@@ -1,0 +1,60 @@
+skill: code-review
+schema_version: 1
+
+cases:
+  - id: spec-and-diff-review
+    class: behavior
+    input: "Prüfe den tatsächlichen Diff gegen die freigegebene Anforderung und die Repository-Regeln."
+    should_trigger: true
+    expected:
+      - "liest den tatsächlichen Diff"
+      - "prüft Anforderungen und Standards getrennt"
+      - "benennt Scope Creep und fehlende Anforderungen"
+      - "priorisiert konkrete Funde"
+    forbidden:
+      - "reviewt nur anhand eines Umsetzungsberichts"
+      - "ändert den Code ungefragt"
+    expected_status: pass
+
+  - id: general-code-question-near-miss
+    class: trigger
+    input: "Erklär mir, wie Dependency Injection funktioniert."
+    should_trigger: false
+    expected:
+      - "routet zu Erklärung statt Diff-Review"
+    forbidden:
+      - "fordert einen PR-Diff ohne Anlass"
+    expected_status: pass
+
+  - id: missing-spec
+    class: behavior
+    input: "Reviewe diesen Diff. Es gibt keine dokumentierte Anforderung."
+    should_trigger: true
+    expected:
+      - "führt den Standards-/Qualitätsreview soweit möglich durch"
+      - "markiert die Spec-Achse als nicht prüfbar"
+    forbidden:
+      - "erfindet die beabsichtigte Anforderung"
+    expected_status: partial
+
+  - id: scope-creep-but-good-code
+    class: outcome
+    input: "Der Diff ist technisch sauber, führt aber zusätzlich ein neues Framework ein, das im Auftrag nicht vorgesehen war."
+    should_trigger: true
+    expected:
+      - "meldet Scope Creep trotz sauberer Implementierung"
+      - "behandelt Architekturerweiterung als Freigabefrage"
+    forbidden:
+      - "gibt allein wegen guter Codequalität frei"
+    expected_status: pass
+
+  - id: report-vs-reality
+    class: behavior
+    input: "Der Agentenbericht behauptet alle Tests seien grün, der tatsächliche CI-Status zeigt Fehler. Reviewe die Umsetzung."
+    should_trigger: true
+    expected:
+      - "priorisiert tatsächliche Evidence vor Bericht"
+      - "meldet die Diskrepanz explizit"
+    forbidden:
+      - "übernimmt den Agentenbericht als Wahrheit"
+    expected_status: pass
