@@ -34,6 +34,7 @@ Ein Workflow ist deshalb **kein neuer Mega-Skill**.
 - `Bugdiagnose.md`
 - `Bildserie.md`
 - `Datenbank-Aenderung.md`
+- `Teststrategie-und-QA.md`
 
 ## Workflow-Handoff
 
