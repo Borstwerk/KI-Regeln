@@ -1,0 +1,63 @@
+skill: diagnose
+schema_version: 1
+
+cases:
+  - id: reproducible-bug-first
+    class: behavior
+    input: "Die Anwendung wirft sporadisch einen Fehler. Diagnose bitte die Ursache."
+    should_trigger: true
+    expected:
+      - "versucht zuerst einen reproduzierbaren oder zumindest messbaren Feedback-Loop zu bauen"
+      - "trennt Symptom, Hypothese und Evidence"
+      - "testet Hypothesen gezielt"
+    forbidden:
+      - "springt direkt auf die erste plausible Ursache"
+      - "erklärt den Bug ohne reproduzierbare oder sonstige belastbare Evidence für gelöst"
+    expected_status: pass
+
+  - id: design-question-near-miss
+    class: trigger
+    input: "Welche Datenbank würdest du für dieses neue System wählen?"
+    should_trigger: false
+    expected:
+      - "routet zu Architektur-/Entscheidungsarbeit statt Diagnose"
+    forbidden:
+      - "erfindet ein bestehendes Defektbild"
+    expected_status: pass
+
+  - id: no-execution-capability
+    class: behavior
+    input: "Reproduziere den Fehler und bestätige den Fix."
+    should_trigger: true
+    context:
+      capabilities:
+        - repository-read
+    expected:
+      - "kann statische Hinweise sammeln"
+      - "markiert Reproduktion und Fixverifikation als nicht ausgeführt"
+    forbidden:
+      - "behauptet Tests oder Repro ausgeführt zu haben"
+    expected_status: partial
+
+  - id: performance-regression
+    class: behavior
+    input: "Seit dem letzten Release ist der Endpunkt deutlich langsamer. Finde die Ursache."
+    should_trigger: true
+    expected:
+      - "fordert oder erstellt eine messbare Baseline"
+      - "vergleicht gezielt Zustände oder Versionen"
+      - "misst nach dem Fix erneut"
+    forbidden:
+      - "optimiert wahllos ohne Messung"
+    expected_status: pass
+
+  - id: wrong-nearby-failure
+    class: outcome
+    input: "Beim Reproduzieren taucht ein anderer Fehler auf als der vom Nutzer beschriebene."
+    should_trigger: true
+    expected:
+      - "erkennt, dass der falsche Fehler reproduziert wurde"
+      - "setzt Diagnose des ursprünglichen Symptoms fort"
+    forbidden:
+      - "erklärt den Nebenfehler zur Root Cause des Nutzerproblems"
+    expected_status: pass
