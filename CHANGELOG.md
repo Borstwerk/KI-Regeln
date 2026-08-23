@@ -8,6 +8,30 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Testing und QA
+
+Neuer technologie- und frameworkneutraler Hauptbereich für Softwaretesting und Qualitätsevidence:
+
+- risikobasierte Teststrategie statt pauschaler Testmengen oder Coverage-Ziele;
+- Testebenen als Portfolio mit der kleinsten belastbaren Ebene für das jeweilige Risiko;
+- Testdesign über Äquivalenzklassen, Grenzwerte, Entscheidungstabellen, Zustandsübergänge, kombinatorische Auswahl und Property-based Testing;
+- klare Regeln für Test-Seams, Test Doubles und reale Dependencies ohne universelle Mocking-Doktrin;
+- Testdaten, Isolation, Hermetik, Zeit-/Randomness-Kontrolle und Parallelisierung;
+- Integration Testing und Contract Testing als getrennte Prüfachsen;
+- End-to-End-Tests auf ausgewählte kritische Nutzer-/Geschäftsflows begrenzt;
+- Flaky Tests als Defekt am Qualitätssignal; Retry ist Diagnose-/Mitigationswerkzeug und kein Root-Cause-Fix;
+- kontrollierte Failure-/Recovery-Tests für Timeout, Teilfehler, Retry, Idempotenz und Recovery;
+- klare Grenze zu späterem Reliability-/Chaos-Engineering;
+- Coverage als Ausführungssignal, Mutation/Brechprobe als mögliche Wirksamkeitsprüfung;
+- exploratives Testen mit Charter, Mission, Scope und Zeitbox;
+- Release-Evidence mit `PASS`, `FAIL`, `BLOCKED`, `NOT RUN` und sichtbarer Restunsicherheit; Releaseentscheidung bleibt beim lokalen Gate;
+- `verification-loop` um die Pflicht zu frischer, zum Completion Claim passender Evidence geschärft statt einen redundanten `verification-before-completion`-Skill anzulegen;
+- Skills `test-strategy`, `test-design`, `integration-testing`, `contract-testing`, `e2e-testing`, `flaky-test-diagnosis`, `failure-testing`, `exploratory-testing` und `test-suite-review`;
+- alle neun Skills zunächst `experimental` mit `partial` Evalabdeckung;
+- Evalpacks für alle neun Skills mit positiven, Near-Miss-, Drift-, Flakiness-, Production-Safety- und Release-Gate-Fällen;
+- Workflow `Workflows/Teststrategie-und-QA.md`;
+- Quellenbasis aus ISTQB, Playwright, Pact, Testcontainers, Hypothesis, Stryker, Testing Library, Fowler, Google Testing Blog sowie aktuellen Testing-Agent-Skills von Anthropic, Currents und Superpowers.
+
 ### Datenbanken
 
 Neuer engine-neutraler Hauptbereich für Datenbankarbeit:
@@ -56,7 +80,7 @@ Neu:
 - Capability- und Related-Hinweise für relevante Skills;
 - `Dokumentation/Skill-Katalog.md` als menschliche Erläuterung;
 - konservative Einstufung: neue Bereiche zunächst `experimental`, ältere praktisch genutzte Skills überwiegend `candidate`; `stable` wird nicht automatisch vergeben;
-- Datenbank-Skills als neue `experimental`-Einträge mit `partial` Evalabdeckung ergänzt.
+- Datenbank- und Testing-und-QA-Skills als neue `experimental`-Einträge mit `partial` Evalabdeckung ergänzt.
 
 ### Evals
 
@@ -67,6 +91,7 @@ Neuer Bereich `Evals/`:
 - Near-Miss-Negative als eigener Qualitätsbestandteil;
 - erste Evalpacks für `deep-research`, `docs-review`, `frontend-design`, `diagnose`, `code-review` und `skill-authoring`;
 - zusätzliche Evalpacks für alle sieben Datenbank-Skills mit Schema-Source-of-Truth-, Query-Safety-, `EXPLAIN ANALYZE`-, Migration-, Concurrency-, Restore- und Review-Gate-Fällen;
+- zusätzliche Evalpacks für alle neun Testing-und-QA-Skills, unter anderem zu fehlendem Oracle, Mock-/Contract-Drift, E2E-Near-Misses, Flakiness trotz Retry, Failure Testing vs. Chaos Engineering und Testsignal-Review;
 - Skill-Katalog für diese Skills auf `eval_coverage: partial` aktualisiert.
 
 ### Sicherheit
@@ -96,7 +121,8 @@ Neuer Bereich zur bewussten Skill-Komposition:
 - Software Feature;
 - Bugdiagnose;
 - Bildserie;
-- Datenbankänderung.
+- Datenbankänderung;
+- Teststrategie und QA.
 
 Grundregel: Skills bleiben begrenzte Disziplinen; wiederkehrende Skill-Ketten werden als Workflow statt als Mega-Skill modelliert.
 
@@ -139,6 +165,7 @@ Erweitert und vollständig auditiert:
 - weitere tatsächlich verwendete Web- und Research-Skills mit geprüftem Blob-SHA ergänzt;
 - langsamere Leitfäden wie HAX, Google Developer Style Guide, Write the Docs und Good Docs Project quartalsweise eingeordnet;
 - Datenbank-Upstreams aus Supabase, Neon, MongoDB, Redis und Prisma sowie lebende Postgres-/Migration-Dokumentation in die Quellenpflege aufgenommen;
+- Testing-und-QA-Upstreams aus Anthropic, Currents und Superpowers per Blob-SHA sowie ISTQB, Playwright, Pact und Testcontainers semantisch registriert;
 - Papers, datierte Research-Artikel und reine Discovery-Kataloge bewusst nicht als künstliche Sync-Dependencies behandelt;
 - Grundregel bleibt: Upstream-Änderung ist Review-Signal, kein automatischer Sync;
 - monatlicher `KI-Regeln Monatscheck` auf das neue Monitoring-Schema und die Cadence-Regeln erweitert.
@@ -181,9 +208,9 @@ Neuer Hauptbereich für Gestaltung und Entwicklung von Websites und Weboberfläc
 
 Aktualisiert:
 
-- Haupt-README um `Webentwicklung/`, `Recherche/`, `Dokumentationserstellung/`, `Skill-Engineering/`, `Sicherheit/`, `Evals/`, `Workflows/` und `Datenbanken/` erweitert;
+- Haupt-README um `Webentwicklung/`, `Recherche/`, `Dokumentationserstellung/`, `Skill-Engineering/`, `Sicherheit/`, `Evals/`, `Workflows/`, `Datenbanken/` und `Testing-und-QA/` erweitert;
 - menschliche Doku um Quellenregister, vollständigen Upstream-Audit, Skill-Katalog und zusätzliche Skill-Handbücher ergänzt;
-- Projektmanifest und Nutzungsanleitung um Research-, Web- und Dokumentationsprojekte ergänzt.
+- Projektmanifest und Nutzungsanleitung um Research-, Web-, Dokumentations-, Datenbank- und Testing-/QA-Projekte ergänzt.
 
 ## v2026.08
 
