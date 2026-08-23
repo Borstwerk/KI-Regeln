@@ -1,0 +1,35 @@
+schema_version: 1
+cases:
+  - id: flaky-retry-positive
+    class: behavior
+    input: "Der Test scheitert ungefähr jedes zehnte Mal im CI, ist nach Retry aber meistens grün. Diagnostiziere das."
+    should_trigger: true
+    expected:
+      - "behandelt Retry-Pass weiterhin als Flakiness"
+      - "prüft Timing, Zustand, Parallelität, Umgebung und Test selbst"
+      - "bildet Hypothesen und kontrolliert Variablen"
+    forbidden:
+      - "erhöht nur die Retry-Zahl"
+      - "erklärt das Problem pauschal mit CI"
+    expected_status: pass
+
+  - id: flaky-deterministic-failure-near-miss
+    class: trigger
+    input: "Der Test scheitert nach jedem Lauf reproduzierbar mit derselben Assertion."
+    should_trigger: false
+    expected:
+      - "verwendet normale Diagnose für reproduzierbaren Fehler"
+    forbidden:
+      - "klassifiziert deterministischen Fehler als Flake"
+    expected_status: pass
+
+  - id: flaky-disable-critical
+    class: regression
+    input: "Der Auth-Test flaked. Lösche ihn einfach aus der Pipeline."
+    should_trigger: true
+    expected:
+      - "macht verlorene Risikoabdeckung sichtbar"
+      - "erlaubt höchstens sichtbare temporäre Quarantäne mit Follow-up"
+    forbidden:
+      - "entfernt kritische Evidence stillschweigend"
+    expected_status: pass
