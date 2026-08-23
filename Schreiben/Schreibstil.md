@@ -181,6 +181,143 @@ Ein glaubwürdiger Text darf:
 - einen Begriff wiederholen;
 - leicht asymmetrisch aufgebaut sein.
 
+## 17. Einfache Verben ausdrücklich zulassen
+
+Einfache Verben sind kein stilistischer Mangel.
+
+Formulierungen mit „ist“, „war“, „hat“, „macht“, „sagt“, „nutzt“ oder „zeigt“ dürfen stehen bleiben, wenn sie präzise und natürlich sind.
+
+Nicht automatisch:
+
+> Das Gebäude fungiert als Veranstaltungsort und verfügt über vier Räume.
+
+wenn einfacher genügt:
+
+> Das Gebäude ist ein Veranstaltungsort und hat vier Räume.
+
+Vermeintlich elegante Ersatzkonstruktionen wie „dient als“, „fungiert als“, „zeichnet sich durch aus“, „bietet“ oder „verfügt über“ nur verwenden, wenn sie tatsächlich genauer sind.
+
+## 18. Keine mechanischen Miniüberschriften in Listen
+
+Listenpunkte brauchen nicht automatisch eine fettgedruckte Überschrift mit Doppelpunkt.
+
+Nicht jedes Thema in dieses Muster pressen:
+
+```text
+- **Ausgangslage:** ...
+- **Problem:** ...
+- **Auswirkung:** ...
+- **Lösung:** ...
+```
+
+Wenn normale Prosa oder einfache Listenpunkte klarer sind, diese bevorzugen.
+
+Inline-Überschriften sind sinnvoll, wenn die Begriffe echte Kategorien bilden und das schnelle Erfassen erleichtern.
+
+## 19. Keine obligatorischen „Herausforderungen und Ausblick“-Abschnitte
+
+Nicht automatisch am Ende eines Textes Abschnitte zu folgenden Themen ergänzen:
+
+- Herausforderungen;
+- Zukunftsaussichten;
+- langfristige Bedeutung;
+- mögliche Entwicklungen;
+- weiterführende Betrachtungen.
+
+Solche Abschnitte gehören nur in den Text, wenn Auftrag oder Inhalt sie verlangen.
+
+## 20. „Nicht gefunden“ bedeutet nicht „existiert nicht“
+
+Eine erfolglose Recherche ist keine Aussage über die Welt.
+
+Aus:
+
+> Ich habe keine belastbare Quelle gefunden.
+
+folgt nicht automatisch:
+
+> Dazu gibt es keine öffentlichen Informationen.
+
+Ebenso wenig dürfen aus einer Quellenlücke erfundene Erklärungen abgeleitet werden, etwa dass Informationen bewusst geheim gehalten würden oder eine Person absichtlich wenig öffentlich auftrete.
+
+Sauber unterscheiden zwischen:
+
+- in den geprüften Quellen nicht gefunden;
+- mit der verwendeten Recherche nicht nachweisbar;
+- tatsächlich nachweislich nicht vorhanden oder nicht veröffentlicht.
+
+## 21. Arbeitskommunikation und Endprodukt trennen
+
+Hinweise an den Nutzer gehören nicht automatisch in den erzeugten Text.
+
+Vor der Ausgabe prüfen, ob versehentlich Meta-Kommunikation stehen geblieben ist, etwa:
+
+- „Hier ist der gewünschte Text“;
+- „Du kannst diesen Abschnitt kopieren“;
+- „Passe die folgenden Punkte bei Bedarf an“;
+- „Wenn du möchtest, kann ich noch …“;
+- Bearbeitungs- oder Einreichungshinweise, die nicht Teil des eigentlichen Dokuments sind.
+
+Planung, Erläuterung und fertiges Artefakt sind unterschiedliche Ebenen.
+
+## 22. Keine unbeabsichtigten Platzhalter oder Template-Reste
+
+Vor der Ausgabe nach ungefüllten Platzhaltern suchen, beispielsweise:
+
+- `[Name]`;
+- `[Datum]`;
+- `[Thema]`;
+- `[Link]`;
+- `XX.XX.XXXX`;
+- `TODO`;
+- interne Bearbeitungshinweise.
+
+Platzhalter sind erlaubt, wenn ausdrücklich eine Vorlage erstellt wird. In einem fertigen Text sind unbeabsichtigte Template-Reste ein Qualitätsfehler.
+
+## 23. KI-typische Vokabelhäufungen als Warnsignal, nicht als Blacklist
+
+Einzelne Wörter beweisen weder KI-Herkunft noch schlechten Stil.
+
+Auffällig kann aber eine Häufung austauschbarer Bedeutungs- und Werbeverben sein, etwa:
+
+- unterstreicht;
+- verdeutlicht;
+- hebt hervor;
+- spiegelt wider;
+- zeigt eindrucksvoll;
+- bereichert;
+- stärkt;
+- prägt;
+- leistet einen Beitrag;
+- steht beispielhaft für.
+
+Bei Häufungen prüfen:
+
+1. Liefert das Verb konkrete Information?
+2. Ist die Wertung durch Inhalt oder Quelle gedeckt?
+3. Würde ein einfacheres Verb dasselbe genauer sagen?
+
+Keine automatische Ersetzung nur wegen eines einzelnen Wortes.
+
+## 24. Überschriften und Trennlinien funktional einsetzen
+
+Überschriften sollen eine nachvollziehbare Hierarchie bilden.
+
+- keine Ebenen ohne Grund überspringen;
+- keine Überschrift nur für einen einzelnen belanglosen Satz erzeugen;
+- nicht automatisch vor jede Überschrift eine horizontale Trennlinie setzen;
+- Überschriftenstil innerhalb eines Dokuments konsistent halten.
+
+Formatierung dient der Lesbarkeit und nicht der sichtbaren Demonstration von Struktur.
+
+## 25. Stilwechsel begründen können
+
+Ein deutlicher Wechsel in Wortschatz, Satzbau, Förmlichkeit oder Rhythmus ist nicht automatisch ein Fehler.
+
+Er sollte aber durch Inhalt, Sprecher, Zielgruppe, Textfunktion oder bewusste Dramaturgie erklärbar sein.
+
+Unbeabsichtigte Registerwechsel innerhalb eines zusammenhängenden Textes im Review prüfen.
+
 ## Qualitätscheck
 
 Vor der Ausgabe prüfen:
@@ -190,11 +327,30 @@ Vor der Ausgabe prüfen:
 3. Gibt es Werbe-, Management- oder Standard-KI-Sprache ohne Nutzen?
 4. Sind Sätze komplizierter als nötig?
 5. Häufen sich Dreiergruppen, Gegensätze oder Gedankenstriche mechanisch?
-6. Gibt es eine überflüssige Zusammenfassung?
+6. Gibt es eine überflüssige Zusammenfassung oder einen unbestellten Ausblick?
 7. Helfen Struktur und Formatierung wirklich?
 8. Sind Aussagen konkret und nachvollziehbar?
 9. Sind Fakten, Quellen und Unsicherheiten sauber behandelt?
-10. Kann eine Floskel gestrichen werden, ohne dass Inhalt verloren geht?
+10. Wird aus einer erfolglosen Recherche versehentlich eine Tatsachenbehauptung?
+11. Sind Meta-Kommunikation, Bearbeitungshinweise oder unbeabsichtigte Platzhalter übrig geblieben?
+12. Werden einfache Verben ohne Grund durch aufgeblähte Ersatzkonstruktionen verdrängt?
+13. Häufen sich bedeutungsaufladende Vokabeln ohne zusätzlichen Informationswert?
+14. Sind Überschriftenhierarchie und Trennlinien funktional?
+15. Kann eine Floskel gestrichen werden, ohne dass Inhalt verloren geht?
+
+## Einordnung von KI-Mustern
+
+Typische KI-Schreibmuster sind Hinweise auf mögliche Qualitätsprobleme, keine Beweise für KI-Herkunft und keine automatischen Änderungsbefehle.
+
+Ein Muster wird erst dann zum Änderungsfall, wenn es im konkreten Text Verständlichkeit, Präzision, Glaubwürdigkeit, Stimme oder Wirkung beeinträchtigt.
+
+## Externe Referenz
+
+Als ergänzender Beobachtungskatalog kann die Wikipedia-Projektseite `Wikipedia:Signs of AI writing` verwendet werden:
+
+https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing
+
+Die Seite ist ein deskriptiver Feldführer und keine verbindliche Stilrichtlinie. Wikipedia-spezifische Merkmale werden nicht automatisch auf andere Textarten übertragen.
 
 ## Oberste Regel
 
