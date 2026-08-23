@@ -79,7 +79,7 @@ Persistent Knowledge
 → dauerhaftes Wissen über Tasks hinweg
 ```
 
-Die ersten beiden Ebenen gehören zur Agentenarbeit. Persistent Knowledge wird im Bereich `Wissensmanagement/` behandelt.
+Die ersten beiden Ebenen gehören zur Agentenarbeit. Persistent Knowledge gehört in einen separaten Wissensmanagement-Bereich, der als nächster eigener Fachbereich aufgebaut wird; bis dahin ist `Wissensmanagement/` kein vorhandener Repository-Pfad.
 
 ## Zusammenspiel mit anderen Skills
 
