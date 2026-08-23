@@ -30,6 +30,7 @@ KI-Regeln/
 │   ├── Harness-Engineering.md
 │   ├── Task-Graph-und-Loops.md
 │   ├── Human-Gates-und-Freigaben.md
+│   ├── Quellen-und-Inspirationen.md
 │   └── Skills/
 │       ├── context-engineering/SKILL.md
 │       ├── task-graph/SKILL.md
@@ -51,8 +52,9 @@ KI-Regeln/
 │       ├── diagnose/SKILL.md
 │       ├── domain-modeling/SKILL.md
 │       └── tdd/SKILL.md
-└── Vorlagen/
-    └── AGENTS.template.md
+├── Vorlagen/
+│   └── AGENTS.template.md
+└── THIRD-PARTY-NOTICES.md
 ```
 
 ## Ebenen
@@ -86,6 +88,8 @@ Enthaltene Skills:
 - `context-engineering` – relevanten Agentenkontext auswählen und Quellen der Wahrheit erhalten;
 - `task-graph` – komplexe Arbeit in abhängige, überprüfbare Knoten zerlegen;
 - `verification-loop` – kontrolliert iterieren, bis Nachweis oder Stop-Kriterium erreicht ist.
+
+`Agentenarbeit/Quellen-und-Inspirationen.md` dokumentiert externe Konzepte, die in diesen Bereich eingeflossen sind. Diese Quellen sind Inspiration und Beobachtungsmaterial, keine projektspezifische Wahrheit.
 
 ### 4. Schreiben
 
@@ -164,6 +168,10 @@ Dabei gilt:
 - lokale Fassung = für den Agenten verfügbare Kopie oder projektspezifischer Adapter;
 - projektspezifische Ergänzungen bleiben lokal;
 - Änderungen an zentralen Skills werden bewusst in betroffene Projekte übernommen.
+
+## Attribution
+
+Übernommene oder adaptierte Drittinhalte werden in `THIRD-PARTY-NOTICES.md` dokumentiert.
 
 ## Pflege
 
