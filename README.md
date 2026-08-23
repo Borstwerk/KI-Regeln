@@ -88,9 +88,28 @@ Wiederverwendbare Denk-, Problemlösungs- und Lernmuster wie Hypothesenbildung, 
 
 Kontrollierte Agentenautonomie mit Context Engineering, Harness Engineering, Task Graphs, Verification Loops, Delegation, Evidence, Evals, Observability, Human Gates und Entropiemanagement.
 
-Zusätzlich existieren ein konkretes Trace-Datenmodell und ein maschinenlesbares Trace-Event-Schema.
+Context Engineering wurde um die technische Long-Horizon-Schicht erweitert:
+
+- Context Budget und Token-Effizienz statt bloßer Token-Minimierung;
+- Context Rot, Duplikate, Altstände und Signalqualität;
+- Context Compaction mit Fortsetzungsfähigkeit als Qualitätskriterium;
+- Long-Horizon-Handoffs zwischen Sessions oder Agenten;
+- Tool-Output-Offloading statt unnötiger Rohdaten im Modellkontext;
+- providerneutrale Regeln für Prompt Caching und stabile Kontextpräfixe;
+- klare Grenze zwischen Active Context, taskbezogenem Working State und dauerhaftem Persistent Knowledge.
+
+Operative Context-Skills:
+
+- `context-engineering`;
+- `context-audit`;
+- `context-compaction`;
+- `session-handoff`.
+
+Zusätzlich existieren ein konkretes Trace-Datenmodell und ein maschinenlesbares Trace-Event-Schema. Diese können optional auch Context-/Usage-Metadaten wie Input-/Output-Tokens, Cache-Signale, Context-Größe, Compaction oder Handoff-Ereignisse erfassen, ohne Promptinhalte standardmäßig zu speichern.
 
 > Autonomie innerhalb klarer Grenzen.
+
+> Kontext ist Arbeitsmaterial, kein Archivdump.
 
 ## Recherche
 
@@ -324,7 +343,10 @@ Erste Evalpacks bestehen unter anderem für:
 - `code-review`;
 - `skill-authoring`;
 - alle sieben Datenbank-Skills;
-- alle neun Testing-und-QA-Skills.
+- alle neun Testing-und-QA-Skills;
+- `context-engineering`, `context-audit`, `context-compaction` und `session-handoff`.
+
+Die Context-Evals prüfen unter anderem fehlende Messfähigkeit, erfundene Tokenpräzision, Verlust kritischer Constraints bei Compaction, Handoff-Fortsetzungsfähigkeit und die Grenze zu Persistent Knowledge.
 
 ## Workflows / Recipes
 
@@ -340,7 +362,8 @@ Enthalten sind Recipes für:
 - Bugdiagnose;
 - Bildserien;
 - Datenbankänderungen;
-- Teststrategie und QA.
+- Teststrategie und QA;
+- Long-Horizon-Agentenarbeit.
 
 > Skills bleiben klein. Workflows verbinden sie.
 
@@ -351,6 +374,9 @@ Agenten dürfen innerhalb eines ausdrücklich oder durch den Projektprozess frei
 Dabei gelten insbesondere:
 
 - Kontext gezielt statt maximal laden;
+- Context Budget wird nach Informationswert und Outcome optimiert, nicht nach einer künstlichen Token-Minimalzahl;
+- gewachsener Kontext wird bei Bedarf auditiert oder verdichtet, ohne harte Constraints, Evidence und Gates zu verlieren;
+- Session-Handoffs müssen eigenständig fortsetzbar sein und dürfen keine Freigaben erfinden;
 - Delegation beschreibt Ziel, Scope, Rechte, Akzeptanzbedingungen und erwartete Evidence;
 - unabhängige Arbeit darf parallelisiert werden, echte Abhängigkeiten nicht;
 - parallele Agenten benötigen ausreichend isolierte veränderliche Workspaces;
@@ -391,6 +417,8 @@ Task
 → Outcome
 ```
 
+Zusätzlich können – sofern die Runtime sie liefert – providerneutrale Usage- und Context-Signale wie Input-/Output-Tokens, Cache-Reads/-Writes, Context-Größe, Tool-Output-Größe, Compaction- oder Handoff-Ereignisse erfasst werden.
+
 Vollständige Prompts, Toolargumente oder Inhalte sind dabei kein Pflichtbestandteil. Metadaten und Datenschutz werden bewusst getrennt.
 
 # Nutzung in Projekten
@@ -410,6 +438,8 @@ Dabei gilt:
 Für Datenbankarbeit gilt zusätzlich: Die zentralen Skills beschreiben Arbeitsweise und Gates; konkrete Engine, Version, reales Schema, Migrationstool, Credentials, Datenklassifikation, RPO/RTO und Produktionsfreigaben bleiben lokal.
 
 Für Testing gilt zusätzlich: Die zentralen Skills definieren Methodik und Evidence; konkrete Frameworks, Testumgebungen, Testdaten, Coverage-Ziele, Releasekriterien und produktive Testbefugnisse bleiben lokal.
+
+Für Context-/Token-Arbeit gilt zusätzlich: konkrete Modellfenster, Tokenpreise, Cache-Semantik, Compaction-APIs, Thread-Persistenz, Tool-Schema-Kosten und Runtime-Grenzen bleiben provider- beziehungsweise projektspezifisch. Dauerhafte Wissensbasen werden nicht mit Working Context gleichgesetzt.
 
 Für Auswahl und Dokumentation zentraler Regeln kann `Vorlagen/ki-regeln.template.yml` als Ausgangspunkt verwendet werden.
 
