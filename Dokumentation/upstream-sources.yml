@@ -136,6 +136,81 @@ sources:
       - Agentenarbeit/Skills/session-handoff/SKILL.md
 
   # ---------------------------------------------------------------------------
+  # Wissensmanagement / Knowledge Bases
+  # ---------------------------------------------------------------------------
+  - id: kcs-practices-guide
+    area: Wissensmanagement
+    kind: web-page
+    url: https://library.serviceinnovation.org/KCS/KCS_v6/KCS_v6_Practices_Guide
+    monitor_mode: semantic-review
+    cadence: quarterly
+    last_checked: 2026-08-23
+    local_impact:
+      - Wissensmanagement/Capture-Ingest-und-Triage.md
+      - Wissensmanagement/Aktualitaet-Staleness-und-Lifecycle.md
+      - Wissensmanagement/Qualitaet-Dubletten-Orphans-und-Drift.md
+      - Wissensmanagement/Skills/knowledge-ingest/SKILL.md
+      - Wissensmanagement/Skills/knowledge-maintenance/SKILL.md
+
+  - id: obsidian-wiki-skills
+    area: Wissensmanagement
+    kind: github-file
+    repository: Ar9av/obsidian-wiki
+    path: docs/skills.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: 05fad2e6bb27ee263a019c786b3120ff78c6996b
+    last_checked: 2026-08-23
+    local_impact:
+      - Wissensmanagement/README.md
+      - Wissensmanagement/Retrieval-Findability-und-Wissensabfrage.md
+      - Wissensmanagement/Qualitaet-Dubletten-Orphans-und-Drift.md
+      - Workflows/Wissensbasis-Aufbauen-und-Pflegen.md
+
+  - id: obsidian-second-brain-skill
+    area: Wissensmanagement
+    kind: github-file
+    repository: eugeniughelbur/obsidian-second-brain
+    path: SKILL.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: 37556b336e8314672b39af8f97bda18516634ddf
+    last_checked: 2026-08-23
+    local_impact:
+      - Wissensmanagement/Capture-Ingest-und-Triage.md
+      - Wissensmanagement/Provenance-Evidence-und-Source-of-Truth.md
+      - Wissensmanagement/Aktualitaet-Staleness-und-Lifecycle.md
+      - Wissensmanagement/Skills/knowledge-ingest/SKILL.md
+
+  - id: insight-wave-knowledge-distill
+    area: Wissensmanagement
+    kind: github-file
+    repository: cogni-work/insight-wave
+    path: cogni-knowledge/skills/knowledge-distill/SKILL.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: 2770f88b4e00f4be98a6a4afcaf66f49b9776b63
+    last_checked: 2026-08-23
+    local_impact:
+      - Wissensmanagement/Wissenseinheiten-und-Granularitaet.md
+      - Wissensmanagement/Provenance-Evidence-und-Source-of-Truth.md
+      - Wissensmanagement/Skills/knowledge-distill/SKILL.md
+
+  - id: openai-knowledge-retrieval
+    area: Wissensmanagement
+    kind: web-page
+    url: https://openai.com/solutions/blueprints/knowledge-retrieval/
+    monitor_mode: semantic-review
+    cadence: monthly
+    last_checked: 2026-08-23
+    local_impact:
+      - Wissensmanagement/Retrieval-Findability-und-Wissensabfrage.md
+      - Wissensmanagement/Skills/knowledge-query/SKILL.md
+
+  # ---------------------------------------------------------------------------
   # Schreiben
   # ---------------------------------------------------------------------------
   - id: wikipedia-signs-ai-writing
