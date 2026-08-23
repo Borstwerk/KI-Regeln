@@ -10,8 +10,8 @@ Ziel ist keine persönliche KI-Konfiguration und keine projektspezifische Wissen
 
 Das bedeutet:
 
-- allgemeine Kommunikations-, Reflexions-, Recherche-, Dokumentations-, Schreib-, Bild-, Web-, Datenbank-, Agenten-, Sicherheits- und Entwicklungsregeln liegen hier;
-- projektspezifische Anforderungen, Architektur, Research-Fragen, interne Quellen, Fachmodelle, reales Datenbankschema, Markenregeln, visuelle Bibeln und Sonderregeln bleiben im jeweiligen Projekt;
+- allgemeine Kommunikations-, Reflexions-, Recherche-, Dokumentations-, Schreib-, Bild-, Web-, Datenbank-, Testing-, Agenten-, Sicherheits- und Entwicklungsregeln liegen hier;
+- projektspezifische Anforderungen, Architektur, Research-Fragen, interne Quellen, Fachmodelle, reales Datenbankschema, konkrete Testumgebung, Markenregeln, visuelle Bibeln und Sonderregeln bleiben im jeweiligen Projekt;
 - persönliche Profile oder unnötige personenbezogene Details gehören nicht in dieses Repository;
 - ein Skill ersetzt niemals die tatsächliche Spezifikation oder Dokumentation eines Projekts.
 
@@ -41,6 +41,7 @@ KI-Regeln/
 ├── Webentwicklung/
 ├── Programmieren/
 ├── Datenbanken/
+├── Testing-und-QA/
 ├── Skill-Engineering/
 ├── Sicherheit/
 ├── Evals/
@@ -181,6 +182,52 @@ Operative Skills:
 
 > Das reale Schema ist Source of Truth. Plausible Datenbankstrukturen sind keine Evidence.
 
+## Testing und QA
+
+Technologie- und frameworkneutrale Regeln für risikobasierte Teststrategie, Testdesign und vertrauenswürdige Qualitätsevidence.
+
+Der Bereich behandelt insbesondere:
+
+- Risiken und Failure Modes vor Testmenge;
+- passende Testebenen statt starrer Unit-/Integration-/E2E-Quoten;
+- Testdesign aus Anforderungen, Invarianten, Grenzwerten und Zuständen;
+- Test-Seams, Doubles und reale Abhängigkeiten;
+- Testdaten, Isolation und Hermetik;
+- Integration und Contract Testing;
+- ausgewählte kritische End-to-End-Flows;
+- Flaky Tests als Defekt am Testsignal;
+- kontrollierte Failure-/Recovery-Tests;
+- Coverage und Mutation als unterschiedliche Wirksamkeitssignale;
+- explorative Tests mit Charter;
+- CI- und Release-Evidence mit frischer Verifikation.
+
+Scope-Grenze:
+
+```text
+TDD
+→ testgetriebene Implementierung
+
+Testing und QA
+→ welche Risiken wie geprüft werden und welche Evidence daraus folgt
+
+Reliability / Chaos Engineering
+→ systemische Resilience-Hypothesen unter kontrollierten Störungen
+```
+
+Operative Skills:
+
+- `test-strategy`;
+- `test-design`;
+- `integration-testing`;
+- `contract-testing`;
+- `e2e-testing`;
+- `flaky-test-diagnosis`;
+- `failure-testing`;
+- `exploratory-testing`;
+- `test-suite-review`.
+
+> Grün ist ein Ergebnis. Vertrauenswürdige Qualitätsevidence braucht das richtige Testsignal.
+
 # Meta-Ebene
 
 ## Skill Engineering
@@ -276,7 +323,8 @@ Erste Evalpacks bestehen unter anderem für:
 - `diagnose`;
 - `code-review`;
 - `skill-authoring`;
-- alle sieben Datenbank-Skills.
+- alle sieben Datenbank-Skills;
+- alle neun Testing-und-QA-Skills.
 
 ## Workflows / Recipes
 
@@ -291,7 +339,8 @@ Enthalten sind Recipes für:
 - Software Features;
 - Bugdiagnose;
 - Bildserien;
-- Datenbankänderungen.
+- Datenbankänderungen;
+- Teststrategie und QA.
 
 > Skills bleiben klein. Workflows verbinden sie.
 
@@ -359,6 +408,8 @@ Dabei gilt:
 - nicht das komplette zentrale Repository ungefiltert in jeden Agentenkontext laden.
 
 Für Datenbankarbeit gilt zusätzlich: Die zentralen Skills beschreiben Arbeitsweise und Gates; konkrete Engine, Version, reales Schema, Migrationstool, Credentials, Datenklassifikation, RPO/RTO und Produktionsfreigaben bleiben lokal.
+
+Für Testing gilt zusätzlich: Die zentralen Skills definieren Methodik und Evidence; konkrete Frameworks, Testumgebungen, Testdaten, Coverage-Ziele, Releasekriterien und produktive Testbefugnisse bleiben lokal.
 
 Für Auswahl und Dokumentation zentraler Regeln kann `Vorlagen/ki-regeln.template.yml` als Ausgangspunkt verwendet werden.
 
