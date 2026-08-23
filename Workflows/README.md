@@ -35,6 +35,7 @@ Ein Workflow ist deshalb **kein neuer Mega-Skill**.
 - `Bildserie.md`
 - `Datenbank-Aenderung.md`
 - `Teststrategie-und-QA.md`
+- `Long-Horizon-Agentenarbeit.md`
 
 ## Workflow-Handoff
 
@@ -48,6 +49,8 @@ Zwischen Phasen möglichst weitergeben:
 - offene Unsicherheiten;
 - Gate-/Freigabestatus;
 - erwarteten nächsten Output.
+
+Bei einem echten Session-/Agentenwechsel kann dafür der Skill `session-handoff` verwendet werden. Ein Workflow-Handoff bleibt trotzdem ein Arbeitsartefakt und keine neue kanonische Projektwahrheit.
 
 ## Anpassung
 
