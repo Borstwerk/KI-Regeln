@@ -33,6 +33,7 @@ Ein Workflow ist deshalb **kein neuer Mega-Skill**.
 - `Software-Feature.md`
 - `Bugdiagnose.md`
 - `Bildserie.md`
+- `Datenbank-Aenderung.md`
 
 ## Workflow-Handoff
 
