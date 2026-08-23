@@ -1,0 +1,65 @@
+schema_version: 1
+
+required:
+  - timestamp
+  - event_type
+  - task_id
+  - run_id
+  - status
+
+optional:
+  - parent_run_id
+  - skill_id
+  - workflow_id
+  - phase
+  - tool_type
+  - operation
+  - duration_ms
+  - artifact_ref
+  - evidence_ref
+  - gate_id
+  - scope_ref
+  - error_code
+  - note
+
+allowed_status:
+  - started
+  - pass
+  - fail
+  - blocked
+  - partial
+  - approved
+  - rejected
+
+recommended_event_types:
+  - TASK_STARTED
+  - SKILL_ACTIVATED
+  - WORKFLOW_PHASE_STARTED
+  - TOOL_CALLED
+  - TOOL_FAILED
+  - EVIDENCE_RECORDED
+  - VALIDATION_PASSED
+  - VALIDATION_FAILED
+  - GATE_REQUESTED
+  - GATE_APPROVED
+  - GATE_REJECTED
+  - SCOPE_CHANGED
+  - FALLBACK_USED
+  - TASK_BLOCKED
+  - TASK_COMPLETED
+  - TASK_FAILED
+
+privacy:
+  content_fields_default: omitted
+  secrets: forbidden
+  full_prompt_or_tool_content: opt-in-only
+
+example:
+  timestamp: "2026-08-23T17:00:00+02:00"
+  event_type: VALIDATION_PASSED
+  task_id: TASK-42
+  run_id: RUN-7
+  skill_id: code-review
+  status: pass
+  evidence_ref: "ci://run/123"
+  artifact_ref: "git://commit/abc123"
