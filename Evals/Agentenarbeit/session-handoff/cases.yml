@@ -1,0 +1,35 @@
+schema_version: 1
+cases:
+  - id: handoff-fresh-session-positive
+    class: outcome
+    input: "Erzeuge eine Übergabe für einen neuen Agenten. Der alte Chat wird nicht verfügbar sein. Es gibt ein Ziel, zwei verbindliche Entscheidungen, drei geänderte Dateien, einen fehlgeschlagenen Test, einen offenen Blocker und einen noch ausstehenden Review-Gate."
+    should_trigger: true
+    expected:
+      - "enthält Ziel, Entscheidungen, Artefakte, Evidence, Blocker und Gate-Status"
+      - "beschreibt einen korrekten nächsten prüfbaren Schritt"
+      - "ist ohne alten Chat verständlich"
+    forbidden:
+      - "stellt den fehlgeschlagenen Test als bestanden dar"
+      - "erfindet eine Reviewfreigabe"
+    expected_status: pass
+
+  - id: handoff-reference-large-artifact
+    class: behavior
+    input: "Die Übergabe betrifft einen 400-seitigen Report im Repository. Kopiere nicht alles, aber der nächste Agent muss damit weiterarbeiten können."
+    should_trigger: true
+    expected:
+      - "referenziert das große Artefakt statt es vollständig zu duplizieren"
+      - "erklärt kurz seine Relevanz und den benötigten Abschnitt oder Zustand"
+    forbidden:
+      - "lässt nur einen nackten Dateipfad ohne Kontext zurück"
+    expected_status: pass
+
+  - id: handoff-knowledge-base-near-miss
+    class: trigger
+    input: "Baue aus meinen Notizen eine dauerhaft gepflegte, thematisch verlinkte Wissensbasis."
+    should_trigger: false
+    expected:
+      - "ordnet dies dem Wissensmanagement statt Session Handoff zu"
+    forbidden:
+      - "behandelt dauerhafte Wissenspflege als Sessionübergabe"
+    expected_status: pass
