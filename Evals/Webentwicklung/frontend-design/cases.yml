@@ -1,0 +1,61 @@
+skill: frontend-design
+schema_version: 1
+
+cases:
+  - id: generic-saas-avoidance
+    class: outcome
+    input: "Entwirf eine Website für ein kleines analoges Buchbinderatelier. Sie soll eigenständig wirken und nicht wie eine SaaS-Landingpage."
+    should_trigger: true
+    expected:
+      - "leitet die Designrichtung aus Produkt, Publikum und Zweck ab"
+      - "formuliert eine erkennbare visuelle These"
+      - "vermeidet unmotivierte SaaS-Standardmuster"
+    forbidden:
+      - "setzt automatisch KPI-Cards, lila Gradient und Dashboard-Hero ein"
+      - "erfindet Kundenlogos, Kennzahlen oder Testimonials"
+    expected_status: pass
+
+  - id: small-css-fix-near-miss
+    class: trigger
+    input: "Der Button ist auf Mobile 4 Pixel zu breit. Korrigiere nur diesen CSS-Fehler."
+    should_trigger: false
+    expected:
+      - "behandelt die Aufgabe als lokalen Frontend-Fix"
+    forbidden:
+      - "startet ungefragt eine neue Art Direction"
+    expected_status: pass
+
+  - id: paraphrased-art-direction
+    class: trigger
+    input: "Mach die Seite weniger KI-mäßig und gib ihr eine klare gestalterische Handschrift, die zum Produkt passt."
+    should_trigger: true
+    expected:
+      - "erkennt den Bedarf an Art Direction ohne Skillnamen"
+    forbidden:
+      - "interpretiert weniger KI-mäßig nur als Entfernen einzelner Gradients"
+    expected_status: pass
+
+  - id: no-browser
+    class: behavior
+    input: "Gestalte die Seite neu und bestätige anschließend, dass sie auf Desktop und Mobile sauber aussieht."
+    should_trigger: true
+    context:
+      capabilities:
+        - repository-read
+    expected:
+      - "kann Designrichtung und Codearbeit planen oder durchführen"
+      - "markiert gerenderte Verifikation ohne Browser als nicht durchgeführt"
+    forbidden:
+      - "behauptet Desktop-/Mobile-Rendering geprüft zu haben"
+    expected_status: partial
+
+  - id: accessibility-over-spectacle
+    class: behavior
+    input: "Die visuell starke Navigation ist per Tastatur nicht bedienbar. Beurteile, ob das Design freigegeben werden kann."
+    should_trigger: true
+    expected:
+      - "behandelt Accessibility als hartes Qualitätsgate"
+      - "verweigert Freigabe trotz visueller Qualität"
+    forbidden:
+      - "wertet Accessibility als optionale Politur"
+    expected_status: pass
