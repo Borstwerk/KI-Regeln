@@ -29,6 +29,113 @@ sources:
       - Grundlagen/Zusammenarbeit-mit-KI.md
 
   # ---------------------------------------------------------------------------
+  # Agentenarbeit / Context Engineering
+  # ---------------------------------------------------------------------------
+  - id: anthropic-effective-context-engineering
+    area: Agentenarbeit
+    kind: web-page
+    url: https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents
+    monitor_mode: semantic-review
+    cadence: monthly
+    last_checked: 2026-08-23
+    local_impact:
+      - Agentenarbeit/Context-Engineering.md
+      - Agentenarbeit/Context-Budget-und-Token-Effizienz.md
+      - Agentenarbeit/Context-Rot-und-Signalqualitaet.md
+      - Agentenarbeit/Context-Compaction.md
+      - Agentenarbeit/Skills/context-engineering/SKILL.md
+      - Agentenarbeit/Skills/context-compaction/SKILL.md
+
+  - id: anthropic-long-running-agent-harnesses
+    area: Agentenarbeit
+    kind: web-page
+    url: https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents
+    monitor_mode: semantic-review
+    cadence: quarterly
+    last_checked: 2026-08-23
+    local_impact:
+      - Agentenarbeit/Long-Horizon-Handoffs.md
+      - Agentenarbeit/Working-Memory-und-Persistenzgrenzen.md
+      - Agentenarbeit/Skills/session-handoff/SKILL.md
+      - Workflows/Long-Horizon-Agentenarbeit.md
+
+  - id: openai-gpt56-context-efficiency
+    area: Agentenarbeit
+    kind: web-page
+    url: https://openai.com/index/gpt-5-6-frontier-intelligence-efficiency/
+    monitor_mode: semantic-review
+    cadence: monthly
+    last_checked: 2026-08-23
+    local_impact:
+      - Agentenarbeit/Context-Budget-und-Token-Effizienz.md
+      - Agentenarbeit/Tool-Outputs-und-Context-Offloading.md
+      - Agentenarbeit/Prompt-Caching-und-stabile-Kontexte.md
+      - Agentenarbeit/Skills/context-audit/SKILL.md
+
+  - id: openai-responses-context-compaction
+    area: Agentenarbeit
+    kind: web-page
+    url: https://openai.com/index/equip-responses-api-computer-environment/
+    monitor_mode: semantic-review
+    cadence: monthly
+    last_checked: 2026-08-23
+    local_impact:
+      - Agentenarbeit/Context-Compaction.md
+      - Agentenarbeit/Skills/context-compaction/SKILL.md
+
+  - id: langchain-memory-concepts
+    area: Agentenarbeit
+    kind: web-page
+    url: https://docs.langchain.com/oss/python/concepts/memory
+    monitor_mode: semantic-review
+    cadence: monthly
+    last_checked: 2026-08-23
+    local_impact:
+      - Agentenarbeit/Working-Memory-und-Persistenzgrenzen.md
+      - Agentenarbeit/Context-Engineering.md
+      - Agentenarbeit/Skills/context-engineering/SKILL.md
+
+  - id: opentelemetry-genai-usage-conventions
+    area: Agentenarbeit
+    kind: web-page
+    url: https://opentelemetry.io/docs/specs/semconv/registry/attributes/gen-ai/
+    monitor_mode: semantic-review
+    cadence: monthly
+    last_checked: 2026-08-23
+    local_impact:
+      - Agentenarbeit/Context-Budget-und-Token-Effizienz.md
+      - Agentenarbeit/Observability-und-Traceability.md
+      - Agentenarbeit/Trace-Datenmodell.md
+
+  - id: context-doctor-skill
+    area: Agentenarbeit
+    kind: github-file
+    repository: jzOcb/context-doctor
+    path: SKILL.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: a0bf345b213cafb5f6571305d9503c21fb920242
+    last_checked: 2026-08-23
+    local_impact:
+      - Agentenarbeit/Context-Budget-und-Token-Effizienz.md
+      - Agentenarbeit/Skills/context-audit/SKILL.md
+
+  - id: openclaw-handoff-skill
+    area: Agentenarbeit
+    kind: github-file
+    repository: openclaw/agent-skills
+    path: skills/handoff/SKILL.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: 50054b4079bcc25492e27cae7b72ea748a853cc9
+    last_checked: 2026-08-23
+    local_impact:
+      - Agentenarbeit/Long-Horizon-Handoffs.md
+      - Agentenarbeit/Skills/session-handoff/SKILL.md
+
+  # ---------------------------------------------------------------------------
   # Schreiben
   # ---------------------------------------------------------------------------
   - id: wikipedia-signs-ai-writing
