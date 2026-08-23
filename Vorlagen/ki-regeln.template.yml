@@ -83,6 +83,17 @@ skills:
   # - Datenbanken/Skills/database-operations
   # - Datenbanken/Skills/database-review
 
+  # Testing und QA
+  # - Testing-und-QA/Skills/test-strategy
+  # - Testing-und-QA/Skills/test-design
+  # - Testing-und-QA/Skills/integration-testing
+  # - Testing-und-QA/Skills/contract-testing
+  # - Testing-und-QA/Skills/e2e-testing
+  # - Testing-und-QA/Skills/flaky-test-diagnosis
+  # - Testing-und-QA/Skills/failure-testing
+  # - Testing-und-QA/Skills/exploratory-testing
+  # - Testing-und-QA/Skills/test-suite-review
+
   # Skill Engineering / Governance
   # - Skill-Engineering/Skills/skill-authoring
   # - Skill-Engineering/Skills/skill-review
@@ -103,6 +114,7 @@ workflows:
   # - Workflows/Bugdiagnose.md
   # - Workflows/Bildserie.md
   # - Workflows/Datenbank-Aenderung.md
+  # - Workflows/Teststrategie-und-QA.md
 
 quality_policy:
   # Optional: Projekte können festlegen, welche zentrale Reife sie akzeptieren.
