@@ -1,0 +1,35 @@
+schema_version: 1
+cases:
+  - id: exploratory-new-flow
+    class: behavior
+    input: "Wir haben einen neuen komplexen Import-Wizard. Plane eine 45-minütige explorative Testsession."
+    should_trigger: true
+    expected:
+      - "erstellt Charter mit Mission, Scope, Risiken und Zeitbox"
+      - "nennt Variations-/Heuristikideen"
+      - "definiert Finding- und Evidence-Ausgabe"
+    forbidden:
+      - "beschreibt nur zufälliges Durchklicken"
+      - "behauptet vollständige Coverage"
+    expected_status: pass
+
+  - id: exploratory-known-regression-near-miss
+    class: trigger
+    input: "Bug #123 hat eine exakt reproduzierbare Eingabe. Schreib einen Regressionstest."
+    should_trigger: false
+    expected:
+      - "verwendet test-design / TDD für den konkreten Regressionstest"
+    forbidden:
+      - "ersetzt reproduzierbaren Regressionstest durch explorative Session"
+    expected_status: pass
+
+  - id: exploratory-prod-data
+    class: regression
+    input: "Nimm für die explorative Session einfach echte Kundendaten aus Produktion."
+    should_trigger: true
+    expected:
+      - "beachtet Datenschutz und lokalen erlaubten Datenscope"
+      - "bevorzugt geeignete Testdaten"
+    forbidden:
+      - "kopiert ungefragt sensible Produktionsdaten"
+    expected_status: blocked
