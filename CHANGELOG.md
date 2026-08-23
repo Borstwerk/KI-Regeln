@@ -8,6 +8,80 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Skill Engineering
+
+Neuer Meta-Bereich für Entwurf und Pflege von Agent-Skills:
+
+- klare Skill-Schnitte und Verantwortungen;
+- Progressive Disclosure mit kompaktem `SKILL.md` und optionalen `references/`, `scripts/` und `assets/`;
+- Trigger- und Description-Design mit Near-Miss-Negativfällen;
+- Input-/Output-/Evidence-Verträge;
+- Capability Detection, Least-Privilege-nahe Anforderungen und ehrliche Fallbacks;
+- Skill-Komposition ohne versteckte Mega-Orchestrierung;
+- Review- und Evalregeln;
+- Lifecycle `experimental → candidate → stable → deprecated → retired`;
+- Skills `skill-authoring` und `skill-review`;
+- Agent Skills Specification als externe Formatgrundlage eingeordnet.
+
+### Skill-Katalog und Maturity
+
+Neu:
+
+- `skill-catalog.yml` als maschinenlesbares Skill-Inventar;
+- expliziter Maturity-Status je Skill;
+- Evalabdeckung `none`, `partial`, `core`, `broad`;
+- Capability- und Related-Hinweise für relevante Skills;
+- `Dokumentation/Skill-Katalog.md` als menschliche Erläuterung;
+- konservative Einstufung: neue Bereiche zunächst `experimental`, ältere praktisch genutzte Skills überwiegend `candidate`; `stable` wird nicht automatisch vergeben.
+
+### Evals
+
+Neuer Bereich `Evals/`:
+
+- gemeinsames Evalfall-Schema;
+- Trigger-, Behavior-, Outcome- und Regressionsevals;
+- Near-Miss-Negative als eigener Qualitätsbestandteil;
+- erste Evalpacks für `deep-research`, `docs-review`, `frontend-design`, `diagnose`, `code-review` und `skill-authoring`;
+- Skill-Katalog für diese Skills auf `eval_coverage: partial` aktualisiert.
+
+### Sicherheit
+
+Neuer Hauptbereich für agentische und Skill-Sicherheit:
+
+- Prompt Injection und untrusted Input;
+- Toolrechte und Least Privilege;
+- Secrets und Datenexfiltration;
+- Skill Supply Chain, Provenance, Pinning und Update Drift;
+- MCP und externe Tools;
+- Sandbox und Isolation;
+- externe Aktionen und Bestätigung;
+- Logging, Datenschutz und Telemetrie;
+- Security Review für Skills;
+- Skills `skill-security-review`, `prompt-injection-review` und `tool-permission-review`;
+- OWASP Agentic Skills Top 10 und Agentic Applications Top 10 als Sicherheitsreferenzen eingeordnet.
+
+### Workflows / Recipes
+
+Neuer Bereich zur bewussten Skill-Komposition:
+
+- Deep Research;
+- technische Dokumentation;
+- Website-Neuentwicklung;
+- Review bestehender Websites;
+- Software Feature;
+- Bugdiagnose;
+- Bildserie.
+
+Grundregel: Skills bleiben begrenzte Disziplinen; wiederkehrende Skill-Ketten werden als Workflow statt als Mega-Skill modelliert.
+
+### Observability und Traceability
+
+Erweitert:
+
+- `Agentenarbeit/Trace-Datenmodell.md` für Task → Run → Skill/Workflow → Tool/Event → Evidence → Gate → Artefakt → Outcome;
+- `Agentenarbeit/trace-event.schema.yml` als toolneutrale maschinenlesbare Ereignisstruktur;
+- Inhaltslogging bleibt optional und datenschutzsensibel; Metadaten sind vom vollständigen Prompt-/Toolinhalt getrennt.
+
 ### Dokumentationserstellung
 
 Neuer Hauptbereich für technische und projektbezogene Dokumentation:
@@ -80,8 +154,8 @@ Neuer Hauptbereich für Gestaltung und Entwicklung von Websites und Weboberfläc
 
 Aktualisiert:
 
-- Haupt-README um `Webentwicklung/`, `Recherche/` und `Dokumentationserstellung/` erweitert;
-- menschliche Doku um Quellenregister, vollständigen Upstream-Audit und Dokumentations-Skill-Handbuch ergänzt;
+- Haupt-README um `Webentwicklung/`, `Recherche/`, `Dokumentationserstellung/`, `Skill-Engineering/`, `Sicherheit/`, `Evals/` und `Workflows/` erweitert;
+- menschliche Doku um Quellenregister, vollständigen Upstream-Audit, Skill-Katalog und zusätzliche Skill-Handbücher ergänzt;
 - Projektmanifest und Nutzungsanleitung um Research-, Web- und Dokumentationsprojekte ergänzt.
 
 ## v2026.08
