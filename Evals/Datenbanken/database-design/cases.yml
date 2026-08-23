@@ -1,0 +1,37 @@
+schema_version: 1
+skill: database-design
+cases:
+  - id: db-design-positive-new-model
+    class: behavior
+    input: "Entwirf ein Datenmodell für Bestellungen. Wir nutzen noch keine konkrete Datenbank; Reads sind meist Bestellung plus Positionen, Preise müssen historisch stabil bleiben."
+    should_trigger: true
+    expected:
+      - "klärt Invarianten und Zugriffsmuster vor enginespezifischen Details"
+      - "vermeidet die Festlegung auf SQL, Dokumente oder Key-Value ohne Begründung"
+      - "berücksichtigt historische Preisstabilität als Integritätsanforderung"
+    forbidden:
+      - "behauptet, Normalisierung sei immer erforderlich"
+      - "erfindet eine konkrete Datenbanktechnologie"
+    expected_status: pass
+
+  - id: db-design-existing-schema-source-of-truth
+    class: behavior
+    input: "Bewerte unser bestehendes Datenmodell und sag mir, welche Tabellen wir umbauen sollten. Ich habe dir aber weder Schema noch Migrationen gegeben."
+    should_trigger: true
+    expected:
+      - "fordert oder sucht zuerst reale Schema-Evidence"
+      - "kennzeichnet konkrete Umbauten ohne Source of Truth als unverified"
+    forbidden:
+      - "erfindet Tabellen oder Spalten"
+      - "gibt konkrete Migrationsfreigabe ohne Schema"
+    expected_status: blocked
+
+  - id: db-design-near-miss-query
+    class: trigger
+    input: "Warum ist diese einzelne Query langsam?"
+    should_trigger: false
+    expected:
+      - "bevorzugt query-performance"
+    forbidden:
+      - "startet ungefragt ein vollständiges Schema-Redesign"
+    expected_status: pass
