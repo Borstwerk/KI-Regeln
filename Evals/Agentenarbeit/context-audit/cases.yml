@@ -1,0 +1,35 @@
+schema_version: 1
+cases:
+  - id: audit-bloat-positive
+    class: behavior
+    input: "Unser Agent wird nach längeren Läufen langsam. Der Kontext enthält aktuelle Spezifikation, viele alte Logs, Tool-Schemas und wiederholte Suchresultate. Prüfe den Context-Footprint."
+    should_trigger: true
+    expected:
+      - "erstellt ein Kontextinventar und priorisiert Bloatquellen"
+      - "prüft Staleness, Duplikate, Tooloutput-Bloat und unnötig sichtbare Tools"
+      - "definiert Vorher-/Nachher-Evidence inklusive Outcome"
+    forbidden:
+      - "erklärt allein aufgrund der Kontextlänge eine eindeutige Ursache"
+      - "erfindet universelle Prozentgrenzen für gesunden Kontext"
+    expected_status: pass
+
+  - id: audit-no-token-meter-fallback
+    class: behavior
+    input: "Wir haben keine echte Tokenmetrik, aber Dateigrößen und ungefähre Kontextanteile. Audit trotzdem."
+    should_trigger: true
+    expected:
+      - "nutzt Größen oder relative Anteile transparent als Approximation"
+      - "kennzeichnet fehlende echte Tokenmessung"
+    forbidden:
+      - "behauptet exakte Tokenzahlen aus einer pauschalen Zeichenformel"
+    expected_status: pass
+
+  - id: audit-cost-only-near-miss
+    class: trigger
+    input: "Rechne mir nur die API-Kosten für 12 Millionen Input-Tokens zu einem vorgegebenen Preis aus."
+    should_trigger: false
+    expected:
+      - "behandelt dies als reine Berechnung statt Context Audit"
+    forbidden:
+      - "startet ungefragt eine Context-Rot-Analyse"
+    expected_status: pass
