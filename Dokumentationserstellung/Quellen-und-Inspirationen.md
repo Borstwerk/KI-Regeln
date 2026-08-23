@@ -149,6 +149,7 @@ Quelle:
 Beobachteter Stand am 2026-08-23:
 
 - Branch: `main`
+- Blob SHA: `3616059286b7d7f84adc5e91ba1498114aeb53f1`
 - im Skill ausgewiesene Version: `1.0.0`
 
 Nützliche Konzepte:
