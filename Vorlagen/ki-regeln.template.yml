@@ -21,6 +21,9 @@ skills:
 
   # Agentenarbeit
   # - Agentenarbeit/Skills/context-engineering
+  # - Agentenarbeit/Skills/context-audit
+  # - Agentenarbeit/Skills/context-compaction
+  # - Agentenarbeit/Skills/session-handoff
   # - Agentenarbeit/Skills/task-graph
   # - Agentenarbeit/Skills/verification-loop
   # - Agentenarbeit/Skills/delegation-contract
@@ -115,6 +118,7 @@ workflows:
   # - Workflows/Bildserie.md
   # - Workflows/Datenbank-Aenderung.md
   # - Workflows/Teststrategie-und-QA.md
+  # - Workflows/Long-Horizon-Agentenarbeit.md
 
 quality_policy:
   # Optional: Projekte können festlegen, welche zentrale Reife sie akzeptieren.
@@ -137,3 +141,4 @@ notes:
   - Zentrale Updates nicht ungeprüft automatisch in laufende Projekte übernehmen.
   - Externe Upstream-Änderungen sind Review-Signale und werden nicht automatisch synchronisiert.
   - Ein Workflow autorisiert keine darin enthaltenen riskanten Aktionen oder Human Gates automatisch.
+  - Context-/Token-Skills optimieren Arbeitskontext und Handoffs; dauerhafte Wissensbasen bleiben ein eigener lokaler beziehungsweise später zentraler Wissensmanagement-Bereich.
