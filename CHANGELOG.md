@@ -8,6 +8,27 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Context, Token-Effizienz und Long-Horizon-Agentenarbeit
+
+`Agentenarbeit/` um die technische Betriebsseite von Context Engineering erweitert:
+
+- Context Budget und Token-Effizienz als Optimierung von Informationswert, Qualität, Latenz und Kosten statt bloßer Token-Minimierung;
+- providerneutrale Messsignale für Input-/Output-Tokens, Cache-Nutzung, Kontext- und Tool-Output-Größen, soweit die jeweilige Runtime diese tatsächlich liefert;
+- Context Rot, Duplikate, Altstände, Widersprüche und Signalqualität als eigene Prüfachse;
+- Context Compaction mit Fortsetzungsfähigkeit und Erhalt harter Constraints, Entscheidungen, Evidence, Sources of Truth und Gates als Qualitätskriterium;
+- Long-Horizon-Handoffs für neue Sessions oder Agenten mit eigenständig verständlichem Fortsetzungszustand;
+- Tool-Output-Offloading: deterministische Filterung, Aggregation oder Reduktion großer Rohresultate außerhalb des Modellkontexts, wenn dadurch kein benötigtes Signal verloren geht;
+- providerneutrale Regeln für Prompt Caching und stabile Kontextpräfixe, ohne konkrete Cache-Semantik oder Modellgrenzen zentral festzuschreiben;
+- klare Trennung `Active Context → Working State → Persistent Knowledge`; dauerhafte Wissensbasen werden nicht mit taskbezogenem Agentenzustand vermischt;
+- vorhandenen Skill `context-engineering` geschärft und mit `partial` Evalabdeckung versehen;
+- neue Skills `context-audit`, `context-compaction` und `session-handoff`, zunächst `experimental` mit `partial` Evalabdeckung;
+- Evalpacks für alle vier Context-Skills mit Near-Miss-, Messfähigkeits-, Informationsverlust-, Handoff- und Knowledge-Base-Grenzfällen;
+- Workflow `Workflows/Long-Horizon-Agentenarbeit.md`;
+- menschliches `Dokumentation/Skill-Handbuch-Context-und-Long-Horizon.md`;
+- Trace-Datenmodell und `trace-event.schema.yml` um optionale, metadata-first Context-/Usage-Signale und Compaction-/Handoff-Ereignisse erweitert;
+- aktive Context-Upstreams aus Anthropic, OpenAI, LangChain und OpenTelemetry sowie die konkret verwendeten Skills `context-doctor` und OpenClaw `handoff` im zentralen Monitoring registriert;
+- keine festen universellen Tokenquoten, Fenstergrenzen, Cachewerte oder Modellpreise als zentrale Wahrheit übernommen.
+
 ### Testing und QA
 
 Neuer technologie- und frameworkneutraler Hauptbereich für Softwaretesting und Qualitätsevidence:
@@ -80,7 +101,9 @@ Neu:
 - Capability- und Related-Hinweise für relevante Skills;
 - `Dokumentation/Skill-Katalog.md` als menschliche Erläuterung;
 - konservative Einstufung: neue Bereiche zunächst `experimental`, ältere praktisch genutzte Skills überwiegend `candidate`; `stable` wird nicht automatisch vergeben;
-- Datenbank- und Testing-und-QA-Skills als neue `experimental`-Einträge mit `partial` Evalabdeckung ergänzt.
+- Datenbank- und Testing-und-QA-Skills als neue `experimental`-Einträge mit `partial` Evalabdeckung ergänzt;
+- `context-engineering` bleibt `candidate` und erhält `partial` Evalabdeckung;
+- `context-audit`, `context-compaction` und `session-handoff` als neue `experimental`-Einträge mit `partial` Evalabdeckung ergänzt.
 
 ### Evals
 
@@ -92,6 +115,7 @@ Neuer Bereich `Evals/`:
 - erste Evalpacks für `deep-research`, `docs-review`, `frontend-design`, `diagnose`, `code-review` und `skill-authoring`;
 - zusätzliche Evalpacks für alle sieben Datenbank-Skills mit Schema-Source-of-Truth-, Query-Safety-, `EXPLAIN ANALYZE`-, Migration-, Concurrency-, Restore- und Review-Gate-Fällen;
 - zusätzliche Evalpacks für alle neun Testing-und-QA-Skills, unter anderem zu fehlendem Oracle, Mock-/Contract-Drift, E2E-Near-Misses, Flakiness trotz Retry, Failure Testing vs. Chaos Engineering und Testsignal-Review;
+- zusätzliche Evalpacks für `context-engineering`, `context-audit`, `context-compaction` und `session-handoff`, unter anderem zu fehlender Tokenmessung, Context Bloat, Compaction-Verlust, erfundenen Freigaben und Persistent-Knowledge-Near-Misses;
 - Skill-Katalog für diese Skills auf `eval_coverage: partial` aktualisiert.
 
 ### Sicherheit
@@ -122,7 +146,8 @@ Neuer Bereich zur bewussten Skill-Komposition:
 - Bugdiagnose;
 - Bildserie;
 - Datenbankänderung;
-- Teststrategie und QA.
+- Teststrategie und QA;
+- Long-Horizon-Agentenarbeit.
 
 Grundregel: Skills bleiben begrenzte Disziplinen; wiederkehrende Skill-Ketten werden als Workflow statt als Mega-Skill modelliert.
 
@@ -132,6 +157,7 @@ Erweitert:
 
 - `Agentenarbeit/Trace-Datenmodell.md` für Task → Run → Skill/Workflow → Tool/Event → Evidence → Gate → Artefakt → Outcome;
 - `Agentenarbeit/trace-event.schema.yml` als toolneutrale maschinenlesbare Ereignisstruktur;
+- optionale Context-/Usage-Metadaten für Input-/Output-Tokens, Cache-Signale, Context- und Tool-Output-Größen sowie Compaction-/Handoff-Ereignisse ergänzt;
 - Inhaltslogging bleibt optional und datenschutzsensibel; Metadaten sind vom vollständigen Prompt-/Toolinhalt getrennt.
 
 ### Dokumentationserstellung
@@ -166,6 +192,7 @@ Erweitert und vollständig auditiert:
 - langsamere Leitfäden wie HAX, Google Developer Style Guide, Write the Docs und Good Docs Project quartalsweise eingeordnet;
 - Datenbank-Upstreams aus Supabase, Neon, MongoDB, Redis und Prisma sowie lebende Postgres-/Migration-Dokumentation in die Quellenpflege aufgenommen;
 - Testing-und-QA-Upstreams aus Anthropic, Currents und Superpowers per Blob-SHA sowie ISTQB, Playwright, Pact und Testcontainers semantisch registriert;
+- Context-/Long-Horizon-Upstreams aus Anthropic, OpenAI, LangChain und OpenTelemetry semantisch sowie `context-doctor` und OpenClaw `handoff` per Blob-SHA registriert;
 - Papers, datierte Research-Artikel und reine Discovery-Kataloge bewusst nicht als künstliche Sync-Dependencies behandelt;
 - Grundregel bleibt: Upstream-Änderung ist Review-Signal, kein automatischer Sync;
 - monatlicher `KI-Regeln Monatscheck` auf das neue Monitoring-Schema und die Cadence-Regeln erweitert.
@@ -208,9 +235,9 @@ Neuer Hauptbereich für Gestaltung und Entwicklung von Websites und Weboberfläc
 
 Aktualisiert:
 
-- Haupt-README um `Webentwicklung/`, `Recherche/`, `Dokumentationserstellung/`, `Skill-Engineering/`, `Sicherheit/`, `Evals/`, `Workflows/`, `Datenbanken/` und `Testing-und-QA/` erweitert;
-- menschliche Doku um Quellenregister, vollständigen Upstream-Audit, Skill-Katalog und zusätzliche Skill-Handbücher ergänzt;
-- Projektmanifest und Nutzungsanleitung um Research-, Web-, Dokumentations-, Datenbank- und Testing-/QA-Projekte ergänzt.
+- Haupt-README um `Webentwicklung/`, `Recherche/`, `Dokumentationserstellung/`, `Skill-Engineering/`, `Sicherheit/`, `Evals/`, `Workflows/`, `Datenbanken/` und `Testing-und-QA/` erweitert und um Context-/Long-Horizon-Agentenarbeit geschärft;
+- menschliche Doku um Quellenregister, vollständigen Upstream-Audit, Skill-Katalog und zusätzliche Skill-Handbücher einschließlich `Skill-Handbuch-Context-und-Long-Horizon.md` ergänzt;
+- Projektmanifest und Nutzungsanleitung um Research-, Web-, Dokumentations-, Datenbank-, Testing-/QA- und Long-Horizon-Agentenarbeit ergänzt.
 
 ## v2026.08
 
