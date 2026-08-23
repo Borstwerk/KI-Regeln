@@ -25,9 +25,30 @@ Ein guter Agentenprozess definiert nicht jeden einzelnen Tastendruck. Er definie
 
 ### Context Engineering
 
-Der Agent erhält den kleinsten ausreichenden Kontext für die aktuelle Aufgabe. Projektwissen wird möglichst aus seinen kanonischen Quellen geladen und nicht unnötig dupliziert.
+Der Agent erhält den kleinsten ausreichenden, aktuellen und signalstarken Kontext für die aktuelle Aufgabe. Projektwissen wird möglichst aus seinen kanonischen Quellen geladen und nicht unnötig dupliziert.
 
-Siehe `Context-Engineering.md`.
+Context Engineering behandelt inzwischen zusätzlich:
+
+- Context Budget und Token-Effizienz;
+- Context Rot und Signalqualität;
+- Context Compaction;
+- Long-Horizon Handoffs;
+- Tooloutput-Offloading;
+- Prompt Caching als runtimeabhängige Optimierung;
+- die Grenze zwischen Active Context, Working State und dauerhaftem Wissen.
+
+Siehe:
+
+- `Context-Engineering.md`;
+- `Context-Budget-und-Token-Effizienz.md`;
+- `Context-Rot-und-Signalqualitaet.md`;
+- `Context-Compaction.md`;
+- `Long-Horizon-Handoffs.md`;
+- `Tool-Outputs-und-Context-Offloading.md`;
+- `Prompt-Caching-und-stabile-Kontexte.md`;
+- `Working-Memory-und-Persistenzgrenzen.md`.
+
+> Kontextfenstergröße ist eine technische Kapazität, kein Qualitätsziel.
 
 ### Harness Engineering
 
@@ -59,7 +80,9 @@ Produktprüfungen und Agentenprüfungen werden getrennt betrachtet.
 
 Agent Evals prüfen beispielsweise, ob ein Agent Scope, Gates, Quellen, Tests und Evidence zuverlässig behandelt – auch in Situationen, in denen korrektes Verhalten bewusstes Stoppen bedeutet.
 
-Siehe `Agent-Evals.md`.
+Context-Evals prüfen zusätzlich Auswahl, Bloat-Diagnose, Compaction-Fidelity und Handoff-Fortsetzungsfähigkeit.
+
+Siehe `Agent-Evals.md` und `../Evals/Agentenarbeit/`.
 
 ### Observability und Traceability
 
@@ -76,6 +99,8 @@ Intent
 ```
 
 Die Session erklärt den Weg, ersetzt aber keine kanonische Projektdokumentation.
+
+Für Context Engineering können – soweit verfügbar – Input-/Output-Tokens, Cache-Signale, Tooloutput-Größen, Latenz und Compaction-/Handoff-Ereignisse als zusätzliche Metadaten beobachtet werden. Vollständige Inhalte bleiben datenschutzsensitiv und optional.
 
 Siehe `Observability-und-Traceability.md`.
 
@@ -94,6 +119,59 @@ Agenten verstärken Muster, die sie im Repository vorfinden. Deshalb gehört kon
 Bereinigung erfolgt in kleinen bestätigten Repair-Slices und nicht als automatische Großsanierung.
 
 Siehe `Entropie-und-Garbage-Collection.md`.
+
+## Active Context, Working State und Persistent Knowledge
+
+Für lange Agentenarbeit drei Ebenen unterscheiden:
+
+```text
+Active Context
+→ aktuell modell-sichtbare Informationen
+
+Working State
+→ task-/threadbezogener Zustand über Schritte oder Sessions
+
+Persistent Knowledge
+→ dauerhaft gepflegtes Wissen über einzelne Tasks hinaus
+```
+
+Active Context und Working State gehören zur Agentenarbeit. Persistent Knowledge wird im separaten Bereich `Wissensmanagement/` behandelt.
+
+## Token-Effizienz
+
+Nicht bloß Tokenzahl minimieren.
+
+```text
+Baseline
+→ Context-Änderung
+→ Token-/Latenzsignal
+→ Task Outcome / Evidence
+```
+
+Eine Einsparung ist keine Verbesserung, wenn Ergebnisqualität oder Zuverlässigkeit sinkt.
+
+Provider- und modellabhängige Größen wie Kontextfenster, Preise, Cache-Lebensdauer oder native Compaction-Mechanismen bleiben lokale technische Wahrheit.
+
+## Long-Horizon-Arbeit
+
+Lange Aufgaben können über mehrere Kontextfenster oder Agenten fortgesetzt werden.
+
+Typischer Ablauf:
+
+```text
+context-engineering
+→ Arbeit
+→ context-audit bei Bedarf
+→ context-compaction bei Context Pressure
+→ verification-loop
+→ session-handoff bei Session-/Agentenwechsel
+→ frische Instanz prüft Sources of Truth
+→ weiterarbeiten
+```
+
+Siehe `../Workflows/Long-Horizon-Agentenarbeit.md`.
+
+Multi-Agent-Architekturen können getrennte Kontextfenster als Isolations- und Parallelitätsmechanismus nutzen, sind aber kein universeller Token-Spartrick und können den Gesamttokenverbrauch deutlich erhöhen.
 
 ## Innerer und äußerer Loop
 
@@ -123,8 +201,13 @@ Ein innerer Loop darf keinen äußeren Gate überspringen.
 
 ## Leitgedanken
 
-- Agenten sollen nicht raten, wenn eine Quelle der Wahrheit vorhanden ist.
+- Agenten sollen nicht raten, wenn eine Source of Truth vorhanden ist.
 - Kontext soll relevant und aktuell sein, nicht maximal groß.
+- Kontextbudget ist Mittel, nicht Ziel.
+- Große Tooloutputs möglichst vorverarbeiten, referenzieren oder gezielt laden, wenn Evidence erhalten bleibt.
+- Compaction wird an Fortsetzungsfähigkeit gemessen, nicht an maximaler Kürze.
+- Ein Handoff muss ohne alten Chat nutzbar sein.
+- Working State wird nicht automatisch zu dauerhaftem Wissen.
 - Ein Delegation Contract beschreibt Ziel, Grenzen und erwarteten Nachweis.
 - Unabhängige Arbeit darf parallelisiert werden; abhängige Arbeit nicht.
 - Parallel arbeitende Agenten benötigen ausreichend isolierte veränderliche Workspaces.
@@ -142,7 +225,10 @@ Ein innerer Loop darf keinen äußeren Gate überspringen.
 
 Unter `Skills/` liegen kompakte Arbeitsdisziplinen für konkrete Agenteneinsätze:
 
-- `context-engineering` – relevanten Kontext auswählen und Quellen der Wahrheit erhalten;
+- `context-engineering` – relevanten aktiven Kontext auswählen und Sources of Truth erhalten;
+- `context-audit` – Context-Footprint, Signalqualität und Bloat analysieren;
+- `context-compaction` – gewachsenen Kontext mit hoher Fidelity verdichten;
+- `session-handoff` – eigenständig nutzbaren Fortsetzungszustand für neue Sessions oder Agenten erzeugen;
 - `task-graph` – komplexe Arbeit in abhängige, überprüfbare Knoten zerlegen;
 - `verification-loop` – Arbeit innerhalb eines freigegebenen Scopes iterativ prüfen und reparieren;
 - `delegation-contract` – Auftrag, Scope, Rechte, Stop-Bedingungen und Evidence vorab definieren;
