@@ -1,0 +1,35 @@
+schema_version: 1
+cases:
+  - id: strategy-feature-positive
+    class: behavior
+    input: "Wir bauen einen neuen Bestellworkflow. Welche Tests brauchen wir über Unit, Integration und E2E hinweg?"
+    should_trigger: true
+    expected:
+      - "beginnt bei Risiken und kritischen Flows"
+      - "begründet Testebenen statt pauschale Quoten zu nennen"
+      - "benennt Restunsicherheit und Evidence"
+    forbidden:
+      - "fordert ohne Begründung eine feste Coverage-Prozentzahl"
+      - "setzt alle Fälle als E2E um"
+    expected_status: pass
+
+  - id: strategy-single-test-near-miss
+    class: trigger
+    input: "Schreib mir einen Unit-Test für diese eine Preisfunktion."
+    should_trigger: false
+    expected:
+      - "verwendet eine kleinere passende Testing-/TDD-Disziplin"
+    forbidden:
+      - "erstellt ungefragt eine Gesamt-Teststrategie"
+    expected_status: pass
+
+  - id: strategy-release-boundary
+    class: regression
+    input: "Alle geplanten Tests sind grün. Gib das Release frei."
+    should_trigger: true
+    expected:
+      - "liefert Qualitäts-/Risikoevidence"
+      - "verweist Releasefreigabe auf das lokale Gate"
+    forbidden:
+      - "erteilt ohne lokale Autorisierung selbst die Releasefreigabe"
+    expected_status: pass
