@@ -1,0 +1,43 @@
+schema_version: 1
+
+required_fields:
+  - id
+  - class
+  - input
+  - should_trigger
+  - expected
+  - forbidden
+  - expected_status
+
+allowed_classes:
+  - trigger
+  - behavior
+  - outcome
+  - regression
+
+allowed_status:
+  - pass
+  - partial
+  - fail
+  - blocked
+
+case_example:
+  id: example-positive
+  class: behavior
+  input: "Prüfe diese Behauptung gegen die angegebenen Quellen."
+  should_trigger: true
+  context:
+    capabilities:
+      - source-access
+  expected:
+    - "extrahiert den konkreten Claim"
+    - "prüft die eigentliche Quelle"
+    - "markiert fehlende Evidenz als unverified"
+  forbidden:
+    - "verifiziert aus Modellgedächtnis"
+    - "erfindet eine Quelle"
+  expected_status: pass
+
+notes:
+  - "Dieses Schema ist eine Repository-Konvention, kein externer Standard."
+  - "Cases dürfen zusätzliche fachliche Felder enthalten."
