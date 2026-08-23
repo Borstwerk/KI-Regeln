@@ -29,12 +29,18 @@ KI-Regeln/
 │   ├── Context-Engineering.md
 │   ├── Harness-Engineering.md
 │   ├── Task-Graph-und-Loops.md
+│   ├── Delegation-und-Evidence.md
+│   ├── Agent-Evals.md
+│   ├── Observability-und-Traceability.md
 │   ├── Human-Gates-und-Freigaben.md
+│   ├── Entropie-und-Garbage-Collection.md
 │   ├── Quellen-und-Inspirationen.md
 │   └── Skills/
 │       ├── context-engineering/SKILL.md
 │       ├── task-graph/SKILL.md
-│       └── verification-loop/SKILL.md
+│       ├── verification-loop/SKILL.md
+│       ├── delegation-contract/SKILL.md
+│       └── agent-eval/SKILL.md
 ├── Schreiben/
 │   ├── Agent-Anweisungen.md
 │   ├── Schreibstil.md
@@ -74,10 +80,15 @@ Regeln für kontrollierte Agentenautonomie unabhängig vom konkreten Fachgebiet.
 Der Bereich behandelt insbesondere:
 
 - `Context Engineering` – den kleinsten ausreichenden, aktuellen Kontext bereitstellen;
-- `Harness Engineering` – Regeln möglichst durch Tests, Linter, Schemas, Rechte und andere technische Grenzen unterstützen;
-- `Task Graphs` – komplexe Arbeit in abhängige und überprüfbare Knoten zerlegen;
+- `Harness Engineering` – Regeln durch Tests, Linter, Schemas, Rechte, Isolation und andere technische Grenzen unterstützen;
+- `Task Graphs` – komplexe Arbeit in abhängige und überprüfbare Knoten zerlegen, ohne jeden Arbeitsschritt zu mikromanagen;
 - `Verification Loops` – innerhalb eines freigegebenen Scopes arbeiten, prüfen, diagnostizieren und korrigieren;
-- `Human Gates` – klar definieren, welche Entscheidungen oder Aktionen nicht autonom erfolgen dürfen.
+- `Delegation Contracts` – Ziel, Scope, Befugnisse, Akzeptanzbedingungen und erwartete Evidence vorab klären;
+- `Evidence Bundles` – Ergebnisse mit tatsächlichen Nachweisen statt bloßem Fertig-Status übergeben;
+- `Agent Evals` – Produktqualität und Agentenprozessqualität getrennt und reproduzierbar prüfen;
+- `Observability und Traceability` – Auftrag, Agentenlauf, Evidence, Artefakt und Freigabe nachvollziehbar verbinden;
+- `Human Gates` – Why Loop und How Loop trennen und klar definieren, welche Entscheidungen nicht autonom erfolgen dürfen;
+- `Entropiemanagement` – Drift und schlechte Repository-Muster erkennen, bevor Agenten sie weiter vervielfältigen.
 
 Leitgedanke:
 
@@ -87,7 +98,9 @@ Enthaltene Skills:
 
 - `context-engineering` – relevanten Agentenkontext auswählen und Quellen der Wahrheit erhalten;
 - `task-graph` – komplexe Arbeit in abhängige, überprüfbare Knoten zerlegen;
-- `verification-loop` – kontrolliert iterieren, bis Nachweis oder Stop-Kriterium erreicht ist.
+- `verification-loop` – kontrolliert iterieren, bis Nachweis oder Stop-Kriterium erreicht ist;
+- `delegation-contract` – Auftrag, Grenzen, Rechte, Stop-Bedingungen und Evidence definieren;
+- `agent-eval` – reproduzierbar prüfen, ob ein Agent Ergebnis- und Prozessanforderungen einhält.
 
 `Agentenarbeit/Quellen-und-Inspirationen.md` dokumentiert externe Konzepte, die in diesen Bereich eingeflossen sind. Diese Quellen sind Inspiration und Beobachtungsmaterial, keine projektspezifische Wahrheit.
 
@@ -148,13 +161,18 @@ Agenten dürfen innerhalb eines ausdrücklich oder durch den Projektprozess frei
 Dabei gelten insbesondere:
 
 - Kontext gezielt statt maximal laden;
+- Delegation beschreibt Ziel, Scope, Rechte, Akzeptanzbedingungen und erwartete Evidence;
 - unabhängige Arbeit darf parallelisiert werden, echte Abhängigkeiten nicht;
+- parallele Agenten benötigen ausreichend isolierte veränderliche Workspaces;
 - jeder wichtige Arbeitsschritt braucht einen überprüfbaren Ausgangszustand;
 - ein Loop benötigt Stop- und Eskalationsbedingungen;
 - fehlende Spezifikation darf nicht durch stillschweigende Agentenentscheidungen ersetzt werden;
 - automatisch prüfbare Invarianten sollten möglichst automatisch geprüft werden;
 - riskante, irreversible oder extern sichtbare Aktionen benötigen die dafür definierte Freigabe;
-- ein erfolgreicher Agentenlauf ist noch keine fachliche oder technische Freigabe.
+- ein erfolgreicher Agentenlauf ist noch keine fachliche oder technische Freigabe;
+- relevante Agentenarbeit soll mit Auftrag, Evidence und Ergebnis nachvollziehbar verbunden werden;
+- wiederkehrende Agentenfähigkeiten können mit Evals statt nur durch subjektiven Eindruck geprüft werden;
+- Repository-Drift wird nicht automatisch großflächig refactort, sondern in bestätigten kleinen Repair-Slices behandelt.
 
 ## Verteilung in Projekte
 
