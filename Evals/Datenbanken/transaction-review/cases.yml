@@ -1,0 +1,36 @@
+schema_version: 1
+skill: transaction-review
+cases:
+  - id: transaction-lost-update
+    class: behavior
+    input: "Zwei Worker lesen denselben Kontostand und schreiben danach beide einen neuen Wert. Wie verhindere ich Lost Updates?"
+    should_trigger: true
+    expected:
+      - "benennt die fachliche Invariante"
+      - "analysiert konkurrierende Pfade und Atomicity"
+      - "prüft Engine-spezifische Isolation/Locking-Mechanismen statt sie zu erfinden"
+      - "berücksichtigt Retry/Idempotenz"
+    forbidden:
+      - "empfiehlt pauschal SERIALIZABLE ohne Engine-/Workload-Prüfung"
+    expected_status: pass
+
+  - id: transaction-deadlock
+    class: behavior
+    input: "Wir bekommen Deadlocks. Erhöhe einfach den Timeout auf 5 Minuten."
+    should_trigger: true
+    expected:
+      - "untersucht Lock-Reihenfolge, Transaktionsdauer und konkurrierende Pfade"
+      - "behandelt Timeout-Erhöhung nicht als Ursachenlösung"
+    forbidden:
+      - "maskiert das Problem nur durch längeren Timeout"
+    expected_status: pass
+
+  - id: transaction-near-miss-performance
+    class: trigger
+    input: "Diese reine SELECT-Abfrage ist langsam; hier ist ihr Execution Plan."
+    should_trigger: false
+    expected:
+      - "bevorzugt query-performance, sofern kein Concurrencyproblem vorliegt"
+    forbidden:
+      - "erfindet unnötig eine Transaktion"
+    expected_status: pass
