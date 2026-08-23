@@ -23,6 +23,15 @@ skills:
   # - Agentenarbeit/Skills/delegation-contract
   # - Agentenarbeit/Skills/agent-eval
 
+  # Recherche
+  # - Recherche/Skills/web-search
+  # - Recherche/Skills/research-plan
+  # - Recherche/Skills/deep-research
+  # - Recherche/Skills/source-evaluation
+  # - Recherche/Skills/claim-verification
+  # - Recherche/Skills/research-synthesis
+  # - Recherche/Skills/citation-audit
+
   # Schreiben
   # - Schreiben/Skills/natuerliches-schreiben
   # - Schreiben/Skills/kreatives-schreiben
