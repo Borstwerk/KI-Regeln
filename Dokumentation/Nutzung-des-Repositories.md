@@ -181,6 +181,49 @@ diagnose
 
 Logs, HARs und Traces vor Weitergabe auf Secrets und personenbezogene Daten prüfen.
 
+## Beispiel: Datenbankänderung
+
+Workflow:
+
+`../Workflows/Datenbank-Aenderung.md`
+
+Kern:
+
+```text
+database-design
+→ schema-migration
+→ optional transaction-review
+→ database-query-review
+→ optional query-performance / database-operations
+→ database-review
+→ Human Gate
+→ lokale Ausführung
+→ Post-Change-Verifikation
+```
+
+Lokal bleiben insbesondere reale Engine und Version, Schema, Migrationstool, Datenklassifikation, RPO/RTO, Credentials und Produktionsfreigaben.
+
+## Beispiel: Teststrategie und QA
+
+Workflow:
+
+`../Workflows/Teststrategie-und-QA.md`
+
+Kern:
+
+```text
+test-strategy
+→ test-design
+→ passende Integration-/Contract-/E2E-/Failure-Tests
+→ optional exploratory-testing
+→ bei Bedarf flaky-test-diagnosis
+→ test-suite-review
+→ verification-loop mit frischer Evidence
+→ lokales Release-/Quality-Gate
+```
+
+Lokal bleiben konkrete Testframeworks, Testdaten, Testumgebungen, Coverage-/Releaseziele und Befugnisse für produktive Testaktionen.
+
 ## Beispiel: Deep Research
 
 Workflow:
