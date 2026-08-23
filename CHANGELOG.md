@@ -8,6 +8,29 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Datenbanken
+
+Neuer engine-neutraler Hauptbereich für Datenbankarbeit:
+
+- Datenmodellierung anhand von Domäne, Invarianten und realen Zugriffsmustern;
+- reales Schema und verwendete Engine-/Driver-/ORM-Version als Source of Truth statt plausibler Annahmen;
+- Schema-, Constraint- und Integritätsregeln;
+- Query-Korrektheit, Parametrisierung, Tenant-/Scope-Sicherheit und Write-Wirkung;
+- messungsbasierte Query-Performance mit bestehenden Indizes und Execution-Plan-Evidence;
+- Transaktionen, Isolation, Locking, Race Conditions, Idempotenz und Retry;
+- Migrationen, Backfills, Expand–Migrate–Contract, Rollback und Forward Fix;
+- Connections, Pooling, Timeouts und Ressourcen als systemweite Kapazitätsfrage;
+- Least Privilege und getrennte Diagnose-/Write-/Adminrechte;
+- Backup, Restore und Recovery mit getestetem Restore statt bloß grünem Backup-Job;
+- Monitoring und Ursachen-Diagnose;
+- klare Scope-Grenze: Zustand innerhalb eines operativen Datenspeichers gehört zu `Datenbanken/`, systemübergreifende ETL-/ELT-/CDC-Pipelines zu einem späteren `Data Engineering/`;
+- Risikoklassen `READ`, `WRITE`, `MIGRATION` und `DESTRUCTIVE / RECOVERY` mit steigenden Evidence- und Human-Gate-Anforderungen;
+- Skills `database-design`, `database-query-review`, `query-performance`, `schema-migration`, `transaction-review`, `database-operations` und `database-review`;
+- alle sieben Skills zunächst `experimental` mit `partial` Evalabdeckung;
+- Evalpacks mit positiven, Near-Miss- und Safety-/Gate-Fällen;
+- Workflow `Workflows/Datenbank-Aenderung.md`;
+- Quellenbasis aus Supabase/Postgres, Neon, MongoDB, Redis, Prisma und lebender Primärdokumentation, ohne deren enginespezifische Regeln zu universalisieren.
+
 ### Skill Engineering
 
 Neuer Meta-Bereich für Entwurf und Pflege von Agent-Skills:
@@ -32,7 +55,8 @@ Neu:
 - Evalabdeckung `none`, `partial`, `core`, `broad`;
 - Capability- und Related-Hinweise für relevante Skills;
 - `Dokumentation/Skill-Katalog.md` als menschliche Erläuterung;
-- konservative Einstufung: neue Bereiche zunächst `experimental`, ältere praktisch genutzte Skills überwiegend `candidate`; `stable` wird nicht automatisch vergeben.
+- konservative Einstufung: neue Bereiche zunächst `experimental`, ältere praktisch genutzte Skills überwiegend `candidate`; `stable` wird nicht automatisch vergeben;
+- Datenbank-Skills als neue `experimental`-Einträge mit `partial` Evalabdeckung ergänzt.
 
 ### Evals
 
@@ -42,6 +66,7 @@ Neuer Bereich `Evals/`:
 - Trigger-, Behavior-, Outcome- und Regressionsevals;
 - Near-Miss-Negative als eigener Qualitätsbestandteil;
 - erste Evalpacks für `deep-research`, `docs-review`, `frontend-design`, `diagnose`, `code-review` und `skill-authoring`;
+- zusätzliche Evalpacks für alle sieben Datenbank-Skills mit Schema-Source-of-Truth-, Query-Safety-, `EXPLAIN ANALYZE`-, Migration-, Concurrency-, Restore- und Review-Gate-Fällen;
 - Skill-Katalog für diese Skills auf `eval_coverage: partial` aktualisiert.
 
 ### Sicherheit
@@ -70,7 +95,8 @@ Neuer Bereich zur bewussten Skill-Komposition:
 - Review bestehender Websites;
 - Software Feature;
 - Bugdiagnose;
-- Bildserie.
+- Bildserie;
+- Datenbankänderung.
 
 Grundregel: Skills bleiben begrenzte Disziplinen; wiederkehrende Skill-Ketten werden als Workflow statt als Mega-Skill modelliert.
 
@@ -112,6 +138,7 @@ Erweitert und vollständig auditiert:
 - lebende Adobe-/Midjourney-Bilddokumentation semantisch registriert;
 - weitere tatsächlich verwendete Web- und Research-Skills mit geprüftem Blob-SHA ergänzt;
 - langsamere Leitfäden wie HAX, Google Developer Style Guide, Write the Docs und Good Docs Project quartalsweise eingeordnet;
+- Datenbank-Upstreams aus Supabase, Neon, MongoDB, Redis und Prisma sowie lebende Postgres-/Migration-Dokumentation in die Quellenpflege aufgenommen;
 - Papers, datierte Research-Artikel und reine Discovery-Kataloge bewusst nicht als künstliche Sync-Dependencies behandelt;
 - Grundregel bleibt: Upstream-Änderung ist Review-Signal, kein automatischer Sync;
 - monatlicher `KI-Regeln Monatscheck` auf das neue Monitoring-Schema und die Cadence-Regeln erweitert.
@@ -154,7 +181,7 @@ Neuer Hauptbereich für Gestaltung und Entwicklung von Websites und Weboberfläc
 
 Aktualisiert:
 
-- Haupt-README um `Webentwicklung/`, `Recherche/`, `Dokumentationserstellung/`, `Skill-Engineering/`, `Sicherheit/`, `Evals/` und `Workflows/` erweitert;
+- Haupt-README um `Webentwicklung/`, `Recherche/`, `Dokumentationserstellung/`, `Skill-Engineering/`, `Sicherheit/`, `Evals/`, `Workflows/` und `Datenbanken/` erweitert;
 - menschliche Doku um Quellenregister, vollständigen Upstream-Audit, Skill-Katalog und zusätzliche Skill-Handbücher ergänzt;
 - Projektmanifest und Nutzungsanleitung um Research-, Web- und Dokumentationsprojekte ergänzt.
 
