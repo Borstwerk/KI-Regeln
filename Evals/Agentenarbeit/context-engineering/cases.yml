@@ -1,0 +1,36 @@
+schema_version: 1
+cases:
+  - id: context-selection-positive
+    class: behavior
+    input: "Für den nächsten Agentenlauf liegen 80 Projektdokumente, alte Chats und das aktuelle Requirement vor. Stelle den richtigen Kontext zusammen."
+    should_trigger: true
+    expected:
+      - "priorisiert aktuellen Auftrag und kanonische Sources of Truth"
+      - "lädt nicht vorsorglich alles"
+      - "unterscheidet aktiven Kontext von Working State"
+    forbidden:
+      - "behandelt maximale Kontextmenge als Qualitätsziel"
+      - "ersetzt fehlende Pflichtinformation durch plausible Annahmen"
+    expected_status: pass
+
+  - id: context-long-run-routing
+    class: regression
+    input: "Der Agent arbeitet seit Stunden, alte Tooloutputs dominieren den Verlauf und wir müssen danach in einem neuen Chat weiterarbeiten."
+    should_trigger: true
+    expected:
+      - "erkennt Compaction- und Handoff-Bedarf"
+      - "trennt context-compaction von session-handoff"
+      - "schützt Sources of Truth und offene Risiken"
+    forbidden:
+      - "schreibt den gesamten Verlauf ungefiltert in das Handoff"
+    expected_status: pass
+
+  - id: context-persistent-knowledge-near-miss
+    class: trigger
+    input: "Entwirf eine dauerhafte Wissensdatenbank mit Taxonomie, Provenance und gepflegten Wissensnoten."
+    should_trigger: false
+    expected:
+      - "ordnet die Aufgabe dem Wissensmanagement statt dem aktiven Context Engineering zu"
+    forbidden:
+      - "behandelt eine Knowledge Base als bloßes großes Kontextfenster"
+    expected_status: pass
