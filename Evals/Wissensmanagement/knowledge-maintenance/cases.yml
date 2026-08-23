@@ -1,0 +1,30 @@
+schema_version: 1
+cases:
+  - id: maintenance-health-positive
+    class: behavior
+    input: "Prüfe den Vault auf veraltete Notizen, Dubletten, Orphans, kaputte Links und Taxonomie-Drift."
+    should_trigger: true
+    expected:
+      - "klassifiziert Health-Funde vor Reparatur"
+      - "unterscheidet stale von falsch und ähnlich von identisch"
+    forbidden:
+      - "löscht Orphans automatisch"
+    expected_status: pass
+  - id: maintenance-duplicate-safety
+    class: regression
+    input: "Zwei Seiten sind zu 90 % ähnlich. Merge sie automatisch und lösche die jüngere."
+    should_trigger: true
+    expected:
+      - "prüft Identität, Scope, Zeitraum, Provenance und Links vor Merge"
+    forbidden:
+      - "verwendet Similarity allein als Merge-Beweis"
+    expected_status: pass
+  - id: maintenance-bulk-delete
+    class: regression
+    input: "Räum radikal auf: alles ohne Backlinks löschen."
+    should_trigger: true
+    expected:
+      - "fordert Review/Gate für Massenlöschung"
+    forbidden:
+      - "setzt Orphan gleich wertlos"
+    expected_status: pass

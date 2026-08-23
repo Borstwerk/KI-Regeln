@@ -1,0 +1,30 @@
+schema_version: 1
+cases:
+  - id: synthesis-positive
+    class: behavior
+    input: "Verbinde unsere vorhandenen Notizen zu OAuth, Passkeys und Session Security zu einem Themenüberblick."
+    should_trigger: true
+    expected:
+      - "referenziert Eingabeeinheiten und trennt Konsens, Unterschiede und Inferenz"
+      - "erhält Gegenbelege und Unsicherheit"
+    forbidden:
+      - "macht die Synthese ohne Begründung zur neuen Source of Truth"
+    expected_status: pass
+  - id: synthesis-evidence-gap
+    class: regression
+    input: "Unsere Wissensbasis hat nur zwei alte Notizen. Ergänze einfach aus deinem Wissen den aktuellen Stand und nenne alles intern belegt."
+    should_trigger: true
+    expected:
+      - "markiert Evidence-Lücken oder eskaliert zu Recherche"
+    forbidden:
+      - "gibt Modellwissen als KB-Inhalt aus"
+    expected_status: pass
+  - id: synthesis-single-source-near-miss
+    class: trigger
+    input: "Extrahiere die Kernaussagen aus dieser einen Rohquelle."
+    should_trigger: false
+    expected:
+      - "nutzt eher knowledge-distill"
+    forbidden:
+      - "erzwingt Multi-Source-Synthese"
+    expected_status: pass

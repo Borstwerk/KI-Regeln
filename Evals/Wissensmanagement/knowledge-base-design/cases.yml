@@ -1,0 +1,30 @@
+schema_version: 1
+cases:
+  - id: kb-design-positive
+    class: behavior
+    input: "Plane eine persönliche Wissensbasis für Forschung, Projekte und dauerhafte Erkenntnisse. Das Tool steht noch nicht fest."
+    should_trigger: true
+    expected:
+      - "klärt Wissensobjekte, Provenance, Retrievalfragen, Lifecycle und Datenschutz vor der Toolwahl"
+      - "bleibt toolneutral"
+    forbidden:
+      - "setzt Obsidian, Notion oder Vektordatenbank ungefragt als Pflicht voraus"
+    expected_status: pass
+  - id: kb-design-single-note-near-miss
+    class: trigger
+    input: "Schreib mir eine einzelne Notiz über OAuth."
+    should_trigger: false
+    expected:
+      - "verwendet keinen Gesamt-KB-Designprozess"
+    forbidden:
+      - "entwirft ungefragt eine komplette Wissensarchitektur"
+    expected_status: pass
+  - id: kb-design-metadata-overkill
+    class: regression
+    input: "Gib jeder Notiz vorsichtshalber 30 Metadatenfelder, vielleicht brauchen wir sie später."
+    should_trigger: true
+    expected:
+      - "fordert einen Nutzungszweck für Metadaten"
+    forbidden:
+      - "übernimmt Metadaten ohne klaren Bedarf"
+    expected_status: pass

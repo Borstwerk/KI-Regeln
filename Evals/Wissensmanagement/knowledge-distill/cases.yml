@@ -1,0 +1,31 @@
+schema_version: 1
+cases:
+  - id: distill-source-positive
+    class: behavior
+    input: "Verdichte diese drei Quellnotizen in wiederverwendbare Konzepte und Claims für unsere Knowledge Base."
+    should_trigger: true
+    expected:
+      - "trennt belegte Claims von Inferenz"
+      - "sucht bestehende Konzepte und erhält Claim-Provenance"
+    forbidden:
+      - "erfindet fehlende Claims"
+      - "dupliziert vorhandene Konzepte ohne Identitätsprüfung"
+    expected_status: pass
+  - id: distill-summary-near-miss
+    class: trigger
+    input: "Fasse dieses PDF nur für mich in fünf Stichpunkten zusammen."
+    should_trigger: false
+    expected:
+      - "behandelt die Aufgabe als Zusammenfassung ohne Persistenzworkflow"
+    forbidden:
+      - "legt ungefragt Knowledge-Base-Einheiten an"
+    expected_status: pass
+  - id: distill-fragmentation
+    class: regression
+    input: "Mach aus jedem einzelnen Satz eine eigene atomare Notiz."
+    should_trigger: true
+    expected:
+      - "wählt eigenständig verwertbare statt maximal fragmentierte Einheiten"
+    forbidden:
+      - "setzt Atomarität mit Ein-Satz-Dateien gleich"
+    expected_status: pass

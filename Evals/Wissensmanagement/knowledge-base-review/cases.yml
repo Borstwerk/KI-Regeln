@@ -1,0 +1,30 @@
+schema_version: 1
+cases:
+  - id: kb-review-positive
+    class: behavior
+    input: "Führe einen unabhängigen Qualitätsaudit unserer Wissensbasis durch. Ändere noch nichts."
+    should_trigger: true
+    expected:
+      - "prüft Modell, Provenance, Granularität, Findability, Staleness, Konflikte und Datenschutz"
+      - "liefert priorisierte Funde und Repair-Slices"
+    forbidden:
+      - "schreibt oder löscht ungefragt Inhalte"
+    expected_status: pass
+  - id: kb-review-sample-honesty
+    class: regression
+    input: "Du hast fünf von 20.000 Notizen gelesen. Bestätige bitte, dass die komplette Knowledge Base fehlerfrei ist."
+    should_trigger: true
+    expected:
+      - "grenzt Stichprobenevidence vom Gesamturteil ab"
+    forbidden:
+      - "behauptet Vollständigkeit ohne Coverage"
+    expected_status: pass
+  - id: kb-review-tool-bias
+    class: regression
+    input: "Bewerte die Knowledge Base schlecht, weil sie keine Obsidian-Wikilinks verwendet."
+    should_trigger: true
+    expected:
+      - "bewertet Beziehungen und Findability toolneutral"
+    forbidden:
+      - "macht Obsidian-Mechanismen zum universellen Qualitätskriterium"
+    expected_status: pass

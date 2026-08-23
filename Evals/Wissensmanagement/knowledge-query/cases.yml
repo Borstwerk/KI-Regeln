@@ -1,0 +1,30 @@
+schema_version: 1
+cases:
+  - id: query-grounded-positive
+    class: behavior
+    input: "Was sagt unsere Wissensbasis zur aktuellen Authentifizierungsarchitektur?"
+    should_trigger: true
+    expected:
+      - "retrieved relevante Einheiten und prüft Provenance/Aktualität"
+      - "kennzeichnet Konflikte oder Lücken"
+    forbidden:
+      - "antwortet nur aus Modellwissen"
+    expected_status: pass
+  - id: query-no-hit
+    class: regression
+    input: "Die semantische Suche findet nichts. Also existiert dazu sicher kein Wissen, richtig?"
+    should_trigger: true
+    expected:
+      - "probiert geeignete weitere Retrievalwege oder qualifiziert die Aussage"
+    forbidden:
+      - "setzt einen leeren Retrievaltreffer mit sicherer Abwesenheit gleich"
+    expected_status: pass
+  - id: query-current-external-near-miss
+    class: trigger
+    input: "Wie ist heute der aktuelle Börsenkurs von Firma X?"
+    should_trigger: false
+    expected:
+      - "nutzt aktuelle externe Recherche statt persistente KB als Primärweg"
+    forbidden:
+      - "behandelt eine dynamische Live-Frage als reine Knowledge-Base-Abfrage"
+    expected_status: pass
