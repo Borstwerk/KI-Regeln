@@ -10,8 +10,8 @@ Ziel ist keine persönliche KI-Konfiguration und keine projektspezifische Wissen
 
 Das bedeutet:
 
-- allgemeine Kommunikations-, Schreib-, Analyse-, Agenten- und Entwicklungsregeln liegen hier;
-- projektspezifische Anforderungen, Architektur, Figuren, Fachbegriffe und Sonderregeln bleiben im jeweiligen Projekt;
+- allgemeine Kommunikations-, Schreib-, Bild-, Analyse-, Agenten- und Entwicklungsregeln liegen hier;
+- projektspezifische Anforderungen, Architektur, Figuren, Fachbegriffe, visuelle Bibeln und Sonderregeln bleiben im jeweiligen Projekt;
 - persönliche Profile, Gesundheitsdaten, Familieninformationen oder andere nicht notwendige personenbezogene Details gehören nicht in dieses Repository;
 - ein Skill ersetzt niemals die tatsächliche Spezifikation oder Dokumentation eines Projekts.
 
@@ -50,6 +50,21 @@ KI-Regeln/
 │       ├── natuerliches-schreiben/SKILL.md
 │       ├── kreatives-schreiben/SKILL.md
 │       └── stilreview/SKILL.md
+├── Bildarbeit/
+│   ├── README.md
+│   ├── Quellen-und-Prioritaeten.md
+│   ├── Stil-und-Referenzsysteme.md
+│   ├── Charaktere-Objekte-und-Orte.md
+│   ├── Szenenplanung-und-Komposition.md
+│   ├── Kontinuitaet-und-Zustandsmatrix.md
+│   ├── Bildpruefung-und-Freigabe.md
+│   ├── Serienproduktion-und-Abschlussaudit.md
+│   ├── Quellen-und-Inspirationen.md
+│   └── Skills/
+│       ├── bild-prebrief/SKILL.md
+│       ├── entitaetsbibel/SKILL.md
+│       ├── serien-kontinuitaetscheck/SKILL.md
+│       └── bildreview/SKILL.md
 ├── Programmieren/
 │   ├── Entwicklungsprozess.md
 │   ├── Agent-Anweisungen.md
@@ -102,8 +117,6 @@ Enthaltene Skills:
 - `delegation-contract` – Auftrag, Grenzen, Rechte, Stop-Bedingungen und Evidence definieren;
 - `agent-eval` – reproduzierbar prüfen, ob ein Agent Ergebnis- und Prozessanforderungen einhält.
 
-`Agentenarbeit/Quellen-und-Inspirationen.md` dokumentiert externe Konzepte, die in diesen Bereich eingeflossen sind. Diese Quellen sind Inspiration und Beobachtungsmaterial, keine projektspezifische Wahrheit.
-
 ### 4. Schreiben
 
 Allgemeine Regeln für natürliche Texte, kreative Prosa und strukturelle Stilreviews.
@@ -114,7 +127,33 @@ Enthaltene Skills:
 - `kreatives-schreiben` – Szene, Figurenstimme, räumliche Klarheit und kanontreue Wirkung;
 - `stilreview` – Muster erkennen, aber nur nach Kontextprüfung ändern.
 
-### 5. Programmieren
+### 5. Bildarbeit
+
+Allgemeine Regeln für konsistente Einzelbilder und Bildserien mit generativer KI.
+
+Der Bereich trennt insbesondere:
+
+- **Identitätskonsistenz** – dieselbe Figur, dasselbe Objekt oder derselbe Ort bleibt wiedererkennbar;
+- **Stilkonsistenz** – Bilder gehören sichtbar zur selben visuellen Welt;
+- **Struktur- und Kompositionskonsistenz** – Perspektive und Bildorganisation werden bewusst gesteuert;
+- **Kontinuitätskonsistenz** – sichtbare Zustände stimmen zum richtigen Zeitpunkt innerhalb einer Serie.
+
+Weitere Schwerpunkte sind Quellenpriorität, Referenzsysteme, Entitätsbibeln, Szenen-Pre-Briefs, Zustandsmatrizen, Review-Stufen, Schutz vor Endlosschleifen und Abschlussaudits für komplette Bildserien.
+
+Leitgedanke:
+
+> Konsistenz vor Zufall. Aussage vor Effekt. Referenz vor Neuerfindung.
+
+Enthaltene Skills:
+
+- `bild-prebrief` – Moment, Aussage, Komposition, Entitäten, Zustand und Ausschlüsse vor einer Generierung klären;
+- `entitaetsbibel` – wiederkehrende Figuren, Objekte, Fahrzeuge, Kreaturen oder Orte stabil definieren;
+- `serien-kontinuitaetscheck` – Bildfolgen auf Identitäts-, Stil-, Struktur- und Zustandsdrift prüfen;
+- `bildreview` – zwischen Keeper, lokalem Feinschliff und Neubau unterscheiden.
+
+Projektkonkrete Charakterdesigns, Bildkanon und visuelle Sonderregeln bleiben im jeweiligen Projekt.
+
+### 6. Programmieren
 
 Allgemeiner Fünf-Gate-Prozess und wiederverwendbare Agent-Skills für Softwarearbeit.
 
@@ -127,15 +166,15 @@ Enthaltene Skills:
 
 Die Regeln aus `Agentenarbeit/` ergänzen diesen Prozess. Ein innerer Agentenloop darf insbesondere keine Planungs-, Review- oder Freigabegates überspringen.
 
-### 6. Projektregeln
+### 7. Projektregeln
 
-Projektregeln gehören nicht hierher. Beispiele sind konkrete Produktanforderungen, Serienkanon, Fachmodelle, Releasewege oder technische Sonderfälle eines einzelnen Repositories.
+Projektregeln gehören nicht hierher. Beispiele sind konkrete Produktanforderungen, Serienkanon, Charaktermerkmale, visuelle Referenzen, Fachmodelle, Releasewege oder technische Sonderfälle eines einzelnen Repositories.
 
 ## Was ist ein Skill?
 
 Ein Skill beschreibt eine begrenzte Arbeitsdisziplin für einen KI-Agenten.
 
-Er beschreibt **wie** gearbeitet wird. Er definiert nicht eigenmächtig, **was** ein Projekt fachlich tun soll.
+Er beschreibt **wie** gearbeitet wird. Er definiert nicht eigenmächtig, **was** ein Projekt fachlich oder visuell tun soll.
 
 Die ausführlicheren Regeldateien erklären Hintergründe und Leitplanken. `SKILL.md`-Dateien verdichten diese Regeln für einen konkreten Agenteneinsatz.
 
@@ -145,14 +184,14 @@ Bei der Anwendung gilt grundsätzlich:
 
 ```text
 konkreter Nutzerauftrag
-→ verbindliche Projektanforderung / Spezifikation
+→ verbindliche Projektanforderung / Spezifikation / Kanon
 → gültige Projektentscheidungen und Projektdokumentation
-→ freigegebener Plan
-→ lokale Repository-Regeln
+→ freigegebener Plan oder Produktionsbrief
+→ lokale Repository-Regeln und freigegebene Referenzen
 → allgemeine Agenten-, Fach- und Arbeitsregeln aus diesem Repository
 ```
 
-Allgemeine Regeln dürfen keine lokale fachliche Wahrheit überschreiben.
+Allgemeine Regeln dürfen keine lokale fachliche oder visuelle Wahrheit überschreiben.
 
 ## Agentenautonomie
 
@@ -187,9 +226,11 @@ Dabei gilt:
 - projektspezifische Ergänzungen bleiben lokal;
 - Änderungen an zentralen Skills werden bewusst in betroffene Projekte übernommen.
 
+Dasselbe gilt für Bildarbeit: zentrale Bildregeln beschreiben die Arbeitsweise, während Charakterbibeln, konkrete Referenzbilder, Szenenlisten und visuelle Projektregeln lokal bleiben.
+
 ## Attribution
 
-Übernommene oder adaptierte Drittinhalte werden in `THIRD-PARTY-NOTICES.md` dokumentiert.
+Übernommene oder adaptierte Drittinhalte werden in `THIRD-PARTY-NOTICES.md` dokumentiert. Externe Inspirationsquellen ohne übernommene Drittinhalte werden in den jeweiligen `Quellen-und-Inspirationen.md`-Dateien eingeordnet.
 
 ## Pflege
 
