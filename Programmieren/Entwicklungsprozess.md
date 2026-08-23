@@ -99,7 +99,7 @@ Dabei gelten insbesondere:
 - Ursache statt Symptom beheben;
 - KISS vor Architekturspielerei;
 - keine unnötigen neuen Abhängigkeiten;
-- stabilen Nachbarcode nicht ohne konkreten Grund umbauen;
+- bestehenden stabilen Code nicht ohne konkreten Grund umbauen;
 - öffentliche Schnittstellen und persistierte Daten nicht beiläufig verändern;
 - Sicherheits- und Validierungsregeln nicht aufweichen, nur damit Tests grün werden;
 - manuelle Benutzereingaben nicht ohne ausdrückliche Anforderung überschreiben;
