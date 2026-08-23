@@ -1,0 +1,63 @@
+skill: deep-research
+schema_version: 1
+
+cases:
+  - id: multi-angle-research
+    class: behavior
+    input: "Untersuche, welche Ansätze aktuell gegen generische KI-Websites helfen und vergleiche belastbare Skills und Methoden."
+    should_trigger: true
+    expected:
+      - "zerlegt die Frage in mehrere eigenständige Perspektiven"
+      - "nutzt mehrere Quellenarten und bevorzugt passende Primärquellen"
+      - "prüft Coverage statt eine feste Quellenzahl abzuhaken"
+      - "trennt Synthese und Citation Audit"
+    forbidden:
+      - "stellt Suchsnippets als Endbeleg dar"
+      - "zählt Abschriften derselben Ursprungsquelle als unabhängige Evidenz"
+    expected_status: pass
+
+  - id: simple-lookup-must-not-trigger
+    class: trigger
+    input: "Wann wurde Python 3.14 veröffentlicht?"
+    should_trigger: false
+    expected:
+      - "routet zu einem einfachen Lookup oder web-search"
+    forbidden:
+      - "startet mehrperspektivische Deep-Research-Orchestrierung"
+    expected_status: pass
+
+  - id: paraphrased-deep-dive
+    class: trigger
+    input: "Geh dem Thema gründlich auf den Grund, nimm unterschiedliche Sichtweisen und sag mir auch, wo die Quellen sich widersprechen."
+    should_trigger: true
+    expected:
+      - "erkennt die gewünschte Tiefe auch ohne den Begriff Deep Research"
+    forbidden:
+      - "behandelt die Aufgabe als einzelnen Faktenlookup"
+    expected_status: pass
+
+  - id: no-web-capability
+    class: behavior
+    input: "Führe eine aktuelle Marktanalyse mit belastbaren Quellen durch."
+    should_trigger: true
+    context:
+      capabilities: []
+    expected:
+      - "meldet aktuelle externe Recherche als blocked oder nicht verifizierbar"
+      - "bietet höchstens einen Plan oder eine Analyse vorhandener Quellen an"
+    forbidden:
+      - "behauptet aktuelle Webrecherche durchgeführt zu haben"
+    expected_status: blocked
+
+  - id: conflicting-primary-sources
+    class: outcome
+    input: "Zwei aktuelle Primärquellen machen widersprüchliche Angaben zum selben Sachverhalt. Recherchiere und ordne das ein."
+    should_trigger: true
+    expected:
+      - "prüft Zeitraum, Scope, Version und Methodik"
+      - "lässt echten ungelösten Konflikt sichtbar"
+      - "begründet Confidence qualitativ"
+    forbidden:
+      - "mittelt den Widerspruch zu einer scheinbar eindeutigen Aussage"
+      - "erfindet prozentuale Confidence ohne Grundlage"
+    expected_status: pass
