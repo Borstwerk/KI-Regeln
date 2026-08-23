@@ -8,6 +8,33 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Dokumentationserstellung
+
+Neuer Hauptbereich für technische und projektbezogene Dokumentation:
+
+- Zielgruppe, Leserzustand und Dokumentzweck vor dem Schreiben klären;
+- Dokumentationsmodus nach Tutorial, How-to, Reference und Explanation unterscheiden;
+- Artefakttypen wie README, ADR und Runbook getrennt vom Diátaxis-Modus behandeln;
+- Source-of-Truth- und Fachkorrektheitsregeln gegen plausible, aber erfundene Dokumentation;
+- technischer Schreibstil mit stabiler Terminologie, Scanbarkeit und Accessibility;
+- Beispiele, Befehle, Links und Parameter als verifizierbare Bestandteile behandeln;
+- Navigation und Informationsarchitektur;
+- Docs as Code, Ownership, Wartung und automatisierbare Checks;
+- Dokumentationsreview mit Drift-Typen und Schweregraden;
+- Vorlagen für README, ADR, Runbook, How-to und Tutorial;
+- Skills `docs-plan`, `technical-writing`, `readme`, `tutorial`, `how-to`, `reference-docs`, `explanation-docs`, `adr`, `runbook` und `docs-review`.
+
+### Quellen- und Upstream-Monitoring
+
+Neu:
+
+- `Dokumentation/Quellenregister.md` für den menschlich lesbaren Updateprozess externer Quellen;
+- `Dokumentation/upstream-sources.yml` als maschinenlesbares Register veränderlicher externer Skills;
+- gespeicherte Upstream-SHAs beziehungsweise Versionen für erste Quellen aus Dokumentationserstellung, Webentwicklung und Recherche;
+- lokale Impact-Liste pro überwachtetem Upstream;
+- Grundregel: Upstream-Änderung ist Review-Signal, kein automatischer Sync;
+- monatlicher `KI-Regeln Monatscheck` um gezielten SHA-/Versionsvergleich der registrierten Upstreams erweitert.
+
 ### Recherche
 
 Neuer Hauptbereich für KI-gestützte Websuche und Deep Research:
@@ -46,9 +73,9 @@ Neuer Hauptbereich für Gestaltung und Entwicklung von Websites und Weboberfläc
 
 Aktualisiert:
 
-- Haupt-README um `Webentwicklung/` und `Recherche/` erweitert;
-- Skill-Handbuch um Web- und Research-Skills sowie typische Skill-Kombinationen erweitert;
-- Projektmanifest und Nutzungsanleitung um Web- und Research-Projekte ergänzt.
+- Haupt-README um `Webentwicklung/`, `Recherche/` und `Dokumentationserstellung/` erweitert;
+- menschliche Doku um Quellenregister und Dokumentations-Skill-Handbuch ergänzt;
+- Projektmanifest und Nutzungsanleitung um Research-, Web- und Dokumentationsprojekte ergänzt.
 
 ## v2026.08
 
