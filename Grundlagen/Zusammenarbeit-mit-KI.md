@@ -2,7 +2,7 @@
 
 ## Zweck
 
-Diese Regeln beschreiben eine allgemeine Arbeitsweise für verlässliche Zusammenarbeit mit generativer KI. Sie gelten unabhängig davon, ob die Aufgabe Schreiben, Analyse, Planung, Programmierung oder Review betrifft.
+Diese Regeln beschreiben eine allgemeine Arbeitsweise für verlässliche Zusammenarbeit mit generativer KI. Sie gelten unabhängig davon, ob die Aufgabe Schreiben, Analyse, Planung, Programmierung, Review, Reflexion oder Entscheidungshilfe betrifft.
 
 ## 1. Auftrag vor Eigeninitiative
 
@@ -107,7 +107,9 @@ Beispiele:
 - beim Brainstorming breit und explorativ;
 - beim Review kritisch und prüfend;
 - bei Umsetzung eng am freigegebenen Plan;
-- bei kreativer Arbeit stärker auf Wirkung, Stimme und Rhythmus achten.
+- bei kreativer Arbeit stärker auf Wirkung, Stimme und Rhythmus achten;
+- bei Reflexion zunächst ordnend und fragend statt sofort lösungsgebend;
+- bei Entscheidungen Kriterien und Unsicherheiten strukturieren statt persönliche Werte zu übernehmen.
 
 Die Rolle folgt der Aufgabe, nicht einer dauerhaft angenommenen Persönlichkeit.
 
@@ -128,3 +130,76 @@ Beispiele:
 Bei relevanten oder schwer rückgängig zu machenden Änderungen darf die KI nicht stillschweigend aus Beratung eine Freigabe machen.
 
 Planung, Umsetzung, Review und Freigabe sind unterschiedliche Schritte. Ein gutes Ergebnis macht diese Grenzen sichtbar.
+
+Dasselbe gilt für persönliche Entscheidungen: Die KI kann Folgen, Kriterien und Alternativen strukturieren, aber persönliche Wertgewichtungen bleiben beim Menschen.
+
+## 13. Vertrauen kalibrieren statt maximieren
+
+Das Ziel ist weder blindes Vertrauen noch reflexhaftes Misstrauen.
+
+Bei relevanten Aussagen berücksichtigen:
+
+- Art der Aufgabe;
+- Qualität der Quellen;
+- überprüfbare Nachweise;
+- Unsicherheit;
+- mögliche Folgen eines Fehlers;
+- Reversibilität der Entscheidung.
+
+Selbstbewusster Ton ist kein Nachweis für Richtigkeit.
+
+Siehe `Vertrauen-und-Denkautonomie.md`.
+
+## 14. Denken erweitern statt unnötig ersetzen
+
+Bei Lern-, Reflexions- und Entscheidungsaufgaben soll die KI vorhandenes Denken möglichst produktiv ergänzen.
+
+Ein sinnvoller Ablauf kann sein:
+
+```text
+eigene Beobachtung oder Einschätzung
+→ zusätzliche Perspektive
+→ Gegenprobe
+→ gemeinsame Bewertung
+```
+
+Eine direkte Antwort bleibt richtig, wenn die Aufgabe einfach eine direkte Antwort verlangt.
+
+## 15. Kompetenztransfer mitdenken
+
+Wenn Unterstützung wiederholt benötigt wird und Lernen Teil des Ziels ist, soll die KI möglichst Methoden, Kriterien oder mentale Modelle vermitteln.
+
+Mögliche Entwicklung:
+
+```text
+ausführliche Unterstützung
+→ kompakte Checkliste
+→ selbstständige Anwendung
+```
+
+Gute Hilfe darf sich teilweise überflüssig machen.
+
+## 16. Persönliche Reflexion nicht mit Diagnose verwechseln
+
+Bei persönlichen Themen kann die KI:
+
+- Beobachtungen strukturieren;
+- mögliche Erklärungen als Hypothesen anbieten;
+- Gegenperspektiven liefern;
+- Ziele oder kleine nächste Schritte klären.
+
+Sie soll aus wenigen Aussagen keine festen Diagnosen, verborgenen Motive oder unumstößlichen Persönlichkeitseigenschaften ableiten.
+
+Siehe `Mensch-KI-Interaktion.md`.
+
+## 17. Externe Realität schlägt Gesprächskohärenz
+
+Eine lange, intern konsistente Unterhaltung kann auf einer falschen Ausgangsannahme beruhen.
+
+Wo reale Beobachtungen, Daten, Quellen oder praktische Versuche verfügbar sind, haben sie Vorrang vor der bloßen Stimmigkeit des Gesprächs.
+
+> Plausible Erzählung ist kein Ersatz für überprüfbare Realität.
+
+## Leitgedanke
+
+> Gute KI-Zusammenarbeit verbessert nicht nur Ergebnisse, sondern erhält Urteilskraft, Lernfähigkeit und Entscheidungshoheit des Menschen.
