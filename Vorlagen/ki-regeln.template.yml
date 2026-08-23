@@ -74,6 +74,15 @@ skills:
   # - Programmieren/Skills/diagnose
   # - Programmieren/Skills/code-review
 
+  # Datenbanken
+  # - Datenbanken/Skills/database-design
+  # - Datenbanken/Skills/database-query-review
+  # - Datenbanken/Skills/query-performance
+  # - Datenbanken/Skills/schema-migration
+  # - Datenbanken/Skills/transaction-review
+  # - Datenbanken/Skills/database-operations
+  # - Datenbanken/Skills/database-review
+
   # Skill Engineering / Governance
   # - Skill-Engineering/Skills/skill-authoring
   # - Skill-Engineering/Skills/skill-review
@@ -93,6 +102,7 @@ workflows:
   # - Workflows/Software-Feature.md
   # - Workflows/Bugdiagnose.md
   # - Workflows/Bildserie.md
+  # - Workflows/Datenbank-Aenderung.md
 
 quality_policy:
   # Optional: Projekte können festlegen, welche zentrale Reife sie akzeptieren.
