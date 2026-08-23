@@ -12,14 +12,15 @@ Neue Ideen werden nicht automatisch übernommen. Das Repository wird bewusst gep
 
 ## Pflege-Rhythmus
 
-### 1. Monatlicher Radar-Check
+### 1. Monatlicher Radar- und Upstream-Check
 
 Ziel:
 
 - neue Entwicklungen früh sehen;
 - interessante Kandidaten sammeln;
 - Quellen sichten;
-- mögliche Lücken erkennen.
+- mögliche Lücken erkennen;
+- fällige mutable Upstreams prüfen.
 
 Typische Themenfelder:
 
@@ -34,11 +35,19 @@ Typische Themenfelder:
 - Reflexion, Lernen und Selbstverbesserung mit KI;
 - neue Sicherheits-, Governance- oder Evaluationsansätze.
 
+Zusätzlich wird `upstream-sources.yml` gelesen.
+
+Für Einträge mit `cadence: monthly`:
+
+- `monitor_mode: exact-sha` → aktuellen GitHub-Blob-SHA vergleichen;
+- `monitor_mode: semantic-review` → aktuelle Produkt-/Webdoku gegen die lokal übernommenen Konzepte lesen.
+
 Ergebnis:
 
 - kurze Kandidatenliste;
 - Quelle und Einordnung;
 - vermuteter Nutzen;
+- relevante Upstream-Diffs oder semantische Änderungen;
 - noch keine automatische Regeländerung.
 
 ### 2. Vierteljährlicher Repo-Audit
@@ -49,7 +58,9 @@ Ziel:
 - Redundanzen und Widersprüche finden;
 - veraltete Regeln erkennen;
 - neue Kandidaten bewerten;
-- reale Nutzungserfahrungen berücksichtigen.
+- reale Nutzungserfahrungen berücksichtigen;
+- `cadence: quarterly`-Upstreams prüfen;
+- Quellenklassifikation erneut auf Vollständigkeit prüfen.
 
 Prüffragen:
 
@@ -63,6 +74,9 @@ Prüffragen:
 8. Ist sie verständlich genug formuliert?
 9. Ist ein vorhandener Skill zu breit, zu eng oder missverständlich?
 10. Muss Dokumentation oder Beispiel aktualisiert werden?
+11. Gibt es mutable Quellen, die noch nicht im Upstream-Register stehen?
+12. Wird eine registrierte Quelle inzwischen nur noch als Radarquelle benötigt?
+13. Ist ein beobachteter Upstream eingestellt, ersetzt oder archiviert worden?
 
 ### 3. Anlassbezogene Prüfung
 
@@ -74,35 +88,71 @@ Zusätzliche Prüfung bei:
 - neuen Projektarten;
 - auffälligen Schwächen eines bestehenden Skills;
 - Änderungen an Drittquellen oder Lizenzbedingungen;
-- neuen Erkenntnissen, die eine bestehende Regel wesentlich infrage stellen.
+- neuen Erkenntnissen, die eine bestehende Regel wesentlich infrage stellen;
+- einem relevanten Upstream-Diff außerhalb des normalen Rhythmus.
 
-### 4. Gezielter Upstream-Check
+## Quellenklassifikation
 
-Veränderliche externe Skills und Quellen können in `upstream-sources.yml` registriert werden.
+Neue externe Quellen werden beim Aufnehmen einer Klasse zugeordnet.
 
-Der monatliche Check vergleicht für diese Quellen möglichst:
+### Aktive mutable Dependency
 
-- gespeicherten Blob-SHA oder Version;
-- aktuellen Blob-SHA oder Version;
-- relevante inhaltliche Änderungen;
-- lokale Dateien, die von der Quelle beeinflusst wurden.
+Eine konkrete veränderliche Quelle beeinflusst lokale Regeln oder Skills direkt.
 
-Ablauf:
+→ in `upstream-sources.yml` aufnehmen.
+
+### Stabile Referenzquelle
+
+Paper, datierte Research-Artikel oder langsam veränderliche Grundlagen ohne sinnvollen Sync-Trigger.
+
+→ im Fachbereich unter `Quellen-und-Inspirationen.md` dokumentieren.
+
+### Radar-/Discoveryquelle
+
+Hilft neue Kandidaten zu finden, erzeugt aber keine direkte lokale Abhängigkeit.
+
+→ als Radarquelle dokumentieren; kein künstlicher Upstream-Watch.
+
+Details: `Quellenregister.md`.
+
+## Gezielter Upstream-Check
+
+Schema v2 unterstützt zwei Monitoring-Arten.
+
+### Exact SHA
+
+Für konkrete GitHub-Dateien:
 
 ```text
-registrierter Upstream
-→ aktuellen Stand abrufen
-→ SHA / Version unverändert?
+registrierter Blob-SHA
+→ aktuellen Blob-SHA abrufen
+→ unverändert?
    ├─ ja → last_checked aktualisieren
    └─ nein
         ↓
-      relevanten Diff prüfen
+      Diff prüfen
         ↓
-      betrifft unsere übernommenen Konzepte?
+      betrifft übernommene Konzepte?
         ├─ nein → Register aktualisieren
         └─ ja  → Änderungskandidat erzeugen
                     ↓
                   normaler Reviewprozess
+```
+
+### Semantic Review
+
+Für lebende Webseiten und Produktdokumentation:
+
+```text
+lokal übernommene Konzepte
+→ aktuelle Quelle erneut lesen
+→ relevante Funktion / Empfehlung / Terminologie geändert?
+   ├─ nein → last_checked aktualisieren
+   └─ ja
+        ↓
+      lokale Auswirkungen bestimmen
+        ↓
+      übernehmen / beobachten / verwerfen
 ```
 
 Dabei gilt:
@@ -130,6 +180,8 @@ Quelle / neue Idee
         ↓
 Kandidat erfassen
         ↓
+Quelle klassifizieren
+        ↓
 allgemein genug?
         ↓
 nützlich genug?
@@ -142,7 +194,7 @@ Nebenwirkungen prüfen
         ↓
 übernehmen / anpassen / verwerfen
         ↓
-Changelog aktualisieren
+Changelog + Quellenregister aktualisieren
 ```
 
 ## Quellenarten
@@ -260,7 +312,7 @@ Bei jedem Audit prüfen:
 - Wo widersprechen Handbuch und `SKILL.md` einander?
 - Welche Quellen sind inzwischen veraltet?
 - Welche registrierten Upstreams haben sich geändert?
-- Ist `upstream-sources.yml` vollständig genug für wichtige mutable Quellen?
+- Welche mutable Quelle fehlt noch im Register?
 - Welche Projektprobleme deuten auf eine allgemeine Lücke hin?
 
 ## Verantwortungsregel
