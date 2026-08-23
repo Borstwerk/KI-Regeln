@@ -1,0 +1,47 @@
+# Beispielmanifest für ein Projekt, das ausgewählte Regeln und Skills aus
+# Borstwerk/KI-Regeln verwendet.
+#
+# Dieses Manifest ist Dokumentation und Auswahlhilfe. Es ersetzt keine
+# projektspezifischen Regeln und führt selbst keine Synchronisierung aus.
+
+source: Borstwerk/KI-Regeln
+version: v2026.08
+
+rules:
+  - Grundlagen/Zusammenarbeit-mit-KI.md
+
+skills:
+  # Arbeitsweisen
+  # - Arbeitsweisen/Skills/reflektierender-dialog
+  # - Arbeitsweisen/Skills/entscheidungsunterstuetzung
+  # - Arbeitsweisen/Skills/ziel-reflexions-loop
+
+  # Agentenarbeit
+  # - Agentenarbeit/Skills/context-engineering
+  # - Agentenarbeit/Skills/task-graph
+  # - Agentenarbeit/Skills/verification-loop
+  # - Agentenarbeit/Skills/delegation-contract
+  # - Agentenarbeit/Skills/agent-eval
+
+  # Schreiben
+  # - Schreiben/Skills/natuerliches-schreiben
+  # - Schreiben/Skills/kreatives-schreiben
+  # - Schreiben/Skills/stilreview
+
+  # Bildarbeit
+  # - Bildarbeit/Skills/bild-prebrief
+  # - Bildarbeit/Skills/entitaetsbibel
+  # - Bildarbeit/Skills/serien-kontinuitaetscheck
+  # - Bildarbeit/Skills/bildreview
+
+  # Programmieren
+  # - Programmieren/Skills/domain-modeling
+  # - Programmieren/Skills/tdd
+  # - Programmieren/Skills/diagnose
+  # - Programmieren/Skills/code-review
+
+notes:
+  - Lokale Projektregeln haben Vorrang vor allgemeinen Regeln.
+  - Nur tatsächlich benötigte Regeln und Skills auswählen.
+  - Die verwendete zentrale Version bewusst dokumentieren.
+  - Zentrale Updates nicht ungeprüft automatisch in laufende Projekte übernehmen.
