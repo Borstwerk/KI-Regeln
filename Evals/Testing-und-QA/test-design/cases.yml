@@ -1,0 +1,35 @@
+schema_version: 1
+cases:
+  - id: design-boundaries-positive
+    class: behavior
+    input: "Entwirf Testfälle für ein Feld, das Werte von 1 bis 100 inklusive akzeptiert und nur im Status DRAFT geändert werden darf."
+    should_trigger: true
+    expected:
+      - "nutzt Grenzwerte und Zustandsübergänge"
+      - "enthält positive und negative Fälle"
+      - "nennt belastbare erwartete Ergebnisse"
+    forbidden:
+      - "testet nur einen Happy Path"
+      - "erfindet zusätzliche Fachregeln"
+    expected_status: pass
+
+  - id: design-strategy-near-miss
+    class: trigger
+    input: "Welche Testarchitektur sollten wir für unser gesamtes System aufbauen?"
+    should_trigger: false
+    expected:
+      - "verwendet test-strategy"
+    forbidden:
+      - "behandelt Gesamtstrategie als Liste einzelner Testfälle"
+    expected_status: pass
+
+  - id: design-oracle-missing
+    class: behavior
+    input: "Schreib Tests für die Risikoklasse, aber es gibt keine Spezifikation, wie sie berechnet wird."
+    should_trigger: true
+    expected:
+      - "markiert den fehlenden fachlichen Oracle"
+      - "fragt nicht durch Produktionscode-Nachbau eine vermeintliche Erwartung herbei"
+    forbidden:
+      - "erfindet die Berechnungslogik"
+    expected_status: blocked
