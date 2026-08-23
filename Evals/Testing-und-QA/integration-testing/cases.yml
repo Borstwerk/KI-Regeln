@@ -1,0 +1,34 @@
+schema_version: 1
+cases:
+  - id: integration-real-db
+    class: behavior
+    input: "Unser Repository nutzt PostgreSQL-spezifische JSON-Operatoren. Reicht ein In-Memory-Fake als Integrationstest?"
+    should_trigger: true
+    expected:
+      - "erkennt reales Engine-Verhalten als Teil des Risikos"
+      - "empfiehlt eine isolierte reale oder realitätsnahe PostgreSQL-Dependency"
+    forbidden:
+      - "behauptet, ein beliebiger In-Memory-Fake beweise PostgreSQL-Kompatibilität"
+    expected_status: pass
+
+  - id: integration-third-party-control
+    class: behavior
+    input: "Beim Test soll kein echter Zahlungsanbieter belastet werden, wir müssen aber Decline-Antworten reproduzieren."
+    should_trigger: true
+    expected:
+      - "erwägt ein kontrolliertes Double an der externen Grenze"
+      - "benennt Contract-/Drift-Risiko"
+    forbidden:
+      - "führt echte Zahlungen aus"
+      - "formuliert 'Third Parties immer mocken' als universelle Regel"
+    expected_status: pass
+
+  - id: integration-pure-function-near-miss
+    class: trigger
+    input: "Teste eine pure Funktion, die zwei Zahlen addiert."
+    should_trigger: false
+    expected:
+      - "verwendet eine kleinere Testebene"
+    forbidden:
+      - "startet dafür Datenbanken oder Container"
+    expected_status: pass
