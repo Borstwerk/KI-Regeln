@@ -38,6 +38,13 @@ Er beschreibt **wie** gearbeitet wird. Er definiert nicht automatisch:
 | innerhalb eines freigegebenen Scopes iterativ prüfen und reparieren | `verification-loop` |
 | einen Agentenauftrag sauber begrenzen | `delegation-contract` |
 | prüfen, ob ein Agent zuverlässig nach Regeln arbeitet | `agent-eval` |
+| einen aktuellen Fakt schnell im Web prüfen | `web-search` |
+| eine größere Recherche strukturieren | `research-plan` |
+| ein Thema iterativ aus mehreren Perspektiven untersuchen | `deep-research` |
+| die Eignung einer Quelle für einen Claim bewerten | `source-evaluation` |
+| einen konkreten Claim verifizieren | `claim-verification` |
+| Research-Funde zu einem Wissensbild zusammenführen | `research-synthesis` |
+| prüfen, ob Zitate tatsächlich die Claims tragen | `citation-audit` |
 | einen natürlichen Sach- oder Gebrauchstext schreiben | `natuerliches-schreiben` |
 | kreative Prosa oder Szenen schreiben | `kreatives-schreiben` |
 | einen Text auf künstliche oder mechanische Muster prüfen | `stilreview` |
@@ -297,6 +304,214 @@ Ein Skill zur reproduzierbaren Prüfung, ob ein Agent nicht nur ein Ergebnis erz
 
 - `delegation-contract`
 - `code-review`
+
+---
+
+# Recherche
+
+## `web-search`
+
+**Was ist das?**  
+Ein Skill für schnelle aktuelle Webrecherche bei klar begrenzten Fragen.
+
+**Wann sinnvoll?**
+
+- einzelne aktuelle Fakten;
+- Produktversionen, Termine oder konkrete Zustände;
+- kleine Nachschlagefragen;
+- ein Thema braucht aktuelle Quellen, aber keine umfassende Analyse.
+
+**Wann eher nicht?**
+
+- bei komplexen Entscheidungen mit mehreren Perspektiven;
+- wenn Widersprüche, Marktvergleich oder umfangreiche Evidence nötig sind.
+
+**Mini-Beispiel**
+
+> „Prüfe die aktuelle Version in einer geeigneten Primärquelle. Suchsnippets sind nur Leads; öffne die eigentliche Quelle.“
+
+**Verwandte Skills**
+
+- `claim-verification`
+- `source-evaluation`
+
+---
+
+## `research-plan`
+
+**Was ist das?**  
+Ein Skill, der eine größere Research-Frage in Teilfragen, Perspektiven, Quellenarten und Coverage-Kriterien zerlegt.
+
+**Wann sinnvoll?**
+
+- Deep Research;
+- komplexe Vergleiche;
+- strategische Entscheidungen;
+- Themen mit mehreren relevanten Perspektiven.
+
+**Wann eher nicht?**
+
+- bei einfachen Lookup-Fragen;
+- wenn die Planung mehr Aufwand erzeugt als die gesamte Recherche.
+
+**Mini-Beispiel**
+
+> „Zerlege die Hauptfrage in technische, wirtschaftliche und Nutzer-Teilfragen und definiere, welche Quellenarten jede Teilfrage am besten tragen.“
+
+**Verwandte Skills**
+
+- `deep-research`
+- `task-graph`
+- `context-engineering`
+
+---
+
+## `deep-research`
+
+**Was ist das?**  
+Ein Orchestrierungs-Skill für iterative Recherche über mehrere Teilfragen, Suchwinkel und Evidence-Pfade.
+
+**Wann sinnvoll?**
+
+- umfangreiche Markt- oder Technologieanalyse;
+- komplexe politische oder wissenschaftliche Fragestellungen;
+- Entscheidungen mit hohem Informationsbedarf;
+- wenn ein einzelner Suchpfad blinde Flecken erzeugen würde.
+
+**Wann eher nicht?**
+
+- bei einer kleinen eindeutig beantwortbaren Frage;
+- wenn nur ein vorhandener Claim geprüft werden soll.
+
+**Mini-Beispiel**
+
+```text
+research-plan
+→ getrennte Research-Threads
+→ Claim/Evidence
+→ Coverage Check
+→ gezielte Nachrecherche
+→ research-synthesis
+→ citation-audit
+```
+
+**Verwandte Skills**
+
+- `research-plan`
+- `source-evaluation`
+- `research-synthesis`
+- `claim-verification`
+- `citation-audit`
+
+---
+
+## `source-evaluation`
+
+**Was ist das?**  
+Ein Skill zur claimbezogenen Bewertung einer Quelle nach Direktheit, Aktualität, Primärnähe, Fachnähe, Unabhängigkeit und Methodentransparenz.
+
+**Wann sinnvoll?**
+
+- zentrale oder kontroverse Claims;
+- mehrere Quellen widersprechen;
+- Community- und Primärquellen müssen unterschiedlich eingeordnet werden;
+- Quellenzahl ist hoch, aber Unabhängigkeit unklar.
+
+**Wann eher nicht?**
+
+- bei einer eindeutigen simplen Primärquelle für einen trivialen Fakt.
+
+**Mini-Beispiel**
+
+> „Bewerte nicht die Website allgemein, sondern ob genau diese Quelle den Claim über Feature X aktuell und direkt trägt.“
+
+**Verwandte Skills**
+
+- `claim-verification`
+- `deep-research`
+
+---
+
+## `claim-verification`
+
+**Was ist das?**  
+Ein Skill, der einen konkreten Claim in prüfbare Teilclaims zerlegt und gegen Primärquelle, Gegenbelege und Kontext prüft.
+
+**Wann sinnvoll?**
+
+- Fact Check;
+- strittige Aussagen;
+- aktuelle Produkt- oder Unternehmensclaims;
+- wichtige Zahlen, Studien- oder Rechtsbehauptungen.
+
+**Wann eher nicht?**
+
+- wenn erst eine offene Research-Frage exploriert werden muss.
+
+**Mini-Beispiel**
+
+> „Prüfe, ob der Claim wirklich für Version Y gilt und ob die Originalquelle dieselbe Aussage macht wie die Zusammenfassung.“
+
+**Verwandte Skills**
+
+- `source-evaluation`
+- `citation-audit`
+- `web-search`
+
+---
+
+## `research-synthesis`
+
+**Was ist das?**  
+Ein Skill, der Research-Funde nach Erkenntnissen statt nach Quellen ordnet und Fakten, Interpretation, Konflikte und Unsicherheiten trennt.
+
+**Wann sinnvoll?**
+
+- nach Multi-Source- oder Deep Research;
+- für Vergleichsberichte, Decision Briefs oder ausführliche Analysen;
+- wenn viele Funde zu einem klaren Wissensbild verdichtet werden müssen.
+
+**Wann eher nicht?**
+
+- wenn nur ein einzelner Fakt beantwortet wird.
+
+**Mini-Beispiel**
+
+> „Strukturiere nach: Was wissen wir? Wo besteht Konsens? Wo widersprechen sich Quellen? Welche Unsicherheit bleibt?“
+
+**Verwandte Skills**
+
+- `deep-research`
+- `citation-audit`
+- `claim-verification`
+
+---
+
+## `citation-audit`
+
+**Was ist das?**  
+Ein unabhängiger Review einer fertigen Research-Synthese darauf, ob wesentliche Claims von den tatsächlich zitierten Quellen getragen werden.
+
+**Wann sinnvoll?**
+
+- Deep-Research-Berichte;
+- faktenreiche Entscheidungsvorlagen;
+- Veröffentlichungen;
+- Antworten mit vielen aktuellen oder strittigen Behauptungen.
+
+**Wann eher nicht?**
+
+- bei reiner Kreativarbeit ohne externe Faktenclaims.
+
+**Mini-Beispiel**
+
+> „Extrahiere die zentralen Faktenclaims und prüfe für jeden, ob die Quelle genau diesen Claim, Zeitraum und Geltungsbereich trägt.“
+
+**Verwandte Skills**
+
+- `claim-verification`
+- `research-synthesis`
+- `source-evaluation`
 
 ---
 
@@ -862,6 +1077,22 @@ delegation-contract
 → task-graph
 → verification-loop pro Slice
 → code-review
+```
+
+```text
+Deep Research:
+research-plan
+→ deep-research
+→ source-evaluation bei wichtigen Quellen
+→ research-synthesis
+→ claim-verification für zentrale Claims
+→ citation-audit
+```
+
+```text
+schnelle aktuelle Websuche:
+web-search
+→ claim-verification, falls der gefundene Fakt besonders wichtig oder strittig ist
 ```
 
 ```text
