@@ -11,6 +11,8 @@ Leitgedanke:
 
 > Muster werden gemessen, aber Texte werden gelesen.
 
+Typische KI-Muster sind Hinweise auf mögliche Qualitätsprobleme. Sie sind keine Beweise für KI-Herkunft und keine automatische Verbotsliste.
+
 ## Ablauf
 
 1. Auffällige Stelle oder Muster benennen.
@@ -28,19 +30,40 @@ Leitgedanke:
 - Vorschau → Ausführung → Zusammenfassung ohne Nutzen;
 - erklärende Nachsätze nach bereits verständlichen Szenen;
 - unpassende Verteilung kurzer und langer Sätze;
+- unnötige Vermeidung einfacher Verben wie „ist“ oder „hat“;
+- Häufungen bedeutungsaufladender oder werblicher Vokabeln;
+- Listen mit mechanischen fettgedruckten Miniüberschriften;
+- automatische Abschnitte zu Herausforderungen, Bedeutung oder Zukunftsaussichten;
+- aus erfolgloser Recherche abgeleitete Behauptungen über angeblich fehlende öffentliche Informationen;
+- Meta-Kommunikation, Bearbeitungshinweise oder ungefüllte Platzhalter im fertigen Text;
+- unlogische Überschriftenhierarchie oder mechanische Trennlinien;
+- unbegründete abrupte Stilwechsel;
 - wiederkehrende Konflikt- oder Auflösungsmechaniken in längeren Texten.
 
 ## Kein automatisches Umschreiben
 
 Häufigkeiten und Kennzahlen sind Hinweise, keine Urteile.
 
-Nicht allein wegen einer Statistik ändern:
+Nicht allein wegen einer Statistik oder eines bekannten KI-Musters ändern:
 
 - Wiederholungen mit Orientierungsfunktion;
 - Figuren- oder Sprechermerkmale;
 - bewusst gesetzte Rhythmen;
 - notwendige Fach- oder Weltinformationen;
-- wiederkehrende Motive und Rituale.
+- wiederkehrende Motive und Rituale;
+- einzelne Wörter, die im Kontext präzise und natürlich sind.
+
+Keine Wort-Blacklist verwenden.
+
+## Quellen- und Template-Check
+
+Bei sachlichen Texten zusätzlich prüfen:
+
+- Belegt die Quelle die konkrete Aussage?
+- Wurde „nicht gefunden“ versehentlich zu „nicht vorhanden“ oder „nicht dokumentiert“?
+- Gibt es erfundene Erklärungen für Quellenlücken?
+- Sind Platzhalter, Dummy-Daten oder Arbeitsnotizen übrig geblieben?
+- Ist Chat-Kommunikation versehentlich Teil des Endprodukts geworden?
 
 ## Erhaltungsprüfung
 
