@@ -13,7 +13,7 @@ Das Repository ist keine automatische Master-Steuerung für alle Projekte. Es is
 Das bedeutet:
 
 - zentrale Regeln beschreiben **wie** gearbeitet wird;
-- Projekte definieren **was** konkret gebaut, geschrieben, geprüft, erzeugt, recherchiert oder entschieden werden soll;
+- Projekte definieren **was** konkret gebaut, geschrieben, dokumentiert, geprüft, erzeugt, recherchiert oder entschieden werden soll;
 - lokale Projektregeln haben Vorrang vor allgemeinen Regeln, wenn sie verbindlich sind.
 
 ## Was das Repository liefert
@@ -25,6 +25,7 @@ Das Repository liefert beispielsweise:
 - Reflexions- und Lernmethoden;
 - Agentenarbeitsweisen;
 - Recherche-, Websuche- und Deep-Research-Methoden;
+- Regeln für technische Dokumentation;
 - Schreibregeln;
 - Bildarbeitsregeln;
 - Webdesign- und Frontend-Regeln;
@@ -38,6 +39,7 @@ Das Repository liefert nicht automatisch:
 - Projektarchitektur;
 - Fachbegriffe eines konkreten Systems;
 - projektspezifische Research-Fragen oder interne Quellen;
+- reale Sources of Truth für ein Dokument;
 - Serienkanon;
 - Charakterdesigns;
 - Markenidentität oder konkrete `DESIGN.md`;
@@ -87,6 +89,39 @@ Zusätzlich bleiben lokal beispielsweise:
 - Testumgebung;
 - Freigabegates;
 - Produktanforderungen.
+
+## Beispiel: Dokumentationsprojekt
+
+Je nach Artefakt können sinnvoll sein:
+
+- `Grundlagen/Zusammenarbeit-mit-KI.md`
+- `Agentenarbeit/Skills/context-engineering/SKILL.md`
+- `Dokumentationserstellung/Skills/docs-plan/SKILL.md`
+- `Dokumentationserstellung/Skills/technical-writing/SKILL.md`
+- ein passender Dokumenttyp-Skill wie `readme`, `tutorial`, `how-to`, `reference-docs`, `explanation-docs`, `adr` oder `runbook`;
+- `Dokumentationserstellung/Skills/docs-review/SKILL.md`.
+
+Ein möglicher Ablauf:
+
+```text
+Zielgruppe / Leseraufgabe
+→ docs-plan
+→ passender Dokumenttyp-Skill
+→ technical-writing
+→ Beispiele / Links / Fakten verifizieren
+→ docs-review
+```
+
+Zusätzlich lokal bleiben insbesondere:
+
+- reale Sources of Truth;
+- Produkt- und Fachterminologie;
+- Dokumentationsplattform;
+- Zielgruppen und Vorwissen;
+- Ownership und Reviewtrigger;
+- betriebliche oder sicherheitsrelevante Freigaben.
+
+Für Docs-as-Code-Projekte können außerdem passende Skills aus `Programmieren/`, `Agentenarbeit/` und `Recherche/` hinzukommen.
 
 ## Beispiel: Research- oder Analyseprojekt
 
@@ -266,6 +301,8 @@ neue zentrale Version
 
 Das verhindert, dass sich Agentenverhalten in laufenden Projekten unbemerkt ändert.
 
+Externe veränderliche Skill-Quellen werden zusätzlich über `upstream-sources.yml` beobachtet. Auch dort gilt: ein Upstream-Update ist nur ein Review-Signal.
+
 ## Wichtige Warnung
 
 Ein Skill ersetzt niemals:
@@ -273,6 +310,7 @@ Ein Skill ersetzt niemals:
 - eine Spezifikation;
 - eine Architekturentscheidung;
 - eine Research-Frage oder fachliche Definition;
+- eine Source of Truth für Dokumentation;
 - einen Serienkanon;
 - eine Marken- oder Designentscheidung;
 - eine Projektfreigabe;
