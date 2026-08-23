@@ -17,6 +17,7 @@ Er richtet sich vor allem an Menschen, die:
 - `Skill-Handbuch.md` – erklärt die allgemeinen Skills in verständlicher Sprache;
 - `Skill-Handbuch-Dokumentationserstellung.md` – erklärt die Skills des Bereichs `Dokumentationserstellung/`;
 - `Skill-Handbuch-Datenbanken.md` – erklärt die engine-neutralen Datenbank-Skills und ihre Abgrenzung;
+- `Skill-Handbuch-Testing-und-QA.md` – erklärt Teststrategie, Testdesign, Integration, Contracts, E2E, Flakiness, Failure Testing und Test-Suite-Review;
 - `Skill-Handbuch-Meta-und-Sicherheit.md` – erklärt Skill-Engineering- und Security-Skills;
 - `Skill-Katalog.md` – erklärt Maturity und den maschinenlesbaren Skill-Katalog;
 - `../skill-catalog.yml` – Inventar der zentralen Skills mit Reifegrad und Evalabdeckung;
@@ -79,7 +80,8 @@ Wer das Repository zum ersten Mal verwendet, sollte in dieser Reihenfolge lesen:
 4. bei Auswahl oder Bewertung von Skills `Skill-Katalog.md`
 5. bei Dokumentationsarbeit zusätzlich `Skill-Handbuch-Dokumentationserstellung.md`
 6. bei Datenbankarbeit zusätzlich `Skill-Handbuch-Datenbanken.md`
-7. bei Skill-/Security-Arbeit zusätzlich `Skill-Handbuch-Meta-und-Sicherheit.md`
-8. erst danach die für das eigene Vorhaben relevanten Regel-, Skill- und Workflow-Dateien.
+7. bei Testing-/QA-Arbeit zusätzlich `Skill-Handbuch-Testing-und-QA.md`
+8. bei Skill-/Security-Arbeit zusätzlich `Skill-Handbuch-Meta-und-Sicherheit.md`
+9. erst danach die für das eigene Vorhaben relevanten Regel-, Skill- und Workflow-Dateien.
 
 Nicht das komplette Repository muss für jede Aufgabe geladen oder übernommen werden. Gute Nutzung bedeutet gezielte Auswahl.
