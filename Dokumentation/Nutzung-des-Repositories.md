@@ -149,6 +149,7 @@ Möglicher Workflow:
 Typische Skills:
 
 - `Agentenarbeit/Skills/context-engineering/SKILL.md`;
+- bei langen oder kontextintensiven Läufen zusätzlich `context-audit`, `context-compaction` und `session-handoff`;
 - `Agentenarbeit/Skills/task-graph/SKILL.md` bei komplexeren Features;
 - `Agentenarbeit/Skills/delegation-contract/SKILL.md` bei Delegation;
 - `Programmieren/Skills/domain-modeling/SKILL.md` bei unklarer Domäne;
@@ -163,6 +164,51 @@ Lokal bleiben:
 - Test- und Releaseumgebungen;
 - Freigabegates;
 - Deploymentrechte.
+
+## Beispiel: Long-Horizon-Agentenarbeit
+
+Workflow:
+
+`../Workflows/Long-Horizon-Agentenarbeit.md`
+
+Kern:
+
+```text
+context-engineering
+→ Task / Scope / Sources of Truth
+→ Arbeit
+→ bei Bedarf context-audit
+→ bei Context Pressure context-compaction
+→ verification-loop
+→ bei Session-/Agentenwechsel session-handoff
+→ frischer Agent / neue Session prüft Fortsetzungszustand
+```
+
+Wichtig ist die Trennung:
+
+```text
+Active Context
+→ was jetzt modell-sichtbar sein muss
+
+Working State
+→ taskbezogener Zustand über längere Arbeit
+
+Persistent Knowledge
+→ dauerhaftes Wissen über Tasks hinweg
+```
+
+Die ersten beiden Ebenen gehören zur Agentenarbeit. Eine dauerhafte Wissensbasis ist kein Ersatz für Context Engineering und wird getrennt behandelt.
+
+Context-/Token-Effizienz bedeutet dabei nicht, Tokens um jeden Preis zu minimieren. Relevante Constraints, Entscheidungen, Evidence und Sources of Truth dürfen nicht für eine künstliche Zielquote weggekomprimiert werden.
+
+Lokal bleiben insbesondere:
+
+- konkretes Modell und Kontextfenster;
+- providerabhängige Tokenpreise;
+- Prompt-Cache-Verhalten;
+- verfügbare Usage-Metriken;
+- Session-/Thread-Persistenz der Laufzeit;
+- projektspezifische Handoff- und Retention-Regeln.
 
 ## Beispiel: Bugdiagnose
 
