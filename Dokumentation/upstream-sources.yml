@@ -1,0 +1,144 @@
+schema_version: 1
+last_updated: 2026-08-23
+
+# Mutable external sources whose changes may affect local rules or skills.
+# A changed upstream SHA is a review signal, never an automatic sync instruction.
+
+sources:
+  - id: mcollina-documentation
+    area: Dokumentationserstellung
+    kind: github-file
+    repository: mcollina/skills
+    path: skills/documentation/SKILL.md
+    ref: main
+    observed_sha: dae5144584a07b60287eac57f0786665b38b3559
+    last_checked: 2026-08-23
+    local_impact:
+      - Dokumentationserstellung/Dokumenttypen-und-Diataxis.md
+      - Dokumentationserstellung/Skills/docs-plan/SKILL.md
+      - Dokumentationserstellung/Skills/tutorial/SKILL.md
+      - Dokumentationserstellung/Skills/how-to/SKILL.md
+      - Dokumentationserstellung/Skills/reference-docs/SKILL.md
+      - Dokumentationserstellung/Skills/explanation-docs/SKILL.md
+
+  - id: mblode-docs-writing
+    area: Dokumentationserstellung
+    kind: github-file
+    repository: mblode/agent-skills
+    path: skills/docs-writing/SKILL.md
+    ref: main
+    observed_sha: 1d9a8530f20ae6dda523fc87e85a66e24ed49473
+    last_checked: 2026-08-23
+    local_impact:
+      - Dokumentationserstellung/Technischer-Schreibstil.md
+      - Dokumentationserstellung/Beispiele-Code-und-Verifikation.md
+      - Dokumentationserstellung/Dokumentationsreview-und-Drift.md
+      - Dokumentationserstellung/Skills/technical-writing/SKILL.md
+      - Dokumentationserstellung/Skills/docs-review/SKILL.md
+
+  - id: jpeetz-technical-documentation
+    area: Dokumentationserstellung
+    kind: github-file
+    repository: JPeetz/agent-skills
+    path: technical-documentation/SKILL.md
+    ref: main
+    observed_version: 1.0.0
+    last_checked: 2026-08-23
+    local_impact:
+      - Dokumentationserstellung/README.md
+      - Dokumentationserstellung/Skills/readme/SKILL.md
+      - Dokumentationserstellung/Skills/adr/SKILL.md
+      - Dokumentationserstellung/Skills/runbook/SKILL.md
+
+  - id: anthropic-frontend-design
+    area: Webentwicklung
+    kind: github-file
+    repository: anthropics/skills
+    path: skills/frontend-design/SKILL.md
+    ref: main
+    observed_sha: decdff43d05908b4c1fc2cfd2d80fc5743440934
+    last_checked: 2026-08-23
+    local_impact:
+      - Webentwicklung/Webdesign/Designrichtung-und-Identitaet.md
+      - Webentwicklung/Skills/frontend-design/SKILL.md
+
+  - id: vercel-web-design-guidelines
+    area: Webentwicklung
+    kind: github-file
+    repository: vercel-labs/agent-skills
+    path: skills/web-design-guidelines/SKILL.md
+    ref: main
+    observed_sha: ceae92ab319216a68274168fba9b63b998b65997
+    observed_version: 1.0.0
+    last_checked: 2026-08-23
+    local_impact:
+      - Webentwicklung/Webdesign/Webdesign-Review.md
+      - Webentwicklung/Skills/web-design-review/SKILL.md
+      - Webentwicklung/Skills/accessibility-review/SKILL.md
+
+  - id: vercel-react-best-practices
+    area: Webentwicklung
+    kind: github-file
+    repository: vercel-labs/agent-skills
+    path: skills/react-best-practices/SKILL.md
+    ref: main
+    observed_sha: 237988de4a66dd8a71d30a2c24ebe1a86b58d04e
+    observed_version: 1.0.0
+    last_checked: 2026-08-23
+    local_impact:
+      - Webentwicklung/Frontend/Performance.md
+      - Webentwicklung/Skills/frontend-performance/SKILL.md
+
+  - id: vercel-composition-patterns
+    area: Webentwicklung
+    kind: github-file
+    repository: vercel-labs/agent-skills
+    path: skills/composition-patterns/SKILL.md
+    ref: main
+    observed_sha: d07025bf943345bc1cf15eb923594f889ff881f0
+    last_checked: 2026-08-23
+    local_impact:
+      - Webentwicklung/Frontend/Komponentenarchitektur.md
+
+  - id: firecrawl-deep-research
+    area: Recherche
+    kind: github-file
+    repository: firecrawl/web-agent
+    path: agent-core/src/skills/definitions/deep-research/SKILL.md
+    ref: main
+    observed_sha: aeebe902cfee721a772b72fde3c11a5f9b989219
+    last_checked: 2026-08-23
+    local_impact:
+      - Recherche/Rechercheplanung-und-Fragezerlegung.md
+      - Recherche/Skills/deep-research/SKILL.md
+
+  - id: practicalswan-research
+    area: Recherche
+    kind: github-file
+    repository: PracticalSwan/agent-skills
+    path: research/SKILL.md
+    ref: main
+    observed_sha: 3a6f4b71128de829a4ca610908c104c070f33b02
+    observed_version: "2.0"
+    last_checked: 2026-08-23
+    local_impact:
+      - Recherche/Quellenstrategie-und-Quellenqualitaet.md
+      - Recherche/Skills/source-evaluation/SKILL.md
+
+  - id: hermes-grounded-citations
+    area: Recherche
+    kind: github-file
+    repository: NousResearch/hermes-agent
+    path: skills/research/grounded-citations/SKILL.md
+    ref: main
+    observed_sha: 4c767369f4d97960925c7c2e73ffa192f95fe583
+    observed_version: 1.1.0
+    last_checked: 2026-08-23
+    local_impact:
+      - Recherche/Claim-Evidence-und-Zitationshygiene.md
+      - Recherche/Skills/citation-audit/SKILL.md
+
+policy:
+  on_change: review-only
+  auto_sync: false
+  require_changelog_for_local_behavior_change: true
