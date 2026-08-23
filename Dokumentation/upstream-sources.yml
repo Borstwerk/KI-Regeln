@@ -683,6 +683,120 @@ sources:
       - Datenbanken/Skills/schema-migration/SKILL.md
 
   # ---------------------------------------------------------------------------
+  # Testing und QA
+  # ---------------------------------------------------------------------------
+  - id: anthropic-testing-strategy
+    area: Testing-und-QA
+    kind: github-file
+    repository: anthropics/knowledge-work-plugins
+    path: engineering/skills/testing-strategy/SKILL.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: 4ff59410c8fe67872a98ca97135815b778ca1219
+    last_checked: 2026-08-23
+    local_impact:
+      - Testing-und-QA/Teststrategie-und-Risikobasiertes-Testen.md
+      - Testing-und-QA/Testebenen-und-Testportfolio.md
+      - Testing-und-QA/Skills/test-strategy/SKILL.md
+
+  - id: anthropic-webapp-testing
+    area: Testing-und-QA
+    kind: github-file
+    repository: anthropics/skills
+    path: skills/webapp-testing/SKILL.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: 4726215301db64a0cc4d41fc3219c61f37a30f4a
+    last_checked: 2026-08-23
+    local_impact:
+      - Testing-und-QA/End-to-End-und-Nutzerverhalten.md
+      - Testing-und-QA/Skills/e2e-testing/SKILL.md
+
+  - id: currents-playwright-best-practices
+    area: Testing-und-QA
+    kind: github-file
+    repository: currents-dev/playwright-best-practices-skill
+    path: playwright-best-practices/SKILL.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: 0da736253c343081ab8c0cb9802729a707c23196
+    observed_version: "1.2"
+    last_checked: 2026-08-23
+    local_impact:
+      - Testing-und-QA/Test-Seams-Doubles-und-Reale-Abhaengigkeiten.md
+      - Testing-und-QA/Testdaten-Isolation-und-Hermetik.md
+      - Testing-und-QA/Flaky-Tests-und-Determinismus.md
+      - Testing-und-QA/Failure-Recovery-und-Negativtests.md
+      - Testing-und-QA/Skills/flaky-test-diagnosis/SKILL.md
+      - Testing-und-QA/Skills/failure-testing/SKILL.md
+
+  - id: superpowers-verification-before-completion
+    area: Testing-und-QA
+    kind: github-file
+    repository: obra/superpowers
+    path: skills/verification-before-completion/SKILL.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: 7d45333cc4a49c57a80df6c1fe2fa777a207afbc
+    last_checked: 2026-08-23
+    local_impact:
+      - Agentenarbeit/Skills/verification-loop/SKILL.md
+      - Testing-und-QA/Testautomatisierung-CI-und-Evidence.md
+      - Workflows/Teststrategie-und-QA.md
+
+  - id: istqb-ctfl-v4
+    area: Testing-und-QA
+    kind: web-page
+    url: https://istqb.org/certifications/certified-tester-foundation-level-ctfl-v4-0/
+    monitor_mode: semantic-review
+    cadence: quarterly
+    last_checked: 2026-08-23
+    local_impact:
+      - Testing-und-QA/Teststrategie-und-Risikobasiertes-Testen.md
+      - Testing-und-QA/Testebenen-und-Testportfolio.md
+      - Testing-und-QA/Testdesign-und-Testfaelle.md
+      - Testing-und-QA/Exploratives-Testen-und-Release-Evidence.md
+
+  - id: playwright-best-practices
+    area: Testing-und-QA
+    kind: web-page
+    url: https://playwright.dev/docs/best-practices
+    monitor_mode: semantic-review
+    cadence: monthly
+    last_checked: 2026-08-23
+    local_impact:
+      - Testing-und-QA/Testdaten-Isolation-und-Hermetik.md
+      - Testing-und-QA/End-to-End-und-Nutzerverhalten.md
+      - Testing-und-QA/Flaky-Tests-und-Determinismus.md
+
+  - id: pact-docs
+    area: Testing-und-QA
+    kind: web-page
+    url: https://docs.pact.io/
+    monitor_mode: semantic-review
+    cadence: quarterly
+    last_checked: 2026-08-23
+    local_impact:
+      - Testing-und-QA/Integration-und-Contract-Testing.md
+      - Testing-und-QA/Skills/contract-testing/SKILL.md
+
+  - id: testcontainers-getting-started
+    area: Testing-und-QA
+    kind: web-page
+    url: https://testcontainers.com/getting-started/
+    monitor_mode: semantic-review
+    cadence: quarterly
+    last_checked: 2026-08-23
+    local_impact:
+      - Testing-und-QA/Test-Seams-Doubles-und-Reale-Abhaengigkeiten.md
+      - Testing-und-QA/Testdaten-Isolation-und-Hermetik.md
+      - Testing-und-QA/Skills/integration-testing/SKILL.md
+
+  # ---------------------------------------------------------------------------
   # Skill Engineering
   # ---------------------------------------------------------------------------
   - id: agent-skills-specification
