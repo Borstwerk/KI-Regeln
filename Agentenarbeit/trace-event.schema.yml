@@ -1,4 +1,4 @@
-schema_version: 1
+schema_version: 2
 
 required:
   - timestamp
@@ -15,6 +15,17 @@ optional:
   - tool_type
   - operation
   - duration_ms
+  - input_tokens
+  - output_tokens
+  - cache_read_input_tokens
+  - cache_write_input_tokens
+  - context_size
+  - context_size_unit
+  - tool_output_size
+  - tool_output_size_unit
+  - compaction_ratio
+  - context_ref
+  - handoff_ref
   - artifact_ref
   - evidence_ref
   - gate_id
@@ -37,6 +48,9 @@ recommended_event_types:
   - WORKFLOW_PHASE_STARTED
   - TOOL_CALLED
   - TOOL_FAILED
+  - CONTEXT_AUDITED
+  - CONTEXT_COMPACTED
+  - HANDOFF_CREATED
   - EVIDENCE_RECORDED
   - VALIDATION_PASSED
   - VALIDATION_FAILED
@@ -49,17 +63,26 @@ recommended_event_types:
   - TASK_COMPLETED
   - TASK_FAILED
 
+usage_rules:
+  provider_reported_tokens_preferred: true
+  approximations_must_be_marked: true
+  token_reduction_is_not_quality_proof: true
+
 privacy:
   content_fields_default: omitted
   secrets: forbidden
   full_prompt_or_tool_content: opt-in-only
+  compaction_or_handoff_content: opt-in-only
 
 example:
-  timestamp: "2026-08-23T17:00:00+02:00"
-  event_type: VALIDATION_PASSED
+  timestamp: "2026-08-23T19:30:00+02:00"
+  event_type: CONTEXT_COMPACTED
   task_id: TASK-42
   run_id: RUN-7
-  skill_id: code-review
+  skill_id: context-compaction
   status: pass
-  evidence_ref: "ci://run/123"
-  artifact_ref: "git://commit/abc123"
+  input_tokens: 82000
+  output_tokens: 1400
+  compaction_ratio: 0.18
+  context_ref: "artifact://context/compacted-7"
+  evidence_ref: "eval://handoff-continuation/7"
