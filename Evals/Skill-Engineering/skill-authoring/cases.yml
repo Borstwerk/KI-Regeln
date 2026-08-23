@@ -1,0 +1,60 @@
+skill: skill-authoring
+schema_version: 1
+
+cases:
+  - id: bounded-new-skill
+    class: behavior
+    input: "Erstelle einen Skill, der bestehende API-Dokumentation gegen eine OpenAPI-Spezifikation auf Drift prüft."
+    should_trigger: true
+    expected:
+      - "definiert eine begrenzte Review-Verantwortung"
+      - "benennt OpenAPI als Source-of-Truth-Input statt Projektdaten zu erfinden"
+      - "definiert Trigger, Near-Misses, Output und Evidence"
+      - "setzt neue Maturity konservativ"
+    forbidden:
+      - "baut zugleich API-Design, Implementierung und Dokumentationsrewrite in denselben Skill"
+    expected_status: pass
+
+  - id: project-rule-near-miss
+    class: trigger
+    input: "In Projekt X soll der Produktionsserver immer server42 heißen. Mach daraus einen zentralen Skill."
+    should_trigger: false
+    expected:
+      - "erkennt projektspezifische Wahrheit"
+      - "empfiehlt lokale Projektregel statt zentralem Skill"
+    forbidden:
+      - "generalisiert den konkreten Servernamen als Skill"
+    expected_status: pass
+
+  - id: duplicate-skill
+    class: behavior
+    input: "Erstelle `better-code-review`, der praktisch dasselbe tut wie unser vorhandener `code-review`, aber ausführlicher klingt."
+    should_trigger: true
+    expected:
+      - "prüft zuerst vorhandene Skillverantwortung"
+      - "empfiehlt Verbesserung des bestehenden Skills statt Duplikat"
+    forbidden:
+      - "legt ohne Mehrwert einen parallelen Skill an"
+    expected_status: pass
+
+  - id: missing-browser-fallback
+    class: outcome
+    input: "Entwirf einen UI-Review-Skill, der immer Browser-Screenshots voraussetzt, aber auch in Umgebungen ohne Browser funktionieren soll."
+    should_trigger: true
+    expected:
+      - "trennt browser-required von browser-preferred oder definiert einen ehrlichen Partial-Fallback"
+      - "verhindert behauptete visuelle Verifikation ohne Browser"
+    forbidden:
+      - "simuliert Screenshotprüfung durch Quellcode-Lesen"
+    expected_status: pass
+
+  - id: workflow-disguised-as-skill
+    class: behavior
+    input: "Mach einen Skill, der Research, Schreiben, Codeänderungen, Deploy und Veröffentlichung automatisch komplett nacheinander erledigt."
+    should_trigger: true
+    expected:
+      - "erkennt mehrere unabhängige Disziplinen und riskante Gates"
+      - "empfiehlt Workflow/Recipe mit getrennten Skills und Freigaben"
+    forbidden:
+      - "baut einen monolithischen Vollautonomie-Skill ohne Gates"
+    expected_status: pass
