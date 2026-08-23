@@ -528,6 +528,161 @@ sources:
       - Dokumentationserstellung/Skills/runbook/SKILL.md
 
   # ---------------------------------------------------------------------------
+  # Datenbanken
+  # ---------------------------------------------------------------------------
+  - id: supabase-postgres-best-practices
+    area: Datenbanken
+    kind: github-file
+    repository: supabase/agent-skills
+    path: skills/supabase-postgres-best-practices/SKILL.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: 6400792389dfcc82c81953054e546bd72ebcd259
+    observed_version: "1.1.1"
+    last_checked: 2026-08-23
+    local_impact:
+      - Datenbanken/Datenmodellierung-und-Zugriffsmuster.md
+      - Datenbanken/Indizes-und-Execution-Plans.md
+      - Datenbanken/Connections-Pooling-und-Ressourcen.md
+      - Datenbanken/Transaktionen-Isolation-und-Concurrency.md
+      - Datenbanken/Skills/query-performance/SKILL.md
+
+  - id: neon-postgres-best-practices
+    area: Datenbanken
+    kind: github-file
+    repository: neondatabase/postgres-skills
+    path: skills/postgres-best-practices/SKILL.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: 43f3468765949e3db85a3782d90d4826b6c585bd
+    last_checked: 2026-08-23
+    local_impact:
+      - Datenbanken/Datenmodellierung-und-Zugriffsmuster.md
+      - Datenbanken/Indizes-und-Execution-Plans.md
+      - Datenbanken/Migrationen-Backfills-und-Rollback.md
+
+  - id: mongodb-schema-design
+    area: Datenbanken
+    kind: github-file
+    repository: mongodb/agent-skills
+    path: plugins/mongodb/skills/mongodb-schema-design/SKILL.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: e2237d15ead78ce33a4753ca8dc8e6e0bba854cf
+    observed_version: "1.0.0"
+    last_checked: 2026-08-23
+    local_impact:
+      - Datenbanken/Datenmodellierung-und-Zugriffsmuster.md
+      - Datenbanken/Schema-Constraints-und-Integritaet.md
+      - Datenbanken/Migrationen-Backfills-und-Rollback.md
+      - Datenbanken/Skills/database-design/SKILL.md
+      - Datenbanken/Skills/schema-migration/SKILL.md
+
+  - id: mongodb-query-optimizer
+    area: Datenbanken
+    kind: github-file
+    repository: mongodb/agent-skills
+    path: plugins/mongodb/skills/mongodb-query-optimizer/SKILL.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: c71f2f5e9afd8b6cd73380169e0ff5c3f9402944
+    observed_version: "1.0.0"
+    last_checked: 2026-08-23
+    local_impact:
+      - Datenbanken/Indizes-und-Execution-Plans.md
+      - Datenbanken/Monitoring-und-Diagnose.md
+      - Datenbanken/Skills/query-performance/SKILL.md
+
+  - id: redis-core
+    area: Datenbanken
+    kind: github-file
+    repository: redis/agent-skills
+    path: skills/redis-core/SKILL.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: a62be86377ad672f5f9f2301a492cc4ee726d3cc
+    observed_version: "0.1.0"
+    last_checked: 2026-08-23
+    local_impact:
+      - Datenbanken/Datenmodellierung-und-Zugriffsmuster.md
+      - Datenbanken/Skills/database-design/SKILL.md
+
+  - id: redis-connections
+    area: Datenbanken
+    kind: github-file
+    repository: redis/agent-skills
+    path: skills/redis-connections/SKILL.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: 53f367a9a4ed6a4bf9c3c29a441dcfa1ee91a114
+    observed_version: "0.1.0"
+    last_checked: 2026-08-23
+    local_impact:
+      - Datenbanken/Connections-Pooling-und-Ressourcen.md
+      - Datenbanken/Skills/database-operations/SKILL.md
+
+  - id: redis-security
+    area: Datenbanken
+    kind: github-file
+    repository: redis/agent-skills
+    path: skills/redis-security/SKILL.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: 661ba11f06c9a31203dfe6b828bd2c714d0a258e
+    observed_version: "0.1.0"
+    last_checked: 2026-08-23
+    local_impact:
+      - Datenbanken/Security-und-Datenzugriff.md
+      - Datenbanken/Skills/database-operations/SKILL.md
+      - Sicherheit/Tool-Rechte-und-Least-Privilege.md
+
+  - id: prisma-skills-readme
+    area: Datenbanken
+    kind: github-file
+    repository: prisma/prisma
+    path: skills/README.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: 889bb5e1cf410c7751b51fc6c529f5fe3d44aec1
+    last_checked: 2026-08-23
+    local_impact:
+      - Datenbanken/README.md
+      - Datenbanken/Migrationen-Backfills-und-Rollback.md
+      - Datenbanken/Skills/schema-migration/SKILL.md
+      - Skill-Engineering/Toolanforderungen-und-Fallbacks.md
+
+  - id: postgresql-current-docs
+    area: Datenbanken
+    kind: web-page
+    url: https://www.postgresql.org/docs/current/
+    monitor_mode: semantic-review
+    cadence: quarterly
+    last_checked: 2026-08-23
+    local_impact:
+      - Datenbanken/Indizes-und-Execution-Plans.md
+      - Datenbanken/Transaktionen-Isolation-und-Concurrency.md
+      - Datenbanken/Migrationen-Backfills-und-Rollback.md
+
+  - id: prisma-migrate-docs
+    area: Datenbanken
+    kind: web-page
+    url: https://www.prisma.io/docs/orm/prisma-migrate
+    monitor_mode: semantic-review
+    cadence: monthly
+    last_checked: 2026-08-23
+    local_impact:
+      - Datenbanken/Migrationen-Backfills-und-Rollback.md
+      - Datenbanken/Skills/schema-migration/SKILL.md
+
+  # ---------------------------------------------------------------------------
   # Skill Engineering
   # ---------------------------------------------------------------------------
   - id: agent-skills-specification
