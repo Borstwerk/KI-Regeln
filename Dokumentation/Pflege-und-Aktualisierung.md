@@ -27,6 +27,9 @@ Typische Themenfelder:
 - Agentic Engineering;
 - generative Bildarbeit;
 - KI-gestütztes Schreiben;
+- technische Dokumentation;
+- Webentwicklung und Webdesign;
+- Recherche und Deep Research;
 - KI-gestützte Softwareentwicklung;
 - Reflexion, Lernen und Selbstverbesserung mit KI;
 - neue Sicherheits-, Governance- oder Evaluationsansätze.
@@ -72,6 +75,41 @@ Zusätzliche Prüfung bei:
 - auffälligen Schwächen eines bestehenden Skills;
 - Änderungen an Drittquellen oder Lizenzbedingungen;
 - neuen Erkenntnissen, die eine bestehende Regel wesentlich infrage stellen.
+
+### 4. Gezielter Upstream-Check
+
+Veränderliche externe Skills und Quellen können in `upstream-sources.yml` registriert werden.
+
+Der monatliche Check vergleicht für diese Quellen möglichst:
+
+- gespeicherten Blob-SHA oder Version;
+- aktuellen Blob-SHA oder Version;
+- relevante inhaltliche Änderungen;
+- lokale Dateien, die von der Quelle beeinflusst wurden.
+
+Ablauf:
+
+```text
+registrierter Upstream
+→ aktuellen Stand abrufen
+→ SHA / Version unverändert?
+   ├─ ja → last_checked aktualisieren
+   └─ nein
+        ↓
+      relevanten Diff prüfen
+        ↓
+      betrifft unsere übernommenen Konzepte?
+        ├─ nein → Register aktualisieren
+        └─ ja  → Änderungskandidat erzeugen
+                    ↓
+                  normaler Reviewprozess
+```
+
+Dabei gilt:
+
+> Upstream-Änderung = Review-Signal, nicht automatischer Sync.
+
+Details und Schema stehen in `Quellenregister.md` und `upstream-sources.yml`.
 
 ## Aufnahme neuer Regeln
 
@@ -221,11 +259,13 @@ Bei jedem Audit prüfen:
 - Wo fehlt ein Beispiel?
 - Wo widersprechen Handbuch und `SKILL.md` einander?
 - Welche Quellen sind inzwischen veraltet?
+- Welche registrierten Upstreams haben sich geändert?
+- Ist `upstream-sources.yml` vollständig genug für wichtige mutable Quellen?
 - Welche Projektprobleme deuten auf eine allgemeine Lücke hin?
 
 ## Verantwortungsregel
 
-Ein Research-Hinweis ist kein automatisches Commit.
+Ein Research-Hinweis oder Upstream-Diff ist kein automatisches Commit.
 
 Eine gute Quelle ersetzt nicht die bewusste Entscheidung.
 
