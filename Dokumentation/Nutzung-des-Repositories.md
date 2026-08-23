@@ -13,7 +13,7 @@ Das Repository ist keine automatische Master-Steuerung für alle Projekte. Es is
 Das bedeutet:
 
 - zentrale Regeln beschreiben **wie** gearbeitet wird;
-- Projekte definieren **was** konkret gebaut, geschrieben, geprüft, erzeugt oder entschieden werden soll;
+- Projekte definieren **was** konkret gebaut, geschrieben, geprüft, erzeugt, recherchiert oder entschieden werden soll;
 - lokale Projektregeln haben Vorrang vor allgemeinen Regeln, wenn sie verbindlich sind.
 
 ## Was das Repository liefert
@@ -24,6 +24,7 @@ Das Repository liefert beispielsweise:
 - Denk- und Problemlösungsmuster;
 - Reflexions- und Lernmethoden;
 - Agentenarbeitsweisen;
+- Recherche-, Websuche- und Deep-Research-Methoden;
 - Schreibregeln;
 - Bildarbeitsregeln;
 - Webdesign- und Frontend-Regeln;
@@ -36,6 +37,7 @@ Das Repository liefert nicht automatisch:
 - Produktanforderungen;
 - Projektarchitektur;
 - Fachbegriffe eines konkreten Systems;
+- projektspezifische Research-Fragen oder interne Quellen;
 - Serienkanon;
 - Charakterdesigns;
 - Markenidentität oder konkrete `DESIGN.md`;
@@ -85,6 +87,45 @@ Zusätzlich bleiben lokal beispielsweise:
 - Testumgebung;
 - Freigabegates;
 - Produktanforderungen.
+
+## Beispiel: Research- oder Analyseprojekt
+
+Je nach Tiefe können sinnvoll sein:
+
+- `Grundlagen/Zusammenarbeit-mit-KI.md`
+- `Agentenarbeit/Skills/context-engineering/SKILL.md`
+- `Recherche/Skills/web-search/SKILL.md`
+- `Recherche/Skills/research-plan/SKILL.md`
+- `Recherche/Skills/deep-research/SKILL.md`
+- `Recherche/Skills/source-evaluation/SKILL.md`
+- `Recherche/Skills/claim-verification/SKILL.md`
+- `Recherche/Skills/research-synthesis/SKILL.md`
+- `Recherche/Skills/citation-audit/SKILL.md`
+
+Ein möglicher Deep-Research-Ablauf:
+
+```text
+Hauptfrage
+→ research-plan
+→ deep-research
+→ source-evaluation bei wichtigen Quellen
+→ research-synthesis
+→ claim-verification für zentrale oder strittige Claims
+→ citation-audit
+→ Final
+```
+
+Für eine kleine aktuelle Faktenfrage kann dagegen `web-search` allein genügen.
+
+Zusätzlich lokal bleiben beispielsweise:
+
+- konkrete Research-Frage;
+- gewünschte Entscheidung oder Zielgruppe;
+- interne Dokumente und Daten;
+- zulässige Quellenbereiche;
+- Freshness-Anforderungen;
+- fachliche Spezialkriterien;
+- Ergebnisformat.
 
 ## Beispiel: Schreibprojekt
 
@@ -231,6 +272,7 @@ Ein Skill ersetzt niemals:
 
 - eine Spezifikation;
 - eine Architekturentscheidung;
+- eine Research-Frage oder fachliche Definition;
 - einen Serienkanon;
 - eine Marken- oder Designentscheidung;
 - eine Projektfreigabe;
