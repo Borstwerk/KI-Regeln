@@ -26,14 +26,21 @@ Neuer Hauptbereich für technische und projektbezogene Dokumentation:
 
 ### Quellen- und Upstream-Monitoring
 
-Neu:
+Erweitert und vollständig auditiert:
 
-- `Dokumentation/Quellenregister.md` für den menschlich lesbaren Updateprozess externer Quellen;
-- `Dokumentation/upstream-sources.yml` als maschinenlesbares Register veränderlicher externer Skills;
-- gespeicherte Upstream-SHAs beziehungsweise Versionen für erste Quellen aus Dokumentationserstellung, Webentwicklung und Recherche;
-- lokale Impact-Liste pro überwachtetem Upstream;
-- Grundregel: Upstream-Änderung ist Review-Signal, kein automatischer Sync;
-- monatlicher `KI-Regeln Monatscheck` um gezielten SHA-/Versionsvergleich der registrierten Upstreams erweitert.
+- `Dokumentation/Quellenregister.md` auf Monitoring-Schema v2 erweitert;
+- `Dokumentation/upstream-sources.yml` unterscheidet jetzt `exact-sha` für konkrete GitHub-Dateien und `semantic-review` für lebende Web-/Produktdokumentation;
+- monatliche und quartalsweise Cadence für unterschiedlich volatile Quellen;
+- vollständiger bereichsübergreifender Audit in `Dokumentation/Upstream-Audit-2026-08-23.md` dokumentiert;
+- mutable Upstreams aus Programmieren, Schreiben, Bildarbeit, Webentwicklung, Recherche, Dokumentationserstellung und relevanten Grundlagen klassifiziert;
+- `Schreiben/Quellen-und-Inspirationen.md` und `Programmieren/Quellen-und-Inspirationen.md` ergänzt;
+- konkrete Matt-Pocock-Engineering-Skills für TDD, Diagnose, Code-Review und Domain Modeling per Blob-SHA registriert;
+- lebende Adobe-/Midjourney-Bilddokumentation semantisch registriert;
+- weitere tatsächlich verwendete Web- und Research-Skills mit geprüftem Blob-SHA ergänzt;
+- langsamere Leitfäden wie HAX, Google Developer Style Guide, Write the Docs und Good Docs Project quartalsweise eingeordnet;
+- Papers, datierte Research-Artikel und reine Discovery-Kataloge bewusst nicht als künstliche Sync-Dependencies behandelt;
+- Grundregel bleibt: Upstream-Änderung ist Review-Signal, kein automatischer Sync;
+- monatlicher `KI-Regeln Monatscheck` auf das neue Monitoring-Schema und die Cadence-Regeln erweitert.
 
 ### Recherche
 
@@ -74,7 +81,7 @@ Neuer Hauptbereich für Gestaltung und Entwicklung von Websites und Weboberfläc
 Aktualisiert:
 
 - Haupt-README um `Webentwicklung/`, `Recherche/` und `Dokumentationserstellung/` erweitert;
-- menschliche Doku um Quellenregister und Dokumentations-Skill-Handbuch ergänzt;
+- menschliche Doku um Quellenregister, vollständigen Upstream-Audit und Dokumentations-Skill-Handbuch ergänzt;
 - Projektmanifest und Nutzungsanleitung um Research-, Web- und Dokumentationsprojekte ergänzt.
 
 ## v2026.08
