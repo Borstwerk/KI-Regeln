@@ -36,6 +36,22 @@ Ein guter Knoten hat:
 
 Zu große Knoten wieder zerlegen.
 
+## Objectives statt Mikromanagement
+
+Ein Graph soll Abhängigkeiten, Grenzen und prüfbare Zustände steuern – nicht jeden einzelnen Denk- oder Implementierungsschritt vorschreiben.
+
+Gute Steuerung:
+
+> Implementiere Verhalten X innerhalb des freigegebenen Scopes. Halte Vertrag Y unverändert. Liefere Test Z und Evidence für die Akzeptanzbedingungen.
+
+Zu enge Steuerung kann unnötig werden:
+
+> Öffne Datei A, ändere Zeile 17, lege danach exakt diese Helper-Methode an und rufe anschließend B auf.
+
+Solche Details sind nur sinnvoll, wenn sie selbst Teil einer verbindlichen Entscheidung oder notwendigen Invariante sind.
+
+Der Agent darf innerhalb des Knotens den einfachsten korrekten Weg wählen, solange Scope, Architekturentscheidungen, Verträge und Nachweise eingehalten werden.
+
 ## Vertical Slices bevorzugen
 
 Wenn möglich, Arbeit nicht ausschließlich nach technischen Schichten zerlegen.
@@ -73,6 +89,34 @@ Vor Parallelisierung prüfen:
 - erzeugen parallele Änderungen Merge- oder Konsistenzrisiken?
 
 Parallelität ist kein Qualitätsziel an sich.
+
+## Isolierter Workspace pro parallelem Knoten
+
+Wenn Knoten parallel ausgeführt werden, sollte jeder Knoten nach Möglichkeit einen eigenen veränderlichen Arbeitsbereich besitzen.
+
+Geeignete Mittel können sein:
+
+- eigener Branch;
+- eigener Git-Worktree;
+- separater Checkout;
+- isolierte Sandbox oder Container;
+- getrennte temporäre Dateien, Datenbanken oder Ports.
+
+Der Graph beschreibt nicht nur **welcher Knoten** parallel laufen darf, sondern der Harness muss auch sicherstellen, dass parallele Knoten sich nicht unkontrolliert gegenseitig verändern.
+
+Gemeinsame unveränderliche Quellen dürfen geteilt werden. Veränderlicher Zustand braucht bewusste Koordination.
+
+## Integration ist ein eigener Zustand
+
+Zwei einzeln erfolgreiche parallele Knoten sind noch kein erfolgreich integriertes Ergebnis.
+
+Nach Parallelität kann ein eigener Integrationsknoten nötig sein, der prüft:
+
+- Merge-Konflikte;
+- gemeinsame Schnittstellen;
+- Integrations- und Regressionstests;
+- gemeinsam veränderte Abhängigkeiten;
+- Gesamt-Scope und Architekturwirkung.
 
 ## Verifikationsloop innerhalb eines Knotens
 
@@ -140,8 +184,9 @@ Der definierte Ausgangszustand muss überprüfbar sein, beispielsweise durch:
 - reproduzierbare Messung;
 - Schema- oder Validatorprüfung;
 - manuellen Test;
-- tatsächlichen Diff gegen den erwarteten Scope.
+- tatsächlichen Diff gegen den erwarteten Scope;
+- Evidence Bundle für einen nachfolgenden Knoten oder ein Gate.
 
 ## Leitgedanke
 
-> Der Graph bestimmt, was ausführbar ist. Der Loop bestimmt, wie innerhalb eines freigegebenen Knotens gelernt und korrigiert wird.
+> Der Graph bestimmt, was ausführbar ist. Der Loop bestimmt, wie innerhalb eines freigegebenen Knotens gelernt und korrigiert wird. Der Harness begrenzt, wo diese Arbeit wirken darf.
