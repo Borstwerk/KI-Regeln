@@ -1,11 +1,14 @@
-# Beispielmanifest für ein Projekt, das ausgewählte Regeln und Skills aus
-# Borstwerk/KI-Regeln verwendet.
+# Beispielmanifest für ein Projekt, das ausgewählte Regeln, Skills und Workflows
+# aus Borstwerk/KI-Regeln verwendet.
 #
 # Dieses Manifest ist Dokumentation und Auswahlhilfe. Es ersetzt keine
 # projektspezifischen Regeln und führt selbst keine Synchronisierung aus.
 
 source: Borstwerk/KI-Regeln
-version: v2026.08
+
+# Immer bewusst auf einen veröffentlichten Stand oder Commit pinnen.
+# Beispiel: v2026.08 oder ein konkreter Commit-SHA.
+version: "<released-version-or-commit>"
 
 rules:
   - Grundlagen/Zusammenarbeit-mit-KI.md
@@ -71,9 +74,44 @@ skills:
   # - Programmieren/Skills/diagnose
   # - Programmieren/Skills/code-review
 
+  # Skill Engineering / Governance
+  # - Skill-Engineering/Skills/skill-authoring
+  # - Skill-Engineering/Skills/skill-review
+
+  # Sicherheit
+  # - Sicherheit/Skills/skill-security-review
+  # - Sicherheit/Skills/prompt-injection-review
+  # - Sicherheit/Skills/tool-permission-review
+
+# Workflows sind Recipes, keine Skills. Nur auswählen, wenn die wiederkehrende
+# Skill-Kette für dieses Projekt tatsächlich hilfreich ist.
+workflows:
+  # - Workflows/Deep-Research.md
+  # - Workflows/Technische-Dokumentation.md
+  # - Workflows/Website-Neuentwicklung.md
+  # - Workflows/Bestehende-Website-Review.md
+  # - Workflows/Software-Feature.md
+  # - Workflows/Bugdiagnose.md
+  # - Workflows/Bildserie.md
+
+quality_policy:
+  # Optional: Projekte können festlegen, welche zentrale Reife sie akzeptieren.
+  # Neue Bereiche können bewusst experimental/candidate genutzt werden, wenn
+  # das Projekt die zusätzliche Reviewlast akzeptiert.
+  minimum_maturity: "<project-decision>"
+  require_security_review_for_powerful_skills: true
+  require_relevant_evals_before_local_upgrade: true
+
+project_rules:
+  # - AGENTS.md
+  # - docs/architecture.md
+  # - .ai/project-rules.md
+
 notes:
   - Lokale Projektregeln haben Vorrang vor allgemeinen Regeln.
-  - Nur tatsächlich benötigte Regeln und Skills auswählen.
+  - Nur tatsächlich benötigte Regeln, Skills und Workflows auswählen.
   - Die verwendete zentrale Version bewusst dokumentieren.
+  - `skill-catalog.yml` vor Übernahme auf Maturity, Capabilities und Evalabdeckung prüfen.
   - Zentrale Updates nicht ungeprüft automatisch in laufende Projekte übernehmen.
   - Externe Upstream-Änderungen sind Review-Signale und werden nicht automatisch synchronisiert.
+  - Ein Workflow autorisiert keine darin enthaltenen riskanten Aktionen oder Human Gates automatisch.
