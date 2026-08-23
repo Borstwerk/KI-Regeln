@@ -195,7 +195,7 @@ wenn einfacher genügt:
 
 > Das Gebäude ist ein Veranstaltungsort und hat vier Räume.
 
-Vermeintlich elegante Ersatzkonstruktionen wie „dient als“, „fungiert als“, „zeichnet sich durch aus“, „bietet“ oder „verfügt über“ nur verwenden, wenn sie tatsächlich genauer sind.
+Vermeintlich elegante Ersatzkonstruktionen wie „dient als“, „fungiert als“, „zeichnet sich durch … aus“, „bietet“ oder „verfügt über“ nur verwenden, wenn sie tatsächlich genauer sind.
 
 ## 18. Keine mechanischen Miniüberschriften in Listen
 
