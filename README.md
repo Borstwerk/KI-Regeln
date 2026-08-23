@@ -10,7 +10,7 @@ Ziel ist keine persönliche KI-Konfiguration und keine projektspezifische Wissen
 
 Das bedeutet:
 
-- allgemeine Kommunikations-, Schreib-, Analyse- und Entwicklungsregeln liegen hier;
+- allgemeine Kommunikations-, Schreib-, Analyse-, Agenten- und Entwicklungsregeln liegen hier;
 - projektspezifische Anforderungen, Architektur, Figuren, Fachbegriffe und Sonderregeln bleiben im jeweiligen Projekt;
 - persönliche Profile, Gesundheitsdaten, Familieninformationen oder andere nicht notwendige personenbezogene Details gehören nicht in dieses Repository;
 - ein Skill ersetzt niemals die tatsächliche Spezifikation oder Dokumentation eines Projekts.
@@ -24,6 +24,16 @@ KI-Regeln/
 │   └── Datenschutz-und-Kontext.md
 ├── Arbeitsweisen/
 │   └── Problemloesung.md
+├── Agentenarbeit/
+│   ├── README.md
+│   ├── Context-Engineering.md
+│   ├── Harness-Engineering.md
+│   ├── Task-Graph-und-Loops.md
+│   ├── Human-Gates-und-Freigaben.md
+│   └── Skills/
+│       ├── context-engineering/SKILL.md
+│       ├── task-graph/SKILL.md
+│       └── verification-loop/SKILL.md
 ├── Schreiben/
 │   ├── Agent-Anweisungen.md
 │   ├── Schreibstil.md
@@ -55,7 +65,29 @@ Regeln für verlässliche Zusammenarbeit mit KI unabhängig vom Fachgebiet: Quel
 
 Wiederverwendbare Denk- und Problemlösungsmuster wie Hypothesenbildung, iterative Bearbeitung und überprüfbare Entscheidungen.
 
-### 3. Schreiben
+### 3. Agentenarbeit
+
+Regeln für kontrollierte Agentenautonomie unabhängig vom konkreten Fachgebiet.
+
+Der Bereich behandelt insbesondere:
+
+- `Context Engineering` – den kleinsten ausreichenden, aktuellen Kontext bereitstellen;
+- `Harness Engineering` – Regeln möglichst durch Tests, Linter, Schemas, Rechte und andere technische Grenzen unterstützen;
+- `Task Graphs` – komplexe Arbeit in abhängige und überprüfbare Knoten zerlegen;
+- `Verification Loops` – innerhalb eines freigegebenen Scopes arbeiten, prüfen, diagnostizieren und korrigieren;
+- `Human Gates` – klar definieren, welche Entscheidungen oder Aktionen nicht autonom erfolgen dürfen.
+
+Leitgedanke:
+
+> Autonomie innerhalb klarer Grenzen.
+
+Enthaltene Skills:
+
+- `context-engineering` – relevanten Agentenkontext auswählen und Quellen der Wahrheit erhalten;
+- `task-graph` – komplexe Arbeit in abhängige, überprüfbare Knoten zerlegen;
+- `verification-loop` – kontrolliert iterieren, bis Nachweis oder Stop-Kriterium erreicht ist.
+
+### 4. Schreiben
 
 Allgemeine Regeln für natürliche Texte, kreative Prosa und strukturelle Stilreviews.
 
@@ -65,7 +97,7 @@ Enthaltene Skills:
 - `kreatives-schreiben` – Szene, Figurenstimme, räumliche Klarheit und kanontreue Wirkung;
 - `stilreview` – Muster erkennen, aber nur nach Kontextprüfung ändern.
 
-### 4. Programmieren
+### 5. Programmieren
 
 Allgemeiner Fünf-Gate-Prozess und wiederverwendbare Agent-Skills für Softwarearbeit.
 
@@ -76,7 +108,9 @@ Enthaltene Skills:
 - `diagnose` – reproduzierbare Root-Cause-Diagnose;
 - `code-review` – tatsächlichen Diff gegen Anforderung und Repository-Standards prüfen.
 
-### 5. Projektregeln
+Die Regeln aus `Agentenarbeit/` ergänzen diesen Prozess. Ein innerer Agentenloop darf insbesondere keine Planungs-, Review- oder Freigabegates überspringen.
+
+### 6. Projektregeln
 
 Projektregeln gehören nicht hierher. Beispiele sind konkrete Produktanforderungen, Serienkanon, Fachmodelle, Releasewege oder technische Sonderfälle eines einzelnen Repositories.
 
@@ -97,10 +131,26 @@ konkreter Nutzerauftrag
 → verbindliche Projektanforderung / Spezifikation
 → gültige Projektentscheidungen und Projektdokumentation
 → freigegebener Plan
-→ allgemeine Regeln und Skills aus diesem Repository
+→ lokale Repository-Regeln
+→ allgemeine Agenten-, Fach- und Arbeitsregeln aus diesem Repository
 ```
 
 Allgemeine Regeln dürfen keine lokale fachliche Wahrheit überschreiben.
+
+## Agentenautonomie
+
+Agenten dürfen innerhalb eines ausdrücklich oder durch den Projektprozess freigegebenen Scopes selbstständig iterieren.
+
+Dabei gelten insbesondere:
+
+- Kontext gezielt statt maximal laden;
+- unabhängige Arbeit darf parallelisiert werden, echte Abhängigkeiten nicht;
+- jeder wichtige Arbeitsschritt braucht einen überprüfbaren Ausgangszustand;
+- ein Loop benötigt Stop- und Eskalationsbedingungen;
+- fehlende Spezifikation darf nicht durch stillschweigende Agentenentscheidungen ersetzt werden;
+- automatisch prüfbare Invarianten sollten möglichst automatisch geprüft werden;
+- riskante, irreversible oder extern sichtbare Aktionen benötigen die dafür definierte Freigabe;
+- ein erfolgreicher Agentenlauf ist noch keine fachliche oder technische Freigabe.
 
 ## Verteilung in Projekte
 
