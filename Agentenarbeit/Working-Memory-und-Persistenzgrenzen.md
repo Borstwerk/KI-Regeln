@@ -49,12 +49,12 @@ Working State darf außerhalb des aktiven Kontextfensters persistiert werden, bl
 
 ## Persistent Knowledge
 
-Wird im späteren Bereich `Wissensmanagement/` behandelt.
+Wird im Bereich `Wissensmanagement/` behandelt.
 
 Beispiele:
 
 - dauerhaft gültige fachliche Erkenntnisse;
-- gepflegte Wissensnoten;
+- gepflegte Wissenseinheiten;
 - Taxonomien und Wissensgraph-Beziehungen;
 - langfristige Quellen- und Provenance-Strukturen;
 - wiederverwendbare Synthesen über mehrere Aufgaben hinweg.
@@ -73,6 +73,8 @@ Vor dauerhafter Übernahme prüfen:
 - ist Provenance nachvollziehbar?
 - enthält sie sensitive oder unnötig personenbezogene Daten?
 - gibt es Ownership- und Aktualitätsanforderungen?
+
+Für die eigentliche Persistenz und Pflege siehe `../Wissensmanagement/README.md` sowie den Workflow `../Workflows/Wissensbasis-Aufbauen-und-Pflegen.md`.
 
 ## Retrieval-Grenze
 

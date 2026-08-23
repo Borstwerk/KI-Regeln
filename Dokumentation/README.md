@@ -16,6 +16,7 @@ Er richtet sich vor allem an Menschen, die:
 - `Nutzung-des-Repositories.md` – erklärt, wie das Repository in echten Projekten eingesetzt wird;
 - `Skill-Handbuch.md` – erklärt die allgemeinen Skills in verständlicher Sprache;
 - `Skill-Handbuch-Context-und-Long-Horizon.md` – erklärt Context Engineering, Context Audit, Compaction und Session-Handoffs für längere Agentenläufe;
+- `Skill-Handbuch-Wissensmanagement.md` – erklärt Design, Ingest, Distillation, Synthese, Query, Maintenance und Review persistenter Wissensbasen;
 - `Skill-Handbuch-Dokumentationserstellung.md` – erklärt die Skills des Bereichs `Dokumentationserstellung/`;
 - `Skill-Handbuch-Datenbanken.md` – erklärt die engine-neutralen Datenbank-Skills und ihre Abgrenzung;
 - `Skill-Handbuch-Testing-und-QA.md` – erklärt Teststrategie, Testdesign, Integration, Contracts, E2E, Flakiness, Failure Testing und Test-Suite-Review;
@@ -80,10 +81,11 @@ Wer das Repository zum ersten Mal verwendet, sollte in dieser Reihenfolge lesen:
 3. `Skill-Handbuch.md`
 4. bei Auswahl oder Bewertung von Skills `Skill-Katalog.md`
 5. bei längerer Agentenarbeit oder Context-/Tokenfragen zusätzlich `Skill-Handbuch-Context-und-Long-Horizon.md`
-6. bei Dokumentationsarbeit zusätzlich `Skill-Handbuch-Dokumentationserstellung.md`
-7. bei Datenbankarbeit zusätzlich `Skill-Handbuch-Datenbanken.md`
-8. bei Testing-/QA-Arbeit zusätzlich `Skill-Handbuch-Testing-und-QA.md`
-9. bei Skill-/Security-Arbeit zusätzlich `Skill-Handbuch-Meta-und-Sicherheit.md`
-10. erst danach die für das eigene Vorhaben relevanten Regel-, Skill- und Workflow-Dateien.
+6. bei persistenter Wissensarbeit zusätzlich `Skill-Handbuch-Wissensmanagement.md`
+7. bei Dokumentationsarbeit zusätzlich `Skill-Handbuch-Dokumentationserstellung.md`
+8. bei Datenbankarbeit zusätzlich `Skill-Handbuch-Datenbanken.md`
+9. bei Testing-/QA-Arbeit zusätzlich `Skill-Handbuch-Testing-und-QA.md`
+10. bei Skill-/Security-Arbeit zusätzlich `Skill-Handbuch-Meta-und-Sicherheit.md`
+11. erst danach die für das eigene Vorhaben relevanten Regel-, Skill- und Workflow-Dateien.
 
 Nicht das komplette Repository muss für jede Aufgabe geladen oder übernommen werden. Gute Nutzung bedeutet gezielte Auswahl.

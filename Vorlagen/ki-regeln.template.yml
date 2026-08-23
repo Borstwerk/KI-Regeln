@@ -7,7 +7,6 @@
 source: Borstwerk/KI-Regeln
 
 # Immer bewusst auf einen veröffentlichten Stand oder Commit pinnen.
-# Beispiel: v2026.08 oder ein konkreter Commit-SHA.
 version: "<released-version-or-commit>"
 
 rules:
@@ -37,6 +36,15 @@ skills:
   # - Recherche/Skills/claim-verification
   # - Recherche/Skills/research-synthesis
   # - Recherche/Skills/citation-audit
+
+  # Wissensmanagement
+  # - Wissensmanagement/Skills/knowledge-base-design
+  # - Wissensmanagement/Skills/knowledge-ingest
+  # - Wissensmanagement/Skills/knowledge-distill
+  # - Wissensmanagement/Skills/knowledge-synthesis
+  # - Wissensmanagement/Skills/knowledge-maintenance
+  # - Wissensmanagement/Skills/knowledge-query
+  # - Wissensmanagement/Skills/knowledge-base-review
 
   # Dokumentationserstellung
   # - Dokumentationserstellung/Skills/docs-plan
@@ -106,8 +114,6 @@ skills:
   # - Sicherheit/Skills/prompt-injection-review
   # - Sicherheit/Skills/tool-permission-review
 
-# Workflows sind Recipes, keine Skills. Nur auswählen, wenn die wiederkehrende
-# Skill-Kette für dieses Projekt tatsächlich hilfreich ist.
 workflows:
   # - Workflows/Deep-Research.md
   # - Workflows/Technische-Dokumentation.md
@@ -119,11 +125,9 @@ workflows:
   # - Workflows/Datenbank-Aenderung.md
   # - Workflows/Teststrategie-und-QA.md
   # - Workflows/Long-Horizon-Agentenarbeit.md
+  # - Workflows/Wissensbasis-Aufbauen-und-Pflegen.md
 
 quality_policy:
-  # Optional: Projekte können festlegen, welche zentrale Reife sie akzeptieren.
-  # Neue Bereiche können bewusst experimental/candidate genutzt werden, wenn
-  # das Projekt die zusätzliche Reviewlast akzeptiert.
   minimum_maturity: "<project-decision>"
   require_security_review_for_powerful_skills: true
   require_relevant_evals_before_local_upgrade: true
@@ -141,4 +145,5 @@ notes:
   - Zentrale Updates nicht ungeprüft automatisch in laufende Projekte übernehmen.
   - Externe Upstream-Änderungen sind Review-Signale und werden nicht automatisch synchronisiert.
   - Ein Workflow autorisiert keine darin enthaltenen riskanten Aktionen oder Human Gates automatisch.
-  - Context-/Token-Skills optimieren Arbeitskontext und Handoffs; dauerhafte Wissensbasen bleiben ein eigener lokaler beziehungsweise später zentraler Wissensmanagement-Bereich.
+  - Context-/Token-Skills optimieren Active Context und taskbezogenen Working State; dauerhaft gepflegtes Wissen gehört zum Bereich `Wissensmanagement/`.
+  - Knowledge-Base-Tools, Taxonomien, Datenschutzklassen und Sources of Truth bleiben projektspezifisch.

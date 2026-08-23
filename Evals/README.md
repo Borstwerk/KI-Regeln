@@ -56,30 +56,24 @@ Neben einzelnen Kernskills bestehen inzwischen vollständige Startpacks für:
 
 - alle sieben Skills aus `Datenbanken/`;
 - alle neun Skills aus `Testing-und-QA/`;
-- die Context-/Long-Horizon-Skills `context-engineering`, `context-audit`, `context-compaction` und `session-handoff`.
+- die Context-/Long-Horizon-Skills `context-engineering`, `context-audit`, `context-compaction` und `session-handoff`;
+- alle sieben Skills aus `Wissensmanagement/`.
 
-Die Testing-und-QA-Fälle prüfen unter anderem:
+Die Testing-und-QA-Fälle prüfen unter anderem risikobasierte Strategie, reale Dependencies, Contract-Drift, E2E-Near-Misses, Flakiness, Failure Testing und Testsignal-Qualität.
 
-- risikobasierte Teststrategie statt pauschaler Quoten;
-- fehlende fachliche Oracles;
-- reale Dependency vs. Test Double;
-- Mock-/Contract-Drift;
-- E2E-Near-Misses und produktive Seiteneffekte;
-- Flakiness trotz erfolgreichem Retry;
-- Failure Testing vs. Chaos Engineering;
-- explorative Charter statt zufälligem Klicken;
-- grüne Suite vs. tatsächlich vertrauenswürdiges Testsignal.
+Die Context-Fälle prüfen unter anderem Sources of Truth, Working State vs. Persistent Knowledge, Context Audit ohne erfundene Tokenmetriken, Compaction-Fidelity und standalone Handoffs.
 
-Die Context-Fälle prüfen unter anderem:
+Die Wissensmanagement-Fälle prüfen unter anderem:
 
-- Auswahl von Sources of Truth statt maximaler Kontextmenge;
-- Working State vs. Persistent Knowledge;
-- Context Audit ohne erfundene Tokenmetriken;
-- Bloat-/Staleness-/Tooloutput-Diagnose;
-- Compaction-Fidelity statt willkürlicher Zielquote;
-- Erhalt von Constraints, offenen Fehlern, Evidence und Gates;
-- standalone Session-Handoffs ohne alten Chat;
-- keine erfundenen Freigaben oder Testzustände.
+- toolneutrales Knowledge-Base-Design;
+- Search-before-Create und Update-vs.-Create;
+- sensible Daten beim Ingest;
+- Distillation mit Claim-Provenance statt Fabrication;
+- Synthese ohne Modellwissen als angebliche KB-Evidence;
+- Similarity nicht als alleinigen Merge-Beweis;
+- Orphan und stale nicht automatisch als Löschgrund;
+- Retrieval ohne Wahrheitsbehauptung aus einem einzelnen No-Hit;
+- Review-Coverage ohne falsches Vollständigkeitsurteil.
 
 ## Fallstruktur
 

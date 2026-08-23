@@ -36,6 +36,7 @@ Ein Workflow ist deshalb **kein neuer Mega-Skill**.
 - `Datenbank-Aenderung.md`
 - `Teststrategie-und-QA.md`
 - `Long-Horizon-Agentenarbeit.md`
+- `Wissensbasis-Aufbauen-und-Pflegen.md`
 
 ## Workflow-Handoff
 
