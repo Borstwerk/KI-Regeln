@@ -10,8 +10,8 @@ Ziel ist keine persönliche KI-Konfiguration und keine projektspezifische Wissen
 
 Das bedeutet:
 
-- allgemeine Kommunikations-, Reflexions-, Recherche-, Dokumentations-, Schreib-, Bild-, Web-, Agenten-, Sicherheits- und Entwicklungsregeln liegen hier;
-- projektspezifische Anforderungen, Architektur, Research-Fragen, interne Quellen, Fachmodelle, Markenregeln, visuelle Bibeln und Sonderregeln bleiben im jeweiligen Projekt;
+- allgemeine Kommunikations-, Reflexions-, Recherche-, Dokumentations-, Schreib-, Bild-, Web-, Datenbank-, Agenten-, Sicherheits- und Entwicklungsregeln liegen hier;
+- projektspezifische Anforderungen, Architektur, Research-Fragen, interne Quellen, Fachmodelle, reales Datenbankschema, Markenregeln, visuelle Bibeln und Sonderregeln bleiben im jeweiligen Projekt;
 - persönliche Profile oder unnötige personenbezogene Details gehören nicht in dieses Repository;
 - ein Skill ersetzt niemals die tatsächliche Spezifikation oder Dokumentation eines Projekts.
 
@@ -40,6 +40,7 @@ KI-Regeln/
 ├── Bildarbeit/
 ├── Webentwicklung/
 ├── Programmieren/
+├── Datenbanken/
 ├── Skill-Engineering/
 ├── Sicherheit/
 ├── Evals/
@@ -141,6 +142,45 @@ Webdesign und Frontend-Engineering mit Art Direction, Informationsarchitektur, D
 
 Allgemeiner Entwicklungsprozess und wiederverwendbare Skills für Domain Modeling, TDD, Diagnose und Code Review.
 
+## Datenbanken
+
+Engine-neutrale Regeln für Datenmodellierung, Integrität, Query-Sicherheit, Performance, Concurrency, Migration und Betrieb.
+
+Der Bereich behandelt insbesondere:
+
+- Domäne und reale Zugriffsmuster als Grundlage des Datenmodells;
+- reales Schema sowie Engine-/Driver-/ORM-Version als Source of Truth;
+- Constraints und Datenintegrität;
+- Query-Korrektheit, Parametrisierung und Tenant-/Scope-Grenzen;
+- Indizes und Execution Plans mit Vorher-/Nachher-Evidence;
+- Transaktionen, Isolation, Locking und Retry;
+- Migrationen, Backfills, Rollout und Recovery;
+- Connections, Pooling und Ressourcen;
+- Least Privilege für Datenzugriff;
+- Backup, Restore, Monitoring und Diagnose.
+
+Scope-Grenze:
+
+```text
+Datenbanken
+→ Zustand und Verhalten innerhalb eines operativen Datenspeichers
+
+Data Engineering
+→ systematische Bewegung, Replikation, Transformation und Orchestrierung zwischen Systemen
+```
+
+Operative Skills:
+
+- `database-design`;
+- `database-query-review`;
+- `query-performance`;
+- `schema-migration`;
+- `transaction-review`;
+- `database-operations`;
+- `database-review`.
+
+> Das reale Schema ist Source of Truth. Plausible Datenbankstrukturen sind keine Evidence.
+
 # Meta-Ebene
 
 ## Skill Engineering
@@ -235,7 +275,8 @@ Erste Evalpacks bestehen unter anderem für:
 - `frontend-design`;
 - `diagnose`;
 - `code-review`;
-- `skill-authoring`.
+- `skill-authoring`;
+- alle sieben Datenbank-Skills.
 
 ## Workflows / Recipes
 
@@ -249,7 +290,8 @@ Enthalten sind Recipes für:
 - bestehende Website Reviews;
 - Software Features;
 - Bugdiagnose;
-- Bildserien.
+- Bildserien;
+- Datenbankänderungen.
 
 > Skills bleiben klein. Workflows verbinden sie.
 
@@ -315,6 +357,8 @@ Dabei gilt:
 - projektspezifische Ergänzungen bleiben lokal;
 - Änderungen an zentralen Skills werden bewusst übernommen;
 - nicht das komplette zentrale Repository ungefiltert in jeden Agentenkontext laden.
+
+Für Datenbankarbeit gilt zusätzlich: Die zentralen Skills beschreiben Arbeitsweise und Gates; konkrete Engine, Version, reales Schema, Migrationstool, Credentials, Datenklassifikation, RPO/RTO und Produktionsfreigaben bleiben lokal.
 
 Für Auswahl und Dokumentation zentraler Regeln kann `Vorlagen/ki-regeln.template.yml` als Ausgangspunkt verwendet werden.
 
