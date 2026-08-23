@@ -50,6 +50,25 @@ Evals/
         └── cases.yml
 ```
 
+## Aktuelle größere Evalpacks
+
+Neben einzelnen Kernskills bestehen inzwischen vollständige Startpacks für:
+
+- alle sieben Skills aus `Datenbanken/`;
+- alle neun Skills aus `Testing-und-QA/`.
+
+Die Testing-und-QA-Fälle prüfen unter anderem:
+
+- risikobasierte Teststrategie statt pauschaler Quoten;
+- fehlende fachliche Oracles;
+- reale Dependency vs. Test Double;
+- Mock-/Contract-Drift;
+- E2E-Near-Misses und produktive Seiteneffekte;
+- Flakiness trotz erfolgreichem Retry;
+- Failure Testing vs. Chaos Engineering;
+- explorative Charter statt zufälligem Klicken;
+- grüne Suite vs. tatsächlich vertrauenswürdiges Testsignal.
+
 ## Fallstruktur
 
 Jeder Fall beschreibt mindestens:
