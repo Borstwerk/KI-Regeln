@@ -135,7 +135,7 @@ Persistent Knowledge
 → dauerhaft gepflegtes Wissen über einzelne Tasks hinaus
 ```
 
-Active Context und Working State gehören zur Agentenarbeit. Persistent Knowledge wird im separaten Bereich `Wissensmanagement/` behandelt.
+Active Context und Working State gehören zur Agentenarbeit. Persistent Knowledge gehört in einen separaten Wissensmanagement-Bereich; dieser ist als nächster Fachbereich vorgesehen und noch kein vorhandener Repository-Pfad.
 
 ## Token-Effizienz
 
