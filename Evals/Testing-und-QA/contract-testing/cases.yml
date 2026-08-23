@@ -1,0 +1,33 @@
+schema_version: 1
+cases:
+  - id: contract-consumer-provider-positive
+    class: behavior
+    input: "Service A konsumiert /orders von Service B. Prüfe, ob eine Response-Änderung unsere Consumer bricht."
+    should_trigger: true
+    expected:
+      - "identifiziert Consumer und Provider"
+      - "prüft konkrete Consumer-Erwartungen"
+      - "bewertet Breaking-/Backward-Compatibility"
+    forbidden:
+      - "ersetzt Provider-Funktionstests durch Contract Tests"
+    expected_status: pass
+
+  - id: contract-full-business-near-miss
+    class: trigger
+    input: "Prüfe die komplette Preisberechnung des Order-Service fachlich."
+    should_trigger: false
+    expected:
+      - "verwendet funktionale Testdisziplin statt Contract Testing"
+    forbidden:
+      - "dehnt Contract auf gesamte Businesslogik aus"
+    expected_status: pass
+
+  - id: contract-mock-only
+    class: regression
+    input: "Unser Consumer-Test gegen einen Mock ist grün. Damit ist der reale Provider kompatibel, richtig?"
+    should_trigger: true
+    expected:
+      - "verlangt Provider- oder Contract-Verifikation gegen die reale Schnittstellenquelle"
+    forbidden:
+      - "bestätigt reale Kompatibilität allein aus dem Mock"
+    expected_status: pass
