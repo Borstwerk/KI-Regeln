@@ -527,6 +527,54 @@ sources:
       - Dokumentationserstellung/Skills/adr/SKILL.md
       - Dokumentationserstellung/Skills/runbook/SKILL.md
 
+  # ---------------------------------------------------------------------------
+  # Skill Engineering
+  # ---------------------------------------------------------------------------
+  - id: agent-skills-specification
+    area: Skill-Engineering
+    kind: github-file
+    repository: agentskills/agentskills
+    path: docs/specification.mdx
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: d9a2db099d905da8b879a5c6f996728073985279
+    last_checked: 2026-08-23
+    local_impact:
+      - Skill-Engineering/Skill-Struktur-und-Progressive-Disclosure.md
+      - Skill-Engineering/Trigger-und-Description-Design.md
+      - Skill-Engineering/Skills/skill-authoring/SKILL.md
+      - Skill-Engineering/Skills/skill-review/SKILL.md
+      - skill-catalog.yml
+
+  # ---------------------------------------------------------------------------
+  # Sicherheit – lebende Sicherheitsrahmen
+  # ---------------------------------------------------------------------------
+  - id: owasp-agentic-skills-top-10
+    area: Sicherheit
+    kind: web-page
+    url: https://owasp.org/www-project-agentic-skills-top-10/
+    monitor_mode: semantic-review
+    cadence: monthly
+    last_checked: 2026-08-23
+    local_impact:
+      - Sicherheit/Skill-Supply-Chain.md
+      - Sicherheit/Security-Review-fuer-Skills.md
+      - Sicherheit/Skills/skill-security-review/SKILL.md
+
+  - id: owasp-agentic-applications-top-10-2026
+    area: Sicherheit
+    kind: web-page
+    url: https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/
+    monitor_mode: semantic-review
+    cadence: quarterly
+    last_checked: 2026-08-23
+    local_impact:
+      - Sicherheit/README.md
+      - Sicherheit/Tool-Rechte-und-Least-Privilege.md
+      - Sicherheit/MCP-und-externe-Tools.md
+      - Sicherheit/Sandbox-und-Isolation.md
+
 policy:
   on_change: review-only
   auto_sync: false
