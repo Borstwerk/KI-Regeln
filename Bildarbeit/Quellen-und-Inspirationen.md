@@ -2,6 +2,10 @@
 
 Dieser Bereich fasst allgemeine Arbeitsprinzipien für konsistente Bildserien zusammen. Die folgenden Quellen dienten als Inspiration und technische Einordnung. Sie sind keine verbindliche Projektspezifikation.
 
+Letzte inhaltliche Prüfung dieser Quellenbasis: **2026-08-23**.
+
+Lebende Produktdokumentationen werden zusätzlich über `../Dokumentation/upstream-sources.yml` semantisch beobachtet.
+
 ## Adobe Firefly – Style Reference
 
 Adobe beschreibt Style References als Mittel, um Stil, Farben, künstlerische Methode und Stimmung über mehrere Generierungen hinweg zu steuern. Die Referenzstärke kann separat geregelt werden.
@@ -20,13 +24,19 @@ https://developer.adobe.com/firefly-services/docs/firefly-api/guides/concepts/st
 
 ## Midjourney – Character Reference / Omni Reference
 
-Midjourney dokumentiert Character Reference beziehungsweise in neueren Versionen Omni Reference für die Wiederverwendung wiederkehrender Figuren, Objekte, Fahrzeuge oder nichtmenschlicher Kreaturen über mehrere Szenen hinweg.
+Midjourney dokumentiert Character Reference beziehungsweise Omni Reference für die Wiederverwendung wiederkehrender Figuren, Objekte, Fahrzeuge oder nichtmenschlicher Kreaturen über mehrere Szenen hinweg.
 
 Quellen:
 
 https://docs.midjourney.com/hc/en-us/articles/32162917505293-Character-Reference
 
 https://docs.midjourney.com/hc/en-us/articles/36285124473997-Omni-Reference
+
+Stand der Prüfung 2026-08-23:
+
+- die Character-Reference-Dokumentation weist für V7 auf Omni Reference als Nachfolger hin;
+- Omni Reference ist deshalb der aktuellere Produktmechanismus für V7;
+- die zentrale Regel dieses Repositories bleibt bewusst toolneutral und spricht allgemein von Identitätsreferenzen.
 
 ## Midjourney – Style Reference
 
@@ -37,6 +47,8 @@ Quellen:
 https://updates.midjourney.com/style-references-for-v7/
 
 https://docs.midjourney.com/hc/en-us/articles/41308374558221-Style-Creator
+
+Die laufend gepflegte Style-Creator-Dokumentation wird aktiv beobachtet. Der V7-Updateartikel bleibt als zeitbezogene Referenz dokumentiert, wird aber nicht als mutable Dependency behandelt.
 
 ## Allgemeine Einordnung
 
