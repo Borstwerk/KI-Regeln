@@ -24,7 +24,8 @@ Er richtet sich vor allem an Menschen, die:
 - `Pflege-und-Aktualisierung.md` – beschreibt Pflegeprozess, Review-Rhythmus und den Umgang mit neuen Quellen und Entwicklungen;
 - `Quellenregister.md` – erklärt Quellenklassen, Monitoring-Arten und den Umgang mit veränderlichen Upstreams;
 - `upstream-sources.yml` – maschinenlesbare Liste aktiv beobachteter Upstreams mit Monitoring-Modus, Cadence, geprüftem SHA/Stand und lokalem Einfluss;
-- `Upstream-Audit-2026-08-23.md` – dokumentiert den ersten vollständigen Audit aller Fachbereiche und begründet, welche Quellen aktiv beobachtet oder bewusst nur als Referenz/Radar behandelt werden.
+- `Upstream-Audit-2026-08-23.md` – dokumentiert den ersten vollständigen Audit der damaligen Fachbereiche;
+- `Upstream-Audit-2026-08-23-Ergaenzung.md` – ergänzt den Audit um Skill Engineering, Sicherheit, Evals und Workflows.
 
 ## Grundsatz
 
