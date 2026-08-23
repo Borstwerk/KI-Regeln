@@ -8,6 +8,32 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Webentwicklung
+
+Neuer Hauptbereich für Gestaltung und Entwicklung von Websites und Weboberflächen:
+
+- Designrichtung und visuelle Identität vor Umsetzung;
+- Informationsarchitektur und Greyboxing als eigene Phase;
+- Typografie-, Farb-, Spacing- und Rhythmusregeln;
+- Content- und Anti-Slop-Regeln gegen generische KI-Webtexte und Fake-Belege;
+- responsive Gestaltung und Interaktionszustände;
+- unabhängiger Webdesign-Review;
+- Komponentenarchitektur mit Komposition vor Konfigurationsexplosion;
+- Accessibility als Qualitätsgate;
+- messungsbasierte Frontend-Performance;
+- responsive Implementierung;
+- Render- und Browser-Verifikation;
+- Quellen- und Inspirationssammlung zu Anthropic `frontend-design`, Impeccable, Vercel Agent Skills und weiteren öffentlichen Skill-Sammlungen;
+- Skills `frontend-design`, `design-system`, `greybox`, `web-content`, `web-design-review`, `accessibility-review`, `frontend-performance` und `visual-verification`.
+
+### Dokumentation
+
+Aktualisiert:
+
+- Haupt-README um `Webentwicklung/` erweitert;
+- Skill-Handbuch um alle Web-Skills und typische Skill-Kombinationen erweitert;
+- Projektmanifest und Nutzungsanleitung um Webprojekte ergänzt.
+
 ## v2026.08
 
 ### Grundlagen
