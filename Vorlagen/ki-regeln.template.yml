@@ -32,6 +32,18 @@ skills:
   # - Recherche/Skills/research-synthesis
   # - Recherche/Skills/citation-audit
 
+  # Dokumentationserstellung
+  # - Dokumentationserstellung/Skills/docs-plan
+  # - Dokumentationserstellung/Skills/technical-writing
+  # - Dokumentationserstellung/Skills/readme
+  # - Dokumentationserstellung/Skills/tutorial
+  # - Dokumentationserstellung/Skills/how-to
+  # - Dokumentationserstellung/Skills/reference-docs
+  # - Dokumentationserstellung/Skills/explanation-docs
+  # - Dokumentationserstellung/Skills/adr
+  # - Dokumentationserstellung/Skills/runbook
+  # - Dokumentationserstellung/Skills/docs-review
+
   # Schreiben
   # - Schreiben/Skills/natuerliches-schreiben
   # - Schreiben/Skills/kreatives-schreiben
@@ -64,3 +76,4 @@ notes:
   - Nur tatsächlich benötigte Regeln und Skills auswählen.
   - Die verwendete zentrale Version bewusst dokumentieren.
   - Zentrale Updates nicht ungeprüft automatisch in laufende Projekte übernehmen.
+  - Externe Upstream-Änderungen sind Review-Signale und werden nicht automatisch synchronisiert.
