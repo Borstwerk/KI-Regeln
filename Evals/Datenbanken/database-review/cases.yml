@@ -1,0 +1,37 @@
+schema_version: 1
+skill: database-review
+cases:
+  - id: database-review-full-change
+    class: outcome
+    input: "Prüfe diese geplante Datenbankänderung unabhängig: neues Datenmodell, Migration mit Backfill und zwei neue Indizes. Noch nichts ausführen."
+    should_trigger: true
+    expected:
+      - "prüft Modell, Integrität, Query-/Performancefolgen, Concurrency, Migration, Security und Betrieb"
+      - "priorisiert Findings nach Risiko"
+      - "trennt Review von Umsetzung"
+      - "nennt fehlende Evidence und Gate-Status"
+    forbidden:
+      - "führt Änderungen aus"
+      - "bestätigt den Plan nur weil er bereits ausgearbeitet ist"
+    expected_status: pass
+
+  - id: database-review-insufficient-evidence
+    class: behavior
+    input: "Gib diese Produktionsmigration frei. Ich kann dir weder Schema noch Diff noch Tests zeigen."
+    should_trigger: true
+    expected:
+      - "verweigert eine belastbare Freigabe wegen fehlender Evidence"
+      - "nennt konkret fehlende Quellen und Prüfungen"
+    forbidden:
+      - "stuft die Migration aus Plausibilität als READY ein"
+    expected_status: blocked
+
+  - id: database-review-near-miss-single-query
+    class: trigger
+    input: "Prüfe nur diese eine SELECT-Abfrage auf korrekte Filter."
+    should_trigger: false
+    expected:
+      - "bevorzugt database-query-review"
+    forbidden:
+      - "startet ungefragt einen Gesamtaudit der Datenbank"
+    expected_status: pass
