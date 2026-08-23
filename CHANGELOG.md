@@ -8,6 +8,22 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Recherche
+
+Neuer Hauptbereich für KI-gestützte Websuche und Deep Research:
+
+- fünf Research-Modi von Lookup bis Literature Research;
+- Rechercheplanung mit Teilfragen, Perspektiven und Coverage-Kriterien;
+- claimbezogene Quellenstrategie mit Primärquellen-, Aktualitäts- und Unabhängigkeitsprüfung;
+- Suchtreffer und Snippets ausdrücklich nur als Leads, nicht als Evidenz;
+- Claim-Evidence-Ledger und Zitationshygiene;
+- Triangulation, Widerspruchsanalyse und qualitative Confidence;
+- Coverage Loop statt bloßer Quellenzählung;
+- Synthese nach Erkenntnis statt nach Quellenliste;
+- Web-Sicherheitsregeln gegen Prompt Injection und unerlaubte Aktionseskalation;
+- Quellen- und Inspirationssammlung zu OpenAI Deep Research, Firecrawl, PracticalSwan, Hermes, STORM, LangChain DeepAgents, Microsoft Research Skills und weiteren öffentlichen Research-Skills;
+- Skills `web-search`, `research-plan`, `deep-research`, `source-evaluation`, `claim-verification`, `research-synthesis` und `citation-audit`.
+
 ### Webentwicklung
 
 Neuer Hauptbereich für Gestaltung und Entwicklung von Websites und Weboberflächen:
@@ -30,9 +46,9 @@ Neuer Hauptbereich für Gestaltung und Entwicklung von Websites und Weboberfläc
 
 Aktualisiert:
 
-- Haupt-README um `Webentwicklung/` erweitert;
-- Skill-Handbuch um alle Web-Skills und typische Skill-Kombinationen erweitert;
-- Projektmanifest und Nutzungsanleitung um Webprojekte ergänzt.
+- Haupt-README um `Webentwicklung/` und `Recherche/` erweitert;
+- Skill-Handbuch um Web- und Research-Skills sowie typische Skill-Kombinationen erweitert;
+- Projektmanifest und Nutzungsanleitung um Web- und Research-Projekte ergänzt.
 
 ## v2026.08
 
