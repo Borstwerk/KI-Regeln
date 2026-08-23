@@ -45,6 +45,14 @@ Er beschreibt **wie** gearbeitet wird. Er definiert nicht automatisch:
 | eine wiederkehrende Figur, ein Objekt oder einen Ort definieren | `entitaetsbibel` |
 | eine Bildserie auf Drift prüfen | `serien-kontinuitaetscheck` |
 | entscheiden, ob ein Bild bleibt, korrigiert oder neu gebaut wird | `bildreview` |
+| eine eigenständige Webdesign-Richtung entwickeln | `frontend-design` |
+| Webtypografie, Farben, Abstände und UI-Grundsätze systematisieren | `design-system` |
+| Seitenstruktur vor visueller Politur klären | `greybox` |
+| konkreten Webcontent statt KI-Fülltext entwickeln | `web-content` |
+| eine gerenderte Website kritisch auf Designqualität und AI-Slop prüfen | `web-design-review` |
+| eine Weboberfläche auf Accessibility prüfen | `accessibility-review` |
+| Frontend-Performance messen und gezielt verbessern | `frontend-performance` |
+| eine implementierte Oberfläche tatsächlich im Browser prüfen | `visual-verification` |
 | Fachbegriffe und Domänengrenzen modellieren | `domain-modeling` |
 | mit kleinen Red/Green-Zyklen implementieren | `tdd` |
 | einen Fehler systematisch bis zur Ursache untersuchen | `diagnose` |
@@ -486,6 +494,236 @@ Ein Skill, der ein generiertes Bild gegen Brief, Referenzen und Kontinuität pr�
 
 ---
 
+# Webentwicklung
+
+## `frontend-design`
+
+**Was ist das?**  
+Ein Skill, der aus Produkt, Zielgruppe und Aufgabe eine konkrete visuelle Richtung ableitet, bevor das eigentliche UI gebaut wird.
+
+**Wann sinnvoll?**
+
+- neue Website oder neue Produktoberfläche;
+- bestehendes UI wirkt austauschbar;
+- eine klare Art Direction fehlt;
+- typische KI-Template-Ästhetik soll bewusst vermieden werden.
+
+**Wann eher nicht?**
+
+- wenn eine freigegebene Designrichtung bereits vollständig existiert und nur umgesetzt werden soll;
+- als Ersatz für lokale Markenentscheidungen.
+
+**Mini-Beispiel**
+
+> „Entwickle erst eine konkrete Designrichtung für diese Fachanwendung. Benenne auch, welche typischen SaaS-Muster hier bewusst nicht passen.“
+
+**Verwandte Skills**
+
+- `design-system`
+- `greybox`
+- `web-design-review`
+
+---
+
+## `design-system`
+
+**Was ist das?**  
+Ein Skill, der eine freigegebene Designrichtung in konsistente Typorollen, Farben, Spacing, Surfaces, Motion-Grundsätze und wiederverwendbare Komponentenprinzipien überführt.
+
+**Wann sinnvoll?**
+
+- mehrere Seiten oder Screens;
+- wiederkehrende UI-Muster;
+- Aufbau oder Pflege einer lokalen `DESIGN.md`;
+- Designentscheidungen sollen stabil und agentenlesbar werden.
+
+**Wann eher nicht?**
+
+- wenn die Designrichtung selbst noch ungeklärt ist;
+- wenn ein riesiges Designsystem für eine triviale Einzelseite gebaut würde.
+
+**Mini-Beispiel**
+
+> „Leite aus der freigegebenen Art Direction semantische Farbrollen, Typorollen, Spacing und begrenzte Surface-Varianten ab.“
+
+**Verwandte Skills**
+
+- `frontend-design`
+- `greybox`
+- `accessibility-review`
+
+---
+
+## `greybox`
+
+**Was ist das?**  
+Ein Skill für Seitenstruktur, Informationshierarchie, Navigation und Nutzerfluss vor visueller Politur.
+
+**Wann sinnvoll?**
+
+- neue Seiten oder Flows;
+- unklare Informationsarchitektur;
+- High-Fidelity wurde zu früh begonnen;
+- Desktop und Mobile sollen strukturell gemeinsam geplant werden.
+
+**Wann eher nicht?**
+
+- wenn nur ein kleiner lokaler Stylefix an einer stabilen Seite nötig ist.
+
+**Mini-Beispiel**
+
+> „Baue zuerst eine reduzierte Greybox mit realistischen Textlängen. Noch keine Gradients, Schatten oder Motion.“
+
+**Verwandte Skills**
+
+- `frontend-design`
+- `design-system`
+- `web-content`
+
+---
+
+## `web-content`
+
+**Was ist das?**  
+Ein Skill für konkreten, glaubwürdigen Webcontent mit Informations- oder Handlungswert statt generischer Marketing- und Fülltexte.
+
+**Wann sinnvoll?**
+
+- Landingpages;
+- Produktseiten;
+- Überschriften und Mikrocopy;
+- Formulare und Empty States;
+- Überarbeitung KI-typischer Website-Texte.
+
+**Wann eher nicht?**
+
+- wenn Fakten oder Produktversprechen fehlen und erfunden werden müssten.
+
+**Mini-Beispiel**
+
+> „Ersetze abstrakte Benefits durch konkrete Produktinformationen. Keine erfundenen Prozentwerte, Logos oder Testimonials.“
+
+**Verwandte Skills**
+
+- `natuerliches-schreiben`
+- `greybox`
+- `web-design-review`
+
+---
+
+## `web-design-review`
+
+**Was ist das?**  
+Ein unabhängiger Review einer gerenderten Website auf Identität, Hierarchie, Typografie, Content, Responsive-Verhalten und typische AI-Slop-Muster.
+
+**Wann sinnvoll?**
+
+- vor Designfreigabe;
+- nach Agentenimplementierungen;
+- bei bestehenden Seiten, die generisch wirken;
+- zum Vergleich mehrerer Designstände.
+
+**Wann eher nicht?**
+
+- als Auftrag, ungefragt eine komplett neue Markenidentität zu entwerfen.
+
+**Mini-Beispiel**
+
+> „Prüfe die Seite gegen `DESIGN.md` und markiere Blocker, hohe Funde und Anti-Slop-Risiken. Schütze starke bestehende Entscheidungen.“
+
+**Verwandte Skills**
+
+- `frontend-design`
+- `web-content`
+- `visual-verification`
+
+---
+
+## `accessibility-review`
+
+**Was ist das?**  
+Ein Skill zur Prüfung von Semantik, Tastaturbedienung, Fokus, Formularen, Kontrast, Motion und assistiver Nutzbarkeit.
+
+**Wann sinnvoll?**
+
+- interaktive Weboberflächen;
+- Formulare, Navigation, Dialoge;
+- vor Release;
+- bei Accessibility-Regressionsrisiken.
+
+**Wann eher nicht?**
+
+- als bloßer Linterlauf ohne reale Bedienprüfung.
+
+**Mini-Beispiel**
+
+> „Prüfe den Kernflow per Tastatur, kontrolliere Fokus und Labels und kombiniere das mit automatisierten Accessibility-Checks.“
+
+**Verwandte Skills**
+
+- `visual-verification`
+- `design-system`
+- `code-review`
+
+---
+
+## `frontend-performance`
+
+**Was ist das?**  
+Ein Skill für messbare Performanceanalyse mit Priorität auf Waterfalls, Bundlekosten, Client-JavaScript, Medien und teure Renderingpfade.
+
+**Wann sinnvoll?**
+
+- langsame Seiten;
+- neue komplexe Features;
+- auffällige Bundles;
+- Performanceprüfung vor Release.
+
+**Wann eher nicht?**
+
+- wenn ohne Messung nur prophylaktisch Mikrooptimierungen eingebaut werden sollen.
+
+**Mini-Beispiel**
+
+> „Messe zuerst die Route. Behebe danach den größten bestätigten Engpass und vergleiche unter denselben Bedingungen erneut.“
+
+**Verwandte Skills**
+
+- `diagnose`
+- `verification-loop`
+- `visual-verification`
+
+---
+
+## `visual-verification`
+
+**Was ist das?**  
+Ein Skill, der eine implementierte Website tatsächlich in Browser, Viewports und relevanten UI-Zuständen prüft.
+
+**Wann sinnvoll?**
+
+- nach UI-Implementierung;
+- vor Review oder Release;
+- bei responsiven oder visuellen Änderungen;
+- wenn Screenshots oder andere UI-Evidence benötigt werden.
+
+**Wann eher nicht?**
+
+- als Ersatz für Code-Review, Accessibility oder funktionale Tests.
+
+**Mini-Beispiel**
+
+> „Rendere die geänderten Seiten auf Desktop und Mobile, prüfe Loading/Error/Empty, Konsole, Fokus und sammle visuelle Evidence.“
+
+**Verwandte Skills**
+
+- `web-design-review`
+- `accessibility-review`
+- `frontend-performance`
+- `code-review`
+
+---
+
 # Programmieren
 
 ## `domain-modeling`
@@ -633,6 +871,29 @@ entitaetsbibel
 → Generierung
 → bildreview
 → serien-kontinuitaetscheck
+```
+
+```text
+Website von Grund auf:
+frontend-design
+→ design-system
+→ greybox
+→ web-content
+→ Implementierung
+→ accessibility-review
+→ frontend-performance
+→ visual-verification
+→ web-design-review
+```
+
+```text
+bestehende Website verbessern:
+visual-verification
+→ web-design-review
+→ accessibility-review
+→ frontend-performance, falls relevant
+→ gezielte Änderung
+→ visual-verification erneut
 ```
 
 ```text
