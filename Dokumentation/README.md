@@ -15,9 +15,10 @@ Er richtet sich vor allem an Menschen, die:
 - `Nutzung-des-Repositories.md` – erklärt, wie das Repository in echten Projekten eingesetzt wird;
 - `Skill-Handbuch.md` – erklärt die allgemeinen Skills in verständlicher Sprache;
 - `Skill-Handbuch-Dokumentationserstellung.md` – erklärt die Skills des Bereichs `Dokumentationserstellung/`;
-- `Pflege-und-Aktualisierung.md` – beschreibt den Pflegeprozess, Review-Rhythmus und den Umgang mit neuen Quellen und Entwicklungen;
-- `Quellenregister.md` – erklärt, wie veränderliche externe Quellen und Skill-Upstreams überwacht werden;
-- `upstream-sources.yml` – maschinenlesbare Liste aktiv beobachteter Upstream-Skills mit geprüftem SHA/Version und lokalem Einfluss.
+- `Pflege-und-Aktualisierung.md` – beschreibt Pflegeprozess, Review-Rhythmus und den Umgang mit neuen Quellen und Entwicklungen;
+- `Quellenregister.md` – erklärt Quellenklassen, Monitoring-Arten und den Umgang mit veränderlichen Upstreams;
+- `upstream-sources.yml` – maschinenlesbare Liste aktiv beobachteter Upstreams mit Monitoring-Modus, Cadence, geprüftem SHA/Stand und lokalem Einfluss;
+- `Upstream-Audit-2026-08-23.md` – dokumentiert den ersten vollständigen Audit aller Fachbereiche und begründet, welche Quellen aktiv beobachtet oder bewusst nur als Referenz/Radar behandelt werden.
 
 ## Grundsatz
 
@@ -34,6 +35,13 @@ Fachbereiche besitzen eigene `Quellen-und-Inspirationen.md`-Dateien. Sie beantwo
 Das zentrale Quellenregister beantwortet zusätzlich:
 
 > Welche veränderlichen Quellen beobachten wir aktiv auf Updates?
+
+Aktuell gibt es zwei Monitoring-Arten:
+
+- `exact-sha` für konkrete GitHub-Dateien;
+- `semantic-review` für lebende Web- und Produktdokumentation.
+
+Zusätzlich unterscheiden wir zwischen monatlich und quartalsweise zu prüfenden Quellen.
 
 Dabei gilt:
 
