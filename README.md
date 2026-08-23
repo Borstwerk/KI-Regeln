@@ -15,6 +15,17 @@ Das bedeutet:
 - persönliche Profile, Gesundheitsdaten, Familieninformationen oder andere nicht notwendige personenbezogene Details gehören nicht in dieses Repository;
 - ein Skill ersetzt niemals die tatsächliche Spezifikation oder Dokumentation eines Projekts.
 
+## Neu hier?
+
+Für den Einstieg empfiehlt sich:
+
+1. diese README für das Gesamtmodell;
+2. `Dokumentation/Nutzung-des-Repositories.md` für den praktischen Einsatz;
+3. `Dokumentation/Skill-Handbuch.md` zur Auswahl geeigneter Skills;
+4. danach nur die für das eigene Vorhaben relevanten Regeln und Skills.
+
+Nicht das komplette Repository muss für jede Aufgabe geladen werden.
+
 ## Struktur
 
 ```text
@@ -82,8 +93,15 @@ KI-Regeln/
 │       ├── diagnose/SKILL.md
 │       ├── domain-modeling/SKILL.md
 │       └── tdd/SKILL.md
+├── Dokumentation/
+│   ├── README.md
+│   ├── Nutzung-des-Repositories.md
+│   ├── Skill-Handbuch.md
+│   └── Pflege-und-Aktualisierung.md
 ├── Vorlagen/
-│   └── AGENTS.template.md
+│   ├── AGENTS.template.md
+│   └── ki-regeln.template.yml
+├── CHANGELOG.md
 └── THIRD-PARTY-NOTICES.md
 ```
 
@@ -204,7 +222,23 @@ Enthaltene Skills:
 
 Die Regeln aus `Agentenarbeit/` ergänzen diesen Prozess. Ein innerer Agentenloop darf insbesondere keine Planungs-, Review- oder Freigabegates überspringen.
 
-### 7. Projektregeln
+### 7. Dokumentation und Pflege
+
+Dieser Bereich erklärt das Repository für Menschen und beschreibt seine Wartung.
+
+Enthalten sind:
+
+- `Nutzung-des-Repositories.md` – wie Regeln und Skills gezielt in echten Projekten verwendet werden;
+- `Skill-Handbuch.md` – menschlich lesbare Erklärung aller vorhandenen Skills mit Einsatzfällen und Beispielen;
+- `Pflege-und-Aktualisierung.md` – monatlicher Radar-Check, vierteljährlicher Audit, Quellenbewertung, Versionierung und Updateprozess;
+- `CHANGELOG.md` – nachvollziehbare Änderungshistorie;
+- `Vorlagen/ki-regeln.template.yml` – Beispielmanifest für die bewusste Auswahl zentraler Regeln und Skills in einem Projekt.
+
+Leitgedanke:
+
+> Das Regelwerk soll nicht nur wachsen, sondern verständlich, prüfbar und wartbar bleiben.
+
+### 8. Projektregeln
 
 Projektregeln gehören nicht hierher. Beispiele sind konkrete Produktanforderungen, Serienkanon, Charaktermerkmale, visuelle Referenzen, Fachmodelle, Releasewege oder technische Sonderfälle eines einzelnen Repositories.
 
@@ -215,6 +249,8 @@ Ein Skill beschreibt eine begrenzte Arbeitsdisziplin für einen KI-Agenten.
 Er beschreibt **wie** gearbeitet wird. Er definiert nicht eigenmächtig, **was** ein Projekt fachlich, visuell oder persönlich tun soll.
 
 Die ausführlicheren Regeldateien erklären Hintergründe und Leitplanken. `SKILL.md`-Dateien verdichten diese Regeln für einen konkreten Agenteneinsatz.
+
+Für eine menschlich lesbare Einführung siehe `Dokumentation/Skill-Handbuch.md`.
 
 ## Vorrangregeln
 
@@ -279,6 +315,24 @@ Dabei gilt:
 Dasselbe gilt für Bildarbeit: zentrale Bildregeln beschreiben die Arbeitsweise, während Charakterbibeln, konkrete Referenzbilder, Szenenlisten und visuelle Projektregeln lokal bleiben.
 
 Persönliche Reflexionsnotizen oder individuelle Entwicklungsverläufe gehören ebenfalls nicht als allgemeine Wahrheit in dieses Repository. Zentral liegen nur die wiederverwendbaren Methoden.
+
+Für die Auswahl und Dokumentation zentraler Regeln kann `Vorlagen/ki-regeln.template.yml` als Ausgangspunkt verwendet werden.
+
+## Aktualisierung und Versionierung
+
+Das Repository wird regelmäßig auf neue Entwicklungen und eigene Praxiserfahrungen geprüft.
+
+Empfohlener Rhythmus:
+
+- monatlicher Radar-Check für neue relevante Ansätze;
+- vierteljährlicher vollständiger Repo-Audit;
+- zusätzliche Prüfung bei größeren Modell-, Tool- oder Forschungsentwicklungen.
+
+Neue Quellen erzeugen zunächst Kandidaten. Sie ändern das Regelwerk nicht automatisch.
+
+Details stehen in `Dokumentation/Pflege-und-Aktualisierung.md`.
+
+Relevante Änderungen werden in `CHANGELOG.md` dokumentiert. Für bewusst nutzbare Stände wird eine datumsbasierte Versionierung wie `v2026.08` oder `v2026.11` empfohlen.
 
 ## Attribution
 
