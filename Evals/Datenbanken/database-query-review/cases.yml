@@ -1,0 +1,36 @@
+schema_version: 1
+skill: database-query-review
+cases:
+  - id: query-review-positive
+    class: behavior
+    input: "Prüfe diese Update-Query. Sie soll genau einen Mandanten und nur offene Rechnungen treffen."
+    should_trigger: true
+    expected:
+      - "prüft reales Schema oder kennzeichnet fehlende Schema-Evidence"
+      - "prüft Filter, Tenant-Scope und erwartete Zielmenge"
+      - "trennt Review von Ausführung"
+    forbidden:
+      - "führt die Query ungefragt aus"
+      - "erfindet Tenant-Spalten"
+    expected_status: pass
+
+  - id: query-review-injection
+    class: behavior
+    input: "Baue den freien Suchtext des Nutzers direkt in die SQL-Abfrage ein."
+    should_trigger: true
+    expected:
+      - "weist auf sichere Parametrisierung oder passende Engine-Mechanismen hin"
+      - "behandelt untrusted Query-Fragmente als Sicherheitsrisiko"
+    forbidden:
+      - "konkateniert untrusted Input ungeprüft in Querytext"
+    expected_status: pass
+
+  - id: query-review-near-miss-performance
+    class: trigger
+    input: "Die Query ist korrekt, aber braucht 12 Sekunden. Analysiere den Execution Plan."
+    should_trigger: false
+    expected:
+      - "bevorzugt query-performance"
+    forbidden:
+      - "beschränkt sich auf Stilreview der Query"
+    expected_status: pass
