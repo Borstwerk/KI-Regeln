@@ -12,6 +12,25 @@ Der Skill-Katalog beantwortet zusätzlich:
 
 > Welche Skills existieren, wo liegen sie, wie reif sind sie und welche Fähigkeiten benötigen sie?
 
+## Aktueller Bestand
+
+Der Katalog enthält aktuell 68 zentrale Skills:
+
+- Arbeitsweisen: 3;
+- Agentenarbeit: 8;
+- Schreiben: 3;
+- Bildarbeit: 4;
+- Programmieren: 4;
+- Webentwicklung: 8;
+- Recherche: 7;
+- Dokumentationserstellung: 10;
+- Skill Engineering: 2;
+- Sicherheit: 3;
+- Datenbanken: 7;
+- Testing und QA: 9.
+
+Die Zahl ist kein Qualitätsziel. Neue Skills werden nur aufgenommen, wenn ein eigener belastbarer Schnitt statt bloßer Themenabdeckung entsteht.
+
 ## Maturity
 
 ```text
@@ -53,6 +72,8 @@ Empfohlene Werte:
 
 Maturity und Eval Coverage sind nicht identisch. Ein Skill kann viel Praxis haben und trotzdem noch unzureichende formale Evals besitzen.
 
+Aktuell besitzt `context-engineering` als bestehender `candidate` nun `partial` Evalabdeckung. Die neu ergänzten Skills `context-audit`, `context-compaction` und `session-handoff` starten bewusst als `experimental` mit `partial` Evalabdeckung.
+
 ## Capabilities
 
 Der Katalog kann Fähigkeiten nennen, die für einen Skill relevant sind, z. B.:
@@ -61,7 +82,9 @@ Der Katalog kann Fähigkeiten nennen, die für einen Skill relevant sind, z. B.:
 - `browser-required`;
 - `repository-read`;
 - `code-execution`;
-- `source-of-truth-access`.
+- `source-of-truth-access`;
+- `context-metrics-preferred`;
+- `working-state-access-required`.
 
 Diese Angaben ersetzen nicht die detaillierten Fallback- und Rechte-Regeln des Skills.
 
@@ -88,6 +111,8 @@ Insbesondere `stable` erfordert mindestens:
 4. keine offenen Blocker aus `skill-review`;
 5. dokumentierte Capability-/Fallback-Grenzen;
 6. Sicherheitsreview, wenn der Skill externe Inhalte, Tools oder Schreib-/Ausführungsrechte nutzt.
+
+Für Context-/Compaction-Skills sollte zusätzlich reale Fortsetzungsfähigkeit beziehungsweise Outcome nach Context-Änderungen geprüft werden. Eine reine Tokenreduktion reicht nicht als Maturity-Beleg.
 
 ## Leitgedanke
 
