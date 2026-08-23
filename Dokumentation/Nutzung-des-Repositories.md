@@ -26,6 +26,7 @@ Das Repository liefert beispielsweise:
 - Agentenarbeitsweisen;
 - Schreibregeln;
 - Bildarbeitsregeln;
+- Webdesign- und Frontend-Regeln;
 - Programmier-Skills.
 
 ## Was das Repository nicht liefert
@@ -37,6 +38,8 @@ Das Repository liefert nicht automatisch:
 - Fachbegriffe eines konkreten Systems;
 - Serienkanon;
 - Charakterdesigns;
+- Markenidentität oder konkrete `DESIGN.md`;
+- reale Website-Inhalte;
 - lokale Freigabeprozesse;
 - reale Projektziele;
 - persönliche Profile oder individuelle Entwicklungsverläufe.
@@ -119,6 +122,50 @@ Zusätzlich lokal:
 - Szenenlisten;
 - Kontinuitätsdetails.
 
+## Beispiel: Webprojekt
+
+Ein neues Webprojekt könnte je nach Umfang verwenden:
+
+- `Grundlagen/Zusammenarbeit-mit-KI.md`
+- `Agentenarbeit/Skills/context-engineering/SKILL.md`
+- `Webentwicklung/Skills/frontend-design/SKILL.md`
+- `Webentwicklung/Skills/design-system/SKILL.md`
+- `Webentwicklung/Skills/greybox/SKILL.md`
+- `Webentwicklung/Skills/web-content/SKILL.md`
+- `Webentwicklung/Skills/accessibility-review/SKILL.md`
+- `Webentwicklung/Skills/frontend-performance/SKILL.md`
+- `Webentwicklung/Skills/visual-verification/SKILL.md`
+- `Webentwicklung/Skills/web-design-review/SKILL.md`
+- bei komplexerer Logik zusätzlich passende Skills aus `Programmieren/`.
+
+Ein möglicher Ablauf:
+
+```text
+Produkt / Zielgruppe
+→ frontend-design
+→ design-system
+→ greybox
+→ web-content
+→ Implementierung
+→ accessibility-review
+→ frontend-performance
+→ visual-verification
+→ web-design-review
+```
+
+Zusätzlich lokal:
+
+- Marke und Designrichtung;
+- `DESIGN.md` oder vergleichbare Designquelle;
+- tatsächlicher Content;
+- Informationsarchitektur;
+- Framework und Komponentenbibliothek;
+- Browseranforderungen;
+- Performancebudgets;
+- Hosting, Release und Deployment.
+
+Nicht jedes Webprojekt benötigt alle Skills. Für eine kleine bestehende Seite kann beispielsweise `visual-verification → web-design-review → gezielte Korrektur` genügen.
+
 ## Beispiel: Reflexion und Selbstverbesserung
 
 Je nach Ziel können sinnvoll sein:
@@ -185,6 +232,7 @@ Ein Skill ersetzt niemals:
 - eine Spezifikation;
 - eine Architekturentscheidung;
 - einen Serienkanon;
+- eine Marken- oder Designentscheidung;
 - eine Projektfreigabe;
 - menschliche Verantwortung.
 
