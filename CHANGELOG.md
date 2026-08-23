@@ -8,6 +8,31 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Wissensmanagement / Knowledge Bases
+
+Neuer toolneutraler Hauptbereich für persistente Wissensbasen und Knowledge Management:
+
+- klare Trennung zwischen Recherche, Persistent Knowledge, Context Engineering, Dokumentation und technischer Retrieval-/RAG-Implementierung;
+- Wissensmodell aus Raw Source, Derived Knowledge Unit, Synthese und Navigation;
+- Capture, Ingest und Triage mit `search before create` und Update-vs.-Create statt Append-only-Wachstum;
+- Provenance, Evidence und Source-of-Truth-Bezug mit Rückführbarkeit von Synthesen auf Eingabeeinheiten und Quellen;
+- Wissensgranularität als eigenständig verwertbare Einheit statt maximaler Fragmentierung;
+- Links, Relationen, Taxonomien, kontrolliertes Vokabular und Navigation ohne toolabhängige Pflichtmechanismen;
+- Synthesen und Maps of Content mit sichtbaren Eingaben, Gegenbelegen und Unsicherheit;
+- Widerspruchsbehandlung mit Trennung von Zeit-, Scope- und Definitionsunterschieden;
+- Aktualität, Staleness und Lifecycle mit risikobasiertem Review statt universeller Prüffrist;
+- Retrieval und Findability mit expliziter Regel `Retrievalscore ≠ Wahrheit` und `No-Hit ≠ sichere Abwesenheit`;
+- Content Health für Dubletten, Orphans, kaputte Links, fehlende Provenance und Taxonomie-/Schema-Drift;
+- Datenschutz und sensitives Wissen mit stärkerer Persistenzprüfung als bei kurzfristigem Kontext; Secrets gehören nicht als normale Wissenseinheiten in die Knowledge Base;
+- Obsidian, Notion, Vector Stores, RAG und Knowledge Graphs als mögliche Adapter eingeordnet statt zu zentralen Standards erklärt;
+- Skills `knowledge-base-design`, `knowledge-ingest`, `knowledge-distill`, `knowledge-synthesis`, `knowledge-maintenance`, `knowledge-query` und `knowledge-base-review`;
+- alle sieben Skills starten `experimental` mit `partial` Evalabdeckung;
+- Evalpacks für alle sieben Skills mit Tool-Bias-, Search-before-Create-, Provenance-, Bulk-Gate-, Distillation-, Synthesis-, Duplicate-/Orphan-, Query- und Review-Coverage-Fällen;
+- Workflow `Workflows/Wissensbasis-Aufbauen-und-Pflegen.md` einschließlich Research-to-Knowledge- und Context-Übergang;
+- menschliches `Dokumentation/Skill-Handbuch-Wissensmanagement.md`;
+- Quellenbasis aus KCS, W3C PROV, ISO 30401, offiziellen Obsidian-/Notion-Mechanismen, OpenAI Retrieval sowie aktuellen Knowledge-Base-Skills;
+- aktive Upstreams: KCS und OpenAI Knowledge Retrieval semantisch sowie `Ar9av/obsidian-wiki`, `obsidian-second-brain` und `knowledge-distill` per Blob-SHA.
+
 ### Context, Token-Effizienz und Long-Horizon-Agentenarbeit
 
 `Agentenarbeit/` um die technische Betriebsseite von Context Engineering erweitert:
@@ -93,7 +118,7 @@ Neuer Meta-Bereich für Entwurf und Pflege von Agent-Skills:
 
 ### Skill-Katalog und Maturity
 
-Neu:
+Neu beziehungsweise erweitert:
 
 - `skill-catalog.yml` als maschinenlesbares Skill-Inventar;
 - expliziter Maturity-Status je Skill;
@@ -101,13 +126,15 @@ Neu:
 - Capability- und Related-Hinweise für relevante Skills;
 - `Dokumentation/Skill-Katalog.md` als menschliche Erläuterung;
 - konservative Einstufung: neue Bereiche zunächst `experimental`, ältere praktisch genutzte Skills überwiegend `candidate`; `stable` wird nicht automatisch vergeben;
-- Datenbank- und Testing-und-QA-Skills als neue `experimental`-Einträge mit `partial` Evalabdeckung ergänzt;
+- Datenbank- und Testing-und-QA-Skills als `experimental` mit `partial` Evalabdeckung;
 - `context-engineering` bleibt `candidate` und erhält `partial` Evalabdeckung;
-- `context-audit`, `context-compaction` und `session-handoff` als neue `experimental`-Einträge mit `partial` Evalabdeckung ergänzt.
+- `context-audit`, `context-compaction` und `session-handoff` als `experimental` mit `partial` Evalabdeckung;
+- sieben Wissensmanagement-Skills als `experimental` mit `partial` Evalabdeckung ergänzt;
+- Gesamtbestand auf 75 zentrale Skills erweitert.
 
 ### Evals
 
-Neuer Bereich `Evals/`:
+Bereich `Evals/` erweitert:
 
 - gemeinsames Evalfall-Schema;
 - Trigger-, Behavior-, Outcome- und Regressionsevals;
@@ -116,6 +143,7 @@ Neuer Bereich `Evals/`:
 - zusätzliche Evalpacks für alle sieben Datenbank-Skills mit Schema-Source-of-Truth-, Query-Safety-, `EXPLAIN ANALYZE`-, Migration-, Concurrency-, Restore- und Review-Gate-Fällen;
 - zusätzliche Evalpacks für alle neun Testing-und-QA-Skills, unter anderem zu fehlendem Oracle, Mock-/Contract-Drift, E2E-Near-Misses, Flakiness trotz Retry, Failure Testing vs. Chaos Engineering und Testsignal-Review;
 - zusätzliche Evalpacks für `context-engineering`, `context-audit`, `context-compaction` und `session-handoff`, unter anderem zu fehlender Tokenmessung, Context Bloat, Compaction-Verlust, erfundenen Freigaben und Persistent-Knowledge-Near-Misses;
+- zusätzliche Evalpacks für alle sieben Wissensmanagement-Skills, unter anderem zu Tool-Bias, Search-before-Create, Provenance, sensibler Persistenz, Bulk-Gates, Distillation, Synthese-Evidence, Duplicate-/Orphan-Entscheidungen, Retrieval und Review-Coverage;
 - Skill-Katalog für diese Skills auf `eval_coverage: partial` aktualisiert.
 
 ### Sicherheit
@@ -136,7 +164,7 @@ Neuer Hauptbereich für agentische und Skill-Sicherheit:
 
 ### Workflows / Recipes
 
-Neuer Bereich zur bewussten Skill-Komposition:
+Bereich zur bewussten Skill-Komposition mit Recipes für:
 
 - Deep Research;
 - technische Dokumentation;
@@ -147,7 +175,8 @@ Neuer Bereich zur bewussten Skill-Komposition:
 - Bildserie;
 - Datenbankänderung;
 - Teststrategie und QA;
-- Long-Horizon-Agentenarbeit.
+- Long-Horizon-Agentenarbeit;
+- Aufbau und Pflege persistenter Wissensbasen.
 
 Grundregel: Skills bleiben begrenzte Disziplinen; wiederkehrende Skill-Ketten werden als Workflow statt als Mega-Skill modelliert.
 
@@ -181,7 +210,7 @@ Neuer Hauptbereich für technische und projektbezogene Dokumentation:
 Erweitert und vollständig auditiert:
 
 - `Dokumentation/Quellenregister.md` auf Monitoring-Schema v2 erweitert;
-- `Dokumentation/upstream-sources.yml` unterscheidet jetzt `exact-sha` für konkrete GitHub-Dateien und `semantic-review` für lebende Web-/Produktdokumentation;
+- `Dokumentation/upstream-sources.yml` unterscheidet `exact-sha` für konkrete GitHub-Dateien und `semantic-review` für lebende Web-/Produktdokumentation;
 - monatliche und quartalsweise Cadence für unterschiedlich volatile Quellen;
 - vollständiger bereichsübergreifender Audit in `Dokumentation/Upstream-Audit-2026-08-23.md` dokumentiert;
 - mutable Upstreams aus Programmieren, Schreiben, Bildarbeit, Webentwicklung, Recherche, Dokumentationserstellung und relevanten Grundlagen klassifiziert;
@@ -193,9 +222,11 @@ Erweitert und vollständig auditiert:
 - Datenbank-Upstreams aus Supabase, Neon, MongoDB, Redis und Prisma sowie lebende Postgres-/Migration-Dokumentation in die Quellenpflege aufgenommen;
 - Testing-und-QA-Upstreams aus Anthropic, Currents und Superpowers per Blob-SHA sowie ISTQB, Playwright, Pact und Testcontainers semantisch registriert;
 - Context-/Long-Horizon-Upstreams aus Anthropic, OpenAI, LangChain und OpenTelemetry semantisch sowie `context-doctor` und OpenClaw `handoff` per Blob-SHA registriert;
+- Wissensmanagement-Upstreams aus KCS und OpenAI Retrieval semantisch sowie `obsidian-wiki`, `obsidian-second-brain` und `knowledge-distill` per Blob-SHA registriert;
+- W3C PROV, ISO 30401 und toolbezogene Hilfedokumentation als stabile Fachreferenzen im Bereich dokumentiert statt künstlich als schnelle mutable Dependencies zu behandeln;
 - Papers, datierte Research-Artikel und reine Discovery-Kataloge bewusst nicht als künstliche Sync-Dependencies behandelt;
 - Grundregel bleibt: Upstream-Änderung ist Review-Signal, kein automatischer Sync;
-- monatlicher `KI-Regeln Monatscheck` auf das neue Monitoring-Schema und die Cadence-Regeln erweitert.
+- monatlicher `KI-Regeln Monatscheck` auf das Monitoring-Schema und die neuen Discovery-Felder erweitert.
 
 ### Recherche
 
@@ -235,9 +266,9 @@ Neuer Hauptbereich für Gestaltung und Entwicklung von Websites und Weboberfläc
 
 Aktualisiert:
 
-- Haupt-README um `Webentwicklung/`, `Recherche/`, `Dokumentationserstellung/`, `Skill-Engineering/`, `Sicherheit/`, `Evals/`, `Workflows/`, `Datenbanken/` und `Testing-und-QA/` erweitert und um Context-/Long-Horizon-Agentenarbeit geschärft;
-- menschliche Doku um Quellenregister, vollständigen Upstream-Audit, Skill-Katalog und zusätzliche Skill-Handbücher einschließlich `Skill-Handbuch-Context-und-Long-Horizon.md` ergänzt;
-- Projektmanifest und Nutzungsanleitung um Research-, Web-, Dokumentations-, Datenbank-, Testing-/QA- und Long-Horizon-Agentenarbeit ergänzt.
+- Haupt-README um `Webentwicklung/`, `Recherche/`, `Wissensmanagement/`, `Dokumentationserstellung/`, `Skill-Engineering/`, `Sicherheit/`, `Evals/`, `Workflows/`, `Datenbanken/` und `Testing-und-QA/` erweitert und um Context-/Long-Horizon-Agentenarbeit geschärft;
+- menschliche Doku um Quellenregister, vollständigen Upstream-Audit, Skill-Katalog und zusätzliche Skill-Handbücher einschließlich `Skill-Handbuch-Context-und-Long-Horizon.md` und `Skill-Handbuch-Wissensmanagement.md` ergänzt;
+- Projektmanifest und Nutzungsanleitung um Research-, Wissensmanagement-, Web-, Dokumentations-, Datenbank-, Testing-/QA- und Long-Horizon-Arbeit ergänzt.
 
 ## v2026.08
 

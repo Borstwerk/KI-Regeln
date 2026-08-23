@@ -14,7 +14,7 @@ Der Skill-Katalog beantwortet zusätzlich:
 
 ## Aktueller Bestand
 
-Der Katalog enthält aktuell 68 zentrale Skills:
+Der Katalog enthält aktuell 75 zentrale Skills:
 
 - Arbeitsweisen: 3;
 - Agentenarbeit: 8;
@@ -23,6 +23,7 @@ Der Katalog enthält aktuell 68 zentrale Skills:
 - Programmieren: 4;
 - Webentwicklung: 8;
 - Recherche: 7;
+- Wissensmanagement: 7;
 - Dokumentationserstellung: 10;
 - Skill Engineering: 2;
 - Sicherheit: 3;
@@ -72,7 +73,7 @@ Empfohlene Werte:
 
 Maturity und Eval Coverage sind nicht identisch. Ein Skill kann viel Praxis haben und trotzdem noch unzureichende formale Evals besitzen.
 
-Aktuell besitzt `context-engineering` als bestehender `candidate` nun `partial` Evalabdeckung. Die neu ergänzten Skills `context-audit`, `context-compaction` und `session-handoff` starten bewusst als `experimental` mit `partial` Evalabdeckung.
+Aktuell besitzt `context-engineering` als bestehender `candidate` `partial` Evalabdeckung. Die ergänzten Context-Skills `context-audit`, `context-compaction` und `session-handoff` sowie alle sieben Wissensmanagement-Skills starten beziehungsweise bleiben bewusst `experimental` mit `partial` Evalabdeckung.
 
 ## Capabilities
 
@@ -84,7 +85,9 @@ Der Katalog kann Fähigkeiten nennen, die für einen Skill relevant sind, z. B.:
 - `code-execution`;
 - `source-of-truth-access`;
 - `context-metrics-preferred`;
-- `working-state-access-required`.
+- `working-state-access-required`;
+- `knowledge-base-read-required`;
+- `knowledge-base-write-gated`.
 
 Diese Angaben ersetzen nicht die detaillierten Fallback- und Rechte-Regeln des Skills.
 
@@ -113,6 +116,8 @@ Insbesondere `stable` erfordert mindestens:
 6. Sicherheitsreview, wenn der Skill externe Inhalte, Tools oder Schreib-/Ausführungsrechte nutzt.
 
 Für Context-/Compaction-Skills sollte zusätzlich reale Fortsetzungsfähigkeit beziehungsweise Outcome nach Context-Änderungen geprüft werden. Eine reine Tokenreduktion reicht nicht als Maturity-Beleg.
+
+Für Wissensmanagement-Skills sollte zusätzlich an realen Wissensbasen geprüft werden, ob Ingest und Pflege tatsächlich Dubletten, Provenance-Verlust und Retrieval-Drift reduzieren. Die Existenz synthetischer Evalcases allein reicht nicht für eine Hochstufung.
 
 ## Leitgedanke
 
