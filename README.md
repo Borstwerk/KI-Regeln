@@ -25,9 +25,14 @@ KI-Regeln/
 ├── Arbeitsweisen/
 │   └── Problemloesung.md
 ├── Schreiben/
+│   ├── Agent-Anweisungen.md
 │   ├── Schreibstil.md
 │   ├── Kreatives-Schreiben.md
-│   └── Stilreview.md
+│   ├── Stilreview.md
+│   └── Skills/
+│       ├── natuerliches-schreiben/SKILL.md
+│       ├── kreatives-schreiben/SKILL.md
+│       └── stilreview/SKILL.md
 ├── Programmieren/
 │   ├── Entwicklungsprozess.md
 │   ├── Agent-Anweisungen.md
@@ -50,17 +55,38 @@ Regeln für verlässliche Zusammenarbeit mit KI unabhängig vom Fachgebiet: Quel
 
 Wiederverwendbare Denk- und Problemlösungsmuster wie Hypothesenbildung, iterative Bearbeitung und überprüfbare Entscheidungen.
 
-### 3. Fachliche Einsatzgebiete
+### 3. Schreiben
 
-Regeln für wiederkehrende Aufgabenarten, derzeit insbesondere Schreiben und Programmieren.
+Allgemeine Regeln für natürliche Texte, kreative Prosa und strukturelle Stilreviews.
 
-### 4. Skills
+Enthaltene Skills:
 
-Kleine, klar begrenzte Arbeitsdisziplinen für Agenten. Ein Skill beschreibt **wie** gearbeitet wird. Er definiert nicht eigenmächtig, **was** ein Projekt fachlich tun soll.
+- `natuerliches-schreiben` – klare, glaubwürdige Texte ohne unnötige KI-, Werbe- oder Managementsprache;
+- `kreatives-schreiben` – Szene, Figurenstimme, räumliche Klarheit und kanontreue Wirkung;
+- `stilreview` – Muster erkennen, aber nur nach Kontextprüfung ändern.
+
+### 4. Programmieren
+
+Allgemeiner Fünf-Gate-Prozess und wiederverwendbare Agent-Skills für Softwarearbeit.
+
+Enthaltene Skills:
+
+- `domain-modeling` – Begriffe, Fachobjekte und Grenzen schärfen;
+- `tdd` – kleine Red/Green-Umsetzungsschnitte;
+- `diagnose` – reproduzierbare Root-Cause-Diagnose;
+- `code-review` – tatsächlichen Diff gegen Anforderung und Repository-Standards prüfen.
 
 ### 5. Projektregeln
 
 Projektregeln gehören nicht hierher. Beispiele sind konkrete Produktanforderungen, Serienkanon, Fachmodelle, Releasewege oder technische Sonderfälle eines einzelnen Repositories.
+
+## Was ist ein Skill?
+
+Ein Skill beschreibt eine begrenzte Arbeitsdisziplin für einen KI-Agenten.
+
+Er beschreibt **wie** gearbeitet wird. Er definiert nicht eigenmächtig, **was** ein Projekt fachlich tun soll.
+
+Die ausführlicheren Regeldateien erklären Hintergründe und Leitplanken. `SKILL.md`-Dateien verdichten diese Regeln für einen konkreten Agenteneinsatz.
 
 ## Vorrangregeln
 
@@ -75,6 +101,19 @@ konkreter Nutzerauftrag
 ```
 
 Allgemeine Regeln dürfen keine lokale fachliche Wahrheit überschreiben.
+
+## Verteilung in Projekte
+
+KI-Agenten arbeiten normalerweise innerhalb eines konkreten Projektrepositories und lesen dieses zentrale Repository nicht automatisch.
+
+Darum können benötigte Skills bewusst repo-lokal übernommen oder durch eine projektspezifische Agent-Datei referenziert werden.
+
+Dabei gilt:
+
+- zentrale Fassung = allgemeine kanonische Arbeitsweise;
+- lokale Fassung = für den Agenten verfügbare Kopie oder projektspezifischer Adapter;
+- projektspezifische Ergänzungen bleiben lokal;
+- Änderungen an zentralen Skills werden bewusst in betroffene Projekte übernommen.
 
 ## Pflege
 
