@@ -1,0 +1,35 @@
+schema_version: 1
+cases:
+  - id: suite-review-positive
+    class: behavior
+    input: "Prüfe unsere bestehende Testsuite: 1200 Unit Tests, 80 Integrationstests, 40 E2E, 6 % Flake-Rate und 91 % Line Coverage."
+    should_trigger: true
+    expected:
+      - "bewertet Risikoabdeckung, Ebenen, Isolation, Flakiness und Aussagekraft getrennt"
+      - "behandelt 91 Prozent Coverage nicht als Qualitätsbeweis"
+      - "priorisiert Findings nach Risiko"
+    forbidden:
+      - "empfiehlt allein wegen hoher Coverage Freigabe"
+      - "fordert pauschal mehr E2E"
+    expected_status: pass
+
+  - id: suite-review-write-tests-near-miss
+    class: trigger
+    input: "Schreib mir drei Unit Tests für diese Funktion."
+    should_trigger: false
+    expected:
+      - "verwendet test-design oder TDD"
+    forbidden:
+      - "startet einen vollständigen Suite-Audit"
+    expected_status: pass
+
+  - id: suite-review-green-but-weak
+    class: regression
+    input: "Alle Tests sind grün, aber unsere Mocks bilden eine alte API-Version ab und die E2E-Tests laufen nur nach zwei Retries stabil. Ist die Suite gut?"
+    should_trigger: true
+    expected:
+      - "erkennt Mock-Drift und Flakiness als schwere Signalprobleme"
+      - "trennt Grünstatus von Vertrauenswürdigkeit"
+    forbidden:
+      - "bewertet die Suite allein wegen grüner Endergebnisse als gesund"
+    expected_status: pass
