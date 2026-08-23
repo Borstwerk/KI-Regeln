@@ -8,13 +8,19 @@ Er richtet sich vor allem an Menschen, die:
 - verstehen möchten, was einzelne Skills bedeuten;
 - Regeln in eigene Projekte übernehmen wollen;
 - den Bestand regelmäßig auf Aktualität prüfen möchten;
-- nachvollziehen möchten, welche externen Skills und Quellen aktiv beobachtet werden.
+- nachvollziehen möchten, welche externen Skills und Quellen aktiv beobachtet werden;
+- Reifegrad und Evalabdeckung von Skills einschätzen möchten.
 
 ## Inhalte
 
 - `Nutzung-des-Repositories.md` – erklärt, wie das Repository in echten Projekten eingesetzt wird;
 - `Skill-Handbuch.md` – erklärt die allgemeinen Skills in verständlicher Sprache;
 - `Skill-Handbuch-Dokumentationserstellung.md` – erklärt die Skills des Bereichs `Dokumentationserstellung/`;
+- `Skill-Handbuch-Meta-und-Sicherheit.md` – erklärt Skill-Engineering- und Security-Skills;
+- `Skill-Katalog.md` – erklärt Maturity und den maschinenlesbaren Skill-Katalog;
+- `../skill-catalog.yml` – Inventar der zentralen Skills mit Reifegrad und Evalabdeckung;
+- `../Evals/` – wiederholbare Trigger-, Behavior-, Outcome- und Regressionsevals;
+- `../Workflows/` – Recipes für wiederkehrende Skill-Ketten;
 - `Pflege-und-Aktualisierung.md` – beschreibt Pflegeprozess, Review-Rhythmus und den Umgang mit neuen Quellen und Entwicklungen;
 - `Quellenregister.md` – erklärt Quellenklassen, Monitoring-Arten und den Umgang mit veränderlichen Upstreams;
 - `upstream-sources.yml` – maschinenlesbare Liste aktiv beobachteter Upstreams mit Monitoring-Modus, Cadence, geprüftem SHA/Stand und lokalem Einfluss;
@@ -25,6 +31,20 @@ Er richtet sich vor allem an Menschen, die:
 > Allgemeine Arbeitsweise zentral, konkrete Wahrheit lokal.
 
 Das Repository liefert wiederverwendbare Methoden. Projektziele, Fachlogik, Kanon, Architektur, Referenzen und lokale Anforderungen bleiben im jeweiligen Projekt.
+
+## Skills und Reife
+
+Ein Skill besitzt neben seiner fachlichen Beschreibung einen expliziten Reifegrad:
+
+```text
+experimental
+→ candidate
+→ stable
+→ deprecated
+→ retired
+```
+
+`stable` ist kein Standardwert. Die Einstufung soll durch reale Nutzung, passende Evals und – bei relevanten Capabilities – Security Review gestützt sein.
 
 ## Quellen und Upstreams
 
@@ -54,7 +74,9 @@ Wer das Repository zum ersten Mal verwendet, sollte in dieser Reihenfolge lesen:
 1. `../README.md`
 2. `Nutzung-des-Repositories.md`
 3. `Skill-Handbuch.md`
-4. bei Dokumentationsarbeit zusätzlich `Skill-Handbuch-Dokumentationserstellung.md`
-5. erst danach die für das eigene Vorhaben relevanten Regel- und Skill-Dateien.
+4. bei Auswahl oder Bewertung von Skills `Skill-Katalog.md`
+5. bei Dokumentationsarbeit zusätzlich `Skill-Handbuch-Dokumentationserstellung.md`
+6. bei Skill-/Security-Arbeit zusätzlich `Skill-Handbuch-Meta-und-Sicherheit.md`
+7. erst danach die für das eigene Vorhaben relevanten Regel-, Skill- und Workflow-Dateien.
 
 Nicht das komplette Repository muss für jede Aufgabe geladen oder übernommen werden. Gute Nutzung bedeutet gezielte Auswahl.
