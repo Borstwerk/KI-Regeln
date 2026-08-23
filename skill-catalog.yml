@@ -1,0 +1,60 @@
+schema_version: 1
+last_updated: 2026-08-23
+
+# Maschinenlesbarer Katalog der zentralen Skills.
+# Maturity bewertet den lokalen Reifegrad, nicht Popularitaet oder Alter.
+
+maturity_levels:
+  - experimental
+  - candidate
+  - stable
+  - deprecated
+  - retired
+
+skills:
+  - {id: reflektierender-dialog, area: Arbeitsweisen, path: Arbeitsweisen/Skills/reflektierender-dialog/SKILL.md, maturity: candidate, eval_coverage: none, purpose: "Erfahrungen und Gedanken reflektierend ordnen, ohne vorschnelle Diagnose."}
+  - {id: entscheidungsunterstuetzung, area: Arbeitsweisen, path: Arbeitsweisen/Skills/entscheidungsunterstuetzung/SKILL.md, maturity: candidate, eval_coverage: none, purpose: "Optionen, Kriterien, Unsicherheiten und Gegenargumente für Entscheidungen sichtbar machen."}
+  - {id: ziel-reflexions-loop, area: Arbeitsweisen, path: Arbeitsweisen/Skills/ziel-reflexions-loop/SKILL.md, maturity: candidate, eval_coverage: none, purpose: "Ziele in kleine Lern- und Handlungsschleifen überführen."}
+  - {id: context-engineering, area: Agentenarbeit, path: Agentenarbeit/Skills/context-engineering/SKILL.md, maturity: candidate, eval_coverage: none, purpose: "Relevanten Agentenkontext gezielt auswählen und pflegen."}
+  - {id: task-graph, area: Agentenarbeit, path: Agentenarbeit/Skills/task-graph/SKILL.md, maturity: candidate, eval_coverage: none, purpose: "Komplexe Arbeit in abhängige, prüfbare Teilaufgaben zerlegen."}
+  - {id: verification-loop, area: Agentenarbeit, path: Agentenarbeit/Skills/verification-loop/SKILL.md, maturity: candidate, eval_coverage: none, purpose: "Arbeit durch Prüfen, Diagnostizieren und Korrigieren iterativ verifizieren."}
+  - {id: delegation-contract, area: Agentenarbeit, path: Agentenarbeit/Skills/delegation-contract/SKILL.md, maturity: candidate, eval_coverage: none, purpose: "Agentenaufträge mit Scope, Rechten, Akzeptanz und Evidence definieren."}
+  - {id: agent-eval, area: Agentenarbeit, path: Agentenarbeit/Skills/agent-eval/SKILL.md, maturity: candidate, eval_coverage: none, purpose: "Agentenverhalten und Ergebnisqualität systematisch evaluieren."}
+  - {id: natuerliches-schreiben, area: Schreiben, path: Schreiben/Skills/natuerliches-schreiben/SKILL.md, maturity: candidate, eval_coverage: none, purpose: "Klare, natürliche Texte ohne unnötige KI-typische Mechanik schreiben."}
+  - {id: kreatives-schreiben, area: Schreiben, path: Schreiben/Skills/kreatives-schreiben/SKILL.md, maturity: candidate, eval_coverage: none, purpose: "Kreative Prosa mit Stimme, Szene, Rhythmus und Wirkung entwickeln."}
+  - {id: stilreview, area: Schreiben, path: Schreiben/Skills/stilreview/SKILL.md, maturity: candidate, eval_coverage: none, purpose: "Texte auf mechanische, unnatürliche oder kontextfremde Stilmerkmale prüfen."}
+  - {id: bild-prebrief, area: Bildarbeit, path: Bildarbeit/Skills/bild-prebrief/SKILL.md, maturity: candidate, eval_coverage: none, purpose: "Bildidee, sichtbaren Moment, Komposition und Pflichtdetails vor Generierung klären.", capabilities: [image-generation-optional]}
+  - {id: entitaetsbibel, area: Bildarbeit, path: Bildarbeit/Skills/entitaetsbibel/SKILL.md, maturity: candidate, eval_coverage: none, purpose: "Wiederkehrende visuelle Entitäten konsistent definieren."}
+  - {id: serien-kontinuitaetscheck, area: Bildarbeit, path: Bildarbeit/Skills/serien-kontinuitaetscheck/SKILL.md, maturity: candidate, eval_coverage: none, purpose: "Bildserien auf Identitäts-, Stil-, Struktur- und Zustandsdrift prüfen.", capabilities: [image-inspection]}
+  - {id: bildreview, area: Bildarbeit, path: Bildarbeit/Skills/bildreview/SKILL.md, maturity: candidate, eval_coverage: none, purpose: "Ein Bild unabhängig auf Keeper, Feinschliff oder Neubau prüfen.", capabilities: [image-inspection]}
+  - {id: code-review, area: Programmieren, path: Programmieren/Skills/code-review/SKILL.md, maturity: candidate, eval_coverage: none, purpose: "Konkrete Codeänderungen gegen Anforderungen und Standards prüfen.", capabilities: [repository-read]}
+  - {id: diagnose, area: Programmieren, path: Programmieren/Skills/diagnose/SKILL.md, maturity: candidate, eval_coverage: none, purpose: "Bugs und Performanceprobleme reproduzierbar bis zur Ursache diagnostizieren.", capabilities: [repository-read, code-execution-preferred]}
+  - {id: domain-modeling, area: Programmieren, path: Programmieren/Skills/domain-modeling/SKILL.md, maturity: candidate, eval_coverage: none, purpose: "Domänenbegriffe, Grenzen und Modelle präzisieren.", capabilities: [repository-read-preferred]}
+  - {id: tdd, area: Programmieren, path: Programmieren/Skills/tdd/SKILL.md, maturity: candidate, eval_coverage: none, purpose: "Verhalten in kleinen Red-Green-Zyklen testgetrieben implementieren.", capabilities: [repository-read, code-execution]}
+  - {id: frontend-design, area: Webentwicklung, path: Webentwicklung/Skills/frontend-design/SKILL.md, maturity: experimental, eval_coverage: none, purpose: "Eine eigenständige, kontextpassende visuelle Webrichtung definieren.", capabilities: [browser-preferred]}
+  - {id: design-system, area: Webentwicklung, path: Webentwicklung/Skills/design-system/SKILL.md, maturity: experimental, eval_coverage: none, purpose: "Freigegebene Designrichtung in wiederverwendbare Tokens und Regeln übersetzen.", related: [frontend-design]}
+  - {id: greybox, area: Webentwicklung, path: Webentwicklung/Skills/greybox/SKILL.md, maturity: experimental, eval_coverage: none, purpose: "Informationsarchitektur und Seitenhierarchie vor visueller Politur klären.", related: [design-system]}
+  - {id: web-content, area: Webentwicklung, path: Webentwicklung/Skills/web-content/SKILL.md, maturity: experimental, eval_coverage: none, purpose: "Webtexte und UI-Inhalte konkret, ehrlich und frei von Füll-/Fake-Content gestalten."}
+  - {id: web-design-review, area: Webentwicklung, path: Webentwicklung/Skills/web-design-review/SKILL.md, maturity: experimental, eval_coverage: none, purpose: "Gerenderte Weboberflächen unabhängig auf Designqualität und Anti-Slop prüfen.", capabilities: [browser-preferred]}
+  - {id: accessibility-review, area: Webentwicklung, path: Webentwicklung/Skills/accessibility-review/SKILL.md, maturity: experimental, eval_coverage: none, purpose: "Weboberflächen auf semantische und bedienbare Accessibility prüfen.", capabilities: [browser-preferred]}
+  - {id: frontend-performance, area: Webentwicklung, path: Webentwicklung/Skills/frontend-performance/SKILL.md, maturity: experimental, eval_coverage: none, purpose: "Frontendperformance messungsbasiert diagnostizieren und verbessern.", capabilities: [measurement-preferred]}
+  - {id: visual-verification, area: Webentwicklung, path: Webentwicklung/Skills/visual-verification/SKILL.md, maturity: experimental, eval_coverage: none, purpose: "Weboberflächen in realen Renderzuständen und Viewports verifizieren.", capabilities: [browser-required]}
+  - {id: web-search, area: Recherche, path: Recherche/Skills/web-search/SKILL.md, maturity: experimental, eval_coverage: none, purpose: "Aktuelle Fakten schnell über Webquellen recherchieren und belegen.", capabilities: [web-required]}
+  - {id: research-plan, area: Recherche, path: Recherche/Skills/research-plan/SKILL.md, maturity: experimental, eval_coverage: none, purpose: "Größere Recherche in Fragen, Perspektiven, Quellenarten und Coverage planen."}
+  - {id: deep-research, area: Recherche, path: Recherche/Skills/deep-research/SKILL.md, maturity: experimental, eval_coverage: none, purpose: "Mehrperspektivische, iterative Multi-Source-Recherche orchestrieren.", capabilities: [web-required], related: [research-plan]}
+  - {id: source-evaluation, area: Recherche, path: Recherche/Skills/source-evaluation/SKILL.md, maturity: experimental, eval_coverage: none, purpose: "Quellen claimbezogen auf Relevanz, Autorität, Aktualität und Unabhängigkeit bewerten.", capabilities: [source-access-required]}
+  - {id: claim-verification, area: Recherche, path: Recherche/Skills/claim-verification/SKILL.md, maturity: experimental, eval_coverage: none, purpose: "Konkrete Behauptungen gegen externe Evidenz prüfen.", capabilities: [source-access-required]}
+  - {id: research-synthesis, area: Recherche, path: Recherche/Skills/research-synthesis/SKILL.md, maturity: experimental, eval_coverage: none, purpose: "Viele Research-Funde nach Erkenntnissen, Konsens, Widerspruch und Unsicherheit synthetisieren."}
+  - {id: citation-audit, area: Recherche, path: Recherche/Skills/citation-audit/SKILL.md, maturity: experimental, eval_coverage: none, purpose: "Prüfen, ob wesentliche Claims tatsächlich von den zitierten Quellen getragen werden.", capabilities: [source-access-required], related: [research-synthesis]}
+  - {id: docs-plan, area: Dokumentationserstellung, path: Dokumentationserstellung/Skills/docs-plan/SKILL.md, maturity: experimental, eval_coverage: none, purpose: "Dokumentation nach Leser, Zweck, Typ und Source of Truth planen.", capabilities: [source-of-truth-access-preferred]}
+  - {id: technical-writing, area: Dokumentationserstellung, path: Dokumentationserstellung/Skills/technical-writing/SKILL.md, maturity: experimental, eval_coverage: none, purpose: "Technische Dokumentation klar, präzise und wartbar formulieren."}
+  - {id: readme, area: Dokumentationserstellung, path: Dokumentationserstellung/Skills/readme/SKILL.md, maturity: experimental, eval_coverage: none, purpose: "Eine projektorientierte README mit klarem Einstieg und nutzbarem Quickstart erstellen.", capabilities: [repository-read-preferred]}
+  - {id: tutorial, area: Dokumentationserstellung, path: Dokumentationserstellung/Skills/tutorial/SKILL.md, maturity: experimental, eval_coverage: none, purpose: "Lernorientierte Schritt-für-Schritt-Dokumentation erstellen."}
+  - {id: how-to, area: Dokumentationserstellung, path: Dokumentationserstellung/Skills/how-to/SKILL.md, maturity: experimental, eval_coverage: none, purpose: "Aufgabenorientierte Anleitung für ein konkretes Ziel erstellen."}
+  - {id: reference-docs, area: Dokumentationserstellung, path: Dokumentationserstellung/Skills/reference-docs/SKILL.md, maturity: experimental, eval_coverage: none, purpose: "Nachschlagbare Referenz eng an der tatsächlichen Source of Truth dokumentieren.", capabilities: [source-of-truth-access]}
+  - {id: explanation-docs, area: Dokumentationserstellung, path: Dokumentationserstellung/Skills/explanation-docs/SKILL.md, maturity: experimental, eval_coverage: none, purpose: "Hintergründe, Zusammenhänge und Gründe erklärend dokumentieren."}
+  - {id: adr, area: Dokumentationserstellung, path: Dokumentationserstellung/Skills/adr/SKILL.md, maturity: experimental, eval_coverage: none, purpose: "Architekturentscheidungen mit Kontext, Alternativen und Konsequenzen dokumentieren.", capabilities: [decision-source-required]}
+  - {id: runbook, area: Dokumentationserstellung, path: Dokumentationserstellung/Skills/runbook/SKILL.md, maturity: experimental, eval_coverage: none, purpose: "Operative, unter Stress ausführbare Betriebsanleitungen erstellen.", capabilities: [operational-source-required]}
+  - {id: docs-review, area: Dokumentationserstellung, path: Dokumentationserstellung/Skills/docs-review/SKILL.md, maturity: experimental, eval_coverage: none, purpose: "Dokumentation auf Korrektheit, Drift, Verifikation und Leserfit prüfen.", capabilities: [source-of-truth-access-preferred], related: [technical-writing]}
+  - {id: skill-authoring, area: Skill-Engineering, path: Skill-Engineering/Skills/skill-authoring/SKILL.md, maturity: experimental, eval_coverage: none, purpose: "Neue Agent-Skills nach dem zentralen Skill-Engineering-Standard entwerfen.", capabilities: [repository-read-preferred]}
+  - {id: skill-review, area: Skill-Engineering, path: Skill-Engineering/Skills/skill-review/SKILL.md, maturity: experimental, eval_coverage: none, purpose: "Agent-Skills unabhängig auf Schnitt, Trigger, Verträge, Capabilities und Evals prüfen.", capabilities: [repository-read-preferred], related: [skill-authoring]}
