@@ -10,7 +10,7 @@ Ziel ist keine persönliche KI-Konfiguration und keine projektspezifische Wissen
 
 Das bedeutet:
 
-- allgemeine Kommunikations-, Schreib-, Bild-, Analyse-, Agenten- und Entwicklungsregeln liegen hier;
+- allgemeine Kommunikations-, Reflexions-, Schreib-, Bild-, Analyse-, Agenten- und Entwicklungsregeln liegen hier;
 - projektspezifische Anforderungen, Architektur, Figuren, Fachbegriffe, visuelle Bibeln und Sonderregeln bleiben im jeweiligen Projekt;
 - persönliche Profile, Gesundheitsdaten, Familieninformationen oder andere nicht notwendige personenbezogene Details gehören nicht in dieses Repository;
 - ein Skill ersetzt niemals die tatsächliche Spezifikation oder Dokumentation eines Projekts.
@@ -21,9 +21,18 @@ Das bedeutet:
 KI-Regeln/
 ├── Grundlagen/
 │   ├── Zusammenarbeit-mit-KI.md
-│   └── Datenschutz-und-Kontext.md
+│   ├── Mensch-KI-Interaktion.md
+│   ├── Vertrauen-und-Denkautonomie.md
+│   ├── Datenschutz-und-Kontext.md
+│   └── Quellen-und-Inspirationen.md
 ├── Arbeitsweisen/
-│   └── Problemloesung.md
+│   ├── Problemloesung.md
+│   ├── Reflexion-und-Selbstverbesserung.md
+│   ├── Zielarbeit-und-Umsetzung.md
+│   └── Skills/
+│       ├── reflektierender-dialog/SKILL.md
+│       ├── entscheidungsunterstuetzung/SKILL.md
+│       └── ziel-reflexions-loop/SKILL.md
 ├── Agentenarbeit/
 │   ├── README.md
 │   ├── Context-Engineering.md
@@ -82,11 +91,40 @@ KI-Regeln/
 
 ### 1. Grundlagen
 
-Regeln für verlässliche Zusammenarbeit mit KI unabhängig vom Fachgebiet: Quellen, Unsicherheit, Kommunikation, Kontext und Datenschutz.
+Regeln für verlässliche Zusammenarbeit mit KI unabhängig vom Fachgebiet: Quellen, Unsicherheit, Kommunikation, Kontext, Datenschutz, kalibriertes Vertrauen und Denkautonomie.
+
+Der Bereich behandelt insbesondere:
+
+- `Zusammenarbeit mit KI` – Auftrag, Quellen, Unsicherheit, direkte Kommunikation, Rollen und menschliche Entscheidungshoheit;
+- `Mensch-KI-Interaktion` – KI als Werkzeug, Sparringspartner und Denkunterstützung statt als Orakel;
+- `Vertrauen und Denkautonomie` – richtige Ausgaben annehmen, falsche zurückweisen und eigene Urteilsfähigkeit erhalten;
+- `Datenschutz und Kontext` – persönliche und projektspezifische Informationen nur so weit verwenden und zentralisieren, wie es tatsächlich nötig ist.
+
+Leitgedanke:
+
+> KI soll Denken unterstützen, nicht unbemerkt an dessen Stelle treten.
+
+`Grundlagen/Quellen-und-Inspirationen.md` dokumentiert unter anderem Human-AI-Interaction-Forschung, Appropriate Reliance, Self-Determination Theory und Motivational Interviewing als Inspirations- und Evidenzquellen.
 
 ### 2. Arbeitsweisen
 
-Wiederverwendbare Denk- und Problemlösungsmuster wie Hypothesenbildung, iterative Bearbeitung und überprüfbare Entscheidungen.
+Wiederverwendbare Denk-, Problemlösungs- und Lernmuster.
+
+Enthalten sind:
+
+- `Problemloesung` – Beobachtung, falsifizierbare Hypothesen, kleine Versuche und belastbare Nachweise;
+- `Reflexion-und-Selbstverbesserung` – Erfahrungen auswerten, Interpretationen als Hypothesen behandeln und kleine Lernschritte ableiten;
+- `Zielarbeit-und-Umsetzung` – Ziele, reale Hindernisse, kleine Handlungen und Wenn-Dann-Pläne verbinden.
+
+Enthaltene Skills:
+
+- `reflektierender-dialog` – persönliche oder strategische Erfahrungen ordnen, ohne vorschnell zu diagnostizieren oder Lösungen aufzudrängen;
+- `entscheidungsunterstuetzung` – Kriterien, Alternativen, Unsicherheiten und Gegenargumente strukturieren, während persönliche Wertentscheidungen beim Menschen bleiben;
+- `ziel-reflexions-loop` – Ziel, Hindernis, kleinen Versuch, reale Erfahrung und Anpassung zu einem Lernloop verbinden.
+
+Leitgedanke:
+
+> Verstehen → ausprobieren → Erfahrung sammeln → reflektieren → anpassen.
 
 ### 3. Agentenarbeit
 
@@ -174,7 +212,7 @@ Projektregeln gehören nicht hierher. Beispiele sind konkrete Produktanforderung
 
 Ein Skill beschreibt eine begrenzte Arbeitsdisziplin für einen KI-Agenten.
 
-Er beschreibt **wie** gearbeitet wird. Er definiert nicht eigenmächtig, **was** ein Projekt fachlich oder visuell tun soll.
+Er beschreibt **wie** gearbeitet wird. Er definiert nicht eigenmächtig, **was** ein Projekt fachlich, visuell oder persönlich tun soll.
 
 Die ausführlicheren Regeldateien erklären Hintergründe und Leitplanken. `SKILL.md`-Dateien verdichten diese Regeln für einen konkreten Agenteneinsatz.
 
@@ -191,7 +229,19 @@ konkreter Nutzerauftrag
 → allgemeine Agenten-, Fach- und Arbeitsregeln aus diesem Repository
 ```
 
-Allgemeine Regeln dürfen keine lokale fachliche oder visuelle Wahrheit überschreiben.
+Allgemeine Regeln dürfen keine lokale fachliche, visuelle oder persönliche Wahrheit überschreiben.
+
+## Menschliche Denk- und Entscheidungshoheit
+
+Bei Reflexion, Lernen und Entscheidungen gelten zusätzlich:
+
+- KI-Unterstützung soll vorhandenes Denken möglichst erweitern statt unnötig ersetzen;
+- Vertrauen wird an Aufgabe, Quellen, Nachweise und Fehlerrisiko angepasst;
+- persönliche Wertgewichtungen bleiben beim Menschen;
+- psychologische Interpretationen werden nicht ohne Grundlage als Diagnose oder verborgene Wahrheit dargestellt;
+- reale Beobachtungen und externe Evidenz haben Vorrang vor bloßer Gesprächskohärenz;
+- wiederkehrende Unterstützung soll möglichst Kompetenz aufbauen;
+- Selbstverbesserung wird als Lernloop behandelt, nicht als Urteil über die Person.
 
 ## Agentenautonomie
 
@@ -228,6 +278,8 @@ Dabei gilt:
 
 Dasselbe gilt für Bildarbeit: zentrale Bildregeln beschreiben die Arbeitsweise, während Charakterbibeln, konkrete Referenzbilder, Szenenlisten und visuelle Projektregeln lokal bleiben.
 
+Persönliche Reflexionsnotizen oder individuelle Entwicklungsverläufe gehören ebenfalls nicht als allgemeine Wahrheit in dieses Repository. Zentral liegen nur die wiederverwendbaren Methoden.
+
 ## Attribution
 
 Übernommene oder adaptierte Drittinhalte werden in `THIRD-PARTY-NOTICES.md` dokumentiert. Externe Inspirationsquellen ohne übernommene Drittinhalte werden in den jeweiligen `Quellen-und-Inspirationen.md`-Dateien eingeordnet.
@@ -242,4 +294,4 @@ Neue Regeln sollen nur aufgenommen werden, wenn sie:
 4. keine unnötigen personenbezogenen Daten enthalten;
 5. möglichst konkret beschreiben, wann und wie sie anzuwenden sind.
 
-Eine Regel, die nur für ein einzelnes Projekt gilt, bleibt dort.
+Eine Regel, die nur für ein einzelnes Projekt oder eine einzelne Person gilt, bleibt dort.
