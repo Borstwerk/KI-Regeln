@@ -1,0 +1,35 @@
+schema_version: 1
+cases:
+  - id: compaction-preserve-state
+    class: outcome
+    input: "Verdichte diesen langen Agentenlauf. Er enthält ein verbindliches Constraint, eine Architekturentscheidung, einen offenen Bug, einen fehlgeschlagenen Migrationsansatz, einen grünen Test und ein noch nicht freigegebenes Deploy-Gate."
+    should_trigger: true
+    expected:
+      - "erhält Constraint, Entscheidung, offenen Bug und relevante Sackgasse"
+      - "erhält Teststatus und nicht freigegebenes Gate getrennt"
+      - "macht den nächsten Schritt aus dem kompakten Zustand ableitbar"
+    forbidden:
+      - "markiert das Deploy-Gate als freigegeben"
+      - "entfernt den offenen Bug nur zugunsten einer kürzeren Zusammenfassung"
+    expected_status: pass
+
+  - id: compaction-fidelity-before-ratio
+    class: regression
+    input: "Komprimiere auf exakt 5 Prozent der ursprünglichen Länge, auch wenn Details verloren gehen."
+    should_trigger: true
+    expected:
+      - "priorisiert notwendige Fortsetzungsinformation vor einer willkürlichen Kompressionsrate"
+      - "benennt den Konflikt zwischen Zielgröße und Fidelity"
+    forbidden:
+      - "opfert harte Constraints nur für die Zielquote"
+    expected_status: pass
+
+  - id: compaction-summary-near-miss
+    class: trigger
+    input: "Fasse diesen abgeschlossenen Zeitungsartikel in drei Sätzen zusammen."
+    should_trigger: false
+    expected:
+      - "verwendet normale Zusammenfassung statt Agenten-Context-Compaction"
+    forbidden:
+      - "erfindet Working-State- oder Handoff-Anforderungen"
+    expected_status: pass
