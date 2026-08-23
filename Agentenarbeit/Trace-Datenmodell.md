@@ -12,7 +12,7 @@ Es ist kein Zwang, jeden Workflow vollständig zu instrumentieren.
 Task
 → Run
 → Skill / Workflow
-→ Tool Event / Evidence
+→ Tool Event / Context Event / Evidence
 → Gate / Decision
 → Artifact
 → Outcome
@@ -40,6 +40,9 @@ SKILL_ACTIVATED
 WORKFLOW_PHASE_STARTED
 TOOL_CALLED
 TOOL_FAILED
+CONTEXT_AUDITED
+CONTEXT_COMPACTED
+HANDOFF_CREATED
 EVIDENCE_RECORDED
 VALIDATION_PASSED
 VALIDATION_FAILED
@@ -67,6 +70,23 @@ Oft reichen:
 - Status;
 - Zielreferenz;
 - ggf. redigierte Evidence-ID.
+
+## Context- und Usage-Signale
+
+Soweit verfügbar, können Kontextmetriken metadata-first protokolliert werden:
+
+- `input_tokens`;
+- `output_tokens`;
+- `cache_read_input_tokens`;
+- `cache_write_input_tokens`;
+- `context_size` oder andere lokale Größenapproximation;
+- `tool_output_size`;
+- `compaction_ratio`;
+- `context_ref` oder `handoff_ref` statt vollständigem Inhalt.
+
+Nicht jede Runtime liefert alle Werte. Fehlende Werte bleiben fehlend und werden nicht künstlich geschätzt, außer eine Approximation wird ausdrücklich als solche gekennzeichnet.
+
+Tokenmetriken allein beschreiben keine Qualität. Für Optimierungen sollten sie mit Outcome, Latenz und relevanter Evidence verbunden werden.
 
 ## Evidence
 
@@ -102,7 +122,7 @@ Keine sensiblen Identitätsdaten erfassen, wenn eine technische Referenz genügt
 
 ## Datenschutz
 
-Vollständige Prompts, Completions, Toolargumente oder Toolresultate sind **kein Pflichtbestandteil** dieses Modells.
+Vollständige Prompts, Completions, Toolargumente, Toolresultate oder Compaction-/Handoff-Inhalte sind **kein Pflichtbestandteil** dieses Modells.
 
 Sie können für Debugging nützlich, aber zugleich sensibel und sehr groß sein.
 
@@ -124,9 +144,12 @@ Insbesondere passen dazu Konzepte wie:
 - Modell-/Operationserkennung;
 - Toolcalls;
 - Laufzeiten;
-- Tokenmetriken;
+- Input-/Output-Token;
+- Cache-Read/-Write-Signale;
 - verschachtelte Spans;
 - optionale Inhaltsaufzeichnung.
+
+Die konkrete Benennung und Stabilität externer Semantic Conventions bleibt deren Upstream vorbehalten.
 
 ## Verhältnis zu Projektwahrheit
 
@@ -141,4 +164,4 @@ Er ersetzt nicht:
 
 ## Leitgedanke
 
-> Traceability verbindet Arbeitsschritte und Evidence – ohne die komplette Arbeitswelt in Logs zu kopieren.
+> Traceability verbindet Arbeitsschritte, Context-Ereignisse und Evidence – ohne die komplette Arbeitswelt in Logs zu kopieren.
