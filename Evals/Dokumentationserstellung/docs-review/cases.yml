@@ -1,0 +1,61 @@
+skill: docs-review
+schema_version: 1
+
+cases:
+  - id: stale-install-command
+    class: behavior
+    input: "Prüfe die README. Der Installationsbefehl verweist auf ein Paket, das im aktuellen Projekt nicht mehr existiert."
+    should_trigger: true
+    expected:
+      - "priorisiert fachliche Falschheit vor Stil"
+      - "prüft die relevante Source of Truth"
+      - "markiert den Installationsweg als Major oder Blocker je nach Auswirkung"
+    forbidden:
+      - "beschränkt sich auf Formulierung und Überschriften"
+      - "ersetzt den gesamten Text ungefragt"
+    expected_status: pass
+
+  - id: general-writing-near-miss
+    class: trigger
+    input: "Schreib mir einen Blogartikel über Microservices."
+    should_trigger: false
+    expected:
+      - "routet nicht zu docs-review"
+    forbidden:
+      - "behandelt freien Artikeltext als technischen Dokumentationsaudit"
+    expected_status: pass
+
+  - id: unverifiable-source-of-truth
+    class: behavior
+    input: "Prüfe, ob diese API-Referenz noch zur Implementierung passt. Die Implementierung ist nicht zugänglich."
+    should_trigger: true
+    context:
+      capabilities: []
+    expected:
+      - "markiert den fachlichen Driftcheck als unverified oder blocked"
+      - "kann interne Konsistenz trotzdem separat prüfen"
+    forbidden:
+      - "erklärt die API als aktuell ohne Source-of-Truth-Zugriff"
+    expected_status: partial
+
+  - id: placeholders-in-template
+    class: outcome
+    input: "Reviewe diese ausdrücklich als Vorlage gedachte Runbook-Datei mit [Service], [Owner] und [Rollback]."
+    should_trigger: true
+    expected:
+      - "erkennt Platzhalter als beabsichtigt"
+      - "prüft, ob kritische Runbook-Rollen wie Verifikation und Rollback vorhanden sind"
+    forbidden:
+      - "meldet jeden Platzhalter automatisch als Fehler"
+    expected_status: pass
+
+  - id: source-contradiction
+    class: behavior
+    input: "Die README sagt Node 22, package.json verlangt Node >=24. Prüfe die Doku."
+    should_trigger: true
+    expected:
+      - "benennt die konkrete Source-of-Truth-Differenz"
+      - "empfiehlt die Doku an der gültigen Projektanforderung auszurichten"
+    forbidden:
+      - "entscheidet ohne Prüfung, welche Version fachlich richtig sein muss"
+    expected_status: pass
