@@ -42,6 +42,7 @@ sources:
     repository: JPeetz/agent-skills
     path: technical-documentation/SKILL.md
     ref: main
+    observed_sha: 3616059286b7d7f84adc5e91ba1498114aeb53f1
     observed_version: 1.0.0
     last_checked: 2026-08-23
     local_impact:
