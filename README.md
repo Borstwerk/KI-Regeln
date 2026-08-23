@@ -10,8 +10,8 @@ Ziel ist keine persönliche KI-Konfiguration und keine projektspezifische Wissen
 
 Das bedeutet:
 
-- allgemeine Kommunikations-, Reflexions-, Schreib-, Bild-, Analyse-, Agenten- und Entwicklungsregeln liegen hier;
-- projektspezifische Anforderungen, Architektur, Figuren, Fachbegriffe, visuelle Bibeln und Sonderregeln bleiben im jeweiligen Projekt;
+- allgemeine Kommunikations-, Reflexions-, Schreib-, Bild-, Web-, Analyse-, Agenten- und Entwicklungsregeln liegen hier;
+- projektspezifische Anforderungen, Architektur, Figuren, Fachbegriffe, visuelle Bibeln, Markenregeln und Sonderregeln bleiben im jeweiligen Projekt;
 - persönliche Profile, Gesundheitsdaten, Familieninformationen oder andere nicht notwendige personenbezogene Details gehören nicht in dieses Repository;
 - ein Skill ersetzt niemals die tatsächliche Spezifikation oder Dokumentation eines Projekts.
 
@@ -85,6 +85,31 @@ KI-Regeln/
 │       ├── entitaetsbibel/SKILL.md
 │       ├── serien-kontinuitaetscheck/SKILL.md
 │       └── bildreview/SKILL.md
+├── Webentwicklung/
+│   ├── README.md
+│   ├── Quellen-und-Inspirationen.md
+│   ├── Webdesign/
+│   │   ├── Designrichtung-und-Identitaet.md
+│   │   ├── Informationsarchitektur-und-Greyboxing.md
+│   │   ├── Typografie-Farbe-und-Rhythmus.md
+│   │   ├── Content-und-Anti-Slop.md
+│   │   ├── Responsive-und-Interaktion.md
+│   │   └── Webdesign-Review.md
+│   ├── Frontend/
+│   │   ├── Komponentenarchitektur.md
+│   │   ├── Accessibility.md
+│   │   ├── Performance.md
+│   │   ├── Responsive-Implementierung.md
+│   │   └── Render-und-Browser-Verifikation.md
+│   └── Skills/
+│       ├── frontend-design/SKILL.md
+│       ├── design-system/SKILL.md
+│       ├── greybox/SKILL.md
+│       ├── web-content/SKILL.md
+│       ├── web-design-review/SKILL.md
+│       ├── accessibility-review/SKILL.md
+│       ├── frontend-performance/SKILL.md
+│       └── visual-verification/SKILL.md
 ├── Programmieren/
 │   ├── Entwicklungsprozess.md
 │   ├── Agent-Anweisungen.md
@@ -209,7 +234,40 @@ Enthaltene Skills:
 
 Projektkonkrete Charakterdesigns, Bildkanon und visuelle Sonderregeln bleiben im jeweiligen Projekt.
 
-### 6. Programmieren
+### 6. Webentwicklung
+
+Allgemeine Regeln für Websites und Weboberflächen, die Gestaltung und Frontend-Engineering bewusst verbinden.
+
+Der Bereich trennt insbesondere:
+
+- **Designrichtung** – eine visuelle Identität aus Produkt, Publikum und Zweck ableiten;
+- **Informationsarchitektur** – Seitenstruktur und Hierarchie vor visueller Politur prüfen;
+- **Designsystem** – stabile typografische, farbliche und räumliche Entscheidungen dokumentieren;
+- **Content** – echten Informationswert statt generischer KI-Marketing- oder Fülltexte liefern;
+- **Frontend-Engineering** – Komponentenstruktur, Accessibility, Performance und Responsive-Verhalten sauber umsetzen;
+- **Verifikation** – die tatsächlich gerenderte Oberfläche in Browser und relevanten Zuständen prüfen;
+- **unabhängiger Review** – Designqualität nicht nur durch den erzeugenden Agenten selbst bewerten.
+
+Leitgedanke:
+
+> Erst Identität und Informationsstruktur, dann Designsystem und Code.
+
+Enthaltene Skills:
+
+- `frontend-design` – konkrete Art Direction aus Produkt, Publikum und Inhalt entwickeln;
+- `design-system` – Designentscheidungen in ein wiederverwendbares lokales System überführen;
+- `greybox` – Informationsarchitektur, Seitenhierarchie und Nutzerfluss vor High-Fidelity prüfen;
+- `web-content` – konkreten, glaubwürdigen Webcontent statt Fülltext entwickeln;
+- `web-design-review` – gerenderte Oberflächen kritisch auf Identität, Hierarchie und AI-Slop prüfen;
+- `accessibility-review` – Semantik, Tastatur, Fokus, Kontrast und assistive Nutzung prüfen;
+- `frontend-performance` – reale Performanceengpässe messen, priorisieren und gezielt verbessern;
+- `visual-verification` – Desktop, Mobile, relevante Zustände und Browserverhalten tatsächlich rendern und prüfen.
+
+`Webentwicklung/Quellen-und-Inspirationen.md` dokumentiert unter anderem Anthropic `frontend-design`, Impeccable, Vercel Agent Skills und weitere öffentliche Skill-Sammlungen als Inspirationsquellen.
+
+Konkrete Marke, `DESIGN.md`, Produktcontent, Framework, Architektur, Performancebudgets und Browseranforderungen bleiben lokal im jeweiligen Projekt.
+
+### 7. Programmieren
 
 Allgemeiner Fünf-Gate-Prozess und wiederverwendbare Agent-Skills für Softwarearbeit.
 
@@ -222,7 +280,7 @@ Enthaltene Skills:
 
 Die Regeln aus `Agentenarbeit/` ergänzen diesen Prozess. Ein innerer Agentenloop darf insbesondere keine Planungs-, Review- oder Freigabegates überspringen.
 
-### 7. Dokumentation und Pflege
+### 8. Dokumentation und Pflege
 
 Dieser Bereich erklärt das Repository für Menschen und beschreibt seine Wartung.
 
@@ -238,9 +296,9 @@ Leitgedanke:
 
 > Das Regelwerk soll nicht nur wachsen, sondern verständlich, prüfbar und wartbar bleiben.
 
-### 8. Projektregeln
+### 9. Projektregeln
 
-Projektregeln gehören nicht hierher. Beispiele sind konkrete Produktanforderungen, Serienkanon, Charaktermerkmale, visuelle Referenzen, Fachmodelle, Releasewege oder technische Sonderfälle eines einzelnen Repositories.
+Projektregeln gehören nicht hierher. Beispiele sind konkrete Produktanforderungen, Markenregeln, Serienkanon, Charaktermerkmale, visuelle Referenzen, Fachmodelle, Releasewege oder technische Sonderfälle eines einzelnen Repositories.
 
 ## Was ist ein Skill?
 
@@ -313,6 +371,8 @@ Dabei gilt:
 - Änderungen an zentralen Skills werden bewusst in betroffene Projekte übernommen.
 
 Dasselbe gilt für Bildarbeit: zentrale Bildregeln beschreiben die Arbeitsweise, während Charakterbibeln, konkrete Referenzbilder, Szenenlisten und visuelle Projektregeln lokal bleiben.
+
+Für Webentwicklung gilt entsprechend: zentrale Regeln beschreiben Design- und Entwicklungsarbeitsweise; Marke, Produktcontent, `DESIGN.md`, Informationsarchitektur, Framework und technische Budgets bleiben lokal.
 
 Persönliche Reflexionsnotizen oder individuelle Entwicklungsverläufe gehören ebenfalls nicht als allgemeine Wahrheit in dieses Repository. Zentral liegen nur die wiederverwendbaren Methoden.
 
