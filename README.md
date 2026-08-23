@@ -10,8 +10,8 @@ Ziel ist keine persönliche KI-Konfiguration und keine projektspezifische Wissen
 
 Das bedeutet:
 
-- allgemeine Kommunikations-, Reflexions-, Recherche-, Dokumentations-, Schreib-, Bild-, Web-, Datenbank-, Testing-, Agenten-, Sicherheits- und Entwicklungsregeln liegen hier;
-- projektspezifische Anforderungen, Architektur, Research-Fragen, interne Quellen, Fachmodelle, reales Datenbankschema, konkrete Testumgebung, Markenregeln, visuelle Bibeln und Sonderregeln bleiben im jeweiligen Projekt;
+- allgemeine Kommunikations-, Reflexions-, Recherche-, Wissensmanagement-, Dokumentations-, Schreib-, Bild-, Web-, Datenbank-, Testing-, Agenten-, Sicherheits- und Entwicklungsregeln liegen hier;
+- projektspezifische Anforderungen, Architektur, Research-Fragen, interne Quellen, Wissensbestände, Fachmodelle, reales Datenbankschema, konkrete Testumgebung, Markenregeln, visuelle Bibeln und Sonderregeln bleiben im jeweiligen Projekt;
 - persönliche Profile oder unnötige personenbezogene Details gehören nicht in dieses Repository;
 - ein Skill ersetzt niemals die tatsächliche Spezifikation oder Dokumentation eines Projekts.
 
@@ -35,6 +35,7 @@ KI-Regeln/
 ├── Arbeitsweisen/
 ├── Agentenarbeit/
 ├── Recherche/
+├── Wissensmanagement/
 ├── Dokumentationserstellung/
 ├── Schreiben/
 ├── Bildarbeit/
@@ -127,6 +128,57 @@ Websuche und Deep Research mit:
 > Suchergebnisse sind Leads, keine Evidenz.
 
 > Coverage vor Source Count.
+
+## Wissensmanagement
+
+Toolneutrale Regeln für persistente Wissensbasen und Personal-/Organizational-Knowledge-Management.
+
+Der Bereich behandelt insbesondere:
+
+- Wissensmodell, Scope und stabile Identität von Wissenseinheiten;
+- Capture, Ingest und Triage mit `search before create`;
+- Raw Sources, Provenance, Evidence und Source-of-Truth-Bezug;
+- Granularität ohne Monolithen oder Notiz-Konfetti;
+- Links, Relationen, Taxonomien und Navigation;
+- Synthesen und Maps of Content mit nachvollziehbaren Eingaben;
+- Widersprüche, Unsicherheit und Confidence;
+- Aktualität, Staleness, Review und Lifecycle;
+- Retrieval und Findability ohne Retrievalscore mit Wahrheit gleichzusetzen;
+- Content Health mit Dubletten, Orphans, kaputten Links und Drift;
+- Datenschutz, Sichtbarkeit und kontrolliertes Vergessen.
+
+Scope-Grenze:
+
+```text
+Recherche
+→ neues Wissen finden und verifizieren
+
+Wissensmanagement
+→ Wissen dauerhaft strukturieren, verbinden und pflegen
+
+Context Engineering
+→ den richtigen Ausschnitt für die aktuelle Aufgabe laden
+
+Dokumentation
+→ Wissen zielgruppengerecht vermitteln
+
+RAG / Vector Search
+→ mögliche technische Retrieval-Implementierung
+```
+
+Operative Skills:
+
+- `knowledge-base-design`;
+- `knowledge-ingest`;
+- `knowledge-distill`;
+- `knowledge-synthesis`;
+- `knowledge-maintenance`;
+- `knowledge-query`;
+- `knowledge-base-review`.
+
+Obsidian, Notion, Vektorstores oder Knowledge Graphs sind mögliche Adapter. Ihre konkreten Mechanismen werden nicht zur universellen Wissensmanagementregel erklärt.
+
+> Eine Wissensbasis soll nach einem Ingest nicht nur größer, sondern besser werden.
 
 ## Dokumentationserstellung
 
@@ -344,9 +396,12 @@ Erste Evalpacks bestehen unter anderem für:
 - `skill-authoring`;
 - alle sieben Datenbank-Skills;
 - alle neun Testing-und-QA-Skills;
-- `context-engineering`, `context-audit`, `context-compaction` und `session-handoff`.
+- `context-engineering`, `context-audit`, `context-compaction` und `session-handoff`;
+- alle sieben Wissensmanagement-Skills.
 
 Die Context-Evals prüfen unter anderem fehlende Messfähigkeit, erfundene Tokenpräzision, Verlust kritischer Constraints bei Compaction, Handoff-Fortsetzungsfähigkeit und die Grenze zu Persistent Knowledge.
+
+Die Wissensmanagement-Evals prüfen unter anderem Search-before-Create, Provenance, sichere Merge-/Delete-Grenzen, Query-Grounding, Staleness-/Orphan-Behandlung und ehrliche Review-Coverage.
 
 ## Workflows / Recipes
 
@@ -363,7 +418,8 @@ Enthalten sind Recipes für:
 - Bildserien;
 - Datenbankänderungen;
 - Teststrategie und QA;
-- Long-Horizon-Agentenarbeit.
+- Long-Horizon-Agentenarbeit;
+- Aufbau und Pflege von Wissensbasen.
 
 > Skills bleiben klein. Workflows verbinden sie.
 
@@ -440,6 +496,8 @@ Für Datenbankarbeit gilt zusätzlich: Die zentralen Skills beschreiben Arbeitsw
 Für Testing gilt zusätzlich: Die zentralen Skills definieren Methodik und Evidence; konkrete Frameworks, Testumgebungen, Testdaten, Coverage-Ziele, Releasekriterien und produktive Testbefugnisse bleiben lokal.
 
 Für Context-/Token-Arbeit gilt zusätzlich: konkrete Modellfenster, Tokenpreise, Cache-Semantik, Compaction-APIs, Thread-Persistenz, Tool-Schema-Kosten und Runtime-Grenzen bleiben provider- beziehungsweise projektspezifisch. Dauerhafte Wissensbasen werden nicht mit Working Context gleichgesetzt.
+
+Für Wissensmanagement gilt zusätzlich: konkrete Knowledge-Base-Software, Ordner-/Property-Schema, Taxonomie, reale Sources of Truth, Zugriffs- und Datenschutzklassen, Retention-Regeln sowie Bulk-Write-/Delete-Freigaben bleiben lokal.
 
 Für Auswahl und Dokumentation zentraler Regeln kann `Vorlagen/ki-regeln.template.yml` als Ausgangspunkt verwendet werden.
 

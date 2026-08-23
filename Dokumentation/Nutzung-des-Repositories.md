@@ -197,7 +197,7 @@ Persistent Knowledge
 → dauerhaftes Wissen über Tasks hinweg
 ```
 
-Die ersten beiden Ebenen gehören zur Agentenarbeit. Eine dauerhafte Wissensbasis ist kein Ersatz für Context Engineering und wird getrennt behandelt.
+Die ersten beiden Ebenen gehören zur Agentenarbeit. Persistent Knowledge wird über den Bereich `Wissensmanagement/` gepflegt und ist kein Ersatz für Context Engineering.
 
 Context-/Token-Effizienz bedeutet dabei nicht, Tokens um jeden Preis zu minimieren. Relevante Constraints, Entscheidungen, Evidence und Sources of Truth dürfen nicht für eine künstliche Zielquote weggekomprimiert werden.
 
@@ -296,6 +296,52 @@ Lokal bleiben:
 - zulässige Datenräume;
 - Freshness;
 - fachliche Bewertungskriterien.
+
+## Beispiel: Wissensbasis
+
+Workflow:
+
+`../Workflows/Wissensbasis-Aufbauen-und-Pflegen.md`
+
+Kern:
+
+```text
+knowledge-base-design
+→ knowledge-ingest
+→ knowledge-distill
+→ optional knowledge-synthesis
+→ knowledge-query
+→ wiederkehrend knowledge-maintenance
+→ bei größeren Meilensteinen knowledge-base-review
+```
+
+Wenn das Wissen erst extern erarbeitet werden muss:
+
+```text
+research-plan / deep-research
+→ source-evaluation
+→ research-synthesis
+→ knowledge-ingest
+→ knowledge-distill
+```
+
+Für den Agentenlauf gilt anschließend:
+
+```text
+Persistent Knowledge
+→ knowledge-query / Retrieval
+→ context-engineering
+→ Active Context
+```
+
+Lokal bleiben insbesondere:
+
+- konkretes Tool wie Obsidian, Notion oder eine andere Knowledge Base;
+- Ordner-, Property-, Relation- oder Taxonomieschema;
+- reale Sources of Truth und erlaubte Quellräume;
+- Datenschutz-, Sichtbarkeits- und Retention-Regeln;
+- technische Retrieval-/RAG-Implementierung;
+- Freigaben für Bulk-Ingest, Mass-Merge, Rewrites und Delete.
 
 ## Beispiel: Technische Dokumentation
 
