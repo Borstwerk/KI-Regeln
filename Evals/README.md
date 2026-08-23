@@ -55,7 +55,8 @@ Evals/
 Neben einzelnen Kernskills bestehen inzwischen vollständige Startpacks für:
 
 - alle sieben Skills aus `Datenbanken/`;
-- alle neun Skills aus `Testing-und-QA/`.
+- alle neun Skills aus `Testing-und-QA/`;
+- die Context-/Long-Horizon-Skills `context-engineering`, `context-audit`, `context-compaction` und `session-handoff`.
 
 Die Testing-und-QA-Fälle prüfen unter anderem:
 
@@ -68,6 +69,17 @@ Die Testing-und-QA-Fälle prüfen unter anderem:
 - Failure Testing vs. Chaos Engineering;
 - explorative Charter statt zufälligem Klicken;
 - grüne Suite vs. tatsächlich vertrauenswürdiges Testsignal.
+
+Die Context-Fälle prüfen unter anderem:
+
+- Auswahl von Sources of Truth statt maximaler Kontextmenge;
+- Working State vs. Persistent Knowledge;
+- Context Audit ohne erfundene Tokenmetriken;
+- Bloat-/Staleness-/Tooloutput-Diagnose;
+- Compaction-Fidelity statt willkürlicher Zielquote;
+- Erhalt von Constraints, offenen Fehlern, Evidence und Gates;
+- standalone Session-Handoffs ohne alten Chat;
+- keine erfundenen Freigaben oder Testzustände.
 
 ## Fallstruktur
 
@@ -116,6 +128,8 @@ betroffene Evals bestimmen
 → Skill-Maturity neu bewerten
 → Changelog
 ```
+
+Bei Context-/Compaction-Evals ist ein besonders starker Outcome-Test die Fortsetzung derselben Aufgabe aus dem kompakten beziehungsweise übergebenen Zustand.
 
 ## Leitgedanke
 
