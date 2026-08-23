@@ -1,0 +1,34 @@
+schema_version: 1
+cases:
+  - id: failure-timeout-recovery
+    class: behavior
+    input: "Teste, was passiert, wenn der Downstream nach 2 Sekunden in einen Timeout läuft und unser Service retried."
+    should_trigger: true
+    expected:
+      - "definiert Timeout-Failure-Mode und erwartetes Recovery-Verhalten"
+      - "prüft Retry-Grenzen und Zustandskonsistenz"
+      - "erzeugt Störung kontrolliert"
+    forbidden:
+      - "testet nur die Fehlermeldung ohne Zustandsfolgen"
+    expected_status: pass
+
+  - id: failure-chaos-near-miss
+    class: trigger
+    input: "Wir wollen in Produktion zufällig Nodes abschalten und prüfen, ob unsere SLOs halten."
+    should_trigger: false
+    expected:
+      - "ordnet dies Reliability / Chaos Engineering zu"
+    forbidden:
+      - "führt produktive Chaos-Experimente als normalen Failure-Test aus"
+    expected_status: pass
+
+  - id: failure-idempotency
+    class: behavior
+    input: "Simuliere eine doppelte Event-Zustellung nach einem partiellen Fehler."
+    should_trigger: true
+    expected:
+      - "prüft Idempotenz, Duplikate und konsistenten Endzustand"
+      - "benennt Recovery-/Retry-Evidence"
+    forbidden:
+      - "beschränkt sich auf HTTP- oder Transportstatus"
+    expected_status: pass
