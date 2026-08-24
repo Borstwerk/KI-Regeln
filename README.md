@@ -10,8 +10,8 @@ Ziel ist keine persönliche KI-Konfiguration und keine projektspezifische Wissen
 
 Das bedeutet:
 
-- allgemeine Kommunikations-, Reflexions-, Recherche-, Wissensmanagement-, Schnittstellen-/Contract-, Infrastruktur-/DevOps-, Reliability-/System-Observability-, Data-Engineering-, Dokumentations-, Schreib-, Bild-, Web-, Datenbank-, Testing-, Agenten-, Sicherheits- und Entwicklungsregeln liegen hier;
-- projektspezifische Anforderungen, Architektur, Research-Fragen, interne Quellen, Wissensbestände, Fachmodelle, reale Schnittstellen/Consumer, Data-Engineering-Sources-of-Truth und Grains, Infrastrukturtools/Provider/Accounts/Cluster, reales Datenbankschema, konkrete Testumgebung, SLO-Werte, Alert-Schwellen, Severity-/On-Call-Modelle, RTO/RPO, Capacity Limits, Recovery-/Failover-Regeln, Markenregeln, visuelle Bibeln und Sonderregeln bleiben im jeweiligen Projekt;
+- allgemeine Kommunikations-, Reflexions-, Recherche-, Wissensmanagement-, Schnittstellen-/Contract-, Infrastruktur-/DevOps-, Reliability-/System-Observability-, Data-Engineering-, Software-Architecture-/System-Design-, Dokumentations-, Schreib-, Bild-, Web-, Datenbank-, Testing-, Agenten-, Sicherheits- und Entwicklungsregeln liegen hier;
+- projektspezifische Anforderungen, Architecture Drivers und Constraints, Systemgrenzen, Ownership, konkrete Architekturentscheidungen, Research-Fragen, interne Quellen, Wissensbestände, Fachmodelle, reale Schnittstellen/Consumer, Data-Engineering-Sources-of-Truth und Grains, Infrastrukturtools/Provider/Accounts/Cluster, reales Datenbankschema, konkrete Testumgebung, SLO-Werte, Alert-Schwellen, Severity-/On-Call-Modelle, RTO/RPO, Capacity Limits, Recovery-/Failover-Regeln, Markenregeln, visuelle Bibeln und Sonderregeln bleiben im jeweiligen Projekt;
 - persönliche Profile oder unnötige personenbezogene Details gehören nicht in dieses Repository;
 - ein Skill ersetzt niemals die tatsächliche Spezifikation oder Dokumentation eines Projekts.
 
@@ -40,6 +40,7 @@ KI-Regeln/
 ├── Infrastruktur-und-DevOps/
 ├── Reliability-und-System-Observability/
 ├── Data-Engineering/
+├── Software-Architecture-und-System-Design/
 ├── Dokumentationserstellung/
 ├── Schreiben/
 ├── Bildarbeit/
@@ -419,6 +420,9 @@ Reliability und System-Observability
 
 Infrastruktur und DevOps
 → Scheduler-, Compute-, Storage- und Deployment-Runtime
+
+Software Architecture
+→ Systemgrenzen, Ownership und strukturelle Plattform-/Deployable-Entscheidungen
 ```
 
 Operative Skills:
@@ -451,6 +455,69 @@ Airflow, Dagster, dbt, Kafka, Flink, Spark, Beam, Snowflake, BigQuery, Databrick
 Sources of Truth, Grain, Qualitäts-/Freshness-Regeln, Retention, reale Consumer, Data-Contract-Zusagen, Backfill-/Replay-Scope und Publish-/Execution-Gates bleiben projektspezifisch.
 
 > Eine Pipeline ist nicht korrekt, weil sie lief, sondern wenn richtige Daten mit nachvollziehbarer Semantik und Evidence beim vorgesehenen Consumer ankommen.
+
+## Software Architecture und System Design
+
+Technologie- und providerneutrale Regeln für Systemstruktur, Verantwortungsgrenzen, Runtime-Flows, Trade-offs und evolutionäre Architekturänderungen.
+
+Der Bereich behandelt insbesondere:
+
+- Architecture Drivers, Constraints, Annahmen und Missing Evidence;
+- System Context, Akteure, externe Systeme und Verantwortungsgrenzen;
+- Module, Komponenten, Services, Ownership und Dependency Direction;
+- kritische Runtime- und Failure-Flows sowie State-/Coordination-Fragen;
+- Architecture Styles und Patterns als Optionen statt Reifeleiter;
+- konkrete Quality-Szenarien, Sensitivity Points und Trade-offs;
+- einfachstes tragfähiges Systemdesign vor unnötiger Verteilung;
+- Technologieauswahl nach Drivers und Struktur;
+- evolutionäre Migration, Compatibility und Zwischenzustände;
+- C4-/Runtime-/Deployment-Views und ADR-Anbindung als Evidence;
+- Architecture Conformance, Fitness Functions und Drift;
+- unabhängige Architektur- und Readiness-Reviews.
+
+Scope-Grenze:
+
+```text
+Requirements / lokale Stakeholderziele
+→ was das System leisten und welche Qualitätsziele es erfüllen muss
+
+Software Architecture und System Design
+→ welche Struktur diese Drivers und Invarianten mit welchen Trade-offs erfüllt
+
+Schnittstellen / Datenbanken / Data Engineering / Reliability / Infrastruktur
+→ wie die jeweiligen Fachmechaniken konkret ausgestaltet und betrieben werden
+
+Programmieren
+→ konkrete Implementierung innerhalb der freigegebenen Struktur
+```
+
+Operative Skills:
+
+- `architecture-baseline`;
+- `system-design`;
+- `architecture-decomposition`;
+- `architecture-tradeoff-analysis`;
+- `architecture-evolution`;
+- `architecture-conformance-review`;
+- `architecture-review`.
+
+Zentrale Trennungen:
+
+```text
+Pattern ≠ Architekturentscheidung
+Diagramm ≠ Architektur
+Soll-Architektur ≠ Ist-Architektur
+Bounded Context ≠ Microservice
+Teamgröße ≠ Service-Split-Gate
+Architecture Review ≠ Implementierungsfreigabe
+Migrationsplan ≠ Cutover-Autorisierung
+```
+
+Microservices, Modular Monolith, Layered, Hexagonal, DDD, CQRS, Event Sourcing, Saga, Strangler, Event-driven und andere Styles/Patterns bleiben Werkzeuge. Kein Pattern ist zentraler Pflichtdefault.
+
+Architecture Drivers, Quality-Ziele, Systemgrenzen, Ownership, akzeptierte ADRs, Last-/Recoverygrenzen, Plattformconstraints sowie Migration-/Cutover-Gates bleiben projektspezifisch.
+
+> Erst Driver und Invarianten, dann Struktur, dann Technologie.
 
 ## Dokumentationserstellung
 
@@ -628,7 +695,7 @@ Operative Skills:
 
 `skill-catalog.yml` ist das maschinenlesbare Inventar der zentralen Skills.
 
-Aktuell enthält der Katalog 104 zentrale Skills.
+Aktuell enthält der Katalog 111 zentrale Skills.
 
 Reifestufen:
 
@@ -678,7 +745,8 @@ Erste Evalpacks bestehen unter anderem für:
 - alle fünf Schnittstellen-/Contract-Skills;
 - alle sieben Infrastruktur-/DevOps-Skills;
 - alle acht Reliability-/System-Observability-Skills;
-- alle neun Data-Engineering-Skills.
+- alle neun Data-Engineering-Skills;
+- alle sieben Software-Architecture-/System-Design-Skills.
 
 Die Context-Evals prüfen unter anderem fehlende Messfähigkeit, erfundene Tokenpräzision, Verlust kritischer Constraints bei Compaction, Handoff-Fortsetzungsfähigkeit und die Grenze zu Persistent Knowledge.
 
@@ -695,6 +763,10 @@ Für die acht Reliability-Skills sind 48 Startfälle definiert; der erste Same-M
 Die Data-Engineering-Evals prüfen unter anderem Source-of-Truth-/Grain-Lücken, DB-/Event-/Testing-Near-Misses, CDC/Replay, `updated_at`-/exactly-once-Dogmen, historische Backfill-Semantik, Star-Schema-Dogma, Freshness-/Quality-Evidence, Data-Contract-Compatibility, Design-vs.-Runtime-Lineage, Retry/Catchup und produktive Datenänderungs-Gates.
 
 Für die neun Data-Engineering-Skills sind 54 Startfälle definiert. Diese 54 Fälle sind **noch nicht ausgeführt oder bestanden**.
+
+Die Software-Architecture-/System-Design-Evals prüfen unter anderem alte Diagramme als unzureichende Ist-Evidence, ADR-/Code-Konflikte, Microservice-/Teamgrößen-/Shared-DB-Dogmen, erfundene Qualitätsziele, künstliche Kandidaten, opaque Architecture Scores, Big-Bang-Migrationen, Conformance ohne lokales Referenzmodell und implizite Implementierungs-/Deploymentfreigaben.
+
+Für die sieben Architecture-Skills sind 42 Startfälle definiert. Diese 42 Fälle sind **noch nicht ausgeführt oder bestanden**.
 
 ## Workflows / Recipes
 
@@ -725,7 +797,12 @@ Enthalten sind Recipes für:
 - neue Datenquellen und Ingestion;
 - Datenqualitätsstörungen und Reconciliation;
 - Backfills und Reprocessing;
-- Data Engineering Readiness Reviews.
+- Data Engineering Readiness Reviews;
+- Architektur-Baseline und Systemdesign;
+- Architekturentscheidungen und Trade-offs;
+- Systemgrenzen und Dekomposition;
+- evolutionäre Architekturänderungen;
+- Architektur Readiness Reviews.
 
 > Skills bleiben klein. Workflows verbinden sie.
 
@@ -814,6 +891,8 @@ Für Infrastruktur-/DevOps-Arbeit gilt zusätzlich: konkrete IaC-/CI-/GitOps-/Co
 Für Reliability-/System-Observability-Arbeit gilt zusätzlich: konkrete SLO-/SLA-Ziele, Alert-Schwellen, Severity-/On-Call-Modelle, RTO/RPO, Capacity-/Quota-Limits, Telemetrieprodukte, Dashboards, Runbooks, Recovery-/Failover-Regeln und Produktionsgates bleiben lokal. Incident-Dringlichkeit oder ein geplanter Game Day erweitern keine Tool- oder Produktionsrechte.
 
 Für Data-Engineering-Arbeit gilt zusätzlich: reale Sources of Truth, fachlicher Grain, Consumer, Quality-/Freshness-/Reconciliation-Regeln, Data-Contract-Zusagen, Retention, Plattform-/Toolwahl, historische Semantik sowie Backfill-/Replay-/Publish-Gates bleiben lokal. Job-, DAG-, Contract- oder Quality-Grün autorisieren keine reale Datenänderung automatisch.
+
+Für Software-Architecture-/System-Design-Arbeit gilt zusätzlich: Architecture Drivers, Constraints, fachliche und technische Invarianten, Quality-Ziele, Systemgrenzen, Ownership, akzeptierte ADRs, Last-/Recoverygrenzen, Plattformconstraints, Migrationsfenster und Cutover-/Implementierungsfreigaben bleiben lokal. Ein Architecture Verdict oder Pattern-Fit autorisiert keine reale Änderung automatisch.
 
 Für Auswahl und Dokumentation zentraler Regeln kann `Vorlagen/ki-regeln.template.yml` als Ausgangspunkt verwendet werden.
 
