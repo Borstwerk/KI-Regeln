@@ -8,6 +8,35 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Infrastruktur und DevOps
+
+Neuer tool- und providerneutraler Hauptbereich für Infrastructure as Code, Delivery-Automation und kontrollierte Infrastrukturänderungen:
+
+- klare Zustandsgrenze `Desired State ≠ Actual State` mit expliziter Ownership von Configuration, Tool-/Controller-State und realem Zielzustand;
+- Infrastructure as Code als reviewbare und reproduzierbare Zustandsbeschreibung statt Terraform-spezifische Universalregel modelliert;
+- Drift als Befund mit bewusster Entscheidung zwischen Übernahme in Desired State und Rückführung des Actual State statt automatischer Korrekturanweisung;
+- Change Preview, Plan, Review, Gate und Apply als getrennte Schritte mit der Grundregel `Preview ≠ Apply` und `Plan Review ≠ Apply Authorization`;
+- Freshness von Plans/Previews und Grenzen von Dry-Run-/Simulationsevidence ausdrücklich berücksichtigt;
+- Risikoklassen `READ / VALIDATE`, `BUILD`, `PLAN / PREVIEW`, `CHANGE / DEPLOY` und `DESTRUCTIVE / STATE / RECOVERY`;
+- Environment-Parität als kontrollierte, dokumentierte Unterschiede statt Dogma „nur Values dürfen differieren“;
+- CI-Pipelines als Orchestrierung von Triggern, DAG, Artifacts, Caches, Credentials, Environment-Grenzen und Gates; Teststrategie bleibt `Testing-und-QA/`;
+- Build-Artefakte, Identität, Provenance und Reproduzierbarkeit mit Trennung `Build ≠ Deploy ≠ Release`;
+- Container Build und Runtime Contract ohne Dockerpflicht, einschließlich Build-/Runtime-Trennung, Base-/Dependency-Pinning, Secret-Hygiene, Signals, Health und Runtime-Konfiguration;
+- Deploymentstrategien Rolling, Blue-Green, Canary, Shadow, Recreate und Feature-gated Release risikobasiert statt als Pflichtmuster;
+- Promotion, Pause, Abort und Rollback mit lokaler Health-/SLO-Evidence; konkrete Health-Schwellen bleiben beim späteren Reliability-/Produktkontext;
+- Rollback ausdrücklich nicht als Undo bereits erfolgter Datenänderungen, Events oder externer Nebenwirkungen behandelt;
+- GitOps als eigener fachlicher Schnitt wegen Continuous Reconciliation und dauerhafter Controller-Autorität; Desired-State-Merge kann bei Auto-Reconcile eine extern wirksame Aktion sein;
+- Kubernetes als wichtige Referenzplattform für Controller, Workloads und Rollouts, aber nicht als universelle Infrastrukturvoraussetzung;
+- Policy as Code als technische Decision-/Enforcement-Schicht eingeordnet; Inhalt von Security Policies bleibt `Sicherheit/`;
+- Secrets, Permissions und Execution Boundaries mit getrennten Rechten für Read/Validate, Build, Preview und reale Change-/Recovery-Aktionen;
+- Skills `infrastructure-as-code`, `infrastructure-change-review`, `ci-pipeline-design`, `container-build`, `deployment-strategy`, `gitops-design` und `infrastructure-review`;
+- alle sieben Skills starten `experimental` mit `partial` Evalabdeckung;
+- Evalpacks für alle sieben Skills mit Drift-, stale-Preview-, destructive-Change-, Secret-/Fork-, Container-Runtime-, Rollback-, GitOps- und Evidence-Grenzfällen;
+- Workflows `Workflows/Infrastruktur-Aenderung.md` und `Workflows/Build-Deploy-und-Promotion.md`;
+- menschliches `Dokumentation/Skill-Handbuch-Infrastruktur-und-DevOps.md`;
+- Quellenbasis aus Terraform, OpenTofu, Kubernetes, OpenGitOps, Argo CD/Rollouts, OPA, SLSA, Docker Build sowie aktuellen offiziellen und Community-Agent-Skills;
+- keine provider-/tool-spezifischen Defaults, festen Canary-Schwellen oder automatischen Apply-/Deploy-Freigaben zur zentralen Wahrheit erklärt.
+
 ### Schnittstellen und Verträge
 
 Neuer technologieübergreifender Hauptbereich für Interface- und Contract-Engineering:
@@ -160,7 +189,8 @@ Neu beziehungsweise erweitert:
 - `context-audit`, `context-compaction` und `session-handoff` als `experimental` mit `partial` Evalabdeckung;
 - sieben Wissensmanagement-Skills als `experimental` mit `partial` Evalabdeckung ergänzt;
 - fünf Schnittstellen-/Contract-Skills als `experimental` mit `partial` Evalabdeckung ergänzt;
-- Gesamtbestand auf 80 zentrale Skills erweitert.
+- sieben Infrastruktur-/DevOps-Skills als `experimental` mit `partial` Evalabdeckung ergänzt;
+- Gesamtbestand auf 87 zentrale Skills erweitert.
 
 ### Evals
 
@@ -175,6 +205,7 @@ Bereich `Evals/` erweitert:
 - zusätzliche Evalpacks für `context-engineering`, `context-audit`, `context-compaction` und `session-handoff`, unter anderem zu fehlender Tokenmessung, Context Bloat, Compaction-Verlust, erfundenen Freigaben und Persistent-Knowledge-Near-Misses;
 - zusätzliche Evalpacks für alle sieben Wissensmanagement-Skills, unter anderem zu Tool-Bias, Search-before-Create, Provenance, sensibler Persistenz, Bulk-Gates, Distillation, Synthese-Evidence, Duplicate-/Orphan-Entscheidungen, Retrieval und Review-Coverage;
 - zusätzliche Evalpacks für alle fünf Schnittstellen-/Contract-Skills, unter anderem zu Transportdogma, Framework-Near-Misses, Datenbankmodell-Leaks, unbekannten Enum-Werten, Source-/Wire-Trennung, rollout-sensitive Changes und fehlenden Baselines;
+- zusätzliche Evalpacks für alle sieben Infrastruktur-/DevOps-Skills, unter anderem zu Drift, State-Sensitivität, stale Previews, destructive Replacements, CI-Secret-Grenzen, Container-Runtime-Verträgen, Rollback-Grenzen und GitOps-Reconciliation;
 - Skill-Katalog für diese Skills auf `eval_coverage: partial` aktualisiert.
 
 ### Sicherheit
@@ -208,7 +239,9 @@ Bereich zur bewussten Skill-Komposition mit Recipes für:
 - Teststrategie und QA;
 - Long-Horizon-Agentenarbeit;
 - Aufbau und Pflege persistenter Wissensbasen;
-- Entwurf und Änderung von Schnittstellenverträgen.
+- Entwurf und Änderung von Schnittstellenverträgen;
+- kontrollierte Infrastrukturänderungen;
+- Build, Deploy und Promotion.
 
 Grundregel: Skills bleiben begrenzte Disziplinen; wiederkehrende Skill-Ketten werden als Workflow statt als Mega-Skill modelliert.
 
@@ -256,11 +289,12 @@ Erweitert und vollständig auditiert:
 - Context-/Long-Horizon-Upstreams aus Anthropic, OpenAI, LangChain und OpenTelemetry semantisch sowie `context-doctor` und OpenClaw `handoff` per Blob-SHA registriert;
 - Wissensmanagement-Upstreams aus KCS und OpenAI Retrieval semantisch sowie `obsidian-wiki`, `obsidian-second-brain` und `knowledge-distill` per Blob-SHA registriert;
 - Schnittstellen-/Contract-Upstreams aus OpenAPI, Google AIPs, GraphQL, Protobuf und AsyncAPI semantisch sowie drei konkret verwendete API-/Event-Skills per Blob-SHA registriert;
+- Infrastruktur-/DevOps-Upstreams aus Terraform, OpenTofu, Kubernetes, OpenGitOps, Argo Rollouts, OPA, SLSA und Docker Build semantisch sowie HashiCorp-, Flux- und ausgewählte IaC/CI/Container/Deployment-Skills per Blob-SHA registriert;
 - stabile HTTP-/Problem-Details-/Deprecation-RFCs und weitere formatbezogene Referenzen bewusst in der Fachquellendatei statt als künstliche schnelle Sync-Dependencies geführt;
 - W3C PROV, ISO 30401 und toolbezogene Hilfedokumentation als stabile Fachreferenzen im Bereich dokumentiert statt künstlich als schnelle mutable Dependencies zu behandeln;
 - Papers, datierte Research-Artikel und reine Discovery-Kataloge bewusst nicht als künstliche Sync-Dependencies behandelt;
 - Grundregel bleibt: Upstream-Änderung ist Review-Signal, kein automatischer Sync;
-- monatlicher `KI-Regeln Monatscheck` auf das Monitoring-Schema und die neuen Fach-/Discovery-Felder erweitert.
+- monatlicher `KI-Regeln Monatscheck` auf das Monitoring-Schema und Infrastruktur/DevOps als eigenes Fachfeld erweitert.
 
 ### Recherche
 
@@ -300,9 +334,9 @@ Neuer Hauptbereich für Gestaltung und Entwicklung von Websites und Weboberfläc
 
 Aktualisiert:
 
-- Haupt-README um `Webentwicklung/`, `Recherche/`, `Wissensmanagement/`, `Schnittstellen-und-Vertraege/`, `Dokumentationserstellung/`, `Skill-Engineering/`, `Sicherheit/`, `Evals/`, `Workflows/`, `Datenbanken/` und `Testing-und-QA/` erweitert und um Context-/Long-Horizon-Agentenarbeit geschärft;
-- menschliche Doku um Quellenregister, vollständigen Upstream-Audit, Skill-Katalog und zusätzliche Skill-Handbücher einschließlich `Skill-Handbuch-Context-und-Long-Horizon.md`, `Skill-Handbuch-Wissensmanagement.md` und `Skill-Handbuch-Schnittstellen-und-Vertraege.md` ergänzt;
-- Projektmanifest und Nutzungsanleitung um Research-, Wissensmanagement-, Schnittstellen-/Contract-, Web-, Dokumentations-, Datenbank-, Testing-/QA- und Long-Horizon-Arbeit ergänzt.
+- Haupt-README um `Webentwicklung/`, `Recherche/`, `Wissensmanagement/`, `Schnittstellen-und-Vertraege/`, `Infrastruktur-und-DevOps/`, `Dokumentationserstellung/`, `Skill-Engineering/`, `Sicherheit/`, `Evals/`, `Workflows/`, `Datenbanken/` und `Testing-und-QA/` erweitert und um Context-/Long-Horizon-Agentenarbeit geschärft;
+- menschliche Doku um Quellenregister, vollständigen Upstream-Audit, Skill-Katalog und zusätzliche Skill-Handbücher einschließlich `Skill-Handbuch-Context-und-Long-Horizon.md`, `Skill-Handbuch-Wissensmanagement.md`, `Skill-Handbuch-Schnittstellen-und-Vertraege.md` und `Skill-Handbuch-Infrastruktur-und-DevOps.md` ergänzt;
+- Projektmanifest und Nutzungsanleitung um Research-, Wissensmanagement-, Schnittstellen-/Contract-, Infrastruktur-/DevOps-, Web-, Dokumentations-, Datenbank-, Testing-/QA- und Long-Horizon-Arbeit ergänzt.
 
 ## v2026.08
 
