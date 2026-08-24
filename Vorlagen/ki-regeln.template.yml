@@ -72,6 +72,17 @@ skills:
   # - Reliability-und-System-Observability/Skills/resilience-experiment
   # - Reliability-und-System-Observability/Skills/reliability-review
 
+  # Data Engineering
+  # - Data-Engineering/Skills/data-pipeline-design
+  # - Data-Engineering/Skills/data-ingestion-design
+  # - Data-Engineering/Skills/data-transformation-design
+  # - Data-Engineering/Skills/analytical-data-modeling
+  # - Data-Engineering/Skills/data-quality-design
+  # - Data-Engineering/Skills/data-contract-design
+  # - Data-Engineering/Skills/data-lineage-analysis
+  # - Data-Engineering/Skills/data-orchestration-design
+  # - Data-Engineering/Skills/data-engineering-review
+
   # Dokumentationserstellung
   # - Dokumentationserstellung/Skills/docs-plan
   # - Dokumentationserstellung/Skills/technical-writing
@@ -160,6 +171,11 @@ workflows:
   # - Workflows/Post-Incident-Learning.md
   # - Workflows/Resilience-Game-Day.md
   # - Workflows/Operational-Readiness-Review.md
+  # - Workflows/Data-Pipeline-Baseline-und-Design.md
+  # - Workflows/Neue-Datenquelle-und-Ingestion.md
+  # - Workflows/Datenqualitaetsstoerung-und-Reconciliation.md
+  # - Workflows/Backfill-und-Reprocessing.md
+  # - Workflows/Data-Engineering-Readiness-Review.md
 
 quality_policy:
   minimum_maturity: "<project-decision>"
@@ -186,3 +202,6 @@ notes:
   - Preview, Plan oder CI-Grün autorisieren keine reale Infrastrukturänderung automatisch.
   - SLO-Werte, Alert-Schwellen, Severity-/On-Call-Modelle, RTO/RPO, Capacity Limits, Recovery-/Failover-Regeln und konkrete Observability-Tools bleiben projektspezifisch.
   - Ein Incident oder Resilience-Experiment erweitert keine Produktionsrechte. Fault Injection, Restart, Failover, Restore, Traffic Switch und andere reale Betriebsaktionen bleiben lokal gated.
+  - Data-Engineering-Sources of Truth, fachlicher Grain, Qualitäts-/Reconciliation-Regeln, Freshness-Semantik, Retention, Data-Contract-Zusagen und Consumer bleiben projektspezifisch.
+  - Toolwahl für Orchestrierung, Streaming, Transformation, Storage und Lineage bleibt projektspezifisch; Airflow, dbt, Kafka, Beam, Spark oder OpenLineage sind keine zentralen Pflichtdefaults.
+  - Publish, Backfill, Replay, Offset-/Cursor-Reset, Partition-Replace und andere reale Datenänderungen bleiben lokal gated. Ein grüner DAG oder Quality Check autorisiert diese Aktionen nicht automatisch.
