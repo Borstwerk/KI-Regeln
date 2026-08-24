@@ -38,6 +38,9 @@ Typische Themenfelder:
 - Data Engineering, ETL/ELT und Datenpipelines;
 - Batch-/Streaming-Semantik, CDC, Orchestrierung und Reprocessing;
 - Data Quality, Data Contracts, Lineage und analytische Datenmodellierung;
+- Software Architecture und System Design;
+- Architecture Drivers, Quality Attributes und Trade-off-Analyse;
+- Systemgrenzen, Dekomposition, Architektur-Evolution und Conformance;
 - Reflexion, Lernen und Selbstverbesserung mit KI;
 - neue Sicherheits-, Governance- oder Evaluationsansätze.
 
