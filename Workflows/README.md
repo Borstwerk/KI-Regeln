@@ -40,6 +40,11 @@ Ein Workflow ist deshalb **kein neuer Mega-Skill**.
 - `Schnittstellenvertrag-Entwerfen-und-Aendern.md`
 - `Infrastruktur-Aenderung.md`
 - `Build-Deploy-und-Promotion.md`
+- `Reliability-Baseline-und-SLOs.md`
+- `Produktionsincident.md`
+- `Post-Incident-Learning.md`
+- `Resilience-Game-Day.md`
+- `Operational-Readiness-Review.md`
 
 ## Workflow-Handoff
 
