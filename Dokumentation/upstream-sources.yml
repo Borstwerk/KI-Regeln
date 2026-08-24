@@ -516,6 +516,75 @@ sources:
       - Workflows/Build-Deploy-und-Promotion.md
 
   # ---------------------------------------------------------------------------
+  # Reliability und System-Observability
+  # ---------------------------------------------------------------------------
+  - id: opentelemetry-signals
+    area: Reliability-und-System-Observability
+    kind: web-page
+    url: https://opentelemetry.io/docs/concepts/signals/
+    monitor_mode: semantic-review
+    cadence: monthly
+    last_checked: 2026-08-24
+    local_impact:
+      - Reliability-und-System-Observability/System-Observability-und-Telemetrie.md
+      - Reliability-und-System-Observability/Skills/system-observability-design/SKILL.md
+
+  - id: opentelemetry-semantic-conventions
+    area: Reliability-und-System-Observability
+    kind: web-page
+    url: https://opentelemetry.io/docs/specs/semconv/
+    monitor_mode: semantic-review
+    cadence: monthly
+    last_checked: 2026-08-24
+    local_impact:
+      - Reliability-und-System-Observability/System-Observability-und-Telemetrie.md
+      - Reliability-und-System-Observability/Skills/system-observability-design/SKILL.md
+
+  - id: arjun-slo-definition-skill
+    area: Reliability-und-System-Observability
+    kind: github-file
+    repository: arjunprabhulal/agent-skills
+    path: skills/sre/slo-definition/SKILL.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: 7bd532345ac98d2d8b38302e613ff351fddabaa9
+    last_checked: 2026-08-24
+    local_impact:
+      - Reliability-und-System-Observability/Reliability-Ziele-SLIs-SLOs-und-Error-Budgets.md
+      - Reliability-und-System-Observability/Skills/slo-design/SKILL.md
+
+  - id: arjun-capacity-planning-skill
+    area: Reliability-und-System-Observability
+    kind: github-file
+    repository: arjunprabhulal/agent-skills
+    path: skills/sre/capacity-planning/SKILL.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: a10e829e30486b8f662a4abd7c1b9b9f3f8a18e3
+    last_checked: 2026-08-24
+    local_impact:
+      - Reliability-und-System-Observability/Capacity-Saturation-und-Dependency-Health.md
+      - Reliability-und-System-Observability/Skills/capacity-planning/SKILL.md
+
+  - id: addyosmani-observability-instrumentation-skill
+    area: Reliability-und-System-Observability
+    kind: github-file
+    repository: addyosmani/agent-skills
+    path: skills/observability-and-instrumentation/SKILL.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: 7d56593ec599cce0bae12aa46862884d0208cc59
+    last_checked: 2026-08-24
+    local_impact:
+      - Reliability-und-System-Observability/System-Observability-und-Telemetrie.md
+      - Reliability-und-System-Observability/Alerting-und-Actionability.md
+      - Reliability-und-System-Observability/Skills/system-observability-design/SKILL.md
+      - Reliability-und-System-Observability/Skills/alert-design/SKILL.md
+
+  # ---------------------------------------------------------------------------
   # Schreiben
   # ---------------------------------------------------------------------------
   - id: wikipedia-signs-ai-writing
