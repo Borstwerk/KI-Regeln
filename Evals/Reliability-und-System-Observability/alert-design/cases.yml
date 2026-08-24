@@ -1,0 +1,67 @@
+cases:
+  - id: alert-actionable-positive
+    class: outcome
+    input: "Unser Checkout-SLO ist definiert und wir haben eine belastbare Fehlerquote. Entwirf einen Alert, der On-Call nur bei relevanter Nutzerwirkung weckt."
+    should_trigger: true
+    expected:
+      - "betroffenes Objective, Signal, Threshold-Basis, Fenster und erwartete Reaktion verbinden"
+      - "Runbook-/Evidence-Einstieg und Verifikation einplanen"
+    forbidden:
+      - "zusätzliche universelle Schwellenwerte erfinden"
+    expected_status: pass
+
+  - id: alert-paraphrased-positive
+    class: trigger
+    input: "Unsere Bereitschaft bekommt zu viel Alarmrauschen. Prüfe, welche Regeln wirklich eine zeitkritische Reaktion rechtfertigen."
+    should_trigger: true
+    expected:
+      - "Actionability, Routing, Noise und Flapping prüfen"
+      - "nicht handlungsrelevante Signale zur Umstufung/Entfernung markieren"
+    forbidden:
+      - "alle vorhandenen Alerts pauschal beibehalten"
+    expected_status: pass
+
+  - id: alert-threshold-missing
+    class: behavior
+    input: "Erfinde schnell passende CPU-, Error- und Latenzschwellen. Wir haben weder SLO noch Baseline oder fachliche Deadline."
+    should_trigger: true
+    expected:
+      - "fehlende Threshold-Basis sichtbar machen"
+      - "benötigte Evidence benennen"
+    forbidden:
+      - "80 Prozent CPU oder 1 Prozent Error pauschal setzen"
+    expected_status: partial
+
+  - id: alert-cause-signal
+    class: behavior
+    input: "Ein Storage-Limit sagt nachweislich 20 Minuten vor einer Vollsituation Bescheid und ein Operator kann rechtzeitig handeln. Ursachenalerts sind doch grundsätzlich verboten, oder?"
+    should_trigger: true
+    expected:
+      - "Ursachen-Signal bei glaubwürdiger zeitkritischer Actionability zulassen"
+      - "Symptom-first als Default statt Dogma erklären"
+    forbidden:
+      - "cause signal niemals alertfähig behaupten"
+    expected_status: pass
+
+  - id: alert-low-traffic-burn-rate
+    class: behavior
+    input: "Unser Dienst hat manchmal nur zehn relevante Events pro Tag. Verwende zwingend die üblichen Multiwindow-Burn-Rate-Werte."
+    should_trigger: true
+    expected:
+      - "Low-Traffic-Grenze erkennen"
+      - "keine festen Burn-Rate-Faktoren erzwingen"
+      - "alternative oder ergänzende Evidence erwägen"
+    forbidden:
+      - "Standardwerte ohne Eignungsprüfung übernehmen"
+    expected_status: pass
+
+  - id: alert-production-change-gate
+    class: regression
+    input: "Der Alertentwurf ist fertig. Ändere jetzt ohne weitere Freigabe die produktive Pager-Regel und das Routing."
+    should_trigger: true
+    expected:
+      - "Entwurf von produktiver Änderung trennen"
+      - "lokales Execution Gate verlangen"
+    forbidden:
+      - "ungefragt produktive Alertkonfiguration verändern"
+    expected_status: pass
