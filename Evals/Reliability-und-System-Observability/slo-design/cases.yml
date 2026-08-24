@@ -1,0 +1,71 @@
+cases:
+  - id: slo-critical-journey-positive
+    class: outcome
+    input: "Wir wollen für den Checkout ein SLO definieren. Die Produktanforderung sagt: mindestens 99,95 % der gültigen Bestellungen sollen erfolgreich abgeschlossen werden."
+    should_trigger: true
+    expected:
+      - "kritischen Checkout-Erfolg und gültige Events präzisieren"
+      - "SLI-Spezifikation von Messimplementierung trennen"
+      - "99,95 Prozent als lokale Vorgabe übernehmen statt neu erfinden"
+      - "Messfenster, Exclusions und Ownership klären"
+    forbidden:
+      - "andere Prozentzahl als angebliche Best Practice einsetzen"
+      - "Error Budget als automatische Deployfreigabe darstellen"
+    expected_status: pass
+
+  - id: slo-paraphrased-positive
+    class: trigger
+    input: "Wie machen wir aus 'der Import soll zuverlässig genug sein' eine messbare Zielgröße für Freshness und erfolgreiche Verarbeitung?"
+    should_trigger: true
+    expected:
+      - "Freshness/Completion als mögliche SLI-Spezifikation behandeln"
+      - "keine Request-Availability-Schablone erzwingen"
+    forbidden:
+      - "nur Uptime als zulässiges SLO verwenden"
+    expected_status: pass
+
+  - id: slo-missing-business-target
+    class: behavior
+    input: "Setz für unseren neuen internen Dienst einfach ein professionelles SLO. Anforderungen oder Baseline haben wir noch nicht."
+    should_trigger: true
+    expected:
+      - "keinen Zielwert als gültige Requirement erfinden"
+      - "Kandidaten höchstens als Vorschlag mit Trade-offs markieren"
+      - "fehlende Business-/Baseline-Evidence nennen"
+    forbidden:
+      - "99,9 oder 99,99 Prozent pauschal festlegen"
+    expected_status: partial
+
+  - id: slo-rto-rpo-near-miss
+    class: trigger
+    input: "Unsere Datenbank muss nach einem Rechenzentrumsausfall innerhalb von 30 Minuten wieder laufen und höchstens 5 Minuten Daten verlieren. Definiere daraus das SLO."
+    should_trigger: false
+    expected:
+      - "RTO und RPO als Recovery Objectives erkennen"
+      - "an Recovery-/Requirements-Kontext übergeben"
+    forbidden:
+      - "RTO/RPO in ein Availability-SLO umdeuten"
+    expected_status: pass
+
+  - id: slo-error-budget-governance
+    class: regression
+    input: "Das Error Budget ist aufgebraucht. Friere automatisch alle Deployments ein, egal welcher Grund oder welches lokale Gate gilt."
+    should_trigger: true
+    expected:
+      - "Error Budget als Entscheidungsinput behandeln"
+      - "lokale Error-Budget-Policy und Autorisierung verlangen"
+    forbidden:
+      - "automatischen globalen Freeze autorisieren"
+    expected_status: pass
+
+  - id: slo-measurement-gap
+    class: behavior
+    input: "Das SLO ist fachlich klar, aber wir haben keine Telemetrie, die den kritischen Nutzerflow tatsächlich misst."
+    should_trigger: true
+    expected:
+      - "SLI-Spezifikation trotzdem sauber festhalten"
+      - "Measurement Gap als unverified markieren"
+      - "an system-observability-design übergeben"
+    forbidden:
+      - "aus Server-CPU eine angebliche Nutzer-SLI ableiten"
+    expected_status: partial
