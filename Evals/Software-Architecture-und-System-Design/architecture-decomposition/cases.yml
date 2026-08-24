@@ -1,0 +1,66 @@
+cases:
+  - id: architecture-decomposition-positive
+    class: outcome
+    input: "Unser Modul Orders macht Bestellung, Zahlung, Versand und Benachrichtigung. Schneide sinnvolle Verantwortungsgrenzen und Dependency Directions, ohne automatisch Services daraus zu machen."
+    should_trigger: true
+    expected:
+      - "Verantwortung, Invarianten und Ownership als Boundary-Driver nutzen"
+      - "logische Modulgrenzen vor Deployable-Grenzen betrachten"
+      - "öffentliche Oberflächen und Dependency Direction beschreiben"
+    forbidden:
+      - "jede Capability automatisch zu einem Microservice machen"
+    expected_status: pass
+
+  - id: architecture-decomposition-service-split
+    class: trigger
+    input: "Prüfe, ob Billing wirklich als eigener Service herausgelöst werden sollte. Es hat andere Compliance-Grenzen und ein stark abweichendes Lastprofil."
+    should_trigger: true
+    expected:
+      - "Service-Split gegen konkrete Compliance-/Scale-Driver bewerten"
+      - "zusätzliche verteilte Kosten benennen"
+    forbidden:
+      - "Service-Split nur wegen Bounded-Context-Label empfehlen"
+    expected_status: pass
+
+  - id: architecture-decomposition-team-size-dogma
+    class: behavior
+    input: "Wir sind jetzt zehn Entwickler. Also müssen wir laut Best Practice auf Microservices wechseln. Plane die Aufteilung."
+    should_trigger: true
+    expected:
+      - "Teamgröße allein als unzureichenden Service-Split-Driver behandeln"
+      - "weitere Ownership-/Failure-/Scale-/Lifecycle-Evidence verlangen"
+    forbidden:
+      - "feste Teamgröße als Microservice-Schwelle verwenden"
+    expected_status: pass
+
+  - id: architecture-decomposition-class-near-miss
+    class: trigger
+    input: "Teile diese 500-Zeilen-Klasse in kleinere Klassen und Methoden auf."
+    should_trigger: false
+    expected:
+      - "an Code-/Komponentendesign übergeben"
+    forbidden:
+      - "Klassenzerlegung als Systemdekomposition behandeln"
+    expected_status: pass
+
+  - id: architecture-decomposition-shared-db-dogma
+    class: behavior
+    input: "Zwei Module nutzen dieselbe Datenbank. Markiere das automatisch als Architekturfehler und fordere getrennte Datenbanken."
+    should_trigger: true
+    expected:
+      - "Ownership, Write-Grenzen und Kopplungswirkung konkret prüfen"
+      - "Shared Database nicht pauschal verbieten"
+    forbidden:
+      - "eine Datenbank pro Modul oder Service als globale Regel erzwingen"
+    expected_status: pass
+
+  - id: architecture-decomposition-refactor-gate
+    class: regression
+    input: "Du hast Boundary-Verletzungen gefunden. Verschiebe jetzt ohne weiteren Auftrag alle Dateien, ändere Imports und splitte die Services."
+    should_trigger: true
+    expected:
+      - "Dekompositionsdesign von Sourcecode-Refactoring und Service-Split-Ausführung trennen"
+      - "separaten Implementierungsauftrag und Gates verlangen"
+    forbidden:
+      - "read-only Architekturarbeit als Codeänderungsfreigabe interpretieren"
+    expected_status: blocked
