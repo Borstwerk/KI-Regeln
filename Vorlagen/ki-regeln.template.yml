@@ -83,6 +83,15 @@ skills:
   # - Data-Engineering/Skills/data-orchestration-design
   # - Data-Engineering/Skills/data-engineering-review
 
+  # Software Architecture und System Design
+  # - Software-Architecture-und-System-Design/Skills/architecture-baseline
+  # - Software-Architecture-und-System-Design/Skills/system-design
+  # - Software-Architecture-und-System-Design/Skills/architecture-decomposition
+  # - Software-Architecture-und-System-Design/Skills/architecture-tradeoff-analysis
+  # - Software-Architecture-und-System-Design/Skills/architecture-evolution
+  # - Software-Architecture-und-System-Design/Skills/architecture-conformance-review
+  # - Software-Architecture-und-System-Design/Skills/architecture-review
+
   # Dokumentationserstellung
   # - Dokumentationserstellung/Skills/docs-plan
   # - Dokumentationserstellung/Skills/technical-writing
@@ -176,6 +185,11 @@ workflows:
   # - Workflows/Datenqualitaetsstoerung-und-Reconciliation.md
   # - Workflows/Backfill-und-Reprocessing.md
   # - Workflows/Data-Engineering-Readiness-Review.md
+  # - Workflows/Architektur-Baseline-und-Systemdesign.md
+  # - Workflows/Architekturentscheidung-und-Tradeoff.md
+  # - Workflows/Systemgrenze-und-Dekomposition.md
+  # - Workflows/Evolutionaere-Architekturaenderung.md
+  # - Workflows/Architektur-Readiness-Review.md
 
 quality_policy:
   minimum_maturity: "<project-decision>"
@@ -186,6 +200,18 @@ project_rules:
   # - AGENTS.md
   # - docs/architecture.md
   # - .ai/project-rules.md
+
+# Optionale projektspezifische Architekturwahrheit. Werte nie aus den zentralen
+# KI-Regeln ableiten, sondern nur aus lokaler Spezifikation, Evidence und Entscheidungen.
+architecture_context:
+  drivers: []
+  constraints: []
+  system_boundary: "<project-specific>"
+  external_systems: []
+  ownership_and_sources_of_truth: []
+  quality_attribute_targets: []
+  accepted_decisions_or_adrs: []
+  migration_and_cutover_constraints: []
 
 notes:
   - Lokale Projektregeln haben Vorrang vor allgemeinen Regeln.
@@ -205,3 +231,6 @@ notes:
   - Data-Engineering-Sources of Truth, fachlicher Grain, Qualitäts-/Reconciliation-Regeln, Freshness-Semantik, Retention, Data-Contract-Zusagen und Consumer bleiben projektspezifisch.
   - Toolwahl für Orchestrierung, Streaming, Transformation, Storage und Lineage bleibt projektspezifisch; Airflow, dbt, Kafka, Beam, Spark oder OpenLineage sind keine zentralen Pflichtdefaults.
   - Publish, Backfill, Replay, Offset-/Cursor-Reset, Partition-Replace und andere reale Datenänderungen bleiben lokal gated. Ein grüner DAG oder Quality Check autorisiert diese Aktionen nicht automatisch.
+  - Architecture Drivers, Constraints, Quality-Ziele, Systemgrenzen, Ownership, akzeptierte ADRs und Migrations-/Cutover-Bedingungen bleiben projektspezifisch.
+  - Microservices, DDD, Hexagonal, Event-driven, CQRS, Event Sourcing oder Cloud sind keine zentralen Pflichtarchitekturen.
+  - Ein Architektur-Verdict oder `READY_FOR_LOCAL_GATE` autorisiert keine Codeänderung, Migration, Traffic-Umschaltung, Deployment oder Release automatisch.
