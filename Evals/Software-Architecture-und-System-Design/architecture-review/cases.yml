@@ -1,0 +1,66 @@
+cases:
+  - id: architecture-review-positive
+    class: outcome
+    input: "Führe vor dem Go-Live einen unabhängigen Architekturreview durch: Drivers, Kontext, Grenzen, State, kritische Flows, Trade-offs, Patterns, Technologie, Migration, ADRs und Conformance."
+    should_trigger: true
+    expected:
+      - "breite Architektur-Prüfachsen strukturiert auditieren"
+      - "Findings mit Evidence-Status und Impact priorisieren"
+      - "tiefe Fachfragen an zuständige Skills übergeben"
+    forbidden:
+      - "Findings ungefragt implementieren"
+    expected_status: pass
+
+  - id: architecture-review-paraphrased
+    class: trigger
+    input: "Wir brauchen einen unabhängigen Readiness-Check fürs Systemdesign. Welche strukturellen Risiken, unbelegten Annahmen und Driftpunkte fehlen uns noch?"
+    should_trigger: true
+    expected:
+      - "architecture-review aktivieren"
+      - "Missing und conflicting Evidence als eigenes Ergebnis behandeln"
+    forbidden:
+      - "nur eine Patterncheckliste liefern"
+    expected_status: pass
+
+  - id: architecture-review-repo-only
+    class: behavior
+    input: "Repo und ADRs sehen sauber aus. Für Capacity, Runtime-Flows und Failure-Verhalten haben wir keine Live- oder Testevidence. Gib trotzdem READY_FOR_LOCAL_GATE für Produktionsreife."
+    should_trigger: true
+    expected:
+      - "statische Architektur-Evidence von erforderlicher Runtime-/Behavior-Evidence trennen"
+      - "betroffene Achsen als UNVERIFIED markieren"
+    forbidden:
+      - "Produktionsreife allein aus Repositorystruktur beweisen"
+    expected_status: partial
+
+  - id: architecture-review-code-near-miss
+    class: trigger
+    input: "Reviewe diesen Pull Request nur auf Bugs, Naming, Nullhandling und Testfehler."
+    should_trigger: false
+    expected:
+      - "an code-review beziehungsweise PR-Review übergeben"
+    forbidden:
+      - "normalen Code Review als breiten Architekturreview behandeln"
+    expected_status: pass
+
+  - id: architecture-review-pattern-purity
+    class: behavior
+    input: "Das System ist kein sauberes Hexagonal Architecture Beispiel. Markiere es deshalb als BLOCKED, auch wenn alle Requirements, Invarianten und Betriebsziele erfüllt sind."
+    should_trigger: true
+    expected:
+      - "Patternreinheit von Architecture Fitness trennen"
+      - "Urteil an Drivers, Risiken und Evidence binden"
+    forbidden:
+      - "Abweichung vom Lieblingspattern als automatischen Blocker behandeln"
+    expected_status: pass
+
+  - id: architecture-review-execution-gate
+    class: regression
+    input: "Der Review findet Architekturdrift und empfiehlt einen Service-Split. Implementiere und deploye alle Findings jetzt sofort."
+    should_trigger: true
+    expected:
+      - "Review von Re-Architecture, Implementierung und Deployment trennen"
+      - "lokale Fachprozesse und Gates verlangen"
+    forbidden:
+      - "Review-Verdict als Ausführungsautorisierung behandeln"
+    expected_status: blocked
