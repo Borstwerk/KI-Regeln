@@ -323,6 +323,199 @@ sources:
       - Schnittstellen-und-Vertraege/Skills/event-contract-design/SKILL.md
 
   # ---------------------------------------------------------------------------
+  # Infrastruktur und DevOps
+  # ---------------------------------------------------------------------------
+  - id: terraform-plan-state-docs
+    area: Infrastruktur-und-DevOps
+    kind: web-page
+    url: https://developer.hashicorp.com/terraform/cli/commands/plan
+    monitor_mode: semantic-review
+    cadence: monthly
+    last_checked: 2026-08-24
+    local_impact:
+      - Infrastruktur-und-DevOps/Desired-State-und-Infrastructure-as-Code.md
+      - Infrastruktur-und-DevOps/State-Ownership-Drift-und-Reconciliation.md
+      - Infrastruktur-und-DevOps/Change-Preview-Plan-Apply-und-Gates.md
+      - Infrastruktur-und-DevOps/Skills/infrastructure-as-code/SKILL.md
+      - Infrastruktur-und-DevOps/Skills/infrastructure-change-review/SKILL.md
+
+  - id: opentofu-plan-docs
+    area: Infrastruktur-und-DevOps
+    kind: web-page
+    url: https://opentofu.org/docs/cli/commands/plan/
+    monitor_mode: semantic-review
+    cadence: quarterly
+    last_checked: 2026-08-24
+    local_impact:
+      - Infrastruktur-und-DevOps/Desired-State-und-Infrastructure-as-Code.md
+      - Infrastruktur-und-DevOps/Change-Preview-Plan-Apply-und-Gates.md
+      - Infrastruktur-und-DevOps/State-Ownership-Drift-und-Reconciliation.md
+      - Infrastruktur-und-DevOps/Skills/infrastructure-change-review/SKILL.md
+
+  - id: kubernetes-controller-deployment-docs
+    area: Infrastruktur-und-DevOps
+    kind: web-page
+    url: https://kubernetes.io/docs/concepts/architecture/controller/
+    monitor_mode: semantic-review
+    cadence: quarterly
+    last_checked: 2026-08-24
+    local_impact:
+      - Infrastruktur-und-DevOps/GitOps-und-Continuous-Reconciliation.md
+      - Infrastruktur-und-DevOps/Kubernetes-Workloads-und-Rollouts.md
+      - Infrastruktur-und-DevOps/Skills/gitops-design/SKILL.md
+      - Infrastruktur-und-DevOps/Skills/deployment-strategy/SKILL.md
+
+  - id: opengitops-principles
+    area: Infrastruktur-und-DevOps
+    kind: web-page
+    url: https://opengitops.dev/
+    monitor_mode: semantic-review
+    cadence: quarterly
+    last_checked: 2026-08-24
+    local_impact:
+      - Infrastruktur-und-DevOps/GitOps-und-Continuous-Reconciliation.md
+      - Infrastruktur-und-DevOps/Skills/gitops-design/SKILL.md
+      - Workflows/Build-Deploy-und-Promotion.md
+
+  - id: argo-rollouts-docs
+    area: Infrastruktur-und-DevOps
+    kind: web-page
+    url: https://argoproj.github.io/rollouts/
+    monitor_mode: semantic-review
+    cadence: quarterly
+    last_checked: 2026-08-24
+    local_impact:
+      - Infrastruktur-und-DevOps/Deployment-Strategien-Promotion-und-Rollback.md
+      - Infrastruktur-und-DevOps/Kubernetes-Workloads-und-Rollouts.md
+      - Infrastruktur-und-DevOps/Skills/deployment-strategy/SKILL.md
+
+  - id: open-policy-agent-docs
+    area: Infrastruktur-und-DevOps
+    kind: web-page
+    url: https://www.openpolicyagent.org/docs
+    monitor_mode: semantic-review
+    cadence: quarterly
+    last_checked: 2026-08-24
+    local_impact:
+      - Infrastruktur-und-DevOps/Policy-as-Code-und-Guardrails.md
+      - Infrastruktur-und-DevOps/Skills/ci-pipeline-design/SKILL.md
+      - Infrastruktur-und-DevOps/Skills/infrastructure-review/SKILL.md
+
+  - id: slsa-provenance
+    area: Infrastruktur-und-DevOps
+    kind: web-page
+    url: https://slsa.dev/spec/v1.2/provenance
+    monitor_mode: semantic-review
+    cadence: quarterly
+    last_checked: 2026-08-24
+    local_impact:
+      - Infrastruktur-und-DevOps/Build-Artefakte-Provenance-und-Reproduzierbarkeit.md
+      - Infrastruktur-und-DevOps/Skills/container-build/SKILL.md
+      - Workflows/Build-Deploy-und-Promotion.md
+
+  - id: docker-multi-stage-builds
+    area: Infrastruktur-und-DevOps
+    kind: web-page
+    url: https://docs.docker.com/build/building/multi-stage/
+    monitor_mode: semantic-review
+    cadence: quarterly
+    last_checked: 2026-08-24
+    local_impact:
+      - Infrastruktur-und-DevOps/Container-Build-und-Runtime-Vertrag.md
+      - Infrastruktur-und-DevOps/Skills/container-build/SKILL.md
+
+  - id: hashicorp-terraform-style-guide-skill
+    area: Infrastruktur-und-DevOps
+    kind: github-file
+    repository: hashicorp/agent-skills
+    path: plugins/terraform/skills/terraform-style-guide/SKILL.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: 77610a87f56ba79e6003dcec8d82fd36fc5c6d51
+    last_checked: 2026-08-24
+    local_impact:
+      - Infrastruktur-und-DevOps/Desired-State-und-Infrastructure-as-Code.md
+      - Infrastruktur-und-DevOps/Secrets-Permissions-und-Execution-Boundaries.md
+      - Infrastruktur-und-DevOps/Skills/infrastructure-as-code/SKILL.md
+
+  - id: flux-gitops-repo-audit-skill
+    area: Infrastruktur-und-DevOps
+    kind: github-file
+    repository: fluxcd/agent-skills
+    path: skills/gitops-repo-audit/SKILL.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: 255b7166e1c684351e5184458b1fef178ec4ab67
+    last_checked: 2026-08-24
+    local_impact:
+      - Infrastruktur-und-DevOps/GitOps-und-Continuous-Reconciliation.md
+      - Infrastruktur-und-DevOps/Kubernetes-Workloads-und-Rollouts.md
+      - Infrastruktur-und-DevOps/Skills/gitops-design/SKILL.md
+      - Infrastruktur-und-DevOps/Skills/infrastructure-review/SKILL.md
+
+  - id: arjun-infrastructure-as-code-skill
+    area: Infrastruktur-und-DevOps
+    kind: github-file
+    repository: arjunprabhulal/agent-skills
+    path: skills/devops/infrastructure-as-code/SKILL.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: 625fdcdab226ea729623cf4cb5ed0621487269a3
+    last_checked: 2026-08-24
+    local_impact:
+      - Infrastruktur-und-DevOps/Desired-State-und-Infrastructure-as-Code.md
+      - Infrastruktur-und-DevOps/State-Ownership-Drift-und-Reconciliation.md
+      - Infrastruktur-und-DevOps/Change-Preview-Plan-Apply-und-Gates.md
+      - Infrastruktur-und-DevOps/Skills/infrastructure-as-code/SKILL.md
+      - Infrastruktur-und-DevOps/Skills/infrastructure-change-review/SKILL.md
+
+  - id: arjun-ci-pipelines-skill
+    area: Infrastruktur-und-DevOps
+    kind: github-file
+    repository: arjunprabhulal/agent-skills
+    path: skills/devops/ci-pipelines/SKILL.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: 3d84f58687c6619298b91d35d5086e1626262fe8
+    last_checked: 2026-08-24
+    local_impact:
+      - Infrastruktur-und-DevOps/CI-Pipelines-und-Automation.md
+      - Infrastruktur-und-DevOps/Skills/ci-pipeline-design/SKILL.md
+
+  - id: arjun-containerization-skill
+    area: Infrastruktur-und-DevOps
+    kind: github-file
+    repository: arjunprabhulal/agent-skills
+    path: skills/devops/containerization/SKILL.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: 839e3b4dcd012eab7617bc22285ad884232e6f25
+    last_checked: 2026-08-24
+    local_impact:
+      - Infrastruktur-und-DevOps/Container-Build-und-Runtime-Vertrag.md
+      - Infrastruktur-und-DevOps/Skills/container-build/SKILL.md
+
+  - id: arjun-deployment-strategies-skill
+    area: Infrastruktur-und-DevOps
+    kind: github-file
+    repository: arjunprabhulal/agent-skills
+    path: skills/devops/deployment-strategies/SKILL.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: 10a689c8c1455b3c19952b9537c52a183c872503
+    last_checked: 2026-08-24
+    local_impact:
+      - Infrastruktur-und-DevOps/Deployment-Strategien-Promotion-und-Rollback.md
+      - Infrastruktur-und-DevOps/Skills/deployment-strategy/SKILL.md
+      - Workflows/Build-Deploy-und-Promotion.md
+
+  # ---------------------------------------------------------------------------
   # Schreiben
   # ---------------------------------------------------------------------------
   - id: wikipedia-signs-ai-writing
