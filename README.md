@@ -10,8 +10,8 @@ Ziel ist keine persönliche KI-Konfiguration und keine projektspezifische Wissen
 
 Das bedeutet:
 
-- allgemeine Kommunikations-, Reflexions-, Recherche-, Wissensmanagement-, Schnittstellen-/Contract-, Dokumentations-, Schreib-, Bild-, Web-, Datenbank-, Testing-, Agenten-, Sicherheits- und Entwicklungsregeln liegen hier;
-- projektspezifische Anforderungen, Architektur, Research-Fragen, interne Quellen, Wissensbestände, Fachmodelle, reale Schnittstellen/Consumer, reales Datenbankschema, konkrete Testumgebung, Markenregeln, visuelle Bibeln und Sonderregeln bleiben im jeweiligen Projekt;
+- allgemeine Kommunikations-, Reflexions-, Recherche-, Wissensmanagement-, Schnittstellen-/Contract-, Infrastruktur-/DevOps-, Dokumentations-, Schreib-, Bild-, Web-, Datenbank-, Testing-, Agenten-, Sicherheits- und Entwicklungsregeln liegen hier;
+- projektspezifische Anforderungen, Architektur, Research-Fragen, interne Quellen, Wissensbestände, Fachmodelle, reale Schnittstellen/Consumer, Infrastrukturtools/Provider/Accounts/Cluster, reales Datenbankschema, konkrete Testumgebung, Markenregeln, visuelle Bibeln und Sonderregeln bleiben im jeweiligen Projekt;
 - persönliche Profile oder unnötige personenbezogene Details gehören nicht in dieses Repository;
 - ein Skill ersetzt niemals die tatsächliche Spezifikation oder Dokumentation eines Projekts.
 
@@ -37,6 +37,7 @@ KI-Regeln/
 ├── Recherche/
 ├── Wissensmanagement/
 ├── Schnittstellen-und-Vertraege/
+├── Infrastruktur-und-DevOps/
 ├── Dokumentationserstellung/
 ├── Schreiben/
 ├── Bildarbeit/
@@ -225,6 +226,69 @@ Operative Skills:
 GraphQL, RPC/IDL/Protobuf und Webhooks besitzen eigene Fachregeln, aber zunächst keine eigenen Skills. Ein anderes Vertragsformat allein ist noch keine neue Arbeitsdisziplin.
 
 > Ein Contract ist eine beobachtbare Zusage – nicht bloß ein Schema.
+
+## Infrastruktur und DevOps
+
+Tool- und providerneutrale Regeln für Infrastructure as Code, Automationspipelines, Build-Artefakte, Deployments und Continuous Reconciliation.
+
+Der Bereich behandelt insbesondere:
+
+- Desired State, Ownership und IaC;
+- State, Actual State, Drift und Reconciliation;
+- Validate, Plan/Preview, Review, Gate und Apply als getrennte Schritte;
+- Environment-Grenzen, Konfiguration und Artifact Promotion;
+- CI-Pipelines, DAGs, Artifacts, Caches, Credentials und Gates;
+- reproduzierbare Build-Artefakte und Provenance;
+- Container Builds und Runtime-Verträge;
+- Deploymentstrategien, Promotion, Pause, Abort und Rollback;
+- GitOps und Continuous Reconciliation;
+- Kubernetes als wichtige Referenzplattform ohne Kubernetes-Pflicht;
+- Policy as Code und technische Guardrails;
+- Secrets, Permissions und Execution Boundaries.
+
+Scope-Grenze:
+
+```text
+Software Architecture
+→ welche Plattformen und Systemtopologien existieren sollen
+
+Infrastruktur und DevOps
+→ wie gewünschte Umgebungen beschrieben, gebaut, geändert und ausgeliefert werden
+
+Testing und QA
+→ welche Qualitätsrisiken wie geprüft werden
+
+Reliability
+→ was gesund, resilient und betrieblich akzeptabel bedeutet
+
+Sicherheit
+→ welche Rechte, Trust Boundaries und Security Policies gelten
+```
+
+Operative Skills:
+
+- `infrastructure-as-code`;
+- `infrastructure-change-review`;
+- `ci-pipeline-design`;
+- `container-build`;
+- `deployment-strategy`;
+- `gitops-design`;
+- `infrastructure-review`.
+
+Zentrale Zustandsregeln:
+
+```text
+Desired State ≠ Actual State
+Preview ≠ Apply
+Plan Review ≠ Apply Authorization
+Build ≠ Deploy ≠ Release
+Rollback ≠ Undo aller Nebenwirkungen
+Continuous Reconciliation ≠ einmalige Änderung
+```
+
+Terraform, OpenTofu, Pulumi, CloudFormation, Ansible, Kubernetes, Argo CD, Flux, Docker, GitHub Actions oder andere Tools bleiben konkrete Adapter.
+
+> Automatisierung reduziert manuelle Arbeit, vergrößert aber gleichzeitig die Reichweite einer Fehlentscheidung.
 
 ## Dokumentationserstellung
 
@@ -444,13 +508,16 @@ Erste Evalpacks bestehen unter anderem für:
 - alle neun Testing-und-QA-Skills;
 - `context-engineering`, `context-audit`, `context-compaction` und `session-handoff`;
 - alle sieben Wissensmanagement-Skills;
-- alle fünf Schnittstellen-/Contract-Skills.
+- alle fünf Schnittstellen-/Contract-Skills;
+- alle sieben Infrastruktur-/DevOps-Skills.
 
 Die Context-Evals prüfen unter anderem fehlende Messfähigkeit, erfundene Tokenpräzision, Verlust kritischer Constraints bei Compaction, Handoff-Fortsetzungsfähigkeit und die Grenze zu Persistent Knowledge.
 
 Die Wissensmanagement-Evals prüfen unter anderem Search-before-Create, Provenance, sichere Merge-/Delete-Grenzen, Query-Grounding, Staleness-/Orphan-Behandlung und ehrliche Review-Coverage.
 
 Die Schnittstellen-Evals prüfen unter anderem Transportdogma, DB-Leaks in API-Schemas, Additive-vs.-Semantic-Compatibility, Source-/Wire-Trennung, rollout-sensitive Changes und fehlende Contract-Baselines.
+
+Die Infrastruktur-/DevOps-Evals prüfen unter anderem State-/Drift-Grenzen, stale Previews, destructive Changes, Pipeline-Secret-Grenzen, Container Runtime Contracts, Deployment-/Rollback-Annahmen und GitOps-Reconciliation-Gates.
 
 ## Workflows / Recipes
 
@@ -469,7 +536,9 @@ Enthalten sind Recipes für:
 - Teststrategie und QA;
 - Long-Horizon-Agentenarbeit;
 - Aufbau und Pflege von Wissensbasen;
-- Entwurf und Änderung von Schnittstellenverträgen.
+- Entwurf und Änderung von Schnittstellenverträgen;
+- Infrastrukturänderungen;
+- Build, Deploy und Promotion.
 
 > Skills bleiben klein. Workflows verbinden sie.
 
@@ -550,6 +619,8 @@ Für Context-/Token-Arbeit gilt zusätzlich: konkrete Modellfenster, Tokenpreise
 Für Wissensmanagement gilt zusätzlich: konkrete Knowledge-Base-Software, Ordner-/Property-Schema, Taxonomie, reale Sources of Truth, Zugriffs- und Datenschutzklassen, Retention-Regeln sowie Bulk-Write-/Delete-Freigaben bleiben lokal.
 
 Für Schnittstellenarbeit gilt zusätzlich: reale Consumer, Architekturgrenzen, Protokolle, Toolchain, kanonische Contract-Artefakte, Compatibility-/Versionierungs-Policy, Auth-Mechanismen, Supportfenster sowie Deprecation-/Removal-Gates bleiben lokal.
+
+Für Infrastruktur-/DevOps-Arbeit gilt zusätzlich: konkrete IaC-/CI-/GitOps-/Container-/Deploymenttools, Provider, Accounts, Cluster, State-Backends, Credentials, Environment-Konfiguration, Policy-Enforcement, Health-/SLO-Schwellen sowie Apply-/Deploy-/Destroy-/Recovery-Gates bleiben lokal. Preview, Plan, Build oder Pipeline-Grün autorisieren keine reale Außenwirkung automatisch.
 
 Für Auswahl und Dokumentation zentraler Regeln kann `Vorlagen/ki-regeln.template.yml` als Ausgangspunkt verwendet werden.
 
