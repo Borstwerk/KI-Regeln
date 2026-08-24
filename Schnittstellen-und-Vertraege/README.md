@@ -29,7 +29,7 @@ Der Bereich behandelt insbesondere:
 
 ## Nicht der Scope
 
-- **Software Architecture:** entscheidet, warum eine Systemgrenze existiert und wo Verantwortung liegt.
+- **Software Architecture:** entscheidet in `../Software-Architecture-und-System-Design/`, warum eine Systemgrenze existiert, wo Verantwortung liegt und welcher strukturelle Interaktionsstil zu den Architecture Drivers passt. Dieser Bereich definiert danach die konkrete beobachtbare Provider-/Consumer-Zusage.
 - **Domain Modeling:** definiert fachliche Begriffe und Invarianten.
 - **Datenbanken:** definieren interne Persistenzmodelle.
 - **Data Engineering:** behandelt in `../Data-Engineering/` veröffentlichte Datasets und Datenprodukte mit Grain, Datenqualität, Freshness, Lineage, Replay und Data-Contract-Evolution. Ein Tabellen-/View-/File-/Topic-Vertrag für analytische oder systemübergreifend publizierte Daten gehört dort hin; der operative Message-/Eventvertrag zwischen Services bleibt hier.
