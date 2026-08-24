@@ -32,6 +32,7 @@ Der Bereich behandelt insbesondere:
 - **Software Architecture:** entscheidet, warum eine Systemgrenze existiert und wo Verantwortung liegt.
 - **Domain Modeling:** definiert fachliche Begriffe und Invarianten.
 - **Datenbanken:** definieren interne Persistenzmodelle.
+- **Data Engineering:** behandelt in `../Data-Engineering/` veröffentlichte Datasets und Datenprodukte mit Grain, Datenqualität, Freshness, Lineage, Replay und Data-Contract-Evolution. Ein Tabellen-/View-/File-/Topic-Vertrag für analytische oder systemübergreifend publizierte Daten gehört dort hin; der operative Message-/Eventvertrag zwischen Services bleibt hier.
 - **Testing und QA:** verifizieren, ob Implementierungen den Vertrag einhalten.
 - **Sicherheit:** behandelt Threat Models, Credential-Schutz, Angriffstechniken und Security Testing im Detail.
 - **Framework-Implementierung:** FastAPI, Spring, ASP.NET, DRF, Express oder ähnliche Mechanik bleibt lokal.
