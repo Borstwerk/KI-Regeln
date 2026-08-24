@@ -1400,6 +1400,101 @@ sources:
       - Sicherheit/MCP-und-externe-Tools.md
       - Sicherheit/Sandbox-und-Isolation.md
 
+  # ---------------------------------------------------------------------------
+  # Data Engineering
+  # ---------------------------------------------------------------------------
+  - id: apache-airflow-core-concepts
+    area: Data-Engineering
+    kind: web-page
+    url: https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/
+    monitor_mode: semantic-review
+    cadence: monthly
+    last_checked: 2026-08-24
+    local_impact:
+      - Data-Engineering/Orchestrierung-Abhaengigkeiten-und-Ausfuehrungszustand.md
+      - Data-Engineering/Transformationen-und-Backfills.md
+      - Data-Engineering/Skills/pipeline-orchestration/SKILL.md
+      - Data-Engineering/Skills/data-backfill/SKILL.md
+
+  - id: apache-beam-programming-guide
+    area: Data-Engineering
+    kind: web-page
+    url: https://beam.apache.org/documentation/programming-guide/
+    monitor_mode: semantic-review
+    cadence: quarterly
+    last_checked: 2026-08-24
+    local_impact:
+      - Data-Engineering/Batch-Streaming-Zeit-und-Late-Data.md
+      - Data-Engineering/Skills/data-ingestion-design/SKILL.md
+      - Data-Engineering/Skills/data-pipeline-review/SKILL.md
+
+  - id: apache-kafka-streams-configs
+    area: Data-Engineering
+    kind: web-page
+    url: https://kafka.apache.org/documentation/#streamsconfigs
+    monitor_mode: semantic-review
+    cadence: quarterly
+    last_checked: 2026-08-24
+    local_impact:
+      - Data-Engineering/Batch-Streaming-Zeit-und-Late-Data.md
+      - Data-Engineering/Ingestion-CDC-und-Replay.md
+      - Data-Engineering/Skills/data-ingestion-design/SKILL.md
+
+  - id: openlineage-docs
+    area: Data-Engineering
+    kind: web-page
+    url: https://openlineage.io/docs/
+    monitor_mode: semantic-review
+    cadence: monthly
+    last_checked: 2026-08-24
+    local_impact:
+      - Data-Engineering/Lineage-Provenance-und-Ownership.md
+      - Data-Engineering/Skills/data-lineage/SKILL.md
+      - Data-Engineering/Skills/data-pipeline-review/SKILL.md
+
+  - id: open-data-contract-standard
+    area: Data-Engineering
+    kind: web-page
+    url: https://docs.datacontract.com/open-data-contract-standard
+    monitor_mode: semantic-review
+    cadence: monthly
+    last_checked: 2026-08-24
+    local_impact:
+      - Data-Engineering/Data-Contracts-und-Schemaevolution.md
+      - Data-Engineering/Skills/data-contract/SKILL.md
+      - Data-Engineering/Skills/data-quality/SKILL.md
+
+  - id: vaquarkhan-data-specification-skill
+    area: Data-Engineering
+    kind: github-file
+    repository: vaquarkhan/data-engineering-agent-skills
+    path: skills/data-specification/SKILL.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: a44f83926c8152a7546c8c579ed3ae6e6178e19e
+    last_checked: 2026-08-24
+    local_impact:
+      - Data-Engineering/README.md
+      - Data-Engineering/Skills/data-ingestion-design/SKILL.md
+      - Data-Engineering/Skills/analytical-data-modeling/SKILL.md
+      - Data-Engineering/Skills/data-pipeline-review/SKILL.md
+
+  - id: vaquarkhan-safe-backfill-replay-skill
+    area: Data-Engineering
+    kind: github-file
+    repository: vaquarkhan/data-engineering-agent-skills
+    path: skills/safe-backfill-and-replay-orchestration/SKILL.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: 59ebc645604d70a8900818ad4dfdeb29d40eaa36
+    last_checked: 2026-08-24
+    local_impact:
+      - Data-Engineering/Transformationen-und-Backfills.md
+      - Data-Engineering/Skills/data-backfill/SKILL.md
+      - Workflows/Data-Backfill-und-Reprocessing.md
+
 policy:
   on_change: review-only
   auto_sync: false
