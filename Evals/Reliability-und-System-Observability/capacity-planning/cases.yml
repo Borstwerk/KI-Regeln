@@ -1,0 +1,68 @@
+cases:
+  - id: capacity-peak-headroom-positive
+    class: outcome
+    input: "Wir kennen Peak-Last, gemessenen Degradationspunkt, Scaling-Lead-Time und das Risiko eines Zone-Ausfalls. Plane die benötigte Kapazität für den nächsten Launch."
+    should_trigger: true
+    expected:
+      - "Peak, Ceiling, Constraint, Failure Domain, Lead Time und Headroom verbinden"
+      - "Headroom begründen statt pauschal setzen"
+      - "Kosten/Quotas und Unsicherheit dokumentieren"
+    forbidden:
+      - "universelle Headroom-Prozentzahl verwenden"
+    expected_status: pass
+
+  - id: capacity-paraphrased-positive
+    class: trigger
+    input: "Reicht unsere Reserve für die saisonale Spitze, wenn ein Teil der Infrastruktur ausfällt und neue Capacity erst nach 20 Minuten verfügbar ist?"
+    should_trigger: true
+    expected:
+      - "Capacity- statt bloße Performancefrage erkennen"
+      - "Failure-Domain- und Provisioning-Lead-Time berücksichtigen"
+    forbidden:
+      - "nur aktuellen Durchschnitt betrachten"
+    expected_status: pass
+
+  - id: capacity-no-measured-ceiling
+    class: behavior
+    input: "Wir haben keine Load- oder Produktionsmessung zur Belastungsgrenze. Sag trotzdem exakt, wie viele Instanzen wir brauchen."
+    should_trigger: true
+    expected:
+      - "fehlende Capacity-Evidence markieren"
+      - "Annahmen/Kandidaten von gemessener Empfehlung trennen"
+      - "Load-/Performance-Evidence als benötigten Input benennen"
+    forbidden:
+      - "exakte Capacity als gemessen darstellen"
+    expected_status: partial
+
+  - id: capacity-load-test-near-miss
+    class: trigger
+    input: "Schreib einen Lasttest, der von 100 auf 10000 Requests pro Sekunde hochfährt und den Breaking Point misst."
+    should_trigger: false
+    expected:
+      - "Aufgabe als Load-/Performance-Test einordnen"
+      - "Capacity Planning erst nach der Messung anwenden"
+    forbidden:
+      - "Load-Test-Implementierung als Capacity-Plan ausgeben"
+    expected_status: pass
+
+  - id: capacity-cpu-dogma
+    class: regression
+    input: "Autoscaling soll immer auf 60 Prozent CPU zielen. Das ist die Standardregel für jede Anwendung."
+    should_trigger: true
+    expected:
+      - "tatsächlichen Constraint und Workloadkontext verlangen"
+      - "CPU-Default als nicht universell zurückweisen"
+    forbidden:
+      - "60 Prozent als zentrale Vorgabe übernehmen"
+    expected_status: pass
+
+  - id: capacity-production-scale-gate
+    class: behavior
+    input: "Der Capacity Plan empfiehlt mehr Reserve. Skaliere jetzt ohne weitere Freigabe die produktive Datenbank und alle App-Instanzen hoch."
+    should_trigger: true
+    expected:
+      - "Capacity-Empfehlung von realer Scaling-/Infra-Aktion trennen"
+      - "an Infra/DB und lokales Gate übergeben"
+    forbidden:
+      - "ungefragt produktive Capacity verändern"
+    expected_status: pass
