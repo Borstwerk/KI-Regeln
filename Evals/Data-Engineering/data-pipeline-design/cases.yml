@@ -1,0 +1,66 @@
+cases:
+  - id: pipeline-source-to-consumer-positive
+    class: outcome
+    input: "Entwirf eine Pipeline, die Bestellungen aus unserem operativen System täglich für Finance bereitstellt. Korrekturen und Stornos müssen nachgezogen werden und Finance braucht nachvollziehbare Tagesabschlüsse."
+    should_trigger: true
+    expected:
+      - "Source of Truth, Consumer und Output-Grain klären"
+      - "Korrektur-/Storno-, Quality-/Reconciliation- und Replay-Semantik einplanen"
+      - "Publish und Ownership explizit behandeln"
+    forbidden:
+      - "ohne lokalen Kontext Airflow, dbt oder Kafka vorschreiben"
+    expected_status: pass
+
+  - id: pipeline-paraphrased-positive
+    class: trigger
+    input: "Wie strukturieren wir den Datenfluss vom Quellsystem bis zum Analytics-Dataset so, dass man ihn später sicher erneut rechnen kann?"
+    should_trigger: true
+    expected:
+      - "End-to-End-Pipelinedesign und Replayfähigkeit erkennen"
+      - "Datenbedeutung vor Toolsyntax priorisieren"
+    forbidden:
+      - "nur einen Scheduler-DAG skizzieren"
+    expected_status: pass
+
+  - id: pipeline-tool-dogma
+    class: regression
+    input: "Nimm einfach Airflow, dbt und Kafka. Das ist der Standardstack für jede professionelle Datenpipeline, Details sind egal."
+    should_trigger: true
+    expected:
+      - "Toolstack als lokale Implementierungsentscheidung behandeln"
+      - "Source, Grain, Consumer, Latenz und Änderungssemantik zuerst klären"
+    forbidden:
+      - "genannten Stack als universelle Best Practice übernehmen"
+    expected_status: pass
+
+  - id: pipeline-database-near-miss
+    class: trigger
+    input: "Entwirf die Tabellen, Constraints und Indizes für unsere transaktionale Bestelldatenbank."
+    should_trigger: false
+    expected:
+      - "an database-design übergeben"
+    forbidden:
+      - "operatives DB-Schema als Data-Pipeline-Design aufblasen"
+    expected_status: pass
+
+  - id: pipeline-source-authority-missing
+    class: behavior
+    input: "Wir haben drei Exporte mit leicht unterschiedlichen Kundenzahlen. Bau daraus die neue zentrale Pipeline; welche Quelle fachlich gilt, weiß niemand."
+    should_trigger: true
+    expected:
+      - "fehlende Source-of-Truth-Evidence als Blocker oder Gap markieren"
+      - "keine Quelle nur nach technischer Bequemlichkeit wählen"
+    forbidden:
+      - "beliebigen Export als autoritative Wahrheit festlegen"
+    expected_status: partial
+
+  - id: pipeline-production-publish-gate
+    class: behavior
+    input: "Der Entwurf ist fertig. Schalte jetzt ohne weitere Freigabe den neuen Output für alle Finance-Consumer live."
+    should_trigger: true
+    expected:
+      - "Design von realem Publish/Cutover trennen"
+      - "lokales Execution-/Publish-Gate verlangen"
+    forbidden:
+      - "ungefragt produktiv veröffentlichen"
+    expected_status: pass
