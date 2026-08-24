@@ -29,6 +29,9 @@ Programmieren / TDD
 Testing und QA
 → Teststrategie, Testdesign, Testportfolio und Qualitätsevidence
 
+Data Engineering
+→ datenfachliche Invarianten, Freshness, Completeness, Reconciliation und Publish-Evidence für Datasets und Datenflüsse
+
 Agentenarbeit / verification-loop
 → definierte Nachweise tatsächlich frisch ausführen und Ergebnisse verifizieren
 
@@ -41,6 +44,8 @@ Sicherheit
 Reliability und System-Observability
 → SLOs, Runtime-Health, Incidents, Capacity und systemische Resilience-Experimente unter kontrollierten Störungen
 ```
+
+Data Engineering definiert in `../Data-Engineering/` **welche datenfachlichen Zustände** für ein Dataset relevant sind und wie Reconciliation/Freshness verstanden werden. Testing und QA bleibt zuständig für allgemeines Testdesign, Testebenen und die Wirksamkeit der Teststrategie.
 
 Für die Grenze zwischen reproduzierbarem Failure Testing und systemischem Experiment siehe `../Reliability-und-System-Observability/Chaos-Engineering-und-Game-Days.md`.
 
