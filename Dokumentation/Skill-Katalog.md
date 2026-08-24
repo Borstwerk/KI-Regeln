@@ -14,7 +14,7 @@ Der Skill-Katalog beantwortet zusätzlich:
 
 ## Aktueller Bestand
 
-Der Katalog enthält aktuell 95 zentrale Skills:
+Der Katalog enthält aktuell 104 zentrale Skills:
 
 - Arbeitsweisen: 3;
 - Agentenarbeit: 8;
@@ -27,6 +27,7 @@ Der Katalog enthält aktuell 95 zentrale Skills:
 - Schnittstellen und Verträge: 5;
 - Infrastruktur und DevOps: 7;
 - Reliability und System-Observability: 8;
+- Data Engineering: 9;
 - Dokumentationserstellung: 10;
 - Skill Engineering: 2;
 - Sicherheit: 3;
@@ -76,9 +77,11 @@ Empfohlene Werte:
 
 Maturity und Eval Coverage sind nicht identisch. Ein Skill kann viel Praxis haben und trotzdem noch unzureichende formale Evals besitzen.
 
-Aktuell besitzt `context-engineering` als bestehender `candidate` `partial` Evalabdeckung. Die ergänzten Context-Skills, alle sieben Wissensmanagement-Skills, alle fünf Schnittstellen-/Contract-Skills, alle sieben Infrastruktur-/DevOps-Skills und alle acht Reliability-/System-Observability-Skills starten beziehungsweise bleiben bewusst `experimental` mit `partial` Evalabdeckung.
+Aktuell besitzt `context-engineering` als bestehender `candidate` `partial` Evalabdeckung. Die ergänzten Context-Skills, alle sieben Wissensmanagement-Skills, alle fünf Schnittstellen-/Contract-Skills, alle sieben Infrastruktur-/DevOps-Skills, alle acht Reliability-/System-Observability-Skills und alle neun Data-Engineering-Skills starten beziehungsweise bleiben bewusst `experimental` mit `partial` Evalabdeckung.
 
-Für Reliability sind sechs Startfälle je Skill definiert, insgesamt 48. Die Definition dieser Cases bedeutet nicht, dass sie bereits ausgeführt oder bestanden wurden.
+Für Reliability sind sechs Startfälle je Skill definiert, insgesamt 48. Der erste Same-Model-Smoke-Lauf wurde am 2026-08-24 ausgeführt; das ersetzt keinen unabhängigen verblindeten Benchmark und rechtfertigt allein keine Hochstufung.
+
+Für Data Engineering sind sechs Startfälle je Skill definiert, insgesamt 54. Diese 54 Fälle sind derzeit **definiert, aber noch nicht ausgeführt oder bestanden**.
 
 ## Capabilities
 
@@ -102,7 +105,11 @@ Der Katalog kann Fähigkeiten nennen, die für einen Skill relevant sind, z. B.:
 - `runtime-observability-access-preferred`;
 - `incident-evidence-access-preferred`;
 - `capacity-evidence-access-preferred`;
-- `controlled-fault-injection-gated`.
+- `controlled-fault-injection-gated`;
+- `data-source-access-preferred`;
+- `data-runtime-evidence-preferred`;
+- `data-contract-source-access-preferred`;
+- `lineage-metadata-access-preferred`.
 
 Diese Angaben ersetzen nicht die detaillierten Fallback- und Rechte-Regeln des Skills.
 
@@ -139,6 +146,8 @@ Für Schnittstellen-Skills sollte an realen Contracts geprüft werden, ob Consum
 Für Infrastruktur-/DevOps-Skills sollte an realen, kontrollierten Projekten geprüft werden, ob Plan-/Actual-State-Abweichungen, destructive Changes, GitOps-Gates und Deployment-/Rollback-Grenzen zuverlässig erkannt werden. Ein grüner Plan, Build oder Pipeline-Lauf allein reicht nicht als Maturity-Beleg.
 
 Für Reliability-/System-Observability-Skills sollte zusätzlich an realen Services beziehungsweise belastbaren Betriebs-/Incident-/Game-Day-Szenarien geprüft werden, ob SLO-Grenzen, Runtime-Evidence, Alert-Actionability, Incident-Gates, Capacity-Annahmen und Resilience-Safety zuverlässig erkannt werden. Ein vorhandenes Dashboard oder definierter Evalcase allein reicht nicht als Maturity-Beleg.
+
+Für Data-Engineering-Skills sollte zusätzlich an realen Datenflüssen beziehungsweise belastbaren Pipeline-/Backfill-/Consumer-Szenarien geprüft werden, ob Source-of-Truth-Lücken, Grainfehler, CDC-/Replay-Grenzen, semantische Contractänderungen, Data-Quality-Blind-Spots, Lineage-Lücken und Reprocessing-Gates zuverlässig erkannt werden. Ein grüner DAG, SQL-Lauf oder definierter Evalcase allein reicht nicht als Maturity-Beleg.
 
 ## Leitgedanke
 
