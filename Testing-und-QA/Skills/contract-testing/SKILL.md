@@ -51,4 +51,6 @@ offene Consumer
 ## Related
 
 - `integration-testing`
-- später `Schnittstellen-und-Vertraege/`
+- `contract-change-review`
+- `interface-review`
+- Bereich `Schnittstellen-und-Vertraege/`

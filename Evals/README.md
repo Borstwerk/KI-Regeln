@@ -57,23 +57,25 @@ Neben einzelnen Kernskills bestehen inzwischen vollständige Startpacks für:
 - alle sieben Skills aus `Datenbanken/`;
 - alle neun Skills aus `Testing-und-QA/`;
 - die Context-/Long-Horizon-Skills `context-engineering`, `context-audit`, `context-compaction` und `session-handoff`;
-- alle sieben Skills aus `Wissensmanagement/`.
+- alle sieben Skills aus `Wissensmanagement/`;
+- alle fünf Skills aus `Schnittstellen-und-Vertraege/`.
 
 Die Testing-und-QA-Fälle prüfen unter anderem risikobasierte Strategie, reale Dependencies, Contract-Drift, E2E-Near-Misses, Flakiness, Failure Testing und Testsignal-Qualität.
 
 Die Context-Fälle prüfen unter anderem Sources of Truth, Working State vs. Persistent Knowledge, Context Audit ohne erfundene Tokenmetriken, Compaction-Fidelity und standalone Handoffs.
 
-Die Wissensmanagement-Fälle prüfen unter anderem:
+Die Wissensmanagement-Fälle prüfen unter anderem toolneutrales Design, Search-before-Create, Provenance, Synthesis, Dubletten/Orphans, Retrieval und Content Health.
 
-- toolneutrales Knowledge-Base-Design;
-- Search-before-Create und Update-vs.-Create;
-- sensible Daten beim Ingest;
-- Distillation mit Claim-Provenance statt Fabrication;
-- Synthese ohne Modellwissen als angebliche KB-Evidence;
-- Similarity nicht als alleinigen Merge-Beweis;
-- Orphan und stale nicht automatisch als Löschgrund;
-- Retrieval ohne Wahrheitsbehauptung aus einem einzelnen No-Hit;
-- Review-Coverage ohne falsches Vollständigkeitsurteil.
+Die Schnittstellen-Fälle prüfen unter anderem:
+
+- Interface Design ohne Transportdogma oder versteckte Re-Architektur;
+- HTTP-Verträge ohne `/v1`- oder Pagination-Dogma;
+- Trennung öffentlicher Repräsentation vom Datenbankschema;
+- Async Contracts mit Delivery, Ordering, Replay und Idempotenz;
+- additive Änderungen, unbekannte Enum-Werte und semantische Compatibility;
+- Wire-vs.-Source-Kompatibilität bei Protobuf;
+- `ROLLOUT-SENSITIVE`, `BREAKING` und `UNVERIFIED` als explizite Verdicts;
+- grüne Contract Tests nicht als vollständige Designfreigabe.
 
 ## Fallstruktur
 

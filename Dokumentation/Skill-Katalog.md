@@ -14,7 +14,7 @@ Der Skill-Katalog beantwortet zusätzlich:
 
 ## Aktueller Bestand
 
-Der Katalog enthält aktuell 75 zentrale Skills:
+Der Katalog enthält aktuell 80 zentrale Skills:
 
 - Arbeitsweisen: 3;
 - Agentenarbeit: 8;
@@ -24,6 +24,7 @@ Der Katalog enthält aktuell 75 zentrale Skills:
 - Webentwicklung: 8;
 - Recherche: 7;
 - Wissensmanagement: 7;
+- Schnittstellen und Verträge: 5;
 - Dokumentationserstellung: 10;
 - Skill Engineering: 2;
 - Sicherheit: 3;
@@ -73,7 +74,7 @@ Empfohlene Werte:
 
 Maturity und Eval Coverage sind nicht identisch. Ein Skill kann viel Praxis haben und trotzdem noch unzureichende formale Evals besitzen.
 
-Aktuell besitzt `context-engineering` als bestehender `candidate` `partial` Evalabdeckung. Die ergänzten Context-Skills `context-audit`, `context-compaction` und `session-handoff` sowie alle sieben Wissensmanagement-Skills starten beziehungsweise bleiben bewusst `experimental` mit `partial` Evalabdeckung.
+Aktuell besitzt `context-engineering` als bestehender `candidate` `partial` Evalabdeckung. Die ergänzten Context-Skills, alle sieben Wissensmanagement-Skills und alle fünf Schnittstellen-/Contract-Skills starten beziehungsweise bleiben bewusst `experimental` mit `partial` Evalabdeckung.
 
 ## Capabilities
 
@@ -87,7 +88,9 @@ Der Katalog kann Fähigkeiten nennen, die für einen Skill relevant sind, z. B.:
 - `context-metrics-preferred`;
 - `working-state-access-required`;
 - `knowledge-base-read-required`;
-- `knowledge-base-write-gated`.
+- `knowledge-base-write-gated`;
+- `contract-source-access-required`;
+- `contract-baseline-required`.
 
 Diese Angaben ersetzen nicht die detaillierten Fallback- und Rechte-Regeln des Skills.
 
@@ -118,6 +121,8 @@ Insbesondere `stable` erfordert mindestens:
 Für Context-/Compaction-Skills sollte zusätzlich reale Fortsetzungsfähigkeit beziehungsweise Outcome nach Context-Änderungen geprüft werden. Eine reine Tokenreduktion reicht nicht als Maturity-Beleg.
 
 Für Wissensmanagement-Skills sollte zusätzlich an realen Wissensbasen geprüft werden, ob Ingest und Pflege tatsächlich Dubletten, Provenance-Verlust und Retrieval-Drift reduzieren. Die Existenz synthetischer Evalcases allein reicht nicht für eine Hochstufung.
+
+Für Schnittstellen-Skills sollte an realen Contracts geprüft werden, ob Consumerannahmen, Breaking Changes und rollout-sensitive Änderungen zuverlässig erkannt werden. Ein grüner Schema-Diff allein reicht nicht als Maturity-Beleg.
 
 ## Leitgedanke
 

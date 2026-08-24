@@ -46,6 +46,13 @@ skills:
   # - Wissensmanagement/Skills/knowledge-query
   # - Wissensmanagement/Skills/knowledge-base-review
 
+  # Schnittstellen und Verträge
+  # - Schnittstellen-und-Vertraege/Skills/interface-design
+  # - Schnittstellen-und-Vertraege/Skills/http-api-design
+  # - Schnittstellen-und-Vertraege/Skills/event-contract-design
+  # - Schnittstellen-und-Vertraege/Skills/contract-change-review
+  # - Schnittstellen-und-Vertraege/Skills/interface-review
+
   # Dokumentationserstellung
   # - Dokumentationserstellung/Skills/docs-plan
   # - Dokumentationserstellung/Skills/technical-writing
@@ -126,6 +133,7 @@ workflows:
   # - Workflows/Teststrategie-und-QA.md
   # - Workflows/Long-Horizon-Agentenarbeit.md
   # - Workflows/Wissensbasis-Aufbauen-und-Pflegen.md
+  # - Workflows/Schnittstellenvertrag-Entwerfen-und-Aendern.md
 
 quality_policy:
   minimum_maturity: "<project-decision>"
@@ -147,3 +155,4 @@ notes:
   - Ein Workflow autorisiert keine darin enthaltenen riskanten Aktionen oder Human Gates automatisch.
   - Context-/Token-Skills optimieren Active Context und taskbezogenen Working State; dauerhaft gepflegtes Wissen gehört zum Bereich `Wissensmanagement/`.
   - Knowledge-Base-Tools, Taxonomien, Datenschutzklassen und Sources of Truth bleiben projektspezifisch.
+  - Schnittstellen-Standards, Frameworks, reale Consumer, Versionierungs-Policies und Release-/Deprecation-Gates bleiben projektspezifisch.
