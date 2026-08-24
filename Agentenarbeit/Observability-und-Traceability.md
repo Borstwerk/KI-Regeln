@@ -4,7 +4,23 @@
 
 Agentenarbeit soll nicht nur ausführbar, sondern später nachvollziehbar sein.
 
-Observability bedeutet, dass relevante Zustände, Prüfungen und Agentenaktionen sichtbar werden. Traceability verbindet Auftrag, Agentenlauf, Ergebnis und Freigabe zu einer nachvollziehbaren Spur.
+Observability bedeutet in diesem Bereich, dass relevante Zustände, Prüfungen und Agentenaktionen sichtbar werden. Traceability verbindet Auftrag, Agentenlauf, Ergebnis und Freigabe zu einer nachvollziehbaren Spur.
+
+## Abgrenzung zu System-Observability
+
+Diese Datei behandelt **Agenten- und Arbeitsprozess-Observability**.
+
+`../Reliability-und-System-Observability/` behandelt dagegen die Runtime-Observability von laufenden Services, Jobs, Datenflüssen und technischen Dependencies.
+
+```text
+Agentenarbeit / Observability
+→ Auftrag, Agentenlauf, Toolereignisse, Artefakte, Evidence, Gates
+
+Reliability / System-Observability
+→ Service Health, Nutzerwirkung, Runtime-Telemetrie, Dependencies, Incidents
+```
+
+Beide Bereiche können strukturierte Events, IDs, Logs oder Traces verwenden. Die fachliche Source of Truth und die zu beantwortenden Fragen sind jedoch unterschiedlich.
 
 ## Grundprinzip
 
