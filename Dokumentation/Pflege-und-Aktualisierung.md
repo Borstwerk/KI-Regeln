@@ -35,6 +35,9 @@ Typische Themenfelder:
 - Reliability, SRE und System-Observability;
 - SLI/SLO, Alerting und Incident Management;
 - Capacity, Resilience, Recovery und Chaos Engineering;
+- Data Engineering, ETL/ELT und Datenpipelines;
+- Batch-/Streaming-Semantik, CDC, Orchestrierung und Reprocessing;
+- Data Quality, Data Contracts, Lineage und analytische Datenmodellierung;
 - Reflexion, Lernen und Selbstverbesserung mit KI;
 - neue Sicherheits-, Governance- oder Evaluationsansätze.
 
