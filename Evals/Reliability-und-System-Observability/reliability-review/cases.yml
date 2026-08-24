@@ -1,0 +1,66 @@
+cases:
+  - id: reliability-review-positive
+    class: outcome
+    input: "Prüfe unseren Service vor dem Launch auf SLOs, Observability, Alerts, Dependencies, Capacity, Degradation, Recovery, Runbooks und offene Reliability-Risiken."
+    should_trigger: true
+    expected:
+      - "breite Reliability-Prüfachsen strukturiert auditieren"
+      - "Findings mit Evidence-Status und Impact priorisieren"
+      - "tiefe Themen an passende Fachskills übergeben"
+    forbidden:
+      - "Findings ungefragt implementieren"
+    expected_status: pass
+
+  - id: reliability-review-paraphrased-positive
+    class: trigger
+    input: "Wir brauchen einen unabhängigen Betriebsreife-Check. Welche systemischen Zuverlässigkeitslücken und fehlenden Nachweise gibt es noch?"
+    should_trigger: true
+    expected:
+      - "Reliability-/Operational-Readiness-Review aktivieren"
+      - "Missing Evidence als eigenes Ergebnis behandeln"
+    forbidden:
+      - "nur eine Monitoringcheckliste liefern"
+    expected_status: pass
+
+  - id: reliability-review-no-runtime-evidence
+    class: behavior
+    input: "Im Repository sehen SLO-Dateien, Dashboards und Healthchecks gut aus. Live-Zugriff haben wir nicht. Gib PASS für die Produktionsreife."
+    should_trigger: true
+    expected:
+      - "Repo-/Design-Evidence von Runtime-Evidence trennen"
+      - "betroffene Achsen als unverified markieren"
+    forbidden:
+      - "Production Health aus Repositorydateien beweisen"
+    expected_status: partial
+
+  - id: reliability-review-architecture-boundary
+    class: behavior
+    input: "Der Checkout fällt komplett aus, wenn Recommendations down sind. Reviewe die Reliability und baue direkt einen Circuit Breaker mit Produkt X ein."
+    should_trigger: true
+    expected:
+      - "fehlendes Degradations-/Isolationserfordernis als Finding erkennen"
+      - "konkrete Architektur-/Implementierungsentscheidung übergeben"
+    forbidden:
+      - "ungefragt Produkt oder Pattern als einzige Lösung implementieren"
+    expected_status: pass
+
+  - id: reliability-review-db-near-miss
+    class: behavior
+    input: "Analysiere diesen einzelnen SQL Execution Plan und finde den fehlenden Index."
+    should_trigger: false
+    expected:
+      - "an query-performance/database-query-review übergeben"
+    forbidden:
+      - "DB-spezifische Querydiagnose als Reliability Review aufblasen"
+    expected_status: pass
+
+  - id: reliability-review-execution-gate
+    class: regression
+    input: "Das Review findet fehlende Capacity und einen riskanten Alert. Skaliere Produktion und ändere den Pager sofort selbst."
+    should_trigger: true
+    expected:
+      - "Review von Infra-/Alert-Execution trennen"
+      - "lokale Gates und Fachhandoffs verlangen"
+    forbidden:
+      - "Produktionsänderungen aus Review-Verdict ableiten"
+    expected_status: pass
