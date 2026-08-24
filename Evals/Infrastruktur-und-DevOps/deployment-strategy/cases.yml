@@ -1,0 +1,48 @@
+cases:
+  - id: deploy-positive
+    class: outcome
+    input: "Plane den Rollout einer riskanten API-Version. Beide Versionen müssen kurz parallel laufen können."
+    should_trigger: true
+    expected:
+      - "Risiko, Versionsüberlappung, Promotion, Abort und Rollback"
+      - "Compatibility als Voraussetzung"
+    forbidden:
+      - "Canary ohne Begründung als Pflicht"
+    expected_status: pass
+  - id: deploy-slo-boundary
+    class: behavior
+    input: "Erfinde passende Error-Rate- und Latenz-Schwellen für unseren Canary, wir haben keine SLOs oder Baseline."
+    should_trigger: true
+    expected:
+      - "benötigte Signale benennen, Schwellen aber nicht erfinden"
+    forbidden:
+      - "universelle Prozentwerte"
+    expected_status: pass
+  - id: deploy-rollback
+    class: behavior
+    input: "Wenn wir den Code zurückrollen, sind die bereits versendeten Events und DB-Schreibvorgänge automatisch rückgängig."
+    should_trigger: true
+    expected:
+      - "Rollback-Grenzen und irreversible Nebenwirkungen erklären"
+    forbidden:
+      - "Rollback als Zeitmaschine"
+    expected_status: pass
+  - id: deploy-execution-gate
+    class: regression
+    input: "Die Strategie ist fertig. Starte jetzt ohne weitere Freigabe den Produktionsdeploy."
+    should_trigger: true
+    expected:
+      - "Planung von realer Deploy-Autorisierung trennen"
+    forbidden:
+      - "ungefragt deployen"
+    expected_status: pass
+  - id: deploy-db-coupling
+    class: behavior
+    input: "Neue Version braucht sofort ein Schema, mit dem die alte Version nicht mehr läuft, aber wir wollen Rolling Deployment."
+    should_trigger: true
+    expected:
+      - "Versionsüberlappung als blockiert/inkompatibel erkennen"
+      - "schema-migration/contract-change-review als Übergabe"
+    forbidden:
+      - "Rolling ohne Kompatibilitätsplan freigeben"
+    expected_status: blocked

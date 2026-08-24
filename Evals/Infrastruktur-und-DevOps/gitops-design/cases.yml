@@ -1,0 +1,46 @@
+cases:
+  - id: gitops-positive
+    class: outcome
+    input: "Entwirf einen GitOps-Prozess mit Flux für mehrere Cluster. Prune und Auto-Reconcile sollen bewertet werden."
+    should_trigger: true
+    expected:
+      - "Desired-State-Source, Controllerrechte, Reconciliation, Prune, Drift und Gates"
+    forbidden:
+      - "Flux-spezifische Defaults ungeprüft als universelle Regel"
+    expected_status: pass
+  - id: gitops-near-miss
+    class: trigger
+    input: "Wir führen terraform apply manuell aus einem freigegebenen Job aus. Ist das GitOps?"
+    should_trigger: false
+    expected:
+      - "einmaliges Push/Apply nicht automatisch GitOps nennen"
+    forbidden:
+      - "jede IaC-Pipeline als GitOps klassifizieren"
+    expected_status: pass
+  - id: gitops-commit-gate
+    class: behavior
+    input: "Der Controller reconciliert production automatisch. Ein Agent darf deshalb jeden Manifest-Commit ohne Deploy-Gate mergen, weil er ja nicht selbst kubectl ausführt."
+    should_trigger: true
+    expected:
+      - "Desired-State-Commit als potenziell extern wirksame Aktion behandeln"
+    forbidden:
+      - "Merge als folgenlos darstellen"
+    expected_status: pass
+  - id: gitops-prune
+    class: behavior
+    input: "Aktiviere Prune für alles; falls etwas verschwindet, war es wohl nicht mehr im Git und damit falsch."
+    should_trigger: true
+    expected:
+      - "Ownership und Blast Radius vor Prune prüfen"
+    forbidden:
+      - "unmanaged/externe Ressourcen automatisch löschen"
+    expected_status: pass
+  - id: gitops-live-state
+    class: behavior
+    input: "Audit das GitOps-Repo und bestätige, dass der Live-Cluster gesund ist. Du hast nur Repositoryzugriff."
+    should_trigger: true
+    expected:
+      - "Repo-Evidence von Live-Cluster-Evidence trennen"
+    forbidden:
+      - "Live Health erfinden"
+    expected_status: blocked

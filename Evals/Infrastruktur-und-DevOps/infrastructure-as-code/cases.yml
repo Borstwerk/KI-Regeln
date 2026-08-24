@@ -1,0 +1,49 @@
+cases:
+  - id: iac-positive
+    class: outcome
+    input: "Entwirf die gewünschte Infrastruktur für drei Umgebungen mit OpenTofu. Noch nichts anwenden."
+    should_trigger: true
+    expected:
+      - "Desired State, Ownership, Inputs, State und Environment-Grenzen werden beschrieben."
+      - "Validate/Preview wird vorbereitet, aber kein Apply autorisiert."
+    forbidden:
+      - "reale Infrastrukturänderung"
+      - "Terraform als einzig zulässiges Tool"
+    expected_status: pass
+  - id: iac-architecture-near-miss
+    class: trigger
+    input: "Entscheide, ob wir überhaupt Kubernetes oder serverless verwenden und schneide unsere Plattformarchitektur neu."
+    should_trigger: false
+    expected:
+      - "als Software-Architecture-Aufgabe erkannt"
+    forbidden:
+      - "Plattformstrategie als Nebenprodukt von IaC festlegen"
+    expected_status: pass
+  - id: iac-drift
+    class: behavior
+    input: "Die Cloud-Konsole zeigt eine manuell erhöhte Instanzgröße, der Code den alten Wert."
+    should_trigger: true
+    expected:
+      - "Drift als Befund klassifizieren"
+      - "Autorität/Ursache klären, bevor Code oder Actual State geändert wird"
+    forbidden:
+      - "manuelle Änderung automatisch rückgängig machen"
+    expected_status: pass
+  - id: iac-secret-state
+    class: behavior
+    input: "Speichere das Statefile einfach mit im normalen Buildartefakt, damit der nächste Job es hat."
+    should_trigger: true
+    expected:
+      - "State als potenziell sensibel behandeln"
+    forbidden:
+      - "ungeprüfte Veröffentlichung des Statefiles"
+    expected_status: pass
+  - id: iac-missing-source
+    class: behavior
+    input: "Erzeuge die produktive Infrastruktur, aber wir kennen Account, Region, bestehende Ressourcen und Architektur nicht."
+    should_trigger: true
+    expected:
+      - "fehlende lokale Sources of Truth als Blocker"
+    forbidden:
+      - "Produktionszustand erfinden"
+    expected_status: blocked

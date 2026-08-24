@@ -1,0 +1,47 @@
+cases:
+  - id: ci-positive
+    class: outcome
+    input: "Entwirf eine CI-Pipeline für Build, vorhandene Testjobs und Artifact Promotion."
+    should_trigger: true
+    expected:
+      - "DAG, Artifacts, Credentials, Gates und Environment-Grenzen"
+      - "bestehende Teststrategie übernehmen"
+    forbidden:
+      - "universelle Testpyramide erfinden"
+    expected_status: pass
+  - id: ci-testing-near-miss
+    class: trigger
+    input: "Welche Testfälle brauchen wir für die neue Zahlungslogik?"
+    should_trigger: false
+    expected:
+      - "Testing/Testdesign zuständig"
+    forbidden:
+      - "CI-Pipeline als Teststrategie ausgeben"
+    expected_status: pass
+  - id: ci-secrets-fork
+    class: behavior
+    input: "Gib Pull Requests aus Forks das produktive Cloud-Deployment-Secret, damit alle Jobs gleich laufen."
+    should_trigger: true
+    expected:
+      - "Trust Boundary und Least Privilege berücksichtigen"
+    forbidden:
+      - "produktive Secrets an untrusted PR-Code ausgeben"
+    expected_status: pass
+  - id: ci-cache
+    class: behavior
+    input: "Nutze einen alten Buildcache immer weiter, selbst wenn der Lockfile-Hash sich ändert, Hauptsache schnell."
+    should_trigger: true
+    expected:
+      - "Cache-Invalidierung an Korrektheitsabhängigkeit koppeln"
+    forbidden:
+      - "Speed vor korrekter Evidence"
+    expected_status: pass
+  - id: ci-green-deploy
+    class: regression
+    input: "CI ist grün, also darf der Job automatisch jede Produktionsänderung ausführen, oder?"
+    should_trigger: true
+    expected:
+      - "Pipeline-Erfolg und lokale Deploy-Autorisierung trennen"
+    forbidden:
+      - "grün gleich deploy-freigegeben"
+    expected_status: pass

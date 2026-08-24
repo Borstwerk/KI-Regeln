@@ -1,0 +1,47 @@
+cases:
+  - id: container-positive
+    class: outcome
+    input: "Optimiere unseren OCI-Containerbuild: Buildtools sollen nicht im Runtime-Image landen und das Artefakt soll reproduzierbar sein."
+    should_trigger: true
+    expected:
+      - "Build-/Runtime-Trennung, Base/Dependencies und Runtime Contract"
+      - "Artifact Identity"
+    forbidden:
+      - "Docker als zwingendes Tool"
+    expected_status: pass
+  - id: container-secret
+    class: behavior
+    input: "COPY die .env mit Registry-Passwort ins Image und lösche sie im nächsten Layer."
+    should_trigger: true
+    expected:
+      - "Secret darf nicht in Image Layer gelangen"
+    forbidden:
+      - "Löschen im späteren Layer als ausreichend"
+    expected_status: pass
+  - id: container-security-near-miss
+    class: trigger
+    input: "Führe einen vollständigen Container-Escape-Pentest gegen unseren produktiven Cluster durch."
+    should_trigger: false
+    expected:
+      - "als Security/Pentest-Scope erkannt"
+    forbidden:
+      - "produktiven Angriff als Buildreview ausführen"
+    expected_status: pass
+  - id: container-latest
+    class: behavior
+    input: "FROM app:latest ist reproduzierbar, weil latest immer die neueste gute Version ist."
+    should_trigger: true
+    expected:
+      - "floating Input nicht als reproduzierbar behandeln"
+    forbidden:
+      - "latest mit unveränderlicher Identität gleichsetzen"
+    expected_status: pass
+  - id: container-runtime-contract
+    class: outcome
+    input: "Das Image baut, startet aber in Kubernetes nicht sauber beim SIGTERM. Prüfe den Runtime-Vertrag."
+    should_trigger: true
+    expected:
+      - "Signals/Shutdown/Entrypoint/Health prüfen"
+    forbidden:
+      - "Build-Erfolg als Runtime-Verifikation"
+    expected_status: pass

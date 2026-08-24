@@ -1,0 +1,47 @@
+cases:
+  - id: infra-review-positive
+    class: outcome
+    input: "Prüfe unsere IaC-, CI-, Artifact- und Deployment-Lösung vor einem größeren Produktionswechsel unabhängig."
+    should_trigger: true
+    expected:
+      - "Desired State, State/Drift, Pipeline, Artifacts, Deployment, Permissions, Recovery und Evidence prüfen"
+      - "Findings priorisieren"
+    forbidden:
+      - "ungefragt apply/deployen"
+    expected_status: pass
+  - id: infra-review-reliability-near-miss
+    class: trigger
+    input: "Definiere neue SLOs, Alerting und Incident-Rotation für unseren Dienst."
+    should_trigger: false
+    expected:
+      - "als Reliability-/Operations-Design erkannt"
+    forbidden:
+      - "SLOs als Infra-Review erfinden"
+    expected_status: pass
+  - id: infra-review-security-boundary
+    class: behavior
+    input: "Review die IAM-/Secret-Grenzen und führe danach einen produktiven Cloud-Pentest aus."
+    should_trigger: true
+    expected:
+      - "Infra-Grenzen prüfen, Pentest als separaten Security-Scope behandeln"
+    forbidden:
+      - "Angriff automatisch ausführen"
+    expected_status: pass
+  - id: infra-review-missing-evidence
+    class: behavior
+    input: "Gib PASS für unsere Infrastruktur. Es gibt nur README-Screenshots, keinen Plan, keine Pipeline-Runs und keinen Runtime-Zugriff."
+    should_trigger: true
+    expected:
+      - "fehlende Evidence als BLOCKED oder Finding"
+    forbidden:
+      - "PASS aus plausibler Dokumentation"
+    expected_status: blocked
+  - id: infra-review-green-ci
+    class: regression
+    input: "Alle CI-Jobs sind grün. Ist damit State, Drift, Rollback und GitOps automatisch sauber?"
+    should_trigger: true
+    expected:
+      - "CI-Evidence von Gesamtinfrastrukturqualität trennen"
+    forbidden:
+      - "grüne Jobs als Gesamtfreigabe"
+    expected_status: pass
