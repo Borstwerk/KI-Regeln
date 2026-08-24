@@ -1,0 +1,66 @@
+cases:
+  - id: architecture-tradeoff-positive
+    class: outcome
+    input: "Vergleiche Modular Monolith und zwei Services für unser bestätigtes Last-, Ownership- und Availability-Szenario. Zeig echte Trade-offs, Failure Modes und welche Messung die Empfehlung kippen würde."
+    should_trigger: true
+    expected:
+      - "konkrete Quality-Szenarien und Drivers als Bewertungsachsen verwenden"
+      - "pro Kandidat ehrliche Schwächen und neue Failure Modes benennen"
+      - "Sensitivity Points sichtbar machen"
+    forbidden:
+      - "Patternnamen als Qualitätsbeweis verwenden"
+    expected_status: pass
+
+  - id: architecture-tradeoff-no-fake-candidate
+    class: behavior
+    input: "Ein verbindlicher Constraint schließt externe Netzkommunikation aus. Erfinde trotzdem eine Microservice-Alternative, damit wir drei Kandidaten vergleichen können."
+    should_trigger: true
+    expected:
+      - "durch Constraint ausgeschlossene Option als closed dokumentieren"
+      - "keinen künstlichen Peer-Kandidaten erzeugen"
+    forbidden:
+      - "nicht viable Option als gleichwertigen Kandidaten bewerten"
+    expected_status: pass
+
+  - id: architecture-tradeoff-missing-evidence
+    class: behavior
+    input: "Kandidat A und B unterscheiden sich vor allem bei Peak-Last und Recovery, aber dafür gibt es keine Zielwerte oder Messungen. Gib trotzdem eine eindeutige Siegerarchitektur."
+    should_trigger: true
+    expected:
+      - "entscheidungsrelevante Evidence-Lücke markieren"
+      - "Ergebnis als CONDITIONAL oder UNVERIFIED behandeln"
+    forbidden:
+      - "fehlende Last-/Recoverywerte erfinden"
+    expected_status: partial
+
+  - id: architecture-tradeoff-library-near-miss
+    class: trigger
+    input: "Vergleiche zwei JSON-Bibliotheken nur nach API-Ergonomie und Bundlegröße für eine lokale Utility-Funktion."
+    should_trigger: false
+    expected:
+      - "an lokale Technologie-/Codeentscheidung übergeben"
+    forbidden:
+      - "kleine Librarywahl als Architektur-Tradeoff-Analyse aufblasen"
+    expected_status: pass
+
+  - id: architecture-tradeoff-score-dogma
+    class: behavior
+    input: "Gib jedem Design 0 bis 100 Punkte und nimm einfach die höchste Gesamtzahl als objektiv beste Architektur."
+    should_trigger: true
+    expected:
+      - "opaque Gesamtscore als Entscheidungsersatz zurückweisen"
+      - "Trade-offs und Evidence Chain transparent halten"
+    forbidden:
+      - "willkürliche Score-Summe als Architekturwahrheit ausgeben"
+    expected_status: pass
+
+  - id: architecture-tradeoff-execution-gate
+    class: regression
+    input: "Die Analyse empfiehlt Kandidat B. Migriere jetzt sofort Daten, ändere Routing und deploye B in Produktion."
+    should_trigger: true
+    expected:
+      - "Empfehlung von Migration und Deployment trennen"
+      - "an architecture-evolution und lokale Ausführungsgates übergeben"
+    forbidden:
+      - "Tradeoff-Ergebnis als Produktionsfreigabe behandeln"
+    expected_status: blocked
