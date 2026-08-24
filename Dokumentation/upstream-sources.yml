@@ -1411,10 +1411,11 @@ sources:
     cadence: monthly
     last_checked: 2026-08-24
     local_impact:
-      - Data-Engineering/Orchestrierung-Abhaengigkeiten-und-Ausfuehrungszustand.md
+      - Data-Engineering/Orchestrierung-Abhaengigkeiten-und-Reprocessing.md
       - Data-Engineering/Transformationen-und-Backfills.md
-      - Data-Engineering/Skills/pipeline-orchestration/SKILL.md
-      - Data-Engineering/Skills/data-backfill/SKILL.md
+      - Data-Engineering/Skills/data-orchestration-design/SKILL.md
+      - Data-Engineering/Skills/data-transformation-design/SKILL.md
+      - Workflows/Backfill-und-Reprocessing.md
 
   - id: apache-beam-programming-guide
     area: Data-Engineering
@@ -1424,9 +1425,9 @@ sources:
     cadence: quarterly
     last_checked: 2026-08-24
     local_impact:
-      - Data-Engineering/Batch-Streaming-Zeit-und-Late-Data.md
+      - Data-Engineering/Batch-Streaming-und-Zeitsemantik.md
       - Data-Engineering/Skills/data-ingestion-design/SKILL.md
-      - Data-Engineering/Skills/data-pipeline-review/SKILL.md
+      - Data-Engineering/Skills/data-engineering-review/SKILL.md
 
   - id: apache-kafka-streams-configs
     area: Data-Engineering
@@ -1436,7 +1437,7 @@ sources:
     cadence: quarterly
     last_checked: 2026-08-24
     local_impact:
-      - Data-Engineering/Batch-Streaming-Zeit-und-Late-Data.md
+      - Data-Engineering/Batch-Streaming-und-Zeitsemantik.md
       - Data-Engineering/Ingestion-CDC-und-Replay.md
       - Data-Engineering/Skills/data-ingestion-design/SKILL.md
 
@@ -1448,9 +1449,9 @@ sources:
     cadence: monthly
     last_checked: 2026-08-24
     local_impact:
-      - Data-Engineering/Lineage-Provenance-und-Ownership.md
-      - Data-Engineering/Skills/data-lineage/SKILL.md
-      - Data-Engineering/Skills/data-pipeline-review/SKILL.md
+      - Data-Engineering/Lineage-Provenance-und-Impact-Analyse.md
+      - Data-Engineering/Skills/data-lineage-analysis/SKILL.md
+      - Data-Engineering/Skills/data-engineering-review/SKILL.md
 
   - id: open-data-contract-standard
     area: Data-Engineering
@@ -1460,9 +1461,9 @@ sources:
     cadence: monthly
     last_checked: 2026-08-24
     local_impact:
-      - Data-Engineering/Data-Contracts-und-Schemaevolution.md
-      - Data-Engineering/Skills/data-contract/SKILL.md
-      - Data-Engineering/Skills/data-quality/SKILL.md
+      - Data-Engineering/Data-Contracts-Schema-und-Evolution.md
+      - Data-Engineering/Skills/data-contract-design/SKILL.md
+      - Data-Engineering/Skills/data-quality-design/SKILL.md
 
   - id: vaquarkhan-data-specification-skill
     area: Data-Engineering
@@ -1476,9 +1477,10 @@ sources:
     last_checked: 2026-08-24
     local_impact:
       - Data-Engineering/README.md
+      - Data-Engineering/Skills/data-pipeline-design/SKILL.md
       - Data-Engineering/Skills/data-ingestion-design/SKILL.md
       - Data-Engineering/Skills/analytical-data-modeling/SKILL.md
-      - Data-Engineering/Skills/data-pipeline-review/SKILL.md
+      - Data-Engineering/Skills/data-engineering-review/SKILL.md
 
   - id: vaquarkhan-safe-backfill-replay-skill
     area: Data-Engineering
@@ -1492,8 +1494,9 @@ sources:
     last_checked: 2026-08-24
     local_impact:
       - Data-Engineering/Transformationen-und-Backfills.md
-      - Data-Engineering/Skills/data-backfill/SKILL.md
-      - Workflows/Data-Backfill-und-Reprocessing.md
+      - Data-Engineering/Skills/data-transformation-design/SKILL.md
+      - Data-Engineering/Skills/data-orchestration-design/SKILL.md
+      - Workflows/Backfill-und-Reprocessing.md
 
 policy:
   on_change: review-only
