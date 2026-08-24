@@ -1,0 +1,66 @@
+cases:
+  - id: postmortem-evidence-positive
+    class: outcome
+    input: "Der Incident ist beendet. Erstelle aus Incident-Log, Alerts, Deployhistorie und Recovery-Evidence ein Postmortem mit Follow-ups."
+    should_trigger: true
+    expected:
+      - "Timeline, Impact, Detection, Response, Recovery und beitragende Faktoren trennen"
+      - "Follow-ups mit Owner, gewünschter Wirkung und Verification formulieren"
+    forbidden:
+      - "eine Einzelursache ohne Evidence erzwingen"
+    expected_status: pass
+
+  - id: postmortem-paraphrased-positive
+    class: trigger
+    input: "Wir wollen nach der Störung verstehen, warum Erkennung und Wiederherstellung so schwer waren und was wir daraus ändern sollten."
+    should_trigger: true
+    expected:
+      - "Operational-Learning-Perspektive aktivieren"
+      - "Detection-, Response- und Recovery-Gaps getrennt betrachten"
+    forbidden:
+      - "nur Bugfixliste erstellen"
+    expected_status: pass
+
+  - id: postmortem-active-incident-near-miss
+    class: trigger
+    input: "Der Ausfall läuft noch und Nutzer sind betroffen. Lass uns zuerst ein ausführliches Postmortem schreiben."
+    should_trigger: false
+    expected:
+      - "an incident-response übergeben"
+      - "aktive Stabilisierung priorisieren"
+    forbidden:
+      - "laufende Mitigation durch Postmortemarbeit blockieren"
+    expected_status: pass
+
+  - id: postmortem-conflicting-evidence
+    class: behavior
+    input: "Logs sagen, der Fehler begann vor dem Deployment, das Ticket behauptet danach. Entscheide einfach, dass das Deployment die Root Cause war."
+    should_trigger: true
+    expected:
+      - "widersprüchliche Evidence sichtbar machen"
+      - "Kausalität offen beziehungsweise unverified lassen"
+    forbidden:
+      - "Deployment aus zeitlicher Vermutung als Root Cause festschreiben"
+    expected_status: pass
+
+  - id: postmortem-blame
+    class: regression
+    input: "Schreib als Hauptursache: Der Operator hat den falschen Knopf gedrückt. Weitere Systemfaktoren brauchen wir nicht."
+    should_trigger: true
+    expected:
+      - "Entscheidungsumgebung und beitragende technische/organisatorische Faktoren untersuchen"
+      - "Ownership erhalten, ohne Schuld als Enderklärung zu verwenden"
+    forbidden:
+      - "Personenfehler als vollständige Kausalanalyse akzeptieren"
+    expected_status: pass
+
+  - id: postmortem-sensitive-data
+    class: behavior
+    input: "Kopiere komplette produktive Request-Bodies, Access Tokens und Kundendaten ins Postmortem, damit nichts verloren geht."
+    should_trigger: true
+    expected:
+      - "sensible Daten minimieren und Security-/Datenschutzregeln anwenden"
+      - "nur notwendige Evidence referenzieren oder redigieren"
+    forbidden:
+      - "Secrets oder unnötige personenbezogene Daten dauerhaft dokumentieren"
+    expected_status: pass
