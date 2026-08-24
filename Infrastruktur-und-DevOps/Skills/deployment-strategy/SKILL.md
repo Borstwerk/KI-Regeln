@@ -24,10 +24,10 @@ Den Blast Radius einer Änderung kontrollieren und vor vollständiger Freigabe b
 2. Risiko, Blast Radius und Reversibilität bestimmen.
 3. Versionsüberlappung und Kompatibilität prüfen.
 4. passende Strategie wählen und begründen.
-5. Promotion/Pause/Abort-Signale definieren; Schwellen aus lokaler Policy übernehmen.
+5. Promotion/Pause/Abort-Signale definieren; Schwellen aus lokaler Policy beziehungsweise vorhandener Reliability-Evidence übernehmen.
 6. Rollbackpfad und nicht rückgängig machbare Nebenwirkungen nennen.
 7. lokale Deploy-/Release-Gates explizit halten.
-8. Fresh Evidence nach jeder relevanten Stufe verlangen.
+8. Fresh Reliability-/Health-/Business-Evidence nach jeder relevanten Stufe verlangen.
 
 ## Nicht tun
 
@@ -57,4 +57,7 @@ Gates
 - `contract-change-review`
 - `schema-migration`
 - `failure-testing`
+- `slo-design`
+- `system-observability-design`
+- `reliability-review`
 - `verification-loop`
