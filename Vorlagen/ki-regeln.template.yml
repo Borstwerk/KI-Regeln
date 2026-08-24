@@ -62,6 +62,16 @@ skills:
   # - Infrastruktur-und-DevOps/Skills/gitops-design
   # - Infrastruktur-und-DevOps/Skills/infrastructure-review
 
+  # Reliability und System-Observability
+  # - Reliability-und-System-Observability/Skills/slo-design
+  # - Reliability-und-System-Observability/Skills/system-observability-design
+  # - Reliability-und-System-Observability/Skills/alert-design
+  # - Reliability-und-System-Observability/Skills/incident-response
+  # - Reliability-und-System-Observability/Skills/incident-postmortem
+  # - Reliability-und-System-Observability/Skills/capacity-planning
+  # - Reliability-und-System-Observability/Skills/resilience-experiment
+  # - Reliability-und-System-Observability/Skills/reliability-review
+
   # Dokumentationserstellung
   # - Dokumentationserstellung/Skills/docs-plan
   # - Dokumentationserstellung/Skills/technical-writing
@@ -145,6 +155,11 @@ workflows:
   # - Workflows/Schnittstellenvertrag-Entwerfen-und-Aendern.md
   # - Workflows/Infrastruktur-Aenderung.md
   # - Workflows/Build-Deploy-und-Promotion.md
+  # - Workflows/Reliability-Baseline-und-SLOs.md
+  # - Workflows/Produktionsincident.md
+  # - Workflows/Post-Incident-Learning.md
+  # - Workflows/Resilience-Game-Day.md
+  # - Workflows/Operational-Readiness-Review.md
 
 quality_policy:
   minimum_maturity: "<project-decision>"
@@ -169,3 +184,5 @@ notes:
   - Schnittstellen-Standards, Frameworks, reale Consumer, Versionierungs-Policies und Release-/Deprecation-Gates bleiben projektspezifisch.
   - Infrastrukturtools, Provider, Accounts/Cluster, State-Backends, Credentials, Environment-Policies, Health-Schwellen und Deploy-/Destroy-Gates bleiben projektspezifisch.
   - Preview, Plan oder CI-Grün autorisieren keine reale Infrastrukturänderung automatisch.
+  - SLO-Werte, Alert-Schwellen, Severity-/On-Call-Modelle, RTO/RPO, Capacity Limits, Recovery-/Failover-Regeln und konkrete Observability-Tools bleiben projektspezifisch.
+  - Ein Incident oder Resilience-Experiment erweitert keine Produktionsrechte. Fault Injection, Restart, Failover, Restore, Traffic Switch und andere reale Betriebsaktionen bleiben lokal gated.
