@@ -10,8 +10,8 @@ Ziel ist keine persönliche KI-Konfiguration und keine projektspezifische Wissen
 
 Das bedeutet:
 
-- allgemeine Kommunikations-, Reflexions-, Recherche-, Wissensmanagement-, Schnittstellen-/Contract-, Infrastruktur-/DevOps-, Reliability-/System-Observability-, Dokumentations-, Schreib-, Bild-, Web-, Datenbank-, Testing-, Agenten-, Sicherheits- und Entwicklungsregeln liegen hier;
-- projektspezifische Anforderungen, Architektur, Research-Fragen, interne Quellen, Wissensbestände, Fachmodelle, reale Schnittstellen/Consumer, Infrastrukturtools/Provider/Accounts/Cluster, reales Datenbankschema, konkrete Testumgebung, SLO-Werte, Alert-Schwellen, Severity-/On-Call-Modelle, RTO/RPO, Capacity Limits, Recovery-/Failover-Regeln, Markenregeln, visuelle Bibeln und Sonderregeln bleiben im jeweiligen Projekt;
+- allgemeine Kommunikations-, Reflexions-, Recherche-, Wissensmanagement-, Schnittstellen-/Contract-, Infrastruktur-/DevOps-, Reliability-/System-Observability-, Data-Engineering-, Dokumentations-, Schreib-, Bild-, Web-, Datenbank-, Testing-, Agenten-, Sicherheits- und Entwicklungsregeln liegen hier;
+- projektspezifische Anforderungen, Architektur, Research-Fragen, interne Quellen, Wissensbestände, Fachmodelle, reale Schnittstellen/Consumer, Data-Engineering-Sources-of-Truth und Grains, Infrastrukturtools/Provider/Accounts/Cluster, reales Datenbankschema, konkrete Testumgebung, SLO-Werte, Alert-Schwellen, Severity-/On-Call-Modelle, RTO/RPO, Capacity Limits, Recovery-/Failover-Regeln, Markenregeln, visuelle Bibeln und Sonderregeln bleiben im jeweiligen Projekt;
 - persönliche Profile oder unnötige personenbezogene Details gehören nicht in dieses Repository;
 - ein Skill ersetzt niemals die tatsächliche Spezifikation oder Dokumentation eines Projekts.
 
@@ -39,6 +39,7 @@ KI-Regeln/
 ├── Schnittstellen-und-Vertraege/
 ├── Infrastruktur-und-DevOps/
 ├── Reliability-und-System-Observability/
+├── Data-Engineering/
 ├── Dokumentationserstellung/
 ├── Schreiben/
 ├── Bildarbeit/
@@ -214,6 +215,9 @@ Software Architecture
 Schnittstellen und Verträge
 → was über diese Grenze zugesichert wird
 
+Data Engineering
+→ welche veröffentlichten Datasets und Datenprodukte Consumer mit Grain, Quality und Lifecycle erwarten dürfen
+
 Contract Testing
 → ob Consumer und Provider den Vertrag tatsächlich einhalten
 
@@ -260,6 +264,9 @@ Software Architecture
 
 Infrastruktur und DevOps
 → wie gewünschte Umgebungen beschrieben, gebaut, geändert und ausgeliefert werden
+
+Data Engineering
+→ welche Datenflüsse, Data Intervals, Replay-/Publish-Semantik und datenfachliche Evidence auf dieser Runtime laufen
 
 Testing und QA
 → welche Qualitätsrisiken wie geprüft werden
@@ -325,6 +332,9 @@ Requirements / lokale Business-Policy
 Reliability und System-Observability
 → wie Ziele operationalisiert, beobachtet und unter Betrieb/Störung geprüft werden
 
+Data Engineering
+→ definiert Datenbedeutung sowie pipeline-spezifische Freshness-, Completeness-, Lag-, Backlog- und Reconciliation-Evidence
+
 Software Architecture
 → welche Struktur und Patterns das gewünschte Failure-Verhalten ermöglichen
 
@@ -368,6 +378,79 @@ OpenTelemetry, Prometheus, Grafana, Datadog, PagerDuty, Elastic, Splunk, New Rel
 SLO-Werte, Alert-Schwellen, Severity-/On-Call-Modelle, RTO/RPO, Capacity Limits, Recovery-/Failover-Regeln und Produktionsgates bleiben projektspezifisch.
 
 > Reliability ist die Verbindung aus relevanten Zielen, glaubwürdiger Runtime-Evidence, kontrollierter Reaktion und nachweisbarem Lernen.
+
+## Data Engineering
+
+Tool- und plattformneutrale Regeln für systemübergreifende Datenflüsse und analytische Datenprodukte von der autoritativen Quelle bis zum Consumer.
+
+Der Bereich behandelt insbesondere:
+
+- Source of Truth und Ownership;
+- Batch-, Micro-Batch- und Streaming-Verarbeitung;
+- Ingestion, Snapshots, CDC, Cursor, Offsets und Replay;
+- Transformationen, Incrementalität und Backfills;
+- analytische Datenmodellierung mit Grain, Measures, Dimensionen und Historisierung;
+- Data Quality, Freshness, Completeness und Reconciliation;
+- Data Contracts für veröffentlichte Datasets;
+- Schema- und Semantikevolution;
+- Lineage, Provenance und Change Impact;
+- Orchestrierung, Data Intervals, Retries, Catchup und Reprocessing;
+- Event Time, Processing Time, Watermarks und Late Data;
+- Publish, Retention und Lifecycle;
+- pipeline-spezifische Runtime-/Freshness-/Lag-/Backlog-Evidence.
+
+Scope-Grenze:
+
+```text
+Datenbanken
+→ Zustand und Verhalten innerhalb eines operativen Datenspeichers
+
+Schnittstellen und Verträge
+→ operative APIs, Messages und Event-Contracts
+
+Data Engineering
+→ Source-to-Consumer-Datenflüsse und veröffentlichte Datasets mit Grain, Quality, Lineage, Replay und Lifecycle
+
+Testing und QA
+→ allgemeine Testmethodik und Teststrategie
+
+Reliability und System-Observability
+→ systemweite SLOs, Alerts, Incidents, Capacity und Resilience
+
+Infrastruktur und DevOps
+→ Scheduler-, Compute-, Storage- und Deployment-Runtime
+```
+
+Operative Skills:
+
+- `data-pipeline-design`;
+- `data-ingestion-design`;
+- `data-transformation-design`;
+- `analytical-data-modeling`;
+- `data-quality-design`;
+- `data-contract-design`;
+- `data-lineage-analysis`;
+- `data-orchestration-design`;
+- `data-engineering-review`.
+
+Zentrale Trennungen:
+
+```text
+Job grün ≠ Daten korrekt
+Schema kompatibel ≠ Semantik kompatibel
+Streaming ≠ exactly-once
+Watermark ≠ garantierte Vollständigkeit
+Retry ≠ Replay/Backfill
+DB-Migrations-Backfill ≠ systemübergreifendes Pipeline-Reprocessing
+Design Lineage ≠ Runtime Lineage
+Backfill-Plan ≠ Backfill-Autorisierung
+```
+
+Airflow, Dagster, dbt, Kafka, Flink, Spark, Beam, Snowflake, BigQuery, Databricks, Iceberg, Delta Lake, OpenLineage und andere Produkte bleiben konkrete Adapter.
+
+Sources of Truth, Grain, Qualitäts-/Freshness-Regeln, Retention, reale Consumer, Data-Contract-Zusagen, Backfill-/Replay-Scope und Publish-/Execution-Gates bleiben projektspezifisch.
+
+> Eine Pipeline ist nicht korrekt, weil sie lief, sondern wenn richtige Daten mit nachvollziehbarer Semantik und Evidence beim vorgesehenen Consumer ankommen.
 
 ## Dokumentationserstellung
 
@@ -470,6 +553,9 @@ TDD
 Testing und QA
 → welche Risiken wie geprüft werden und welche Evidence daraus folgt
 
+Data Engineering
+→ fachliche Quality-, Freshness- und Reconciliation-Regeln für Datasets
+
 Reliability und System-Observability
 → Runtime-Health, SLOs, Incidents, Capacity und systemische Resilience-Hypothesen unter kontrollierten Störungen
 ```
@@ -542,7 +628,7 @@ Operative Skills:
 
 `skill-catalog.yml` ist das maschinenlesbare Inventar der zentralen Skills.
 
-Aktuell enthält der Katalog 95 zentrale Skills.
+Aktuell enthält der Katalog 104 zentrale Skills.
 
 Reifestufen:
 
@@ -591,7 +677,8 @@ Erste Evalpacks bestehen unter anderem für:
 - alle sieben Wissensmanagement-Skills;
 - alle fünf Schnittstellen-/Contract-Skills;
 - alle sieben Infrastruktur-/DevOps-Skills;
-- alle acht Reliability-/System-Observability-Skills.
+- alle acht Reliability-/System-Observability-Skills;
+- alle neun Data-Engineering-Skills.
 
 Die Context-Evals prüfen unter anderem fehlende Messfähigkeit, erfundene Tokenpräzision, Verlust kritischer Constraints bei Compaction, Handoff-Fortsetzungsfähigkeit und die Grenze zu Persistent Knowledge.
 
@@ -603,7 +690,11 @@ Die Infrastruktur-/DevOps-Evals prüfen unter anderem State-/Drift-Grenzen, stal
 
 Die Reliability-/System-Observability-Evals prüfen unter anderem SLO-vs.-RTO/RPO-Grenzen, Observability ohne Tooldogma, Alert-Actionability, Incident-Gates, Postmortem-Evidence, Capacity-vs.-Load-Testing und sichere Resilience-Experimente.
 
-Für die acht Reliability-Skills sind 48 Startfälle definiert. Definierte Evalfälle sind keine ausgeführten oder bestandenen Evals.
+Für die acht Reliability-Skills sind 48 Startfälle definiert; der erste Same-Model-Smoke-Lauf wurde am 2026-08-24 ausgeführt und ersetzt keinen unabhängigen verblindeten Benchmark.
+
+Die Data-Engineering-Evals prüfen unter anderem Source-of-Truth-/Grain-Lücken, DB-/Event-/Testing-Near-Misses, CDC/Replay, `updated_at`-/exactly-once-Dogmen, historische Backfill-Semantik, Star-Schema-Dogma, Freshness-/Quality-Evidence, Data-Contract-Compatibility, Design-vs.-Runtime-Lineage, Retry/Catchup und produktive Datenänderungs-Gates.
+
+Für die neun Data-Engineering-Skills sind 54 Startfälle definiert. Diese 54 Fälle sind **noch nicht ausgeführt oder bestanden**.
 
 ## Workflows / Recipes
 
@@ -629,7 +720,12 @@ Enthalten sind Recipes für:
 - Produktionsincidents;
 - Post-Incident Learning;
 - Resilience Game Days;
-- Operational Readiness Reviews.
+- Operational Readiness Reviews;
+- Data Pipeline Baseline und Design;
+- neue Datenquellen und Ingestion;
+- Datenqualitätsstörungen und Reconciliation;
+- Backfills und Reprocessing;
+- Data Engineering Readiness Reviews.
 
 > Skills bleiben klein. Workflows verbinden sie.
 
@@ -716,6 +812,8 @@ Für Schnittstellenarbeit gilt zusätzlich: reale Consumer, Architekturgrenzen, 
 Für Infrastruktur-/DevOps-Arbeit gilt zusätzlich: konkrete IaC-/CI-/GitOps-/Container-/Deploymenttools, Provider, Accounts, Cluster, State-Backends, Credentials, Environment-Konfiguration, Policy-Enforcement, Health-/SLO-Schwellen sowie Apply-/Deploy-/Destroy-/Recovery-Gates bleiben lokal. Preview, Plan, Build oder Pipeline-Grün autorisieren keine reale Außenwirkung automatisch.
 
 Für Reliability-/System-Observability-Arbeit gilt zusätzlich: konkrete SLO-/SLA-Ziele, Alert-Schwellen, Severity-/On-Call-Modelle, RTO/RPO, Capacity-/Quota-Limits, Telemetrieprodukte, Dashboards, Runbooks, Recovery-/Failover-Regeln und Produktionsgates bleiben lokal. Incident-Dringlichkeit oder ein geplanter Game Day erweitern keine Tool- oder Produktionsrechte.
+
+Für Data-Engineering-Arbeit gilt zusätzlich: reale Sources of Truth, fachlicher Grain, Consumer, Quality-/Freshness-/Reconciliation-Regeln, Data-Contract-Zusagen, Retention, Plattform-/Toolwahl, historische Semantik sowie Backfill-/Replay-/Publish-Gates bleiben lokal. Job-, DAG-, Contract- oder Quality-Grün autorisieren keine reale Datenänderung automatisch.
 
 Für Auswahl und Dokumentation zentraler Regeln kann `Vorlagen/ki-regeln.template.yml` als Ausgangspunkt verwendet werden.
 
