@@ -47,13 +47,21 @@ Die injizierte Störung soll:
 - reproduzierbar sein;
 - keine unerlaubten realen Schäden erzeugen.
 
-## Grenze zu Chaos Engineering
+## Grenze zu Chaos Engineering / Resilience Experimenten
 
 Dieser Bereich behandelt gezielte, reproduzierbare Failure Cases innerhalb eines Testscopes.
 
-Chaos Engineering beginnt dort, wo systemische Hypothesen über das Verhalten komplexer oder verteilter Systeme unter realistischen Störungen experimentell geprüft werden, insbesondere mit Steady-State-Metriken, kontrollierter Blast Radius und gegebenenfalls produktionsnahen oder produktiven Experimenten.
+Systemische Resilience-Experimente beginnen dort, wo eine Steady-State-Hypothese über das Verhalten eines komplexen oder verteilten Systems unter realistischen Störungen geprüft wird, insbesondere mit kontrolliertem Blast Radius, Observation, Abort und Recovery.
 
-Das gehört in einen späteren Bereich `Reliability/`.
+Das gehört zu `../Reliability-und-System-Observability/Chaos-Engineering-und-Game-Days.md` beziehungsweise zum Skill `resilience-experiment`.
+
+```text
+reproduzierbarer Failure Mode im Testscope
+→ failure-testing
+
+systemische Hypothese + realistischer Blast Radius
+→ resilience-experiment
+```
 
 ## Security-Grenze
 
