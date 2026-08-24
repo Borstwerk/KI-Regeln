@@ -38,9 +38,11 @@ Webentwicklung / visual-verification
 Sicherheit
 → tiefgehende Security-Testmethodik
 
-Reliability (später)
-→ Resilience, SLO, Chaos Engineering und systemische Störungsexperimente
+Reliability und System-Observability
+→ SLOs, Runtime-Health, Incidents, Capacity und systemische Resilience-Experimente unter kontrollierten Störungen
 ```
+
+Für die Grenze zwischen reproduzierbarem Failure Testing und systemischem Experiment siehe `../Reliability-und-System-Observability/Chaos-Engineering-und-Game-Days.md`.
 
 ## Grundmodell
 
