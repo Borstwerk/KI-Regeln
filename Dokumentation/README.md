@@ -20,6 +20,7 @@ Er richtet sich vor allem an Menschen, die:
 - `Skill-Handbuch-Schnittstellen-und-Vertraege.md` – erklärt Interface Design, HTTP-/Event-Contracts, Compatibility Change Review und Interface Review;
 - `Skill-Handbuch-Infrastruktur-und-DevOps.md` – erklärt Infrastructure as Code, Change Review, CI, Container Builds, Deploymentstrategien, GitOps und Infrastrukturreview;
 - `Skill-Handbuch-Reliability-und-System-Observability.md` – erklärt SLO Design, System-Observability, Alerting, Incident Response, Postmortems, Capacity, Resilience-Experimente und Reliability Review;
+- `Skill-Handbuch-Data-Engineering.md` – erklärt Pipeline Design, Ingestion, Transformation, analytische Modellierung, Data Quality, Data Contracts, Lineage, Orchestrierung und Data-Engineering-Review;
 - `Skill-Handbuch-Dokumentationserstellung.md` – erklärt die Skills des Bereichs `Dokumentationserstellung/`;
 - `Skill-Handbuch-Datenbanken.md` – erklärt die engine-neutralen Datenbank-Skills und ihre Abgrenzung;
 - `Skill-Handbuch-Testing-und-QA.md` – erklärt Teststrategie, Testdesign, Integration, Contracts, E2E, Flakiness, Failure Testing und Test-Suite-Review;
@@ -88,10 +89,11 @@ Wer das Repository zum ersten Mal verwendet, sollte in dieser Reihenfolge lesen:
 7. bei Schnittstellen-/API-/Contract-Arbeit zusätzlich `Skill-Handbuch-Schnittstellen-und-Vertraege.md`
 8. bei Infrastruktur-/DevOps-/IaC-Arbeit zusätzlich `Skill-Handbuch-Infrastruktur-und-DevOps.md`
 9. bei Reliability-/Observability-/SRE-Arbeit zusätzlich `Skill-Handbuch-Reliability-und-System-Observability.md`
-10. bei Dokumentationsarbeit zusätzlich `Skill-Handbuch-Dokumentationserstellung.md`
-11. bei Datenbankarbeit zusätzlich `Skill-Handbuch-Datenbanken.md`
-12. bei Testing-/QA-Arbeit zusätzlich `Skill-Handbuch-Testing-und-QA.md`
-13. bei Skill-/Security-Arbeit zusätzlich `Skill-Handbuch-Meta-und-Sicherheit.md`
-14. erst danach die für das eigene Vorhaben relevanten Regel-, Skill- und Workflow-Dateien.
+10. bei Data-Engineering-/ETL-/CDC-/Warehouse-Arbeit zusätzlich `Skill-Handbuch-Data-Engineering.md`
+11. bei Dokumentationsarbeit zusätzlich `Skill-Handbuch-Dokumentationserstellung.md`
+12. bei Datenbankarbeit zusätzlich `Skill-Handbuch-Datenbanken.md`
+13. bei Testing-/QA-Arbeit zusätzlich `Skill-Handbuch-Testing-und-QA.md`
+14. bei Skill-/Security-Arbeit zusätzlich `Skill-Handbuch-Meta-und-Sicherheit.md`
+15. erst danach die für das eigene Vorhaben relevanten Regel-, Skill- und Workflow-Dateien.
 
 Nicht das komplette Repository muss für jede Aufgabe geladen oder übernommen werden. Gute Nutzung bedeutet gezielte Auswahl.
