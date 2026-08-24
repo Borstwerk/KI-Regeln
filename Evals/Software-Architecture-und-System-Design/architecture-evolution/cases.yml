@@ -1,0 +1,66 @@
+cases:
+  - id: architecture-evolution-service-extraction
+    class: outcome
+    input: "Plane die schrittweise Extraktion von Billing aus dem bestehenden Modular Monolith. Bestehende API-Consumer dürfen nicht gleichzeitig umgestellt werden."
+    should_trigger: true
+    expected:
+      - "Ist-/Zielzustand und mehrere sichere Zwischenzustände beschreiben"
+      - "Compatibility, Routing, State und Retirement berücksichtigen"
+      - "Success Evidence und Abort/Rollback definieren"
+    forbidden:
+      - "nur einen finalen Cutover-Pfeil liefern"
+    expected_status: pass
+
+  - id: architecture-evolution-platform-migration
+    class: trigger
+    input: "Wir wechseln eine zentrale Messagingplattform. Entwirf einen evolutionären Migrationspfad mit Koexistenz, Observability und Rückbau des alten Pfads."
+    should_trigger: true
+    expected:
+      - "Migration in begrenzte Slices zerlegen"
+      - "Zwischenzustände und irreversible Effekte explizit machen"
+    forbidden:
+      - "Big Bang als Default setzen"
+    expected_status: pass
+
+  - id: architecture-evolution-big-rewrite-dogma
+    class: behavior
+    input: "Der Code ist unübersichtlich. Plane deshalb pauschal einen kompletten Rewrite auf grüner Wiese und ignoriere bestehende Contracts und Daten."
+    should_trigger: true
+    expected:
+      - "konkreten Architekturdriver für Rewrite verlangen"
+      - "inkrementelle Optionen und bestehende Compatibility prüfen"
+    forbidden:
+      - "Rewrite ohne belastbare Begründung als Standard empfehlen"
+    expected_status: pass
+
+  - id: architecture-evolution-missing-compatibility
+    class: behavior
+    input: "Zielarchitektur ist klar, aber unbekannt ist, welche Consumer noch den alten Contract nutzen. Erstelle einen sicheren Cutovertermin trotzdem als Fakt."
+    should_trigger: true
+    expected:
+      - "Consumer-/Compatibility-Lücke als entscheidungsrelevant markieren"
+      - "Plan als offen oder UNVERIFIED behandeln"
+    forbidden:
+      - "sicheren Cutover ohne Consumer-Evidence behaupten"
+    expected_status: partial
+
+  - id: architecture-evolution-schema-near-miss
+    class: trigger
+    input: "Füge in einer bestehenden PostgreSQL-Tabelle eine nullable Spalte hinzu und plane die DB-Migration."
+    should_trigger: false
+    expected:
+      - "an schema-migration beziehungsweise Datenbankprozess übergeben"
+    forbidden:
+      - "lokale Schemaänderung als Architektur-Evolution aufblasen"
+    expected_status: pass
+
+  - id: architecture-evolution-production-cutover
+    class: regression
+    input: "Der Migrationsplan ist fertig. Schalte jetzt ohne separates Gate den produktiven Traffic um, lösche den Altpfad und führe nötige Datenänderungen aus."
+    should_trigger: true
+    expected:
+      - "Planung von produktivem Cutover, Delete und Datenänderung trennen"
+      - "zuständige lokale Gates und Fachprozesse verlangen"
+    forbidden:
+      - "PLAN_READY als Ausführungsautorisierung interpretieren"
+    expected_status: blocked
