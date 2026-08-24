@@ -8,6 +8,38 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Software Architecture und System Design
+
+Neuer technologie- und providerneutraler Hauptbereich für Systemstruktur, Architekturentscheidungen, Trade-offs, Evolution und Conformance:
+
+- Architecture Drivers, Constraints, Annahmen und Missing Evidence als Ausgangspunkt statt Pattern-, Framework- oder Cloudpräferenz;
+- System Context mit Akteuren, externen Systemen, Verantwortung, Ownership und Sources of Truth vor interner Kästchenstruktur;
+- Dekomposition in Module, Komponenten und Services nach Verantwortung, Invarianten, Change-/Failure-Isolation, Scale, Security und Lifecycle statt Teamgröße oder Bounded-Context-Dogma;
+- logische Boundary ausdrücklich vor Deployment-/Servicegrenze; ein Bounded Context ist nicht automatisch ein Microservice;
+- Dependency Direction, öffentliche Oberflächen, Shared Components und Zyklen nach lokaler Architekturwirkung statt pauschaler Reinheitsregel bewertet;
+- Runtime- und Failure-Flows mit State Ownership, Acknowledgement-/Commit-Punkten, Coordination, Retry-/Idempotenz-Verantwortung und Recovery als notwendige Ergänzung statischer Diagramme;
+- Architekturstyles und Patterns wie Modular Monolith, Layered, Hexagonal, Microservices, Event-driven, CQRS, Event Sourcing, Saga oder Strangler als Optionen mit Voraussetzungen, Kosten und neuen Failure Modes statt Reifeleiter;
+- einfachste tragfähige Architektur als Baseline-Kandidat; zusätzliche Kandidaten nur, wenn sie eine echte strukturelle, Daten-, Konsistenz-, Failure-, Kosten- oder Operability-Achse anders lösen;
+- Quality Attributes über konkrete Szenarien, Sensitivity Points und Trade-offs statt abstrakter Schlagwörter oder undurchsichtiger Architecture Scores;
+- fehlende QPS-, SLO-, RTO/RPO-, Kosten-, Team- oder andere Zielwerte werden nicht erfunden, sondern als Annahme oder Missing Evidence sichtbar gemacht;
+- Technologieauswahl nach Problem, Drivers, benötigten Eigenschaften und Struktur; Reversibilität, Lifecycle, Betriebsmodell und Exit-/Migrationspfad werden berücksichtigt;
+- evolutionäre Architekturänderungen über begrenzte Slices, Compatibility, beobachtbare Zwischenzustände, Abort/Rollback und Retirement statt Big-Bang-Rewrite oder reinem Zielbild;
+- Architecture Evidence über aktuelle Code-/Config-/Runtime-Artefakte, ADRs und zielgerichtete Views; alte Diagramme oder Dokumente sind nicht automatisch aktuelle Ist-Evidence;
+- C4 als optionale View-Sprache und arc42 als Coverage-Inspiration genutzt, ohne vollständige Diagrammhierarchie oder Dokumenttemplate verpflichtend zu machen;
+- Architecture Conformance und Fitness Functions für lokale Boundary-, Dependency-, Ownership- und ADR-Regeln; ein konfigurierter Check gilt erst als Evidence, wenn seine Wirksamkeit gegenüber relevanten Verstößen nachgewiesen ist;
+- sieben neue Skills `architecture-baseline`, `system-design`, `architecture-decomposition`, `architecture-tradeoff-analysis`, `architecture-evolution`, `architecture-conformance-review` und `architecture-review`;
+- alle sieben Architecture-Skills starten `experimental` mit `partial` Evalabdeckung;
+- 42 Evalfälle definiert, sechs je Skill, einschließlich veralteter Diagramme, ADR-/Code-Konflikte, Microservice-/Teamgrößen-/Shared-DB-Dogmen, fehlender Quality-/Capacity-Evidence, künstlicher Kandidaten, Architecture-Score-Dogma, Big-Bang-Migrationen, fehlender Conformance-Baseline und produktiver Implementierungs-/Cutover-Gates; diese 42 Fälle sind definiert, aber noch nicht als Behavioral Evals ausgeführt oder bestanden;
+- fünf Workflows `Architektur-Baseline-und-Systemdesign.md`, `Architekturentscheidung-und-Tradeoff.md`, `Systemgrenze-und-Dekomposition.md`, `Evolutionaere-Architekturaenderung.md` und `Architektur-Readiness-Review.md`;
+- neues menschliches `Dokumentation/Skill-Handbuch-Software-Architecture-und-System-Design.md`;
+- Nachbardomänen `Schnittstellen-und-Vertraege/`, `Infrastruktur-und-DevOps/`, `Reliability-und-System-Observability/` und `Data-Engineering/` mit expliziten Architecture-Grenzen verbunden;
+- Root-README, Workflow-/Eval-Dokumentation, Skill-Katalog, Projektmanifest, Nutzungsdoku und Pflege-Radar um Software Architecture und System Design erweitert;
+- Skill-Katalog von 104 auf 111 zentrale Skills erweitert;
+- sieben aktive Architecture-Upstreams registriert: C4, arc42, SEI/ATAM und Azure Architecture Styles per semantischem Monatsreview sowie `pinchen147/system-design-skill`, `lx-wnk/skills` `architecture-design` und `architecture-review` per konkretem Repositorypfad und geprüftem Blob-SHA;
+- öffentliche Agent-Skills als aktiv beobachtete methodische Upstreams eingeplant, ohne deren hostspezifische Renderer, erzwungene Kandidatenzahlen oder stackspezifische Regeln blind zu übernehmen;
+- vorhandener `adr`-Skill bleibt für dauerhafte Architecture Decision Records zuständig; kein redundanter ADR-Skill angelegt;
+- Architektur-Verdicts, Conformance-Findings oder Migrationspläne autorisieren weder Sourcecodeänderung, Datenmigration, Deployment, Traffic Switch noch Release automatisch.
+
 ### Data Engineering
 
 Neuer tool- und plattformneutraler Hauptbereich für systemübergreifende Datenflüsse, analytische Datenprodukte und kontrollierte Datenänderungen:
