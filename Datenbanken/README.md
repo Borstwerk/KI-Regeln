@@ -30,7 +30,7 @@ Nicht primär hierher gehören:
 - Data-Lake-/Warehouse-Pipelines;
 - Orchestrierung von Datenflüssen zwischen mehreren Systemen.
 
-Diese Themen gehören in einen späteren Bereich `Data Engineering/`.
+Diese Themen gehören in `../Data-Engineering/`. Dort werden Source-to-Consumer-Datenflüsse, Ingestion/CDC/Replay, Transformationen, analytische Datenmodelle, Datenqualität, Data Contracts, Lineage und Orchestrierung behandelt.
 
 ## Engine-neutral, aber nicht engine-blind
 
