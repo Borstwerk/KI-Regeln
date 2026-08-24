@@ -48,7 +48,17 @@ Bei Events zusätzlich:
 
 ## Grenze zu Reliability
 
-Dieser Bereich definiert die Schnittstellen-Zusagen. Reliability prüft später systemisch, ob das Gesamtsystem diese Zusagen unter Ausfällen tatsächlich halten kann.
+Dieser Bereich definiert die Schnittstellen-Zusagen.
+
+`../Reliability-und-System-Observability/` prüft systemisch, ob das Gesamtsystem diese Zusagen unter realistischen Ausfällen, Overload, Retry Amplification oder Dependency-Störungen tatsächlich halten kann.
+
+```text
+Interface / Contract
+→ was Retry, Idempotenz, Delivery und Concurrency bedeuten
+
+Reliability / Resilience
+→ ob das resultierende Gesamtsystemverhalten unter Störung tragfähig bleibt
+```
 
 ## Leitgedanke
 
