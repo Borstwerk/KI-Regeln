@@ -20,7 +20,7 @@ Das bedeutet:
 Empfohlener Einstieg:
 
 1. diese README für das Gesamtmodell;
-2. `Dokumentation/Nutzung-des-Repositories.md` für den praktischen Einsatz;
+2. `Dokumentation/Nutzung-des-Repositories.md` für den praktischen EinsatzZ;
 3. `Dokumentation/Skill-Handbuch.md` zur Auswahl geeigneter Skills;
 4. `Dokumentation/Skill-Katalog.md` für Reifegrad und Evalabdeckung;
 5. danach nur die für das eigene Vorhaben relevanten Regeln, Skills und Workflows.
