@@ -10,8 +10,8 @@ Ziel ist keine persönliche KI-Konfiguration und keine projektspezifische Wissen
 
 Das bedeutet:
 
-- allgemeine Kommunikations-, Reflexions-, Recherche-, Wissensmanagement-, Schnittstellen-/Contract-, Infrastruktur-/DevOps-, Dokumentations-, Schreib-, Bild-, Web-, Datenbank-, Testing-, Agenten-, Sicherheits- und Entwicklungsregeln liegen hier;
-- projektspezifische Anforderungen, Architektur, Research-Fragen, interne Quellen, Wissensbestände, Fachmodelle, reale Schnittstellen/Consumer, Infrastrukturtools/Provider/Accounts/Cluster, reales Datenbankschema, konkrete Testumgebung, Markenregeln, visuelle Bibeln und Sonderregeln bleiben im jeweiligen Projekt;
+- allgemeine Kommunikations-, Reflexions-, Recherche-, Wissensmanagement-, Schnittstellen-/Contract-, Infrastruktur-/DevOps-, Reliability-/System-Observability-, Dokumentations-, Schreib-, Bild-, Web-, Datenbank-, Testing-, Agenten-, Sicherheits- und Entwicklungsregeln liegen hier;
+- projektspezifische Anforderungen, Architektur, Research-Fragen, interne Quellen, Wissensbestände, Fachmodelle, reale Schnittstellen/Consumer, Infrastrukturtools/Provider/Accounts/Cluster, reales Datenbankschema, konkrete Testumgebung, SLO-Werte, Alert-Schwellen, Severity-/On-Call-Modelle, RTO/RPO, Capacity Limits, Recovery-/Failover-Regeln, Markenregeln, visuelle Bibeln und Sonderregeln bleiben im jeweiligen Projekt;
 - persönliche Profile oder unnötige personenbezogene Details gehören nicht in dieses Repository;
 - ein Skill ersetzt niemals die tatsächliche Spezifikation oder Dokumentation eines Projekts.
 
@@ -38,6 +38,7 @@ KI-Regeln/
 ├── Wissensmanagement/
 ├── Schnittstellen-und-Vertraege/
 ├── Infrastruktur-und-DevOps/
+├── Reliability-und-System-Observability/
 ├── Dokumentationserstellung/
 ├── Schreiben/
 ├── Bildarbeit/
@@ -109,6 +110,8 @@ Operative Context-Skills:
 - `session-handoff`.
 
 Zusätzlich existieren ein konkretes Trace-Datenmodell und ein maschinenlesbares Trace-Event-Schema. Diese können optional auch Context-/Usage-Metadaten wie Input-/Output-Tokens, Cache-Signale, Context-Größe, Compaction oder Handoff-Ereignisse erfassen, ohne Promptinhalte standardmäßig zu speichern.
+
+Agenten-Observability bezeichnet hier die Nachvollziehbarkeit von Auftrag, Agentenlauf, Tools, Artefakten, Evidence und Gates. Die Runtime-Observability laufender Produktsysteme gehört zu `Reliability-und-System-Observability/`.
 
 > Autonomie innerhalb klarer Grenzen.
 
@@ -213,6 +216,9 @@ Schnittstellen und Verträge
 
 Contract Testing
 → ob Consumer und Provider den Vertrag tatsächlich einhalten
+
+Reliability und System-Observability
+→ ob das resultierende Gesamtsystemverhalten unter Störung tragfähig bleibt
 ```
 
 Operative Skills:
@@ -258,7 +264,7 @@ Infrastruktur und DevOps
 Testing und QA
 → welche Qualitätsrisiken wie geprüft werden
 
-Reliability
+Reliability und System-Observability
 → was gesund, resilient und betrieblich akzeptabel bedeutet
 
 Sicherheit
@@ -289,6 +295,79 @@ Continuous Reconciliation ≠ einmalige Änderung
 Terraform, OpenTofu, Pulumi, CloudFormation, Ansible, Kubernetes, Argo CD, Flux, Docker, GitHub Actions oder andere Tools bleiben konkrete Adapter.
 
 > Automatisierung reduziert manuelle Arbeit, vergrößert aber gleichzeitig die Reichweite einer Fehlentscheidung.
+
+## Reliability und System-Observability
+
+Tool- und providerneutrale Regeln dafür, was bei laufenden Systemen gesund, zuverlässig, beobachtbar, recoverable und unter Störung akzeptabel bedeutet.
+
+Der Bereich behandelt insbesondere:
+
+- kritische Nutzer-/Consumerflows als Ausgangspunkt für Reliability;
+- SLI-Spezifikation, Messimplementierung, SLOs und Error Budgets;
+- System-Observability als Fähigkeit, relevante Betriebsfragen mit Runtime-Evidence zu beantworten;
+- Health-Modelle, Telemetrie, Korrelation, Coverage und Blind Spots;
+- actionable Alerting, Signalbasis, Threshold-Begründung, Fenster und Alert Noise;
+- Incident Response mit Impact, Rollen, Incident State, Mitigation, Kommunikation und Fresh Recovery Evidence;
+- Postmortems mit beitragenden Faktoren statt erzwungener Einzelursache;
+- Capacity, Saturation, Headroom, Dependencies, Quotas und Failure Domains;
+- Recovery-Ziele wie RTO/RPO und Disaster-Recovery-Readiness;
+- Graceful Degradation, Failure Isolation und Cascading-Failure-Risiken;
+- kontrollierte Resilience-Experimente, Chaos Engineering und Game Days;
+- Toil und nachhaltigen Betrieb;
+- Operational Readiness als zusammengesetzte Evidence statt Mega-Skill.
+
+Scope-Grenze:
+
+```text
+Requirements / lokale Business-Policy
+→ wie zuverlässig ein Flow sein muss und welche RTO/RPO gelten
+
+Reliability und System-Observability
+→ wie Ziele operationalisiert, beobachtet und unter Betrieb/Störung geprüft werden
+
+Software Architecture
+→ welche Struktur und Patterns das gewünschte Failure-Verhalten ermöglichen
+
+Infrastruktur und DevOps
+→ wie Capacity, Deployment, Rollback, Failover und technische Zielzustände umgesetzt werden
+
+Testing und QA
+→ reproduzierbare Tests und Failure Cases im Testscope
+
+Agentenarbeit / Observability
+→ Nachvollziehbarkeit von Agentenläufen und Arbeitsprozessen
+```
+
+Operative Skills:
+
+- `slo-design`;
+- `system-observability-design`;
+- `alert-design`;
+- `incident-response`;
+- `incident-postmortem`;
+- `capacity-planning`;
+- `resilience-experiment`;
+- `reliability-review`.
+
+Zentrale Trennungen:
+
+```text
+SLI-Spezifikation ≠ Messimplementierung
+SLO ≠ SLA ≠ RTO/RPO
+Telemetry ≠ Observability
+Alert ≠ Incident
+Mitigation Proposal ≠ Produktionsautorisierung
+Load Testing ≠ Capacity Planning
+Failure Testing ≠ Resilience Experiment
+Reliability Requirement ≠ Architecture Pattern
+Backup ≠ bewiesene Recovery
+```
+
+OpenTelemetry, Prometheus, Grafana, Datadog, PagerDuty, Elastic, Splunk, New Relic, CloudWatch, Azure Monitor, Google Cloud Operations, Kubernetes und andere Produkte bleiben konkrete Adapter.
+
+SLO-Werte, Alert-Schwellen, Severity-/On-Call-Modelle, RTO/RPO, Capacity Limits, Recovery-/Failover-Regeln und Produktionsgates bleiben projektspezifisch.
+
+> Reliability ist die Verbindung aus relevanten Zielen, glaubwürdiger Runtime-Evidence, kontrollierter Reaktion und nachweisbarem Lernen.
 
 ## Dokumentationserstellung
 
@@ -391,8 +470,8 @@ TDD
 Testing und QA
 → welche Risiken wie geprüft werden und welche Evidence daraus folgt
 
-Reliability / Chaos Engineering
-→ systemische Resilience-Hypothesen unter kontrollierten Störungen
+Reliability und System-Observability
+→ Runtime-Health, SLOs, Incidents, Capacity und systemische Resilience-Hypothesen unter kontrollierten Störungen
 ```
 
 Operative Skills:
@@ -463,6 +542,8 @@ Operative Skills:
 
 `skill-catalog.yml` ist das maschinenlesbare Inventar der zentralen Skills.
 
+Aktuell enthält der Katalog 95 zentrale Skills.
+
 Reifestufen:
 
 ```text
@@ -509,7 +590,8 @@ Erste Evalpacks bestehen unter anderem für:
 - `context-engineering`, `context-audit`, `context-compaction` und `session-handoff`;
 - alle sieben Wissensmanagement-Skills;
 - alle fünf Schnittstellen-/Contract-Skills;
-- alle sieben Infrastruktur-/DevOps-Skills.
+- alle sieben Infrastruktur-/DevOps-Skills;
+- alle acht Reliability-/System-Observability-Skills.
 
 Die Context-Evals prüfen unter anderem fehlende Messfähigkeit, erfundene Tokenpräzision, Verlust kritischer Constraints bei Compaction, Handoff-Fortsetzungsfähigkeit und die Grenze zu Persistent Knowledge.
 
@@ -518,6 +600,10 @@ Die Wissensmanagement-Evals prüfen unter anderem Search-before-Create, Provenan
 Die Schnittstellen-Evals prüfen unter anderem Transportdogma, DB-Leaks in API-Schemas, Additive-vs.-Semantic-Compatibility, Source-/Wire-Trennung, rollout-sensitive Changes und fehlende Contract-Baselines.
 
 Die Infrastruktur-/DevOps-Evals prüfen unter anderem State-/Drift-Grenzen, stale Previews, destructive Changes, Pipeline-Secret-Grenzen, Container Runtime Contracts, Deployment-/Rollback-Annahmen und GitOps-Reconciliation-Gates.
+
+Die Reliability-/System-Observability-Evals prüfen unter anderem SLO-vs.-RTO/RPO-Grenzen, Observability ohne Tooldogma, Alert-Actionability, Incident-Gates, Postmortem-Evidence, Capacity-vs.-Load-Testing und sichere Resilience-Experimente.
+
+Für die acht Reliability-Skills sind 48 Startfälle definiert. Definierte Evalfälle sind keine ausgeführten oder bestandenen Evals.
 
 ## Workflows / Recipes
 
@@ -538,7 +624,12 @@ Enthalten sind Recipes für:
 - Aufbau und Pflege von Wissensbasen;
 - Entwurf und Änderung von Schnittstellenverträgen;
 - Infrastrukturänderungen;
-- Build, Deploy und Promotion.
+- Build, Deploy und Promotion;
+- Reliability Baseline und SLOs;
+- Produktionsincidents;
+- Post-Incident Learning;
+- Resilience Game Days;
+- Operational Readiness Reviews.
 
 > Skills bleiben klein. Workflows verbinden sie.
 
@@ -579,7 +670,7 @@ Fehlende Fähigkeiten dürfen nicht simuliert oder behauptet werden.
 
 ## Observability
 
-Ein gemeinsames Trace-Modell kann verbinden:
+Ein gemeinsames Trace-Modell für Agentenarbeit kann verbinden:
 
 ```text
 Task
@@ -595,6 +686,8 @@ Task
 Zusätzlich können – sofern die Runtime sie liefert – providerneutrale Usage- und Context-Signale wie Input-/Output-Tokens, Cache-Reads/-Writes, Context-Größe, Tool-Output-Größe, Compaction- oder Handoff-Ereignisse erfasst werden.
 
 Vollständige Prompts, Toolargumente oder Inhalte sind dabei kein Pflichtbestandteil. Metadaten und Datenschutz werden bewusst getrennt.
+
+Diese Agenten-Observability ist nicht mit der System-Observability aus `Reliability-und-System-Observability/` gleichzusetzen.
 
 # Nutzung in Projekten
 
@@ -621,6 +714,8 @@ Für Wissensmanagement gilt zusätzlich: konkrete Knowledge-Base-Software, Ordne
 Für Schnittstellenarbeit gilt zusätzlich: reale Consumer, Architekturgrenzen, Protokolle, Toolchain, kanonische Contract-Artefakte, Compatibility-/Versionierungs-Policy, Auth-Mechanismen, Supportfenster sowie Deprecation-/Removal-Gates bleiben lokal.
 
 Für Infrastruktur-/DevOps-Arbeit gilt zusätzlich: konkrete IaC-/CI-/GitOps-/Container-/Deploymenttools, Provider, Accounts, Cluster, State-Backends, Credentials, Environment-Konfiguration, Policy-Enforcement, Health-/SLO-Schwellen sowie Apply-/Deploy-/Destroy-/Recovery-Gates bleiben lokal. Preview, Plan, Build oder Pipeline-Grün autorisieren keine reale Außenwirkung automatisch.
+
+Für Reliability-/System-Observability-Arbeit gilt zusätzlich: konkrete SLO-/SLA-Ziele, Alert-Schwellen, Severity-/On-Call-Modelle, RTO/RPO, Capacity-/Quota-Limits, Telemetrieprodukte, Dashboards, Runbooks, Recovery-/Failover-Regeln und Produktionsgates bleiben lokal. Incident-Dringlichkeit oder ein geplanter Game Day erweitern keine Tool- oder Produktionsrechte.
 
 Für Auswahl und Dokumentation zentraler Regeln kann `Vorlagen/ki-regeln.template.yml` als Ausgangspunkt verwendet werden.
 
