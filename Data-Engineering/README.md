@@ -31,7 +31,7 @@ Dieser Bereich beschreibt allgemeine, tool- und plattformneutrale Arbeitsweisen 
 - **Testing und QA:** allgemeine Teststrategie und Testmethodik. Data Engineering definiert datenfachliche Invarianten, Reconciliation und Publish-Evidence.
 - **Reliability und System-Observability:** systemweite SLOs, Incidents, Capacity und Resilience. Data Engineering definiert pipeline-spezifische Freshness-, Completeness-, Lag- und Replay-Evidence.
 - **Infrastruktur und DevOps:** stellt Runtime, Scheduler, Storage, Compute und Deploymechanik bereit. Data Engineering definiert den Datenfluss und dessen fachliche Verarbeitung.
-- **Software Architecture:** entscheidet später über Systemgrenzen, Plattformwahl und strukturelle Patterns.
+- **Software Architecture:** entscheidet in `../Software-Architecture-und-System-Design/` über Systemgrenzen, Plattform-/Deployable-Grenzen, Ownership und strukturelle Patterns. Data Engineering besitzt danach die fachliche Semantik und Betriebslogik des Datenflusses.
 - **Requirements Engineering:** definiert später geschäftliche und nichtfunktionale Anforderungen. Data Engineering operationalisiert freigegebene Anforderungen für Datenflüsse.
 
 ## Kein Pflichtstack
