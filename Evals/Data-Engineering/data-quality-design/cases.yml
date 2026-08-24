@@ -1,0 +1,65 @@
+cases:
+  - id: quality-consumer-invariants-positive
+    class: outcome
+    input: "Für das tägliche Finance-Dataset müssen alle abgeschlossenen Buchungen enthalten sein, Belegnummern eindeutig sein und der Tagesumsatz mit dem Quellsystem abstimmbar bleiben."
+    should_trigger: true
+    expected:
+      - "Completeness, Uniqueness und fachliche Reconciliation aus den genannten Invarianten ableiten"
+      - "Zeit-/Grainbezug der Checks präzisieren"
+    forbidden:
+      - "zusätzliche universelle Schwellenwerte erfinden"
+    expected_status: pass
+
+  - id: quality-paraphrased-positive
+    class: trigger
+    input: "Welche Nachweise brauchen wir, damit wir nicht nur wissen, dass der Job lief, sondern dass das Dataset für den Consumer stimmt?"
+    should_trigger: true
+    expected:
+      - "datenfachliche Quality-/Reconciliation-Evidence aktivieren"
+      - "Pipelineerfolg von Datenkorrektheit trennen"
+    forbidden:
+      - "nur Unit Tests der Pipeline nennen"
+    expected_status: pass
+
+  - id: quality-threshold-dogma
+    class: regression
+    input: "Setz überall 0 Prozent Nulls, 100 Prozent Uniqueness und maximal 5 Prozent Volumenabweichung. Das sind professionelle Standards."
+    should_trigger: true
+    expected:
+      - "Regeln und Thresholds an Grain, Contract, Baseline oder Businessinvariante binden"
+      - "universelle Schwellen zurückweisen"
+    forbidden:
+      - "genannte Werte pauschal übernehmen"
+    expected_status: pass
+
+  - id: quality-software-test-near-miss
+    class: trigger
+    input: "Entwirf Unit-, Integration- und E2E-Tests für die Python-Anwendung, die unsere Pipeline startet."
+    should_trigger: false
+    expected:
+      - "an test-strategy beziehungsweise test-design übergeben"
+    forbidden:
+      - "allgemeine Softwareteststrategie als Data Quality behandeln"
+    expected_status: pass
+
+  - id: quality-freshness-time-gap
+    class: behavior
+    input: "Prüf Freshness einfach mit MAX(created_at). Ob created_at Eventzeit, Importzeit oder etwas anderes ist, wissen wir nicht."
+    should_trigger: true
+    expected:
+      - "Zeitsemantik als fehlende Evidence markieren"
+      - "Freshness nicht aus unbekanntem Timestamp ableiten"
+    forbidden:
+      - "MAX(created_at) als belastbaren Freshnessbeweis ausgeben"
+    expected_status: partial
+
+  - id: quality-sensitive-samples
+    class: behavior
+    input: "Wenn ein Quality Check fehlschlägt, speichere zur Diagnose komplette Kundendatensätze inklusive Tokens und personenbezogener Felder im Report."
+    should_trigger: true
+    expected:
+      - "sensible Samples minimieren beziehungsweise redigieren"
+      - "Security-/Privacy-Grenzen beachten"
+    forbidden:
+      - "Secrets oder unnötige personenbezogene Daten dauerhaft protokollieren"
+    expected_status: pass
