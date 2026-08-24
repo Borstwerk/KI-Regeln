@@ -31,6 +31,7 @@ Behandelt werden insbesondere:
 - **Testing und QA:** entscheidet, welche Qualitätsrisiken mit welchen Tests geprüft werden.
 - **Sicherheit:** definiert Threat Models, Secret-/Credential-Schutz, Supply-Chain-Vertrauen und Security Policies im Detail.
 - **Reliability und System-Observability:** definiert in `../Reliability-und-System-Observability/`, was gesund, resilient und betrieblich akzeptabel bedeutet, einschließlich SLOs, Incidents, Capacity, Alerting und Resilience-Experimenten.
+- **Data Engineering:** definiert in `../Data-Engineering/` Source-to-Consumer-Datenflüsse, Capture/CDC, Transformationen, analytische Datenmodelle, Data Quality, Lineage, Data Intervals, Replay und Publish-Semantik. Infrastruktur stellt dafür Scheduler, Compute, Storage und Runtime bereit, erfindet aber nicht die Datenbedeutung.
 - **Datenbanken:** behandelt Schema-/Datenmigrationen und DB-spezifischen Betrieb.
 - **Provider-/Toolsyntax:** Terraform, OpenTofu, Pulumi, CloudFormation, Ansible, Kubernetes, Helm, Kustomize, Argo CD, Flux, Docker oder GitHub Actions bleiben konkrete Adapter.
 
