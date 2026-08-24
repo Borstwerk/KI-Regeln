@@ -14,7 +14,7 @@ Der Skill-Katalog beantwortet zusätzlich:
 
 ## Aktueller Bestand
 
-Der Katalog enthält aktuell 104 zentrale Skills:
+Der Katalog enthält aktuell 111 zentrale Skills:
 
 - Arbeitsweisen: 3;
 - Agentenarbeit: 8;
@@ -28,6 +28,7 @@ Der Katalog enthält aktuell 104 zentrale Skills:
 - Infrastruktur und DevOps: 7;
 - Reliability und System-Observability: 8;
 - Data Engineering: 9;
+- Software Architecture und System Design: 7;
 - Dokumentationserstellung: 10;
 - Skill Engineering: 2;
 - Sicherheit: 3;
@@ -77,11 +78,13 @@ Empfohlene Werte:
 
 Maturity und Eval Coverage sind nicht identisch. Ein Skill kann viel Praxis haben und trotzdem noch unzureichende formale Evals besitzen.
 
-Aktuell besitzt `context-engineering` als bestehender `candidate` `partial` Evalabdeckung. Die ergänzten Context-Skills, alle sieben Wissensmanagement-Skills, alle fünf Schnittstellen-/Contract-Skills, alle sieben Infrastruktur-/DevOps-Skills, alle acht Reliability-/System-Observability-Skills und alle neun Data-Engineering-Skills starten beziehungsweise bleiben bewusst `experimental` mit `partial` Evalabdeckung.
+Aktuell besitzt `context-engineering` als bestehender `candidate` `partial` Evalabdeckung. Die ergänzten Context-Skills, alle sieben Wissensmanagement-Skills, alle fünf Schnittstellen-/Contract-Skills, alle sieben Infrastruktur-/DevOps-Skills, alle acht Reliability-/System-Observability-Skills, alle neun Data-Engineering-Skills und alle sieben Software-Architecture-/System-Design-Skills starten beziehungsweise bleiben bewusst `experimental` mit `partial` Evalabdeckung.
 
 Für Reliability sind sechs Startfälle je Skill definiert, insgesamt 48. Der erste Same-Model-Smoke-Lauf wurde am 2026-08-24 ausgeführt; das ersetzt keinen unabhängigen verblindeten Benchmark und rechtfertigt allein keine Hochstufung.
 
 Für Data Engineering sind sechs Startfälle je Skill definiert, insgesamt 54. Diese 54 Fälle sind derzeit **definiert, aber noch nicht ausgeführt oder bestanden**.
+
+Für Software Architecture und System Design sind sechs Startfälle je Skill definiert, insgesamt 42. Diese 42 Fälle sind derzeit **definiert, aber noch nicht ausgeführt oder bestanden**.
 
 ## Capabilities
 
@@ -109,7 +112,9 @@ Der Katalog kann Fähigkeiten nennen, die für einen Skill relevant sind, z. B.:
 - `data-source-access-preferred`;
 - `data-runtime-evidence-preferred`;
 - `data-contract-source-access-preferred`;
-- `lineage-metadata-access-preferred`.
+- `lineage-metadata-access-preferred`;
+- `architecture-source-access-preferred`;
+- `architecture-runtime-evidence-preferred`.
 
 Diese Angaben ersetzen nicht die detaillierten Fallback- und Rechte-Regeln des Skills.
 
@@ -148,6 +153,8 @@ Für Infrastruktur-/DevOps-Skills sollte an realen, kontrollierten Projekten gep
 Für Reliability-/System-Observability-Skills sollte zusätzlich an realen Services beziehungsweise belastbaren Betriebs-/Incident-/Game-Day-Szenarien geprüft werden, ob SLO-Grenzen, Runtime-Evidence, Alert-Actionability, Incident-Gates, Capacity-Annahmen und Resilience-Safety zuverlässig erkannt werden. Ein vorhandenes Dashboard oder definierter Evalcase allein reicht nicht als Maturity-Beleg.
 
 Für Data-Engineering-Skills sollte zusätzlich an realen Datenflüssen beziehungsweise belastbaren Pipeline-/Backfill-/Consumer-Szenarien geprüft werden, ob Source-of-Truth-Lücken, Grainfehler, CDC-/Replay-Grenzen, semantische Contractänderungen, Data-Quality-Blind-Spots, Lineage-Lücken und Reprocessing-Gates zuverlässig erkannt werden. Ein grüner DAG, SQL-Lauf oder definierter Evalcase allein reicht nicht als Maturity-Beleg.
+
+Für Software-Architecture-/System-Design-Skills sollte zusätzlich an realen Systemen oder belastbaren Architekturentscheidungen geprüft werden, ob Architecture 0 korrekt rekonstruiert, Drivers und Missing Evidence sauber getrennt, unnötige verteilte Komplexität vermieden, echte Trade-offs erkannt, Migrationszwischenzustände erklärt und lokale Architekturregeln ohne Patterndogma geprüft werden. Ein schönes Diagramm, ein ADR oder definierter Evalcase allein reicht nicht als Maturity-Beleg.
 
 ## Leitgedanke
 
