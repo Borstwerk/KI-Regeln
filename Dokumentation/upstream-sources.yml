@@ -1498,6 +1498,104 @@ sources:
       - Data-Engineering/Skills/data-orchestration-design/SKILL.md
       - Workflows/Backfill-und-Reprocessing.md
 
+  # ---------------------------------------------------------------------------
+  # Software Architecture und System Design
+  # ---------------------------------------------------------------------------
+  - id: c4-model-diagrams
+    area: Software-Architecture-und-System-Design
+    kind: web-page
+    url: https://c4model.com/diagrams
+    monitor_mode: semantic-review
+    cadence: monthly
+    last_checked: 2026-08-24
+    local_impact:
+      - Software-Architecture-und-System-Design/Systemkontext-Grenzen-und-Ownership.md
+      - Software-Architecture-und-System-Design/Architekturevidence-Views-ADRs-und-Dokumentation.md
+      - Software-Architecture-und-System-Design/Skills/architecture-baseline/SKILL.md
+
+  - id: arc42-documentation
+    area: Software-Architecture-und-System-Design
+    kind: web-page
+    url: https://docs.arc42.org/home/
+    monitor_mode: semantic-review
+    cadence: monthly
+    last_checked: 2026-08-24
+    local_impact:
+      - Software-Architecture-und-System-Design/Architekturevidence-Views-ADRs-und-Dokumentation.md
+      - Software-Architecture-und-System-Design/Skills/architecture-review/SKILL.md
+
+  - id: sei-atam
+    area: Software-Architecture-und-System-Design
+    kind: web-page
+    url: https://www.sei.cmu.edu/library/the-architecture-tradeoff-analysis-method/
+    monitor_mode: semantic-review
+    cadence: monthly
+    last_checked: 2026-08-24
+    local_impact:
+      - Software-Architecture-und-System-Design/Qualitaetsattribute-Szenarien-und-Trade-offs.md
+      - Software-Architecture-und-System-Design/Skills/architecture-tradeoff-analysis/SKILL.md
+      - Software-Architecture-und-System-Design/Skills/system-design/SKILL.md
+      - Software-Architecture-und-System-Design/Skills/architecture-review/SKILL.md
+
+  - id: azure-architecture-styles
+    area: Software-Architecture-und-System-Design
+    kind: web-page
+    url: https://learn.microsoft.com/en-us/azure/architecture/guide/architecture-styles/
+    monitor_mode: semantic-review
+    cadence: monthly
+    last_checked: 2026-08-24
+    local_impact:
+      - Software-Architecture-und-System-Design/Architekturstile-und-Patterns.md
+      - Software-Architecture-und-System-Design/Skills/system-design/SKILL.md
+      - Software-Architecture-und-System-Design/Skills/architecture-tradeoff-analysis/SKILL.md
+
+  - id: pinchen-system-design-skill
+    area: Software-Architecture-und-System-Design
+    kind: github-file
+    repository: pinchen147/system-design-skill
+    path: skills/system-design/SKILL.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: 8ea4d9b0d1ee929896aa519bc03964e2a8746291
+    last_checked: 2026-08-24
+    local_impact:
+      - Software-Architecture-und-System-Design/Architekturziele-Drivers-und-Constraints.md
+      - Software-Architecture-und-System-Design/Runtime-Flows-State-und-Koordination.md
+      - Software-Architecture-und-System-Design/Qualitaetsattribute-Szenarien-und-Trade-offs.md
+      - Software-Architecture-und-System-Design/Skills/system-design/SKILL.md
+      - Software-Architecture-und-System-Design/Skills/architecture-review/SKILL.md
+
+  - id: lx-wnk-architecture-design-skill
+    area: Software-Architecture-und-System-Design
+    kind: github-file
+    repository: lx-wnk/skills
+    path: skills/architecture-design/SKILL.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: 05ad3d2cb5e19bb9b5218ecb33b5eebe97985cc0
+    last_checked: 2026-08-24
+    local_impact:
+      - Software-Architecture-und-System-Design/Dekomposition-Module-Services-und-Abhaengigkeiten.md
+      - Software-Architecture-und-System-Design/Skills/architecture-decomposition/SKILL.md
+      - Software-Architecture-und-System-Design/Skills/system-design/SKILL.md
+
+  - id: lx-wnk-architecture-review-skill
+    area: Software-Architecture-und-System-Design
+    kind: github-file
+    repository: lx-wnk/skills
+    path: skills/architecture-review/SKILL.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: 6be36cfa38b20ba27673419ff7043cf87cffdbc9
+    last_checked: 2026-08-24
+    local_impact:
+      - Software-Architecture-und-System-Design/Conformance-Fitness-Functions-und-Drift.md
+      - Software-Architecture-und-System-Design/Skills/architecture-conformance-review/SKILL.md
+      - Software-Architecture-und-System-Design/Skills/architecture-review/SKILL.md
+
 policy:
   on_change: review-only
   auto_sync: false
