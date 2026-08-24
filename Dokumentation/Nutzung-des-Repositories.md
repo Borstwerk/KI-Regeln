@@ -343,6 +343,47 @@ Lokal bleiben insbesondere:
 - technische Retrieval-/RAG-Implementierung;
 - Freigaben für Bulk-Ingest, Mass-Merge, Rewrites und Delete.
 
+## Beispiel: Schnittstellenvertrag
+
+Workflow:
+
+`../Workflows/Schnittstellenvertrag-Entwerfen-und-Aendern.md`
+
+Für einen neuen Vertrag:
+
+```text
+lokale Architektur-/Domain-Sources-of-Truth
+→ interface-design
+→ je nach Stil http-api-design / event-contract-design / passende Fachregeln
+→ Contract Artifact
+→ Implementierung
+→ contract-testing
+→ optional integration-testing
+→ interface-review
+→ lokales Gate
+```
+
+Für einen bestehenden Vertrag:
+
+```text
+Baseline + Consumer
+→ contract-change-review
+→ COMPATIBLE / ROLLOUT-SENSITIVE / BREAKING / UNVERIFIED
+→ Migration / Deprecation nach Verdict
+→ Implementierung
+→ contract-testing
+```
+
+Lokal bleiben insbesondere:
+
+- reale Consumer und deren Deployment-/Upgradefreiheit;
+- Architekturgrenzen und Ownership;
+- tatsächlicher Transport/Framework/IDL;
+- kanonische Contract-Dateien;
+- Compatibility- und Versionierungs-Policy;
+- Auth-/Tenant-Mechanismen;
+- Support-, Migration-, Deprecation- und Removal-Gates.
+
 ## Beispiel: Technische Dokumentation
 
 Workflow:

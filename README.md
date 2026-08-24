@@ -10,8 +10,8 @@ Ziel ist keine persönliche KI-Konfiguration und keine projektspezifische Wissen
 
 Das bedeutet:
 
-- allgemeine Kommunikations-, Reflexions-, Recherche-, Wissensmanagement-, Dokumentations-, Schreib-, Bild-, Web-, Datenbank-, Testing-, Agenten-, Sicherheits- und Entwicklungsregeln liegen hier;
-- projektspezifische Anforderungen, Architektur, Research-Fragen, interne Quellen, Wissensbestände, Fachmodelle, reales Datenbankschema, konkrete Testumgebung, Markenregeln, visuelle Bibeln und Sonderregeln bleiben im jeweiligen Projekt;
+- allgemeine Kommunikations-, Reflexions-, Recherche-, Wissensmanagement-, Schnittstellen-/Contract-, Dokumentations-, Schreib-, Bild-, Web-, Datenbank-, Testing-, Agenten-, Sicherheits- und Entwicklungsregeln liegen hier;
+- projektspezifische Anforderungen, Architektur, Research-Fragen, interne Quellen, Wissensbestände, Fachmodelle, reale Schnittstellen/Consumer, reales Datenbankschema, konkrete Testumgebung, Markenregeln, visuelle Bibeln und Sonderregeln bleiben im jeweiligen Projekt;
 - persönliche Profile oder unnötige personenbezogene Details gehören nicht in dieses Repository;
 - ein Skill ersetzt niemals die tatsächliche Spezifikation oder Dokumentation eines Projekts.
 
@@ -36,6 +36,7 @@ KI-Regeln/
 ├── Agentenarbeit/
 ├── Recherche/
 ├── Wissensmanagement/
+├── Schnittstellen-und-Vertraege/
 ├── Dokumentationserstellung/
 ├── Schreiben/
 ├── Bildarbeit/
@@ -179,6 +180,51 @@ Operative Skills:
 Obsidian, Notion, Vektorstores oder Knowledge Graphs sind mögliche Adapter. Ihre konkreten Mechanismen werden nicht zur universellen Wissensmanagementregel erklärt.
 
 > Eine Wissensbasis soll nach einem Ingest nicht nur größer, sondern besser werden.
+
+## Schnittstellen und Verträge
+
+Technologieübergreifende Regeln für langlebige Zusagen zwischen Providern und Consumern.
+
+Der Bereich behandelt insbesondere:
+
+- Consumer-/Provider- und Ownership-Modell;
+- Wahl zwischen HTTP, GraphQL, RPC/IDL, Events und Webhooks nach realem Kommunikationsproblem;
+- Contract-Schemas, Defaults, Nullability, Enums und Fehlersemantik;
+- HTTP API Design ohne REST- oder Versionierungsdogma;
+- GraphQL-Schemaevolution;
+- RPC-/Protobuf-Verträge mit Source-/Wire-Aspekten;
+- Event-/Async-Contracts mit Delivery, Ordering, Replay und Dead Letter;
+- Webhooks und Callbacks;
+- Idempotenz, Retry und Concurrency;
+- Auth-, Scope- und Tenant-Grenzen im beobachtbaren Vertrag;
+- Source-, Wire- und semantische Compatibility;
+- Versionierung, Deprecation, Sunset und Removal-Gates;
+- Contract-First und maschinenlesbare Artefakte.
+
+Scope-Grenze:
+
+```text
+Software Architecture
+→ warum und wo eine Systemgrenze existiert
+
+Schnittstellen und Verträge
+→ was über diese Grenze zugesichert wird
+
+Contract Testing
+→ ob Consumer und Provider den Vertrag tatsächlich einhalten
+```
+
+Operative Skills:
+
+- `interface-design`;
+- `http-api-design`;
+- `event-contract-design`;
+- `contract-change-review`;
+- `interface-review`.
+
+GraphQL, RPC/IDL/Protobuf und Webhooks besitzen eigene Fachregeln, aber zunächst keine eigenen Skills. Ein anderes Vertragsformat allein ist noch keine neue Arbeitsdisziplin.
+
+> Ein Contract ist eine beobachtbare Zusage – nicht bloß ein Schema.
 
 ## Dokumentationserstellung
 
@@ -397,11 +443,14 @@ Erste Evalpacks bestehen unter anderem für:
 - alle sieben Datenbank-Skills;
 - alle neun Testing-und-QA-Skills;
 - `context-engineering`, `context-audit`, `context-compaction` und `session-handoff`;
-- alle sieben Wissensmanagement-Skills.
+- alle sieben Wissensmanagement-Skills;
+- alle fünf Schnittstellen-/Contract-Skills.
 
 Die Context-Evals prüfen unter anderem fehlende Messfähigkeit, erfundene Tokenpräzision, Verlust kritischer Constraints bei Compaction, Handoff-Fortsetzungsfähigkeit und die Grenze zu Persistent Knowledge.
 
 Die Wissensmanagement-Evals prüfen unter anderem Search-before-Create, Provenance, sichere Merge-/Delete-Grenzen, Query-Grounding, Staleness-/Orphan-Behandlung und ehrliche Review-Coverage.
+
+Die Schnittstellen-Evals prüfen unter anderem Transportdogma, DB-Leaks in API-Schemas, Additive-vs.-Semantic-Compatibility, Source-/Wire-Trennung, rollout-sensitive Changes und fehlende Contract-Baselines.
 
 ## Workflows / Recipes
 
@@ -419,7 +468,8 @@ Enthalten sind Recipes für:
 - Datenbankänderungen;
 - Teststrategie und QA;
 - Long-Horizon-Agentenarbeit;
-- Aufbau und Pflege von Wissensbasen.
+- Aufbau und Pflege von Wissensbasen;
+- Entwurf und Änderung von Schnittstellenverträgen.
 
 > Skills bleiben klein. Workflows verbinden sie.
 
@@ -498,6 +548,8 @@ Für Testing gilt zusätzlich: Die zentralen Skills definieren Methodik und Evid
 Für Context-/Token-Arbeit gilt zusätzlich: konkrete Modellfenster, Tokenpreise, Cache-Semantik, Compaction-APIs, Thread-Persistenz, Tool-Schema-Kosten und Runtime-Grenzen bleiben provider- beziehungsweise projektspezifisch. Dauerhafte Wissensbasen werden nicht mit Working Context gleichgesetzt.
 
 Für Wissensmanagement gilt zusätzlich: konkrete Knowledge-Base-Software, Ordner-/Property-Schema, Taxonomie, reale Sources of Truth, Zugriffs- und Datenschutzklassen, Retention-Regeln sowie Bulk-Write-/Delete-Freigaben bleiben lokal.
+
+Für Schnittstellenarbeit gilt zusätzlich: reale Consumer, Architekturgrenzen, Protokolle, Toolchain, kanonische Contract-Artefakte, Compatibility-/Versionierungs-Policy, Auth-Mechanismen, Supportfenster sowie Deprecation-/Removal-Gates bleiben lokal.
 
 Für Auswahl und Dokumentation zentraler Regeln kann `Vorlagen/ki-regeln.template.yml` als Ausgangspunkt verwendet werden.
 
