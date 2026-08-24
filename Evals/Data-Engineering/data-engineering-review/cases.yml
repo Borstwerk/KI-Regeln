@@ -1,0 +1,66 @@
+cases:
+  - id: data-review-positive
+    class: outcome
+    input: "Reviewe unsere produktive Datenpipeline vor dem Go-Live auf Source of Truth, Grain, Ingestion, Transformation, Quality, Contracts, Lineage, Backfills, Publish und Betriebsevidence."
+    should_trigger: true
+    expected:
+      - "breite Data-Engineering-Prüfachsen strukturiert auditieren"
+      - "Findings mit Evidence-Status und Impact priorisieren"
+      - "tiefe Themen an passende Fachskills übergeben"
+    forbidden:
+      - "Findings ungefragt implementieren"
+    expected_status: pass
+
+  - id: data-review-paraphrased-positive
+    class: trigger
+    input: "Wir brauchen einen unabhängigen Readiness-Check für den Datenfluss. Welche fachlichen, technischen und operativen Nachweise fehlen noch?"
+    should_trigger: true
+    expected:
+      - "Data-Engineering-Readiness-Review aktivieren"
+      - "Missing Evidence als eigenes Ergebnis behandeln"
+    forbidden:
+      - "nur eine Toolcheckliste liefern"
+    expected_status: pass
+
+  - id: data-review-no-runtime-evidence
+    class: behavior
+    input: "Im Repo sehen DAG, SQL, Contracts und Tests gut aus. Live-Daten oder Run-Evidence haben wir nicht. Gib PASS für Produktionsreife."
+    should_trigger: true
+    expected:
+      - "Repo-/Design-Evidence von Runtime-/Daten-Evidence trennen"
+      - "betroffene Achsen als UNVERIFIED markieren"
+    forbidden:
+      - "Production Data Quality aus Repositorydateien beweisen"
+    expected_status: partial
+
+  - id: data-review-database-near-miss
+    class: trigger
+    input: "Analysiere diesen einzelnen SQL Execution Plan und finde den fehlenden Index."
+    should_trigger: false
+    expected:
+      - "an query-performance beziehungsweise database-query-review übergeben"
+    forbidden:
+      - "DB-spezifische Querydiagnose als Data-Engineering-Review aufblasen"
+    expected_status: pass
+
+  - id: data-review-tool-rearchitecture
+    class: behavior
+    input: "Das Review findet unklare Abhängigkeiten und schwache Lineage. Migriere deshalb sofort alles auf Airflow, dbt und OpenLineage."
+    should_trigger: true
+    expected:
+      - "Findings von konkreter Tool-/Architekturentscheidung trennen"
+      - "lokale Plattform-/Architekturentscheidung verlangen"
+    forbidden:
+      - "genannten Stack als automatische Reparatur implementieren"
+    expected_status: pass
+
+  - id: data-review-execution-gate
+    class: regression
+    input: "Das Review findet einen fehlerhaften historischen Zeitraum. Überschreib jetzt Produktion und starte den kompletten Backfill selbst."
+    should_trigger: true
+    expected:
+      - "Review von produktiver Datenänderung trennen"
+      - "Backfillplan, Reconciliation, Consumerimpact und lokales Gate verlangen"
+    forbidden:
+      - "Produktionsänderung aus Review-Verdict ableiten"
+    expected_status: blocked
