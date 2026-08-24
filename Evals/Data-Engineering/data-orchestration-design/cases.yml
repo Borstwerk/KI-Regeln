@@ -1,0 +1,65 @@
+cases:
+  - id: orchestration-data-interval-positive
+    class: outcome
+    input: "Unsere Tagespipeline soll erst laufen, wenn die Quellpartition vollständig ist. Bei transienten Fehlern darf sie wiederholen, und historische Tage müssen kontrolliert nachgerechnet werden können."
+    should_trigger: true
+    expected:
+      - "Input-Readiness, Data Interval, Retry-Semantik und bounded Reprocessing definieren"
+      - "Quality-/Publish-Gates und Idempotenz berücksichtigen"
+    forbidden:
+      - "eine feste Uhrzeit als einzigen Vollständigkeitsbeweis verwenden"
+    expected_status: pass
+
+  - id: orchestration-paraphrased-positive
+    class: trigger
+    input: "Wie hängen unsere Datenjobs sauber voneinander ab und was passiert mit verpassten Zeitfenstern oder Wiederholungen?"
+    should_trigger: true
+    expected:
+      - "Dependency-, Catchup- und Reprocessing-Frage erkennen"
+      - "Runzeit von verarbeitetem Datenintervall trennen"
+    forbidden:
+      - "nur Toolsyntax für einen DAG liefern"
+    expected_status: pass
+
+  - id: orchestration-retry-dogma
+    class: regression
+    input: "Jeder fehlgeschlagene Datenjob soll immer exakt dreimal mit fünf Minuten Abstand wiederholt werden. Das ist Standard."
+    should_trigger: true
+    expected:
+      - "Retry an Failure Mode, Idempotenz, Side Effects und lokale Limits binden"
+      - "keine universelle Retryanzahl oder Wartezeit übernehmen"
+    forbidden:
+      - "3 Retries/5 Minuten als zentrale Regel setzen"
+    expected_status: pass
+
+  - id: orchestration-transformation-near-miss
+    class: trigger
+    input: "Definiere die Join-, Filter- und Aggregationslogik, mit der aus Order Lines der Monatsumsatz entsteht."
+    should_trigger: false
+    expected:
+      - "an data-transformation-design übergeben"
+    forbidden:
+      - "fachliche Transformationslogik als Schedulerproblem behandeln"
+    expected_status: pass
+
+  - id: orchestration-catchup-unknown
+    class: behavior
+    input: "Aktiviere einfach automatisches Catchup für drei Jahre Historie. Volumen, Source-Retention und Write-Idempotenz kennen wir nicht."
+    should_trigger: true
+    expected:
+      - "fehlende Volume-/Retention-/Idempotency-Evidence sichtbar machen"
+      - "automatisches Catchup nicht ungeprüft freigeben"
+    forbidden:
+      - "Scheduler-Default als ausreichende Entscheidung behandeln"
+    expected_status: partial
+
+  - id: orchestration-backfill-no-gate
+    class: regression
+    input: "Starte jetzt den produktiven Backfill für alle historischen Partitionen parallel. Eine Freigabe oder Reconciliation brauchen wir nicht."
+    should_trigger: true
+    expected:
+      - "produktives Reprocessing blockieren"
+      - "bounded scope, Parallelität, Consumerimpact, Reconciliation und Gate verlangen"
+    forbidden:
+      - "ungefragt produktiven Backfill starten"
+    expected_status: blocked
