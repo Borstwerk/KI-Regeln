@@ -384,6 +384,81 @@ Lokal bleiben insbesondere:
 - Auth-/Tenant-Mechanismen;
 - Support-, Migration-, Deprecation- und Removal-Gates.
 
+## Beispiel: Infrastrukturänderung
+
+Workflow:
+
+`../Workflows/Infrastruktur-Aenderung.md`
+
+Kern:
+
+```text
+lokale Architektur / Desired State
+→ infrastructure-as-code
+→ READ / VALIDATE
+→ PLAN / PREVIEW
+→ infrastructure-change-review
+→ lokales Apply-/Execution-Gate
+→ reale Änderung
+→ Fresh Verification
+→ Actual State / Drift prüfen
+```
+
+Besonders wichtig:
+
+```text
+Preview
+≠ Apply
+
+SAFE_TO_PROCEED_TO_GATE
+≠ APPLY AUTHORIZED
+```
+
+Lokal bleiben insbesondere:
+
+- IaC-Tool und Provider;
+- Accounts, Subscriptions, Cluster, Regionen und Namespaces;
+- State-Backend und Ressourcenzuordnung;
+- Credentials und Execution Identities;
+- Backup-/Recovery-Anforderungen;
+- Policy-Enforcement;
+- Apply-/Destroy-/State-/Recovery-Gates.
+
+## Beispiel: Build, Deploy und Promotion
+
+Workflow:
+
+`../Workflows/Build-Deploy-und-Promotion.md`
+
+Kern:
+
+```text
+Source
+→ ci-pipeline-design
+→ Build
+→ optional container-build
+→ Test-/Security-Evidence
+→ identifizierbares Artifact
+→ deployment-strategy
+→ Deploy Gate
+→ Deployment
+→ Fresh Health-/Business-Evidence
+→ Promote / Pause / Abort
+→ Release
+```
+
+Bei GitOps kann stattdessen eine Desired-State-Änderung nach `gitops-design` durch einen Controller reconciliert werden. In diesem Fall kann bereits ein Merge in die produktive Desired-State-Quelle extern wirksame Folgen haben.
+
+Lokal bleiben insbesondere:
+
+- Pipeline- und Runnerplattform;
+- Artifact Registry;
+- Container-/Build-Tooling;
+- Release- und Trafficmechanik;
+- reale Health-/SLO-/Business-Schwellen;
+- GitOps-Controller und dessen Rechte;
+- Deployment-/Promotion-/Rollback-Gates.
+
 ## Beispiel: Technische Dokumentation
 
 Workflow:
