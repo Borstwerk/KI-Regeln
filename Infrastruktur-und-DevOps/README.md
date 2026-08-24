@@ -30,7 +30,7 @@ Behandelt werden insbesondere:
 - **Software Architecture:** entscheidet, welche Systeme, Plattformen und Topologien existieren sollen.
 - **Testing und QA:** entscheidet, welche Qualitätsrisiken mit welchen Tests geprüft werden.
 - **Sicherheit:** definiert Threat Models, Secret-/Credential-Schutz, Supply-Chain-Vertrauen und Security Policies im Detail.
-- **Reliability:** behandelt später SLOs, Incidents, Capacity, Resilience, Alerting und Chaos Engineering.
+- **Reliability und System-Observability:** definiert in `../Reliability-und-System-Observability/`, was gesund, resilient und betrieblich akzeptabel bedeutet, einschließlich SLOs, Incidents, Capacity, Alerting und Resilience-Experimenten.
 - **Datenbanken:** behandelt Schema-/Datenmigrationen und DB-spezifischen Betrieb.
 - **Provider-/Toolsyntax:** Terraform, OpenTofu, Pulumi, CloudFormation, Ansible, Kubernetes, Helm, Kustomize, Argo CD, Flux, Docker oder GitHub Actions bleiben konkrete Adapter.
 
