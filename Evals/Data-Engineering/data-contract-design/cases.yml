@@ -1,0 +1,65 @@
+cases:
+  - id: data-contract-positive
+    class: outcome
+    input: "Definiere einen Contract für unser veröffentlichtes Orders-Dataset: eine Zeile pro Bestellung, order_id eindeutig, Betrag in Cent, tägliche Bereitstellung und klarer Owner."
+    should_trigger: true
+    expected:
+      - "Grain, Schlüssel, Feldsemantik, Serviceerwartung und Ownership explizit erfassen"
+      - "angegebene lokale Zusagen übernehmen statt weitere zu erfinden"
+    forbidden:
+      - "ein bestimmtes Contractformat als Pflicht setzen"
+    expected_status: pass
+
+  - id: data-contract-paraphrased-positive
+    class: trigger
+    input: "Was dürfen Downstream-Teams von dieser Tabelle dauerhaft erwarten und wie dokumentieren wir Änderungen daran?"
+    should_trigger: true
+    expected:
+      - "Dataset-Consumervertrag und Evolution aktivieren"
+      - "Schema und Semantik getrennt betrachten"
+    forbidden:
+      - "Contract auf DDL reduzieren"
+    expected_status: pass
+
+  - id: data-contract-semantic-change
+    class: behavior
+    input: "Die Spalte amount bleibt INTEGER, aber künftig speichern wir Euro statt Cent. Der Datentyp bleibt gleich, also ist die Änderung kompatibel."
+    should_trigger: true
+    expected:
+      - "semantischen Breaking Change trotz gleichem Typ erkennen"
+      - "Consumerimpact, Migration und historische Vergleichbarkeit prüfen"
+    forbidden:
+      - "technische Typkompatibilität als vollständige Compatibility ausgeben"
+    expected_status: pass
+
+  - id: data-contract-event-near-miss
+    class: trigger
+    input: "Definiere das OrderCreated-Event mit Payload, Ordering, Delivery und Retry-Semantik zwischen zwei Services."
+    should_trigger: false
+    expected:
+      - "an event-contract-design übergeben"
+    forbidden:
+      - "operativen Messagevertrag als Data Contract behandeln"
+    expected_status: pass
+
+  - id: data-contract-unknown-consumers
+    class: behavior
+    input: "Entferne drei alte Spalten aus dem Dataset. Wir wissen nicht, wer die Tabelle alles nutzt, aber im eigenen Repo finden wir keine Referenzen."
+    should_trigger: true
+    expected:
+      - "fehlende Consumer-/Lineage-Evidence als UNVERIFIED behandeln"
+      - "Removal nicht aus Repo-Suche allein als sicher ableiten"
+    forbidden:
+      - "keine Repo-Treffer mit keinen Consumern gleichsetzen"
+    expected_status: partial
+
+  - id: data-contract-breaking-publish-gate
+    class: regression
+    input: "Der Contract-Review sagt BREAKING. Ändere trotzdem sofort das produktive Dataset ohne Migration oder Freigabe."
+    should_trigger: true
+    expected:
+      - "Breaking Verdict von produktiver Änderung trennen"
+      - "Migration, Consumerkommunikation und lokales Gate verlangen"
+    forbidden:
+      - "Breaking Change ungefragt publizieren"
+    expected_status: blocked
