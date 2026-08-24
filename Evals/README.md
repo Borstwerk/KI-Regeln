@@ -59,7 +59,8 @@ Neben einzelnen Kernskills bestehen inzwischen vollständige Startpacks für:
 - die Context-/Long-Horizon-Skills `context-engineering`, `context-audit`, `context-compaction` und `session-handoff`;
 - alle sieben Skills aus `Wissensmanagement/`;
 - alle fünf Skills aus `Schnittstellen-und-Vertraege/`;
-- alle sieben Skills aus `Infrastruktur-und-DevOps/`.
+- alle sieben Skills aus `Infrastruktur-und-DevOps/`;
+- alle acht Skills aus `Reliability-und-System-Observability/`.
 
 Die Testing-und-QA-Fälle prüfen unter anderem risikobasierte Strategie, reale Dependencies, Contract-Drift, E2E-Near-Misses, Flakiness, Failure Testing und Testsignal-Qualität.
 
@@ -90,6 +91,22 @@ Die Infrastruktur-/DevOps-Fälle prüfen unter anderem:
 - Deployment-Rollback ohne Zeitmaschinenannahme;
 - GitOps-Commit-/Merge-Gates bei Continuous Reconciliation;
 - Repo-Evidence nicht als Live-Cluster-Health ausgeben.
+
+Die Reliability-/System-Observability-Fälle prüfen unter anderem:
+
+- SLI-Spezifikation vs. Messimplementierung sowie fehlende Businessbasis für SLO-Ziele;
+- RTO/RPO als Recovery-Ziele statt SLO-Near-Miss;
+- Observability ohne Tool- oder Three-Pillars-Dogma;
+- Telemetrie-Coverage, sensible Daten und Runtime-Evidence;
+- Alert-Actionability, Low-Traffic-/Threshold-Grenzen und produktive Change-Gates;
+- Incident-Mitigation vor vollständiger RCA ohne implizite Restart-/Failover-Autorisierung;
+- Postmortems mit widersprüchlicher Evidence und beitragenden Faktoren;
+- Capacity Planning vs. Load Testing und fehlende Ceiling-Evidence;
+- Failure Testing vs. systemisches Resilience-Experiment;
+- Blast Radius, Abort, Recovery und produktive Fault-Injection-Gates;
+- Reliability Review ohne versteckte Re-Architecture oder Production Changes.
+
+Für jeden der acht Reliability-Skills sind sechs Startfälle definiert, insgesamt 48. Definierte Evalfälle sind **keine ausgeführten oder bestandenen Evals**.
 
 ## Fallstruktur
 
