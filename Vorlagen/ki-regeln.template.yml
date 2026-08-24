@@ -53,6 +53,15 @@ skills:
   # - Schnittstellen-und-Vertraege/Skills/contract-change-review
   # - Schnittstellen-und-Vertraege/Skills/interface-review
 
+  # Infrastruktur und DevOps
+  # - Infrastruktur-und-DevOps/Skills/infrastructure-as-code
+  # - Infrastruktur-und-DevOps/Skills/infrastructure-change-review
+  # - Infrastruktur-und-DevOps/Skills/ci-pipeline-design
+  # - Infrastruktur-und-DevOps/Skills/container-build
+  # - Infrastruktur-und-DevOps/Skills/deployment-strategy
+  # - Infrastruktur-und-DevOps/Skills/gitops-design
+  # - Infrastruktur-und-DevOps/Skills/infrastructure-review
+
   # Dokumentationserstellung
   # - Dokumentationserstellung/Skills/docs-plan
   # - Dokumentationserstellung/Skills/technical-writing
@@ -134,6 +143,8 @@ workflows:
   # - Workflows/Long-Horizon-Agentenarbeit.md
   # - Workflows/Wissensbasis-Aufbauen-und-Pflegen.md
   # - Workflows/Schnittstellenvertrag-Entwerfen-und-Aendern.md
+  # - Workflows/Infrastruktur-Aenderung.md
+  # - Workflows/Build-Deploy-und-Promotion.md
 
 quality_policy:
   minimum_maturity: "<project-decision>"
@@ -156,3 +167,5 @@ notes:
   - Context-/Token-Skills optimieren Active Context und taskbezogenen Working State; dauerhaft gepflegtes Wissen gehört zum Bereich `Wissensmanagement/`.
   - Knowledge-Base-Tools, Taxonomien, Datenschutzklassen und Sources of Truth bleiben projektspezifisch.
   - Schnittstellen-Standards, Frameworks, reale Consumer, Versionierungs-Policies und Release-/Deprecation-Gates bleiben projektspezifisch.
+  - Infrastrukturtools, Provider, Accounts/Cluster, State-Backends, Credentials, Environment-Policies, Health-Schwellen und Deploy-/Destroy-Gates bleiben projektspezifisch.
+  - Preview, Plan oder CI-Grün autorisieren keine reale Infrastrukturänderung automatisch.
