@@ -8,6 +8,35 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Reliability und System-Observability
+
+Neuer tool- und providerneutraler Hauptbereich für Zuverlässigkeitsziele, System-Observability, Betriebsreaktion und Resilience:
+
+- klare Trennung von Agenten-Observability und Runtime-/System-Observability;
+- Reliability entlang der Ebenen Objectives, Sensing, Response sowie Learning & Resilience strukturiert;
+- SLI-Spezifikation, Messimplementierung, SLO, Messfenster und Error Budget getrennt modelliert; konkrete Zielwerte werden nicht ohne lokale Anforderungsgrundlage erfunden;
+- `SLO ≠ SLA ≠ RTO/RPO` als zentrale Grenze festgeschrieben;
+- System-Observability als Fähigkeit modelliert, relevante Zustands- und Betriebsfragen aus externer Evidence beantworten zu können; Metrics, Logs, Traces und weitere Telemetrieformen sind mögliche Signale, keine Definition von Observability;
+- Alerting nach Actionability, Nutzer-/Serviceimpact, Symptom-vs.-Cause, Noise, Fensterung und Runbook-/Next-Action-Bezug statt universeller Thresholds oder Severitymodelle;
+- Incident Response mit Impact, Rollen, Incident State, Mitigation, Kommunikation, Handoff und Fresh Recovery Evidence; Incident-Dringlichkeit erweitert keine Rechte und ersetzt keine Human Gates;
+- Postmortems mit Timeline, Evidence, beitragenden Faktoren, Detection-/Response-/Recovery-Gaps und Follow-ups statt erzwungener Einzelursache;
+- Capacity Planning als eigene Arbeitsdisziplin zwischen gemessener Belastungsgrenze und technischer Provisionierung; Peak, Wachstum, Saturation, Failure Domains, Lead Time, Headroom und Unsicherheit werden explizit;
+- Recovery-Ziele RTO/RPO bleiben lokale Business-/Requirement-Werte; Reliability operationalisiert und prüft sie, während Backup/Restore/Failover technisch in den zuständigen Domänen bleiben;
+- Resilience über Failure Domains, Dependency Health, Graceful Degradation und Recovery-Verhalten beschrieben; konkrete Architekturpatterns bleiben bei Software Architecture;
+- Chaos Engineering und Game Days als kontrollierte Hypothesenexperimente mit Steady State, Blast Radius, Abort und Recovery statt als destruktiver Stunt oder Produktionspflicht;
+- Toil als Signal für nicht nachhaltigen Betrieb eingeordnet, ohne universelle Prozentziele;
+- Operational Readiness als zusammengesetzte Evidence und Workflow statt als Mega-Skill modelliert;
+- acht neue Skills `slo-design`, `system-observability-design`, `alert-design`, `incident-response`, `incident-postmortem`, `capacity-planning`, `resilience-experiment` und `reliability-review`;
+- alle acht Skills starten `experimental` mit `partial` Evalabdeckung;
+- 48 Evalfälle definiert, sechs je Skill, einschließlich SLO-/RTO-Grenzen, Telemetrie-/PII-Fällen, Alert-Noise, Incident-Gates, Capacity-Evidence, Failure-Testing-vs.-Chaos und unabhängigen Reliability-Reviews; die Fälle sind definiert, nicht automatisch als ausgeführt oder bestanden zu verstehen;
+- fünf Workflows `Reliability-Baseline-und-SLOs.md`, `Produktionsincident.md`, `Post-Incident-Learning.md`, `Resilience-Game-Day.md` und `Operational-Readiness-Review.md`;
+- neues menschliches `Dokumentation/Skill-Handbuch-Reliability-und-System-Observability.md`;
+- neue Capability `controlled-fault-injection-gated` für ausdrücklich freigegebene Resilience-Experiment-Ausführung;
+- bestehende Grenzen in `Testing-und-QA/`, `Infrastruktur-und-DevOps/`, `Schnittstellen-und-Vertraege/` und `Agentenarbeit/` auf den realen Reliability-Bereich umgestellt;
+- `failure-testing` mit `resilience-experiment` und `deployment-strategy` mit `slo-design`, `system-observability-design` und `reliability-review` verbunden;
+- Skill-Katalog auf 95 zentrale Skills erweitert;
+- Quellenbasis aus Google SRE, CNCF/OpenTelemetry, Principles of Chaos Engineering, ISO/IEC 25010 sowie AWS-/Azure-/GCP-Gegenprüfungen und ausgewählten aktuellen öffentlichen Agent-Skills, ohne provider- oder toolgebundene Defaults zu universalisieren.
+
 ### Infrastruktur und DevOps
 
 Neuer tool- und providerneutraler Hauptbereich für Infrastructure as Code, Delivery-Automation und kontrollierte Infrastrukturänderungen:
