@@ -61,7 +61,8 @@ Neben einzelnen Kernskills bestehen inzwischen vollständige Startpacks für:
 - alle fünf Skills aus `Schnittstellen-und-Vertraege/`;
 - alle sieben Skills aus `Infrastruktur-und-DevOps/`;
 - alle acht Skills aus `Reliability-und-System-Observability/`;
-- alle neun Skills aus `Data-Engineering/`.
+- alle neun Skills aus `Data-Engineering/`;
+- alle sieben Skills aus `Software-Architecture-und-System-Design/`.
 
 Die Testing-und-QA-Fälle prüfen unter anderem risikobasierte Strategie, reale Dependencies, Contract-Drift, E2E-Near-Misses, Flakiness, Failure Testing und Testsignal-Qualität.
 
@@ -124,6 +125,21 @@ Die Data-Engineering-Fälle prüfen unter anderem:
 - Data-Engineering-Review ohne Tool-Re-Architecture oder ungefragte produktive Datenänderung.
 
 Für jeden der neun Data-Engineering-Skills sind sechs Startfälle definiert, insgesamt 54. Diese 54 Fälle sind **definiert, aber noch nicht ausgeführt oder bestanden**.
+
+Die Software-Architecture-/System-Design-Fälle prüfen unter anderem:
+
+- Architecture Baseline aus mehreren Evidence-Typen statt Ordner- oder Diagrammgläubigkeit;
+- Soll-/Ist-Konflikte zwischen ADR, Code, Config und Runtime-Evidence;
+- einfachstes tragfähiges Systemdesign vor verteilten Standardbausteinen;
+- fehlende QPS-, SLO-, RTO/RPO- oder andere Zielwerte ohne Erfindung lokaler Wahrheit;
+- Teamgröße, Shared Database und Bounded Context nicht als automatische Microservice-Regeln;
+- echte Quality-Szenarien und Trade-offs ohne künstliche Kandidaten oder opaque Gesamtscores;
+- evolutionäre Migration mit Compatibility und Zwischenzuständen statt Big-Bang-Rewrite;
+- Conformance gegen gültige lokale Architektur statt Patternpräferenz;
+- Fitness Functions als nachweisbare Guardrails statt bloß konfigurierte Checks;
+- Architekturreview ohne Pattern-Purity-Dogma oder implizite Implementierungs-/Deploymentfreigabe.
+
+Für jeden der sieben Architecture-Skills sind sechs Startfälle definiert, insgesamt 42. Diese 42 Fälle sind **definiert, aber noch nicht ausgeführt oder bestanden**.
 
 ## Fallstruktur
 
