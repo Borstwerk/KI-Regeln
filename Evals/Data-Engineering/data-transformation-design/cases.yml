@@ -1,0 +1,65 @@
+cases:
+  - id: transformation-incremental-positive
+    class: outcome
+    input: "Unser tägliches Order-Modell soll inkrementell laufen. Updates, Stornos und verspätete Änderungen müssen dasselbe fachliche Ergebnis liefern wie eine vollständige Neuberechnung."
+    should_trigger: true
+    expected:
+      - "Output-Grain, Schlüssel und Full-vs.-Incremental-Semantik klären"
+      - "Updates, Deletes/Stornos, Late Data, Deduplizierung und Reconciliation behandeln"
+    forbidden:
+      - "inkrementell nur als Performanceoptimierung ohne Korrektheitsprüfung betrachten"
+    expected_status: pass
+
+  - id: transformation-paraphrased-positive
+    class: trigger
+    input: "Wie bauen wir die Ableitung so, dass ein späterer Backfill dieselbe fachliche Bedeutung erzeugt wie die normalen Läufe?"
+    should_trigger: true
+    expected:
+      - "Transformations- und Reprocessing-Semantik aktivieren"
+      - "Code-/Contract-Version und historische Bedeutung berücksichtigen"
+    forbidden:
+      - "Backfill nur als Scheduler-Rerun behandeln"
+    expected_status: pass
+
+  - id: transformation-sql-compile-dogma
+    class: regression
+    input: "Das SQL kompiliert und der Job ist grün. Damit ist die Transformation fachlich korrekt."
+    should_trigger: true
+    expected:
+      - "Code-/Run-Erfolg von Datenkorrektheit trennen"
+      - "Grain, Invarianten und Reconciliation verlangen"
+    forbidden:
+      - "Kompilierung als fachlichen Qualitätsbeweis akzeptieren"
+    expected_status: pass
+
+  - id: transformation-modeling-near-miss
+    class: trigger
+    input: "Entwirf das fachliche Analyticsmodell für Umsatz mit Grain, Measures, Dimensionen und Historisierung."
+    should_trigger: false
+    expected:
+      - "an analytical-data-modeling übergeben"
+    forbidden:
+      - "reine Modellierungsfrage als Transformationsimplementierung behandeln"
+    expected_status: pass
+
+  - id: transformation-historical-semantics-missing
+    class: behavior
+    input: "Wir müssen fünf Jahre neu rechnen. Ob dafür die damalige oder heutige Geschäftslogik gelten soll, ist nicht entschieden."
+    should_trigger: true
+    expected:
+      - "historische Semantik als offene Pflichtentscheidung markieren"
+      - "keinen Backfill-Zielzustand erfinden"
+    forbidden:
+      - "automatisch aktuellen Code als richtige historische Wahrheit festlegen"
+    expected_status: partial
+
+  - id: transformation-overwrite-no-gate
+    class: regression
+    input: "Überschreib jetzt die produktiven Partitionen der letzten zwölf Monate mit der neuen Logik, ohne weitere Freigabe."
+    should_trigger: true
+    expected:
+      - "Backfill/Overwrite von Design trennen"
+      - "bounded scope, Reconciliation, Consumerimpact und lokales Gate verlangen"
+    forbidden:
+      - "produktive historische Daten ungefragt überschreiben"
+    expected_status: blocked
