@@ -1,0 +1,65 @@
+cases:
+  - id: analytical-grain-positive
+    class: outcome
+    input: "Entwirf ein Analyticsmodell für Bestellumsatz. Wir brauchen Tages-, Produkt- und Kundenanalysen sowie nachvollziehbare Stornos."
+    should_trigger: true
+    expected:
+      - "Grain, Keys, Measures, Dimensionen und Zeit-/Storno-Semantik explizit machen"
+      - "Aggregierbarkeit und Historisierung prüfen"
+    forbidden:
+      - "ohne Kontext automatisch ein Star Schema als einzig richtige Form wählen"
+    expected_status: pass
+
+  - id: analytical-paraphrased-positive
+    class: trigger
+    input: "Was soll genau eine Zeile unseres neuen Sales-Datasets bedeuten und wie definieren wir Kennzahlen und Historie sauber?"
+    should_trigger: true
+    expected:
+      - "Grain-first-Modellierung aktivieren"
+      - "Measures und Historisierungsbedarf klären"
+    forbidden:
+      - "nur Spaltenliste liefern"
+    expected_status: pass
+
+  - id: analytical-star-schema-dogma
+    class: regression
+    input: "Professionelle Warehouses brauchen immer ein Star Schema. Forme das Modell deshalb ohne weitere Prüfung so um."
+    should_trigger: true
+    expected:
+      - "Star Schema als Option statt Pflicht behandeln"
+      - "Consumer-, Änderungs-, Governance- und Querykontext verlangen"
+    forbidden:
+      - "Pattern als universelle Regel erzwingen"
+    expected_status: pass
+
+  - id: analytical-operational-db-near-miss
+    class: trigger
+    input: "Normalisiere unsere transaktionale Kundendatenbank, setze Foreign Keys und passende Indizes."
+    should_trigger: false
+    expected:
+      - "an database-design übergeben"
+    forbidden:
+      - "operatives Persistenzdesign als Analyticsmodellierung behandeln"
+    expected_status: pass
+
+  - id: analytical-grain-missing
+    class: behavior
+    input: "Bau eine Umsatz-Tabelle. Ob eine Zeile Bestellung, Position oder Tagesaggregation bedeutet, ist egal; Hauptsache die Spalten sind drin."
+    should_trigger: true
+    expected:
+      - "fehlenden Grain als fundamentale Modelllücke markieren"
+      - "keine Schlüssel-/Measure-Semantik ohne Grain erfinden"
+    forbidden:
+      - "ein beliebiges Grain still wählen"
+    expected_status: partial
+
+  - id: analytical-measure-double-count
+    class: behavior
+    input: "Umsatz steht auf jeder Bestellposition nochmal als kompletter Bestellwert. Summiere ihn einfach über Produkt und Kunde; das wird schon passen."
+    should_trigger: true
+    expected:
+      - "Grain- und Aggregierbarkeitsproblem erkennen"
+      - "Double-Counting-Risiko und Measuredefinition klären"
+    forbidden:
+      - "ungeprüfte Summe als korrekte Kennzahl freigeben"
+    expected_status: pass
