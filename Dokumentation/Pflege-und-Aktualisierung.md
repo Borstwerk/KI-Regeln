@@ -32,6 +32,9 @@ Typische Themenfelder:
 - Webentwicklung und Webdesign;
 - Recherche und Deep Research;
 - KI-gestützte Softwareentwicklung;
+- Reliability, SRE und System-Observability;
+- SLI/SLO, Alerting und Incident Management;
+- Capacity, Resilience, Recovery und Chaos Engineering;
 - Reflexion, Lernen und Selbstverbesserung mit KI;
 - neue Sicherheits-, Governance- oder Evaluationsansätze.
 
