@@ -459,6 +459,129 @@ Lokal bleiben insbesondere:
 - GitOps-Controller und dessen Rechte;
 - Deployment-/Promotion-/Rollback-Gates.
 
+## Beispiel: Reliability Baseline und SLOs
+
+Workflow:
+
+`../Workflows/Reliability-Baseline-und-SLOs.md`
+
+Kern:
+
+```text
+lokale Requirements / Critical Journeys
+→ slo-design
+→ system-observability-design
+→ alert-design
+→ optional capacity-planning
+→ reliability-review
+→ lokales Reliability-/Produkt-Gate
+```
+
+Wichtig ist die Trennung:
+
+```text
+Requirements / Business
+→ warum und wie zuverlässig ein Flow sein muss
+
+Reliability
+→ wie das Ziel messbar und betrieblich prüfbar wird
+```
+
+Lokal bleiben insbesondere:
+
+- konkrete SLO-Ziele und Messfenster;
+- SLAs und vertragliche Konsequenzen;
+- Alert-Schwellen, Severity- und On-Call-Modelle;
+- konkrete Telemetrie-/Monitoringprodukte;
+- RTO/RPO;
+- Capacity Limits, Quotas und Kostenbudgets.
+
+## Beispiel: Produktionsincident
+
+Workflow:
+
+`../Workflows/Produktionsincident.md`
+
+Kern:
+
+```text
+Signal / tatsächlicher Impact
+→ incident-response
+→ diagnose / passende Fachskills
+→ Mitigation Proposal
+→ Human-/Execution-Gate
+→ autorisierte technische Aktion
+→ Fresh Recovery Evidence
+→ Abschluss / Postmortem-Trigger
+```
+
+Besonders wichtig:
+
+```text
+Incident-Dringlichkeit
+≠ Produktionsautorisierung
+```
+
+`incident-response` koordiniert. Root-Cause-Diagnose, Datenbank-, Infra-, Interface- oder Security-Arbeit bleibt bei den jeweiligen Fachdomänen.
+
+Restart, Rollback, Restore, Failover, Traffic Switch, Scaling und andere reale Betriebsaktionen bleiben lokal gated.
+
+## Beispiel: Resilience Game Day
+
+Workflow:
+
+`../Workflows/Resilience-Game-Day.md`
+
+Kern:
+
+```text
+Failure-Risiko / Annahme
+→ resilience-experiment [PLAN]
+→ Steady State + Hypothese
+→ Fault / Environment / Blast Radius
+→ Observation + Abort + Recovery
+→ Permission / Execution Gate
+→ Experiment nur wenn autorisiert
+→ Fresh Recovery Evidence
+→ Hypothese bewerten
+```
+
+Ein gezielter reproduzierbarer Fault innerhalb eines Testscopes bleibt `failure-testing`.
+
+Produktion ist kein notwendiges Reifeziel. Die gewählte Umgebung soll die benötigte Aussagekraft bei vertretbarem Risiko liefern.
+
+## Beispiel: Operational Readiness
+
+Workflow:
+
+`../Workflows/Operational-Readiness-Review.md`
+
+Kern:
+
+```text
+Critical Journeys / Objectives
++ Observability / Alerts
++ Capacity / Dependencies
++ Recovery / Runbooks
++ Testing / Resilience Evidence
++ Deployment / Rollback Evidence
++ Security / Permissions
++ Ownership / On-Call
+→ reliability-review
+→ Findings / Missing Evidence
+→ lokales Go / No-Go
+```
+
+Operational Readiness ist bewusst ein Workflow und kein Mega-Skill.
+
+Lokal bleiben insbesondere:
+
+- tatsächliche Go-/No-Go-Entscheidung;
+- verbindliche Reliability-/Recovery-Ziele;
+- Owner und On-Call-Struktur;
+- Produktionsrechte;
+- Release-/Promotion-/Failover-Gates.
+
 ## Beispiel: Technische Dokumentation
 
 Workflow:
