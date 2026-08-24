@@ -50,6 +50,11 @@ Ein Workflow ist deshalb **kein neuer Mega-Skill**.
 - `Datenqualitaetsstoerung-und-Reconciliation.md`
 - `Backfill-und-Reprocessing.md`
 - `Data-Engineering-Readiness-Review.md`
+- `Architektur-Baseline-und-Systemdesign.md`
+- `Architekturentscheidung-und-Tradeoff.md`
+- `Systemgrenze-und-Dekomposition.md`
+- `Evolutionaere-Architekturaenderung.md`
+- `Architektur-Readiness-Review.md`
 
 ## Workflow-Handoff
 
