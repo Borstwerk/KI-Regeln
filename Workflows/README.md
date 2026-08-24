@@ -45,6 +45,11 @@ Ein Workflow ist deshalb **kein neuer Mega-Skill**.
 - `Post-Incident-Learning.md`
 - `Resilience-Game-Day.md`
 - `Operational-Readiness-Review.md`
+- `Data-Pipeline-Baseline-und-Design.md`
+- `Neue-Datenquelle-und-Ingestion.md`
+- `Datenqualitaetsstoerung-und-Reconciliation.md`
+- `Backfill-und-Reprocessing.md`
+- `Data-Engineering-Readiness-Review.md`
 
 ## Workflow-Handoff
 
