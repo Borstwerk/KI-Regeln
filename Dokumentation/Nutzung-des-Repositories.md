@@ -698,6 +698,118 @@ Sources / Grain / Semantik
 
 Repo-, SQL-, DAG- und Contractdateien belegen Design. Wo Produktionsreife von realem Datenzustand abhängt, bleibt Runtime-/Daten-Evidence notwendig.
 
+## Beispiel: Architektur-Baseline und Systemdesign
+
+Workflow:
+
+`../Workflows/Architektur-Baseline-und-Systemdesign.md`
+
+Kern:
+
+```text
+lokale Requirements / Constraints
+→ architecture-baseline bei bestehendem System
+→ Drivers / Invarianten / Critical Flows
+→ system-design
+→ optional architecture-tradeoff-analysis
+→ architecture-review
+→ optional adr
+→ lokales Implementierungs-/Entscheidungsgate
+```
+
+Die Baseline trennt aktuelle Implementierung, gültige ADRs, Dokumentation und Runtime-Evidence. Ein altes Diagramm oder eine plausible Ordnerstruktur reicht nicht als bestätigte Ist-Architektur.
+
+Lokal bleiben insbesondere Architecture Drivers, Qualitätsziele, Last-/Recoverygrenzen, System Boundary, Ownership, akzeptierte ADRs, Plattformconstraints und technische Freigaben.
+
+## Beispiel: Architekturentscheidung und Trade-off
+
+Workflow:
+
+`../Workflows/Architekturentscheidung-und-Tradeoff.md`
+
+Kern:
+
+```text
+Decision Scope / bestätigte Drivers
+→ viable Kandidaten
+→ konkrete Quality-Szenarien
+→ architecture-tradeoff-analysis
+→ Sensitivity Points / Missing Evidence
+→ architecture-review
+→ optional adr
+```
+
+Nur ernsthafte Alternativen werden verglichen. Ein Kandidat, den ein verbindlicher Constraint bereits ausschließt, wird nicht künstlich als Peer bewertet. Eine undurchsichtige Gesamtnote ersetzt keine Evidence Chain.
+
+## Beispiel: Systemgrenze und Dekomposition
+
+Workflow:
+
+`../Workflows/Systemgrenze-und-Dekomposition.md`
+
+Kern:
+
+```text
+System Context
+→ domain-modeling bei Bedarf
+→ architecture-decomposition
+→ Public Surfaces / Dependency Direction
+→ Service-Split-Gate
+→ interface-design für konkrete Verträge
+→ optional architecture-tradeoff-analysis
+```
+
+Ein Bounded Context, eine Teamgröße, ein Shared-DB-Befund oder das Wort „Microservices“ erzwingt keinen eigenen Service. Erst die logische Verantwortungsgrenze begründen, danach Deployment-/Servicegrenzen entscheiden.
+
+## Beispiel: Evolutionäre Architekturänderung
+
+Workflow:
+
+`../Workflows/Evolutionaere-Architekturaenderung.md`
+
+Kern:
+
+```text
+Architecture 0
+→ Zielentscheidung / Drivers
+→ architecture-evolution
+→ Migrationsslices und Zwischenzustände
+→ Contract-/Data-/Deployment-Handoffs
+→ Success Evidence / Abort / Rollback
+→ architecture-conformance-review
+→ lokales Cutover-/Execution-Gate
+```
+
+Besonders wichtig:
+
+```text
+Migrationsplan
+≠ Cutover-Autorisierung
+```
+
+Codeänderungen, Datenmigrationen, Deployments, Traffic Switches und Retirement bleiben bei den zuständigen Fachprozessen und lokalen Gates.
+
+## Beispiel: Architektur Readiness
+
+Workflow:
+
+`../Workflows/Architektur-Readiness-Review.md`
+
+Kern:
+
+```text
+Requirements / Drivers
++ Architecture Baseline / Zielbild
++ Conformance / Drift
++ relevante Fach-Evidence
+→ architecture-review
+→ Findings / Missing Evidence
+→ READY_FOR_LOCAL_GATE / READY_WITH_FINDINGS / BLOCKED / UNVERIFIED
+→ lokales Go / No-Go außerhalb des Reviews
+```
+
+Patternreinheit ist kein Readiness-Kriterium. Wenn Produktionsreife von Runtime-, Capacity-, Failure-, Security- oder Daten-Evidence abhängt, reicht ein sauberes Repository oder ADR-Set nicht aus.
+
 ## Beispiel: Technische Dokumentation
 
 Workflow:
