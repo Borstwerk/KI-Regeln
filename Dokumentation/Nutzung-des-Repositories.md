@@ -582,6 +582,122 @@ Lokal bleiben insbesondere:
 - Produktionsrechte;
 - Release-/Promotion-/Failover-Gates.
 
+## Beispiel: Data Pipeline Baseline und Design
+
+Workflow:
+
+`../Workflows/Data-Pipeline-Baseline-und-Design.md`
+
+Kern:
+
+```text
+lokaler Business-/Consumerkontext
+→ data-pipeline-design
+→ data-ingestion-design
+→ data-transformation-design
+→ optional analytical-data-modeling
+→ data-quality-design
+→ data-contract-design
+→ data-lineage-analysis
+→ data-orchestration-design
+→ data-engineering-review
+→ lokales Implementierungs-/Publish-Gate
+```
+
+Lokal bleiben insbesondere Source of Truth, Consumer, Grain, Freshness-/Qualityanforderungen, Security/Privacy, Retention, Plattform- und Kostenentscheidungen.
+
+## Beispiel: Neue Datenquelle und Ingestion
+
+Workflow:
+
+`../Workflows/Neue-Datenquelle-und-Ingestion.md`
+
+Kern:
+
+```text
+Source-/Consumerkontext
+→ data-ingestion-design
+→ data-contract-design
+→ data-quality-design
+→ data-lineage-analysis
+→ data-orchestration-design
+→ lokales Implementierungs-/Publish-Gate
+```
+
+`updated_at`, CDC oder ein bestimmter Streamingstack sind keine automatische Garantie für verlustfreie oder exactly-once Verarbeitung. Source-Capabilities, Deletes, Ordering, Offset/Checkpoint, Retention und Replay bleiben konkret zu prüfen.
+
+## Beispiel: Datenqualitätsstörung
+
+Workflow:
+
+`../Workflows/Datenqualitaetsstoerung-und-Reconciliation.md`
+
+Kern:
+
+```text
+Daten-/Consumerproblem
+→ data-quality-design
+→ data-lineage-analysis
+→ data-transformation-design / data-ingestion-design
+→ bei aktivem Impact incident-response
+→ Reconciliation
+→ optional kontrolliertes Reprocessing
+→ Fresh Verification
+```
+
+Ein grüner Scheduler- oder Jobstatus beweist weder Vollständigkeit noch fachliche Korrektheit des Datasets.
+
+## Beispiel: Backfill und Reprocessing
+
+Workflow:
+
+`../Workflows/Backfill-und-Reprocessing.md`
+
+Kern:
+
+```text
+Reprocessingbedarf
+→ Transformations-/Ingest-Semantik
+→ Lineage / Consumerimpact
+→ Quality / Reconciliation
+→ Orchestrierungsplan mit bounded scope
+→ lokales Execution Gate
+→ autorisiertes Reprocessing
+→ Fresh Reconciliation / Publish
+```
+
+Besonders wichtig:
+
+```text
+Backfill-Plan
+≠ Backfill-Autorisierung
+```
+
+Lokal bleiben Zeitraum/Partitionen, historische Semantik, Write-/Idempotenzstrategie, Parallelität, Source-/Target-Last, Consumerkommunikation, Rollback/Recovery und reale Ausführungsrechte.
+
+## Beispiel: Data Engineering Readiness
+
+Workflow:
+
+`../Workflows/Data-Engineering-Readiness-Review.md`
+
+Kern:
+
+```text
+Sources / Grain / Semantik
++ Ingestion / Transformation
++ Quality / Freshness / Reconciliation
++ Contract / Lineage
++ Orchestrierung / Replay
++ Publish / Lifecycle
++ Runtime-Evidence
+→ data-engineering-review
+→ Findings / Missing Evidence
+→ lokales Go / No-Go beziehungsweise Publish-Gate
+```
+
+Repo-, SQL-, DAG- und Contractdateien belegen Design. Wo Produktionsreife von realem Datenzustand abhängt, bleibt Runtime-/Daten-Evidence notwendig.
+
 ## Beispiel: Technische Dokumentation
 
 Workflow:
