@@ -1,0 +1,67 @@
+cases:
+  - id: observability-critical-flow-positive
+    class: outcome
+    input: "Entwirf die Observability für einen Checkout, der API, Queue, Payment Provider und Datenbank durchläuft. Wir müssen Nutzerfehler von Provider-Timeouts unterscheiden können."
+    should_trigger: true
+    expected:
+      - "kritische Betriebsfragen vor Signaltypen formulieren"
+      - "Health-/Dependency-Evidence und Korrelation über Grenzen planen"
+      - "Blind Spots und Telemetrieverifikation benennen"
+    forbidden:
+      - "ohne Kontext ein bestimmtes Monitoringprodukt vorschreiben"
+    expected_status: pass
+
+  - id: observability-paraphrased-positive
+    class: trigger
+    input: "Wir sehen im Betrieb nur 'irgendwas ist langsam'. Welche Signale und Zusammenhänge brauchen wir, damit On-Call die betroffene Strecke eingrenzen kann?"
+    should_trigger: true
+    expected:
+      - "question-first Observability aktivieren"
+      - "Symptom- und Diagnosefragen unterscheiden"
+    forbidden:
+      - "Observability mit mehr Logs gleichsetzen"
+    expected_status: pass
+
+  - id: observability-tool-near-miss
+    class: behavior
+    input: "Installiere Prometheus und Grafana und nenne das anschließend Observability Design."
+    should_trigger: true
+    expected:
+      - "zuerst Betriebsfragen, Health-Modell und Evidence-Bedarf klären"
+      - "Toolinstallation als Adapter-/Infra-Handoff behandeln"
+    forbidden:
+      - "Prometheus/Grafana als universelle Pflichtarchitektur behandeln"
+    expected_status: partial
+
+  - id: observability-three-pillars-dogma
+    class: regression
+    input: "Observability ist definitionsgemäß nur Metrics, Logs und Traces. Alles andere darf nicht berücksichtigt werden."
+    should_trigger: true
+    expected:
+      - "Metrics/Logs/Traces als wichtige, aber nicht vollständige Signaltypen einordnen"
+      - "Events, Profiles, Synthetic-, Client- oder Business-Signale bei Bedarf zulassen"
+    forbidden:
+      - "Three Pillars als universelle Definition erzwingen"
+    expected_status: pass
+
+  - id: observability-sensitive-cardinality
+    class: behavior
+    input: "Nimm E-Mail, Access Token und vollständigen Request Body als Metric Labels, dann können wir jeden Nutzer schnell debuggen."
+    should_trigger: true
+    expected:
+      - "Privacy-/Secret-Risiko und ungeeignete Kardinalität erkennen"
+      - "nur zweckgebundene, geeignete Korrelation vorschlagen"
+    forbidden:
+      - "Secrets oder vollständige personenbezogene Payloads als Telemetrie empfehlen"
+    expected_status: pass
+
+  - id: observability-no-runtime-evidence
+    class: behavior
+    input: "Im Code gibt es Logging-Aufrufe. Bestätige deshalb, dass Produktion vollständig beobachtbar ist."
+    should_trigger: true
+    expected:
+      - "Code-/Designabsicht von Runtime-Evidence trennen"
+      - "Telemetrie-Coverage und tatsächliche Ausgabe als unverified markieren"
+    forbidden:
+      - "Production Observability ohne Runtime-Evidence als bewiesen melden"
+    expected_status: partial
