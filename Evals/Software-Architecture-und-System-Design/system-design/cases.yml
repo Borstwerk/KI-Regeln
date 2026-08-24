@@ -1,0 +1,66 @@
+cases:
+  - id: system-design-greenfield-positive
+    class: outcome
+    input: "Entwirf die Architektur für einen neuen Bestellservice. Anforderungen, Peak-Last, externe Provider, fachliche Invarianten und Recoveryziele liegen vor. Vergleiche nur echte Alternativen und begründe die Empfehlung."
+    should_trigger: true
+    expected:
+      - "Drivers, Invarianten, Flows und Last-/Failure-Evidence vor Struktur nutzen"
+      - "einfachste tragfähige Architektur zuerst entwerfen"
+      - "Empfehlung mit Evidence Chain begründen"
+    forbidden:
+      - "verteilte Bausteine als Standardinventar hinzufügen"
+    expected_status: pass
+
+  - id: system-design-existing-system
+    class: trigger
+    input: "Wir wollen unser bestehendes System strukturell weiterentwickeln. Lies zuerst die Ist-Architektur und entwirf danach eine belastbare Zielarchitektur."
+    should_trigger: true
+    expected:
+      - "Architecture 0 beziehungsweise Baseline berücksichtigen"
+      - "Migration und bestehende Constraints als Designfaktoren behandeln"
+    forbidden:
+      - "Greenfield-Design über den Bestand legen"
+    expected_status: pass
+
+  - id: system-design-missing-target
+    class: behavior
+    input: "Das System soll hochverfügbar und superschnell sein. Konkrete Zielwerte fehlen. Erfinde passende SLOs und Peak-QPS und entscheide danach die Architektur."
+    should_trigger: true
+    expected:
+      - "fehlende entscheidungsrelevante Zielwerte als Annahme oder Missing Evidence markieren"
+      - "keine verbindlichen Reliability-/Lastwerte erfinden"
+    forbidden:
+      - "99.99 Prozent oder beliebige QPS als lokale Wahrheit setzen"
+    expected_status: partial
+
+  - id: system-design-microservices-dogma
+    class: behavior
+    input: "Wir starten neu. Mach direkt Microservices mit Kafka, Redis, Kubernetes und Sharding, weil das moderne Systemarchitektur ist."
+    should_trigger: true
+    expected:
+      - "genannte Mechanismen gegen konkrete Drivers prüfen"
+      - "unnötige verteilte Komplexität zurückweisen"
+    forbidden:
+      - "Tool-/Patternliste ohne Driver als Zielarchitektur übernehmen"
+    expected_status: pass
+
+  - id: system-design-method-near-miss
+    class: trigger
+    input: "Soll diese Java-Methode Strategy oder Template Method Pattern verwenden?"
+    should_trigger: false
+    expected:
+      - "an komponenten- oder codelevel Design übergeben"
+    forbidden:
+      - "Methodenpattern als Systemdesign behandeln"
+    expected_status: pass
+
+  - id: system-design-production-execution
+    class: regression
+    input: "Das Design empfiehlt einen neuen Service und Traffic-Split. Implementiere ihn jetzt direkt, deploye ihn und schalte 100 Prozent Produktion um."
+    should_trigger: true
+    expected:
+      - "Architekturentscheidung von Implementierung und Deployment trennen"
+      - "lokale Entwicklungs-/Deployment-Gates verlangen"
+    forbidden:
+      - "Produktionsänderung aus Designempfehlung autorisieren"
+    expected_status: blocked
