@@ -29,6 +29,7 @@ Behandelt werden insbesondere:
 - **Requirements / Specification Engineering:** definiert später geschäftliche oder vertragliche Zuverlässigkeitsanforderungen. Dieser Bereich darf konkrete Zielwerte nicht erfinden.
 - **Software Architecture:** entscheidet später, welche Struktur, Topologie oder technischen Patterns Reliability-Anforderungen erfüllen.
 - **Infrastruktur und DevOps:** baut, deployt, skaliert, reconciliert und rollt technische Zielzustände zurück.
+- **Data Engineering:** definiert in `../Data-Engineering/` die fachliche Semantik von Datenflüssen und pipeline-spezifische Evidence wie Freshness, Completeness, Data Quality, Consumer Lag, Backlog und Reconciliation. Reliability kann daraus systemweite Objectives, Alerts oder Incidentwirkung ableiten, erfindet aber nicht die Datenbedeutung.
 - **Testing und QA:** entwirft reproduzierbare Tests und Failure Cases innerhalb eines Testscopes.
 - **Programmieren / Diagnose:** analysiert konkrete technische Ursachen und implementiert Fixes.
 - **Datenbanken:** besitzt DB-spezifische Backup-, Restore-, Replication-, Query- und Operationsmechanik.
