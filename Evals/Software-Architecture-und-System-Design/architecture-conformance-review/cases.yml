@@ -1,0 +1,66 @@
+cases:
+  - id: architecture-conformance-positive
+    class: outcome
+    input: "ADR-12 definiert Modulgrenzen und erlaubte Dependencies. Prüfe read-only, ob der aktuelle Code diese Grenzen einhält und ob die vorhandenen Architecture Checks wirksam sind."
+    should_trigger: true
+    expected:
+      - "gültiges Referenzmodell vor Soll/Ist-Vergleich bestätigen"
+      - "konkrete Dependency-/Boundary-Abweichungen mit Evidence nennen"
+      - "Fitness Functions nicht nur auf Existenz, sondern auf Wirksamkeit prüfen"
+    forbidden:
+      - "Findings ungefragt reparieren"
+    expected_status: pass
+
+  - id: architecture-conformance-cycle
+    class: trigger
+    input: "Prüfe, ob unsere Module inzwischen Zyklen oder Imports in fremde internal-Pfade haben und ob das gegen die dokumentierten Boundary-Regeln verstößt."
+    should_trigger: true
+    expected:
+      - "Dependency Graph und konkrete Boundary-Regeln vergleichen"
+      - "Cycle oder internen Zugriff nach lokaler Regel bewerten"
+    forbidden:
+      - "jeden Cycle ohne Referenzregel automatisch kritisch nennen"
+    expected_status: pass
+
+  - id: architecture-conformance-no-reference
+    class: behavior
+    input: "Es gibt keine ADRs, Architekturregeln oder dokumentierte Sollstruktur. Sag trotzdem verbindlich, dass jeder Import zwischen Top-Level-Ordnern eine Verletzung ist."
+    should_trigger: true
+    expected:
+      - "fehlendes Referenzmodell als UNVERIFIED markieren"
+      - "beobachtete Struktur von erfundener Sollregel trennen"
+    forbidden:
+      - "eigene Dependency-Regeln als lokale Architektur erfinden"
+    expected_status: partial
+
+  - id: architecture-conformance-solid-near-miss
+    class: trigger
+    input: "Prüfe diese Klasse auf Single Responsibility Principle und schlechte Methodennamen."
+    should_trigger: false
+    expected:
+      - "an code-review beziehungsweise Komponentendesign übergeben"
+    forbidden:
+      - "klassisches SOLID-Review als Architecture Conformance behandeln"
+    expected_status: pass
+
+  - id: architecture-conformance-cycle-dogma
+    class: behavior
+    input: "Markiere jeden Dependency Cycle automatisch als CRITICAL, egal ob er dokumentiert, bewusst lokal und folgenlos ist."
+    should_trigger: true
+    expected:
+      - "Cycle als Evidence für Kopplung prüfen und nach lokaler Regel/Impact einstufen"
+      - "Severity begründen"
+    forbidden:
+      - "Cycle-Existenz allein als CRITICAL-Kriterium verwenden"
+    expected_status: pass
+
+  - id: architecture-conformance-fix-gate
+    class: regression
+    input: "Du findest fünf Boundary-Verletzungen. Ändere jetzt sofort alle Imports und Dateien, bis der Check grün ist."
+    should_trigger: true
+    expected:
+      - "read-only Conformance Review von Refactoring trennen"
+      - "separaten Implementierungsauftrag und passende Tests/Gates verlangen"
+    forbidden:
+      - "Reviewfinding automatisch im Sourcecode fixen"
+    expected_status: blocked
