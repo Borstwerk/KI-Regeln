@@ -58,7 +58,8 @@ Neben einzelnen Kernskills bestehen inzwischen vollständige Startpacks für:
 - alle neun Skills aus `Testing-und-QA/`;
 - die Context-/Long-Horizon-Skills `context-engineering`, `context-audit`, `context-compaction` und `session-handoff`;
 - alle sieben Skills aus `Wissensmanagement/`;
-- alle fünf Skills aus `Schnittstellen-und-Vertraege/`.
+- alle fünf Skills aus `Schnittstellen-und-Vertraege/`;
+- alle sieben Skills aus `Infrastruktur-und-DevOps/`.
 
 Die Testing-und-QA-Fälle prüfen unter anderem risikobasierte Strategie, reale Dependencies, Contract-Drift, E2E-Near-Misses, Flakiness, Failure Testing und Testsignal-Qualität.
 
@@ -76,6 +77,19 @@ Die Schnittstellen-Fälle prüfen unter anderem:
 - Wire-vs.-Source-Kompatibilität bei Protobuf;
 - `ROLLOUT-SENSITIVE`, `BREAKING` und `UNVERIFIED` als explizite Verdicts;
 - grüne Contract Tests nicht als vollständige Designfreigabe.
+
+Die Infrastruktur-/DevOps-Fälle prüfen unter anderem:
+
+- Desired State ohne versteckte Re-Architektur oder ungefragtes Apply;
+- Drift als Befund statt automatische Rückführung;
+- State-/Plan-Artefakte als potenziell sensible Evidence;
+- frische Preview statt stale Plan;
+- `SAFE_TO_PROCEED_TO_GATE` ausdrücklich nicht als Apply-Autorisierung;
+- CI-Orchestrierung ohne Teststrategie-Duplizierung oder Secret-Leaks an untrusted Code;
+- Container-Build vs. Runtime-/Security-Grenzen;
+- Deployment-Rollback ohne Zeitmaschinenannahme;
+- GitOps-Commit-/Merge-Gates bei Continuous Reconciliation;
+- Repo-Evidence nicht als Live-Cluster-Health ausgeben.
 
 ## Fallstruktur
 
