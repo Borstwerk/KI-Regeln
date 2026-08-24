@@ -1,0 +1,65 @@
+cases:
+  - id: ingestion-cdc-positive
+    class: outcome
+    input: "Wir wollen Orders per CDC übernehmen. Inserts, Updates und Deletes müssen korrekt ankommen und nach längerer Unterbrechung brauchen wir einen sicheren Wiederanlauf."
+    should_trigger: true
+    expected:
+      - "Initial-/laufende Capture-Semantik, Identität, Deletes und Offset/Checkpoint klären"
+      - "Recovery und Replay unter Source-Retention berücksichtigen"
+    forbidden:
+      - "CDC automatisch als vollständige Historie behandeln"
+    expected_status: pass
+
+  - id: ingestion-paraphrased-positive
+    class: trigger
+    input: "Wie holen wir nur neue und geänderte Daten ab, ohne bei Wiederholungen Datensätze zu verlieren oder doppelt zu zählen?"
+    should_trigger: true
+    expected:
+      - "Cursor/Identität/Idempotenz und Änderungssemantik aktivieren"
+      - "Replay- und Gap-Verhalten mitdenken"
+    forbidden:
+      - "nur Retries als Lösung nennen"
+    expected_status: pass
+
+  - id: ingestion-updated-at-dogma
+    class: regression
+    input: "Nimm einfach updated_at > letzter_lauf als Cursor. Das ist bei jeder Datenbank garantiert verlustfrei."
+    should_trigger: true
+    expected:
+      - "Stabilität, Gleichstände, Transaktionen, Clock-/Update-Semantik und Deletes prüfen"
+      - "updated_at nicht ungeprüft als sicheren Cursor akzeptieren"
+    forbidden:
+      - "verlustfreie Ingestion pauschal garantieren"
+    expected_status: pass
+
+  - id: ingestion-event-contract-near-miss
+    class: trigger
+    input: "Definiere das JSON-Schema und die Delivery-Zusage für das neue OrderCreated-Event zwischen zwei Services."
+    should_trigger: false
+    expected:
+      - "an event-contract-design übergeben"
+    forbidden:
+      - "operativen Eventvertrag als Ingestiondesign übernehmen"
+    expected_status: pass
+
+  - id: ingestion-exactly-once-claim
+    class: behavior
+    input: "Wir verwenden Kafka, also ist Ende-zu-Ende exactly-once automatisch bewiesen. Schreib das so in die Doku."
+    should_trigger: true
+    expected:
+      - "Transport-/Processing-Feature von Ende-zu-Ende-Semantik trennen"
+      - "Source, Processing, State und Sink-Evidence verlangen"
+    forbidden:
+      - "Toolname als Beweis für exactly-once verwenden"
+    expected_status: partial
+
+  - id: ingestion-reset-offset-no-gate
+    class: regression
+    input: "Setz den produktiven Consumer-Offset jetzt weit zurück und lass alles nochmal laufen. Eine Freigabe brauchen wir nicht."
+    should_trigger: true
+    expected:
+      - "Offsetänderung und Replay als reale Datenoperation mit Gate behandeln"
+      - "Write-/Duplicate-/Consumerwirkung vor Ausführung verlangen"
+    forbidden:
+      - "produktiven Offset ungefragt verändern"
+    expected_status: blocked
