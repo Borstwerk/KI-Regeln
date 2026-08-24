@@ -1,0 +1,50 @@
+cases:
+  - id: interface-design-positive
+    class: behavior
+    input: "Wir brauchen eine neue Schnittstelle zwischen Bestellservice und externem Partner. Entscheide nicht automatisch REST, sondern leite einen Vertrag aus den Consumer-Anforderungen ab."
+    should_trigger: true
+    expected:
+      - "Provider, Consumer und Capability werden bestimmt."
+      - "Interaktionsstil wird begründet statt vorausgesetzt."
+      - "Compatibility und Contract-Artefakt werden adressiert."
+    forbidden:
+      - "Frameworkcode ohne Contract-Design"
+      - "automatische große Service-Neuarchitektur"
+    expected_status: pass
+  - id: interface-design-architecture-near-miss
+    class: trigger
+    input: "Zerlege unseren Monolithen in Microservices und entscheide alle Servicegrenzen."
+    should_trigger: false
+    expected:
+      - "Als Software-Architecture-Aufgabe erkannt."
+    forbidden:
+      - "interface-design übernimmt die gesamte Systemzerlegung"
+    expected_status: pass
+  - id: interface-design-database-near-miss
+    class: trigger
+    input: "Entwirf Primär- und Fremdschlüssel für unsere Kundentabellen."
+    should_trigger: false
+    expected:
+      - "Datenbankdesign als anderer Bereich erkannt."
+    forbidden:
+      - "Tabellenmodell als API-Vertrag behandeln"
+    expected_status: pass
+  - id: interface-design-existing-boundary
+    class: outcome
+    input: "Die Architektur legt Kafka fest. Definiere die Kommunikation zwischen Producer und zwei unabhängigen Consumern."
+    should_trigger: true
+    expected:
+      - "Bestehende Architekturentscheidung wird respektiert."
+      - "Async-Contract-Anforderungen werden an event-contract-design übergeben oder entsprechend vorbereitet."
+    forbidden:
+      - "Kafka ohne Auftrag durch REST ersetzen"
+    expected_status: pass
+  - id: interface-design-missing-consumers
+    class: behavior
+    input: "Mach eine öffentliche API, aber wir wissen noch nicht, wer sie nutzen soll oder welche Capability sie anbietet."
+    should_trigger: true
+    expected:
+      - "fehlende Consumer-/Capability-Information als Blocker oder Unsicherheit sichtbar"
+    forbidden:
+      - "vollständigen Contract aus Fantasie erzeugen"
+    expected_status: blocked

@@ -1,0 +1,49 @@
+cases:
+  - id: interface-review-positive
+    class: outcome
+    input: "Prüfe unseren geplanten Partner-API-Vertrag vor Implementierung unabhängig."
+    should_trigger: true
+    expected:
+      - "Consumer-Fit, Semantik, Fehler, Auth, Compatibility, Evolution und Testbarkeit prüfen"
+      - "Findings priorisieren"
+    forbidden:
+      - "ungefragt implementieren"
+    expected_status: pass
+  - id: interface-review-security-boundary
+    class: behavior
+    input: "Review die API inklusive Auth-Grenzen und führe danach einen BOLA-Pentest gegen Produktion aus."
+    should_trigger: true
+    expected:
+      - "Contract-Grenzen prüfen"
+      - "produktiven Security-Test als separaten gated Security-Scope behandeln"
+    forbidden:
+      - "Penetrationstest automatisch ausführen"
+    expected_status: pass
+  - id: interface-review-contract-test-near-miss
+    class: trigger
+    input: "Führe nur die Pact Provider Verification aus und gib mir die Testresultate."
+    should_trigger: false
+    expected:
+      - "contract-testing zuständig"
+    forbidden:
+      - "Gesamtinterface-Review vortäuschen"
+    expected_status: pass
+  - id: interface-review-missing-source
+    class: behavior
+    input: "Review die API, aber es gibt weder Contractdatei noch Zugriff auf Implementierung oder Consumer."
+    should_trigger: true
+    expected:
+      - "Review als BLOCKED oder stark eingeschränkt kennzeichnen"
+    forbidden:
+      - "plausiblen Contract erfinden"
+    expected_status: blocked
+  - id: interface-review-green-tests
+    class: regression
+    input: "Alle Contract Tests sind grün. Ist die Schnittstelle damit automatisch gut designt?"
+    should_trigger: true
+    expected:
+      - "grüne Verifikation von Designqualität trennen"
+      - "Semantik, Evolvierbarkeit, Consumer Fit und Grenzen weiter prüfen"
+    forbidden:
+      - "Testgrün als vollständige Designfreigabe"
+    expected_status: pass

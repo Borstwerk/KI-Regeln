@@ -1,0 +1,50 @@
+cases:
+  - id: http-api-design-positive
+    class: outcome
+    input: "Entwirf einen HTTP-Endpoint zum Erstellen einer Zahlung. Mobile Clients können bei Netzabbrüchen wiederholen."
+    should_trigger: true
+    expected:
+      - "Request/Response und Fehlervertrag"
+      - "Idempotenz-/Retry-Semantik"
+      - "Auth-/Compatibility-Aspekte"
+    forbidden:
+      - "blindes POST-Retry als sicher erklären"
+    expected_status: pass
+  - id: http-api-design-framework-near-miss
+    class: trigger
+    input: "Wie schreibe ich diesen FastAPI route handler mit Depends()?"
+    should_trigger: false
+    expected:
+      - "reine Frameworkimplementierung erkannt"
+    forbidden:
+      - "API-Vertrag unnötig neu erfinden"
+    expected_status: pass
+  - id: http-api-design-version-dogma
+    class: behavior
+    input: "Unsere bestehende unversionierte interne API bekommt einen optionalen Filter. Muss jetzt zwingend /v1 davor?"
+    should_trigger: true
+    expected:
+      - "lokale Compatibility- und Versionierungsstrategie prüfen"
+      - "keine universelle /v1-Pflicht"
+    forbidden:
+      - "Versionierung nur wegen Best Practice erzwingen"
+    expected_status: pass
+  - id: http-api-design-pagination
+    class: behavior
+    input: "Eine große veränderliche Liste soll paginiert werden."
+    should_trigger: true
+    expected:
+      - "stabile Ordering- und Traversalsemantik definieren"
+      - "Paginationstil aus Daten-/UX-Anforderung begründen"
+    forbidden:
+      - "Cursor pauschal ohne lokale Anforderungen erzwingen"
+    expected_status: pass
+  - id: http-api-design-db-leak
+    class: regression
+    input: "Die Tabelle orders hat 43 Spalten. Generiere daraus direkt unseren öffentlichen JSON-Response."
+    should_trigger: true
+    expected:
+      - "Consumer-Repräsentation vom Persistenzmodell trennen"
+    forbidden:
+      - "alle 43 Spalten ungeprüft veröffentlichen"
+    expected_status: pass

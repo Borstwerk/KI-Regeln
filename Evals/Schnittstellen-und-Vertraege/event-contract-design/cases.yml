@@ -1,0 +1,50 @@
+cases:
+  - id: event-contract-positive
+    class: outcome
+    input: "Definiere OrderPaid für Kafka. Zwei Teams konsumieren unabhängig; Duplikate sind möglich und Replay wird benötigt."
+    should_trigger: true
+    expected:
+      - "Producer/Owner/Consumer"
+      - "Envelope/Payload"
+      - "Delivery, Idempotenz und Replay"
+      - "Compatibility"
+    forbidden:
+      - "globale Reihenfolge erfinden"
+    expected_status: pass
+  - id: event-contract-discovery-near-miss
+    class: trigger
+    input: "Führe Event Storming durch und finde heraus, welche Domain Events es überhaupt gibt."
+    should_trigger: false
+    expected:
+      - "Domain-/Architecture-Discovery als anderer Schritt erkannt"
+    forbidden:
+      - "unentdeckte Events als fertigen Contract behandeln"
+    expected_status: pass
+  - id: event-contract-broker-default
+    class: behavior
+    input: "Unser Broker hat standardmäßig eine Retry Policy. Schreib das einfach als fachliche Garantie in den Contract."
+    should_trigger: true
+    expected:
+      - "zwischen Infrastrukturdefault und zugesicherter Contract-Semantik unterscheiden"
+    forbidden:
+      - "Default ohne lokale Bestätigung garantieren"
+    expected_status: pass
+  - id: event-contract-webhook
+    class: behavior
+    input: "Wir senden PaymentSucceeded per Webhook mit Retries und Event-ID an Kunden."
+    should_trigger: true
+    expected:
+      - "HTTP- und Event-Semantik gemeinsam berücksichtigen"
+      - "Duplicate/Retry/Idempotenz definieren"
+    forbidden:
+      - "Provider-spezifische Signaturalgorithmen erfinden"
+    expected_status: pass
+  - id: event-contract-contract-testing-near-miss
+    class: trigger
+    input: "Der Eventvertrag ist fertig. Führe jetzt Provider-Verifikation gegen alle Consumer-Fixtures aus."
+    should_trigger: false
+    expected:
+      - "contract-testing als zuständiger Skill erkannt"
+    forbidden:
+      - "Testausführung als Contract-Design ausgeben"
+    expected_status: pass

@@ -1,0 +1,51 @@
+cases:
+  - id: contract-change-breaking
+    class: outcome
+    input: "Response-Feld total wird entfernt. Drei externe Consumer lesen es."
+    should_trigger: true
+    expected:
+      - "BREAKING"
+      - "Migration/Deprecation und Consumer Impact"
+    forbidden:
+      - "als kosmetische Schemaänderung einstufen"
+    expected_status: pass
+  - id: contract-change-additive-enum
+    class: behavior
+    input: "Wir ergänzen einen neuen Enum-Wert im Response. Der Schema-Diff sagt additive. Consumer-Code ist unbekannt."
+    should_trigger: true
+    expected:
+      - "semantische/Source-Risiken unbekannter Enumbehandlung prüfen"
+      - "nicht automatisch COMPATIBLE"
+    forbidden:
+      - "additive gleich non-breaking"
+    expected_status: pass
+  - id: contract-change-wire-source-split
+    class: behavior
+    input: "Eine Protobuf-Definition wird in eine andere Datei verschoben. Wire bleibt kompatibel, aber generierte Imports ändern sich."
+    should_trigger: true
+    expected:
+      - "Wire und Source Compatibility getrennt bewerten"
+      - "BREAKING oder mindestens rollout-/consumerabhängiges Verdict nach realer Nutzung"
+    forbidden:
+      - "wire-safe als vollständig compatible ausgeben"
+    expected_status: pass
+  - id: contract-change-rollout-sensitive
+    class: outcome
+    input: "int32 wird zu int64 erweitert. Alte Consumer können int64 wire-seitig lesen, aber große Werte erst nach vollständigem Upgrade sicher verarbeiten."
+    should_trigger: true
+    expected:
+      - "ROLLOUT-SENSITIVE"
+      - "kontrollierte Schreib-/Deploymentreihenfolge"
+    forbidden:
+      - "sofort große Werte senden"
+    expected_status: pass
+  - id: contract-change-no-baseline
+    class: behavior
+    input: "Sag mir, ob dieses neue OpenAPI-Dokument breaking ist. Den alten Contract und Consumer haben wir nicht."
+    should_trigger: true
+    expected:
+      - "UNVERIFIED"
+      - "fehlende Baseline/Consumer als Evidence-Lücke"
+    forbidden:
+      - "Breaking-Freiheit behaupten"
+    expected_status: blocked
