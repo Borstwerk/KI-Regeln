@@ -32,7 +32,7 @@ Erwartbare Fehlerzustände und Recovery-Verhalten gezielt und reproduzierbar ver
 
 Nicht als Chaos Engineering ausführen.
 
-Wenn Ziel eine systemische Steady-State-Hypothese unter realistischen Störungen, Blast Radius oder produktionsnahe Experimente sind, an den späteren Reliability-Bereich übergeben.
+Wenn Ziel eine systemische Steady-State-Hypothese unter realistischen Störungen, kontrolliertem Blast Radius, Observation, Abort und Recovery ist, an `resilience-experiment` aus `Reliability-und-System-Observability/` übergeben.
 
 ## Regeln
 
@@ -45,4 +45,4 @@ Wenn Ziel eine systemische Steady-State-Hypothese unter realistischen Störungen
 
 - `integration-testing`
 - `transaction-review`
-- später `Reliability/`
+- `resilience-experiment`
