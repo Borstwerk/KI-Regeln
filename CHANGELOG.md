@@ -8,6 +8,35 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Data Engineering
+
+Neuer tool- und plattformneutraler Hauptbereich für systemübergreifende Datenflüsse, analytische Datenprodukte und kontrollierte Datenänderungen:
+
+- klare Scope-Grenze zu `Datenbanken/`: operative Datenspeicher, Query-/Schema-/DB-Betrieb bleiben dort; Ingestion, CDC, Transformation, Orchestrierung und veröffentlichte Datenprodukte liegen in `Data-Engineering/`;
+- Datenfluss zunächst über Source of Truth, Source, Destination, Consumer, Ownership, Grain, Semantik und Betriebsanforderungen modelliert statt aus Toolpräferenzen heraus;
+- Ingestion mit Snapshot, Incremental, CDC, Cursor/Checkpoint, Duplicate-/Ordering-Verhalten, Late Data und Replay als expliziten Entwurfsfragen;
+- `updated_at` ausdrücklich nicht als automatisch sicherer Cursor behandelt und Processing Guarantees wie `exactly once` nicht ohne End-to-End-Evidence behauptet;
+- Transformationen und inkrementelle Verarbeitung mit expliziten Keys, Grain, Zustands-/Historisierungssemantik und Reprocessing-Verhalten;
+- Backfill und Replay als reale, publish-sensitive Datenänderungen mit bounded scope, Idempotenz-/Write-Strategie, Reconciliation, Recovery und lokalem Human Gate;
+- analytische Datenmodellierung als eigene Disziplin für Grain, Historisierung, Dimensionen/Fakten, Metriksemantik und Consumer-Fit statt Star-Schema-Dogma;
+- Datenqualität entlang getrennter Achsen wie Korrektheit, Vollständigkeit, Freshness, Eindeutigkeit, Konsistenz und Reconciliation; ein grüner Job beweist keine korrekten Daten;
+- Data Contracts als veröffentlichte Dataset-Zusage mit Struktur, Semantik, Quality, Service-/Freshness-Erwartungen, Ownership und Evolution statt bloßem DDL;
+- Lineage und Provenance für Herkunft, Transformation, Dataset-/Job-/Run-Beziehungen und Impact Analysis; Diagrammexistenz allein gilt nicht als Evidence;
+- Orchestrierung mit Abhängigkeiten, Ausführungszustand, Retry, Catch-up/Reprocessing und Publish-Gates ohne Airflow-/DAG-Pflicht;
+- Batch, Micro-Batch und Streaming nach tatsächlicher Latenz-/Vollständigkeitsanforderung statt Streaming-Reifegrad-Dogma; Event Time, Processing Time, Windows, Watermarks und Late Data werden als Semantikentscheidungen behandelt;
+- Publish, Retention und Datenlebenszyklus als bewusste Consumer- und Governance-Grenzen statt implizite Nebenwirkung eines erfolgreichen Jobs;
+- Pipeline-Observability für Freshness, Completeness, Lag, Processing State, Quality und Replay Evidence mit klarer Übergabe an `Reliability-und-System-Observability/` für systemweite Betriebsziele und Incidents;
+- neun neue Skills `data-pipeline-design`, `data-ingestion-design`, `data-transformation-design`, `analytical-data-modeling`, `data-quality-design`, `data-contract-design`, `data-lineage-analysis`, `data-orchestration-design` und `data-engineering-review`;
+- alle neun Skills starten `experimental` mit `partial` Evalabdeckung;
+- 54 Evalfälle definiert, sechs je Skill, einschließlich DB-/Interface-/Testing-Near-Misses, fehlender Source Evidence, unsicherer Cursor-/Exactly-once-Annahmen, Modellierungsdogmen, Quality-/Publish-Grenzen und produktiver Backfill-/Replay-Gates; diese 54 Fälle sind definiert, aber noch nicht als Behavioral Evals ausgeführt oder bestanden;
+- fünf Workflows `Data-Pipeline-Baseline-und-Design.md`, `Neue-Datenquelle-und-Ingestion.md`, `Datenqualitaetsstoerung-und-Reconciliation.md`, `Backfill-und-Reprocessing.md` und `Data-Engineering-Readiness-Review.md`;
+- neues menschliches `Dokumentation/Skill-Handbuch-Data-Engineering.md`;
+- Nachbardomänen `Datenbanken/`, `Schnittstellen-und-Vertraege/`, `Testing-und-QA/`, `Reliability-und-System-Observability/` und `Infrastruktur-und-DevOps/` mit expliziten Data-Engineering-Grenzen verbunden;
+- Root-README, Workflow-/Eval-Dokumentation, Skill-Katalog, Projektmanifest, Nutzungsdoku und Pflege-Radar um Data Engineering erweitert;
+- Skill-Katalog von 95 auf 104 zentrale Skills erweitert;
+- sieben aktive Data-Engineering-Upstreams registriert: Airflow, Beam, Kafka, OpenLineage und Open Data Contract Standard semantisch sowie zwei konkret verwendete `vaquarkhan/data-engineering-agent-skills` per geprüftem Blob-SHA;
+- Airflow, Beam, Kafka, OpenLineage, ODCS, AWS Analytics Lens und öffentliche Agent-Skills als Referenzen genutzt, ohne Airflow, dbt, Kafka, Spark, Beam, Star Schema, Streaming oder Exactly-once als universellen Pflichtstack beziehungsweise Default zu erklären.
+
 ### Reliability und System-Observability
 
 Neuer tool- und providerneutraler Hauptbereich für Zuverlässigkeitsziele, System-Observability, Betriebsreaktion und Resilience:
