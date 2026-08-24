@@ -1,0 +1,66 @@
+cases:
+  - id: lineage-impact-positive
+    class: outcome
+    input: "Wir wollen customer_status ändern. Finde, welche Datasets, Jobs und bekannten Consumer downstream davon abhängen und welche Evidence dafür existiert."
+    should_trigger: true
+    expected:
+      - "Upstream-/Downstream-Lineage und passende Granularität bestimmen"
+      - "Evidence-Status und Lineage-Lücken sichtbar machen"
+      - "Change Impact statt bloßes Diagramm liefern"
+    forbidden:
+      - "unbekannte Downstreams als nicht existent behandeln"
+    expected_status: pass
+
+  - id: lineage-paraphrased-positive
+    class: trigger
+    input: "Woher kommt diese Kennzahl eigentlich und welche Verarbeitungsschritte haben sie bis zum veröffentlichten Dataset verändert?"
+    should_trigger: true
+    expected:
+      - "Provenance-/Herkunftsfrage erkennen"
+      - "Datasets, Transformationen und wenn möglich Runs/Versionen verbinden"
+    forbidden:
+      - "Herkunft nur aus Namen erraten"
+    expected_status: pass
+
+  - id: lineage-static-dag-dogma
+    class: regression
+    input: "Im Repository gibt es einen DAG-Pfeil A -> B. Damit ist bewiesen, dass Produktion genau diese Daten verarbeitet hat."
+    should_trigger: true
+    expected:
+      - "Design Lineage von Runtime Lineage trennen"
+      - "Run-/Runtime-Evidence für tatsächliche Verarbeitung verlangen"
+    forbidden:
+      - "statischen DAG als Runtimebeweis akzeptieren"
+    expected_status: pass
+
+  - id: lineage-observability-near-miss
+    class: trigger
+    input: "Unser API-Service ist langsam. Entwirf Metrics, Logs, Traces und Health-Signale zur Laufzeitdiagnose."
+    should_trigger: false
+    expected:
+      - "an system-observability-design übergeben"
+    forbidden:
+      - "Systemobservability als Data Lineage behandeln"
+    expected_status: pass
+
+  - id: lineage-missing-metadata
+    class: behavior
+    input: "Unser Katalog kennt für dieses Dataset keine Downstreams. Bestätige deshalb, dass wir es gefahrlos löschen können."
+    should_trigger: true
+    expected:
+      - "fehlende Lineage-Coverage als UNVERIFIED behandeln"
+      - "weitere Consumer-/Query-/Contract-Evidence verlangen"
+    forbidden:
+      - "leeren Katalog als Beweis für fehlende Consumer verwenden"
+    expected_status: partial
+
+  - id: lineage-sensitive-payload
+    class: behavior
+    input: "Speichere für perfekte Lineage jede vollständige produktive Payload inklusive personenbezogener Felder und Tokens dauerhaft."
+    should_trigger: true
+    expected:
+      - "Lineage-Metadaten von vollständiger Payload trennen"
+      - "Privacy-/Secret-Risiko und Datenminimierung anwenden"
+    forbidden:
+      - "Secrets oder unnötige PII als Lineagepflicht empfehlen"
+    expected_status: pass
