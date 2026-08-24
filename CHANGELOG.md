@@ -8,6 +8,35 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Schnittstellen und Verträge
+
+Neuer technologieübergreifender Hauptbereich für Interface- und Contract-Engineering:
+
+- Schnittstellen als beobachtbare Zusage zwischen Provider und Consumer statt bloß als Transport oder Schema modelliert;
+- klare Grenze zu späterem Software Architecture: Architektur entscheidet, warum und wo eine Grenze existiert; Interface Design definiert die Zusagen über diese Grenze;
+- Interaktionsstile HTTP, GraphQL, RPC/IDL, Events sowie Webhooks/Callbacks nach Consumer- und Kommunikationsanforderungen statt Transportdogma eingeordnet;
+- öffentliche Request-/Response-/Message-Repräsentationen bewusst von internen Datenbank-, Klassen- und Frameworkmodellen getrennt;
+- Schema- und Feldsemantik einschließlich required/optional, nullable/absent, Defaults, Enums und Fehlerverträgen;
+- HTTP API Design mit bewusster Method-/Statussemantik, Collections, Pagination, Filtering, Ordering, Idempotenz, Retry und Concurrency;
+- GraphQL-Schemaevolution und Deprecation als eigene Fachregel ohne unnötigen Format-Skill;
+- RPC-/IDL-/Protobuf-Regeln für Field Numbers, Reserved Fields, generierten Code und die Trennung von Source- und Wire-Kompatibilität;
+- Event-/Async-Verträge mit Producer/Consumer, Envelope/Payload, Delivery, Ordering, Duplicate-Verhalten, Replay, Dead Letter, Correlation und Schemaevolution;
+- Webhooks und Callbacks als HTTP-basierte asynchrone Contracts eingeordnet; provider-spezifische Signatur-/Replay-Security bleibt lokal beziehungsweise in `Sicherheit/`;
+- Auth-, Scope- und Tenant-Grenzen als beobachtbare Contract-Semantik;
+- providerneutrales Compatibility-Modell aus Source-, Wire- und semantischer Kompatibilität plus realen Consumer-/Deploymentbedingungen;
+- Change-Verdicts `COMPATIBLE`, `ROLLOUT-SENSITIVE`, `BREAKING` und `UNVERIFIED`;
+- additive Syntax ausdrücklich nicht mit bewiesener semantischer Rückwärtskompatibilität gleichgesetzt;
+- Versionierung, Deprecation, Migration, Sunset und Removal-Gates ohne universelle `/v1`-, SemVer- oder Supportfenster-Pflicht;
+- Contract-First und maschinenlesbare Artefakte wie OpenAPI, GraphQL SDL, Protobuf/IDL und AsyncAPI mit eindeutiger lokaler Source of Truth;
+- Skills `interface-design`, `http-api-design`, `event-contract-design`, `contract-change-review` und `interface-review`;
+- alle fünf Skills starten `experimental` mit `partial` Evalabdeckung;
+- Evalpacks für alle fünf Skills mit Architecture-/Framework-Near-Misses, DB-Leaks, Versionierungsdogma, Async-Delivery, Additive-vs.-Semantic-Compatibility, Source-/Wire-Trennung, rollout-sensitive Changes und fehlenden Baselines;
+- vorhandenen Testing-Skill `contract-testing` mit `contract-change-review` und `interface-review` verbunden, ohne Design und Verifikation zusammenzulegen;
+- Workflow `Workflows/Schnittstellenvertrag-Entwerfen-und-Aendern.md`;
+- menschliches `Dokumentation/Skill-Handbuch-Schnittstellen-und-Vertraege.md`;
+- Quellenbasis aus OpenAPI, HTTP RFCs, Google AIPs, GraphQL, Protobuf/gRPC, AsyncAPI, CloudEvents und aktuellen API-/Event-Agent-Skills;
+- aktive Upstreams aus OpenAPI, Google AIPs, GraphQL, Protobuf und AsyncAPI semantisch sowie drei tatsächlich einflussreiche API-/Event-Skills per Blob-SHA registriert.
+
 ### Wissensmanagement / Knowledge Bases
 
 Neuer toolneutraler Hauptbereich für persistente Wissensbasen und Knowledge Management:
@@ -130,7 +159,8 @@ Neu beziehungsweise erweitert:
 - `context-engineering` bleibt `candidate` und erhält `partial` Evalabdeckung;
 - `context-audit`, `context-compaction` und `session-handoff` als `experimental` mit `partial` Evalabdeckung;
 - sieben Wissensmanagement-Skills als `experimental` mit `partial` Evalabdeckung ergänzt;
-- Gesamtbestand auf 75 zentrale Skills erweitert.
+- fünf Schnittstellen-/Contract-Skills als `experimental` mit `partial` Evalabdeckung ergänzt;
+- Gesamtbestand auf 80 zentrale Skills erweitert.
 
 ### Evals
 
@@ -144,6 +174,7 @@ Bereich `Evals/` erweitert:
 - zusätzliche Evalpacks für alle neun Testing-und-QA-Skills, unter anderem zu fehlendem Oracle, Mock-/Contract-Drift, E2E-Near-Misses, Flakiness trotz Retry, Failure Testing vs. Chaos Engineering und Testsignal-Review;
 - zusätzliche Evalpacks für `context-engineering`, `context-audit`, `context-compaction` und `session-handoff`, unter anderem zu fehlender Tokenmessung, Context Bloat, Compaction-Verlust, erfundenen Freigaben und Persistent-Knowledge-Near-Misses;
 - zusätzliche Evalpacks für alle sieben Wissensmanagement-Skills, unter anderem zu Tool-Bias, Search-before-Create, Provenance, sensibler Persistenz, Bulk-Gates, Distillation, Synthese-Evidence, Duplicate-/Orphan-Entscheidungen, Retrieval und Review-Coverage;
+- zusätzliche Evalpacks für alle fünf Schnittstellen-/Contract-Skills, unter anderem zu Transportdogma, Framework-Near-Misses, Datenbankmodell-Leaks, unbekannten Enum-Werten, Source-/Wire-Trennung, rollout-sensitive Changes und fehlenden Baselines;
 - Skill-Katalog für diese Skills auf `eval_coverage: partial` aktualisiert.
 
 ### Sicherheit
@@ -176,7 +207,8 @@ Bereich zur bewussten Skill-Komposition mit Recipes für:
 - Datenbankänderung;
 - Teststrategie und QA;
 - Long-Horizon-Agentenarbeit;
-- Aufbau und Pflege persistenter Wissensbasen.
+- Aufbau und Pflege persistenter Wissensbasen;
+- Entwurf und Änderung von Schnittstellenverträgen.
 
 Grundregel: Skills bleiben begrenzte Disziplinen; wiederkehrende Skill-Ketten werden als Workflow statt als Mega-Skill modelliert.
 
@@ -223,10 +255,12 @@ Erweitert und vollständig auditiert:
 - Testing-und-QA-Upstreams aus Anthropic, Currents und Superpowers per Blob-SHA sowie ISTQB, Playwright, Pact und Testcontainers semantisch registriert;
 - Context-/Long-Horizon-Upstreams aus Anthropic, OpenAI, LangChain und OpenTelemetry semantisch sowie `context-doctor` und OpenClaw `handoff` per Blob-SHA registriert;
 - Wissensmanagement-Upstreams aus KCS und OpenAI Retrieval semantisch sowie `obsidian-wiki`, `obsidian-second-brain` und `knowledge-distill` per Blob-SHA registriert;
+- Schnittstellen-/Contract-Upstreams aus OpenAPI, Google AIPs, GraphQL, Protobuf und AsyncAPI semantisch sowie drei konkret verwendete API-/Event-Skills per Blob-SHA registriert;
+- stabile HTTP-/Problem-Details-/Deprecation-RFCs und weitere formatbezogene Referenzen bewusst in der Fachquellendatei statt als künstliche schnelle Sync-Dependencies geführt;
 - W3C PROV, ISO 30401 und toolbezogene Hilfedokumentation als stabile Fachreferenzen im Bereich dokumentiert statt künstlich als schnelle mutable Dependencies zu behandeln;
 - Papers, datierte Research-Artikel und reine Discovery-Kataloge bewusst nicht als künstliche Sync-Dependencies behandelt;
 - Grundregel bleibt: Upstream-Änderung ist Review-Signal, kein automatischer Sync;
-- monatlicher `KI-Regeln Monatscheck` auf das Monitoring-Schema und die neuen Discovery-Felder erweitert.
+- monatlicher `KI-Regeln Monatscheck` auf das Monitoring-Schema und die neuen Fach-/Discovery-Felder erweitert.
 
 ### Recherche
 
@@ -266,9 +300,9 @@ Neuer Hauptbereich für Gestaltung und Entwicklung von Websites und Weboberfläc
 
 Aktualisiert:
 
-- Haupt-README um `Webentwicklung/`, `Recherche/`, `Wissensmanagement/`, `Dokumentationserstellung/`, `Skill-Engineering/`, `Sicherheit/`, `Evals/`, `Workflows/`, `Datenbanken/` und `Testing-und-QA/` erweitert und um Context-/Long-Horizon-Agentenarbeit geschärft;
-- menschliche Doku um Quellenregister, vollständigen Upstream-Audit, Skill-Katalog und zusätzliche Skill-Handbücher einschließlich `Skill-Handbuch-Context-und-Long-Horizon.md` und `Skill-Handbuch-Wissensmanagement.md` ergänzt;
-- Projektmanifest und Nutzungsanleitung um Research-, Wissensmanagement-, Web-, Dokumentations-, Datenbank-, Testing-/QA- und Long-Horizon-Arbeit ergänzt.
+- Haupt-README um `Webentwicklung/`, `Recherche/`, `Wissensmanagement/`, `Schnittstellen-und-Vertraege/`, `Dokumentationserstellung/`, `Skill-Engineering/`, `Sicherheit/`, `Evals/`, `Workflows/`, `Datenbanken/` und `Testing-und-QA/` erweitert und um Context-/Long-Horizon-Agentenarbeit geschärft;
+- menschliche Doku um Quellenregister, vollständigen Upstream-Audit, Skill-Katalog und zusätzliche Skill-Handbücher einschließlich `Skill-Handbuch-Context-und-Long-Horizon.md`, `Skill-Handbuch-Wissensmanagement.md` und `Skill-Handbuch-Schnittstellen-und-Vertraege.md` ergänzt;
+- Projektmanifest und Nutzungsanleitung um Research-, Wissensmanagement-, Schnittstellen-/Contract-, Web-, Dokumentations-, Datenbank-, Testing-/QA- und Long-Horizon-Arbeit ergänzt.
 
 ## v2026.08
 
