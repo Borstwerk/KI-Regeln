@@ -27,7 +27,7 @@ Behandelt werden insbesondere:
 
 ## Nicht der Scope
 
-- **Software Architecture:** entscheidet, welche Systeme, Plattformen und Topologien existieren sollen.
+- **Software Architecture:** entscheidet in `../Software-Architecture-und-System-Design/`, welche Systeme, Deployables, Plattformgrenzen und strukturellen Topologien existieren sollen. Infrastruktur baut, deployt und reconciliert den freigegebenen technischen Zielzustand.
 - **Testing und QA:** entscheidet, welche Qualitätsrisiken mit welchen Tests geprüft werden.
 - **Sicherheit:** definiert Threat Models, Secret-/Credential-Schutz, Supply-Chain-Vertrauen und Security Policies im Detail.
 - **Reliability und System-Observability:** definiert in `../Reliability-und-System-Observability/`, was gesund, resilient und betrieblich akzeptabel bedeutet, einschließlich SLOs, Incidents, Capacity, Alerting und Resilience-Experimenten.
