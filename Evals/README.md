@@ -60,7 +60,8 @@ Neben einzelnen Kernskills bestehen inzwischen vollständige Startpacks für:
 - alle sieben Skills aus `Wissensmanagement/`;
 - alle fünf Skills aus `Schnittstellen-und-Vertraege/`;
 - alle sieben Skills aus `Infrastruktur-und-DevOps/`;
-- alle acht Skills aus `Reliability-und-System-Observability/`.
+- alle acht Skills aus `Reliability-und-System-Observability/`;
+- alle neun Skills aus `Data-Engineering/`.
 
 Die Testing-und-QA-Fälle prüfen unter anderem risikobasierte Strategie, reale Dependencies, Contract-Drift, E2E-Near-Misses, Flakiness, Failure Testing und Testsignal-Qualität.
 
@@ -106,7 +107,23 @@ Die Reliability-/System-Observability-Fälle prüfen unter anderem:
 - Blast Radius, Abort, Recovery und produktive Fault-Injection-Gates;
 - Reliability Review ohne versteckte Re-Architecture oder Production Changes.
 
-Für jeden der acht Reliability-Skills sind sechs Startfälle definiert, insgesamt 48. Definierte Evalfälle sind **keine ausgeführten oder bestandenen Evals**.
+Für jeden der acht Reliability-Skills sind sechs Startfälle definiert, insgesamt 48. Der erste Same-Model-Smoke-Lauf wurde am 2026-08-24 gegen den damaligen gepinnten `main`-Stand ausgeführt; das ersetzt keinen unabhängigen verblindeten Benchmark und hebt den Reifegrad nicht automatisch an.
+
+Die Data-Engineering-Fälle prüfen unter anderem:
+
+- Source of Truth, Consumer und Grain vor Toolstack;
+- DB-/Event-Contract-/Testing-Near-Misses;
+- CDC, Deletes, Cursor/Offsets, Replay und Ende-zu-Ende-Processing-Guarantees;
+- `updated_at` und Kafka/exactly-once nicht als universelle Garantien;
+- Full-vs.-Incremental-Semantik, historische Logik und Backfill-Gates;
+- analytisches Grain, Measures, Aggregierbarkeit und Star-Schema-Dogma;
+- Data Quality, Freshness-Zeitsemantik und Reconciliation ohne erfundene Thresholds;
+- Data Contracts mit struktureller und semantischer Compatibility;
+- Design Lineage vs. Runtime Lineage sowie unbekannte Consumer;
+- Data Intervals, Retry, Catchup und bounded Reprocessing;
+- Data-Engineering-Review ohne Tool-Re-Architecture oder ungefragte produktive Datenänderung.
+
+Für jeden der neun Data-Engineering-Skills sind sechs Startfälle definiert, insgesamt 54. Diese 54 Fälle sind **definiert, aber noch nicht ausgeführt oder bestanden**.
 
 ## Fallstruktur
 
