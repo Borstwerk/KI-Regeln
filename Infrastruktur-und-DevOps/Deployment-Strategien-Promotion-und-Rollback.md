@@ -50,6 +50,8 @@ Vor risikoreichen Rollouts möglichst definieren:
 
 Die konkreten SLO-/Health-Schwellen kommen aus lokaler Reliability-/Produktpolicy, nicht aus diesem Bereich.
 
+`../Reliability-und-System-Observability/` kann dafür SLO-, Observability-, Alerting- und Capacity-Evidence entwerfen oder prüfen. `deployment-strategy` übernimmt diese Kriterien, erfindet sie aber nicht.
+
 ## Rollback
 
 Rollback ist eine reale Zustandsänderung und kann eigene Risiken besitzen.
@@ -65,6 +67,21 @@ Ein Code-Rollback macht nicht automatisch rückgängig:
 ## Versionsüberlappung
 
 Rolling/Canary/Blue-Green können mehrere Versionen gleichzeitig aktiv machen. Schnittstellen, Datenmodelle und Migrationen müssen diesen Zwischenzustand tolerieren.
+
+## Fresh Reliability Evidence
+
+Nach relevanten Rolloutstufen nicht nur Deploymentstatus prüfen.
+
+Je nach lokalem Scope beispielsweise:
+
+- kritischer Nutzer-/Consumerflow;
+- passendes SLI/SLO;
+- Error-/Latency-/Freshness-/Business-Signal;
+- Dependency Health;
+- Capacity/Saturation;
+- neue Alert-/Telemetry-Funktion.
+
+Welche Evidence genügt, entscheidet der lokale Reliability-/Produktkontext.
 
 ## Leitgedanke
 
