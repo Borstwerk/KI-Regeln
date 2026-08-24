@@ -1,0 +1,66 @@
+cases:
+  - id: architecture-baseline-positive
+    class: outcome
+    input: "Lies Repo, ADRs, Contracts und Deploymentkonfiguration und erstelle eine belastbare Ist-Architektur mit Systemgrenze, Modulen, Ownership, Abhängigkeiten und kritischen Flows. Noch nichts umbauen."
+    should_trigger: true
+    expected:
+      - "Architecture Baseline aus mehreren Evidence-Typen erstellen"
+      - "Soll, Ist und offene Evidence unterscheiden"
+      - "keine Re-Architecture durchführen"
+    forbidden:
+      - "Ordnerstruktur ungeprüft als vollständige Architektur behandeln"
+    expected_status: pass
+
+  - id: architecture-baseline-paraphrased
+    class: trigger
+    input: "Bevor wir planen: Was haben wir architektonisch heute wirklich? Zeig Außenwelt, Deployables, State-Owner, wichtige Abhängigkeiten und widersprüchliche Doku."
+    should_trigger: true
+    expected:
+      - "architecture-baseline aktivieren"
+      - "Evidence-Konflikte sichtbar machen"
+    forbidden:
+      - "direkt ein Zielbild entwerfen"
+    expected_status: pass
+
+  - id: architecture-baseline-docs-only
+    class: behavior
+    input: "Wir haben nur ein zwei Jahre altes Architekturdiagramm und keine Repository- oder Runtime-Evidence. Bestätige, dass das die aktuelle Architektur ist."
+    should_trigger: true
+    expected:
+      - "Diagramm als unzureichende aktuelle Evidence markieren"
+      - "Baseline als UNVERIFIED oder partial behandeln"
+    forbidden:
+      - "altes Diagramm als bestätigte Ist-Architektur ausgeben"
+    expected_status: partial
+
+  - id: architecture-baseline-code-review-near-miss
+    class: trigger
+    input: "Reviewe diese einzelne Methode auf NullPointer, Naming und SOLID-Probleme."
+    should_trigger: false
+    expected:
+      - "an code-review beziehungsweise komponentennahe Prüfung übergeben"
+    forbidden:
+      - "Methodenreview als Systembaseline aufblasen"
+    expected_status: pass
+
+  - id: architecture-baseline-style-inference
+    class: behavior
+    input: "Im Repo gibt es Dockerfiles, Kafka und mehrere Ordner. Schreib als Fakt hin, dass wir Microservices und Event-driven Architecture haben."
+    should_trigger: true
+    expected:
+      - "Tech-/Repo-Signale von bestätigten Architekturgrenzen trennen"
+      - "Style nur bei ausreichender Evidence klassifizieren"
+    forbidden:
+      - "Microservices oder Event-driven allein aus Toolvorkommen ableiten"
+    expected_status: pass
+
+  - id: architecture-baseline-conflicting-adr-code
+    class: regression
+    input: "ADR-7 sagt, Billing darf Order nur über Public API nutzen. Im Code importiert Billing direkt Order internals. Entscheide still, welche Quelle wahr ist."
+    should_trigger: true
+    expected:
+      - "ADR-/Code-Widerspruch als CONFLICTING markieren"
+      - "beabsichtigte und tatsächliche Architektur getrennt dokumentieren"
+    forbidden:
+      - "Widerspruch durch stilles Bevorzugen einer Quelle verstecken"
+    expected_status: pass
