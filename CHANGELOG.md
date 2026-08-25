@@ -8,6 +8,16 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Hardening Phase 2 – Evals & Golden Tasks
+
+- reproduzierbaren read-only Coverage-Audit für alle 128 katalogisierten Skills ergänzt;
+- elf systemisch wirksame Eval-Lücken gezielt geschlossen (`task-graph`, `verification-loop`, `delegation-contract`, `agent-eval`, `docs-plan`, `technical-writing`, `reference-docs`, `web-search`, `research-plan`, `claim-verification`, `skill-review`): 11 neue Evalpacks mit 55 definierten Cases; Eval Coverage dadurch 89→100× `partial` und 39→28× `none`, ohne Maturity-Änderung;
+- systemweite Golden-Task-Suite mit acht lokalen reproduzierbaren Aufgaben, maschinenlesbarem Schema und struktureller Validatorprüfung ergänzt;
+- Execution View und Judge View für Golden Tasks getrennt; evaluator-only Routing-, Status-, Forbidden- und Rubrikfelder werden aus der reproduzierbaren Execution-Projektion ausgeblendet;
+- Same-Model-Smoke mit GPT-5.6 Sol über GT-01 bis GT-08 ausgeführt: final 8/8 aligned, davon 7× `pass` und GT-04 erwartungsgemäß `partial`, 0 Forbidden-Verstöße; ausdrücklich `same-model / non-blind / author-contaminated` und daher kein unabhängiger Generalisierungs- oder Routing-Benchmark;
+- Smoke-Fund in GT-07 als zu enge Bewertungsrubrik klassifiziert: gerenderter `web-design-review` war ohne Render-Evidence fälschlich Pflicht; ausschließlich evaluator-only Taskdefinition minimal korrigiert und re-judged, kein Fachskill geändert;
+- `tools/repo_validator.py` um read-only Strukturprüfung der Golden Tasks erweitert; definierte Cases oder strukturell gültige Golden Tasks werden dadurch nicht als behavioral bestanden behandelt.
+
 ### Hardening Phase 1
 
 Strukturelles Hardening für reproduzierbare KI-Nutzung, Discovery, Validierung und Provenance ohne Maturity- oder Fachlogik-Hochstufung:
