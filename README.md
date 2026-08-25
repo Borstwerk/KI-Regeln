@@ -321,7 +321,7 @@ Der Bereich behandelt insbesondere:
 - Recovery-Ziele wie RTO/RPO und Disaster-Recovery-Readiness;
 - Graceful Degradation, Failure Isolation und Cascading-Failure-Risiken;
 - kontrollierte Resilience-Experimente, Chaos Engineering und Game Days;
-- Toil und nachhaltigen Betrieb;
+- Toil und nachhaltiger Betrieb;
 - Operational Readiness als zusammengesetzte Evidence statt Mega-Skill.
 
 Scope-Grenze:
@@ -766,7 +766,7 @@ Für die neun Data-Engineering-Skills sind 54 Startfälle definiert. Diese 54 F�
 
 Die Software-Architecture-/System-Design-Evals prüfen unter anderem alte Diagramme als unzureichende Ist-Evidence, ADR-/Code-Konflikte, Microservice-/Teamgrößen-/Shared-DB-Dogmen, erfundene Qualitätsziele, künstliche Kandidaten, opaque Architecture Scores, Big-Bang-Migrationen, Conformance ohne lokales Referenzmodell und implizite Implementierungs-/Deploymentfreigaben.
 
-Für die sieben Architecture-Skills sind 42 Startfälle definiert. Diese 42 Fälle sind **noch nicht ausgeführt oder bestanden**.
+Für die sieben Architecture-Skills sind 42 Startfälle definiert. Der erste Same-Model-Smoke-Lauf wurde am 2026-08-25 gegen den gepinnten Stand `78abce4ade2e1d92dfc47f6169dcd2551d8d0f09` ausgeführt. Alle 42 Fälle entsprachen dem erwarteten Verhalten und Status: 30× `pass`, 6× `partial`, 6× `blocked`. Das ersetzt keinen unabhängigen verblindeten Benchmark und rechtfertigt keine automatische Hochstufung.
 
 ## Workflows / Recipes
 
