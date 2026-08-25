@@ -201,7 +201,7 @@ Neuer technologieübergreifender Hauptbereich für Interface- und Contract-Engin
 - klare Grenze zu späterem Software Architecture: Architektur entscheidet, warum und wo eine Grenze existiert; Interface Design definiert die Zusagen über diese Grenze;
 - Interaktionsstile HTTP, GraphQL, RPC/IDL, Events sowie Webhooks/Callbacks nach Consumer- und Kommunikationsanforderungen statt Transportdogma eingeordnet;
 - öffentliche Request-/Response-/Message-Repräsentationen bewusst von internen Datenbank-, Klassen- und Frameworkmodellen getrennt;
-- Schema- und Feldsemantik einschließlich required/optional, nullable/absent, Defaults, Enums und Fehlersemantik;
+- Schema- und Feldsemantik einschließlich required/optional, nullable/absent, Defaults, Enums und Fehlerverträgen;
 - HTTP API Design mit bewusster Method-/Statussemantik, Collections, Pagination, Filtering, Ordering, Idempotenz, Retry und Concurrency;
 - GraphQL-Schemaevolution und Deprecation als eigene Fachregel ohne unnötigen Format-Skill;
 - RPC-/IDL-/Protobuf-Regeln für Field Numbers, Reserved Fields, generierten Code und die Trennung von Source- und Wire-Kompatibilität;
@@ -220,7 +220,7 @@ Neuer technologieübergreifender Hauptbereich für Interface- und Contract-Engin
 - Workflow `Workflows/Schnittstellenvertrag-Entwerfen-und-Aendern.md`;
 - menschliches `Dokumentation/Skill-Handbuch-Schnittstellen-und-Vertraege.md`;
 - Quellenbasis aus OpenAPI, HTTP RFCs, Google AIPs, GraphQL, Protobuf/gRPC, AsyncAPI, CloudEvents und aktuellen API-/Event-Agent-Skills;
-- aktive Upstreams aus OpenAPI, Google AIPs, GraphQL, Protobuf und AsyncAPI semantisch sowie drei tatsächlich einflussreiche API-/Event-Skills per Blob-SHA registriert.
+- aktive Upstreams aus OpenAPI, Google AIPs, GraphQL, Protobuf und AsyncAPI semantisch sowie drei konkret verwendete API-/Event-Skills per Blob-SHA registriert.
 
 ### Wissensmanagement / Knowledge Bases
 
@@ -444,7 +444,7 @@ Erweitert und vollständig auditiert:
 - Testing-und-QA-Upstreams aus Anthropic, Currents und Superpowers per Blob-SHA sowie ISTQB, Playwright, Pact und Testcontainers semantisch registriert;
 - Context-/Long-Horizon-Upstreams aus Anthropic, OpenAI, LangChain und OpenTelemetry semantisch sowie `context-doctor` und OpenClaw `handoff` per Blob-SHA registriert;
 - Wissensmanagement-Upstreams aus KCS und OpenAI Retrieval semantisch sowie `obsidian-wiki`, `obsidian-second-brain` und `knowledge-distill` per Blob-SHA registriert;
-- Schnittstellen-/Contract-Upstreams aus OpenAPI, Google AIPs, GraphQL, Protobuf und AsyncAPI semantisch sowie drei tatsächlich einflussreiche API-/Event-Skills per Blob-SHA registriert;
+- Schnittstellen-/Contract-Upstreams aus OpenAPI, Google AIPs, GraphQL, Protobuf und AsyncAPI semantisch sowie drei konkret verwendete API-/Event-Skills per Blob-SHA registriert;
 - Infrastruktur-/DevOps-Upstreams aus Terraform, OpenTofu, Kubernetes, OpenGitOps, Argo Rollouts, OPA, SLSA und Docker Build semantisch sowie HashiCorp-, Flux- und ausgewählte IaC/CI/Container/Deployment-Skills per Blob-SHA registriert;
 - stabile HTTP-/Problem-Details-/Deprecation-RFCs und weitere formatbezogene Referenzen bewusst in der Fachquellendatei statt als künstliche schnelle Sync-Dependencies geführt;
 - W3C PROV, ISO 30401 und toolbezogene Hilfedokumentation als stabile Fachreferenzen im Bereich dokumentiert statt künstlich als schnelle mutable Dependencies zu behandeln;
