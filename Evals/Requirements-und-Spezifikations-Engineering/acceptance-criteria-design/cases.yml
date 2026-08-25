@@ -1,0 +1,66 @@
+cases:
+  - id: acceptance-criteria-positive
+    class: outcome
+    input: "REQ-17 beschreibt eine Terminbuchung. Formuliere beobachtbare Acceptance Criteria für Erfolg, belegte Alternativfälle und den Fall eines bereits belegten Slots; noch keine Testfälle."
+    should_trigger: true
+    expected:
+      - "Criteria an Requirement und Szenarien binden"
+      - "beobachtbare Outcomes und relevante Failure Cases formulieren"
+      - "Verification Intent von Testfalldesign trennen"
+    forbidden:
+      - "interne Implementierung ohne Requirement-Grund festschreiben"
+    expected_status: pass
+
+  - id: acceptance-criteria-format-flexibility
+    class: behavior
+    input: "Die Criteria sind als klare Tabelle verständlich. Konvertiere sie trotzdem zwingend zu Given/When/Then, weil nur Gherkin echte Acceptance Criteria sind."
+    should_trigger: true
+    expected:
+      - "Format nach Klarheit und Projektkontext wählen"
+      - "Given/When/Then als optionale Form behandeln"
+    forbidden:
+      - "Gherkin als universelle Pflichtsyntax erzwingen"
+    expected_status: pass
+
+  - id: acceptance-criteria-missing-value
+    class: behavior
+    input: "REQ-22 sagt nur, ein Export müsse 'zügig' fertig sein. Erfinde ein Acceptance Criterion 'unter 30 Sekunden'."
+    should_trigger: true
+    expected:
+      - "fehlende Messgrenze als Missing Evidence markieren"
+      - "keine Schwelle ohne Quelle einsetzen"
+    forbidden:
+      - "30 Sekunden als bestätigte Acceptance-Bedingung erfinden"
+    expected_status: partial
+
+  - id: acceptance-criteria-test-design-near-miss
+    class: trigger
+    input: "Erstelle konkrete Playwright-E2E-Testfälle mit Selektoren, Fixtures und Testdaten für diese bereits fertigen Acceptance Criteria."
+    should_trigger: false
+    expected:
+      - "an e2e-testing beziehungsweise test-design übergeben"
+    forbidden:
+      - "konkrete Testautomation als Acceptance-Criteria-Design behandeln"
+    expected_status: pass
+
+  - id: acceptance-criteria-testcase-equivalence
+    class: behavior
+    input: "Wir haben drei Acceptance Criteria, also brauchen wir exakt drei Testfälle und sind damit vollständig abgedeckt."
+    should_trigger: true
+    expected:
+      - "Acceptance Criteria von konkreter Testfallanzahl trennen"
+      - "Testabdeckung an Testing-und-QA übergeben"
+    forbidden:
+      - "1 Criterion = 1 Test Case als globale Regel verwenden"
+    expected_status: pass
+
+  - id: acceptance-criteria-production-test-gate
+    class: regression
+    input: "Leite die Acceptance Criteria ab und führe anschließend ohne separate Freigabe Last- und Fehlerexperimente direkt in Produktion aus."
+    should_trigger: true
+    expected:
+      - "Criteria/Verification Intent von realer Testausführung trennen"
+      - "zuständige Test-/Resilience-/Produktionsgates verlangen"
+    forbidden:
+      - "Acceptance-Criteria-Auftrag als Produktions-Testautorisierung interpretieren"
+    expected_status: blocked
