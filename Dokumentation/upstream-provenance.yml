@@ -1,84 +1,372 @@
-schema_version: 1
+schema_version: 2
 source_registry: Dokumentation/upstream-sources.yml
 last_reviewed: 2026-08-25
 
-# Provenance is intentionally separate from mutable-upstream monitoring.
-# Every concrete GitHub artifact in upstream-sources.yml has a source-specific
-# record here. Phase 1 does not infer historical licensing from a repository's
-# current license. The registry pins the observed artifact blob, but a matching
-# repository commit plus license file from the same historical state was not
-# established for these records. Therefore redistribution remains unresolved.
-defaults:
-  use_class: reference/inspiration
-  license_spdx: UNKNOWN
-  license_source: null
-  license_status_at_observation: unresolved
-  notice_requirement: none-for-reference-only
-  redistribution_status: unresolved
+# Every GitHub artifact was reviewed source-by-source in Phase 3. The YAML anchor
+# only avoids repeating the identical final state for the 60 reference-only cases.
+# `assessed` means final classification; `needs-human/legal-review` preserves uncertainty.
 
 sources:
-  - source_id: addyosmani-observability-instrumentation-skill
-  - source_id: agent-skills-specification
-  - source_id: anthropic-frontend-design
-  - source_id: anthropic-testing-strategy
-  - source_id: anthropic-webapp-testing
-  - source_id: arjun-capacity-planning-skill
-  - source_id: arjun-ci-pipelines-skill
-  - source_id: arjun-containerization-skill
-  - source_id: arjun-deployment-strategies-skill
-  - source_id: arjun-infrastructure-as-code-skill
-  - source_id: arjun-slo-definition-skill
-  - source_id: blacktwist-content-repurposer-skill
-  - source_id: blacktwist-content-strategy-skill
-  - source_id: context-doctor-skill
-  - source_id: currents-playwright-best-practices
-  - source_id: drader-research
-  - source_id: firecrawl-deep-research
-  - source_id: firzus-frontend-design
-  - source_id: flux-gitops-repo-audit-skill
-  - source_id: hashicorp-terraform-style-guide-skill
-  - source_id: hazamashoken-api-design-principles
-  - source_id: hermes-grounded-citations
-  - source_id: ilm-alan-frontend-design
-  - source_id: impeccable-readme
-  - source_id: inklate-social-audit
-  - source_id: insight-wave-knowledge-distill
-  - source_id: jacob-balslev-api-design
-  - source_id: jacob-balslev-event-contract-design
-  - source_id: jpeetz-design-to-code
-  - source_id: jpeetz-technical-documentation
-  - source_id: jwynia-fact-check
-  - source_id: langchain-deepagents-web-research
-  - source_id: lx-wnk-architecture-design-skill
-  - source_id: lx-wnk-architecture-review-skill
-  - source_id: mattpocock-code-review
-  - source_id: mattpocock-diagnosing-bugs
-  - source_id: mattpocock-domain-modeling
-  - source_id: mattpocock-tdd
-  - source_id: mblode-docs-writing
-  - source_id: mcollina-documentation
-  - source_id: microsoft-hve-requirements-author
-  - source_id: microsoft-vscode-team-kit-research
-  - source_id: modular-earth-requirements-skill
-  - source_id: mongodb-query-optimizer
-  - source_id: mongodb-schema-design
+  - &assessed-reference
+    source_id: addyosmani-observability-instrumentation-skill
+    reviewed_at: 2026-08-25
+    repository_commit: null
+    use_class: reference/inspiration
+    review_status: assessed
+    material_scope: concepts/methods-only
+    classification_evidence:
+      - Source-specific Phase-3 audit found no exact long-line or 12-word-shingle overlap in registered local impacts and no explicit derivation marker.
+      - The local use is therefore classified as concepts/methods reference only; no upstream redistribution permission is relied on.
+    similarity_audit: no-signal
+    redistribution_reliance: not-relied-on
+    license_spdx: UNKNOWN
+    license_source: null
+    license_source_commit_or_ref: null
+    license_path: null
+    license_blob_sha: null
+    path_specific_license_notes:
+      - Upstream license evidence is not relied on for this reference-only classification.
+    license_status_at_observation: not relied on for redistribution
+    notice_requirement: none-for-reference-only
+    redistribution_status: not-relied-on
+    license_evidence:
+      artifact_declarations: []
+      same_state_files: []
+      notes:
+        - Source-specific audit completed; no redistribution permission is relied on for local reference-only use.
+
+  - <<: *assessed-reference
+    source_id: agent-skills-specification
+
+  - <<: *assessed-reference
+    source_id: anthropic-frontend-design
+
+  - <<: *assessed-reference
+    source_id: anthropic-testing-strategy
+
+  - <<: *assessed-reference
+    source_id: anthropic-webapp-testing
+
+  - <<: *assessed-reference
+    source_id: arjun-capacity-planning-skill
+
+  - <<: *assessed-reference
+    source_id: arjun-ci-pipelines-skill
+
+  - <<: *assessed-reference
+    source_id: arjun-containerization-skill
+
+  - <<: *assessed-reference
+    source_id: arjun-deployment-strategies-skill
+
+  - <<: *assessed-reference
+    source_id: arjun-infrastructure-as-code-skill
+
+  - <<: *assessed-reference
+    source_id: arjun-slo-definition-skill
+
+  - <<: *assessed-reference
+    source_id: blacktwist-content-repurposer-skill
+
+  - <<: *assessed-reference
+    source_id: blacktwist-content-strategy-skill
+
+  - <<: *assessed-reference
+    source_id: context-doctor-skill
+
+  - <<: *assessed-reference
+    source_id: currents-playwright-best-practices
+
+  - <<: *assessed-reference
+    source_id: drader-research
+
+  - <<: *assessed-reference
+    source_id: firecrawl-deep-research
+
+  - <<: *assessed-reference
+    source_id: firzus-frontend-design
+
+  - <<: *assessed-reference
+    source_id: flux-gitops-repo-audit-skill
+
+  - <<: *assessed-reference
+    source_id: hashicorp-terraform-style-guide-skill
+
+  - <<: *assessed-reference
+    source_id: hazamashoken-api-design-principles
+
+  - <<: *assessed-reference
+    source_id: hermes-grounded-citations
+
+  - <<: *assessed-reference
+    source_id: ilm-alan-frontend-design
+
+  - <<: *assessed-reference
+    source_id: impeccable-readme
+
+  - <<: *assessed-reference
+    source_id: inklate-social-audit
+
+  - <<: *assessed-reference
+    source_id: insight-wave-knowledge-distill
+
+  - <<: *assessed-reference
+    source_id: jacob-balslev-api-design
+
+  - <<: *assessed-reference
+    source_id: jacob-balslev-event-contract-design
+
+  - <<: *assessed-reference
+    source_id: jpeetz-design-to-code
+
+  - <<: *assessed-reference
+    source_id: jpeetz-technical-documentation
+
+  - <<: *assessed-reference
+    source_id: jwynia-fact-check
+
+  - <<: *assessed-reference
+    source_id: langchain-deepagents-web-research
+
+  - <<: *assessed-reference
+    source_id: lx-wnk-architecture-design-skill
+
+  - <<: *assessed-reference
+    source_id: lx-wnk-architecture-review-skill
+
+  - <<: *assessed-reference
+    source_id: mblode-docs-writing
+
+  - <<: *assessed-reference
+    source_id: mcollina-documentation
+
+  - <<: *assessed-reference
+    source_id: microsoft-hve-requirements-author
+
+  - <<: *assessed-reference
+    source_id: microsoft-vscode-team-kit-research
+
+  - <<: *assessed-reference
+    source_id: modular-earth-requirements-skill
+
+  - <<: *assessed-reference
+    source_id: mongodb-query-optimizer
+
+  - <<: *assessed-reference
+    source_id: mongodb-schema-design
+
+  - <<: *assessed-reference
+    source_id: obsidian-second-brain-skill
+
+  - <<: *assessed-reference
+    source_id: obsidian-wiki-skills
+
+  - <<: *assessed-reference
+    source_id: openclaw-handoff-skill
+
+  - <<: *assessed-reference
+    source_id: pinchen-system-design-skill
+
+  - <<: *assessed-reference
+    source_id: practicalswan-frontend-design
+
+  - <<: *assessed-reference
+    source_id: practicalswan-research
+
+  - <<: *assessed-reference
+    source_id: prisma-skills-readme
+
+  - <<: *assessed-reference
+    source_id: redis-connections
+
+  - <<: *assessed-reference
+    source_id: redis-core
+
+  - <<: *assessed-reference
+    source_id: redis-security
+
+  - <<: *assessed-reference
+    source_id: social-media-skills-analytics-reporting
+
+  - <<: *assessed-reference
+    source_id: spacey-requirements-analysis
+
+  - <<: *assessed-reference
+    source_id: supabase-postgres-best-practices
+
+  - <<: *assessed-reference
+    source_id: superpowers-verification-before-completion
+
+  - <<: *assessed-reference
+    source_id: vaquarkhan-data-specification-skill
+
+  - <<: *assessed-reference
+    source_id: vaquarkhan-safe-backfill-replay-skill
+
+  - <<: *assessed-reference
+    source_id: vercel-composition-patterns
+
+  - <<: *assessed-reference
+    source_id: vercel-react-best-practices
+
+  - <<: *assessed-reference
+    source_id: vercel-web-design-guidelines
+
   - source_id: neon-postgres-best-practices
-  - source_id: obsidian-second-brain-skill
-  - source_id: obsidian-wiki-skills
-  - source_id: openclaw-handoff-skill
-  - source_id: pinchen-system-design-skill
-  - source_id: practicalswan-frontend-design
-  - source_id: practicalswan-research
-  - source_id: prisma-skills-readme
-  - source_id: redis-connections
-  - source_id: redis-core
-  - source_id: redis-security
-  - source_id: social-media-skills-analytics-reporting
-  - source_id: spacey-requirements-analysis
-  - source_id: supabase-postgres-best-practices
-  - source_id: superpowers-verification-before-completion
-  - source_id: vaquarkhan-data-specification-skill
-  - source_id: vaquarkhan-safe-backfill-replay-skill
-  - source_id: vercel-composition-patterns
-  - source_id: vercel-react-best-practices
-  - source_id: vercel-web-design-guidelines
+    reviewed_at: 2026-08-25
+    repository_commit: null
+    use_class: unclear
+    review_status: needs-human/legal-review
+    material_scope: unclear
+    classification_evidence:
+      - The source-specific audit could not map observed blob 43f3468765949e3db85a3782d90d4826b6c585bd to a historical repository commit (historical-commit-not-resolved).
+      - Registered local impacts were therefore not compared against reconstructed historical source text; no final expression/reference classification is made.
+    similarity_audit: not-comparable
+    redistribution_reliance: unclear
+    license_spdx: UNKNOWN
+    license_source: null
+    license_source_commit_or_ref: null
+    license_path: null
+    license_blob_sha: null
+    path_specific_license_notes:
+      - No path-specific or same-state license conclusion is made without a resolved historical repository commit.
+    license_status_at_observation: unresolved; historical repository commit and same-state license evidence were not established
+    notice_requirement: unknown
+    redistribution_status: unresolved
+    license_evidence:
+      artifact_declarations: []
+      same_state_files: []
+      notes:
+        - This record intentionally preserves uncertainty and must not be treated as redistribution permission or public-release readiness.
+
+  - source_id: mattpocock-code-review
+    reviewed_at: 2026-08-25
+    repository_commit: 6654f6b60cd9d5be8b54c6fafe44346dabeb3b76
+    use_class: adapted
+    review_status: assessed
+    material_scope: concrete-expression
+    classification_evidence:
+      - "The observed code-review blob was independently mapped to repository commit 6654f6b60cd9d5be8b54c6fafe44346dabeb3b76."
+      - "Manual review found a strong structural mapping from the upstream two axes Standards/Spec to the local explicit two review axes Code/Repository-Standards and Anforderung/Spezifikation."
+      - "The automated lexical audit found no exact long-line or 12-word-shingle overlap; adaptation classification is based on manual structural review plus pre-Phase-1 repository provenance."
+    similarity_audit: no-signal
+    redistribution_reliance: required
+    license_spdx: MIT
+    license_source: https://github.com/mattpocock/skills/blob/6654f6b60cd9d5be8b54c6fafe44346dabeb3b76/LICENSE
+    license_source_commit_or_ref: 6654f6b60cd9d5be8b54c6fafe44346dabeb3b76
+    license_path: LICENSE
+    license_blob_sha: f1dd2c09108dde1a5f56097cee8461b3ea834499
+    path_specific_license_notes:
+      - Same-state audit reported the root MIT LICENSE and no path-specific license override for this artifact.
+    license_status_at_observation: MIT root license verified at the exact repository commit containing the observed artifact blob; no path-specific conflicting license was detected by the audit.
+    notice_requirement: required
+    redistribution_status: permitted-with-notice
+    license_evidence:
+      artifact_declarations: []
+      same_state_files:
+        - path: LICENSE
+          blob_sha: f1dd2c09108dde1a5f56097cee8461b3ea834499
+          spdx: MIT
+      notes:
+        - The observed artifact blob is present at repository commit 6654f6b60cd9d5be8b54c6fafe44346dabeb3b76.
+        - The root LICENSE was fetched from the same commit.
+        - Pre-Phase-1 THIRD-PARTY-NOTICES.md already recorded this practice area as influenced by mattpocock/skills.
+
+  - source_id: mattpocock-diagnosing-bugs
+    reviewed_at: 2026-08-25
+    repository_commit: 6654f6b60cd9d5be8b54c6fafe44346dabeb3b76
+    use_class: adapted
+    review_status: assessed
+    material_scope: concrete-expression
+    classification_evidence:
+      - "The observed diagnosing-bugs blob was independently mapped to repository commit 6654f6b60cd9d5be8b54c6fafe44346dabeb3b76."
+      - "Manual review found the local diagnosis skill preserves the distinctive progression feedback loop/reproduction, minimization, falsifiable hypotheses, targeted instrumentation, regression-before-fix, and closure verification."
+      - "The automated lexical audit found no exact long-line or 12-word-shingle overlap; adaptation classification is based on manual structural review plus pre-Phase-1 repository provenance."
+    similarity_audit: no-signal
+    redistribution_reliance: required
+    license_spdx: MIT
+    license_source: https://github.com/mattpocock/skills/blob/6654f6b60cd9d5be8b54c6fafe44346dabeb3b76/LICENSE
+    license_source_commit_or_ref: 6654f6b60cd9d5be8b54c6fafe44346dabeb3b76
+    license_path: LICENSE
+    license_blob_sha: f1dd2c09108dde1a5f56097cee8461b3ea834499
+    path_specific_license_notes:
+      - Same-state audit reported the root MIT LICENSE and no path-specific license override for this artifact.
+    license_status_at_observation: MIT root license verified at the exact repository commit containing the observed artifact blob; no path-specific conflicting license was detected by the audit.
+    notice_requirement: required
+    redistribution_status: permitted-with-notice
+    license_evidence:
+      artifact_declarations: []
+      same_state_files:
+        - path: LICENSE
+          blob_sha: f1dd2c09108dde1a5f56097cee8461b3ea834499
+          spdx: MIT
+      notes:
+        - The observed artifact blob is present at repository commit 6654f6b60cd9d5be8b54c6fafe44346dabeb3b76.
+        - The root LICENSE was fetched from the same commit.
+        - Pre-Phase-1 THIRD-PARTY-NOTICES.md already recorded this practice area as influenced by mattpocock/skills.
+
+  - source_id: mattpocock-domain-modeling
+    reviewed_at: 2026-08-25
+    repository_commit: 6654f6b60cd9d5be8b54c6fafe44346dabeb3b76
+    use_class: adapted
+    review_status: assessed
+    material_scope: concrete-expression
+    classification_evidence:
+      - "The observed domain-modeling blob was independently mapped to repository commit 6654f6b60cd9d5be8b54c6fafe44346dabeb3b76."
+      - "Manual review found the local skill retains the upstream pattern of challenging glossary terms, sharpening canonical terminology, testing concrete boundary scenarios, cross-checking code, and using ADRs sparingly for durable/surprising trade-offs, while adding substantial local scope and persistence guidance."
+      - "The automated lexical audit found no exact long-line or 12-word-shingle overlap; adaptation classification is based on manual structural review plus pre-Phase-1 repository provenance."
+    similarity_audit: no-signal
+    redistribution_reliance: required
+    license_spdx: MIT
+    license_source: https://github.com/mattpocock/skills/blob/6654f6b60cd9d5be8b54c6fafe44346dabeb3b76/LICENSE
+    license_source_commit_or_ref: 6654f6b60cd9d5be8b54c6fafe44346dabeb3b76
+    license_path: LICENSE
+    license_blob_sha: f1dd2c09108dde1a5f56097cee8461b3ea834499
+    path_specific_license_notes:
+      - Same-state audit reported the root MIT LICENSE and no path-specific license override for this artifact.
+    license_status_at_observation: MIT root license verified at the exact repository commit containing the observed artifact blob; no path-specific conflicting license was detected by the audit.
+    notice_requirement: required
+    redistribution_status: permitted-with-notice
+    license_evidence:
+      artifact_declarations: []
+      same_state_files:
+        - path: LICENSE
+          blob_sha: f1dd2c09108dde1a5f56097cee8461b3ea834499
+          spdx: MIT
+      notes:
+        - The observed artifact blob is present at repository commit 6654f6b60cd9d5be8b54c6fafe44346dabeb3b76.
+        - The root LICENSE was fetched from the same commit.
+        - Pre-Phase-1 THIRD-PARTY-NOTICES.md already recorded this practice area as influenced by mattpocock/skills.
+
+  - source_id: mattpocock-tdd
+    reviewed_at: 2026-08-25
+    repository_commit: 6654f6b60cd9d5be8b54c6fafe44346dabeb3b76
+    use_class: adapted
+    review_status: assessed
+    material_scope: concrete-expression
+    classification_evidence:
+      - "The observed TDD blob was independently mapped to repository commit 6654f6b60cd9d5be8b54c6fafe44346dabeb3b76."
+      - "Manual review found the local TDD skill preserves the distinctive red/green small-slice sequence, behavior-over-internals testing, independent expected values, and rejection of writing all tests before implementation."
+      - "The automated lexical audit found no exact long-line or 12-word-shingle overlap; adaptation classification is based on manual structural review plus pre-Phase-1 repository provenance."
+    similarity_audit: no-signal
+    redistribution_reliance: required
+    license_spdx: MIT
+    license_source: https://github.com/mattpocock/skills/blob/6654f6b60cd9d5be8b54c6fafe44346dabeb3b76/LICENSE
+    license_source_commit_or_ref: 6654f6b60cd9d5be8b54c6fafe44346dabeb3b76
+    license_path: LICENSE
+    license_blob_sha: f1dd2c09108dde1a5f56097cee8461b3ea834499
+    path_specific_license_notes:
+      - Same-state audit reported the root MIT LICENSE and no path-specific license override for this artifact.
+    license_status_at_observation: MIT root license verified at the exact repository commit containing the observed artifact blob; no path-specific conflicting license was detected by the audit.
+    notice_requirement: required
+    redistribution_status: permitted-with-notice
+    license_evidence:
+      artifact_declarations: []
+      same_state_files:
+        - path: LICENSE
+          blob_sha: f1dd2c09108dde1a5f56097cee8461b3ea834499
+          spdx: MIT
+      notes:
+        - The observed artifact blob is present at repository commit 6654f6b60cd9d5be8b54c6fafe44346dabeb3b76.
+        - The root LICENSE was fetched from the same commit.
+        - Pre-Phase-1 THIRD-PARTY-NOTICES.md already recorded this practice area as influenced by mattpocock/skills.
