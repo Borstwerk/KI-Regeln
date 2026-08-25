@@ -1,0 +1,46 @@
+name: Phase 3 provenance summary
+
+on:
+  push:
+    branches:
+      - hardening/phase-3-open-source-readiness
+
+permissions:
+  contents: read
+
+jobs:
+  summarize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+      - name: Install dependency
+        run: python -m pip install --disable-pip-version-check PyYAML==6.0.2
+      - name: Run GitHub provenance audit
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python tools/open_source_readiness_audit.py --github --output "$RUNNER_TEMP/phase3-github.json"
+      - name: Print concise source records
+        env:
+          REPORT: ${{ runner.temp }}/phase3-github.json
+        run: |
+          python - <<'PY'
+          import json, os
+          d=json.load(open(os.environ['REPORT'], encoding='utf-8'))
+          for r in d['github_provenance_audit']['records']:
+              licenses=','.join(f"{x.get('path')}:{x.get('detected_spdx')}:{x.get('blob_sha')}" for x in r.get('license_files', [])) or '-'
+              declarations=','.join(r.get('artifact_license_declarations') or []) or '-'
+              sims=','.join(f"{x.get('path')}={x.get('signal')}" for x in r.get('similarity', [])) or '-'
+              errors=','.join(r.get('errors') or []) or '-'
+              print('|'.join([
+                  'SOURCE', r.get('source_id',''), r.get('repository',''), r.get('source_path',''),
+                  r.get('observed_blob_sha',''), r.get('repository_commit') or '-',
+                  r.get('commit_resolution',''), errors, declarations, licenses,
+                  'derivation='+str(bool(r.get('explicit_local_derivation_marker'))).lower(), sims,
+              ]))
+          PY
