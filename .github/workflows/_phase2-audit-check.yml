@@ -1,0 +1,33 @@
+name: Phase 2 audit check
+
+on:
+  push:
+    branches:
+      - hardening/phase-2-evals-golden-tasks
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 9e2ca4947b822e6529a1ebb9d463b2e90f0b4aa6
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install --disable-pip-version-check PyYAML==6.0.2 jsonschema==4.25.1
+      - name: Coverage audit
+        run: python tools/eval_coverage_audit.py --summary
+      - name: Execution view leakage check
+        run: |
+          python - <<'PY'
+          import yaml, subprocess
+          from pathlib import Path
+          suite = yaml.safe_load(Path('Evals/Golden-Tasks/suite.yml').read_text(encoding='utf-8'))
+          for task in suite['tasks']:
+              subprocess.run(['python', 'tools/golden_task_execution_view.py', task, '--assert-no-evaluator-fields'], check=True, stdout=subprocess.DEVNULL)
+              print(f'Execution view OK: {task}')
+          PY
