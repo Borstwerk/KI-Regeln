@@ -1,6 +1,6 @@
 ---
 name: context-compaction
-description: Verdichtet gewachsenen Agentenkontext mit hoher Fidelity, erhält Constraints, Entscheidungen, Sources of Truth, offenen Zustand und Evidence und prüft die Fortsetzungsfähigkeit nach der Kompression.
+description: Verdichtet gewachsenen Agentenkontext mit hoher Fidelity, erhält Constraints, Entscheidungen, Sources of Truth, offenen Zustand und Evidence und prüft die Fortsetzungsfähigkeit nach der Kompression. Verwenden bei langen Agentenläufen mit Context Pressure oder vor einer kontrollierten Verdichtung.
 ---
 
 # Context Compaction

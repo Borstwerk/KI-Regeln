@@ -1,6 +1,6 @@
 ---
 name: context-engineering
-description: Wählt für einen Agentenlauf den kleinsten ausreichenden, aktuellen und signalstarken Kontext aus, schützt Sources of Truth und entscheidet zwischen aktivem Kontext, Working State, Compaction und gezieltem Nachladen.
+description: Wählt für einen Agentenlauf den kleinsten ausreichenden, aktuellen und signalstarken Kontext aus, schützt Sources of Truth und entscheidet zwischen aktivem Kontext, Working State, Compaction und gezieltem Nachladen. Verwenden bei Auswahl, Bereinigung oder Planung des aktiven Agentenkontexts.
 ---
 
 # Context Engineering

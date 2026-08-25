@@ -1,6 +1,6 @@
 ---
 name: entscheidungsunterstuetzung
-description: Strukturiert Entscheidungen so, dass Kriterien, Unsicherheiten, Alternativen und Gegenargumente sichtbar werden, ohne persönliche Wertentscheidungen an die KI auszulagern.
+description: Strukturiert Entscheidungen so, dass Kriterien, Unsicherheiten, Alternativen und Gegenargumente sichtbar werden, ohne persönliche Wertentscheidungen an die KI auszulagern. Verwenden bei relevanten Entscheidungen mit mehreren Optionen, Kriterien oder Unsicherheiten.
 ---
 
 # Entscheidungsunterstützung

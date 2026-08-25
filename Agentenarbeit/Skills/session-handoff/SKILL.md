@@ -1,6 +1,6 @@
 ---
 name: session-handoff
-description: Erzeugt für einen neuen Agenten, Chat oder späteren Arbeitslauf einen eigenständig nutzbaren Fortsetzungszustand mit Ziel, Scope, Sources of Truth, Entscheidungen, Artefakten, Evidence, Risiken, Gates und nächstem Schritt.
+description: Erzeugt für einen neuen Agenten, Chat oder späteren Arbeitslauf einen eigenständig nutzbaren Fortsetzungszustand mit Ziel, Scope, Sources of Truth, Entscheidungen, Artefakten, Evidence, Risiken, Gates und nächstem Schritt. Verwenden bei Session-, Agenten- oder Zeitwechseln, wenn Arbeit zuverlässig fortgesetzt werden muss.
 ---
 
 # Session Handoff

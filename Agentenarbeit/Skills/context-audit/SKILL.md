@@ -1,6 +1,6 @@
 ---
 name: context-audit
-description: Prüft einen Agentenkontext oder Harness auf Token-/Größenverteilung, Relevanz, Staleness, Duplikate, Context Rot, Tooloutput-Bloat und unnötig sichtbare Skills oder Tools und leitet messbare Optimierungen ab.
+description: Prüft einen Agentenkontext oder Harness auf Token-/Größenverteilung, Relevanz, Staleness, Duplikate, Context Rot, Tooloutput-Bloat und unnötig sichtbare Skills oder Tools und leitet messbare Optimierungen ab. Verwenden bei Context Bloat, steigenden Token-/Latenzkosten oder Verdacht auf Staleness und Signalverlust.
 ---
 
 # Context Audit
