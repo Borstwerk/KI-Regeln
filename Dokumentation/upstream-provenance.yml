@@ -1,0 +1,38 @@
+schema_version: 1
+source_registry: Dokumentation/upstream-sources.yml
+last_reviewed: 2026-08-25
+
+# Repository, konkreter Pfad und beobachteter Blob werden über source_id aus
+# upstream-sources.yml bezogen und vom Validator exakt gejoint. Dadurch bleibt
+# Monitoring (mutable upstream) von Provenance (Lizenz/Nutzung) getrennt.
+#
+# Default ist absichtlich konservativ: externer Einfluss ist zunächst nur
+# reference/inspiration und nicht als redistributable angenommen, solange die
+# Lizenzlage am beobachteten Stand nicht belastbar dokumentiert ist.
+defaults:
+  use_class: reference/inspiration
+  license_spdx: UNKNOWN
+  license_source: null
+  license_status_at_observation: unresolved
+  notice_requirement: unknown
+  redistribution_status: unresolved
+
+sources:
+  - source_id: mattpocock-diagnosing-bugs
+    license_spdx: MIT
+    license_source: https://github.com/mattpocock/skills/blob/main/LICENSE
+    license_status_at_observation: "Repository-Lizenz als MIT dokumentiert; historischer Repository-Commit zum beobachteten Blob noch nicht gepinnt."
+    notice_requirement: "MIT copyright and permission notice for copied/substantial portions; current local classification is reference/inspiration."
+    redistribution_status: permitted-with-notice
+  - source_id: mattpocock-code-review
+    license_spdx: MIT
+    license_source: https://github.com/mattpocock/skills/blob/main/LICENSE
+    license_status_at_observation: "Repository-Lizenz als MIT dokumentiert; historischer Repository-Commit zum beobachteten Blob noch nicht gepinnt."
+    notice_requirement: "MIT copyright and permission notice for copied/substantial portions; current local classification is reference/inspiration."
+    redistribution_status: permitted-with-notice
+  - source_id: mattpocock-domain-modeling
+    license_spdx: MIT
+    license_source: https://github.com/mattpocock/skills/blob/main/LICENSE
+    license_status_at_observation: "Repository-Lizenz als MIT dokumentiert; historischer Repository-Commit zum beobachteten Blob noch nicht gepinnt."
+    notice_requirement: "MIT copyright and permission notice for copied/substantial portions; current local classification is reference/inspiration."
+    redistribution_status: permitted-with-notice

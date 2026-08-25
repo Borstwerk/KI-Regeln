@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["schema_version", "sources"],
+  "properties": {
+    "schema_version": {"type": "integer", "minimum": 1},
+    "last_updated": {"type": ["string", "object"]},
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "area", "kind", "monitor_mode", "cadence", "local_impact"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "area": {"type": "string", "minLength": 1},
+          "kind": {"enum": ["web-page", "github-file"]},
+          "url": {"type": "string"},
+          "repository": {"type": "string", "pattern": "^[^/]+/[^/]+$"},
+          "path": {"type": "string", "minLength": 1},
+          "ref": {"type": "string", "minLength": 1},
+          "monitor_mode": {"enum": ["semantic-review", "exact-sha"]},
+          "cadence": {"enum": ["monthly", "quarterly"]},
+          "observed_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+          "local_impact": {"type": "array", "items": {"type": "string", "minLength": 1}, "minItems": 1}
+        },
+        "allOf": [
+          {"if": {"properties": {"kind": {"const": "web-page"}}}, "then": {"required": ["url"]}},
+          {"if": {"properties": {"kind": {"const": "github-file"}}}, "then": {"required": ["repository", "path", "ref", "observed_sha"]}}
+        ],
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["source", "version", "rules", "skills", "workflows", "quality_policy", "project_rules"],
+  "properties": {
+    "source": {"const": "Borstwerk/KI-Regeln"},
+    "version": {"type": "string", "minLength": 1},
+    "rules": {"type": "array", "items": {"type": "string"}},
+    "skills": {"type": "array", "items": {"type": "string"}},
+    "workflows": {"type": "array", "items": {"type": "string"}},
+    "quality_policy": {"type": "object"},
+    "project_rules": {"type": "array", "items": {"type": "string"}}
+  },
+  "additionalProperties": true
+}
