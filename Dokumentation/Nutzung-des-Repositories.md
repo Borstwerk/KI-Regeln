@@ -864,7 +864,7 @@ Elicitation ist kein Formularzwang. Interviews, Workshops, Dokumentanalyse, Beob
 
 Workflow:
 
-`../Workflows/Acceptance-und-Traceability.md`
+`../Workflows/Acceptance-Traceability-und-Handoff.md`
 
 Kern:
 
@@ -883,7 +883,7 @@ EARS, Given-When-Then oder Gherkin können helfen, wenn sie zur Art des Verhalte
 
 Workflow:
 
-`../Workflows/Requirement-Aenderung-und-Impact.md`
+`../Workflows/Requirements-Change-und-Impact.md`
 
 Kern:
 
