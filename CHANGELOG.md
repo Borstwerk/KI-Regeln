@@ -220,7 +220,7 @@ Neuer technologieübergreifender Hauptbereich für Interface- und Contract-Engin
 - Workflow `Workflows/Schnittstellenvertrag-Entwerfen-und-Aendern.md`;
 - menschliches `Dokumentation/Skill-Handbuch-Schnittstellen-und-Vertraege.md`;
 - Quellenbasis aus OpenAPI, HTTP RFCs, Google AIPs, GraphQL, Protobuf/gRPC, AsyncAPI, CloudEvents und aktuellen API-/Event-Agent-Skills;
-- aktive Upstreams aus OpenAPI, Google AIPs, GraphQL, Protobuf und AsyncAPI semantisch sowie drei konkret verwendete API-/Event-Skills per Blob-SHA registriert.
+- aktive Upstreams aus OpenAPI, Google AIPs, GraphQL, Protobuf und AsyncAPI semantisch sowie drei tatsächlich einflussreiche API-/Event-Skills per Blob-SHA registriert.
 
 ### Wissensmanagement / Knowledge Bases
 
