@@ -92,6 +92,16 @@ skills:
   # - Software-Architecture-und-System-Design/Skills/architecture-conformance-review
   # - Software-Architecture-und-System-Design/Skills/architecture-review
 
+  # Requirements und Spezifikations-Engineering
+  # - Requirements-und-Spezifikations-Engineering/Skills/requirements-baseline
+  # - Requirements-und-Spezifikations-Engineering/Skills/requirements-elicitation
+  # - Requirements-und-Spezifikations-Engineering/Skills/requirements-specification
+  # - Requirements-und-Spezifikations-Engineering/Skills/acceptance-criteria-design
+  # - Requirements-und-Spezifikations-Engineering/Skills/requirements-traceability
+  # - Requirements-und-Spezifikations-Engineering/Skills/requirements-change-analysis
+  # - Requirements-und-Spezifikations-Engineering/Skills/requirements-validation
+  # - Requirements-und-Spezifikations-Engineering/Skills/requirements-review
+
   # Dokumentationserstellung
   # - Dokumentationserstellung/Skills/docs-plan
   # - Dokumentationserstellung/Skills/technical-writing
@@ -190,6 +200,11 @@ workflows:
   # - Workflows/Systemgrenze-und-Dekomposition.md
   # - Workflows/Evolutionaere-Architekturaenderung.md
   # - Workflows/Architektur-Readiness-Review.md
+  # - Workflows/Requirements-Baseline-und-Spezifikation.md
+  # - Workflows/Requirements-Elicitation-und-Klaerung.md
+  # - Workflows/Acceptance-Traceability-und-Handoff.md
+  # - Workflows/Requirements-Change-und-Impact.md
+  # - Workflows/Requirements-Readiness-Review.md
 
 quality_policy:
   minimum_maturity: "<project-decision>"
@@ -200,6 +215,18 @@ project_rules:
   # - AGENTS.md
   # - docs/architecture.md
   # - .ai/project-rules.md
+
+# Optionale projektspezifische Requirements-Wahrheit. Werte nie aus den zentralen
+# KI-Regeln ableiten, sondern nur aus lokalen Stakeholdern, Sources und Entscheidungen.
+requirements_context:
+  stakeholders_and_owners: []
+  goals_and_needs: []
+  authoritative_sources: []
+  scope_and_non_goals: []
+  constraints: []
+  confirmed_quality_targets: []
+  assumptions_and_open_decisions: []
+  approval_and_baseline_policy: "<project-specific>"
 
 # Optionale projektspezifische Architekturwahrheit. Werte nie aus den zentralen
 # KI-Regeln ableiten, sondern nur aus lokaler Spezifikation, Evidence und Entscheidungen.
@@ -234,3 +261,6 @@ notes:
   - Architecture Drivers, Constraints, Quality-Ziele, Systemgrenzen, Ownership, akzeptierte ADRs und Migrations-/Cutover-Bedingungen bleiben projektspezifisch.
   - Microservices, DDD, Hexagonal, Event-driven, CQRS, Event Sourcing oder Cloud sind keine zentralen Pflichtarchitekturen.
   - Ein Architektur-Verdict oder `READY_FOR_LOCAL_GATE` autorisiert keine Codeänderung, Migration, Traffic-Umschaltung, Deployment oder Release automatisch.
+  - Stakeholder, Goals, Requirements Sources, Scope, Prioritäten, Quality-Ziele, Approval-/Baseline-Regeln und verbindliche Constraints bleiben projektspezifisch.
+  - PRD, BRD, SRS, User Stories, Given/When/Then, EARS, MoSCoW oder numerische Clarity-Scores sind keine zentralen Pflichtformate oder Freigaberegeln.
+  - Requirements Validation, `APPROVED` oder `READY_FOR_LOCAL_GATE` autorisieren keine Architektur-, Code-, Daten-, Contract-, Deployment- oder Releaseaktion automatisch.
