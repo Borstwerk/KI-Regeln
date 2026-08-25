@@ -8,6 +8,36 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Social Media und Content-Präsenz
+
+Neuer plattform- und toolneutraler Hauptbereich für Social-Media-Präsenz, Content-Systeme, Community-Arbeit und performancebasiertes Lernen:
+
+- Content-Präsenz als System aus Ziel, Audience, Positionierung, Themen, Plattformrollen, Content, Community und Evidence modelliert statt als Sammlung einzelner Posts;
+- bestehende Profile, Bios, Links, Posts, Formate, Kadenz und reale Analytics über `content-presence-baseline` read-only erfassbar, ohne fehlende Performanceursachen oder Benchmarks zu erfinden;
+- Social-Content-Strategie aus bestätigten Zielen, Audience, Positionierung, Themen und realen Plattformrollen statt universellen Content-Pillars, Postingfrequenzen oder Algorithmusmythen;
+- Editorial Planning übersetzt Strategie in Backlog, Serien, Prioritäten, Owner, Produktionsstatus und Kalender, bleibt aber klar von realem Scheduling und Publishing getrennt;
+- konkrete Social-Drafts über `social-content-design` mit belegter Source-Wahrheit, natürlicher Sprache und sichtbaren Claim-/Rights-/Disclosure-Grenzen statt erfundener Zahlen, Testimonials, Trends oder künstlicher Hook-Mechanik;
+- Plattformadaption erhält Kernbotschaft und Wahrheit, verändert aber Struktur, Einstieg, Länge, Interaktionsform und Format nach aktueller Plattform-Evidence; zentrale Regeln konservieren keine angeblich ewigen Rankinggewichte, Limits oder Best Times;
+- Content Repurposing behandelt Source-Assets als kanonische Quelle und erzeugt eigenständige Derivatives statt mechanischer Cross-Posts oder Low-Value-Reuploads;
+- Community Engagement priorisiert reale Fragen und Dialog, trennt Reply-Drafts, Support-/Moderationseskalation und Außenaktionen und lehnt Fake-Engagement, Engagement-Ringe, Dogpiling und koordinierte Manipulation ab;
+- Content Performance Analysis bindet Metriken an Ziele, hält Definition, Zeitraum, Vergleichsbasis und Nenner fest und trennt Korrelation, Hypothese und Kausalität; ein einzelner Gewinnerpost beweist keine Algorithmusregel;
+- unabhängiges `content-presence-review` prüft Ziele, Audience, Positionierung, Plattformfit, Content, Community, Analytics, Claims, Rights/Disclosure und Freigabeprozess read-only;
+- zentrale Trennungen `Draft ≠ Post`, `Kalender ≠ Scheduling`, `Review ≠ Publishing-Freigabe`, `Engagement ≠ Geschäftserfolg`, `Korrelation ≠ Kausalität` und `Repurposing ≠ Copy/Paste`;
+- neun neue Skills `content-presence-baseline`, `social-content-strategy`, `editorial-planning`, `social-content-design`, `platform-content-adaptation`, `content-repurposing`, `community-engagement`, `content-performance-analysis` und `content-presence-review`;
+- alle neun Social-Media-Skills starten `experimental` mit `partial` Evalabdeckung;
+- 54 Evalfälle definiert, sechs je Skill, mit erwarteter Statusverteilung 36× `pass`, 9× `partial` und 9× `blocked`, einschließlich fehlender Analytics-/Policy-/Rights-Evidence, Algorithmus-/Benchmarkdogmen, Fake-Engagement, Kausalitätsfehlern und externen Publishing-/Reply-/Delete-/Block-Gates; diese 54 Fälle sind **definiert, aber noch nicht als Behavioral Evals ausgeführt oder bestanden**;
+- fünf Workflows für Presence-/Strategie-Baseline, Editorialproduktion, Cross-Platform-/Repurposing, Community-Arbeit sowie Performance-/Readiness-Review;
+- neues menschliches `Dokumentation/Skill-Handbuch-Social-Media-und-Content-Praesenz.md`;
+- Root-README, Workflow-/Eval-Dokumentation, Skill-Katalog, Projektmanifest, Nutzungsdoku und Pflege-Radar um Social Media und Content-Präsenz erweitert;
+- Projektmanifest um lokalen `content_presence_context` für Ziele, Audience, Voice/Positionierung, Plattformrollen, Sources, Themen, Metrikdefinitionen, Rights/Disclosure und Publishing-/Approval-Policy ergänzt;
+- Requirements, Recherche, Schreiben und Bildarbeit mit expliziten Social-Media-Handoffs verbunden: Ziele und Constraints bleiben lokal/bei Requirements, externe Claims und Trends bei Recherche, allgemeine Sprachqualität bei Schreiben und visuelle Produktion bei Bildarbeit;
+- Skill-Katalog von 119 auf 128 zentrale Skills erweitert;
+- neun aktive Social-Media-Upstreams registriert: lebende LinkedIn-, Meta-, YouTube- und FTC-Quellen per semantischem Monatsreview sowie vier konkret verwendete öffentliche Social-Agent-Skills per Repositorypfad und geprüftem Blob-SHA;
+- konkrete Skill-Upstreams: `blacktwist/social-media-skills` `content-strategy-sms` (`b4eefa218107e9c8402bf8318abd1cce38f383f1`), `blacktwist/social-media-skills` `content-repurposer-sms` (`03e0d2398cb513ee19dd80f19d24dfe58ed701a3`), `social-media-skills/skills` `analytics-and-reporting` (`bf851b46b375f6c9952f54245f5fa49ff7da0371`) und `inklate/social-skills` `social-audit` (`de89934532c0203052f12158df32032469afab77`);
+- Plattformfeatures, Formatlimits, Analyticsdefinitionen und Aussagen über Ranking/Distribution werden als mutable Evidence behandelt und bei Materialität aktuell geprüft statt als zeitlose zentrale Regeln festgeschrieben;
+- reale Posts, Scheduling, Replies, DMs, Deletes, Blocks, Profiländerungen und andere Außenaktionen bleiben lokal gated; Toolverfügbarkeit oder ein Review-Verdict autorisieren sie nicht automatisch;
+- Upstream-Governance bleibt `on_change: review-only` und `auto_sync: false`.
+
 ### Requirements und Specification Engineering
 
 Neuer tool- und formatneutraler Hauptbereich für Requirements Elicitation, Spezifikation, Acceptance, Traceability, Change und Validation:
@@ -171,7 +201,7 @@ Neuer technologieübergreifender Hauptbereich für Interface- und Contract-Engin
 - klare Grenze zu späterem Software Architecture: Architektur entscheidet, warum und wo eine Grenze existiert; Interface Design definiert die Zusagen über diese Grenze;
 - Interaktionsstile HTTP, GraphQL, RPC/IDL, Events sowie Webhooks/Callbacks nach Consumer- und Kommunikationsanforderungen statt Transportdogma eingeordnet;
 - öffentliche Request-/Response-/Message-Repräsentationen bewusst von internen Datenbank-, Klassen- und Frameworkmodellen getrennt;
-- Schema- und Feldsemantik einschließlich required/optional, nullable/absent, Defaults, Enums und Fehlerverträgen;
+- Schema- und Feldsemantik einschließlich required/optional, nullable/absent, Defaults, Enums und Fehlersemantik;
 - HTTP API Design mit bewusster Method-/Statussemantik, Collections, Pagination, Filtering, Ordering, Idempotenz, Retry und Concurrency;
 - GraphQL-Schemaevolution und Deprecation als eigene Fachregel ohne unnötigen Format-Skill;
 - RPC-/IDL-/Protobuf-Regeln für Field Numbers, Reserved Fields, generierten Code und die Trennung von Source- und Wire-Kompatibilität;
@@ -414,7 +444,7 @@ Erweitert und vollständig auditiert:
 - Testing-und-QA-Upstreams aus Anthropic, Currents und Superpowers per Blob-SHA sowie ISTQB, Playwright, Pact und Testcontainers semantisch registriert;
 - Context-/Long-Horizon-Upstreams aus Anthropic, OpenAI, LangChain und OpenTelemetry semantisch sowie `context-doctor` und OpenClaw `handoff` per Blob-SHA registriert;
 - Wissensmanagement-Upstreams aus KCS und OpenAI Retrieval semantisch sowie `obsidian-wiki`, `obsidian-second-brain` und `knowledge-distill` per Blob-SHA registriert;
-- Schnittstellen-/Contract-Upstreams aus OpenAPI, Google AIPs, GraphQL, Protobuf und AsyncAPI semantisch sowie drei konkret verwendete API-/Event-Skills per Blob-SHA registriert;
+- Schnittstellen-/Contract-Upstreams aus OpenAPI, Google AIPs, GraphQL, Protobuf und AsyncAPI semantisch sowie drei tatsächlich einflussreiche API-/Event-Skills per Blob-SHA registriert;
 - Infrastruktur-/DevOps-Upstreams aus Terraform, OpenTofu, Kubernetes, OpenGitOps, Argo Rollouts, OPA, SLSA und Docker Build semantisch sowie HashiCorp-, Flux- und ausgewählte IaC/CI/Container/Deployment-Skills per Blob-SHA registriert;
 - stabile HTTP-/Problem-Details-/Deprecation-RFCs und weitere formatbezogene Referenzen bewusst in der Fachquellendatei statt als künstliche schnelle Sync-Dependencies geführt;
 - W3C PROV, ISO 30401 und toolbezogene Hilfedokumentation als stabile Fachreferenzen im Bereich dokumentiert statt künstlich als schnelle mutable Dependencies zu behandeln;
