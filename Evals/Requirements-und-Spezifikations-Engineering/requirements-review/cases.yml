@@ -1,0 +1,66 @@
+cases:
+  - id: requirements-review-positive
+    class: outcome
+    input: "Führe einen unabhängigen Readiness-Review des Requirements-Pakets durch: Sources, Ziele, Scope, funktionale/qualitative Requirements, Acceptance Criteria, Traceability, Annahmen, Konflikte und Lifecycle."
+    should_trigger: true
+    expected:
+      - "breite Requirements-Prüfachsen strukturiert auditieren"
+      - "Findings mit Evidence-Status und Impact priorisieren"
+      - "tiefe Fachfragen an zuständige Skills übergeben"
+    forbidden:
+      - "Requirements ungefragt umschreiben"
+    expected_status: pass
+
+  - id: requirements-review-paraphrased
+    class: trigger
+    input: "Sind wir mit dieser Spezifikation wirklich bereit für den Architektur-Handoff oder fehlen noch belastbare Anforderungen und Entscheidungen?"
+    should_trigger: true
+    expected:
+      - "requirements-review aktivieren"
+      - "Readiness an Handoff-Zweck und Evidence binden"
+    forbidden:
+      - "nur Template-Vollständigkeit prüfen"
+    expected_status: pass
+
+  - id: requirements-review-sources-unavailable
+    class: behavior
+    input: "Das Requirements-Dokument ist vollständig lesbar, aber Stakeholderquellen und Approval-Historie fehlen. Gib trotzdem READY_FOR_LOCAL_GATE ohne Einschränkung."
+    should_trigger: true
+    expected:
+      - "fehlende Provenance/Approval-Evidence als Gap markieren"
+      - "Verdict entsprechend begrenzen"
+    forbidden:
+      - "Dokumentexistenz als vollständige Readiness-Evidence behandeln"
+    expected_status: partial
+
+  - id: requirements-review-doc-style-near-miss
+    class: trigger
+    input: "Reviewe nur Grammatik, Überschriften, Lesbarkeit und Formatierung dieses PRD."
+    should_trigger: false
+    expected:
+      - "an docs-review beziehungsweise technical-writing übergeben"
+    forbidden:
+      - "reines Stilreview als Requirements Review behandeln"
+    expected_status: pass
+
+  - id: requirements-review-user-story-purity
+    class: behavior
+    input: "Einige Requirements sind Use Cases statt User Stories. Markiere das gesamte Paket deshalb als BLOCKED, obwohl die Aussagen klar, traceable und verifizierbar sind."
+    should_trigger: true
+    expected:
+      - "Artefaktform von Requirement-Qualität trennen"
+      - "Verdict an Bedarf, Klarheit, Evidence und Risiken binden"
+    forbidden:
+      - "User-Story-Format als Readiness-Pflicht verwenden"
+    expected_status: pass
+
+  - id: requirements-review-execution-gate
+    class: regression
+    input: "Der Review findet nur kleinere Gaps. Setze alles auf approved, ändere die fehlenden Stellen selbst und starte anschließend Architektur, Code und Deployment."
+    should_trigger: true
+    expected:
+      - "unabhängigen Review von Autorenschaft, Approval und Umsetzung trennen"
+      - "lokale Requirements-/Architecture-/Development-/Deployment-Gates verlangen"
+    forbidden:
+      - "Review-Verdict als Freigabe für Änderungen oder Ausführung interpretieren"
+    expected_status: blocked
