@@ -41,6 +41,9 @@ Typische Themenfelder:
 - Software Architecture und System Design;
 - Architecture Drivers, Quality Attributes und Trade-off-Analyse;
 - Systemgrenzen, Dekomposition, Architektur-Evolution und Conformance;
+- Requirements und Spezifikations-Engineering;
+- Stakeholder-/Requirements-Sources, Elicitation und Konfliktklärung;
+- Requirement-Qualität, Acceptance Criteria, Traceability, Change und Validation;
 - Reflexion, Lernen und Selbstverbesserung mit KI;
 - neue Sicherheits-, Governance- oder Evaluationsansätze.
 
@@ -50,6 +53,8 @@ Für Einträge mit `cadence: monthly`:
 
 - `monitor_mode: exact-sha` → aktuellen GitHub-Blob-SHA vergleichen;
 - `monitor_mode: semantic-review` → aktuelle Produkt-/Webdoku gegen die lokal übernommenen Konzepte lesen.
+
+Bei Standards in Draft-/DIS-Status – aktuell beispielsweise ISO/IEC/IEEE 29148 Edition 3 – muss ein Statuswechsel zu Final/Published ausdrücklich erkannt werden. Ein Draft wird nicht vorzeitig als veröffentlichter Normstand behandelt.
 
 Ergebnis:
 
@@ -155,7 +160,7 @@ Für lebende Webseiten und Produktdokumentation:
 ```text
 lokal übernommene Konzepte
 → aktuelle Quelle erneut lesen
-→ relevante Funktion / Empfehlung / Terminologie geändert?
+→ relevante Funktion / Empfehlung / Terminologie / Publikationsstatus geändert?
    ├─ nein → last_checked aktualisieren
    └─ ja
         ↓
