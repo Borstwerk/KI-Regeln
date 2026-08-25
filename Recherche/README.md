@@ -109,6 +109,20 @@ Research Question
 
 Die Regeln aus `Agentenarbeit/` ergänzen diesen Bereich insbesondere bei Context Engineering, Task Graphs, Verification Loops, Evidence und Human Gates.
 
+## Übergabe an Social Media und Content-Präsenz
+
+Wenn Research für öffentliche Inhalte benötigt wird, gilt:
+
+```text
+Recherche
+→ externe Fakten, Trends, Plattformmechaniken und Quellen verifizieren
+
+Social-Media-und-Content-Praesenz
+→ belegte Aussagen für Audience, Format, Plattformrolle, Editorialsystem und Community operationalisieren
+```
+
+Ein Trendfund, Suchtreffer oder Communitysignal ist noch keine Content-Strategie. Umgekehrt darf Social Content externe Fakten oder aktuelle Plattformregeln nicht nur aus Erinnerung als Research-Evidence behandeln.
+
 ## Enthaltene Regeln
 
 - `Suchmodi-und-Research-Tiefe.md`
