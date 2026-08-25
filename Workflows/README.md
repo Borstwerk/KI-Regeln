@@ -60,6 +60,11 @@ Ein Workflow ist deshalb **kein neuer Mega-Skill**.
 - `Acceptance-Traceability-und-Handoff.md`
 - `Requirements-Change-und-Impact.md`
 - `Requirements-Readiness-Review.md`
+- `Content-Praesenz-Baseline-und-Strategie.md`
+- `Editorialplan-und-Content-Produktion.md`
+- `Cross-Platform-Adaption-und-Repurposing.md`
+- `Community-Engagement-und-Eskalation.md`
+- `Content-Performance-und-Readiness-Review.md`
 
 ## Workflow-Handoff
 
