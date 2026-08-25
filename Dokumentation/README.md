@@ -23,6 +23,7 @@ Er richtet sich vor allem an Menschen, die:
 - `Skill-Handbuch-Data-Engineering.md` – erklärt Pipeline Design, Ingestion, Transformation, analytische Modellierung, Data Quality, Data Contracts, Lineage, Orchestrierung und Data-Engineering-Review;
 - `Skill-Handbuch-Software-Architecture-und-System-Design.md` – erklärt Architecture Baseline, System Design, Dekomposition, Trade-off-Analyse, Evolution, Conformance und Architecture Review;
 - `Skill-Handbuch-Requirements-und-Spezifikations-Engineering.md` – erklärt Requirements Baseline, Elicitation, Specification, Acceptance Criteria, Traceability, Change Analysis, Validation und Requirements Review;
+- `Skill-Handbuch-Social-Media-und-Content-Praesenz.md` – erklärt Presence Baseline, Social Content Strategy, Editorialplanung, Social Content Design, Plattformadaption, Repurposing, Community Engagement, Performanceanalyse und Presence Review;
 - `Skill-Handbuch-Dokumentationserstellung.md` – erklärt die Skills des Bereichs `Dokumentationserstellung/`;
 - `Skill-Handbuch-Datenbanken.md` – erklärt die engine-neutralen Datenbank-Skills und ihre Abgrenzung;
 - `Skill-Handbuch-Testing-und-QA.md` – erklärt Teststrategie, Testdesign, Integration, Contracts, E2E, Flakiness, Failure Testing und Test-Suite-Review;
@@ -41,7 +42,7 @@ Er richtet sich vor allem an Menschen, die:
 
 > Allgemeine Arbeitsweise zentral, konkrete Wahrheit lokal.
 
-Das Repository liefert wiederverwendbare Methoden. Projektziele, Stakeholder-/Requirements-Quellen, Fachlogik, Kanon, Architektur, Referenzen und lokale Anforderungen bleiben im jeweiligen Projekt.
+Das Repository liefert wiederverwendbare Methoden. Projektziele, Stakeholder-/Requirements-Quellen, Fachlogik, Kanon, Architektur, Marken-/Audience-Wahrheit, reale Plattformaccounts, Content-Ziele und lokale Anforderungen bleiben im jeweiligen Projekt.
 
 ## Skills und Reife
 
@@ -94,10 +95,11 @@ Wer das Repository zum ersten Mal verwendet, sollte in dieser Reihenfolge lesen:
 10. bei Data-Engineering-/ETL-/CDC-/Warehouse-Arbeit zusätzlich `Skill-Handbuch-Data-Engineering.md`
 11. bei Software-Architecture-/System-Design-Arbeit zusätzlich `Skill-Handbuch-Software-Architecture-und-System-Design.md`
 12. bei Requirements-/Specification-Arbeit zusätzlich `Skill-Handbuch-Requirements-und-Spezifikations-Engineering.md`
-13. bei Dokumentationsarbeit zusätzlich `Skill-Handbuch-Dokumentationserstellung.md`
-14. bei Datenbankarbeit zusätzlich `Skill-Handbuch-Datenbanken.md`
-15. bei Testing-/QA-Arbeit zusätzlich `Skill-Handbuch-Testing-und-QA.md`
-16. bei Skill-/Security-Arbeit zusätzlich `Skill-Handbuch-Meta-und-Sicherheit.md`
-17. erst danach die für das eigene Vorhaben relevanten Regel-, Skill- und Workflow-Dateien.
+13. bei Social-Media-/Content-Präsenz-Arbeit zusätzlich `Skill-Handbuch-Social-Media-und-Content-Praesenz.md`
+14. bei Dokumentationsarbeit zusätzlich `Skill-Handbuch-Dokumentationserstellung.md`
+15. bei Datenbankarbeit zusätzlich `Skill-Handbuch-Datenbanken.md`
+16. bei Testing-/QA-Arbeit zusätzlich `Skill-Handbuch-Testing-und-QA.md`
+17. bei Skill-/Security-Arbeit zusätzlich `Skill-Handbuch-Meta-und-Sicherheit.md`
+18. erst danach die für das eigene Vorhaben relevanten Regel-, Skill- und Workflow-Dateien.
 
 Nicht das komplette Repository muss für jede Aufgabe geladen oder übernommen werden. Gute Nutzung bedeutet gezielte Auswahl.
