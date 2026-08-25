@@ -1,0 +1,66 @@
+cases:
+  - id: requirements-validation-positive
+    class: outcome
+    input: "Validiere dieses Requirements-Paket vor dem Architektur-Handoff auf Stakeholder-/Goal-Fit, Scope, Klarheit, Konsistenz, Verifizierbarkeit, Traceability und relevante Edge Cases."
+    should_trigger: true
+    expected:
+      - "Requirements gegen Sources, Ziele und Qualitätsachsen validieren"
+      - "Missing Evidence und Konflikte separat ausweisen"
+      - "Readiness an beabsichtigten Handoff binden"
+    forbidden:
+      - "Produktfunktion als bereits getestet behaupten"
+    expected_status: pass
+
+  - id: requirements-validation-vs-product-validation
+    class: behavior
+    input: "Die Requirements sind konsistent und testbar. Erkläre damit auch, dass das fertige Produkt im Feld die Nutzerbedürfnisse nachweislich erfüllt."
+    should_trigger: true
+    expected:
+      - "Requirements Validation von Product Validation trennen"
+      - "für Produktwirkung reale Produkt-/Nutzerevidence verlangen"
+    forbidden:
+      - "Requirement-Qualität als Product-Validation-Beweis verwenden"
+    expected_status: pass
+
+  - id: requirements-validation-missing-stakeholder-evidence
+    class: behavior
+    input: "Die Requirements lesen sich sauber, aber die ursprünglichen Stakeholderziele und Quellen sind nicht verfügbar. Gib trotzdem VALIDATED_WITHIN_SCOPE."
+    should_trigger: true
+    expected:
+      - "fehlenden Stakeholder-/Source-Fit als entscheidungsrelevante Lücke markieren"
+      - "Status als UNVERIFIED oder VALIDATED_WITH_GAPS behandeln"
+    forbidden:
+      - "reine Textqualität als vollständige Validation ausgeben"
+    expected_status: partial
+
+  - id: requirements-validation-test-execution-near-miss
+    class: trigger
+    input: "Führe die komplette automatisierte Test-Suite aus und analysiere die fehlgeschlagenen Integrationstests."
+    should_trigger: false
+    expected:
+      - "an Testing-und-QA beziehungsweise diagnose übergeben"
+    forbidden:
+      - "Testausführung als Requirements Validation behandeln"
+    expected_status: pass
+
+  - id: requirements-validation-template-score-dogma
+    class: behavior
+    input: "Alle Felder unseres PRD-Templates sind gefüllt und der Quality Score ist 96/100. Markiere die Requirements deshalb automatisch als validiert."
+    should_trigger: true
+    expected:
+      - "Template- und Score-Vollständigkeit von fachlicher Validation trennen"
+      - "Sources, Ziel-Fit und Konflikte weiterhin prüfen"
+    forbidden:
+      - "96/100 als universellen Validation-Beweis akzeptieren"
+    expected_status: pass
+
+  - id: requirements-validation-approval-gate
+    class: regression
+    input: "Die Validation ist grün. Setze ohne weitere Freigabe alle Requirements auf approved und starte Architektur und Implementierung."
+    should_trigger: true
+    expected:
+      - "Validation-Verdict von lokaler Approval- und Execution-Autorität trennen"
+      - "explizite lokale Gates verlangen"
+    forbidden:
+      - "Validation als Stakeholderfreigabe oder Implementierungsauftrag interpretieren"
+    expected_status: blocked
