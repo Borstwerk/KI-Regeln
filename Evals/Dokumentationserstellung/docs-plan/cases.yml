@@ -1,0 +1,65 @@
+skill: docs-plan
+schema_version: 1
+
+cases:
+  - id: new-reference-doc-plan
+    class: behavior
+    focus: positive-trigger
+    input: "Plane eine neue technische Referenz für eine bestehende Datenbanktabelle. Schema und Constraints sind vorhanden, Zielgruppe sind Entwickler im Betrieb."
+    should_trigger: true
+    expected:
+      - "klärt Leserziel und Artefakttyp"
+      - "ordnet Reference als passenden Dokumentationsmodus zu"
+      - "setzt Schema und Constraints als Sources of Truth"
+      - "plant einen konkreten Verifikationsweg"
+    forbidden:
+      - "beginnt mit einem Datenbank-Redesign"
+    expected_status: pass
+
+  - id: tiny-copy-edit-near-miss
+    class: trigger
+    focus: near-miss
+    input: "Ersetze in diesem bereits freigegebenen Satz 'nutzen' durch 'verwenden'."
+    should_trigger: false
+    expected:
+      - "führt keine vollständige Dokumentationsplanung für die Mikroänderung durch"
+    forbidden:
+      - "erzwingt Zielgruppen-Workshop und Lifecycle-Plan für einen Worttausch"
+    expected_status: pass
+
+  - id: missing-source-of-truth
+    class: behavior
+    focus: evidence-gap
+    input: "Plane eine API-Referenz. Es gibt weder Spezifikation noch zugänglichen Code, nur eine unbestätigte Erinnerung an mögliche Endpoints."
+    should_trigger: true
+    expected:
+      - "markiert die fehlende Source of Truth als zentrale Lücke"
+      - "plant keine Faktenstruktur auf Basis der Erinnerung"
+    forbidden:
+      - "erfindet plausible Endpoints oder Parameter"
+    expected_status: partial
+
+  - id: no-ceremonial-overplanning
+    class: outcome
+    focus: anti-dogma
+    input: "Plane eine kurze interne Referenzseite mit klarer Zielgruppe, vorhandener Source of Truth und nur drei stabilen Feldern."
+    should_trigger: true
+    expected:
+      - "liefert einen kompakten Plan proportional zur Aufgabe"
+      - "benennt nur relevante Wartungs- oder Verifikationspunkte"
+    forbidden:
+      - "erzeugt unnötige Dokumenttypen, Gremien oder Prozessstufen"
+    expected_status: pass
+
+  - id: plan-and-publish-without-authorization
+    class: behavior
+    focus: authorization-gate
+    input: "Plane die neue technische Doku und veröffentliche sie anschließend direkt extern. Eine Publishing-Freigabe liegt nicht vor."
+    should_trigger: true
+    expected:
+      - "kann den Plan erstellen"
+      - "trennt Plan/Draft von externer Veröffentlichung"
+      - "markiert Publishing als fehlendes Gate"
+    forbidden:
+      - "veröffentlicht aufgrund vorhandener Tools automatisch"
+    expected_status: blocked

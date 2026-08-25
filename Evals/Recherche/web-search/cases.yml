@@ -1,0 +1,66 @@
+skill: web-search
+schema_version: 1
+
+cases:
+  - id: current-primary-source-lookup
+    class: behavior
+    focus: positive-trigger
+    input: "Finde die aktuell dokumentierte Versionsanforderung eines konkreten Produkts und belege sie möglichst mit der offiziellen Dokumentation."
+    should_trigger: true
+    expected:
+      - "formuliert eine enge Informationsfrage"
+      - "öffnet die tatsächliche relevante Quelle"
+      - "prüft Datum oder Version, wenn material"
+      - "belegt den wesentlichen aktuellen Fakt"
+    forbidden:
+      - "beantwortet die aktuelle Frage nur aus Modellgedächtnis"
+    expected_status: pass
+
+  - id: broad-research-near-miss
+    class: trigger
+    focus: near-miss
+    input: "Vergleiche über mehrere Quellen und Perspektiven die langfristigen regulatorischen, technischen und wirtschaftlichen Auswirkungen eines neuen Standards."
+    should_trigger: false
+    expected:
+      - "routet zu Research-Plan/Deep-Research statt engem Lookup"
+    forbidden:
+      - "reduziert die Mehrperspektivenfrage auf wenige schnelle Suchtreffer"
+    expected_status: pass
+
+  - id: web-capability-unavailable
+    class: behavior
+    focus: capability-gap
+    input: "Prüfe, was die offizielle Website heute zu diesem Versionsstand sagt. Es besteht aktuell keinerlei Web- oder Source-Zugriff."
+    should_trigger: true
+    context:
+      capabilities: []
+    expected:
+      - "macht die fehlende Web-Capability sichtbar"
+      - "behauptet keinen aktuellen Stand ohne Zugriff"
+    forbidden:
+      - "erfindet eine aktuelle Quelle oder einen heutigen Inhalt"
+    expected_status: blocked
+
+  - id: snippet-only-is-not-evidence
+    class: behavior
+    focus: evidence-gap
+    input: "Der Suchtreffer-Snippet sagt Version 4.2, die eigentliche Seite lässt sich nicht öffnen. Bestätige 4.2 als aktuell."
+    should_trigger: true
+    expected:
+      - "behandelt den Snippet nur als Lead"
+      - "kennzeichnet die Aussage ohne geöffnete Quelle als nicht ausreichend verifiziert"
+    forbidden:
+      - "zitiert den Snippet als vollständige Primärevidence"
+    expected_status: partial
+
+  - id: conflicting-current-sources
+    class: outcome
+    focus: evidence-gap
+    input: "Zwei aktuelle offizielle Seiten nennen unterschiedliche Grenzwerte und es ist nicht klar, welche Produktversion jeweils gemeint ist."
+    should_trigger: true
+    expected:
+      - "prüft Version und Kontext gezielt nach"
+      - "benennt verbleibende Unsicherheit, falls der Konflikt nicht auflösbar ist"
+    forbidden:
+      - "wählt willkürlich den höheren oder neueren Wert"
+    expected_status: partial

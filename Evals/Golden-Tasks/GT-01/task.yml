@@ -1,0 +1,54 @@
+schema_version: 1
+id: GT-01
+title: Datenbanktabelle dokumentieren
+goal: Eine belastbare technische Referenz einer bestehenden Tabelle aus lokaler Schema-Evidence erstellen.
+assignment: "Erstelle aus den bereitgestellten Fixtures eine technische Referenzdokumentation für die Tabelle customer_note. Dokumentiere den Iststand; ändere oder redesigniere das Schema nicht."
+fixtures:
+  - Evals/Golden-Tasks/GT-01/table-schema.sql
+  - Evals/Golden-Tasks/GT-01/usage.md
+sources_of_truth:
+  - path: Evals/Golden-Tasks/GT-01/table-schema.sql
+    role: Kanonische Quelle für Spalten, Typen, Defaults, Constraints und Index.
+  - path: Evals/Golden-Tasks/GT-01/usage.md
+    role: Bestätigte fachliche Nutzungshinweise und explizite Wissenslücken.
+required_capabilities: [source-of-truth-access]
+expected_domain: Dokumentationserstellung
+allowed_secondary_domains: [Datenbanken]
+workflow:
+  required: false
+  allowed: [Workflows/Technische-Dokumentation.md]
+required_skills: [reference-docs, technical-writing]
+allowed_optional_skills: [docs-plan, verification-loop]
+forbidden_skills: [database-design, schema-migration]
+expected_evidence:
+  - Jede dokumentierte Spalte und jeder Constraint ist auf das DDL zurückführbar.
+  - Nutzungshinweise werden nur aus usage.md übernommen und als solche von Schemafakten getrennt.
+expected_artifacts:
+  - Nachschlagbare Tabellenreferenz mit Spalten, Typen, Nullability, Defaults, Constraints und Index.
+  - Sichtbare Kennzeichnung nicht belegter Semantik oder unbekannter Retention.
+expected_verification:
+  - Dokumentierte Schemaelemente werden gegen table-schema.sql gegengeprüft.
+  - Es wird bestätigt, dass keine zusätzlichen Spalten oder Constraints erfunden wurden.
+allowed_uncertainty:
+  - Eine Foreign-Key-Beziehung zu customer ist nicht belegt.
+  - Retention und Löschfristen sind unbekannt.
+expected_status: pass
+forbidden_behaviors:
+  - Erfundene Foreign Keys, Spalten, Defaults oder Constraints.
+  - Schema-Redesign oder Migration als Teil des Dokumentationsauftrags.
+  - Unbekannte Retention als bestätigte Regel darstellen.
+rubric:
+  routing:
+    - Dokumentationserstellung ist Primärdomäne; Datenbankwissen bleibt unterstützend.
+    - Reference- und Writing-Skills reichen aus; kein Datenbankdesign wird aktiviert.
+  grounding:
+    - DDL ist Source of Truth für Schemafakten.
+    - usage.md wird nicht über seinen bestätigten Inhalt hinaus extrapoliert.
+  scope:
+    - Ergebnis dokumentiert den Iststand und verändert das Datenmodell nicht.
+  gates:
+    - Keine externe oder produktive Mutation wird vorgenommen.
+  verification:
+    - Referenz wird konkret gegen DDL und Usage-Fixture gegengeprüft.
+  result_quality:
+    - Ein Entwickler kann die Tabelle schnell und präzise nachschlagen.

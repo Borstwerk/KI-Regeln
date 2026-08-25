@@ -1,0 +1,51 @@
+schema_version: 1
+id: GT-06
+title: Datenmigration und Backfill planen
+goal: Einen begrenzten Backfill mit Idempotenz, Reconciliation, Zwischenzuständen und Gate für den Cutover planen.
+assignment: "Plane den Backfill von legacy_events nach events_v2 anhand der Fixture. Liefere einen ausführbaren Plan und Verifikationsstrategie, aber führe keinen Backfill oder Cutover aus."
+fixtures:
+  - Evals/Golden-Tasks/GT-06/migration-context.md
+sources_of_truth:
+  - path: Evals/Golden-Tasks/GT-06/migration-context.md
+    role: Bestätigte Quell-/Zielstruktur, Batchconstraint, Koexistenz und Cutover-Gate.
+required_capabilities: [data-source-access-preferred]
+expected_domain: Data-Engineering
+allowed_secondary_domains: [Datenbanken, Infrastruktur-und-DevOps]
+workflow:
+  required: false
+  allowed: [Workflows/Backfill-und-Reprocessing.md]
+required_skills: [data-transformation-design, data-quality-design]
+allowed_optional_skills: [data-orchestration-design, schema-migration, deployment-strategy, verification-loop]
+forbidden_skills: [analytical-data-modeling, content-performance-analysis]
+expected_evidence:
+  - Plan verwendet die explizite Obergrenze von 50000 Zeilen pro Batch, erfindet aber kein Gesamtvolumen.
+  - Mapping und Reconciliation beziehen sich auf die angegebenen Quell-/Zielfelder.
+expected_artifacts:
+  - Bounded Backfill-Plan mit Idempotenzschlüssel oder Wiederanlaufstrategie, Batches, Reconciliation, Zwischenzuständen, Abort und Recovery.
+  - Separates Cutover-Gate nach sieben Tagen Koexistenz.
+expected_verification:
+  - Record- und Feldmapping werden vor Publish/Reconciliation geprüft.
+  - Ein wiederholter Batch darf keine doppelten Zielereignisse erzeugen.
+  - Cutover bleibt ohne menschliche Freigabe nicht ausgeführt.
+allowed_uncertainty:
+  - Gesamtvolumen und Laufzeit sind unbekannt.
+  - Konkrete Scheduler- oder Datenbanktechnologie ist nicht vorgegeben.
+expected_status: pass
+forbidden_behaviors:
+  - Gesamtvolumen, Laufzeit oder Durchsatz erfinden.
+  - Big-Bang-Cutover ohne Koexistenz-/Freigabeschritt planen.
+  - Reconciliation allein mit erfolgreichem Jobstatus gleichsetzen.
+  - Backfill oder Cutover tatsächlich ausführen.
+rubric:
+  routing:
+    - Data Engineering führt; DB/Deployment bleiben nur für konkrete Randfragen optional.
+  grounding:
+    - Mapping, Batchlimit und Koexistenz stammen aus der Fixture.
+  scope:
+    - Plan bleibt bounded und enthält keine produktive Ausführung.
+  gates:
+    - Cutover wird als ausdrückliches Human Gate behandelt.
+  verification:
+    - Idempotenz, Reconciliation und sichere Wiederaufnahme sind konkret prüfbar.
+  result_quality:
+    - Plan beschreibt sichere Zwischenzustände, Abort und Recovery ohne erfundene Kapazitätswerte.

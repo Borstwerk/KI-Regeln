@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <title>Status</title>
+  <style>
+    body { font-family: sans-serif; }
+    .card { width: 320px; padding: 16px; }
+  </style>
+</head>
+<body>
+  <main>
+    <button id="menu"><svg width="16" height="16" aria-hidden="true"><path d="M1 3h14M1 8h14M1 13h14"/></svg></button>
+    <section class="card">
+      <img src="status.png">
+      <h1>Systemstatus</h1>
+      <p>Alle Komponenten erreichbar.</p>
+    </section>
+  </main>
+  <script>
+    const card = document.querySelector('.card');
+    for (let i = 0; i < 200; i += 1) {
+      card.style.width = `${320 + (i % 2)}px`;
+      void card.offsetWidth;
+    }
+  </script>
+</body>
+</html>

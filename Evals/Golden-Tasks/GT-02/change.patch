@@ -1,0 +1,15 @@
+diff --git a/src/orders.py b/src/orders.py
+index 1111111..2222222 100644
+--- a/src/orders.py
++++ b/src/orders.py
+@@ -12,8 +12,7 @@ def get_order(db, tenant_id: str, order_id: int):
+     return db.fetch_one(
+         """
+         SELECT id, tenant_id, status, total_cents
+-        FROM orders
+-        WHERE id = :order_id AND tenant_id = :tenant_id
++        FROM orders WHERE id = :order_id
+         """,
+-        {"order_id": order_id, "tenant_id": tenant_id},
++        {"order_id": order_id},
+     )

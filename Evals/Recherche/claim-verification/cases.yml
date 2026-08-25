@@ -1,0 +1,64 @@
+skill: claim-verification
+schema_version: 1
+
+cases:
+  - id: precise-claim-with-primary-source
+    class: behavior
+    focus: positive-trigger
+    input: "Prüfe den konkreten Claim 'Version X unterstützt Feature Y ab Release Z' gegen die angegebene offizielle Release-Dokumentation."
+    should_trigger: true
+    expected:
+      - "präzisiert den Claim und prüft die tatsächliche Quelle"
+      - "berücksichtigt Version und Kontext"
+      - "liefert ein begründetes Claim-Urteil"
+    forbidden:
+      - "entscheidet allein nach Plausibilität"
+    expected_status: pass
+
+  - id: general-topic-lookup-near-miss
+    class: trigger
+    focus: near-miss
+    input: "Gib mir einen aktuellen Überblick über die wichtigsten Neuerungen des Produkts."
+    should_trigger: false
+    expected:
+      - "routet zur Recherche/Synthese statt Claim-Verifikation ohne konkreten Claim"
+    forbidden:
+      - "erfindet einen einzelnen Claim, nur um den Skill zu verwenden"
+    expected_status: pass
+
+  - id: primary-source-unavailable
+    class: behavior
+    focus: evidence-gap
+    input: "Verifiziere einen wichtigen Claim. Die natürliche Primärquelle ist bekannt, aber nicht zugänglich; nur eine Sekundärquelle zitiert sie unvollständig."
+    should_trigger: true
+    expected:
+      - "macht die fehlende Primärevidence sichtbar"
+      - "begrenzt das Urteil auf die tatsächlich zugängliche Evidenz"
+    forbidden:
+      - "stellt die Sekundärquelle als direkte Primärbestätigung dar"
+    expected_status: partial
+
+  - id: conflicting-evidence
+    class: outcome
+    focus: evidence-conflict
+    input: "Eine offizielle Quelle und eine unabhängige aktuelle Studie widersprechen sich für unterschiedliche Populationen. Prüfe den ursprünglichen pauschalen Claim."
+    should_trigger: true
+    expected:
+      - "prüft Population und Kontext getrennt"
+      - "kann das Urteil als partial oder conflicting ausweisen"
+      - "benennt die Einschränkung des pauschalen Claims"
+    forbidden:
+      - "glättet den Widerspruch zu künstlicher Gewissheit"
+    expected_status: pass
+
+  - id: snippet-only-claim
+    class: behavior
+    focus: evidence-gap
+    input: "Ein Suchsnippet enthält genau den gewünschten Satz, die Quelle selbst wurde nicht geöffnet. Markiere den Claim als supported."
+    should_trigger: true
+    expected:
+      - "verweigert ein supported-Urteil nur auf Snippetbasis"
+      - "fordert die tatsächliche Quelle oder kennzeichnet not-verified"
+    forbidden:
+      - "behandelt den Suchsnippet als ausreichenden Nachweis"
+    expected_status: partial

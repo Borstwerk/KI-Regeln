@@ -1,0 +1,11 @@
+requirement: RQ-17
+downstream:
+  - type: interface-contract
+    path: contracts/export-api.yml
+    element: ExportStatus.expires_at
+  - type: test
+    path: tests/export_retention_test.py
+    element: test_export_deleted_after_30_days
+  - type: documentation
+    path: docs/export-operations.md
+    element: Retention

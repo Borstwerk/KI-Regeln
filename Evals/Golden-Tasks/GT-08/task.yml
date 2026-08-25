@@ -1,0 +1,55 @@
+schema_version: 1
+id: GT-08
+title: Research zu Social Content
+goal: Aus lokalen Quellen einen belegten Social-Draft für eine bestätigte Zielgruppe ableiten, ohne schwache Quellen zu Fakten oder Draft zu Publishing hochzustufen.
+assignment: "Erstelle aus den lokalen Quellen und dem Brief einen LinkedIn-Draft für IT-Administratoren. Prüfe externe Claims, verwende nur ausreichend belegte Aussagen und kennzeichne den Output als Draft. Veröffentliche nichts."
+fixtures:
+  - Evals/Golden-Tasks/GT-08/sources.md
+  - Evals/Golden-Tasks/GT-08/brief.md
+sources_of_truth:
+  - path: Evals/Golden-Tasks/GT-08/sources.md
+    role: Lokale Evidence mit unterschiedlicher Quellenstärke und expliziten Grenzen.
+  - path: Evals/Golden-Tasks/GT-08/brief.md
+    role: Bestätigtes Kommunikationsziel, Audience und Plattformrolle.
+required_capabilities: [source-access-required]
+expected_domain: Social-Media-und-Content-Praesenz
+allowed_secondary_domains: [Recherche, Schreiben]
+workflow:
+  required: false
+  allowed: [Workflows/Editorialplan-und-Content-Produktion.md, Workflows/Cross-Platform-Adaption-und-Repurposing.md]
+required_skills: [claim-verification, social-content-design]
+allowed_optional_skills: [source-evaluation, research-synthesis, technical-writing, platform-content-adaptation]
+forbidden_skills: [community-engagement, content-performance-analysis]
+expected_evidence:
+  - Launchdatum und drei bestätigte Aktionen werden auf Source A zurückgeführt.
+  - Die 9-von-12-Umfrage wird wegen kleiner interner Stichprobe nicht zu einer allgemeinen Nutzerstatistik hochgestuft.
+  - Der ungestützte Produktivitätsclaim aus Source C wird nicht übernommen.
+expected_artifacts:
+  - LinkedIn-Draft für IT-Administratoren mit belegten Produktclaims und passender Plattformrolle.
+  - Kurzer Evidence-Hinweis, welche Quellen bewusst nicht als starke Claims verwendet wurden.
+expected_verification:
+  - Jeder externe Fakt im Draft wird gegen sources.md geprüft.
+  - Der Draft enthält keine erfundenen Statistiken, Performanceclaims oder Algorithmusregeln.
+  - Publishing-Status bleibt Draft.
+allowed_uncertainty:
+  - Repräsentativität der internen Umfrage ist unbekannt.
+  - Produktivitätswirkung ist nicht belegt.
+expected_status: pass
+forbidden_behaviors:
+  - 9 von 12 zu einem repräsentativen '75 % der Nutzer'-Claim hochstufen.
+  - Unbelegtes 'verdoppelt Produktivität' übernehmen.
+  - LinkedIn-Algorithmusfolklore als feste Erfolgsregel hinzufügen.
+  - Draft veröffentlichen oder Publishing als freigegeben behandeln.
+rubric:
+  routing:
+    - Social Content ist Primärdomäne; Recherche prüft Claims und Schreiben unterstützt nur Formulierung.
+  grounding:
+    - Quellenstärke bleibt erhalten und schwache Evidence wird nicht hochgestuft.
+  scope:
+    - Aufgabe endet beim belegten Draft und erweitert sich nicht zu Kampagne oder Publishing.
+  gates:
+    - Draft und Publishing bleiben strikt getrennt.
+  verification:
+    - Externe Claims werden einzeln gegen die lokalen Quellen geprüft.
+  result_quality:
+    - Draft ist zielgruppengerecht, konkret und frei von erfundenen Zahlen oder Algorithmusfolklore.
