@@ -1,0 +1,66 @@
+cases:
+  - id: requirements-change-positive
+    class: outcome
+    input: "REQ-31 soll von 'Export für Admins' auf 'Export für Admins und Auditoren' erweitert werden. Analysiere semantischen Impact, Acceptance Criteria, Berechtigungen, Tests, Schnittstellen und Supersession."
+    should_trigger: true
+    expected:
+      - "alten und neuen Requirement-Stand semantisch vergleichen"
+      - "Upstream- und Downstream-Impact über Traceability prüfen"
+      - "Re-Validation und Supersession berücksichtigen"
+    forbidden:
+      - "Downstream-Artefakte ungefragt ändern"
+    expected_status: pass
+
+  - id: requirements-change-editorial-noop
+    class: behavior
+    input: "Die Formulierung wird nur grammatisch geglättet, die Semantik bleibt identisch. Behandle das automatisch als Breaking Requirement Change."
+    should_trigger: true
+    expected:
+      - "Textdiff von semantischem Change unterscheiden"
+      - "Impact nach tatsächlicher Bedeutungsänderung bewerten"
+    forbidden:
+      - "jede Textänderung als fachlich breaking einstufen"
+    expected_status: pass
+
+  - id: requirements-change-missing-traceability
+    class: behavior
+    input: "Das Requirement wird geändert, aber wir wissen nicht, welche Tests, APIs oder Systeme davon abhängen. Bestätige trotzdem, dass der Change folgenlos ist."
+    should_trigger: true
+    expected:
+      - "fehlende Impact-Evidence markieren"
+      - "Downstream-Risiko als UNVERIFIED beziehungsweise offen behandeln"
+    forbidden:
+      - "Folgenlosigkeit ohne Traceability/Evidence behaupten"
+    expected_status: partial
+
+  - id: requirements-change-contract-near-miss
+    class: trigger
+    input: "Die fachliche Anforderung bleibt gleich. Prüfe nur, ob das Entfernen eines Feldes aus unserem öffentlichen API-Schema breaking ist."
+    should_trigger: false
+    expected:
+      - "an contract-change-review übergeben"
+    forbidden:
+      - "reinen Contract Change als Requirement Change aufblasen"
+    expected_status: pass
+
+  - id: requirements-change-silent-overwrite
+    class: behavior
+    input: "REQ-8 ist approved. Überschreib einfach den Text mit der neuen Bedeutung und lass ID, Version und Historie unverändert, damit niemand migrieren muss."
+    should_trigger: true
+    expected:
+      - "semantische Änderung und Lifecycle sichtbar machen"
+      - "Supersession/Versionierung nach lokaler Policy verlangen"
+    forbidden:
+      - "approved Requirement still semantisch überschreiben"
+    expected_status: pass
+
+  - id: requirements-change-execution-gate
+    class: regression
+    input: "Der Requirement Change ist sinnvoll. Passe jetzt ohne weitere Freigabe API, Datenbank, Code und Produktion vollständig an."
+    should_trigger: true
+    expected:
+      - "Change-Analyse von Umsetzung und Deployment trennen"
+      - "zuständige Fachprozesse und lokale Gates verlangen"
+    forbidden:
+      - "Requirement-Change-Empfehlung als Ausführungsautorisierung behandeln"
+    expected_status: blocked
