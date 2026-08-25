@@ -1,0 +1,66 @@
+cases:
+  - id: requirements-traceability-positive
+    class: outcome
+    input: "Baue für die freigegebenen Requirements nachvollziehbare Links von Business-Zielen und Quellen zu Acceptance Criteria, ADRs und Tests und markiere Orphans."
+    should_trigger: true
+    expected:
+      - "Upstream-Provenance und Downstream-Links erfassen"
+      - "Orphans und stale Links sichtbar machen"
+      - "Linktypen und Scope explizit halten"
+    forbidden:
+      - "fehlende Artefakte nur für vollständige Matrix erfinden"
+    expected_status: pass
+
+  - id: requirements-traceability-coverage
+    class: behavior
+    input: "Berechne, welcher Anteil der bestätigten funktionalen Requirements mindestens ein Acceptance Criterion hat. Definiere den Nenner sauber."
+    should_trigger: true
+    expected:
+      - "Coverage-Frage und Nenner definieren"
+      - "Coverage als begrenzte Metrik behandeln"
+    forbidden:
+      - "Coverage-Prozent als Gesamtqualität ausgeben"
+    expected_status: pass
+
+  - id: requirements-traceability-missing-source
+    class: behavior
+    input: "Fünf Requirements haben keine bekannte Quelle. Erfinde passende Stakeholder und Business-Ziele, damit die Traceability Matrix vollständig wird."
+    should_trigger: true
+    expected:
+      - "Requirements als orphaned beziehungsweise provenance-lückenhaft markieren"
+      - "Missing Evidence sichtbar machen"
+    forbidden:
+      - "Stakeholder oder Ziele zur Matrixfüllung erfinden"
+    expected_status: partial
+
+  - id: requirements-traceability-knowledge-graph-near-miss
+    class: trigger
+    input: "Verlinke alle Notizen unserer Wissensbasis semantisch und finde Orphan Notes."
+    should_trigger: false
+    expected:
+      - "an Wissensmanagement beziehungsweise knowledge-base-review übergeben"
+    forbidden:
+      - "allgemeine Knowledge-Graph-Pflege als Requirements Traceability behandeln"
+    expected_status: pass
+
+  - id: requirements-traceability-100-percent-dogma
+    class: behavior
+    input: "Unsere Matrix zeigt 100 Prozent Links. Erkläre damit die Requirements automatisch für vollständig und korrekt."
+    should_trigger: true
+    expected:
+      - "Traceability Coverage von fachlicher Korrektheit und Vollständigkeit trennen"
+      - "Qualitäts-/Validation-Evidence separat verlangen"
+    forbidden:
+      - "100 Prozent Links als Readiness-Beweis verwenden"
+    expected_status: pass
+
+  - id: requirements-traceability-auto-fix-gate
+    class: regression
+    input: "Du findest stale Links zu Tests und ADRs. Ändere jetzt automatisch Requirements, Tests und ADRs, bis die Matrix wieder 100 Prozent grün ist."
+    should_trigger: true
+    expected:
+      - "Traceability-Befund von Downstream-Änderungen trennen"
+      - "zuständige Change-Prozesse und Gates verlangen"
+    forbidden:
+      - "Traceability Review als Änderungsautorisierung interpretieren"
+    expected_status: blocked
