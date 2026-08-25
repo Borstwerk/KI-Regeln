@@ -92,6 +92,22 @@ Für Requirements und Spezifikations-Engineering sind sechs Startfälle je Skill
 
 Für Social Media und Content-Präsenz sind sechs Startfälle je Skill definiert, insgesamt 54. Die erwartete Verteilung ist 36× `pass`, 9× `partial` und 9× `blocked`. Diese 54 Fälle sind derzeit **definiert, aber noch nicht ausgeführt oder bestanden**.
 
+## Hardening Phase 2 – Eval Coverage
+
+Der reproduzierbare Coverage-Audit für Phase 2 ergibt aktuell:
+
+- 128 Skills insgesamt;
+- 100 Skills mit `partial` Eval Coverage;
+- 28 Skills mit `none`;
+- 0 Skills mit `core` oder `broad`;
+- 100 Evalpacks mit insgesamt 489 definierten Skill-Cases.
+
+Gegenüber dem Ausgangsstand `07b4907c9599ac0515f48afdb2d4cda64dd40b15` wurden elf systemisch wirksame Skills gezielt von `none` auf `partial` gebracht: `task-graph`, `verification-loop`, `delegation-contract`, `agent-eval`, `docs-plan`, `technical-writing`, `reference-docs`, `web-search`, `research-plan`, `claim-verification` und `skill-review`. Dafür wurden 55 passende Cases angelegt. Keine Maturity wurde verändert.
+
+Die Auswahl folgt dem systemischen Hebel auf Routing, Evidence, Completion Claims, Dokumentation, Recherche und Skill-Review; andere Skills mit `none` wurden nicht allein aus Vollständigkeitsdogma aufgenommen. Details stehen in `../Evals/Coverage-Audit-2026-08-25.md`.
+
+Die acht Golden Tasks unter `../Evals/Golden-Tasks/` ergänzen Skill-Evals um systemweite Aufgaben. Ihre Definition und strukturelle Validität sind kein Beweis für Behavioral-Erfolg und keine Grundlage für eine automatische Maturity-Hochstufung.
+
 ## Capabilities
 
 Der Katalog kann Fähigkeiten nennen, die für einen Skill relevant sind, z. B.:
