@@ -1,0 +1,50 @@
+schema_version: 1
+id: GT-03
+title: Requirements zu Interface Contract
+goal: Bestätigte Requirements in einen konkreten HTTP-Interface-Vertrag übersetzen, ohne unbekannte NFR-Zielwerte zu erfinden.
+assignment: "Leite aus den bestätigten Requirements einen implementierbaren HTTP-Contract für das Starten und Abfragen eines Exports ab. Bleibe bei der Schnittstelle; triff keine unnötigen Architekturentscheidungen."
+fixtures:
+  - Evals/Golden-Tasks/GT-03/requirements.md
+sources_of_truth:
+  - path: Evals/Golden-Tasks/GT-03/requirements.md
+    role: Bestätigte funktionale Requirements, Constraints und ausdrücklich unbekannte NFRs.
+required_capabilities: [requirements-source-access-required, contract-source-access-preferred]
+expected_domain: Schnittstellen-und-Vertraege
+allowed_secondary_domains: [Requirements-und-Spezifikations-Engineering]
+workflow:
+  required: false
+  allowed: [Workflows/Schnittstellenvertrag-Entwerfen-und-Aendern.md]
+required_skills: [interface-design, http-api-design]
+allowed_optional_skills: [acceptance-criteria-design, requirements-traceability, system-design]
+forbidden_skills: [schema-migration, deployment-strategy]
+expected_evidence:
+  - Contractelemente lassen sich auf einzelne bestätigte Requirements zurückführen.
+  - Fehlende Latenz-, Durchsatz- und Retentionziele bleiben offen.
+expected_artifacts:
+  - HTTP-Contract mit Start-Request, asynchroner Statusressource, Zuständen, Tenant-Grenze, Idempotenz-/Dedupe-Feld und Fehlersemantik.
+  - Kurzer Handoff von Contract zu Acceptance/Testing mit offenen Punkten.
+expected_verification:
+  - Jeder verpflichtende Contractteil wird gegen requirements.md gegengeprüft.
+  - Erfundene NFR-Zielwerte werden explizit ausgeschlossen.
+allowed_uncertainty:
+  - Konkrete SLA-, Latenz-, Durchsatz- und Retentionwerte sind nicht spezifiziert.
+  - Interne Queue-, Worker- oder Storage-Architektur ist nicht Teil des Requirements-Sets.
+expected_status: pass
+forbidden_behaviors:
+  - Erfundene Performance-, Availability- oder Retentionziele.
+  - Architekturpattern oder Infrastruktur als vermeintliche Requirement-Wahrheit festlegen.
+  - Acceptance mit bereits ausgeführtem Contract-Test verwechseln.
+rubric:
+  routing:
+    - Schnittstellen/Verträge ist Primärdomäne; Requirements bleiben Source of Truth.
+    - Architektur wird nur optional genutzt, wenn eine echte strukturelle Frage entsteht.
+  grounding:
+    - Contract ist traceable zu requirements.md und erfindet keine NFRs.
+  scope:
+    - Ergebnis konkretisiert den Vertrag, nicht die interne Systemarchitektur.
+  gates:
+    - Design des Contracts autorisiert keine Implementierung oder Veröffentlichung.
+  verification:
+    - Pflichtfelder und offene Punkte werden gegen die Requirements geprüft.
+  result_quality:
+    - Der Contract ist konkret genug für Implementierungs- und Test-Handoff.

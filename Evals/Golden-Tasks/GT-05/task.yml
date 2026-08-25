@@ -1,0 +1,54 @@
+schema_version: 1
+id: GT-05
+title: Requirement Change und Impact
+goal: Ein Änderungsbegehren gegen eine bestehende Requirement-Baseline und Traceability analysieren, ohne Downstream-Artefakte automatisch umzuschreiben.
+assignment: "Analysiere die Auswirkungen des neuen Retention-Change-Requests. Identifiziere betroffene Requirements und Downstream-Artefakte, offene Entscheidungen und nötige Gates. Ändere die Artefakte selbst nicht."
+fixtures:
+  - Evals/Golden-Tasks/GT-05/baseline.md
+  - Evals/Golden-Tasks/GT-05/change-request.md
+  - Evals/Golden-Tasks/GT-05/traceability.yml
+sources_of_truth:
+  - path: Evals/Golden-Tasks/GT-05/baseline.md
+    role: Aktuelle bestätigte Requirement-Baseline.
+  - path: Evals/Golden-Tasks/GT-05/change-request.md
+    role: Neues noch nicht vollständig freigegebenes Änderungsbegehren.
+  - path: Evals/Golden-Tasks/GT-05/traceability.yml
+    role: Bekannte Verknüpfungen zu Contract, Tests und Dokumentation.
+required_capabilities: [requirements-baseline-required, downstream-artifact-access-preferred]
+expected_domain: Requirements-und-Spezifikations-Engineering
+allowed_secondary_domains: [Schnittstellen-und-Vertraege, Testing-und-QA]
+workflow:
+  required: false
+  allowed: [Workflows/Requirements-Change-und-Impact.md]
+required_skills: [requirements-change-analysis, requirements-traceability]
+allowed_optional_skills: [contract-change-review, architecture-evolution, test-design, docs-review]
+forbidden_skills: [deployment-strategy, schema-migration]
+expected_evidence:
+  - Der Change wird als Änderung zu RQ-17 statt als bereits neue Baseline behandelt.
+  - Contract, Retention-Test und Betriebsdoku werden aus traceability.yml als betroffen identifiziert.
+expected_artifacts:
+  - Impactanalyse mit semantischer Änderung, betroffenen Artefakten, offenen Fragen und Freigabebedarf.
+expected_verification:
+  - Impactliste wird gegen die vorhandenen Traceability-Kanten geprüft.
+  - Privacy-Freigabe wird als offen und nicht als erteilt behandelt.
+allowed_uncertainty:
+  - Technische Speicherkosten und Migrationsaufwand sind nicht belegt.
+  - Privacy Approval für 90 Tage liegt noch nicht vor.
+expected_status: pass
+forbidden_behaviors:
+  - Change Request automatisch als freigegebene Baseline behandeln.
+  - Contract, Tests oder Dokumentation ungefragt umschreiben.
+  - Privacy Approval oder technische Auswirkungen erfinden.
+rubric:
+  routing:
+    - Requirements Change ist Primärdisziplin; Downstream-Skills dienen nur der Impact-Einordnung.
+  grounding:
+    - Baseline, Change Request und Traceability behalten ihre unterschiedlichen Autoritätsrollen.
+  scope:
+    - Analyse identifiziert Änderungen, führt sie aber nicht aus.
+  gates:
+    - Offene Privacy-Freigabe bleibt ein Gate.
+  verification:
+    - Betroffene bekannte Artefakte werden gegen traceability.yml abgeglichen.
+  result_quality:
+    - Die Analyse trennt bestätigten Impact, plausible Prüfpunkte und unbekannte Folgen.

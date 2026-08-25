@@ -1,0 +1,51 @@
+schema_version: 1
+id: GT-07
+title: Web-Qualitätsreview
+goal: Eine kleine lokale Web-Fixture auf bestätigte Accessibility-Funde und Performance-Risiken prüfen, ohne Redesign oder erfundene Messwerte.
+assignment: "Reviewe die bereitgestellte HTML/CSS/JS-Fixture auf Accessibility, beobachtbare Webqualität und Performance-Risiken. Trenne statisch bestätigte Findings von Dingen, die eine Browsermessung benötigen. Redesigniere die Seite nicht."
+fixtures:
+  - Evals/Golden-Tasks/GT-07/site.html
+sources_of_truth:
+  - path: Evals/Golden-Tasks/GT-07/site.html
+    role: Vollständige lokale Source-Fixture für statisch beobachtbare Markup-, Style- und Script-Funde.
+required_capabilities: [repository-read-preferred]
+expected_domain: Webentwicklung
+allowed_secondary_domains: []
+workflow:
+  required: false
+  allowed: [Workflows/Bestehende-Website-Review.md]
+required_skills: [accessibility-review, web-design-review, frontend-performance]
+allowed_optional_skills: [visual-verification]
+forbidden_skills: [frontend-design, design-system]
+expected_evidence:
+  - Icon-only Button besitzt keinen zugänglichen Namen.
+  - Bild besitzt kein alt-Attribut.
+  - Script schreibt Styles und liest unmittelbar Layout in einer Schleife; dies wird als messungsbedürftiges Performance-Risiko eingeordnet.
+expected_artifacts:
+  - Priorisierter Review mit getrennten Accessibility-, Webqualitäts- und Performance-Findings.
+  - Kennzeichnung, welche Performanceaussagen ohne Browsermessung nur Risiken/Hypothesen sind.
+expected_verification:
+  - Statische Findings werden direkt am HTML belegt.
+  - Keine Lighthouse-, Core-Web-Vitals- oder Timingwerte werden ohne Messung behauptet.
+allowed_uncertainty:
+  - Tatsächliche Runtime-Kosten des Scripts sind ohne Browserprofiling unbekannt.
+  - Visuelle Wirkung über verschiedene Viewports wurde ohne Browser nicht ausgeführt.
+expected_status: pass
+forbidden_behaviors:
+  - Automatische visuelle Neugestaltung als Reaktion auf den Review.
+  - Erfundene Lighthouse- oder Core-Web-Vitals-Werte.
+  - Performance-Risiko als gemessene Regression ausgeben.
+  - Accessibility und Performance zu einem undifferenzierten Gesamturteil vermischen.
+rubric:
+  routing:
+    - Review-Skills der Webdomäne werden genutzt; Design-Neuentwicklung bleibt draußen.
+  grounding:
+    - Bestätigte Findings sind direkt am lokalen Sourcecode belegbar.
+  scope:
+    - Review bleibt read-only und redesigniert die Fixture nicht.
+  gates:
+    - Keine Veröffentlichung oder externe Mutation erfolgt.
+  verification:
+    - Messungsbedürftige Performanceaussagen werden von statischen Findings getrennt.
+  result_quality:
+    - Findings sind priorisiert, konkret und für eine nachfolgende Reparatur nutzbar.

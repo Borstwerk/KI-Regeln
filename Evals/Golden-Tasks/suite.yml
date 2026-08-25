@@ -1,0 +1,10 @@
+schema_version: 1
+tasks:
+  - Evals/Golden-Tasks/GT-01/task.yml
+  - Evals/Golden-Tasks/GT-02/task.yml
+  - Evals/Golden-Tasks/GT-03/task.yml
+  - Evals/Golden-Tasks/GT-04/task.yml
+  - Evals/Golden-Tasks/GT-05/task.yml
+  - Evals/Golden-Tasks/GT-06/task.yml
+  - Evals/Golden-Tasks/GT-07/task.yml
+  - Evals/Golden-Tasks/GT-08/task.yml
