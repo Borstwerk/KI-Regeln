@@ -81,8 +81,32 @@ def validate_public_readiness(root: Path, err: Callable[[str, str], None], warn:
 
         if review_status == "needs-human/legal-review":
             legal_review += 1
-            if redistribution not in ("unresolved", "not-redistributable"):
+            if redistribution not in ("unresolved", "not-redistributable", "not-relied-on"):
                 err("PROVENANCE_REVIEW", f"{sid}: legal-review case may not be marked redistributable")
+            if use_class == "unclear":
+                if material_scope not in ("unclear", "concepts/methods-only", "concrete-expression"):
+                    err("PROVENANCE_REVIEW", f"{sid}: unclear legal-review case has invalid material_scope")
+                if reliance not in ("unclear", "not-relied-on", "required"):
+                    err("PROVENANCE_REVIEW", f"{sid}: unclear legal-review case has invalid redistribution_reliance")
+            elif use_class not in ("reference/inspiration", "adapted", "copied/vendored"):
+                err("PROVENANCE_CLASS", f"{sid}: unknown use_class {use_class}")
+            # Deliberately do not apply assessed class invariants here. A legal-review
+            # record is allowed to preserve uncertainty and is never release-ready.
+            continue
+
+        if review_status != "assessed":
+            err("PROVENANCE_REVIEW", f"{sid}: unknown review_status {review_status}")
+            continue
+
+        if use_class == "unclear":
+            err("PROVENANCE_CLASS", f"{sid}: assessed record may not keep use_class=unclear")
+            continue
+        if material_scope == "unclear":
+            err("PROVENANCE_CLASS", f"{sid}: assessed record may not keep material_scope=unclear")
+        if reliance == "unclear":
+            err("PROVENANCE_CLASS", f"{sid}: assessed record may not keep redistribution_reliance=unclear")
+        if redistribution == "unresolved":
+            err("PROVENANCE_LICENSE", f"{sid}: assessed record may not keep redistribution_status=unresolved")
 
         if use_class == "reference/inspiration":
             if material_scope != "concepts/methods-only":
@@ -97,11 +121,10 @@ def validate_public_readiness(root: Path, err: Callable[[str, str], None], warn:
                 err("PROVENANCE_CLASS", f"{sid}: {use_class} requires concrete-expression material scope")
             if reliance != "required":
                 err("PROVENANCE_CLASS", f"{sid}: {use_class} requires redistribution_reliance=required")
-            if review_status == "assessed":
-                if license_spdx in (None, "UNKNOWN"):
-                    err("PROVENANCE_LICENSE", f"{sid}: assessed redistribution-relevant material requires a resolved license")
-                if redistribution not in ("permitted", "permitted-with-notice", "not-redistributable"):
-                    err("PROVENANCE_LICENSE", f"{sid}: assessed redistribution-relevant material has unresolved redistribution status")
+            if license_spdx in (None, "UNKNOWN"):
+                err("PROVENANCE_LICENSE", f"{sid}: assessed redistribution-relevant material requires a resolved license")
+            if redistribution not in ("permitted", "permitted-with-notice", "not-redistributable"):
+                err("PROVENANCE_LICENSE", f"{sid}: assessed redistribution-relevant material has invalid redistribution status")
             if notice not in ("none", "none-required", "required"):
                 err("PROVENANCE_NOTICE", f"{sid}: redistribution-relevant notice requirement must be explicit")
             if notice == "required":
@@ -151,9 +174,19 @@ def validate_public_readiness(root: Path, err: Callable[[str, str], None], warn:
 
     categories = readiness.get("categories") or {} if isinstance(readiness, dict) else {}
     licensing = categories.get("licensing") or {} if isinstance(categories, dict) else {}
+    provenance_readiness = categories.get("provenance") or {} if isinstance(categories, dict) else {}
+    history_readiness = categories.get("history_exposure") or {} if isinstance(categories, dict) else {}
+    security_readiness = categories.get("security_reporting") or {} if isinstance(categories, dict) else {}
+
     if licensing.get("status") == "ready" and not ((root / "LICENSE").is_file() or (root / "LICENSE.md").is_file()):
         err("READINESS_LICENSE", "licensing is marked ready but no root LICENSE exists")
     if licensing.get("status") == "blocked" and ((root / "LICENSE").is_file() or (root / "LICENSE.md").is_file()):
         warn("READINESS_LICENSE", "root LICENSE exists while licensing readiness is blocked; verify intentional state")
+    if legal_review and provenance_readiness.get("status") == "ready":
+        err("READINESS_PROVENANCE", "provenance is marked ready while legal-review provenance records remain")
+    if history_readiness.get("status") == "ready" and history_readiness.get("scan_complete") is not True:
+        err("READINESS_HISTORY", "history exposure is marked ready without a completed reachable-history scan")
+    if security_readiness.get("status") == "ready" and security_readiness.get("private_reporting_channel_configured") is not True:
+        err("READINESS_SECURITY", "security reporting is marked ready without a configured private reporting channel")
 
     return redistribution_relevant, legal_review
