@@ -28,12 +28,12 @@ Architektur wird nicht aus Patternnamen abgeleitet. Ein Pattern, ein Framework o
 
 ## Nicht der Scope
 
-- **Requirements / Specification Engineering:** definiert später funktionale und nichtfunktionale Anforderungen, Stakeholderziele und verbindliche Qualitätsziele. Architecture darf solche Zielwerte nicht erfinden.
+- **Requirements und Spezifikations-Engineering:** definiert in `../Requirements-und-Spezifikations-Engineering/` Stakeholderbedarfe, Scope, funktionale und qualitative Requirements, verbindliche Zielwerte, Acceptance-/Verification-Intent und Requirements-Lifecycle. Architecture konsumiert diese bestätigte Sollgrundlage und darf fehlende Zielwerte nicht erfinden.
 - **Domain Modeling:** `../Programmieren/Skills/domain-modeling/` klärt Fachbegriffe, Fachobjekte und Invarianten. Architecture nutzt diese Wahrheit für Systemgrenzen, ersetzt aber nicht die Fachmodellierung.
 - **Schnittstellen und Verträge:** `../Schnittstellen-und-Vertraege/` definiert konkrete Provider-/Consumer-Verträge, Compatibility, Delivery-, Retry- und Idempotenzsemantik. Architecture entscheidet, warum eine Grenze existiert und welche Interaktionsform strukturell passt.
 - **Datenbanken:** besitzt internes Datenbankdesign, Query-Performance, Transaktionen, Migration und DB-Betrieb.
 - **Data Engineering:** besitzt Source-to-Consumer-Datenflüsse, Data Contracts, Lineage, Replay und Data Quality.
-- **Reliability und System-Observability:** definiert SLOs, Health, Incident-, Capacity- und Resilience-Evidence. Architecture entscheidet, welche Struktur gewünschte Reliability-Eigenschaften ermöglichen soll.
+- **Reliability und System-Observability:** operationalisiert bestätigte Reliability-Ziele in SLI/SLO-, Health-, Incident-, Capacity- und Resilience-Evidence. Architecture entscheidet, welche Struktur diese Eigenschaften ermöglichen soll.
 - **Infrastruktur und DevOps:** baut und betreibt die gewählte Runtime-, Deployment- und Infrastrukturmechanik.
 - **Testing und QA:** besitzt allgemeine Teststrategie und Testmethodik. Architecture kann prüfbare Architekturregeln und Fitness-Function-Ziele formulieren.
 - **Sicherheit:** besitzt Threat Modeling, Security Controls und Security Testing im Detail.
@@ -43,7 +43,7 @@ Architektur wird nicht aus Patternnamen abgeleitet. Ein Pattern, ein Framework o
 ## Zentrale Modelle
 
 ```text
-Requirement / Driver / Constraint
+bestätigtes Requirement / Driver / Constraint
 → Invarianten und Quality-Szenarien
 → System Context und aktuelle Architektur
 → einfachste tragfähige Struktur
@@ -131,7 +131,7 @@ Der Lauf ist im Eval-Artefakt `../Evals/Software-Architecture-und-System-Design/
 
 ## Leitgedanken
 
-> Erst Driver und Invarianten, dann Struktur, dann Technologie.
+> Erst bestätigte Drivers und Invarianten, dann Struktur, dann Technologie.
 
 > Die einfachste tragfähige Architektur ist der Ausgangspunkt, nicht der langweilige Kandidat.
 
