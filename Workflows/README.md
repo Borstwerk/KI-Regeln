@@ -55,6 +55,11 @@ Ein Workflow ist deshalb **kein neuer Mega-Skill**.
 - `Systemgrenze-und-Dekomposition.md`
 - `Evolutionaere-Architekturaenderung.md`
 - `Architektur-Readiness-Review.md`
+- `Requirements-Baseline-und-Spezifikation.md`
+- `Requirements-Elicitation-und-Klaerung.md`
+- `Acceptance-Traceability-und-Handoff.md`
+- `Requirements-Change-und-Impact.md`
+- `Requirements-Readiness-Review.md`
 
 ## Workflow-Handoff
 
