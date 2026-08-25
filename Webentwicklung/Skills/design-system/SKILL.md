@@ -1,3 +1,8 @@
+---
+name: design-system
+description: Verdichtet eine freigegebene Designrichtung in ein konsistentes System aus Tokens, Typografie, Farben, Flächen, Abständen und Komponentenprinzipien. Verwenden bei mehreren Seiten oder Komponenten mit wiederkehrenden visuellen Entscheidungen oder beim Aufbau einer dokumentierten UI-Grundlage.
+---
+
 # Skill: Design System
 
 ## Zweck

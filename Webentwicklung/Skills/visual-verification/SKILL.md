@@ -1,3 +1,8 @@
+---
+name: visual-verification
+description: Prüft implementierte Weboberflächen im Browser auf tatsächliche visuelle, responsive und interaktive Korrektheit. Verwenden nach UI-Änderungen oder Design-/Greybox-Implementierungen sowie wenn gerenderte Evidence für Review oder Freigabe benötigt wird.
+---
+
 # Skill: Visual Verification
 
 ## Zweck

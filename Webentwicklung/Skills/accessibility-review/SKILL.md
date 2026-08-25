@@ -1,3 +1,8 @@
+---
+name: accessibility-review
+description: Prüft Weboberflächen auf relevante Accessibility-Anforderungen in Semantik, Tastaturbedienung, Fokus, Kontrast, Formularen und dynamischen Zuständen. Verwenden vor Freigaben neuer oder geänderter Oberflächen sowie bei interaktiven Komponenten und Accessibility-Regressionsrisiken.
+---
+
 # Skill: Accessibility Review
 
 ## Zweck

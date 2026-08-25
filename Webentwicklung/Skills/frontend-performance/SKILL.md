@@ -1,3 +1,8 @@
+---
+name: frontend-performance
+description: Untersucht und verbessert Frontend-Performance anhand realer Messungen und priorisierter Engpässe. Verwenden bei langsamen Lade- oder Interaktionszeiten, auffälligen Bundles, schweren neuen UI-Funktionen oder Performance-Prüfungen vor Release.
+---
+
 # Skill: Frontend Performance
 
 ## Zweck

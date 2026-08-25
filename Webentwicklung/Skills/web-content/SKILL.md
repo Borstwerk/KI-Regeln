@@ -1,3 +1,8 @@
+---
+name: web-content
+description: Erzeugt oder überarbeitet Webcontent mit konkreter Information, Nutzen oder Handlung statt reiner Designfüllung. Verwenden bei Website-Texten, Mikrocopy, Formularen, Empty States oder beim Ersatz generischer Marketingtexte und unbelegter Platzhalter.
+---
+
 # Skill: Web Content
 
 ## Zweck
