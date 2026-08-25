@@ -148,6 +148,8 @@ Möglicher Workflow:
 
 Typische Skills:
 
+- bei unklarer oder verstreuter Sollbasis zuerst `Requirements-und-Spezifikations-Engineering/Skills/requirements-baseline/SKILL.md`;
+- bei noch zu klärendem Bedarf `requirements-elicitation` beziehungsweise bei Formulierung `requirements-specification`;
 - `Agentenarbeit/Skills/context-engineering/SKILL.md`;
 - bei langen oder kontextintensiven Läufen zusätzlich `context-audit`, `context-compaction` und `session-handoff`;
 - `Agentenarbeit/Skills/task-graph/SKILL.md` bei komplexeren Features;
@@ -159,8 +161,9 @@ Typische Skills:
 
 Lokal bleiben:
 
+- der konkrete Inhalt und Status von Produktanforderungen;
+- Stakeholder-, Priorisierungs- und Approval-Entscheidungen;
 - Architektur;
-- Produktanforderungen;
 - Test- und Releaseumgebungen;
 - Freigabegates;
 - Deploymentrechte.
@@ -258,7 +261,8 @@ Workflow:
 Kern:
 
 ```text
-test-strategy
+bestätigte Requirements / Acceptance Criteria / Risiken
+→ test-strategy
 → test-design
 → passende Integration-/Contract-/E2E-/Failure-Tests
 → optional exploratory-testing
@@ -267,6 +271,8 @@ test-strategy
 → verification-loop mit frischer Evidence
 → lokales Release-/Quality-Gate
 ```
+
+Requirements Engineering definiert dabei das gewünschte Soll und dessen Akzeptanzbedingungen. Testing und QA entscheidet, mit welchem Testportfolio und welcher Evidence das relevante Risiko geprüft wird.
 
 Lokal bleiben konkrete Testframeworks, Testdaten, Testumgebungen, Coverage-/Releaseziele und Befugnisse für produktive Testaktionen.
 
@@ -352,7 +358,7 @@ Workflow:
 Für einen neuen Vertrag:
 
 ```text
-lokale Architektur-/Domain-Sources-of-Truth
+bestätigte Requirements + lokale Architektur-/Domain-Sources-of-Truth
 → interface-design
 → je nach Stil http-api-design / event-contract-design / passende Fachregeln
 → Contract Artifact
@@ -468,7 +474,7 @@ Workflow:
 Kern:
 
 ```text
-lokale Requirements / Critical Journeys
+bestätigte lokale Requirements / Critical Journeys
 → slo-design
 → system-observability-design
 → alert-design
@@ -591,7 +597,7 @@ Workflow:
 Kern:
 
 ```text
-lokaler Business-/Consumerkontext
+lokaler Business-/Consumerkontext + bestätigte Requirements
 → data-pipeline-design
 → data-ingestion-design
 → data-transformation-design
@@ -707,7 +713,7 @@ Workflow:
 Kern:
 
 ```text
-lokale Requirements / Constraints
+bestätigte lokale Requirements / Constraints
 → architecture-baseline bei bestehendem System
 → Drivers / Invarianten / Critical Flows
 → system-design
@@ -810,6 +816,119 @@ Requirements / Drivers
 
 Patternreinheit ist kein Readiness-Kriterium. Wenn Produktionsreife von Runtime-, Capacity-, Failure-, Security- oder Daten-Evidence abhängt, reicht ein sauberes Repository oder ADR-Set nicht aus.
 
+## Beispiel: Requirements-Baseline und Spezifikation
+
+Workflow:
+
+`../Workflows/Requirements-Baseline-und-Spezifikation.md`
+
+Kern:
+
+```text
+bestehende Spezifikation / Tickets / Entscheidungen / Ist-Evidence
+→ requirements-baseline
+→ Lücken / Konflikte / Autorität klären
+→ requirements-specification
+→ acceptance-criteria-design
+→ requirements-traceability
+→ requirements-validation
+→ requirements-review
+→ lokales Approval-/Baseline-Gate
+```
+
+Brownfield-Code, Tests oder aktuelle UI können wertvolle Evidence für das Ist-Verhalten liefern. Sie werden aber nicht stillschweigend zum gewünschten Soll erklärt.
+
+Lokal bleiben insbesondere Stakeholderautorität, kanonische Requirements-Quelle, Prioritäten, konkrete Zielwerte, regulatorische/vertragliche Vorgaben und Approval-Policy.
+
+## Beispiel: Requirements Elicitation
+
+Workflow:
+
+`../Workflows/Requirements-Elicitation-und-Klaerung.md`
+
+Kern:
+
+```text
+Problem / Ziel / vorhandene Evidence
+→ Stakeholder- und Quellenmap
+→ requirements-elicitation
+→ Aussagen als confirmed / inferred / assumption / open question trennen
+→ Scope / Constraints / Konflikte klären
+→ bestätigte Requirement-Kandidaten
+→ lokales Review
+```
+
+Elicitation ist kein Formularzwang. Interviews, Workshops, Dokumentanalyse, Beobachtung oder Repository-Evidence werden nach Kontext gewählt. Ein Vollständigkeitsscore ersetzt keine konkrete Lückenanalyse.
+
+## Beispiel: Acceptance Criteria und Traceability
+
+Workflow:
+
+`../Workflows/Acceptance-und-Traceability.md`
+
+Kern:
+
+```text
+bestätigte Requirements
+→ acceptance-criteria-design
+→ beobachtbare Akzeptanzbedingungen
+→ requirements-traceability
+→ Quellen / Ziele / Acceptance / downstream Evidence verbinden
+→ Gap- und Konsistenzcheck
+```
+
+EARS, Given-When-Then oder Gherkin können helfen, wenn sie zur Art des Verhaltens passen. Kein Format ist Pflicht. Acceptance Criteria beschreiben Akzeptanzbedingungen; konkrete Testfälle und Testdaten gehören anschließend zu Testing und QA.
+
+## Beispiel: Requirement Change
+
+Workflow:
+
+`../Workflows/Requirement-Aenderung-und-Impact.md`
+
+Kern:
+
+```text
+Änderungsvorschlag
+→ requirements-change-analysis
+→ betroffene Ziele / Requirements / Acceptance / Trace Links
+→ Downstream-Impact auf Architecture / Interfaces / Data / Reliability / Tests
+→ Konflikte / Migration / offene Entscheidungen
+→ lokales Change-/Approval-Gate
+→ erst danach fachdomänenspezifische Umsetzung
+```
+
+Besonders wichtig:
+
+```text
+Requirement Change Analysis
+≠ Downstream Change Authorization
+```
+
+Der Skill darf Auswirkungen benennen und Handoffs vorbereiten, aber keine Code-, Schema-, Contract-, Infrastruktur- oder Produktionsänderung eigenmächtig ausführen.
+
+## Beispiel: Requirements Readiness
+
+Workflow:
+
+`../Workflows/Requirements-Readiness-Review.md`
+
+Kern:
+
+```text
+Baseline / Sources / Stakeholder
++ Scope / Constraints / Assumptions
++ Functional / Quality Requirements
++ Acceptance Criteria
++ Traceability / offene Konflikte
+→ requirements-validation
+→ requirements-review
+→ Findings / Missing Evidence
+→ READY_FOR_LOCAL_GATE / READY_WITH_FINDINGS / BLOCKED / UNVERIFIED
+→ lokales Approval außerhalb des Reviews
+```
+
+`READY_FOR_LOCAL_GATE` bedeutet nur, dass der Requirements-Stand genügend Evidence für die nächste lokale Entscheidung besitzt. Es ist weder fachliche Abnahme noch Implementierungs-, Release- oder Produktionsfreigabe.
+
 ## Beispiel: Technische Dokumentation
 
 Workflow:
@@ -910,7 +1029,8 @@ Das Manifest kann dokumentieren:
 - ausgewählte Skills;
 - ausgewählte Workflows;
 - projektspezifische Qualitäts-/Maturity-Policy;
-- lokale Projektregeldateien.
+- lokale Projektregeldateien;
+- optional projektspezifischen `requirements_context` und `architecture_context`, ohne deren Werte aus zentralen Defaults abzuleiten.
 
 Beispiel:
 
