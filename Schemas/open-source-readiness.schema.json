@@ -33,39 +33,40 @@
     }
   },
   "$defs": {
+    "status": {"enum": ["ready", "partial", "blocked", "not-applicable"]},
+    "evidence": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+    "blockers": {"type": "array", "items": {"type": "string", "minLength": 1}},
     "category": {
       "type": "object",
       "additionalProperties": false,
       "required": ["status", "evidence", "blockers"],
       "properties": {
-        "status": {"enum": ["ready", "partial", "blocked", "not-applicable"]},
-        "evidence": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
-        "blockers": {"type": "array", "items": {"type": "string", "minLength": 1}}
+        "status": {"$ref": "#/$defs/status"},
+        "evidence": {"$ref": "#/$defs/evidence"},
+        "blockers": {"$ref": "#/$defs/blockers"}
       }
     },
     "historyCategory": {
-      "allOf": [
-        {"$ref": "#/$defs/category"},
-        {
-          "type": "object",
-          "properties": {
-            "scan_complete": {"type": "boolean"}
-          },
-          "required": ["scan_complete"]
-        }
-      ]
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "evidence", "blockers", "scan_complete"],
+      "properties": {
+        "status": {"$ref": "#/$defs/status"},
+        "evidence": {"$ref": "#/$defs/evidence"},
+        "blockers": {"$ref": "#/$defs/blockers"},
+        "scan_complete": {"type": "boolean"}
+      }
     },
     "securityReportingCategory": {
-      "allOf": [
-        {"$ref": "#/$defs/category"},
-        {
-          "type": "object",
-          "properties": {
-            "private_reporting_channel_configured": {"type": "boolean"}
-          },
-          "required": ["private_reporting_channel_configured"]
-        }
-      ]
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "evidence", "blockers", "private_reporting_channel_configured"],
+      "properties": {
+        "status": {"$ref": "#/$defs/status"},
+        "evidence": {"$ref": "#/$defs/evidence"},
+        "blockers": {"$ref": "#/$defs/blockers"},
+        "private_reporting_channel_configured": {"type": "boolean"}
+      }
     }
   }
 }
