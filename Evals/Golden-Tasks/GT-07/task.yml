@@ -14,8 +14,8 @@ allowed_secondary_domains: []
 workflow:
   required: false
   allowed: [Workflows/Bestehende-Website-Review.md]
-required_skills: [accessibility-review, web-design-review, frontend-performance]
-allowed_optional_skills: [visual-verification]
+required_skills: [accessibility-review, frontend-performance]
+allowed_optional_skills: [web-design-review, visual-verification]
 forbidden_skills: [frontend-design, design-system]
 expected_evidence:
   - Icon-only Button besitzt keinen zugänglichen Namen.
@@ -38,7 +38,8 @@ forbidden_behaviors:
   - Accessibility und Performance zu einem undifferenzierten Gesamturteil vermischen.
 rubric:
   routing:
-    - Review-Skills der Webdomäne werden genutzt; Design-Neuentwicklung bleibt draußen.
+    - Accessibility- und Performance-Review sind für die Source-Fixture erforderlich; gerenderter Design-Review bleibt ohne Render-Evidence optional.
+    - Design-Neuentwicklung bleibt draußen.
   grounding:
     - Bestätigte Findings sind direkt am lokalen Sourcecode belegbar.
   scope:
