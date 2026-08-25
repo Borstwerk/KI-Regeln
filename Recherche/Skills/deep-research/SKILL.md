@@ -1,3 +1,8 @@
+---
+name: deep-research
+description: Führt komplexe Recherche über mehrere Teilfragen, Perspektiven und Iterationen hinweg durch und synthetisiert belastbare Evidence. Verwenden bei größeren Research-Aufträgen mit definiertem Scope, mehreren Teilfragen und Bedarf an Coverage-, Gegenbeleg- und Quellenunabhängigkeitsprüfung.
+---
+
 # Skill: deep-research
 
 ## Zweck

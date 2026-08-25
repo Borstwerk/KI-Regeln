@@ -1,3 +1,8 @@
+---
+name: research-synthesis
+description: Führt mehrere Research-Funde zu einem strukturierten, entscheidungsrelevanten Wissensbild mit sichtbaren Fakten, Interpretationen, Konflikten und Unsicherheiten zusammen. Verwenden bei mehreren Quellen oder Teilfragen, wenn Findings nach Erkenntnis statt nach Quelle synthetisiert werden sollen.
+---
+
 # Skill: research-synthesis
 
 ## Zweck

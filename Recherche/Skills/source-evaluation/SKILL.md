@@ -1,3 +1,8 @@
+---
+name: source-evaluation
+description: Bewertet eine Quelle bezogen auf einen konkreten Claim nach Direktheit, Aktualität, Primärnähe, Fachnähe, Methodentransparenz und Unabhängigkeit. Verwenden bei Research-Claims, wenn die Eignung oder Stärke einer konkreten Quelle eingeordnet werden muss.
+---
+
 # Skill: source-evaluation
 
 ## Zweck
