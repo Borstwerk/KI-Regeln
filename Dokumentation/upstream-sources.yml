@@ -1,5 +1,5 @@
 schema_version: 2
-last_updated: 2026-08-24
+last_updated: 2026-08-25
 
 # Mutable external sources whose changes may affect local rules or skills.
 # A changed upstream is a review signal, never an automatic sync instruction.
@@ -597,7 +597,6 @@ sources:
     local_impact:
       - Schreiben/Stilreview.md
       - Schreiben/Skills/stilreview/SKILL.md
-      - Schreiben/Schreibstil.md
       - Schreiben/Skills/natuerliches-schreiben/SKILL.md
 
   # ---------------------------------------------------------------------------
@@ -1595,6 +1594,123 @@ sources:
       - Software-Architecture-und-System-Design/Conformance-Fitness-Functions-und-Drift.md
       - Software-Architecture-und-System-Design/Skills/architecture-conformance-review/SKILL.md
       - Software-Architecture-und-System-Design/Skills/architecture-review/SKILL.md
+
+  # ---------------------------------------------------------------------------
+  # Requirements und Spezifikations-Engineering
+  # ---------------------------------------------------------------------------
+  - id: ireb-cpre-foundation
+    area: Requirements-und-Spezifikations-Engineering
+    kind: web-page
+    url: https://cpre.ireb.org/en/concept/foundationlevel
+    monitor_mode: semantic-review
+    cadence: monthly
+    last_checked: 2026-08-25
+    local_impact:
+      - Requirements-und-Spezifikations-Engineering/README.md
+      - Requirements-und-Spezifikations-Engineering/Anforderungsqualitaet-und-Sprachregeln.md
+      - Requirements-und-Spezifikations-Engineering/Validation-Verifikation-und-Readiness.md
+      - Requirements-und-Spezifikations-Engineering/Skills/requirements-specification/SKILL.md
+      - Requirements-und-Spezifikations-Engineering/Skills/requirements-validation/SKILL.md
+
+  - id: ireb-requirements-elicitation
+    area: Requirements-und-Spezifikations-Engineering
+    kind: web-page
+    url: https://cpre.ireb.org/en/concept/requirements-elicitation
+    monitor_mode: semantic-review
+    cadence: monthly
+    last_checked: 2026-08-25
+    local_impact:
+      - Requirements-und-Spezifikations-Engineering/Stakeholder-Bedarf-Ziele-und-Quellen.md
+      - Requirements-und-Spezifikations-Engineering/Elicitation-und-Konfliktklaerung.md
+      - Requirements-und-Spezifikations-Engineering/Skills/requirements-elicitation/SKILL.md
+
+  - id: iso-29148-edition3-draft
+    area: Requirements-und-Spezifikations-Engineering
+    kind: web-page
+    url: https://www.iso.org/standard/94091.html
+    monitor_mode: semantic-review
+    cadence: monthly
+    last_checked: 2026-08-25
+    local_impact:
+      - Requirements-und-Spezifikations-Engineering/Anforderungsqualitaet-und-Sprachregeln.md
+      - Requirements-und-Spezifikations-Engineering/Traceability-Provenance-und-Coverage.md
+      - Requirements-und-Spezifikations-Engineering/Requirements-Change-Baselines-und-Lifecycle.md
+      - Requirements-und-Spezifikations-Engineering/Quellen-und-Inspirationen.md
+
+  - id: nasa-system-design-requirements
+    area: Requirements-und-Spezifikations-Engineering
+    kind: web-page
+    url: https://www.nasa.gov/reference/4-0-system-design-processes/
+    monitor_mode: semantic-review
+    cadence: monthly
+    last_checked: 2026-08-25
+    local_impact:
+      - Requirements-und-Spezifikations-Engineering/Stakeholder-Bedarf-Ziele-und-Quellen.md
+      - Requirements-und-Spezifikations-Engineering/Qualitaetsanforderungen-und-messbare-Ziele.md
+      - Requirements-und-Spezifikations-Engineering/Validation-Verifikation-und-Readiness.md
+      - Requirements-und-Spezifikations-Engineering/Skills/requirements-validation/SKILL.md
+
+  - id: nasa-se-handbook-appendix-requirements
+    area: Requirements-und-Spezifikations-Engineering
+    kind: web-page
+    url: https://www.nasa.gov/reference/system-engineering-handbook-appendix/
+    monitor_mode: semantic-review
+    cadence: monthly
+    last_checked: 2026-08-25
+    local_impact:
+      - Requirements-und-Spezifikations-Engineering/Anforderungsqualitaet-und-Sprachregeln.md
+      - Requirements-und-Spezifikations-Engineering/Akzeptanzkriterien-und-Verifikationsabsicht.md
+      - Requirements-und-Spezifikations-Engineering/Skills/acceptance-criteria-design/SKILL.md
+
+  - id: modular-earth-requirements-skill
+    area: Requirements-und-Spezifikations-Engineering
+    kind: github-file
+    repository: Modular-Earth-LLC/solutions-architecture-agent
+    path: skills/requirements/SKILL.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: 06ab931a6898d5f9f455d0b2d00ee7fabad9f15c
+    last_checked: 2026-08-25
+    local_impact:
+      - Requirements-und-Spezifikations-Engineering/Elicitation-und-Konfliktklaerung.md
+      - Requirements-und-Spezifikations-Engineering/Scope-Annahmen-und-Constraints.md
+      - Requirements-und-Spezifikations-Engineering/Skills/requirements-elicitation/SKILL.md
+      - Requirements-und-Spezifikations-Engineering/Skills/requirements-specification/SKILL.md
+
+  - id: microsoft-hve-requirements-author
+    area: Requirements-und-Spezifikations-Engineering
+    kind: github-file
+    repository: microsoft/hve-core
+    path: .github/skills/project-planning/requirements-author/SKILL.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: ebeca3bfba19ee3cba90648df16cb4fddac5c319
+    last_checked: 2026-08-25
+    local_impact:
+      - Requirements-und-Spezifikations-Engineering/Traceability-Provenance-und-Coverage.md
+      - Requirements-und-Spezifikations-Engineering/Requirements-Change-Baselines-und-Lifecycle.md
+      - Requirements-und-Spezifikations-Engineering/Skills/requirements-traceability/SKILL.md
+      - Requirements-und-Spezifikations-Engineering/Skills/requirements-change-analysis/SKILL.md
+      - Requirements-und-Spezifikations-Engineering/Skills/requirements-review/SKILL.md
+
+  - id: spacey-requirements-analysis
+    area: Requirements-und-Spezifikations-Engineering
+    kind: github-file
+    repository: Spacey6849/AgentSkills
+    path: .claude/skills/requirements-analysis/SKILL.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: 4a9193522eb25f9029e09dbab5579224420dc0bb
+    last_checked: 2026-08-25
+    local_impact:
+      - Requirements-und-Spezifikations-Engineering/Anforderungsqualitaet-und-Sprachregeln.md
+      - Requirements-und-Spezifikations-Engineering/Akzeptanzkriterien-und-Verifikationsabsicht.md
+      - Requirements-und-Spezifikations-Engineering/Skills/requirements-specification/SKILL.md
+      - Requirements-und-Spezifikations-Engineering/Skills/acceptance-criteria-design/SKILL.md
+      - Requirements-und-Spezifikations-Engineering/Skills/requirements-review/SKILL.md
 
 policy:
   on_change: review-only
