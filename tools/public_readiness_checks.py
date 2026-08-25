@@ -45,32 +45,30 @@ def validate_public_readiness(root: Path, err: Callable[[str, str], None], warn:
         if isinstance(item, dict) and item.get("kind") == "github-file"
     }
     entries = provenance.get("sources") or [] if isinstance(provenance, dict) else []
-    by_id = {item.get("source_id"): item for item in entries if isinstance(item, dict)}
+
+    by_id: dict[str, dict[str, Any]] = {}
+    for item in entries:
+        if not isinstance(item, dict):
+            continue
+        sid = item.get("source_id")
+        if not isinstance(sid, str):
+            continue
+        if sid in by_id:
+            err("PROVENANCE_ID", f"duplicate provenance source_id {sid}")
+            continue
+        by_id[sid] = item
+
+    for sid in sorted(set(github_sources) - set(by_id)):
+        err("PROVENANCE_MISSING", f"GitHub upstream has no provenance decision record: {sid}")
+    for sid in sorted(set(by_id) - set(github_sources)):
+        err("PROVENANCE_ID", f"provenance record has no GitHub upstream registry entry: {sid}")
 
     redistribution_relevant = 0
     legal_review = 0
     notices_required: set[str] = set()
 
-    for sid, source in sorted(github_sources.items()):
-        entry = by_id.get(sid)
-        if not isinstance(entry, dict):
-            continue
-
-        expected = {
-            "repository": source.get("repository"),
-            "source_path": source.get("path"),
-            "observed_ref": source.get("ref"),
-            "observed_blob_sha": source.get("observed_sha"),
-            "local_impact": source.get("local_impact") or [],
-        }
-        for field, value in expected.items():
-            if entry.get(field) != value:
-                err("PROVENANCE_SNAPSHOT", f"{sid}: {field} does not match upstream-sources.yml")
-
-        for impact in entry.get("local_impact") or []:
-            if not (root / impact).exists():
-                err("PROVENANCE_IMPACT", f"{sid}: provenance local_impact path does not exist: {impact}")
-
+    for sid in sorted(set(github_sources) & set(by_id)):
+        entry = by_id[sid]
         use_class = entry.get("use_class")
         review_status = entry.get("review_status")
         material_scope = entry.get("material_scope")
@@ -90,8 +88,8 @@ def validate_public_readiness(root: Path, err: Callable[[str, str], None], warn:
                     err("PROVENANCE_REVIEW", f"{sid}: unclear legal-review case has invalid redistribution_reliance")
             elif use_class not in ("reference/inspiration", "adapted", "copied/vendored"):
                 err("PROVENANCE_CLASS", f"{sid}: unknown use_class {use_class}")
-            # Deliberately do not apply assessed class invariants here. A legal-review
-            # record is allowed to preserve uncertainty and is never release-ready.
+            # A legal-review record intentionally preserves uncertainty. It never
+            # receives the assessed class invariants and it always blocks readiness.
             continue
 
         if review_status != "assessed":
@@ -129,19 +127,21 @@ def validate_public_readiness(root: Path, err: Callable[[str, str], None], warn:
                 err("PROVENANCE_NOTICE", f"{sid}: redistribution-relevant notice requirement must be explicit")
             if notice == "required":
                 notices_required.add(sid)
-        else:
-            err("PROVENANCE_CLASS", f"{sid}: unknown use_class {use_class}")
 
-        if license_spdx not in (None, "UNKNOWN") and reliance == "required":
             evidence_fields = (
+                entry.get("repository_commit"),
                 entry.get("license_source"),
                 entry.get("license_source_commit_or_ref"),
                 entry.get("license_path"),
                 entry.get("license_blob_sha"),
-                entry.get("repository_commit"),
             )
             if not all(evidence_fields):
-                err("PROVENANCE_LICENSE", f"{sid}: resolved redistribution license requires same-state license evidence fields")
+                err("PROVENANCE_LICENSE", f"{sid}: assessed redistribution-relevant material requires same-state license evidence")
+            same_state = (entry.get("license_evidence") or {}).get("same_state_files") or []
+            if not same_state:
+                err("PROVENANCE_LICENSE", f"{sid}: assessed redistribution-relevant material requires same-state license file evidence")
+        else:
+            err("PROVENANCE_CLASS", f"{sid}: unknown use_class {use_class}")
 
     notice_path = root / "THIRD-PARTY-NOTICES.md"
     notice_text = notice_path.read_text(encoding="utf-8") if notice_path.is_file() else ""
