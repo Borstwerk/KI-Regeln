@@ -63,7 +63,8 @@ Neben einzelnen Kernskills bestehen inzwischen vollständige Startpacks für:
 - alle acht Skills aus `Reliability-und-System-Observability/`;
 - alle neun Skills aus `Data-Engineering/`;
 - alle sieben Skills aus `Software-Architecture-und-System-Design/`;
-- alle acht Skills aus `Requirements-und-Spezifikations-Engineering/`.
+- alle acht Skills aus `Requirements-und-Spezifikations-Engineering/`;
+- alle neun Skills aus `Social-Media-und-Content-Praesenz/`.
 
 Die Testing-und-QA-Fälle prüfen unter anderem risikobasierte Strategie, reale Dependencies, Contract-Drift, E2E-Near-Misses, Flakiness, Failure Testing und Testsignal-Qualität.
 
@@ -101,6 +102,20 @@ Die Requirements-/Specification-Fälle prüfen unter anderem:
 - unabhängigen Requirements Review ohne ungefragte Umschreibung oder Downstream-Ausführung.
 
 Für jeden der acht Requirements-Skills sind sechs Startfälle definiert, insgesamt 48. Diese 48 Fälle sind **definiert, aber noch nicht ausgeführt oder bestanden**.
+
+Die Social-Media-/Content-Präsenz-Fälle prüfen unter anderem:
+
+- Presence-Baselines ohne erfundene Analytics oder Branchenbenchmarks;
+- Strategie ohne Viralitäts-, Plattform- oder Content-Pillar-Dogma;
+- Editorialplanung ohne universelle Postingfrequenzen;
+- Social-Drafts ohne erfundene Statistiken, Clickbait- oder Engagement-Bait-Zwang;
+- Plattformadaption ohne veraltete Limits oder Algorithmusfolklore;
+- Repurposing ohne Claim-Drift, Fake-Zitate oder Low-Value-Reupload;
+- Community-Dialog ohne Fake-Engagement, Dogpiling oder ungefragte Außenaktionen;
+- Performanceanalyse mit definierten Nennern und ohne Kausalität aus Einzelposts;
+- unabhängigen Presence Review ohne Auto-Fixes oder Publishing-Freigabe.
+
+Für jeden der neun Social-Media-/Content-Präsenz-Skills sind sechs Startfälle definiert, insgesamt 54. Die erwartete Statusverteilung ist 36× `pass`, 9× `partial` und 9× `blocked`. Diese 54 Fälle sind **definiert, aber noch nicht als Behavioral Evals ausgeführt oder bestanden**.
 
 ## Fallstruktur
 
