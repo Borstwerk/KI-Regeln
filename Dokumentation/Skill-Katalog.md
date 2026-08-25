@@ -14,7 +14,7 @@ Der Skill-Katalog beantwortet zusätzlich:
 
 ## Aktueller Bestand
 
-Der Katalog enthält aktuell 119 zentrale Skills:
+Der Katalog enthält aktuell 128 zentrale Skills:
 
 - Arbeitsweisen: 3;
 - Agentenarbeit: 8;
@@ -30,6 +30,7 @@ Der Katalog enthält aktuell 119 zentrale Skills:
 - Data Engineering: 9;
 - Software Architecture und System Design: 7;
 - Requirements und Spezifikations-Engineering: 8;
+- Social Media und Content-Präsenz: 9;
 - Dokumentationserstellung: 10;
 - Skill Engineering: 2;
 - Sicherheit: 3;
@@ -79,7 +80,7 @@ Empfohlene Werte:
 
 Maturity und Eval Coverage sind nicht identisch. Ein Skill kann viel Praxis haben und trotzdem noch unzureichende formale Evals besitzen.
 
-Aktuell besitzt `context-engineering` als bestehender `candidate` `partial` Evalabdeckung. Die ergänzten Context-Skills, alle sieben Wissensmanagement-Skills, alle fünf Schnittstellen-/Contract-Skills, alle sieben Infrastruktur-/DevOps-Skills, alle acht Reliability-/System-Observability-Skills, alle neun Data-Engineering-Skills, alle sieben Software-Architecture-/System-Design-Skills und alle acht Requirements-/Specification-Skills starten beziehungsweise bleiben bewusst `experimental` mit `partial` Evalabdeckung.
+Aktuell besitzt `context-engineering` als bestehender `candidate` `partial` Evalabdeckung. Die ergänzten Context-Skills, alle sieben Wissensmanagement-Skills, alle fünf Schnittstellen-/Contract-Skills, alle sieben Infrastruktur-/DevOps-Skills, alle acht Reliability-/System-Observability-Skills, alle neun Data-Engineering-Skills, alle sieben Software-Architecture-/System-Design-Skills, alle acht Requirements-/Specification-Skills und alle neun Social-Media-/Content-Präsenz-Skills starten beziehungsweise bleiben bewusst `experimental` mit `partial` Evalabdeckung.
 
 Für Reliability sind sechs Startfälle je Skill definiert, insgesamt 48. Der erste Same-Model-Smoke-Lauf wurde am 2026-08-24 ausgeführt; das ersetzt keinen unabhängigen verblindeten Benchmark und rechtfertigt allein keine Hochstufung.
 
@@ -88,6 +89,8 @@ Für Data Engineering sind sechs Startfälle je Skill definiert, insgesamt 54. D
 Für Software Architecture und System Design sind sechs Startfälle je Skill definiert, insgesamt 42. Der erste Same-Model-Smoke-Lauf wurde am 2026-08-25 gegen `78abce4ade2e1d92dfc47f6169dcd2551d8d0f09` ausgeführt. Alle 42 Fälle entsprachen dem erwarteten Verhalten und Status (30× `pass`, 6× `partial`, 6× `blocked`, 0 verbotene Verhaltensweisen). Das ersetzt keinen unabhängigen verblindeten Benchmark und rechtfertigt allein keine Hochstufung.
 
 Für Requirements und Spezifikations-Engineering sind sechs Startfälle je Skill definiert, insgesamt 48. Diese 48 Fälle sind derzeit **definiert, aber noch nicht ausgeführt oder bestanden**.
+
+Für Social Media und Content-Präsenz sind sechs Startfälle je Skill definiert, insgesamt 54. Die erwartete Verteilung ist 36× `pass`, 9× `partial` und 9× `blocked`. Diese 54 Fälle sind derzeit **definiert, aber noch nicht ausgeführt oder bestanden**.
 
 ## Capabilities
 
@@ -122,7 +125,12 @@ Der Katalog kann Fähigkeiten nennen, die für einen Skill relevant sind, z. B.:
 - `requirements-source-access-required`;
 - `requirements-baseline-required`;
 - `downstream-artifact-access-preferred`;
-- `stakeholder-interaction-optional`.
+- `stakeholder-interaction-optional`;
+- `social-content-source-access-preferred`;
+- `social-analytics-access-preferred`;
+- `social-community-source-access-preferred`;
+- `web-preferred-for-current-platform-evidence`;
+- `social-external-actions-gated`.
 
 Diese Angaben ersetzen nicht die detaillierten Fallback- und Rechte-Regeln des Skills.
 
@@ -165,6 +173,8 @@ Für Data-Engineering-Skills sollte zusätzlich an realen Datenflüssen beziehun
 Für Software-Architecture-/System-Design-Skills sollte zusätzlich an realen Systemen oder belastbaren Architekturentscheidungen geprüft werden, ob Architecture 0 korrekt rekonstruiert, Drivers und Missing Evidence sauber getrennt, unnötige verteilte Komplexität vermieden, echte Trade-offs erkannt, Migrationszwischenzustände erklärt und lokale Architekturregeln ohne Patterndogma geprüft werden. Ein schönes Diagramm, ein ADR oder ein Same-Model-Smoke-Lauf allein reicht nicht als Maturity-Beleg.
 
 Für Requirements-/Specification-Skills sollte zusätzlich an realen Spezifikationen und Stakeholder-/Source-Evidence geprüft werden, ob Soll-Baselines korrekt rekonstruiert, Inferenz sichtbar bleibt, keine Zielwerte erfunden, Acceptance und Traceability sinnvoll getrennt, Changes mit Downstream-Impact erkannt und Validation/Review nicht mit Product Approval verwechselt werden. Ein ausgefülltes PRD, 100 Prozent Traceability oder definierte Evalcases allein reichen nicht als Maturity-Beleg.
+
+Für Social-Media-/Content-Präsenz-Skills sollte zusätzlich an realen Content-Historien, Plattformdaten und Community-Situationen geprüft werden, ob Ziel-/Audience-Fit korrekt erfasst, Plattformfolklore von aktueller Evidence getrennt, Claims und Repurposing sauber behandelt, Performance ohne Scheinkausalität analysiert und Publishing-/Community-Aktionen zuverlässig gegatet werden. Ein gefüllter Content-Kalender, ein viraler Einzelpost oder definierte Evalcases allein reichen nicht als Maturity-Beleg.
 
 ## Leitgedanke
 
