@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KI-Regeln open-source readiness",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "assessed_at", "base_commit", "categories", "release_gate"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "assessed_at": {"type": "string", "format": "date"},
+    "base_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "categories": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provenance", "licensing", "security_privacy", "repository_hygiene", "supply_chain"],
+      "properties": {
+        "provenance": {"$ref": "#/$defs/category"},
+        "licensing": {"$ref": "#/$defs/category"},
+        "security_privacy": {"$ref": "#/$defs/category"},
+        "repository_hygiene": {"$ref": "#/$defs/category"},
+        "supply_chain": {"$ref": "#/$defs/category"}
+      }
+    },
+    "release_gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "blockers"],
+      "properties": {
+        "status": {"enum": ["ready", "partial", "blocked", "not-applicable"]},
+        "blockers": {"type": "array", "items": {"type": "string", "minLength": 1}}
+      }
+    }
+  },
+  "$defs": {
+    "category": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "evidence", "blockers"],
+      "properties": {
+        "status": {"enum": ["ready", "partial", "blocked", "not-applicable"]},
+        "evidence": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+        "blockers": {"type": "array", "items": {"type": "string", "minLength": 1}}
+      }
+    }
+  }
+}
