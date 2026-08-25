@@ -62,7 +62,8 @@ Neben einzelnen Kernskills bestehen inzwischen vollständige Startpacks für:
 - alle sieben Skills aus `Infrastruktur-und-DevOps/`;
 - alle acht Skills aus `Reliability-und-System-Observability/`;
 - alle neun Skills aus `Data-Engineering/`;
-- alle sieben Skills aus `Software-Architecture-und-System-Design/`.
+- alle sieben Skills aus `Software-Architecture-und-System-Design/`;
+- alle acht Skills aus `Requirements-und-Spezifikations-Engineering/`.
 
 Die Testing-und-QA-Fälle prüfen unter anderem risikobasierte Strategie, reale Dependencies, Contract-Drift, E2E-Near-Misses, Flakiness, Failure Testing und Testsignal-Qualität.
 
@@ -70,76 +71,36 @@ Die Context-Fälle prüfen unter anderem Sources of Truth, Working State vs. Per
 
 Die Wissensmanagement-Fälle prüfen unter anderem toolneutrales Design, Search-before-Create, Provenance, Synthesis, Dubletten/Orphans, Retrieval und Content Health.
 
-Die Schnittstellen-Fälle prüfen unter anderem:
+Die Schnittstellen-Fälle prüfen unter anderem Transportdogma, DB-Leaks in API-Schemas, Additive-vs.-Semantic-Compatibility, Source-/Wire-Trennung, rollout-sensitive Changes und fehlende Contract-Baselines.
 
-- Interface Design ohne Transportdogma oder versteckte Re-Architektur;
-- HTTP-Verträge ohne `/v1`- oder Pagination-Dogma;
-- Trennung öffentlicher Repräsentation vom Datenbankschema;
-- Async Contracts mit Delivery, Ordering, Replay und Idempotenz;
-- additive Änderungen, unbekannte Enum-Werte und semantische Compatibility;
-- Wire-vs.-Source-Kompatibilität bei Protobuf;
-- `ROLLOUT-SENSITIVE`, `BREAKING` und `UNVERIFIED` als explizite Verdicts;
-- grüne Contract Tests nicht als vollständige Designfreigabe.
+Die Infrastruktur-/DevOps-Fälle prüfen unter anderem State-/Drift-Grenzen, stale Previews, destructive Changes, Pipeline-Secret-Grenzen, Container Runtime Contracts, Deployment-/Rollback-Annahmen und GitOps-Reconciliation-Gates.
 
-Die Infrastruktur-/DevOps-Fälle prüfen unter anderem:
-
-- Desired State ohne versteckte Re-Architektur oder ungefragtes Apply;
-- Drift als Befund statt automatische Rückführung;
-- State-/Plan-Artefakte als potenziell sensible Evidence;
-- frische Preview statt stale Plan;
-- `SAFE_TO_PROCEED_TO_GATE` ausdrücklich nicht als Apply-Autorisierung;
-- CI-Orchestrierung ohne Teststrategie-Duplizierung oder Secret-Leaks an untrusted Code;
-- Container-Build vs. Runtime-/Security-Grenzen;
-- Deployment-Rollback ohne Zeitmaschinenannahme;
-- GitOps-Commit-/Merge-Gates bei Continuous Reconciliation;
-- Repo-Evidence nicht als Live-Cluster-Health ausgeben.
-
-Die Reliability-/System-Observability-Fälle prüfen unter anderem:
-
-- SLI-Spezifikation vs. Messimplementierung sowie fehlende Businessbasis für SLO-Ziele;
-- RTO/RPO als Recovery-Ziele statt SLO-Near-Miss;
-- Observability ohne Tool- oder Three-Pillars-Dogma;
-- Telemetrie-Coverage, sensible Daten und Runtime-Evidence;
-- Alert-Actionability, Low-Traffic-/Threshold-Grenzen und produktive Change-Gates;
-- Incident-Mitigation vor vollständiger RCA ohne implizite Restart-/Failover-Autorisierung;
-- Postmortems mit widersprüchlicher Evidence und beitragenden Faktoren;
-- Capacity Planning vs. Load Testing und fehlende Ceiling-Evidence;
-- Failure Testing vs. systemisches Resilience-Experiment;
-- Blast Radius, Abort, Recovery und produktive Fault-Injection-Gates;
-- Reliability Review ohne versteckte Re-Architecture oder Production Changes.
+Die Reliability-/System-Observability-Fälle prüfen unter anderem SLO-vs.-RTO/RPO-Grenzen, Observability ohne Tooldogma, Alert-Actionability, Incident-Gates, Postmortem-Evidence, Capacity-vs.-Load-Testing und sichere Resilience-Experimente.
 
 Für jeden der acht Reliability-Skills sind sechs Startfälle definiert, insgesamt 48. Der erste Same-Model-Smoke-Lauf wurde am 2026-08-24 gegen den damaligen gepinnten `main`-Stand ausgeführt; das ersetzt keinen unabhängigen verblindeten Benchmark und hebt den Reifegrad nicht automatisch an.
 
-Die Data-Engineering-Fälle prüfen unter anderem:
-
-- Source of Truth, Consumer und Grain vor Toolstack;
-- DB-/Event-Contract-/Testing-Near-Misses;
-- CDC, Deletes, Cursor/Offsets, Replay und Ende-zu-Ende-Processing-Guarantees;
-- `updated_at` und Kafka/exactly-once nicht als universelle Garantien;
-- Full-vs.-Incremental-Semantik, historische Logik und Backfill-Gates;
-- analytisches Grain, Measures, Aggregierbarkeit und Star-Schema-Dogma;
-- Data Quality, Freshness-Zeitsemantik und Reconciliation ohne erfundene Thresholds;
-- Data Contracts mit struktureller und semantischer Compatibility;
-- Design Lineage vs. Runtime Lineage sowie unbekannte Consumer;
-- Data Intervals, Retry, Catchup und bounded Reprocessing;
-- Data-Engineering-Review ohne Tool-Re-Architecture oder ungefragte produktive Datenänderung.
+Die Data-Engineering-Fälle prüfen unter anderem Source of Truth/Grain, CDC/Replay, Backfill-Semantik, Data Quality/Freshness, Contracts, Lineage und produktive Datenänderungs-Gates.
 
 Für jeden der neun Data-Engineering-Skills sind sechs Startfälle definiert, insgesamt 54. Diese 54 Fälle sind **definiert, aber noch nicht ausgeführt oder bestanden**.
 
-Die Software-Architecture-/System-Design-Fälle prüfen unter anderem:
-
-- Architecture Baseline aus mehreren Evidence-Typen statt Ordner- oder Diagrammgläubigkeit;
-- Soll-/Ist-Konflikte zwischen ADR, Code, Config und Runtime-Evidence;
-- einfachstes tragfähiges Systemdesign vor verteilten Standardbausteinen;
-- fehlende QPS-, SLO-, RTO/RPO- oder andere Zielwerte ohne Erfindung lokaler Wahrheit;
-- Teamgröße, Shared Database und Bounded Context nicht als automatische Microservice-Regeln;
-- echte Quality-Szenarien und Trade-offs ohne künstliche Kandidaten oder opaque Gesamtscores;
-- evolutionäre Migration mit Compatibility und Zwischenzuständen statt Big-Bang-Rewrite;
-- Conformance gegen gültige lokale Architektur statt Patternpräferenz;
-- Fitness Functions als nachweisbare Guardrails statt bloß konfigurierte Checks;
-- Architekturreview ohne Pattern-Purity-Dogma oder implizite Implementierungs-/Deploymentfreigabe.
+Die Software-Architecture-/System-Design-Fälle prüfen unter anderem Architecture Baseline, ADR-/Code-Konflikte, Microservice-/Teamgrößen-/Shared-DB-Dogmen, fehlende Quality-/Capacity-Evidence, künstliche Kandidaten, Big-Bang-Migrationen, Conformance und Ausführungsgates.
 
 Für jeden der sieben Architecture-Skills sind sechs Startfälle definiert, insgesamt 42. Der erste Same-Model-Smoke-Lauf wurde am 2026-08-25 gegen den gepinnten Stand `78abce4ade2e1d92dfc47f6169dcd2551d8d0f09` ausgeführt. Alle 42 Fälle entsprachen ihrem erwarteten Verhalten und Status: 30× `pass`, 6× `partial`, 6× `blocked`; es wurden keine verbotenen Verhaltensweisen beobachtet. Das ist **kein unabhängiger verblindeter Benchmark**, rechtfertigt keine Maturity-Hochstufung und ist im Laufartefakt `Software-Architecture-und-System-Design/Same-Model-Smoke-2026-08-25.md` dokumentiert.
+
+Die Requirements-/Specification-Fälle prüfen unter anderem:
+
+- aktuelle Soll-Baseline statt `neueste Datei = Wahrheit`;
+- Implementierung als Evidence, aber nicht automatisch als gewünschtes Requirement;
+- Elicitation ohne Fragebogenritual oder Clarity-Score-Dogma;
+- User Stories, EARS und Given/When/Then als optionale Formen statt Pflichtsyntax;
+- fehlende Performance-, Retention- oder Reliability-Zielwerte ohne Erfindung lokaler Wahrheit;
+- Acceptance Criteria getrennt von konkreten Testfällen und Testausführung;
+- Traceability Coverage ohne `100 % Links = korrekt`-Fehlschluss;
+- semantische Requirement Changes statt bloßer Textdiff-Bewertung;
+- Requirements Validation getrennt von Product Validation und Stakeholder Approval;
+- unabhängigen Requirements Review ohne ungefragte Umschreibung oder Downstream-Ausführung.
+
+Für jeden der acht Requirements-Skills sind sechs Startfälle definiert, insgesamt 48. Diese 48 Fälle sind **definiert, aber noch nicht ausgeführt oder bestanden**.
 
 ## Fallstruktur
 
