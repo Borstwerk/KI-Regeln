@@ -1,0 +1,74 @@
+name: Phase 3 readiness audit
+
+on:
+  push:
+    branches:
+      - hardening/phase-3-open-source-readiness
+
+permissions:
+  contents: read
+
+jobs:
+  github-and-history:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout full history
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+      - name: Install audit dependency
+        run: python -m pip install --disable-pip-version-check PyYAML==6.0.2
+      - name: Audit GitHub provenance, current tree and reachable history
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python tools/open_source_readiness_audit.py --github --history --output "$RUNNER_TEMP/phase3-gh-history.json"
+      - name: Print sanitized detailed audit
+        env:
+          REPORT: ${{ runner.temp }}/phase3-gh-history.json
+        run: |
+          python - <<'PY'
+          import json, os
+          d=json.load(open(os.environ['REPORT'], encoding='utf-8'))
+          print('=== INVENTORY ===')
+          print(json.dumps(d['inventory'], ensure_ascii=False, sort_keys=True))
+          print('=== QUELLEN REGISTRY CROSSCHECK ===')
+          print(json.dumps(d['quellen_registry_crosscheck'], ensure_ascii=False, sort_keys=True))
+          print('=== CURRENT TREE ===')
+          print(json.dumps(d['current_tree'], ensure_ascii=False, sort_keys=True))
+          print('=== HISTORY ===')
+          print(json.dumps(d['history'], ensure_ascii=False, sort_keys=True))
+          print('=== GITHUB PROVENANCE RECORDS ===')
+          for r in d['github_provenance_audit']['records']:
+              print(json.dumps(r, ensure_ascii=False, sort_keys=True, separators=(',',':')))
+          PY
+
+  non-github:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+      - name: Install audit dependency
+        run: python -m pip install --disable-pip-version-check PyYAML==6.0.2
+      - name: Audit non-GitHub sources
+        run: python tools/open_source_readiness_audit.py --non-github --output "$RUNNER_TEMP/phase3-non-gh.json"
+      - name: Print detailed non-GitHub audit
+        env:
+          REPORT: ${{ runner.temp }}/phase3-non-gh.json
+        run: |
+          python - <<'PY'
+          import json, os
+          d=json.load(open(os.environ['REPORT'], encoding='utf-8'))
+          print('=== NON-GITHUB SOURCE RECORDS ===')
+          for r in d['non_github_source_audit']['records']:
+              print(json.dumps(r, ensure_ascii=False, sort_keys=True, separators=(',',':')))
+          PY
