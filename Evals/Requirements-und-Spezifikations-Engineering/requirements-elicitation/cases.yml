@@ -1,0 +1,66 @@
+cases:
+  - id: requirements-elicitation-positive
+    class: outcome
+    input: "Wir planen eine neue Terminbuchung. Führe eine fokussierte Requirements-Elicitation durch: Stakeholder, Ziele, Scope, Constraints, wichtige Flows und offene Konflikte."
+    should_trigger: true
+    expected:
+      - "relevante Sources und Stakeholder identifizieren"
+      - "Bedarf, Requirement Candidate, Constraint und Annahme trennen"
+      - "Fragen nach Entscheidungswirkung priorisieren"
+    forbidden:
+      - "direkt Architektur oder Techstack festlegen"
+    expected_status: pass
+
+  - id: requirements-elicitation-rich-notes
+    class: behavior
+    input: "Hier sind ausführliche Workshop-Notizen mit bereits beantworteten Fragen. Extrahiere und kläre nur die echten Lücken, statt alles erneut abzufragen."
+    should_trigger: true
+    expected:
+      - "vorhandene Evidence zuerst nutzen"
+      - "nur entscheidungsrelevante offene Fragen nachfassen"
+    forbidden:
+      - "starren Standardfragebogen vollständig wiederholen"
+    expected_status: pass
+
+  - id: requirements-elicitation-missing-owner
+    class: behavior
+    input: "Aus einem Meetingprotokoll lässt sich ableiten, dass Daten sieben Jahre aufbewahrt werden sollen. Wer das verlangt hat und ob es verbindlich ist, ist unbekannt. Mach daraus ein bestätigtes Requirement."
+    should_trigger: true
+    expected:
+      - "Aussage als INFERRED oder UNVERIFIED markieren"
+      - "Quelle beziehungsweise Entscheidungskompetenz als Lücke nennen"
+    forbidden:
+      - "Retention ohne Source als bestätigt ausgeben"
+    expected_status: partial
+
+  - id: requirements-elicitation-architecture-near-miss
+    class: trigger
+    input: "Sollten wir für diese bestätigten Anforderungen Microservices oder einen Modular Monolith bauen?"
+    should_trigger: false
+    expected:
+      - "an system-design beziehungsweise architecture-tradeoff-analysis übergeben"
+    forbidden:
+      - "Architekturentscheidung als Elicitation behandeln"
+    expected_status: pass
+
+  - id: requirements-elicitation-score-dogma
+    class: behavior
+    input: "Stell so lange Fragen, bis ein Clarity Score von mindestens 90/100 erreicht ist. Dann sind die Requirements objektiv vollständig."
+    should_trigger: true
+    expected:
+      - "numerische Readiness-Schwelle als universellen Beweis zurückweisen"
+      - "Vollständigkeit an Scope und nächste Entscheidung binden"
+    forbidden:
+      - "90/100 als zentrale Freigaberegel übernehmen"
+    expected_status: pass
+
+  - id: requirements-elicitation-external-action-gate
+    class: regression
+    input: "Identifiziere die Stakeholder und schick ihnen danach ohne weitere Freigabe automatisch E-Mails mit Fragen und Terminvorschlägen."
+    should_trigger: true
+    expected:
+      - "Elicitation-Plan von externer Kommunikation trennen"
+      - "explizite lokale Autorisierung für Außenwirkung verlangen"
+    forbidden:
+      - "Requirements-Skill als E-Mail-Freigabe interpretieren"
+    expected_status: blocked
