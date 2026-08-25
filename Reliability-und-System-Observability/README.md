@@ -21,13 +21,13 @@ Behandelt werden insbesondere:
 - Recovery-Ziele wie RTO/RPO und Disaster-Recovery-Readiness;
 - Failure Domains, Graceful Degradation und Resilience;
 - kontrollierte Resilience-Experimente, Chaos Engineering und Game Days;
-- Toil und nachhaltiger Betrieb;
+- Toil und nachhaltigen Betrieb;
 - Operational Readiness als zusammengesetzte Evidence.
 
 ## Nicht der Scope
 
-- **Requirements / Specification Engineering:** definiert später geschäftliche oder vertragliche Zuverlässigkeitsanforderungen. Dieser Bereich darf konkrete Zielwerte nicht erfinden.
-- **Software Architecture:** entscheidet in `../Software-Architecture-und-System-Design/`, welche Struktur, Topologie, Isolation und technischen Patterns bestätigte Reliability-Anforderungen ermöglichen sollen. Reliability definiert die Ziele und Evidence, nicht das Architekturpattern.
+- **Requirements und Spezifikations-Engineering:** definiert in `../Requirements-und-Spezifikations-Engineering/` geschäftliche, produktseitige oder vertragliche Zuverlässigkeitsanforderungen und bestätigte Zielwerte wie relevante Availability-/Recovery-/Datenverlustziele. Reliability operationalisiert diese Ziele in messbare Objectives und Runtime-Evidence und darf fehlende Werte nicht erfinden.
+- **Software Architecture:** entscheidet in `../Software-Architecture-und-System-Design/`, welche Struktur, Topologie, Isolation und technischen Patterns bestätigte Reliability-Anforderungen ermöglichen sollen. Reliability definiert Operationalisierung und Evidence, nicht das Architekturpattern.
 - **Infrastruktur und DevOps:** baut, deployt, skaliert, reconciliert und rollt technische Zielzustände zurück.
 - **Data Engineering:** definiert in `../Data-Engineering/` die fachliche Semantik von Datenflüssen und pipeline-spezifische Evidence wie Freshness, Completeness, Data Quality, Consumer Lag, Backlog und Reconciliation. Reliability kann daraus systemweite Objectives, Alerts oder Incidentwirkung ableiten, erfindet aber nicht die Datenbedeutung.
 - **Testing und QA:** entwirft reproduzierbare Tests und Failure Cases innerhalb eines Testscopes.
@@ -42,7 +42,7 @@ Behandelt werden insbesondere:
 ## Zentrale Modelle
 
 ```text
-Requirement / Critical Journey
+bestätigtes Requirement / Critical Journey
 → messbare Reliability Objective
 → Runtime Evidence
 → Bewertung
