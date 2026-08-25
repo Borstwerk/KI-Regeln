@@ -44,6 +44,10 @@ Typische Themenfelder:
 - Requirements und Spezifikations-Engineering;
 - Stakeholder-/Requirements-Sources, Elicitation und Konfliktklärung;
 - Requirement-Qualität, Acceptance Criteria, Traceability, Change und Validation;
+- Social Media und Content-Präsenz;
+- Content-Strategie, Plattformrollen, Editorialsystem und Repurposing;
+- Community Engagement, Plattform-Analytics, Originalität und Disclosure;
+- aktuelle Plattformfeatures, Formatlimits, Analyticsdefinitionen und öffentlich dokumentierte Ranking-/Recommendation-Hinweise;
 - Reflexion, Lernen und Selbstverbesserung mit KI;
 - neue Sicherheits-, Governance- oder Evaluationsansätze.
 
@@ -55,6 +59,13 @@ Für Einträge mit `cadence: monthly`:
 - `monitor_mode: semantic-review` → aktuelle Produkt-/Webdoku gegen die lokal übernommenen Konzepte lesen.
 
 Bei Standards in Draft-/DIS-Status – aktuell beispielsweise ISO/IEC/IEEE 29148 Edition 3 – muss ein Statuswechsel zu Final/Published ausdrücklich erkannt werden. Ein Draft wird nicht vorzeitig als veröffentlichter Normstand behandelt.
+
+Bei Social-Plattformen gilt zusätzlich:
+
+- Ranking-/Recommendation-Verhalten, Features, Zeichen-/Medienlimits und Analyticsdefinitionen sind mutable Evidence;
+- aktuelle offizielle Plattformquellen haben Vorrang vor alten Blogposts, Agent-Skills oder erinnerter Best Practice;
+- feste Postingzeiten, Frequenzen, Hashtagzahlen oder Algorithmusgewichte werden nicht allein wegen Wiederholung in Communityquellen zur zentralen Regel;
+- ein beobachteter Plattformwechsel erzeugt einen Review-Kandidaten, aber keinen automatischen Rewrite lokaler Social-Regeln.
 
 Ergebnis:
 
