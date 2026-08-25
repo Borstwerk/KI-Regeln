@@ -11,7 +11,7 @@
     "sources": {"type": "array", "items": {"$ref": "#/$defs/source"}}
   },
   "$defs": {
-    "useClass": {"enum": ["reference/inspiration", "adapted", "copied/vendored"]},
+    "useClass": {"enum": ["reference/inspiration", "adapted", "copied/vendored", "unclear"]},
     "reviewStatus": {"enum": ["assessed", "needs-human/legal-review"]},
     "materialScope": {"enum": ["concepts/methods-only", "concrete-expression", "unclear"]},
     "redistributionReliance": {"enum": ["not-relied-on", "required", "unclear"]},
