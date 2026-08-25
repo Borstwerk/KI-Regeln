@@ -1,3 +1,8 @@
+---
+name: explanation-docs
+description: Erklärt Hintergründe, Zusammenhänge, Designgründe und Trade-offs so, dass Leser ein System und seine Konsequenzen besser verstehen. Verwenden bei Verständnisfragen nach dem Warum oder Zusammenspiel von Konzepten, nicht für Schrittanleitungen oder reine Reference.
+---
+
 # Skill: explanation-docs
 
 ## Zweck

@@ -1,3 +1,8 @@
+---
+name: runbook
+description: Dokumentiert bekannte Betriebs- oder Störungsfälle so, dass berechtigte Personen sie unter Zeitdruck sicher diagnostizieren, mitigieren und verifizieren können. Verwenden bei wiederkehrenden operativen Situationen mit klaren Zugriffs-, Sicherheits-, Eskalations- und Verifikationsanforderungen.
+---
+
 # Skill: runbook
 
 ## Zweck

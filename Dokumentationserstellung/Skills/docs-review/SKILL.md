@@ -1,3 +1,8 @@
+---
+name: docs-review
+description: Prüft Dokumentation unabhängig auf fachliche Korrektheit, Dokumenttyp, Verifikation, Informationsarchitektur, Sprache und Drift. Verwenden bei Reviews bestehender oder neuer Dokumentation vor Freigabe oder nach relevanten Systemänderungen, ohne automatisch einen vollständigen Rewrite auszulösen.
+---
+
 # Skill: docs-review
 
 ## Zweck

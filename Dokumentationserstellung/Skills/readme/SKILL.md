@@ -1,3 +1,8 @@
+---
+name: readme
+description: Erstellt oder überarbeitet ein README als verlässlichen Einstiegspunkt mit konkretem Projektzweck und verifiziertem Quick Start. Verwenden bei neuen, veralteten oder unklaren Repository-READMEs, wenn Einstieg, Installation, Nutzung oder zentrale Verweise zuverlässig dargestellt werden müssen.
+---
+
 # Skill: readme
 
 ## Zweck
