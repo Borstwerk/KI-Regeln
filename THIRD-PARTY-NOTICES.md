@@ -1,14 +1,50 @@
 # Third-Party Notices
 
-Diese Datei ist ausschließlich für Materialien vorgesehen, bei denen durch Übernahme, Vendoring oder konkrete Adaption tatsächlich eine Lizenz- oder Notice-Pflicht im Repository entsteht.
+Diese Datei enthält ausschließlich Materialien, bei denen die aktuelle Provenance-Bewertung eine konkrete Übernahme, Vendoring- oder Adaptionsbeziehung mit Notice-Pflicht festhält.
 
-Im aktuellen Hardening-Phase-1-Stand sind die in `Dokumentation/upstream-sources.yml` erfassten konkreten GitHub-Artefakte in `Dokumentation/upstream-provenance.yml` ausschließlich als `reference/inspiration` klassifiziert. Für sie wird hier deshalb **kein** Lizenztext so dargestellt, als wäre Fremdmaterial in dieses Repository übernommen worden.
+Die kanonischen Provenance-Entscheidungen stehen in `Dokumentation/upstream-provenance.yml`; beobachtete Upstream-Artefakte und lokale Einflussbereiche stehen getrennt in `Dokumentation/upstream-sources.yml`.
 
-Die vollständige Einfluss- und Provenance-Erfassung steht in:
+## Matt Pocock – `mattpocock/skills`
 
-- `Dokumentation/upstream-sources.yml` – beobachtete externe Quellen und lokaler Einfluss;
-- `Dokumentation/upstream-provenance.yml` – Nutzungsklasse und Lizenz-/Redistributionsstatus.
+Im Phase-3-Audit wurden vier Artefakte **jeweils separat** als `adapted` eingestuft. Für jeden Fall wurde der beobachtete Artefakt-Blob dem Repository-Commit `6654f6b60cd9d5be8b54c6fafe44346dabeb3b76` zugeordnet. An diesem selben Commit liegt die Root-Datei `LICENSE` mit MIT-Lizenz vor; der Audit fand für diese vier Artefakte keinen widersprechenden pfadspezifischen Lizenzhinweis.
 
-Ein `unresolved`-Status ist ausdrücklich keine Aussage zur tatsächlichen Lizenz des Upstreams und keine Erlaubnis zur Weiterverteilung. Er bedeutet, dass für den beobachteten Artefaktstand kein belastbarer Nachweis aus Repository-Commit/Ref und zugehöriger Lizenzdatei desselben historischen Stands dokumentiert wurde.
+Notice-relevante Provenance-IDs:
 
-Soll später tatsächlich fremdes Material übernommen, vendored oder substanziell adaptiert werden, muss vor der Weiterverteilung die konkrete Lizenzlage am verwendeten Stand geklärt und ein gegebenenfalls erforderlicher Notice-Eintrag hier ergänzt werden.
+- `mattpocock-tdd` – beobachteter Blob `8fc086710806190ee7c4baa32089cb877a75736a`;
+- `mattpocock-diagnosing-bugs` – beobachteter Blob `061c25a524acaa93d4534e9e08a793c0a5fe45fd`;
+- `mattpocock-code-review` – beobachteter Blob `e28d7acbf7b3bb4d7817b7eb5d9c105af03f6ec4`;
+- `mattpocock-domain-modeling` – beobachteter Blob `9b97707e19ef1f590aada356f2b3f6bb881f91be`.
+
+Die Einstufung als Adaption ist eine konservative Repository-Provenance-Klassifikation aus manuellem Strukturreview und historischer lokaler Provenance. Der automatische Textähnlichkeitscheck allein trifft keine Copyright- oder Lizenzentscheidung.
+
+Source: `https://github.com/mattpocock/skills`
+
+License evidence: `LICENSE` at commit `6654f6b60cd9d5be8b54c6fafe44346dabeb3b76`, blob `f1dd2c09108dde1a5f56097cee8461b3ea834499`.
+
+### MIT License
+
+Copyright (c) 2026 Matt Pocock
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+## Nicht Notice-pflichtig aus der aktuellen Bewertung
+
+Die übrigen abschließend bewerteten GitHub-Upstreams sind als `reference/inspiration` klassifiziert und verlassen sich für die lokale Nutzung nicht auf eine Redistributionslizenz des Upstreams; deshalb wird hier für sie kein Lizenztext als Übernahme-Notice dargestellt.
+
+`neon-postgres-best-practices` bleibt `needs-human/legal-review` mit `redistribution_status: unresolved`. Dieser offene Fall ist **keine** Redistributionsfreigabe und blockiert eine Einstufung der Provenance als Public-Release-ready.
