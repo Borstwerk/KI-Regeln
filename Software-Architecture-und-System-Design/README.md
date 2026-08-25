@@ -115,6 +115,20 @@ Ein Architektur-Verdict oder eine Empfehlung autorisiert keine Implementierung, 
 - `architecture-conformance-review`
 - `architecture-review`
 
+## Evalstatus
+
+Für die sieben Skills sind 42 Startfälle definiert. Der erste Same-Model-Smoke-Lauf wurde am 2026-08-25 gegen den gepinnten Stand `78abce4ade2e1d92dfc47f6169dcd2551d8d0f09` ausgeführt.
+
+Ergebnis:
+
+- 42/42 Fälle entsprachen dem erwarteten Verhalten und Status;
+- 30× `pass`;
+- 6× `partial`;
+- 6× `blocked`;
+- 0 beobachtete verbotene Verhaltensweisen.
+
+Der Lauf ist im Eval-Artefakt `../Evals/Software-Architecture-und-System-Design/Same-Model-Smoke-2026-08-25.md` dokumentiert. Da dasselbe Modell die Kriterien sehen und das Verhalten bewerten konnte, ersetzt der Lauf keinen unabhängigen verblindeten Benchmark und verändert weder `maturity: experimental` noch `eval_coverage: partial`.
+
 ## Leitgedanken
 
 > Erst Driver und Invarianten, dann Struktur, dann Technologie.
