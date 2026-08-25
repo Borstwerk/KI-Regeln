@@ -274,6 +274,111 @@ def validate_upstreams() -> tuple[int, int, int]:
     return len(sources), len(github), unresolved
 
 
+def checked_repo_path(raw: str, label: str) -> Path | None:
+    candidate = Path(raw)
+    if candidate.is_absolute() or ".." in candidate.parts:
+        err("GOLDEN_PATH", f"{label}: path must stay repository-relative: {raw}")
+        return None
+    return ROOT / candidate
+
+
+def validate_golden_tasks(by_id: dict[str, dict[str, Any]]) -> int:
+    base = ROOT / "Evals/Golden-Tasks"
+    schema_path = base / "golden-task.schema.json"
+    suite_path = base / "suite.yml"
+    suite = load_yaml(suite_path)
+    if not isinstance(suite, dict):
+        err("GOLDEN_SUITE", "Evals/Golden-Tasks/suite.yml must be a mapping")
+        return 0
+    if suite.get("schema_version") != 1:
+        err("GOLDEN_SUITE", f"unsupported schema_version {suite.get('schema_version')}")
+
+    task_refs = suite.get("tasks")
+    if not isinstance(task_refs, list) or not all(isinstance(item, str) for item in task_refs):
+        err("GOLDEN_SUITE", "tasks must be a list of repository-relative task paths")
+        task_refs = []
+    if len(task_refs) != len(set(task_refs)):
+        err("GOLDEN_SUITE", "duplicate task path in suite.yml")
+
+    real = {
+        str(path.relative_to(ROOT)).replace("\\", "/")
+        for path in base.glob("GT-*/task.yml")
+    }
+    indexed = set(task_refs)
+    for missing in sorted(real - indexed):
+        err("GOLDEN_SUITE", f"task missing from suite index: {missing}")
+    for extra in sorted(indexed - real):
+        err("GOLDEN_SUITE", f"indexed task does not exist: {extra}")
+
+    workflow_data = load_yaml(ROOT / "workflow-index.yml") or {}
+    indexed_workflows = set(workflow_data.get("workflows") or []) if isinstance(workflow_data, dict) else set()
+    areas = {item.get("area") for item in by_id.values()}
+    seen_ids: set[str] = set()
+
+    for ref in sorted(indexed & real):
+        task_path = checked_repo_path(ref, ref)
+        if task_path is None:
+            continue
+        data = load_yaml(task_path)
+        validate_schema(data, schema_path, ref)
+        if not isinstance(data, dict):
+            continue
+
+        task_id = data.get("id")
+        if task_id in seen_ids:
+            err("GOLDEN_ID", f"duplicate Golden Task id {task_id}")
+        seen_ids.add(task_id)
+        if task_path.parent.name != task_id:
+            err("GOLDEN_ID", f"{ref}: directory {task_path.parent.name} != id {task_id}")
+        if data.get("expected_domain") not in areas:
+            err("GOLDEN_DOMAIN", f"{task_id}: unknown expected_domain {data.get('expected_domain')}")
+        for area in data.get("allowed_secondary_domains") or []:
+            if area not in areas:
+                err("GOLDEN_DOMAIN", f"{task_id}: unknown secondary domain {area}")
+
+        required = set(data.get("required_skills") or [])
+        optional = set(data.get("allowed_optional_skills") or [])
+        forbidden = set(data.get("forbidden_skills") or [])
+        for sid in sorted(required | optional | forbidden):
+            if sid not in by_id:
+                err("GOLDEN_SKILL", f"{task_id}: unknown skill id {sid}")
+        for left, right, label in (
+            (required, optional, "required/optional"),
+            (required, forbidden, "required/forbidden"),
+            (optional, forbidden, "optional/forbidden"),
+        ):
+            overlap = sorted(left & right)
+            if overlap:
+                err("GOLDEN_SKILL", f"{task_id}: conflicting {label} skills {overlap}")
+
+        for fixture in data.get("fixtures") or []:
+            fixture_path = checked_repo_path(fixture, f"{task_id} fixture")
+            if fixture_path is not None and not fixture_path.is_file():
+                err("GOLDEN_FIXTURE", f"{task_id}: missing fixture {fixture}")
+        for source in data.get("sources_of_truth") or []:
+            if not isinstance(source, dict):
+                continue
+            source_raw = source.get("path")
+            if not isinstance(source_raw, str):
+                continue
+            source_path = checked_repo_path(source_raw, f"{task_id} source")
+            if source_path is not None and not source_path.is_file():
+                err("GOLDEN_SOURCE", f"{task_id}: missing Source of Truth {source_raw}")
+
+        workflow = data.get("workflow") or {}
+        allowed = workflow.get("allowed") or [] if isinstance(workflow, dict) else []
+        if isinstance(workflow, dict) and workflow.get("required") is True and not allowed:
+            err("GOLDEN_WORKFLOW", f"{task_id}: workflow.required=true but no allowed workflow is listed")
+        for workflow_path in allowed:
+            checked = checked_repo_path(workflow_path, f"{task_id} workflow")
+            if workflow_path not in indexed_workflows:
+                err("GOLDEN_WORKFLOW", f"{task_id}: workflow not in workflow-index.yml: {workflow_path}")
+            if checked is not None and not checked.is_file():
+                err("GOLDEN_WORKFLOW", f"{task_id}: workflow path missing: {workflow_path}")
+
+    return len(real)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--warnings-as-errors", action="store_true")
@@ -288,12 +393,14 @@ def main() -> int:
     by_id, skill_count = validate_skills(catalog)
     eval_files = validate_eval_cases(by_id)
     workflow_count = validate_workflows()
+    golden_task_count = validate_golden_tasks(by_id)
     validate_manifest()
     upstream_count, github_upstreams, unresolved = validate_upstreams()
 
     print(f"Validated skills: {skill_count}")
     print(f"Validated eval files: {eval_files}")
     print(f"Validated workflows: {workflow_count}")
+    print(f"Validated golden tasks: {golden_task_count}")
     print(f"Validated upstream sources: {upstream_count} ({github_upstreams} GitHub files; {unresolved} unresolved license/provenance records)")
     for message in WARNINGS:
         print(f"WARNING {message}")
