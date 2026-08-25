@@ -5,11 +5,12 @@ from __future__ import annotations
 import argparse
 import re
 import sys
+from datetime import date, datetime
 from pathlib import Path
 from typing import Any
 
 import yaml
-from jsonschema import Draft202012Validator
+from jsonschema import Draft202012Validator, FormatChecker
 
 ROOT = Path(__file__).resolve().parents[1]
 ERRORS: list[str] = []
@@ -33,11 +34,26 @@ def load_yaml(path: Path) -> Any:
         return None
 
 
+def normalize_schema_value(value: Any) -> Any:
+    """Convert YAML-native date values for JSON Schema validation only."""
+    if isinstance(value, datetime):
+        return value.isoformat()
+    if isinstance(value, date):
+        return value.isoformat()
+    if isinstance(value, dict):
+        return {key: normalize_schema_value(item) for key, item in value.items()}
+    if isinstance(value, list):
+        return [normalize_schema_value(item) for item in value]
+    return value
+
+
 def validate_schema(data: Any, schema_path: Path, label: str) -> None:
     schema = load_yaml(schema_path)
     if schema is None or data is None:
         return
-    for issue in sorted(Draft202012Validator(schema).iter_errors(data), key=lambda e: list(e.absolute_path)):
+    normalized = normalize_schema_value(data)
+    validator = Draft202012Validator(schema, format_checker=FormatChecker())
+    for issue in sorted(validator.iter_errors(normalized), key=lambda e: list(e.absolute_path)):
         loc = ".".join(str(x) for x in issue.absolute_path) or "<root>"
         err("SCHEMA", f"{label} [{loc}]: {issue.message}")
 
@@ -237,8 +253,9 @@ def validate_upstreams() -> tuple[int, int, int]:
         err("PROVENANCE_MISSING", f"github-file upstream missing source-specific provenance record: {sid}")
     defaults = (pdata or {}).get("defaults", {}) if isinstance(pdata, dict) else {}
     unresolved = 0
+    by_provenance = {entry.get("source_id"): entry for entry in entries}
     for sid in sorted(github):
-        entry = next((e for e in entries if e.get("source_id") == sid), {})
+        entry = by_provenance.get(sid, {})
         effective = dict(defaults)
         effective.update(entry)
         if effective.get("license_spdx") in (None, "UNKNOWN") or effective.get("redistribution_status") == "unresolved":
@@ -247,6 +264,13 @@ def validate_upstreams() -> tuple[int, int, int]:
             err("PROVENANCE_LICENSE", f"{sid}: unknown license may not be marked redistributable")
         if effective.get("use_class") in ("adapted", "copied/vendored") and effective.get("license_spdx") in (None, "UNKNOWN"):
             err("PROVENANCE_LICENSE", f"{sid}: {effective.get('use_class')} requires resolved license before redistribution")
+        if effective.get("use_class") == "reference/inspiration" and effective.get("notice_requirement") not in ("none", "none-for-reference-only", "unknown"):
+            warn("PROVENANCE_NOTICE", f"{sid}: reference/inspiration should not be presented as vendored notice material")
+        commit = effective.get("repository_commit")
+        license_path = effective.get("license_path")
+        license_blob = effective.get("license_blob_sha")
+        if any(value is not None for value in (commit, license_path, license_blob)) and not all(value is not None for value in (commit, license_path, license_blob)):
+            err("PROVENANCE_EVIDENCE", f"{sid}: same-state license evidence requires repository_commit, license_path and license_blob_sha together")
     return len(sources), len(github), unresolved
 
 
