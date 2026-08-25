@@ -29,6 +29,7 @@ Der Bereich behandelt insbesondere:
 
 ## Nicht der Scope
 
+- **Requirements und Spezifikations-Engineering:** definiert in `../Requirements-und-Spezifikations-Engineering/` benötigte Capabilities, Stakeholder-/Consumerziele, Constraints und Acceptance Intent. Dieser Bereich konkretisiert daraus nach begründeter Systemgrenze die beobachtbare Provider-/Consumer-Zusage und erfindet keine fehlenden Produktanforderungen.
 - **Software Architecture:** entscheidet in `../Software-Architecture-und-System-Design/`, warum eine Systemgrenze existiert, wo Verantwortung liegt und welcher strukturelle Interaktionsstil zu den Architecture Drivers passt. Dieser Bereich definiert danach die konkrete beobachtbare Provider-/Consumer-Zusage.
 - **Domain Modeling:** definiert fachliche Begriffe und Invarianten.
 - **Datenbanken:** definieren interne Persistenzmodelle.
@@ -40,7 +41,8 @@ Der Bereich behandelt insbesondere:
 ## Contract-Modell
 
 ```text
-fachliche Capability
+bestätigte Capability / Requirement
+→ begründete Systemgrenze
 → Provider / Consumer
 → Interaktionsstil
 → Contract
