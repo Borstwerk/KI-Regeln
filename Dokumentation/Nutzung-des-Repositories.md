@@ -929,6 +929,117 @@ Baseline / Sources / Stakeholder
 
 `READY_FOR_LOCAL_GATE` bedeutet nur, dass der Requirements-Stand genügend Evidence für die nächste lokale Entscheidung besitzt. Es ist weder fachliche Abnahme noch Implementierungs-, Release- oder Produktionsfreigabe.
 
+## Beispiel: Content-Präsenz Baseline und Strategie
+
+Workflow:
+
+`../Workflows/Content-Praesenz-Baseline-und-Strategie.md`
+
+Kern:
+
+```text
+lokale Content-/Business-Ziele + Audience + Brand-/Voice-Constraints
+→ content-presence-baseline bei bestehender Präsenz
+→ Research-/Evidence-Lücken klären
+→ social-content-strategy
+→ Plattformrollen / Themen / Formate / Erfolgssignale
+→ content-presence-review
+→ lokales Strategie-/Brand-Gate
+```
+
+Lokal bleiben insbesondere Zielgruppen, Positionierung, Marke/Voice, verbindliche Claims, aktive Plattformaccounts, Plattformrollen, KPI-Ziele, Budget-/Ressourcengrenzen und Approval-Policy.
+
+## Beispiel: Editorialplan und Content-Produktion
+
+Workflow:
+
+`../Workflows/Editorialplan-und-Content-Produktion.md`
+
+Kern:
+
+```text
+bestätigte Content-Strategie
+→ editorial-planning
+→ Research / Claim Verification bei Bedarf
+→ social-content-design
+→ natuerliches-schreiben / Stilreview bei Bedarf
+→ Bild-/Visual-Brief an Bildarbeit bei Bedarf
+→ Claims / Disclosure / Rechte / Privacy prüfen
+→ READY_FOR_LOCAL_PUBLISH_GATE
+→ Publishing außerhalb des Workflows
+```
+
+Postingfrequenz, beste Uhrzeit, Hook-Formeln, Hashtagzahl oder Content-Pillar-Prozente werden nicht zentral erfunden. Kadenz folgt Ziel, Audience, realer Produktionskapazität und relevanter aktueller Plattform-Evidence.
+
+## Beispiel: Cross-Platform-Adaption und Repurposing
+
+Workflow:
+
+`../Workflows/Cross-Platform-Adaption-und-Repurposing.md`
+
+Kern:
+
+```text
+Source Asset / bestätigte Kernbotschaft
+→ content-repurposing
+→ platform-content-adaptation je Zielplattform
+→ social-content-design für finale Drafts
+→ Source / Claims / Rechte / Disclosure prüfen
+→ editorial-planning
+→ lokales Publishing-Gate
+```
+
+Repurposing erzeugt neue Darstellungen, keine neue Wahrheit. Copy-Paste, erfundene Zitate, Claim-Aufblähung und Low-Value-Reuploads sind keine zentrale Content-Strategie.
+
+## Beispiel: Community Engagement und Eskalation
+
+Workflow:
+
+`../Workflows/Community-Engagement-und-Eskalation.md`
+
+Kern:
+
+```text
+reale Kommentare / Mentions / Community-Beiträge
+→ community-engagement
+→ Dialog / Frage / Kritik / Support / Spam / Abuse / Risk klassifizieren
+→ Reply- oder Moderationsvorschlag
+→ sensible Fälle lokal eskalieren
+→ External-Action-Gate
+→ autorisierte Reply-/Moderationsaktion
+```
+
+Fake-Engagement, Engagement-Ringe, Dogpiling und ungefragte DMs sind keine Community-Pflege. Reply, Delete, Hide, Block oder Report bleiben reale Außenaktionen.
+
+## Beispiel: Content Performance und Readiness
+
+Workflow:
+
+`../Workflows/Content-Performance-und-Readiness-Review.md`
+
+Kern:
+
+```text
+lokale Ziele / Metrikdefinitionen
++ Content-Historie
++ native Analytics / verifizierte Exports
++ Community-Signale
+→ content-performance-analysis
+→ optional content-presence-baseline bei Drift
+→ content-presence-review
+→ Findings / Missing Evidence / Lernhypothesen
+→ lokale Strategie-/Editorialentscheidung
+```
+
+Metrikdefinition, Zeitraum, Scope und Nenner gehören zur Evidence. Ein viraler Einzelpost, hohe Impressions oder ein Unterschied zwischen zwei Posts beweisen weder Kausalität noch automatisch Geschäftswirkung.
+
+Besonders wichtig:
+
+```text
+Draft / Kalender / Review / Analytics-Verdict
+≠ Publish / Schedule / Reply / DM / Delete / Block / Report
+```
+
 ## Beispiel: Technische Dokumentation
 
 Workflow:
@@ -1030,7 +1141,7 @@ Das Manifest kann dokumentieren:
 - ausgewählte Workflows;
 - projektspezifische Qualitäts-/Maturity-Policy;
 - lokale Projektregeldateien;
-- optional projektspezifischen `requirements_context` und `architecture_context`, ohne deren Werte aus zentralen Defaults abzuleiten.
+- optional projektspezifischen `requirements_context`, `architecture_context` und `content_presence_context`, ohne deren Werte aus zentralen Defaults abzuleiten.
 
 Beispiel:
 
