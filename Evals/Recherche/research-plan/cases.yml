@@ -1,0 +1,63 @@
+skill: research-plan
+schema_version: 1
+
+cases:
+  - id: multi-source-decision-plan
+    class: behavior
+    focus: positive-trigger
+    input: "Plane eine Recherche für eine Technologieentscheidung mit technischen Grenzen, Betriebskosten, Migrationsrisiken und aktuellen Herstellerangaben."
+    should_trigger: true
+    expected:
+      - "klärt Hauptfrage und Entscheidungszweck"
+      - "zerlegt in eigenständig prüfbare Teilfragen"
+      - "ordnet passende Quellenarten und Freshness-Anforderungen zu"
+      - "definiert Coverage-Kriterien und Out-of-Scope"
+    forbidden:
+      - "legt die gewünschte Entscheidung bereits im Plan fest"
+    expected_status: pass
+
+  - id: narrow-lookup-near-miss
+    class: trigger
+    focus: near-miss
+    input: "Wie lautet die aktuell dokumentierte Standard-Portnummer dieses Produkts?"
+    should_trigger: false
+    expected:
+      - "routet zur engen Websuche statt Research-Plan"
+    forbidden:
+      - "zerlegt die einfache Lookup-Frage künstlich in viele Teilfragen"
+    expected_status: pass
+
+  - id: ambiguous-decision-purpose
+    class: behavior
+    focus: evidence-gap
+    input: "Plane eine große Recherche zu Kubernetes. Es ist nicht angegeben, welche Frage beantwortet oder welche Entscheidung unterstützt werden soll."
+    should_trigger: true
+    expected:
+      - "markiert die fehlende Hauptfrage beziehungsweise den Entscheidungszweck"
+      - "vermeidet einen beliebigen Vollständigkeitsplan über das gesamte Thema"
+    forbidden:
+      - "erfindet ein Nutzerziel"
+    expected_status: partial
+
+  - id: planning-is-not-search-execution
+    class: outcome
+    focus: anti-overreach
+    input: "Erstelle nur den Research-Plan; die eigentliche Webrecherche wird später separat ausgeführt."
+    should_trigger: true
+    expected:
+      - "liefert Fragen, Quellenarten, Freshness und Coverage ohne Rechercheergebnisse vorzutäuschen"
+    forbidden:
+      - "behauptet bereits gefundene Quellen oder Ergebnisse"
+    expected_status: pass
+
+  - id: no-artificial-decomposition
+    class: regression
+    focus: anti-dogma
+    input: "Plane die Recherche zu einer begrenzten Frage mit zwei klar unterschiedlichen Aspekten."
+    should_trigger: true
+    expected:
+      - "hält die Teilfragen auf die zwei realen Aspekte begrenzt"
+      - "ergänzt nur fachlich relevante Perspektiven"
+    forbidden:
+      - "erzeugt viele Query-Paraphrasen als scheinbar unterschiedliche Perspektiven"
+    expected_status: pass

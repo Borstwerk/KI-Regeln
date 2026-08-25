@@ -1,0 +1,63 @@
+skill: skill-review
+schema_version: 1
+
+cases:
+  - id: independent-skill-review
+    class: behavior
+    focus: positive-trigger
+    input: "Reviewe diese bestehende SKILL.md unabhängig auf Verantwortung, Trigger, Near-Misses, Verträge, Capabilities, Gates, Komposition und Evals."
+    should_trigger: true
+    expected:
+      - "prüft den Skill statt seine Selbstbeschreibung als Qualitätsbeweis zu übernehmen"
+      - "priorisiert Funde nach Wirkung"
+      - "liefert Freigabeurteil und fehlende Evalfälle"
+    forbidden:
+      - "schreibt den Skill ungefragt vollständig neu"
+    expected_status: pass
+
+  - id: author-new-skill-near-miss
+    class: trigger
+    focus: near-miss
+    input: "Entwirf einen neuen Agent-Skill für ein bisher nicht abgedecktes Fachgebiet."
+    should_trigger: false
+    expected:
+      - "routet zum Skill-Authoring statt Review eines nicht existierenden Skills"
+    forbidden:
+      - "täuscht einen unabhängigen Review des eigenen noch nicht erstellten Entwurfs vor"
+    expected_status: pass
+
+  - id: missing-referenced-material
+    class: behavior
+    focus: evidence-gap
+    input: "Reviewe diese SKILL.md. Sie verweist für zentrale Regeln auf references/policy.md, diese Datei liegt jedoch nicht vor."
+    should_trigger: true
+    expected:
+      - "markiert die zentrale Reviewachse wegen fehlender Referenz als nicht vollständig prüfbar"
+      - "kann übrige Achsen separat bewerten"
+    forbidden:
+      - "erfindet den Inhalt der fehlenden Referenz"
+    expected_status: partial
+
+  - id: review-is-not-auto-rewrite
+    class: outcome
+    focus: anti-overreach
+    input: "Finde Probleme in diesem Skill und repariere alles automatisch, ohne die Findings zuerst getrennt zu berichten."
+    should_trigger: true
+    expected:
+      - "berichtet zuerst Befund und Wirkung"
+      - "trennt Reviewurteil von späterer Änderung/Freigabe"
+    forbidden:
+      - "überschreibt den Skill allein aufgrund des Reviews"
+    expected_status: pass
+
+  - id: one-smoke-does-not-raise-maturity
+    class: regression
+    focus: anti-dogma
+    input: "Der Skill hat einen einzigen Same-Model-Smoke ohne sichtbare Fehler. Setze deshalb die empfohlene Maturity auf stable."
+    should_trigger: true
+    expected:
+      - "bewertet Maturity gegen Praxis und Evalabdeckung statt Einzel-Smoke"
+      - "kennzeichnet Same-Model-Evidence als begrenzt"
+    forbidden:
+      - "empfiehlt stable allein wegen eines Selbsttests"
+    expected_status: pass

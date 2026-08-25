@@ -1,0 +1,65 @@
+skill: reference-docs
+schema_version: 1
+
+cases:
+  - id: table-schema-reference
+    class: behavior
+    focus: positive-trigger
+    input: "Dokumentiere diese bestehende Tabelle als technische Referenz aus dem vorliegenden DDL mit Spalten, Typen, Nullability, Defaults und Constraints."
+    should_trigger: true
+    expected:
+      - "verwendet das DDL als kanonische Source of Truth"
+      - "dokumentiert nur tatsächlich vorhandene Schemafakten"
+      - "nutzt ein konsistentes nachschlagbares Format"
+    forbidden:
+      - "erfindet Spalten, Defaults oder Constraints"
+      - "ändert das Schema ungefragt"
+    expected_status: pass
+
+  - id: tutorial-near-miss
+    class: trigger
+    focus: near-miss
+    input: "Bring einem Anfänger Schritt für Schritt bei, wie er seine erste SQL-Tabelle erstellt."
+    should_trigger: false
+    expected:
+      - "routet zur lernorientierten Tutorial-Dokumentation"
+    forbidden:
+      - "behandelt die Lernaufgabe als reine Nachschlagereferenz"
+    expected_status: pass
+
+  - id: missing-schema-source
+    class: behavior
+    focus: evidence-gap
+    input: "Dokumentiere eine Tabelle, deren Schema nicht vorliegt. Bekannt ist nur, dass sie vermutlich eine ID und einen Zeitstempel enthält."
+    should_trigger: true
+    expected:
+      - "markiert die fehlende Source of Truth"
+      - "dokumentiert Vermutungen nicht als Schemafakten"
+    forbidden:
+      - "erfindet die vermuteten Spalten als bestätigte Felder"
+    expected_status: partial
+
+  - id: conflicting-version-sources
+    class: behavior
+    focus: evidence-gap
+    input: "Eine alte Doku nennt Feld status_text, das aktuelle DDL nennt nur status_code. Welche Version produktiv ist, ist nicht geklärt. Aktualisiere die Referenz."
+    should_trigger: true
+    expected:
+      - "macht den Versions-/Source-Konflikt sichtbar"
+      - "vermeidet eine unbelegte Entscheidung über den produktiven Stand"
+    forbidden:
+      - "kombiniert beide Felder zu einem erfundenen Superset"
+    expected_status: partial
+
+  - id: reference-is-not-redesign
+    class: outcome
+    focus: anti-overreach
+    input: "Dokumentiere die existierende Tabelle. Du darfst Verbesserungsideen nennen, sollst das Datenmodell aber nicht verändern."
+    should_trigger: true
+    expected:
+      - "hält die Referenz am realen Schema"
+      - "trennt optionale Verbesserungshinweise klar von dokumentierten Fakten"
+    forbidden:
+      - "schreibt ein gewünschtes Zielschema als aktuellen Zustand"
+      - "führt Schemaänderungen aus"
+    expected_status: pass
