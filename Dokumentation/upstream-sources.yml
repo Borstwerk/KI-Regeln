@@ -1712,6 +1712,132 @@ sources:
       - Requirements-und-Spezifikations-Engineering/Skills/acceptance-criteria-design/SKILL.md
       - Requirements-und-Spezifikations-Engineering/Skills/requirements-review/SKILL.md
 
+  # ---------------------------------------------------------------------------
+  # Social Media und Content-Praesenz
+  # ---------------------------------------------------------------------------
+  - id: linkedin-build-your-voice
+    area: Social-Media-und-Content-Praesenz
+    kind: web-page
+    url: https://www.linkedin.com/help/linkedin/answer/a7134086
+    monitor_mode: semantic-review
+    cadence: monthly
+    last_checked: 2026-08-25
+    local_impact:
+      - Social-Media-und-Content-Praesenz/Ziele-Audience-Positionierung-und-Praesenz.md
+      - Social-Media-und-Content-Praesenz/Social-Content-Hooks-Struktur-und-CTA.md
+      - Social-Media-und-Content-Praesenz/Skills/social-content-design/SKILL.md
+
+  - id: linkedin-post-analytics
+    area: Social-Media-und-Content-Praesenz
+    kind: web-page
+    url: https://www.linkedin.com/help/linkedin/answer/a516972
+    monitor_mode: semantic-review
+    cadence: monthly
+    last_checked: 2026-08-25
+    local_impact:
+      - Social-Media-und-Content-Praesenz/Performance-Metriken-Lernschleifen-und-Experimente.md
+      - Social-Media-und-Content-Praesenz/Skills/content-performance-analysis/SKILL.md
+      - Social-Media-und-Content-Praesenz/Skills/content-presence-review/SKILL.md
+
+  - id: meta-rewarding-original-creators
+    area: Social-Media-und-Content-Praesenz
+    kind: web-page
+    url: https://about.fb.com/news/2026/03/rewarding-original-creators-on-facebook/
+    monitor_mode: semantic-review
+    cadence: monthly
+    last_checked: 2026-08-25
+    local_impact:
+      - Social-Media-und-Content-Praesenz/Repurposing-Originalitaet-und-Provenance.md
+      - Social-Media-und-Content-Praesenz/Plattformrollen-und-native-Adaption.md
+      - Social-Media-und-Content-Praesenz/Skills/content-repurposing/SKILL.md
+      - Social-Media-und-Content-Praesenz/Skills/platform-content-adaptation/SKILL.md
+
+  - id: youtube-posts-tips
+    area: Social-Media-und-Content-Praesenz
+    kind: web-page
+    url: https://support.google.com/youtube/answer/11912631
+    monitor_mode: semantic-review
+    cadence: monthly
+    last_checked: 2026-08-25
+    local_impact:
+      - Social-Media-und-Content-Praesenz/Plattformrollen-und-native-Adaption.md
+      - Social-Media-und-Content-Praesenz/Skills/platform-content-adaptation/SKILL.md
+      - Social-Media-und-Content-Praesenz/Skills/social-content-strategy/SKILL.md
+
+  - id: ftc-endorsements-influencers-reviews
+    area: Social-Media-und-Content-Praesenz
+    kind: web-page
+    url: https://www.ftc.gov/business-guidance/advertising-marketing/endorsements-influencers-reviews
+    monitor_mode: semantic-review
+    cadence: monthly
+    last_checked: 2026-08-25
+    local_impact:
+      - Social-Media-und-Content-Praesenz/Claims-Disclosure-Rechte-und-Content-Risiken.md
+      - Social-Media-und-Content-Praesenz/Skills/social-content-design/SKILL.md
+      - Social-Media-und-Content-Praesenz/Skills/content-presence-review/SKILL.md
+
+  - id: blacktwist-content-strategy-skill
+    area: Social-Media-und-Content-Praesenz
+    kind: github-file
+    repository: blacktwist/social-media-skills
+    path: skills/content-strategy-sms/SKILL.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: b4eefa218107e9c8402bf8318abd1cce38f383f1
+    last_checked: 2026-08-25
+    local_impact:
+      - Social-Media-und-Content-Praesenz/Ziele-Audience-Positionierung-und-Praesenz.md
+      - Social-Media-und-Content-Praesenz/Content-Saeulen-Themen-und-Formate.md
+      - Social-Media-und-Content-Praesenz/Editorialsystem-Kadenz-und-Ressourcen.md
+      - Social-Media-und-Content-Praesenz/Skills/social-content-strategy/SKILL.md
+      - Social-Media-und-Content-Praesenz/Skills/editorial-planning/SKILL.md
+
+  - id: blacktwist-content-repurposer-skill
+    area: Social-Media-und-Content-Praesenz
+    kind: github-file
+    repository: blacktwist/social-media-skills
+    path: skills/content-repurposer-sms/SKILL.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: 03e0d2398cb513ee19dd80f19d24dfe58ed701a3
+    last_checked: 2026-08-25
+    local_impact:
+      - Social-Media-und-Content-Praesenz/Repurposing-Originalitaet-und-Provenance.md
+      - Social-Media-und-Content-Praesenz/Skills/content-repurposing/SKILL.md
+      - Social-Media-und-Content-Praesenz/Skills/platform-content-adaptation/SKILL.md
+
+  - id: social-media-skills-analytics-reporting
+    area: Social-Media-und-Content-Praesenz
+    kind: github-file
+    repository: social-media-skills/skills
+    path: skills/analytics-and-reporting/SKILL.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: bf851b46b375f6c9952f54245f5fa49ff7da0371
+    last_checked: 2026-08-25
+    local_impact:
+      - Social-Media-und-Content-Praesenz/Performance-Metriken-Lernschleifen-und-Experimente.md
+      - Social-Media-und-Content-Praesenz/Skills/content-performance-analysis/SKILL.md
+      - Social-Media-und-Content-Praesenz/Skills/content-presence-review/SKILL.md
+
+  - id: inklate-social-audit
+    area: Social-Media-und-Content-Praesenz
+    kind: github-file
+    repository: inklate/social-skills
+    path: skills/social-audit/SKILL.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: de89934532c0203052f12158df32032469afab77
+    last_checked: 2026-08-25
+    local_impact:
+      - Social-Media-und-Content-Praesenz/Content-Audit-Readiness-und-Drift.md
+      - Social-Media-und-Content-Praesenz/Skills/content-presence-baseline/SKILL.md
+      - Social-Media-und-Content-Praesenz/Skills/content-presence-review/SKILL.md
+
 policy:
   on_change: review-only
   auto_sync: false
