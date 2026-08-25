@@ -102,6 +102,17 @@ skills:
   # - Requirements-und-Spezifikations-Engineering/Skills/requirements-validation
   # - Requirements-und-Spezifikations-Engineering/Skills/requirements-review
 
+  # Social Media und Content-Präsenz
+  # - Social-Media-und-Content-Praesenz/Skills/content-presence-baseline
+  # - Social-Media-und-Content-Praesenz/Skills/social-content-strategy
+  # - Social-Media-und-Content-Praesenz/Skills/editorial-planning
+  # - Social-Media-und-Content-Praesenz/Skills/social-content-design
+  # - Social-Media-und-Content-Praesenz/Skills/platform-content-adaptation
+  # - Social-Media-und-Content-Praesenz/Skills/content-repurposing
+  # - Social-Media-und-Content-Praesenz/Skills/community-engagement
+  # - Social-Media-und-Content-Praesenz/Skills/content-performance-analysis
+  # - Social-Media-und-Content-Praesenz/Skills/content-presence-review
+
   # Dokumentationserstellung
   # - Dokumentationserstellung/Skills/docs-plan
   # - Dokumentationserstellung/Skills/technical-writing
@@ -205,6 +216,11 @@ workflows:
   # - Workflows/Acceptance-Traceability-und-Handoff.md
   # - Workflows/Requirements-Change-und-Impact.md
   # - Workflows/Requirements-Readiness-Review.md
+  # - Workflows/Content-Praesenz-Baseline-und-Strategie.md
+  # - Workflows/Editorialplan-und-Content-Produktion.md
+  # - Workflows/Cross-Platform-Adaption-und-Repurposing.md
+  # - Workflows/Community-Engagement-und-Eskalation.md
+  # - Workflows/Content-Performance-und-Readiness-Review.md
 
 quality_policy:
   minimum_maturity: "<project-decision>"
@@ -240,6 +256,19 @@ architecture_context:
   accepted_decisions_or_adrs: []
   migration_and_cutover_constraints: []
 
+# Optionale projektspezifische Content-/Presence-Wahrheit. Plattformrollen, Ziele,
+# Zielgruppen, Brand Voice und Publishingrechte nie aus zentralen Defaults erfinden.
+content_presence_context:
+  goals_and_outcomes: []
+  audiences_and_communities: []
+  brand_voice_and_positioning: []
+  active_platforms_and_roles: []
+  authoritative_content_sources: []
+  content_pillars_or_topic_areas: []
+  confirmed_metric_definitions_and_targets: []
+  disclosure_rights_and_privacy_rules: []
+  publishing_accounts_and_approval_policy: "<project-specific>"
+
 notes:
   - Lokale Projektregeln haben Vorrang vor allgemeinen Regeln.
   - Nur tatsächlich benötigte Regeln, Skills und Workflows auswählen.
@@ -264,3 +293,6 @@ notes:
   - Stakeholder, Goals, Requirements Sources, Scope, Prioritäten, Quality-Ziele, Approval-/Baseline-Regeln und verbindliche Constraints bleiben projektspezifisch.
   - PRD, BRD, SRS, User Stories, Given/When/Then, EARS, MoSCoW oder numerische Clarity-Scores sind keine zentralen Pflichtformate oder Freigaberegeln.
   - Requirements Validation, `APPROVED` oder `READY_FOR_LOCAL_GATE` autorisieren keine Architektur-, Code-, Daten-, Contract-, Deployment- oder Releaseaktion automatisch.
+  - Content-Ziele, Audience, Marke/Voice, Plattformrollen, echte Analyticsdefinitionen/-ziele, Rights/Disclosure und Publishingaccounts bleiben projektspezifisch.
+  - Postingfrequenz, beste Uhrzeit, Hashtagzahlen, Content-Pillar-Prozente und Algorithmusgewichte sind keine zentralen Pflichtwerte.
+  - Draft, Content-Kalender, Review oder `READY_FOR_LOCAL_GATE` autorisieren kein Publish, Schedule, Reply, DM, Delete, Block, Report oder Profiledit automatisch.
