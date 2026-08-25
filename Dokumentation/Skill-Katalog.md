@@ -84,7 +84,7 @@ Für Reliability sind sechs Startfälle je Skill definiert, insgesamt 48. Der er
 
 Für Data Engineering sind sechs Startfälle je Skill definiert, insgesamt 54. Diese 54 Fälle sind derzeit **definiert, aber noch nicht ausgeführt oder bestanden**.
 
-Für Software Architecture und System Design sind sechs Startfälle je Skill definiert, insgesamt 42. Diese 42 Fälle sind derzeit **definiert, aber noch nicht ausgeführt oder bestanden**.
+Für Software Architecture und System Design sind sechs Startfälle je Skill definiert, insgesamt 42. Der erste Same-Model-Smoke-Lauf wurde am 2026-08-25 gegen `78abce4ade2e1d92dfc47f6169dcd2551d8d0f09` ausgeführt. Alle 42 Fälle entsprachen dem erwarteten Verhalten und Status (30× `pass`, 6× `partial`, 6× `blocked`, 0 verbotene Verhaltensweisen). Das ersetzt keinen unabhängigen verblindeten Benchmark und rechtfertigt allein keine Hochstufung.
 
 ## Capabilities
 
@@ -154,7 +154,7 @@ Für Reliability-/System-Observability-Skills sollte zusätzlich an realen Servi
 
 Für Data-Engineering-Skills sollte zusätzlich an realen Datenflüssen beziehungsweise belastbaren Pipeline-/Backfill-/Consumer-Szenarien geprüft werden, ob Source-of-Truth-Lücken, Grainfehler, CDC-/Replay-Grenzen, semantische Contractänderungen, Data-Quality-Blind-Spots, Lineage-Lücken und Reprocessing-Gates zuverlässig erkannt werden. Ein grüner DAG, SQL-Lauf oder definierter Evalcase allein reicht nicht als Maturity-Beleg.
 
-Für Software-Architecture-/System-Design-Skills sollte zusätzlich an realen Systemen oder belastbaren Architekturentscheidungen geprüft werden, ob Architecture 0 korrekt rekonstruiert, Drivers und Missing Evidence sauber getrennt, unnötige verteilte Komplexität vermieden, echte Trade-offs erkannt, Migrationszwischenzustände erklärt und lokale Architekturregeln ohne Patterndogma geprüft werden. Ein schönes Diagramm, ein ADR oder definierter Evalcase allein reicht nicht als Maturity-Beleg.
+Für Software-Architecture-/System-Design-Skills sollte zusätzlich an realen Systemen oder belastbaren Architekturentscheidungen geprüft werden, ob Architecture 0 korrekt rekonstruiert, Drivers und Missing Evidence sauber getrennt, unnötige verteilte Komplexität vermieden, echte Trade-offs erkannt, Migrationszwischenzustände erklärt und lokale Architekturregeln ohne Patterndogma geprüft werden. Ein schönes Diagramm, ein ADR oder ein Same-Model-Smoke-Lauf allein reicht nicht als Maturity-Beleg.
 
 ## Leitgedanke
 
