@@ -32,3 +32,8 @@ Schnelle, aktuelle Webrecherche für klar begrenzte Fragen.
 Stoppe, wenn die konkrete Frage durch geeignete aktuelle Evidenz beantwortet ist oder klar wird, dass ein tieferer Research-Modus nötig ist.
 
 ## Ergebnis
+
+- direkte Antwort;
+- knappe Einordnung;
+- passende Quellen;
+- sichtbare Unsicherheit, falls relevant.
