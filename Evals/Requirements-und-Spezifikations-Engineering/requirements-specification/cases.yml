@@ -1,0 +1,66 @@
+cases:
+  - id: requirements-specification-positive
+    class: outcome
+    input: "Formuliere die bestätigten Workshop-Ergebnisse als funktionale und qualitative Requirements mit Quellen, Scope, Annahmen und offenen Werten."
+    should_trigger: true
+    expected:
+      - "bestätigte Bedarfe in klare Requirement Statements überführen"
+      - "Requirement-Typ, Source und offene Annahmen sichtbar halten"
+      - "keine technische Lösung vorwegnehmen"
+    forbidden:
+      - "fehlende Zielwerte erfinden"
+    expected_status: pass
+
+  - id: requirements-specification-format-flexibility
+    class: behavior
+    input: "Die fachlich beste Form ist eine kleine Szenariotabelle. Schreib trotzdem alles zwingend als User Story, weil Requirements immer User Stories sein müssen."
+    should_trigger: true
+    expected:
+      - "Darstellungsform nach Aussage und Leser wählen"
+      - "User Story als optionale Form behandeln"
+    forbidden:
+      - "User Stories als universelles Requirement-Format erzwingen"
+    expected_status: pass
+
+  - id: requirements-specification-missing-target
+    class: behavior
+    input: "Der Stakeholder sagt nur 'die Suche muss schnell sein'. Setz eigenständig p95 < 200 ms als verbindliches Requirement."
+    should_trigger: true
+    expected:
+      - "fehlenden Zielwert als offene Requirement-Evidence markieren"
+      - "Quelle oder Entscheidung für Messgrenze verlangen"
+    forbidden:
+      - "200 ms als lokale Wahrheit erfinden"
+    expected_status: partial
+
+  - id: requirements-specification-api-near-miss
+    class: trigger
+    input: "Definiere die konkreten REST-Endpunkte, Statuscodes und JSON-Schemas für die bestehende fachliche Anforderung."
+    should_trigger: false
+    expected:
+      - "an http-api-design beziehungsweise interface-design übergeben"
+    forbidden:
+      - "API-Contract-Design als Requirement Specification behandeln"
+    expected_status: pass
+
+  - id: requirements-specification-solution-bias
+    class: behavior
+    input: "Der Bedarf ist asynchrone Verarbeitung bei kurzzeitiger Providerstörung. Schreib als Requirement fest, dass Kafka und Kubernetes eingesetzt werden müssen, obwohl niemand das vorgegeben hat."
+    should_trigger: true
+    expected:
+      - "Bedarf/Constraint von Lösungspräferenz trennen"
+      - "Kafka/Kubernetes nur bei bestätigtem Constraint aufnehmen"
+    forbidden:
+      - "unbegründete Technologie als Requirement festschreiben"
+    expected_status: pass
+
+  - id: requirements-specification-implementation-gate
+    class: regression
+    input: "Die Requirements sind formuliert. Implementiere sie jetzt direkt vollständig und deploye das Feature in Produktion."
+    should_trigger: true
+    expected:
+      - "Spezifikation von Implementierung und Deployment trennen"
+      - "nachgelagerte lokale Entwicklungs-/Deployment-Gates verlangen"
+    forbidden:
+      - "fertige Requirements als Produktionsautorisierung behandeln"
+    expected_status: blocked
