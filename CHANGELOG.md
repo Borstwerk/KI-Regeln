@@ -8,6 +8,41 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Requirements und Specification Engineering
+
+Neuer tool- und formatneutraler Hauptbereich für Requirements Elicitation, Spezifikation, Acceptance, Traceability, Change und Validation:
+
+- Requirements Engineering als Übersetzung von Stakeholderbedarf, Zielen, Constraints und Evidence in nachvollziehbare, prüfbare Soll-Aussagen statt als PRD-/Ticket-Schreibübung modelliert;
+- klare Quellen- und Autoritätslogik für Stakeholderaussagen, Entscheidungen, bestehende Spezifikationen, Fachquellen, Tickets, Code, Tests und Runtime-/Ist-Evidence;
+- `Stakeholderwunsch ≠ automatisch verbindliches Requirement` sowie `Ist-Verhalten ≠ automatisch gewünschtes Soll` als zentrale Brownfield-Grenzen;
+- Requirements Baseline trennt bestätigte Soll-Aussagen, aktuelle Ist-Evidence, Annahmen, Konflikte, offene Fragen und Supersession statt aus dem Repository stillschweigend Spezifikation zu rekonstruieren;
+- Elicitation über Interviews, Workshops, Dokumentanalyse, Beobachtung und technische Evidence nach Kontext statt festem Fragebogen oder Vollständigkeitsscore;
+- Problem, Ziel, Scope, Out-of-Scope, Constraints, Assumptions, Dependencies und offene Fragen als explizite Ebenen;
+- funktionale Anforderungen beschreiben benötigtes Verhalten beziehungsweise Capability, ohne frühzeitig Architektur, Framework, Datenbank oder konkrete Implementierung festzuschreiben;
+- Quality Requirements werden über relevantes Objekt/Flow, Bedingung, Messidee und bestätigten Zielwert formuliert statt mit unprüfbaren Adjektiven wie „schnell“, „skalierbar“ oder „hochverfügbar“;
+- fehlende Performance-, Availability-, RTO/RPO-, Capacity-, Kosten- oder andere Zielwerte werden nicht erfunden; sie bleiben Missing Evidence beziehungsweise lokale Entscheidung;
+- Acceptance Criteria als beobachtbare Akzeptanzbedingungen von konkreten Testfällen, Testdaten und Testautomatisierung getrennt;
+- EARS, Given-When-Then, Gherkin, User Stories, Use Cases, PRD, BRD und SRS als optionale Formate und Techniken statt Pflichtmodell;
+- bidirektionale Traceability von Source/Goal über Requirement und Acceptance bis zu downstream Design-/Test-/Evidence-Artefakten, ohne Traceability mit Korrektheit gleichzusetzen;
+- Requirements Change Analysis mit Baseline-Diff, Impact auf Ziele, Acceptance, Architektur, Interfaces, Daten, Reliability, Tests und Migration, aber ohne automatische Downstream-Änderung;
+- Lifecycle mit Draft, Review, Approval/Baseline, Versionierung, Supersession und Change-Historie; konkrete Statusnamen und Approval-Policy bleiben lokal;
+- Requirements Validation prüft, ob die beschriebenen Anforderungen den tatsächlichen Stakeholderbedarf und Intended Use treffen; Verification/Testen der Implementierung bleibt downstream;
+- unabhängiges Requirements Review prüft Quellenbasis, Scope, Qualität, Acceptance, Traceability, Konflikte, Change-/Lifecycle-State und Missing Evidence read-only;
+- Readiness-Verdicts `READY_FOR_LOCAL_GATE`, `READY_WITH_FINDINGS`, `BLOCKED` und `UNVERIFIED` liefern Evidence für die nächste lokale Entscheidung, aber keine fachliche Abnahme oder Implementierungs-/Releasefreigabe;
+- acht neue Skills `requirements-baseline`, `requirements-elicitation`, `requirements-specification`, `acceptance-criteria-design`, `requirements-traceability`, `requirements-change-analysis`, `requirements-validation` und `requirements-review`;
+- alle acht Requirements-Skills starten `experimental` mit `partial` Evalabdeckung;
+- 48 Evalfälle definiert, sechs je Skill, einschließlich Code-/Ist-vs.-Soll-Fällen, Clarity-Score-/User-Story-/Gherkin-/MoSCoW-Dogmen, erfundenen Quality Targets, Acceptance-vs.-Test-Near-Misses, Traceability-Autofix, Change-Autorisierung, fehlender Stakeholder-/Source-Evidence und Approval-/Deployment-Gates; diese 48 Fälle sind **definiert, aber noch nicht als Behavioral Evals ausgeführt oder bestanden**;
+- fünf Workflows `Requirements-Baseline-und-Spezifikation.md`, `Requirements-Elicitation-und-Klaerung.md`, `Acceptance-und-Traceability.md`, `Requirement-Aenderung-und-Impact.md` und `Requirements-Readiness-Review.md`;
+- neues menschliches `Dokumentation/Skill-Handbuch-Requirements-und-Spezifikations-Engineering.md`;
+- `Software-Architecture-und-System-Design/`, `Reliability-und-System-Observability/`, `Data-Engineering/`, `Testing-und-QA/` und `Schnittstellen-und-Vertraege/` mit dem realen Requirements-Bereich verbunden;
+- Root-README, Workflow-/Eval-Dokumentation, Skill-Katalog, Projektmanifest, Nutzungsdoku und Pflege-Radar um Requirements und Specification Engineering erweitert;
+- Projektmanifest um lokalen `requirements_context` für Stakeholder, Ziele, Sources of Truth, Scope, Constraints, bestätigte Quality Targets, Approval-/Baseline-Policy und offene Fragen ergänzt;
+- Skill-Katalog von 111 auf 119 zentrale Skills erweitert;
+- acht aktive Requirements-Upstreams registriert: IREB Foundation, IREB Elicitation, NASA Requirements Engineering, NASA SE Handbook Appendix und ISO/IEC/IEEE 29148 Edition 3 Draft per semantischem Monatsreview sowie `Modular-Earth-LLC/solutions-architecture-agent`, `microsoft/hve-core` `requirements-author` und `Spacey6849/AgentSkills` `requirements-analysis` per konkretem Repositorypfad und geprüftem Blob-SHA;
+- ISO/IEC/IEEE 29148 Edition 3 ausdrücklich als Draft-Upstream behandelt, damit ein späterer Final-Release als Review-Signal erkannt wird, ohne den Draft heute als endgültigen Normstand auszugeben;
+- öffentliche Agent-Skills als methodische Upstreams eingeplant, ohne BANT-/GenAI-/AWS-Speziallogik, BRD/PRD-Zwang, feste Clarity Scores oder andere hostspezifische Prozessvorgaben zu zentralen Regeln zu machen;
+- Upstream-Governance bleibt `on_change: review-only` und `auto_sync: false`.
+
 ### Software Architecture und System Design
 
 Neuer technologie- und providerneutraler Hauptbereich für Systemstruktur, Architekturentscheidungen, Trade-offs, Evolution und Conformance:
@@ -29,7 +64,8 @@ Neuer technologie- und providerneutraler Hauptbereich für Systemstruktur, Archi
 - Architecture Conformance und Fitness Functions für lokale Boundary-, Dependency-, Ownership- und ADR-Regeln; ein konfigurierter Check gilt erst als Evidence, wenn seine Wirksamkeit gegenüber relevanten Verstößen nachgewiesen ist;
 - sieben neue Skills `architecture-baseline`, `system-design`, `architecture-decomposition`, `architecture-tradeoff-analysis`, `architecture-evolution`, `architecture-conformance-review` und `architecture-review`;
 - alle sieben Architecture-Skills starten `experimental` mit `partial` Evalabdeckung;
-- 42 Evalfälle definiert, sechs je Skill, einschließlich veralteter Diagramme, ADR-/Code-Konflikte, Microservice-/Teamgrößen-/Shared-DB-Dogmen, fehlender Quality-/Capacity-Evidence, künstlicher Kandidaten, Architecture-Score-Dogma, Big-Bang-Migrationen, fehlender Conformance-Baseline und produktiver Implementierungs-/Cutover-Gates; diese 42 Fälle sind definiert, aber noch nicht als Behavioral Evals ausgeführt oder bestanden;
+- 42 Evalfälle definiert, sechs je Skill, einschließlich veralteter Diagramme, ADR-/Code-Konflikte, Microservice-/Teamgrößen-/Shared-DB-Dogmen, fehlender Quality-/Capacity-Evidence, künstlicher Kandidaten, Architecture-Score-Dogma, Big-Bang-Migrationen, fehlender Conformance-Baseline und produktiver Implementierungs-/Cutover-Gates;
+- erster Same-Model-Smoke am 2026-08-25 gegen `78abce4ade2e1d92dfc47f6169dcd2551d8d0f09`: 42/42 Fälle entsprachen dem erwarteten Verhalten und Status (30× `pass`, 6× `partial`, 6× `blocked`, 0 beobachtete verbotene Verhaltensweisen); der Lauf ist kein unabhängiger verblindeter Benchmark und rechtfertigt keine Maturity-Hochstufung;
 - fünf Workflows `Architektur-Baseline-und-Systemdesign.md`, `Architekturentscheidung-und-Tradeoff.md`, `Systemgrenze-und-Dekomposition.md`, `Evolutionaere-Architekturaenderung.md` und `Architektur-Readiness-Review.md`;
 - neues menschliches `Dokumentation/Skill-Handbuch-Software-Architecture-und-System-Design.md`;
 - Nachbardomänen `Schnittstellen-und-Vertraege/`, `Infrastruktur-und-DevOps/`, `Reliability-und-System-Observability/` und `Data-Engineering/` mit expliziten Architecture-Grenzen verbunden;
