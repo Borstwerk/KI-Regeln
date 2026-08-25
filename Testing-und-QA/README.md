@@ -23,11 +23,14 @@ Der Bereich beantwortet insbesondere:
 ## Abgrenzung
 
 ```text
+Requirements und Spezifikations-Engineering
+→ definiert, welches Verhalten beziehungsweise welche Eigenschaft gelten soll, plus Acceptance Criteria und Verification Intent
+
 Programmieren / TDD
 → testgetriebene Implementierung in kleinen Red-Green-Schnitten
 
 Testing und QA
-→ Teststrategie, Testdesign, Testportfolio und Qualitätsevidence
+→ Teststrategie, konkrete Testfälle, Testdaten, Testportfolio, Ausführung und Qualitätsevidence
 
 Data Engineering
 → datenfachliche Invarianten, Freshness, Completeness, Reconciliation und Publish-Evidence für Datasets und Datenflüsse
@@ -45,6 +48,8 @@ Reliability und System-Observability
 → SLOs, Runtime-Health, Incidents, Capacity und systemische Resilience-Experimente unter kontrollierten Störungen
 ```
 
+Requirements und Spezifikations-Engineering definiert in `../Requirements-und-Spezifikations-Engineering/` **welche beobachtbare Bedingung** als Erfüllungsabsicht gilt. Testing und QA entscheidet anschließend über konkrete Testebene, Testdesign, Daten, Environment und Automation. `Acceptance Criterion ≠ Test Case`.
+
 Data Engineering definiert in `../Data-Engineering/` **welche datenfachlichen Zustände** für ein Dataset relevant sind und wie Reconciliation/Freshness verstanden werden. Testing und QA bleibt zuständig für allgemeines Testdesign, Testebenen und die Wirksamkeit der Teststrategie.
 
 Für die Grenze zwischen reproduzierbarem Failure Testing und systemischem Experiment siehe `../Reliability-und-System-Observability/Chaos-Engineering-und-Game-Days.md`.
@@ -52,7 +57,7 @@ Für die Grenze zwischen reproduzierbarem Failure Testing und systemischem Exper
 ## Grundmodell
 
 ```text
-Änderung / Produktziel
+bestätigte Anforderungen / Änderung / Produktziel
         ↓
 Risiken und Failure Modes
         ↓
