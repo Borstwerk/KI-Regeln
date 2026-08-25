@@ -79,6 +79,23 @@ Quellen und Kanon
 → Abschluss
 ```
 
+## Übergabe an Social Media und Content-Präsenz
+
+Wenn ein Bild für einen öffentlichen Social-Kanal bestimmt ist, bleiben die Verantwortungen getrennt:
+
+```text
+Social-Media-und-Content-Praesenz
+→ Aussage, Audience, Plattformrolle, Formatbedarf und Visual Brief
+
+Bildarbeit
+→ visuelle Planung, Erzeugung, Konsistenz und Bildreview
+
+Social-Media-und-Content-Praesenz
+→ plattformbezogene Einbettung, Caption/CTA, Editorialkontext und lokales Publishing-Gate
+```
+
+Ein fertiges Social-Visual autorisiert keine Veröffentlichung. Rechte, Disclosure, Privacy und Account-/Publishing-Freigaben bleiben zusätzlich lokal zu prüfen.
+
 ## Leitgedanken
 
 - Wiederkehrende Entitäten werden nicht in jeder Generation neu erfunden.
