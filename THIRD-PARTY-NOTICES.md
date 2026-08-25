@@ -1,39 +1,14 @@
-# Third-Party Notices and Provenance Status
+# Third-Party Notices
 
-KI-Regeln enthält lokal entwickelte Regeln und Skills, die teilweise durch externe öffentliche Quellen und Agent-Skills beeinflusst wurden. Die maschinenlesbare Zuordnung der tatsächlich einflussreichen GitHub-Artefakte steht in `Dokumentation/upstream-sources.yml`; Lizenz- und Nutzungsklassifikation steht in `Dokumentation/upstream-provenance.yml`.
+Diese Datei ist ausschließlich für Materialien vorgesehen, bei denen durch Übernahme, Vendoring oder konkrete Adaption tatsächlich eine Lizenz- oder Notice-Pflicht im Repository entsteht.
 
-**Wichtig:** Ein Eintrag als Upstream bedeutet nicht automatisch, dass Quelltext oder Skilltext kopiert wurde. `reference/inspiration`, `adapted` und `copied/vendored` werden ausdrücklich unterschieden. Ein unbekannter Lizenzstatus wird nicht als Erlaubnis zur Weiterverteilung interpretiert.
+Im aktuellen Hardening-Phase-1-Stand sind die in `Dokumentation/upstream-sources.yml` erfassten konkreten GitHub-Artefakte in `Dokumentation/upstream-provenance.yml` ausschließlich als `reference/inspiration` klassifiziert. Für sie wird hier deshalb **kein** Lizenztext so dargestellt, als wäre Fremdmaterial in dieses Repository übernommen worden.
 
-## Matt Pocock – skills
+Die vollständige Einfluss- und Provenance-Erfassung steht in:
 
-Mehrere Engineering-Praktiken in diesem Repository wurden teilweise durch `mattpocock/skills` inspiriert, insbesondere Debugging, Code Review und Domain Modeling. Die aktuelle lokale Nutzungsklasse ist `reference/inspiration`.
+- `Dokumentation/upstream-sources.yml` – beobachtete externe Quellen und lokaler Einfluss;
+- `Dokumentation/upstream-provenance.yml` – Nutzungsklasse und Lizenz-/Redistributionsstatus.
 
-Source: https://github.com/mattpocock/skills
+Ein `unresolved`-Status ist ausdrücklich keine Aussage zur tatsächlichen Lizenz des Upstreams und keine Erlaubnis zur Weiterverteilung. Er bedeutet, dass für den beobachteten Artefaktstand kein belastbarer Nachweis aus Repository-Commit/Ref und zugehöriger Lizenzdatei desselben historischen Stands dokumentiert wurde.
 
-License: MIT
-
-License source: https://github.com/mattpocock/skills/blob/main/LICENSE
-
-Copyright (c) 2026 Matt Pocock
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
-## Noch nicht abschließend lizenzgeklärte GitHub-Upstreams
-
-Alle weiteren in `Dokumentation/upstream-sources.yml` als `kind: github-file` geführten Quellen bleiben bis zur belastbaren Prüfung des Lizenzstands am beobachteten Commit/Blob konservativ `redistribution_status: unresolved`, sofern `Dokumentation/upstream-provenance.yml` keinen engeren Eintrag enthält. Diese Quellen dürfen nicht allein aufgrund ihrer öffentlichen Erreichbarkeit als redistributable behandelt werden.
+Soll später tatsächlich fremdes Material übernommen, vendored oder substanziell adaptiert werden, muss vor der Weiterverteilung die konkrete Lizenzlage am verwendeten Stand geklärt und ein gegebenenfalls erforderlicher Notice-Eintrag hier ergänzt werden.
