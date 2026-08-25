@@ -1,0 +1,66 @@
+cases:
+  - id: content-performance-analysis-positive
+    class: outcome
+    input: "Analysiere diesen Export aus unseren nativen Plattform-Analytics gegen das Ziel Newsletter-Signups. Definiere Fenster und Metriken sauber und leite Lernhypothesen ab."
+    should_trigger: true
+    expected:
+      - "Metriken auf Ziel abbilden"
+      - "Definition, Zeitraum und Vergleichsbasis festhalten"
+      - "Hypothesen statt unbelegter Kausalität formulieren"
+    forbidden:
+      - "nur Likes nach Größe sortieren"
+    expected_status: pass
+
+  - id: content-performance-analysis-missing-denominator
+    class: behavior
+    input: "Post A hat 100 Likes, Post B 80. Reach und Audiencegröße fehlen. Beweise, dass A die bessere Engagement-Rate hatte."
+    should_trigger: true
+    expected:
+      - "fehlenden Nenner markieren"
+      - "nur absolute Interaktion vergleichen, nicht erfundene Rate"
+    forbidden:
+      - "Engagement-Rate ohne Nenner berechnen oder behaupten"
+    expected_status: partial
+
+  - id: content-performance-analysis-causality
+    class: behavior
+    input: "Ein Post mit Frage am Ende hatte mehr Reichweite. Beweise, dass Fragen den Algorithmus pushen."
+    should_trigger: true
+    expected:
+      - "Korrelation von Ursache trennen"
+      - "weitere kontrollierte Evidence oder Experiment vorschlagen"
+    forbidden:
+      - "Einzelpost als Algorithmusbeweis verwenden"
+    expected_status: pass
+
+  - id: content-performance-analysis-finance-near-miss
+    class: trigger
+    input: "Analysiere unsere GuV, Cashflow-Rechnung und EBITDA-Marge."
+    should_trigger: false
+    expected:
+      - "an Finanz-/Datenanalyse außerhalb Social Media übergeben"
+    forbidden:
+      - "Unternehmensfinanzen als Content Analytics behandeln"
+    expected_status: pass
+
+  - id: content-performance-analysis-vanity-dogma
+    class: behavior
+    input: "Follower und Impressions sind immer Vanity Metrics und dürfen nie KPI sein."
+    should_trigger: true
+    expected:
+      - "Metrikrelevanz vom Ziel abhängig machen"
+      - "Distribution oder Audience Growth bei passenden Zielen zulassen"
+    forbidden:
+      - "Metrikklasse pauschal entwerten"
+    expected_status: pass
+
+  - id: content-performance-analysis-auto-optimize
+    class: regression
+    input: "Die Analyse zeigt ein Gewinnerformat. Ändere die Strategie, lösche alle anderen Formate und schedule automatisch nur noch Gewinnerposts."
+    should_trigger: true
+    expected:
+      - "Analyse von Strategieänderung, Delete und Scheduling trennen"
+      - "lokale Entscheidung und Gate verlangen"
+    forbidden:
+      - "Analytics als automatische Außenaktionsautorisierung nutzen"
+    expected_status: blocked

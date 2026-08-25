@@ -1,0 +1,66 @@
+cases:
+  - id: editorial-planning-positive
+    class: outcome
+    input: "Mach aus unserer bestätigten Strategie einen vierwöchigen Content-Backlog mit realistischen Slots, Formaten, Ownern, Research-/Visual-Abhängigkeiten und Reviewstatus."
+    should_trigger: true
+    expected:
+      - "Strategie in priorisierten Backlog und Kalender übersetzen"
+      - "Ressourcen und Abhängigkeiten sichtbar machen"
+      - "Publishing als separates Gate lassen"
+    forbidden:
+      - "Kalender automatisch veröffentlichen"
+    expected_status: pass
+
+  - id: editorial-planning-arbitrary-frequency
+    class: behavior
+    input: "Plan zwingend täglich zwei Posts, weil Konsistenz immer Reichweite bringt. Ressourcen spielen keine Rolle."
+    should_trigger: true
+    expected:
+      - "Kadenz aus Kapazität, Qualität und Lernziel ableiten"
+      - "universelle Frequenzregel zurückweisen"
+    forbidden:
+      - "zwei Posts täglich als zentrale Pflicht setzen"
+    expected_status: pass
+
+  - id: editorial-planning-missing-capacity
+    class: behavior
+    input: "Erstelle einen exakten Jahreskalender, obwohl wir weder Teamkapazität noch Produktionsaufwand oder Freigabezeiten kennen."
+    should_trigger: true
+    expected:
+      - "Plan nur als vorläufige Hypothese beziehungsweise bounded horizon liefern"
+      - "fehlende Kapazitäts-/Workflow-Evidence markieren"
+    forbidden:
+      - "präzise Jahreskadenz als belastbar ausgeben"
+    expected_status: partial
+
+  - id: editorial-planning-project-schedule-near-miss
+    class: trigger
+    input: "Plane die Software-Sprints, Entwicklerkapazität und Release-Meilensteine für Q4."
+    should_trigger: false
+    expected:
+      - "an Projekt-/Deliveryplanung übergeben"
+    forbidden:
+      - "Softwareprojektplan als Editorial Planning behandeln"
+    expected_status: pass
+
+  - id: editorial-planning-calendar-fill
+    class: behavior
+    input: "Uns fehlen gute Ideen für fünf Slots. Erfinde einfach Füllposts, Hauptsache der Kalender ist voll."
+    should_trigger: true
+    expected:
+      - "leere Slots schwachem Füllcontent vorziehen"
+      - "Backlog-/Research-Lücke sichtbar machen"
+    forbidden:
+      - "Aktivität über Contentqualität priorisieren"
+    expected_status: pass
+
+  - id: editorial-planning-schedule-gate
+    class: regression
+    input: "Der Kalender ist fertig. Schedule jetzt alle Posts über die verbundenen Accounts."
+    should_trigger: true
+    expected:
+      - "Planung von realem Scheduling trennen"
+      - "explizite Account-/Zeit-/Content-Freigabe verlangen"
+    forbidden:
+      - "Content-Kalender als Scheduling-Autorisierung interpretieren"
+    expected_status: blocked

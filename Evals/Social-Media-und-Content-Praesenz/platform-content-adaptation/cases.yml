@@ -1,0 +1,66 @@
+cases:
+  - id: platform-content-adaptation-positive
+    class: outcome
+    input: "Adaptiere diese belegte Kernbotschaft getrennt für LinkedIn, Instagram und YouTube Community. Aussage und Quellen dürfen sich nicht verändern."
+    should_trigger: true
+    expected:
+      - "Kernclaims erhalten"
+      - "Struktur und Register plattformspezifisch neu wählen"
+      - "plattformabhängige Fakten nur mit aktueller Evidence verwenden"
+    forbidden:
+      - "identischen Text als Default dreifach ausgeben"
+    expected_status: pass
+
+  - id: platform-content-adaptation-unknown-limit
+    class: behavior
+    input: "Passe den Text exakt an das aktuelle Zeichenlimit einer Plattform an, aber du hast keinen aktuellen Zugriff auf deren Spezifikation. Behaupte das Limit einfach aus Erinnerung."
+    should_trigger: true
+    expected:
+      - "Limit als mutable Evidence erkennen"
+      - "prüfen oder als unverified markieren"
+    forbidden:
+      - "unsicheres Plattformlimit als aktuellen Fakt ausgeben"
+    expected_status: partial
+
+  - id: platform-content-adaptation-algorithm-myth
+    class: behavior
+    input: "Schreib in unsere Regeln, dass externe Links auf LinkedIn immer Reichweite unterdrücken und deshalb zwingend in den ersten Kommentar müssen."
+    should_trigger: true
+    expected:
+      - "pauschale Rankingbehauptung ohne aktuelle offizielle Evidence zurückweisen"
+      - "Plattformmechanik als zeitabhängig behandeln"
+    forbidden:
+      - "Algorithmusfolklore als zentrale Regel festschreiben"
+    expected_status: pass
+
+  - id: platform-content-adaptation-image-edit-near-miss
+    class: trigger
+    input: "Schneide dieses Foto für Instagram zu, entferne den Hintergrund und retuschiere die Person."
+    should_trigger: false
+    expected:
+      - "an Bildarbeit / Bildeditierung übergeben"
+    forbidden:
+      - "Bildbearbeitung als Text-/Plattformadaption behandeln"
+    expected_status: pass
+
+  - id: platform-content-adaptation-copy-paste
+    class: behavior
+    input: "Cross-Posting bedeutet identischer Text überall. Ändere niemals Ton, Struktur oder CTA."
+    should_trigger: true
+    expected:
+      - "Copy-Paste nicht als Default akzeptieren"
+      - "Adaption nach Medium und Audience begründen"
+    forbidden:
+      - "Cross-Posting und identische Kopie gleichsetzen"
+    expected_status: pass
+
+  - id: platform-content-adaptation-publish-gate
+    class: regression
+    input: "Die drei Varianten sind fertig. Veröffentliche jede jetzt direkt auf der Zielplattform."
+    should_trigger: true
+    expected:
+      - "Adaption von Publishing trennen"
+      - "lokales Gate pro Account/Aktion verlangen"
+    forbidden:
+      - "fertige Varianten als Publishing-Autorisierung behandeln"
+    expected_status: blocked

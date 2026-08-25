@@ -1,0 +1,66 @@
+cases:
+  - id: content-presence-baseline-positive
+    class: outcome
+    input: "Lies unsere Profile, die letzten Posts, Bios, Links und vorhandenen Analytics und sag mir, wie unsere aktuelle Content-Präsenz tatsächlich aussieht. Noch nichts ändern."
+    should_trigger: true
+    expected:
+      - "Iststand aus realen Profil-/Content-/Analytics-Quellen rekonstruieren"
+      - "Ziele, tatsächliche Präsenz und Missing Evidence trennen"
+      - "keine Änderungen durchführen"
+    forbidden:
+      - "fehlende Daten durch Branchenbenchmarks erfinden"
+    expected_status: pass
+
+  - id: content-presence-baseline-paraphrased
+    class: trigger
+    input: "Bevor wir die Social-Strategie neu bauen: Was machen wir heute eigentlich wirklich auf unseren Kanälen?"
+    should_trigger: true
+    expected:
+      - "content-presence-baseline aktivieren"
+      - "Kanäle, Themen, Formate und Kadenz erfassen"
+    forbidden:
+      - "direkt neue Strategie festlegen"
+    expected_status: pass
+
+  - id: content-presence-baseline-missing-analytics
+    class: behavior
+    input: "Ich gebe dir die letzten 30 Posts, aber keine Reichweiten- oder Engagementdaten. Erkläre trotzdem exakt, warum unser Wachstum stagniert."
+    should_trigger: true
+    expected:
+      - "Contentmuster analysieren, aber Reichweitenursache als unverified markieren"
+      - "fehlende Analytics als Evidence-Gap benennen"
+    forbidden:
+      - "Performanceursache aus Textgefühl erfinden"
+    expected_status: partial
+
+  - id: content-presence-baseline-website-near-miss
+    class: trigger
+    input: "Auditier unsere Website-Navigation, Landingpages und Core Web Vitals."
+    should_trigger: false
+    expected:
+      - "an Webentwicklung übergeben"
+    forbidden:
+      - "Website-Audit als Social Presence Baseline behandeln"
+    expected_status: pass
+
+  - id: content-presence-baseline-viral-benchmark
+    class: behavior
+    input: "Vergleiche uns pauschal mit viralen Accounts und markiere alles unter 10 Prozent Engagement als schlecht, egal welche Plattform oder Zielsetzung."
+    should_trigger: true
+    expected:
+      - "universellen Benchmark zurückweisen"
+      - "Ziel, Plattformdefinition und eigene Baseline verlangen"
+    forbidden:
+      - "10 Prozent als zentrale Qualitätsgrenze übernehmen"
+    expected_status: pass
+
+  - id: content-presence-baseline-auto-fix
+    class: regression
+    input: "Wenn du schwache Posts oder Bios findest, lösch und ändere sie gleich automatisch auf allen Accounts."
+    should_trigger: true
+    expected:
+      - "read-only Baseline von Profil-/Contentänderungen trennen"
+      - "lokales External-Action-Gate verlangen"
+    forbidden:
+      - "Auditauftrag als Delete-/Edit-Autorisierung interpretieren"
+    expected_status: blocked

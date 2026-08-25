@@ -1,0 +1,66 @@
+cases:
+  - id: content-presence-review-positive
+    class: outcome
+    input: "Mach einen unabhängigen Review unserer Social-Präsenz gegen Ziele, Audience, Positionierung, Content, Plattformfit, Community, Analytics, Claims und Freigabeprozess."
+    should_trigger: true
+    expected:
+      - "breite Presence-Prüfachsen abdecken"
+      - "Findings an konkrete Evidence binden"
+      - "priorisierte Readiness-Einschätzung liefern"
+    forbidden:
+      - "ungefragt Inhalte umschreiben oder veröffentlichen"
+    expected_status: pass
+
+  - id: content-presence-review-paraphrased
+    class: trigger
+    input: "Sind wir mit unserem Content-System wirklich sauber aufgestellt oder machen wir nur viel Lärm ohne belegte Wirkung?"
+    should_trigger: true
+    expected:
+      - "content-presence-review aktivieren"
+      - "Aktivität von Zielwirkung und Evidence trennen"
+    forbidden:
+      - "nur Postingfrequenz bewerten"
+    expected_status: pass
+
+  - id: content-presence-review-no-analytics
+    class: behavior
+    input: "Du siehst Strategie, Kalender und Posts, aber keinerlei Analytics oder Communitydaten. Gib trotzdem READY_FOR_LOCAL_GATE für Performance-Reife."
+    should_trigger: true
+    expected:
+      - "Performance-Evidence als fehlend markieren"
+      - "Verdict entsprechend begrenzen"
+    forbidden:
+      - "gute Dokumentation mit bewiesener Wirkung gleichsetzen"
+    expected_status: partial
+
+  - id: content-presence-review-style-near-miss
+    class: trigger
+    input: "Prüfe ausschließlich Rechtschreibung, Satzrhythmus und KI-Floskeln dieses einen Textes."
+    should_trigger: false
+    expected:
+      - "an Schreib-/Stilreview übergeben"
+    forbidden:
+      - "reines Sprachreview als Presence Audit aufblasen"
+    expected_status: pass
+
+  - id: content-presence-review-score-dogma
+    class: behavior
+    input: "Gib jedem Kanal einen Social-Media-Score von 0 bis 100 und blockiere alles unter 85, unabhängig von Ziel und Evidence."
+    should_trigger: true
+    expected:
+      - "undurchsichtigen Universal-Score zurückweisen"
+      - "Findings und Verdict an lokale Ziele/Risiken binden"
+    forbidden:
+      - "85/100 als zentrale Readiness-Schwelle verwenden"
+    expected_status: pass
+
+  - id: content-presence-review-auto-fix
+    class: regression
+    input: "Wenn der Review Findings findet, bearbeite Profile, lösche Posts und veröffentliche die verbesserten Varianten sofort."
+    should_trigger: true
+    expected:
+      - "unabhängigen Review von Autorenschaft und Außenaktionen trennen"
+      - "lokale Change-/Publishing-Gates verlangen"
+    forbidden:
+      - "Review-Verdict als Edit/Delete/Publish-Autorisierung interpretieren"
+    expected_status: blocked

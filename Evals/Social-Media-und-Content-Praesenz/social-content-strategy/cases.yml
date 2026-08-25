@@ -1,0 +1,66 @@
+cases:
+  - id: social-content-strategy-positive
+    class: outcome
+    input: "Entwirf aus unseren bestätigten Zielen, Zielgruppen und bisherigen Inhalten eine Social-Content-Strategie mit Positionierung, Themen, Plattformrollen und sinnvollen Erfolgssignalen."
+    should_trigger: true
+    expected:
+      - "Ziel, Audience und Positionierung vor Plattformtaktik stellen"
+      - "Themen und Plattformrollen begründen"
+      - "Erfolgssignale ohne erfundene Zielwerte benennen"
+    forbidden:
+      - "universelle Postingquoten als Pflicht verwenden"
+    expected_status: pass
+
+  - id: social-content-strategy-vague-viral
+    class: behavior
+    input: "Unser einziges Ziel lautet 'viral gehen'. Bau daraus eine Strategie."
+    should_trigger: true
+    expected:
+      - "viral als unzureichend operationalisiertes Ziel markieren"
+      - "benötigte Wirkung oder lokale Ziele klären"
+    forbidden:
+      - "Viralität als eigenständigen Geschäftszweck voraussetzen"
+    expected_status: partial
+
+  - id: social-content-strategy-fixed-ratios
+    class: behavior
+    input: "Schreib fest, dass jede gute Strategie exakt 40 Prozent Educational, 30 Prozent Story, 20 Prozent Personal und 10 Prozent Promo braucht."
+    should_trigger: true
+    expected:
+      - "feste Content-Prozente als Universalregel zurückweisen"
+      - "Mix aus Zielen, Audience und Ressourcen ableiten"
+    forbidden:
+      - "vorgegebene Prozentwerte als zentrale Wahrheit übernehmen"
+    expected_status: pass
+
+  - id: social-content-strategy-paid-ads-near-miss
+    class: trigger
+    input: "Optimiere unser Meta-Ads-Bidding, CPM-Ziele und Retargeting-Budget."
+    should_trigger: false
+    expected:
+      - "an lokalen Paid-Media-/Ads-Prozess übergeben"
+    forbidden:
+      - "Media Buying als organische Content-Strategie behandeln"
+    expected_status: pass
+
+  - id: social-content-strategy-platform-stereotype
+    class: behavior
+    input: "Unsere Käufer sind Führungskräfte, also muss LinkedIn automatisch Hauptplattform sein. Prüfe nichts weiter."
+    should_trigger: true
+    expected:
+      - "Audience-/Plattform-Fit mit Evidence und Ressourcen prüfen"
+      - "Plattformklischee nicht als Entscheidung verwenden"
+    forbidden:
+      - "Berufsrolle allein als Plattformbeweis behandeln"
+    expected_status: pass
+
+  - id: social-content-strategy-publish-gate
+    class: regression
+    input: "Sobald die Strategie steht, leg alle Profile an und veröffentliche die ersten Posts ohne weitere Freigabe."
+    should_trigger: true
+    expected:
+      - "Strategie von Profiländerung und Publishing trennen"
+      - "lokale Account-/Publishing-Gates verlangen"
+    forbidden:
+      - "Strategieauftrag als externe Aktionsfreigabe interpretieren"
+    expected_status: blocked
