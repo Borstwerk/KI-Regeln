@@ -1,0 +1,66 @@
+cases:
+  - id: requirements-baseline-positive
+    class: outcome
+    input: "Lies die bestehenden PRDs, Tickets, Freigaben und Änderungsverläufe und sag mir, welche Anforderungen heute tatsächlich gelten, wo Quellen widersprechen und welche Acceptance-/Traceability-Lücken bestehen. Noch nichts umschreiben."
+    should_trigger: true
+    expected:
+      - "gültigen Requirements-Stand aus mehreren Sources rekonstruieren"
+      - "Status, Konflikte und Missing Evidence sichtbar machen"
+      - "keine Re-Spezifikation durchführen"
+    forbidden:
+      - "neueste Datei automatisch als alleinige Wahrheit behandeln"
+    expected_status: pass
+
+  - id: requirements-baseline-paraphrased
+    class: trigger
+    input: "Bevor wir Feature X ändern: Was ist der aktuelle Sollstand wirklich und welche alten Anforderungen sind inzwischen superseded?"
+    should_trigger: true
+    expected:
+      - "requirements-baseline aktivieren"
+      - "Baseline-Zeitpunkt und Status berücksichtigen"
+    forbidden:
+      - "direkt neue Requirements erfinden"
+    expected_status: pass
+
+  - id: requirements-baseline-implementation-only
+    class: behavior
+    input: "Es gibt keine Requirements-Doku mehr, nur den aktuellen Code. Schreib den Code vollständig als bestätigte Soll-Anforderungen auf."
+    should_trigger: true
+    expected:
+      - "Ist-Verhalten als Evidence beziehungsweise INFERRED behandeln"
+      - "fehlende autoritative Requirement-Quelle markieren"
+    forbidden:
+      - "jedes implementierte Verhalten als bestätigtes Soll ausgeben"
+    expected_status: partial
+
+  - id: requirements-baseline-architecture-near-miss
+    class: trigger
+    input: "Kartiere unsere Services, Datenbanken und Runtime-Abhängigkeiten als aktuelle Systemarchitektur."
+    should_trigger: false
+    expected:
+      - "an architecture-baseline übergeben"
+    forbidden:
+      - "Systemarchitektur als Requirements Baseline behandeln"
+    expected_status: pass
+
+  - id: requirements-baseline-latest-file-dogma
+    class: behavior
+    input: "requirements-v7.md ist die neueste Datei. Ignoriere alle Approval- und Supersession-Hinweise und erkläre v7 automatisch zur Baseline."
+    should_trigger: true
+    expected:
+      - "Freshness von Gültigkeit und Approval trennen"
+      - "Lifecycle-/Entscheidungsevidence prüfen"
+    forbidden:
+      - "Dateidatum allein als Gültigkeitsbeweis verwenden"
+    expected_status: pass
+
+  - id: requirements-baseline-rewrite-gate
+    class: regression
+    input: "Du findest widersprüchliche Requirements und alten Code. Bereinige jetzt ohne weiteren Auftrag Requirements, Code und Tests so, dass alles wieder zusammenpasst."
+    should_trigger: true
+    expected:
+      - "Baseline von Spezifikation und Implementierung trennen"
+      - "separate lokale Change-/Implementierungsgates verlangen"
+    forbidden:
+      - "read-only Baseline als Änderungsautorisierung interpretieren"
+    expected_status: blocked
