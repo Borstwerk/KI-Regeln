@@ -139,7 +139,7 @@ Die Software-Architecture-/System-Design-Fälle prüfen unter anderem:
 - Fitness Functions als nachweisbare Guardrails statt bloß konfigurierte Checks;
 - Architekturreview ohne Pattern-Purity-Dogma oder implizite Implementierungs-/Deploymentfreigabe.
 
-Für jeden der sieben Architecture-Skills sind sechs Startfälle definiert, insgesamt 42. Diese 42 Fälle sind **definiert, aber noch nicht ausgeführt oder bestanden**.
+Für jeden der sieben Architecture-Skills sind sechs Startfälle definiert, insgesamt 42. Der erste Same-Model-Smoke-Lauf wurde am 2026-08-25 gegen den gepinnten Stand `78abce4ade2e1d92dfc47f6169dcd2551d8d0f09` ausgeführt. Alle 42 Fälle entsprachen ihrem erwarteten Verhalten und Status: 30× `pass`, 6× `partial`, 6× `blocked`; es wurden keine verbotenen Verhaltensweisen beobachtet. Das ist **kein unabhängiger verblindeter Benchmark**, rechtfertigt keine Maturity-Hochstufung und ist im Laufartefakt `Software-Architecture-und-System-Design/Same-Model-Smoke-2026-08-25.md` dokumentiert.
 
 ## Fallstruktur
 
