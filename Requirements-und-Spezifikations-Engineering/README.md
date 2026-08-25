@@ -120,6 +120,22 @@ IMPLEMENT / VERIFY IN PRODUCT
 - `requirements-validation`
 - `requirements-review`
 
+## Workflows
+
+- `../Workflows/Requirements-Baseline-und-Spezifikation.md`
+- `../Workflows/Requirements-Elicitation-und-Klaerung.md`
+- `../Workflows/Acceptance-Traceability-und-Handoff.md`
+- `../Workflows/Requirements-Change-und-Impact.md`
+- `../Workflows/Requirements-Readiness-Review.md`
+
+## Evalstatus
+
+Für die acht Requirements-Skills sind jeweils sechs Startfälle definiert, insgesamt 48.
+
+Die Fälle enthalten positive Trigger, Near-Misses, Evidence-Gaps und Ausführungsgates. Ihre erwartete Statusverteilung ist 32× `pass`, 8× `partial` und 8× `blocked`.
+
+Diese 48 Fälle sind derzeit **definiert und strukturell geprüft, aber noch nicht als Behavioral Evals ausgeführt oder bestanden**. Alle acht Skills bleiben deshalb bewusst `maturity: experimental` mit `eval_coverage: partial`.
+
 ## Leitgedanken
 
 > Erst Quelle und Bedarf verstehen, dann formulieren.
