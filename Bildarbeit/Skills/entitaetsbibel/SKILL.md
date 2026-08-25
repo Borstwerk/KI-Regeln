@@ -1,6 +1,6 @@
 ---
 name: entitaetsbibel
-description: Erstellt oder pflegt eine kompakte visuelle Produktionsbibel für wiederkehrende Figuren, Objekte, Fahrzeuge, Kreaturen oder Orte.
+description: Erstellt oder pflegt eine kompakte visuelle Produktionsbibel für wiederkehrende Figuren, Objekte, Fahrzeuge, Kreaturen oder Orte. Verwenden bei Bildserien oder wiederkehrenden visuellen Entitäten, wenn Pflichtmerkmale, Variationen, Größenrelationen und Referenzen stabil reproduzierbar sein müssen.
 ---
 
 # Entitätsbibel

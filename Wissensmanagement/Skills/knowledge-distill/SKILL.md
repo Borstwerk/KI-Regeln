@@ -1,6 +1,6 @@
 ---
 name: knowledge-distill
-description: Verdichtet Raw Sources oder source-nahe Notizen in wiederverwendbare Wissenseinheiten und Claims mit klarer Provenance, ohne Quelleninhalt zu erfinden oder bestehende Konzepte unnötig zu duplizieren.
+description: Verdichtet Raw Sources oder source-nahe Notizen in wiederverwendbare Wissenseinheiten und Claims mit klarer Provenance, ohne Quelleninhalt zu erfinden oder bestehende Konzepte unnötig zu duplizieren. Verwenden bei source-basiertem Wissen mit Persistenzziel, wenn aus Rohmaterial wiederverwendbare Einheiten oder Claims entstehen sollen.
 ---
 
 # Knowledge Distill

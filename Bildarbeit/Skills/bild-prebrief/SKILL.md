@@ -1,6 +1,6 @@
 ---
 name: bild-prebrief
-description: Bereitet ein einzelnes Bild vor der Generierung mit Moment, Aussage, Komposition, sichtbaren Entitäten, Kontinuität, Stil und Ausschlüssen vor.
+description: Bereitet ein einzelnes Bild vor der Generierung mit Moment, Aussage, Komposition, sichtbaren Entitäten, Kontinuität, Stil und Ausschlüssen vor. Verwenden vor wichtigen oder komplexen Bildgenerierungen, wenn Szenenmoment, Kontinuität und Referenzfunktion eindeutig festgelegt werden müssen.
 ---
 
 # Bild-Pre-Brief

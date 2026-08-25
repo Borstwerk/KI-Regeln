@@ -1,6 +1,6 @@
 ---
 name: kreatives-schreiben
-description: Allgemeiner Schreibskill für erzählende Prosa mit Fokus auf Szene, Figurenstimme, räumliche Klarheit und kanontreue Wirkung.
+description: Allgemeiner Schreibskill für erzählende Prosa mit Fokus auf Szene, Figurenstimme, räumliche Klarheit und kanontreue Wirkung. Verwenden bei fiktionalen oder erzählenden Schreibaufträgen, wenn vorhandener Kanon, Figurenstimme, Szenenfunktion und Kontinuität geschützt werden müssen.
 ---
 
 # Kreatives Schreiben

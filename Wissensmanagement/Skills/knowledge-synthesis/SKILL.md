@@ -1,6 +1,6 @@
 ---
 name: knowledge-synthesis
-description: Verbindet mehrere bestehende Wissenseinheiten zu einer nachvollziehbaren Synthese, erhält Herkunft, Gegenbelege und Unsicherheit und erzeugt bei Bedarf navigierbare Themenübersichten.
+description: Verbindet mehrere bestehende Wissenseinheiten zu einer nachvollziehbaren Synthese, erhält Herkunft, Gegenbelege und Unsicherheit und erzeugt bei Bedarf navigierbare Themenübersichten. Verwenden bei mehreren vorhandenen Wissenseinheiten, wenn daraus ein übergreifendes Themenbild oder eine abgeleitete Synthese entstehen soll.
 ---
 
 # Knowledge Synthesis

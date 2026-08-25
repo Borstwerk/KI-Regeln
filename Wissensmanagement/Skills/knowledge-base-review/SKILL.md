@@ -1,6 +1,6 @@
 ---
 name: knowledge-base-review
-description: Führt einen unabhängigen Gesamtcheck einer Wissensbasis auf Modell, Provenance, Granularität, Findability, Verlinkung, Aktualität, Konflikte, Content Health, Datenschutz und Wartbarkeit durch.
+description: Führt einen unabhängigen Gesamtcheck einer Wissensbasis auf Modell, Provenance, Granularität, Findability, Verlinkung, Aktualität, Konflikte, Content Health, Datenschutz und Wartbarkeit durch. Verwenden bei read-only Reviews einer bestehenden Wissensbasis, wenn Gesamtzustand, priorisierte Repair-Slices und Evidence-Lücken bewertet werden sollen.
 ---
 
 # Knowledge Base Review

@@ -1,6 +1,6 @@
 ---
 name: stilreview
-description: Struktureller Stilreview für längere Texte. Verwendet Muster als Fundstellen, bewertet aber immer Funktion, Zielgruppe, Stimme und Inhalt vor einer Änderung.
+description: Struktureller Stilreview für längere Texte. Verwendet Muster als Fundstellen, bewertet aber immer Funktion, Zielgruppe, Stimme und Inhalt vor einer Änderung. Verwenden bei fertigen oder weit fortgeschrittenen Texten, wenn Stilprobleme, KI-typische Muster oder unnötige Glättung unabhängig geprüft werden sollen.
 ---
 
 # Stilreview

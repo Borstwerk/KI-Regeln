@@ -1,6 +1,6 @@
 ---
 name: knowledge-base-design
-description: Entwirft oder prüft die toolneutrale Struktur einer persistenten Wissensbasis einschließlich Wissensobjekten, Metadaten, Provenance, Navigation, Lifecycle und Datenschutzgrenzen.
+description: Entwirft oder prüft die toolneutrale Struktur einer persistenten Wissensbasis einschließlich Wissensobjekten, Metadaten, Provenance, Navigation, Lifecycle und Datenschutzgrenzen. Verwenden bei einer neuen Wissensbasis, größerem Umbau oder ungeklärtem Wissensmodell, nicht für das bloße Schreiben einer einzelnen Notiz.
 ---
 
 # Knowledge Base Design

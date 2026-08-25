@@ -1,6 +1,6 @@
 ---
 name: natuerliches-schreiben
-description: Allgemeiner Schreibskill für klare, glaubwürdige und natürliche Texte ohne unnötige KI-, Werbe- oder Managementsprache.
+description: Allgemeiner Schreibskill für klare, glaubwürdige und natürliche Texte ohne unnötige KI-, Werbe- oder Managementsprache. Verwenden bei sachlichen oder allgemeinen Schreibaufträgen, wenn natürliche Formulierungen, Quellen- und Unsicherheitstreue sowie ein sauberes Endprodukt wichtig sind.
 ---
 
 # Natürliches Schreiben
