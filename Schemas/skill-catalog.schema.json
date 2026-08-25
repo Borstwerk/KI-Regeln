@@ -5,7 +5,7 @@
   "required": ["schema_version", "skills"],
   "properties": {
     "schema_version": {"type": "integer", "minimum": 1},
-    "last_updated": {"type": ["string", "object"]},
+    "last_updated": {"type": "string", "format": "date"},
     "maturity_levels": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
     "eval_coverage_levels": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
     "skills": {
