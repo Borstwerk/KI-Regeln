@@ -33,9 +33,10 @@ Requirements Engineering reduziert Unsicherheit vor und während Design, Impleme
 - **Schnittstellen und Verträge:** `../Schnittstellen-und-Vertraege/` konkretisiert beobachtbare Provider-/Consumer-Verträge über bereits begründete Systemgrenzen.
 - **Testing und QA:** `../Testing-und-QA/` entwirft und führt Tests aus. Requirements definieren Akzeptanz- und Verifikationsabsicht, nicht die komplette Testimplementierung.
 - **Reliability und System-Observability:** `../Reliability-und-System-Observability/` operationalisiert bestätigte Zuverlässigkeitsziele in SLI/SLO-, Alert-, Capacity- und Runtime-Evidence.
+- **Social Media und Content-Präsenz:** `../Social-Media-und-Content-Praesenz/` operationalisiert bestätigte Content-/Business-Ziele, Audience-/Brand-Constraints und Erfolgskriterien in Presence-Strategie, Editorialsystem, Social-Formate, Community und Performance-Lernen. Requirements erfindet weder Plattformtaktik noch Publishingmechanik.
 - **Sicherheit:** besitzt Threat Modeling, Security Controls und Security Testing im Detail. Security Requirements können hier erfasst werden, ihre fachliche Ausgestaltung gehört zur Sicherheitsdomäne.
 - **Dokumentationserstellung:** besitzt allgemeine Dokumenttypen und Schreibmethodik. PRD, BRD, SRS, Backlog, Ticket oder Tabelle sind mögliche Container für Requirements, keine eigene fachliche Wahrheit.
-- **Implementierung und Deployment:** ein freigegebenes Requirement oder Review-Verdict autorisiert keine Code-, Daten-, Infrastruktur- oder Produktionsänderung.
+- **Implementierung und Deployment:** ein freigegebenes Requirement oder Review-Verdict autorisiert keine Code-, Daten-, Infrastruktur-, Content-Publishing- oder Produktionsänderung.
 
 ## Zentrales Modell
 
@@ -45,7 +46,7 @@ Stakeholder / Source / Ziel / Problem
 → Requirement Candidate
 → Klärung / Konflikt / Validation
 → bestätigtes Requirement + Acceptance-/Verification-Intent
-→ Traceability zu Design / Contract / Test / Betrieb
+→ Traceability zu Design / Contract / Test / Betrieb / Content-Präsenz
 → Change / Supersession / Re-Validation
 ```
 
