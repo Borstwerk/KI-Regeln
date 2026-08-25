@@ -1,3 +1,8 @@
+---
+name: claim-verification
+description: Prüft einen bestehenden, präzisierten Claim gezielt gegen geeignete Evidenz und ordnet Unterstützung, Konflikte und verbleibende Unsicherheit ein. Verwenden bei wichtigen oder strittigen Faktenclaims, deren tatsächliche Evidenzbasis verifiziert werden soll.
+---
+
 # Skill: claim-verification
 
 ## Zweck

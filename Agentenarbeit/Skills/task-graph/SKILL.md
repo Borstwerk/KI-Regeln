@@ -1,6 +1,6 @@
 ---
 name: task-graph
-description: Zerlegt komplexe Agentenarbeit in abhängige, überprüfbare Knoten und macht echte Abhängigkeiten, Parallelisierung und Stop-Bedingungen sichtbar.
+description: Zerlegt komplexe Agentenarbeit in abhängige, überprüfbare Knoten und macht echte Abhängigkeiten, Parallelisierung und Stop-Bedingungen sichtbar. Verwenden bei komplexen Aufgaben mit mehreren abhängigen oder parallelisierbaren Arbeitsschritten.
 ---
 
 # Task Graph

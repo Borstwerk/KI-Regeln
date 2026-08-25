@@ -1,6 +1,6 @@
 ---
 name: verification-loop
-description: Führt innerhalb eines freigegebenen Scopes einen kontrollierten Arbeiten-Prüfen-Diagnose-Korrigieren-Loop mit klaren Stop-Kriterien aus.
+description: Führt innerhalb eines freigegebenen Scopes einen kontrollierten Arbeiten-Prüfen-Diagnose-Korrigieren-Loop mit klaren Stop-Kriterien aus. Verwenden bei iterativer Umsetzung, wenn nach jedem Änderungsschritt reproduzierbare Nachweise möglich sind.
 ---
 
 # Verification Loop

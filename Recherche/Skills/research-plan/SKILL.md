@@ -1,3 +1,8 @@
+---
+name: research-plan
+description: Strukturiert vor einer größeren Recherche Hauptfrage, Teilfragen, Perspektiven, Quellenarten, Freshness und Coverage-Kriterien. Verwenden bei komplexeren Rechercheaufträgen, bevor Suchanfragen gestartet werden und der Suchraum noch geplant werden muss.
+---
+
 # Skill: research-plan
 
 ## Zweck

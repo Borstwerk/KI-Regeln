@@ -1,6 +1,6 @@
 ---
 name: delegation-contract
-description: Definiert vor relevanter Agentenarbeit Ziel, Scope, Rechte, Quellen, Akzeptanzbedingungen und geforderte Evidence und prüft anschließend das Evidence Bundle.
+description: Definiert vor relevanter Agentenarbeit Ziel, Scope, Rechte, Quellen, Akzeptanzbedingungen und geforderte Evidence und prüft anschließend das Evidence Bundle. Verwenden vor nicht trivialer delegierter Agentenarbeit mit Scope-, Rechte- oder Gate-Risiken.
 ---
 
 # Delegation Contract

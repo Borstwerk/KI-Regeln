@@ -1,6 +1,6 @@
 ---
 name: agent-eval
-description: Entwirft reproduzierbare Evals für Agentenverhalten und trennt dabei Produktqualität von Prozessqualität.
+description: Entwirft reproduzierbare Evals für Agentenverhalten und trennt dabei Produktqualität von Prozessqualität. Verwenden beim Entwurf oder Review von Evals für Agentenverhalten.
 ---
 
 # Agent Eval

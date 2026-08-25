@@ -50,7 +50,7 @@ Er ist kein direkter Source-of-Truth-Upstream für eine konkrete lokale Regel un
 
 ## Lizenz und Attribution
 
-Lizenz- und Attributionshinweise zu Matt Pococks Skill-Repository stehen zusätzlich in `../THIRD-PARTY-NOTICES.md`.
+Das Monitoring der konkreten GitHub-Upstreams steht in `../Dokumentation/upstream-sources.yml`. Der aktuelle Lizenz-/Provenance-Prüfstand steht in `../Dokumentation/upstream-provenance.yml`. Daraus wird keine abschließende Redistributability oder Open-Source-Readiness abgeleitet.
 
 ## Leitgedanke
 

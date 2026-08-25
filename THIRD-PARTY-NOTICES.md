@@ -1,29 +1,14 @@
 # Third-Party Notices
 
-## Matt Pocock – skills
+Diese Datei ist ausschließlich für Materialien vorgesehen, bei denen durch Übernahme, Vendoring oder konkrete Adaption tatsächlich eine Lizenz- oder Notice-Pflicht im Repository entsteht.
 
-Several agent-skill workflows in this repository were inspired in part by the public repository `mattpocock/skills`, especially its TDD, debugging, code-review and domain-modeling practices.
+Im aktuellen Hardening-Phase-1-Stand sind die in `Dokumentation/upstream-sources.yml` erfassten konkreten GitHub-Artefakte in `Dokumentation/upstream-provenance.yml` ausschließlich als `reference/inspiration` klassifiziert. Für sie wird hier deshalb **kein** Lizenztext so dargestellt, als wäre Fremdmaterial in dieses Repository übernommen worden.
 
-Source: https://github.com/mattpocock/skills
+Die vollständige Einfluss- und Provenance-Erfassung steht in:
 
-License: MIT
+- `Dokumentation/upstream-sources.yml` – beobachtete externe Quellen und lokaler Einfluss;
+- `Dokumentation/upstream-provenance.yml` – Nutzungsklasse und Lizenz-/Redistributionsstatus.
 
-Copyright (c) 2026 Matt Pocock
+Ein `unresolved`-Status ist ausdrücklich keine Aussage zur tatsächlichen Lizenz des Upstreams und keine Erlaubnis zur Weiterverteilung. Er bedeutet, dass für den beobachteten Artefaktstand kein belastbarer Nachweis aus Repository-Commit/Ref und zugehöriger Lizenzdatei desselben historischen Stands dokumentiert wurde.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+Soll später tatsächlich fremdes Material übernommen, vendored oder substanziell adaptiert werden, muss vor der Weiterverteilung die konkrete Lizenzlage am verwendeten Stand geklärt und ein gegebenenfalls erforderlicher Notice-Eintrag hier ergänzt werden.

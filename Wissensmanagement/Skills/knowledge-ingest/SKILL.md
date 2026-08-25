@@ -1,6 +1,6 @@
 ---
 name: knowledge-ingest
-description: Nimmt neue Quellen oder Erfahrungen kontrolliert in eine bestehende Wissensbasis auf, sucht zuerst nach vorhandenem Wissen und entscheidet zwischen Verwerfen, Raw-Speicherung, Update, Neuanlage oder Konfliktstatus.
+description: Nimmt neue Quellen oder Erfahrungen kontrolliert in eine bestehende Wissensbasis auf, sucht zuerst nach vorhandenem Wissen und entscheidet zwischen Verwerfen, Raw-Speicherung, Update, Neuanlage oder Konfliktstatus. Verwenden bei neuen Quellen oder Erfahrungen, die in eine bestehende persistente Wissensbasis eingeordnet werden sollen.
 ---
 
 # Knowledge Ingest

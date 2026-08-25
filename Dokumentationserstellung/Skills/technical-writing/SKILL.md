@@ -1,3 +1,8 @@
+---
+name: technical-writing
+description: Schreibt oder überarbeitet technische Dokumentation klar, scanbar, quellennah und mit stabilem Leserziel. Verwenden bei technischen Dokumentationstexten, deren Zweck und Sources of Truth ausreichend bekannt sind und deren Fakten oder Beispiele verifizierbar bleiben müssen.
+---
+
 # Skill: technical-writing
 
 ## Zweck

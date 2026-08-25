@@ -1,0 +1,84 @@
+schema_version: 1
+source_registry: Dokumentation/upstream-sources.yml
+last_reviewed: 2026-08-25
+
+# Provenance is intentionally separate from mutable-upstream monitoring.
+# Every concrete GitHub artifact in upstream-sources.yml has a source-specific
+# record here. Phase 1 does not infer historical licensing from a repository's
+# current license. The registry pins the observed artifact blob, but a matching
+# repository commit plus license file from the same historical state was not
+# established for these records. Therefore redistribution remains unresolved.
+defaults:
+  use_class: reference/inspiration
+  license_spdx: UNKNOWN
+  license_source: null
+  license_status_at_observation: unresolved
+  notice_requirement: none-for-reference-only
+  redistribution_status: unresolved
+
+sources:
+  - source_id: addyosmani-observability-instrumentation-skill
+  - source_id: agent-skills-specification
+  - source_id: anthropic-frontend-design
+  - source_id: anthropic-testing-strategy
+  - source_id: anthropic-webapp-testing
+  - source_id: arjun-capacity-planning-skill
+  - source_id: arjun-ci-pipelines-skill
+  - source_id: arjun-containerization-skill
+  - source_id: arjun-deployment-strategies-skill
+  - source_id: arjun-infrastructure-as-code-skill
+  - source_id: arjun-slo-definition-skill
+  - source_id: blacktwist-content-repurposer-skill
+  - source_id: blacktwist-content-strategy-skill
+  - source_id: context-doctor-skill
+  - source_id: currents-playwright-best-practices
+  - source_id: drader-research
+  - source_id: firecrawl-deep-research
+  - source_id: firzus-frontend-design
+  - source_id: flux-gitops-repo-audit-skill
+  - source_id: hashicorp-terraform-style-guide-skill
+  - source_id: hazamashoken-api-design-principles
+  - source_id: hermes-grounded-citations
+  - source_id: ilm-alan-frontend-design
+  - source_id: impeccable-readme
+  - source_id: inklate-social-audit
+  - source_id: insight-wave-knowledge-distill
+  - source_id: jacob-balslev-api-design
+  - source_id: jacob-balslev-event-contract-design
+  - source_id: jpeetz-design-to-code
+  - source_id: jpeetz-technical-documentation
+  - source_id: jwynia-fact-check
+  - source_id: langchain-deepagents-web-research
+  - source_id: lx-wnk-architecture-design-skill
+  - source_id: lx-wnk-architecture-review-skill
+  - source_id: mattpocock-code-review
+  - source_id: mattpocock-diagnosing-bugs
+  - source_id: mattpocock-domain-modeling
+  - source_id: mattpocock-tdd
+  - source_id: mblode-docs-writing
+  - source_id: mcollina-documentation
+  - source_id: microsoft-hve-requirements-author
+  - source_id: microsoft-vscode-team-kit-research
+  - source_id: modular-earth-requirements-skill
+  - source_id: mongodb-query-optimizer
+  - source_id: mongodb-schema-design
+  - source_id: neon-postgres-best-practices
+  - source_id: obsidian-second-brain-skill
+  - source_id: obsidian-wiki-skills
+  - source_id: openclaw-handoff-skill
+  - source_id: pinchen-system-design-skill
+  - source_id: practicalswan-frontend-design
+  - source_id: practicalswan-research
+  - source_id: prisma-skills-readme
+  - source_id: redis-connections
+  - source_id: redis-core
+  - source_id: redis-security
+  - source_id: social-media-skills-analytics-reporting
+  - source_id: spacey-requirements-analysis
+  - source_id: supabase-postgres-best-practices
+  - source_id: superpowers-verification-before-completion
+  - source_id: vaquarkhan-data-specification-skill
+  - source_id: vaquarkhan-safe-backfill-replay-skill
+  - source_id: vercel-composition-patterns
+  - source_id: vercel-react-best-practices
+  - source_id: vercel-web-design-guidelines

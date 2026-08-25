@@ -1,3 +1,8 @@
+---
+name: web-search
+description: Führt schnelle, aktuelle Webrecherche für klar begrenzte Informationsfragen durch und prüft die tatsächlichen Quellen statt nur Suchtreffer oder Snippets. Verwenden bei eng umrissenen Fragen, für die aktuelle oder gezielt primäre Webquellen benötigt werden, ohne Deep Research zu starten.
+---
+
 # Skill: web-search
 
 ## Zweck

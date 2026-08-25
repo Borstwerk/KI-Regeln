@@ -273,7 +273,7 @@ notes:
   - Lokale Projektregeln haben Vorrang vor allgemeinen Regeln.
   - Nur tatsächlich benötigte Regeln, Skills und Workflows auswählen.
   - Die verwendete zentrale Version bewusst dokumentieren.
-  - `skill-catalog.yml` vor Übernahme auf Maturity, Capabilities und Evalabdeckung prüfen.
+  - "`skill-catalog.yml` vor Übernahme auf Maturity, Capabilities und Evalabdeckung prüfen."
   - Zentrale Updates nicht ungeprüft automatisch in laufende Projekte übernehmen.
   - Externe Upstream-Änderungen sind Review-Signale und werden nicht automatisch synchronisiert.
   - Ein Workflow autorisiert keine darin enthaltenen riskanten Aktionen oder Human Gates automatisch.

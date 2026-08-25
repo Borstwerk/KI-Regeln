@@ -1,6 +1,6 @@
 ---
 name: reflektierender-dialog
-description: Unterstützt persönliche oder strategische Reflexion, ohne vorschnell zu diagnostizieren, Lösungen aufzudrängen oder die Denkautonomie des Menschen zu ersetzen.
+description: Unterstützt persönliche oder strategische Reflexion, ohne vorschnell zu diagnostizieren, Lösungen aufzudrängen oder die Denkautonomie des Menschen zu ersetzen. Verwenden bei persönlicher oder strategischer Reflexion, wenn Erfahrungen, Muster, Ambivalenzen oder nächste Lernschritte geklärt werden sollen.
 ---
 
 # Reflektierender Dialog

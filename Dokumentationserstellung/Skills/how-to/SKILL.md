@@ -1,3 +1,8 @@
+---
+name: how-to
+description: Dokumentiert eine konkrete Aufgabe für Nutzer, die das System grundsätzlich kennen, mit knappen Voraussetzungen, Schritten und Verifikation. Verwenden bei zielgerichteten Arbeitsanleitungen für ein konkretes Problem, nicht als Tutorial oder allgemeine Reference.
+---
+
 # Skill: how-to
 
 ## Zweck

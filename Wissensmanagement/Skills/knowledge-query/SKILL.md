@@ -1,6 +1,6 @@
 ---
 name: knowledge-query
-description: Beantwortet Fragen aus einer vorhandenen Wissensbasis durch gezieltes Retrieval, Prüfung von Provenance, Aktualität und Widersprüchen und kennzeichnet klar, was die Basis nicht trägt.
+description: Beantwortet Fragen aus einer vorhandenen Wissensbasis durch gezieltes Retrieval, Prüfung von Provenance, Aktualität und Widersprüchen und kennzeichnet klar, was die Basis nicht trägt. Verwenden bei Fragen, die aus einer bestehenden Wissensbasis grounded beantwortet werden sollen, ohne Modellwissen als Basisinhalt auszugeben.
 ---
 
 # Knowledge Query

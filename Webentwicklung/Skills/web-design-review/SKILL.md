@@ -1,3 +1,8 @@
+---
+name: web-design-review
+description: Prüft gerenderte Weboberflächen kritisch gegen Produktziel, lokale Designregeln, Informationshierarchie und typische generische AI-Designmuster. Verwenden vor Freigaben, nach Agenten-Umsetzungen oder bei unabhängigen UI- und AI-Slop-Reviews.
+---
+
 # Skill: Web Design Review
 
 ## Zweck

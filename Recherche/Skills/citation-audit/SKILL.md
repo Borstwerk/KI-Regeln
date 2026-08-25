@@ -1,3 +1,8 @@
+---
+name: citation-audit
+description: Prüft fertige oder weitgehend fertige Research-Synthesen darauf, ob wesentliche Faktenclaims tatsächlich durch passende Quellen und konkrete Evidence gestützt werden. Verwenden vor Abschluss oder Veröffentlichung eines Research-Texts, wenn Citation Coverage und Zitationsqualität überprüft werden sollen.
+---
+
 # Skill: citation-audit
 
 ## Zweck

@@ -1,6 +1,6 @@
 ---
 name: bildreview
-description: Prüft eine einzelne Bildgenerierung auf Aufgabe, Identität, Kontinuität, Anatomie, Physik, Stil und entscheidet zwischen Keeper, Feinschliff oder Neubau.
+description: Prüft eine einzelne Bildgenerierung auf Aufgabe, Identität, Kontinuität, Anatomie, Physik, Stil und entscheidet zwischen Keeper, Feinschliff oder Neubau. Verwenden nach einer Bildgenerierung, wenn Produktionsauftrag und Ergebnis unabhängig geprüft und ein enger nächster Status gewählt werden sollen.
 ---
 
 # Bildreview

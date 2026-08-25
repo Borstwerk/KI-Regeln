@@ -1,3 +1,8 @@
+---
+name: greybox
+description: Strukturiert und prüft Weboberflächen auf Informationsarchitektur, Hierarchie und Nutzerfluss vor visueller Politur. Verwenden bei neuen oder strukturell unklaren Seiten, wenn Navigation, Reihenfolge oder Gruppierung vor High-Fidelity-Design geklärt werden sollen.
+---
+
 # Skill: Greybox
 
 ## Zweck

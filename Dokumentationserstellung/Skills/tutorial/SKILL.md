@@ -1,3 +1,8 @@
+---
+name: tutorial
+description: Erstellt ein lernorientiertes Tutorial, das eine definierte Zielgruppe Schritt für Schritt zu einem funktionierenden Ergebnis führt. Verwenden bei Lernpfaden, in denen Nutzer durch konkretes Tun und verifizierbare Zwischenergebnisse ein System oder eine Funktion kennenlernen sollen.
+---
+
 # Skill: tutorial
 
 ## Zweck

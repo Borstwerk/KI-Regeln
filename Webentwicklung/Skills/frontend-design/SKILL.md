@@ -1,3 +1,8 @@
+---
+name: frontend-design
+description: Entwickelt für eine Website oder Weboberfläche eine konkrete, begründete Designrichtung vor dem detaillierten Komponentenbau. Verwenden bei neuen oder sichtbar generischen Weboberflächen, wenn Produkt, Publikum und Wirkung in eine eigenständige visuelle Sprache übersetzt werden sollen.
+---
+
 # Skill: Frontend Design
 
 ## Zweck

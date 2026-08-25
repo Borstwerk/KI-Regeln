@@ -1,3 +1,8 @@
+---
+name: reference-docs
+description: Erstellt oder aktualisiert scanbare, präzise und systemnahe Nachschlagedokumentation aus kanonischen Sources of Truth. Verwenden bei Parametern, Schemas, Commands oder anderen Faktenbeständen, die schnell auffindbar und versionsgerecht dokumentiert werden müssen.
+---
+
 # Skill: reference-docs
 
 ## Zweck

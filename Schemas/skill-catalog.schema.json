@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://borstwerk.github.io/KI-Regeln/schemas/skill-catalog.schema.json",
+  "type": "object",
+  "required": ["schema_version", "skills"],
+  "properties": {
+    "schema_version": {"type": "integer", "minimum": 1},
+    "last_updated": {"type": "string", "format": "date"},
+    "maturity_levels": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "eval_coverage_levels": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "skills": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "area", "path", "maturity", "eval_coverage", "purpose"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+          "area": {"type": "string", "minLength": 1},
+          "path": {"type": "string", "pattern": "^.+/SKILL\\.md$"},
+          "maturity": {"type": "string"},
+          "eval_coverage": {"type": "string"},
+          "purpose": {"type": "string", "minLength": 20},
+          "capabilities": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+          "related": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}

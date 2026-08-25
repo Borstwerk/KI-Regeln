@@ -1,6 +1,6 @@
 ---
 name: knowledge-maintenance
-description: Prüft und pflegt eine Wissensbasis auf Staleness, Dubletten, Orphans, kaputte Links, fehlende Provenance, Taxonomie- oder Schema-Drift und führt nur sichere, nachvollziehbare Repair-Slices durch.
+description: Prüft und pflegt eine Wissensbasis auf Staleness, Dubletten, Orphans, kaputte Links, fehlende Provenance, Taxonomie- oder Schema-Drift und führt nur sichere, nachvollziehbare Repair-Slices durch. Verwenden bei wiederkehrender Pflege oder Health-Checks einer bestehenden Wissensbasis, wenn Drift, Staleness oder strukturelle Defekte untersucht werden sollen.
 ---
 
 # Knowledge Maintenance

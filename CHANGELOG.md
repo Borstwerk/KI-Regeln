@@ -8,6 +8,22 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Hardening Phase 1
+
+Strukturelles Hardening für reproduzierbare KI-Nutzung, Discovery, Validierung und Provenance ohne Maturity- oder Fachlogik-Hochstufung:
+
+- `AGENTS.md` als schlanker KI-Bootstrap ergänzt und `Dokumentation/Skill-Handbuch.md` zum Master-Router für Fachbereiche, Skills und Workflows umgebaut;
+- `workflow-index.yml` als maschinenlesbarer Index des vollständigen Workflow-Bestands ergänzt;
+- deterministischen, read-only arbeitenden Repo-Validator unter `tools/repo_validator.py` einschließlich JSON-Schemas und GitHub Action `.github/workflows/repo-validation.yml` ergänzt;
+- alle 128 katalogisierten Skills reproduzierbar auf Discovery-Metadaten geprüft; ausschließlich 49 durch den Validator konkret beanstandete Skills normalisiert, ohne Maturity zu ändern;
+- Diff-Gegenprobe der 49 normalisierten Skills gegen `5be2763da15522bec6ced372a8119c806a77e244` durchgeführt; dabei unbeabsichtigte Kürzungen in `Webentwicklung/Skills/frontend-design/SKILL.md` und `Recherche/Skills/web-search/SKILL.md` gefunden und deren fachliche Originalkörper vollständig wiederhergestellt, sodass dort nur erforderliche Discovery-Metadaten verbleiben;
+- YAML-Datumsbehandlung so kalibriert, dass native YAML-Date-/Datetime-Werte ausschließlich für die Schema-Prüfung als ISO-Werte normalisiert und mit Date-Formatprüfung validiert werden; Quelldateien werden dafür nicht umgeschrieben;
+- syntaktisch ungültigen Backtick-Eintrag in `Vorlagen/ki-regeln.template.yml` minimal gequotet und kommentierte, bewusst leere Auswahlblöcke im zugehörigen Schema als leere YAML-Semantik (`null` oder Array) abgebildet;
+- zwei veraltete `Data-Engineering/Transformationen-und-Backfills.md`-Referenzen auf den tatsächlich vorhandenen Pfad `Data-Engineering/Transformationen-Inkrementalitaet-und-Backfills.md` korrigiert;
+- für alle 65 konkret beobachteten GitHub-Upstream-Artefakte source-spezifische Provenance-Einträge in `Dokumentation/upstream-provenance.yml` ergänzt; ohne belastbar zusammengehörigen historischen Repository-Commit und Lizenznachweis bleibt der Redistributionsstatus konservativ `unresolved`;
+- `THIRD-PARTY-NOTICES.md` auf tatsächlich notice-relevantes übernommenes, vendored oder substanziell adaptiertes Fremdmaterial begrenzt; reine `reference/inspiration`-Quellen werden dort nicht wie eingebettetes Fremdmaterial dargestellt;
+- keine Behavioral-Evals für dieses Hardening ausgeführt oder als bestanden behauptet, keine Maturity geändert, keinen Tag oder Release erzeugt und keinen automatischen Upstream-Sync eingeführt.
+
 ### Social Media und Content-Präsenz
 
 Neuer plattform- und toolneutraler Hauptbereich für Social-Media-Präsenz, Content-Systeme, Community-Arbeit und performancebasiertes Lernen:

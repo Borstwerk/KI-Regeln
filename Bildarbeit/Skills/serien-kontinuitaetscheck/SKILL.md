@@ -1,6 +1,6 @@
 ---
 name: serien-kontinuitaetscheck
-description: Prüft mehrere Bilder einer Serie auf Identitäts-, Stil-, Struktur- und Zustandsdrift sowie auf zeitliche Kontinuitätsfehler.
+description: Prüft mehrere Bilder einer Serie auf Identitäts-, Stil-, Struktur- und Zustandsdrift sowie auf zeitliche Kontinuitätsfehler. Verwenden bei Bildserien, wenn mehrere Einzelbilder als gemeinsame Produktion auf Identität, Rhythmus, Zustand und technische Konsistenz geprüft werden sollen.
 ---
 
 # Serien-Kontinuitätscheck

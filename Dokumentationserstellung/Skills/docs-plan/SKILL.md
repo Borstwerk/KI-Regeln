@@ -1,3 +1,8 @@
+---
+name: docs-plan
+description: Plant vor dem Schreiben Zielgruppe, Leseraufgabe, Artefakttyp, Dokumentationsmodus, Sources of Truth und Verifikationsweg. Verwenden bei neuen oder grundlegend zu strukturierenden Dokumentationsaufträgen, bevor der eigentliche Text erstellt wird.
+---
+
 # Skill: docs-plan
 
 ## Zweck
