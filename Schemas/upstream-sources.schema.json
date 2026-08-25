@@ -4,7 +4,7 @@
   "required": ["schema_version", "sources"],
   "properties": {
     "schema_version": {"type": "integer", "minimum": 1},
-    "last_updated": {"type": ["string", "object"]},
+    "last_updated": {"type": "string", "format": "date"},
     "sources": {
       "type": "array",
       "items": {
