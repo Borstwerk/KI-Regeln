@@ -5,6 +5,7 @@
   "properties": {
     "schema_version": {"type": "integer", "minimum": 1},
     "source_registry": {"const": "Dokumentation/upstream-sources.yml"},
+    "last_reviewed": {"type": "string", "format": "date"},
     "defaults": {
       "type": "object",
       "required": ["use_class", "license_spdx", "license_source", "license_status_at_observation", "notice_requirement", "redistribution_status"],
@@ -31,6 +32,9 @@
           "license_status_at_observation": {"type": "string"},
           "notice_requirement": {"type": "string"},
           "redistribution_status": {"enum": ["permitted-with-notice", "permitted", "unresolved", "not-redistributable"]},
+          "repository_commit": {"type": ["string", "null"], "pattern": "^[0-9a-f]{40}$"},
+          "license_path": {"type": ["string", "null"]},
+          "license_blob_sha": {"type": ["string", "null"], "pattern": "^[0-9a-f]{40}$"},
           "notes": {"type": "string"}
         },
         "additionalProperties": false
