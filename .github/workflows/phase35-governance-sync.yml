@@ -57,7 +57,7 @@ jobs:
               body = rendered[len(header):]
               if not body.startswith('  - '):
                   raise SystemExit('unexpected source record indentation')
-              return body[2:].rstrip('\n')
+              return body[4:].rstrip('\n')
 
           catalog_path = Path('skill-catalog.yml')
           catalog_text = catalog_path.read_text(encoding='utf-8')
