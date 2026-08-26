@@ -126,6 +126,43 @@ Relevante Ideen:
 - visuelle Verifikation nach Implementierung;
 - Design-to-Code nicht mit freier Art Direction vermischen.
 
+## Motion und Mikrointeraktionen – methodische Referenzen
+
+Für Phase 3.5 wurden drei konkrete öffentliche Skill-Artefakte source-spezifisch geprüft und ausschließlich als `reference/inspiration` verwendet:
+
+- Emil Kowalski – `emilkowalski/skills`, `skills/animate/SKILL.md`;
+- mblode – `mblode/agent-skills`, `skills/ui-animation/SKILL.md`;
+- Taste – `Leonxlnx/taste-skill`, `skills/taste-skill/SKILL.md`.
+
+Relevante abstrahierte Ideen:
+
+- zuerst entscheiden, ob Motion überhaupt einen Produktzweck erfüllt;
+- Frequenz und wiederholte Nutzung als Teil der Motion-Entscheidung behandeln;
+- Spatial Continuity, Gesten und Interruptibility bewusst modellieren;
+- Screenrecordings als Evidence zur Rekonstruktion beobachtbarer Bewegung nutzen, ohne daraus die ursprüngliche Technik zu erraten;
+- unscharfe Designanforderungen bei Bedarf in wenige explizite lokale Parameter übersetzen.
+
+Einordnung:
+
+Die Quellen wurden **nicht** als Normenkatalog übernommen. Insbesondere feste Dauer-/Easingtabellen, harte Toolrankings, absolute Performancebehauptungen, benannte Skalen und Defaultwerte wurden nicht als universelle lokale Wahrheit übernommen. mblode wird bei Emil-nahen Craft-Heuristiken wegen genealogischer Nähe nicht als unabhängiger Konsens doppelt gezählt. Die konkrete Provenance-Klassifikation und die beobachteten Blob-SHAs stehen in `../Dokumentation/upstream-provenance.yml`.
+
+Die daraus entstandene lokale Struktur trennt `motion-design`, `motion-implementation` und `motion-review`. Reverse Engineering aus Video ist ein Evidence-Modus von `motion-review`; die technische Umsetzung und die anschließende Browser-Gegenprüfung werden mit `motion-implementation` beziehungsweise `visual-verification` komponiert.
+
+## Motion und Mikrointeraktionen – technische Primärquellen
+
+Konkrete technische Aussagen werden nicht aus den Agent-Skills abgeleitet, sondern aus Primärdokumentation:
+
+- MDN – `prefers-reduced-motion`;
+- MDN – Web Animations API;
+- MDN – `@starting-style`;
+- MDN – View Transition API;
+- MDN – CSS Scroll-driven Animations;
+- Motion – offizielle Layout-Animations-Dokumentation;
+- GSAP – offizielle Timeline-Dokumentation;
+- GSAP – offizielle ScrollTrigger-Dokumentation.
+
+Diese Quellen belegen technische Fähigkeiten und API-Verhalten. Sie sind **kein methodischer Designkonsens** und begründen keine pauschale Toolpräferenz. Browserunterstützung und API-Status bleiben zeitabhängige Evidence und werden bei Materialität aktuell geprüft. Die konkreten URLs und `local_impact`-Pfade stehen in `../Dokumentation/upstream-sources.yml`.
+
 ## skills.sh
 
 Quelle:
@@ -151,10 +188,14 @@ Aus den Quellen wurden vor allem folgende allgemeine Konzepte bestätigt oder ge
 7. gerenderte Browserprüfung ist Teil der Verifikation.
 8. unabhängiger Review ist stärker als Selbstbewertung des erzeugenden Agenten.
 9. Komponenten sollen durch Komposition und klare Verantwortung wartbar bleiben.
-10. allgemeine Regeln bleiben zentral; konkrete Marke, Architektur und Produktwahrheit bleiben lokal.
+10. Motion braucht einen benennbaren Produktzweck; keine Animation ist ein zulässiges Ergebnis.
+11. Reduced Motion, Unterbrechbarkeit und reale Render-/Performance-Evidence gehören zur Motion-Qualität.
+12. allgemeine Regeln bleiben zentral; konkrete Marke, Architektur und Produktwahrheit bleiben lokal.
 
 ## Lizenz- und Übernahmehinweis
 
 Die Inhalte dieses Bereichs sind eigenständig formulierte allgemeine Regeln. Externe Skill-Dateien oder längere Textpassagen wurden nicht als Vorlage kopiert.
+
+Die drei in Phase 3.5 geprüften methodischen Motion-Artefakte bleiben `reference/inspiration`, `material_scope: concepts/methods-only`, `redistribution_reliance: not-relied-on`; ihr finaler Similarity-Recheck ergab kein Signal für konkrete Ausdrucksübernahme. Deshalb entsteht aus ihnen keine neue Notice-Pflicht.
 
 Falls künftig konkrete Drittinhalte übernommen oder adaptiert werden, ist zusätzlich `THIRD-PARTY-NOTICES.md` zu aktualisieren.
