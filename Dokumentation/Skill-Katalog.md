@@ -96,9 +96,9 @@ Für Webentwicklung ergänzen `motion-design`, `motion-implementation` und `moti
 
 Der Stand nach Phase 3.5 betrug 131 Skills, davon 103× `partial` und 28× `none`, 0× `core`/`broad`; 103 Skill-Evalpacks mit insgesamt 515 definierten Cases. Die drei neuen Skills aus Phase 3.5 wurden nicht über `experimental` hinaus hochgestuft.
 
-Phase 3.6 ergänzt im Bereich Schreiben genau einen neuen Skill, `adressatengerechte-kommunikation`, als `experimental` mit `partial` Evalabdeckung. `natuerliches-schreiben`, `kreatives-schreiben` und `stilreview` bleiben `candidate`; ihre Maturity wurde nicht angehoben. Für die vier Schreiben-Skills sind 34 neue Startfälle definiert: 11 für `natuerliches-schreiben`, 11 für `adressatengerechte-kommunikation`, 6 für `kreatives-schreiben` und 6 für `stilreview`. Diese 34 Fälle sind **definiert, aber nicht als Behavioral Evals ausgeführt oder bestanden**.
+Phase 3.6 ergänzt im Bereich Schreiben genau einen neuen Skill, `adressatengerechte-kommunikation`, als `experimental` mit `partial` Evalabdeckung. `natuerliches-schreiben`, `kreatives-schreiben` und `stilreview` bleiben `candidate`; ihre Maturity wurde nicht angehoben. Für die vier Schreiben-Skills sind 35 neue Startfälle definiert: 12 für `natuerliches-schreiben`, 11 für `adressatengerechte-kommunikation`, 6 für `kreatives-schreiben` und 6 für `stilreview`. Diese 35 Fälle sind **definiert, aber nicht als Behavioral Evals ausgeführt oder bestanden**.
 
-Aktueller Gesamtstand nach Phase 3.6: 132 Skills, davon 107× `partial` und 25× `none`, 0× `core`/`broad`; 107 Skill-Evalpacks mit insgesamt 549 definierten Cases. Die Zahlen ergeben sich aus dem aktuellen maschinenlesbaren Katalog sowie dem dokumentierten Phase-3.5-Stand von 103 Evalpacks/515 Cases plus den vier neuen Schreiben-Packs mit zusammen 34 Cases.
+Aktueller Gesamtstand nach Phase 3.6: 132 Skills, davon 107× `partial` und 25× `none`, 0× `core`/`broad`; 107 Skill-Evalpacks mit insgesamt 550 definierten Cases. Die Zahlen ergeben sich aus dem aktuellen maschinenlesbaren Katalog sowie dem dokumentierten Phase-3.5-Stand von 103 Evalpacks/515 Cases plus den vier neuen Schreiben-Packs mit zusammen 35 Cases.
 
 ## Hardening Phase 2 – Eval Coverage
 
@@ -192,7 +192,7 @@ Für Infrastruktur-/DevOps-Skills sollte an realen, kontrollierten Projekten gep
 
 Für Reliability-/System-Observability-Skills sollte zusätzlich an realen Services beziehungsweise belastbaren Betriebs-/Incident-/Game-Day-Szenarien geprüft werden, ob SLO-Grenzen, Runtime-Evidence, Alert-Actionability, Incident-Gates, Capacity-Annahmen und Resilience-Safety zuverlässig erkannt werden. Ein vorhandenes Dashboard oder definierter Evalcase allein reicht nicht als Maturity-Beleg.
 
-Für Data-Engineering-Skills sollte zusätzlich an realen Datenflüssen beziehungsweise belastbaren Pipeline-/Backfill-/Consumer-Szenarien geprüft werden, ob Source-of-Truth-Lücken, Grainfehler, CDC-/Replay-Grenzen, semantische Contractänderungen, Data-Quality-Blind-Spots, Lineage-Lücken und Reprocessing-Gates zuverlässig erkannt werden. Ein grüner DAG, SQL-Lauf oder definierter Evalcase allein reicht nicht als Maturity-Beleg.
+Für Data-Engineering-Skills sollte zusätzlich an realen Datenflüssen beziehungsweise belastbaren Pipeline-/Backfill-/Consumer-Szenarien geprüft werden, ob Source-of-Truth-Lücken, Grainfehler, CDC-/Replay-Grenzen, semantische Contractänderungen, Data-Quality-Blind-Spots, Lineage-Lücken und Reprocessing-Gates zuverlässig erkannt werden. Ein grüner DAG, SQL-Lauf oder definierter Evalcase allein reicht nicht für eine Hochstufung.
 
 Für Software-Architecture-/System-Design-Skills sollte zusätzlich an realen Systemen oder belastbaren Architekturentscheidungen geprüft werden, ob Architecture 0 korrekt rekonstruiert, Drivers und Missing Evidence sauber getrennt, unnötige verteilte Komplexität vermieden, echte Trade-offs erkannt, Migrationszwischenzustände erklärt und lokale Architekturregeln ohne Patterndogma geprüft werden. Ein schönes Diagramm, ein ADR oder ein Same-Model-Smoke-Lauf allein reicht nicht als Maturity-Beleg.
 
