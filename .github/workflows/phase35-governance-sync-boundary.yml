@@ -1,0 +1,59 @@
+name: Phase 3.5 governance sync policy boundary
+
+on:
+  push:
+    branches:
+      - hardening/phase-3-5-webdesign-motion
+    paths:
+      - .phase35-governance-sync-boundary-trigger
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+        with:
+          ref: hardening/phase-3-5-webdesign-motion
+          fetch-depth: 0
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12'
+      - run: python -m pip install --disable-pip-version-check PyYAML==6.0.2 jsonschema==4.25.1
+      - name: Execute renderer using parser-located policy key boundary
+        run: |
+          python - <<'BOOT'
+          from pathlib import Path
+
+          workflow = Path('.github/workflows/phase35-governance-sync-corrected.yml').read_text(encoding='utf-8')
+          marker = "          python - <<'PY'\n"
+          start = workflow.index(marker) + len(marker)
+          end = workflow.index("\n          PY\n", start)
+          lines = workflow[start:end].splitlines()
+          if not lines or not all((not line) or line.startswith('          ') for line in lines):
+              raise SystemExit('unexpected embedded Python indentation')
+          code = '\n'.join(line[10:] if line else '' for line in lines)
+
+          old_nodes = "registry_nodes = {k.value: v for k, v in registry_root.value if isinstance(k, yaml.ScalarNode)}"
+          new_nodes = old_nodes + "\nregistry_key_nodes = {k.value: k for k, v in registry_root.value if isinstance(k, yaml.ScalarNode)}"
+          old_suffix = '+ registry_text[last_tail_node.end_mark.index:]'
+          new_suffix = "+ '\\n' + registry_text[registry_key_nodes['policy'].start_mark.index:]"
+          if code.count(old_nodes) != 1 or code.count(old_suffix) != 1:
+              raise SystemExit('expected registry boundary expressions not found exactly once')
+          code = code.replace(old_nodes, new_nodes).replace(old_suffix, new_suffix)
+          exec(compile(code, '<phase35-governance-sync-policy-boundary>', 'exec'), {'__name__': '__main__'})
+          BOOT
+      - name: Validate synchronized state
+        run: |
+          python tools/repo_validator.py
+          python tools/eval_coverage_audit.py --summary
+          git diff --check
+      - name: Commit governance data only
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add skill-catalog.yml Dokumentation/upstream-sources.yml
+          git commit -m "chore: synchronize Phase 3.5 catalog and sources"
+          git push origin HEAD:hardening/phase-3-5-webdesign-motion
