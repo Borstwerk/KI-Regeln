@@ -8,6 +8,19 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Hardening Phase 3.6 – Schreiben und Kommunikation
+
+- Schreiben um genau einen neuen Skill `adressatengerechte-kommunikation` ergänzt; schwierige schriftliche Kommunikation bleibt ein Modus dieses Skills statt eines separaten Konflikt-, Coaching-, E-Mail- oder Plattform-Kommunikationsskills;
+- `natuerliches-schreiben` um klare Generation-, Rewrite-/Preservation- und Voice-Calibration-Regeln gehärtet; Voice-Evidence wird kontextbezogen und mit kalibrierter Confidence genutzt statt als exakte Persönlichkeitsrekonstruktion;
+- `stilreview` ausschließlich an der Routinggrenze zu Rewrite und adressatenbezogener Kommunikation geschärft; `kreatives-schreiben` fachlich unverändert belassen;
+- Detector-Scores sind weder Qualitäts- noch Akzeptanzziel; keine Undetectability-Garantien, keine künstlichen Fehler und keine erfundenen Anekdoten zur Detector-Manipulation;
+- vier Schreiben-Evalpacks ergänzt beziehungsweise vervollständigt: 11 Cases für `natuerliches-schreiben`, 11 für `adressatengerechte-kommunikation`, 6 für `kreatives-schreiben` und 6 für `stilreview`, zusammen 34 neue definierte Schreiben-Cases; Gesamtstand 107 Evalpacks mit 549 definierten Cases;
+- die neuen Schreiben-Cases sind definiert, aber nicht als Behavioral Evals ausgeführt oder bestanden dargestellt;
+- Skill-Katalog auf 132 Skills aktualisiert; Coverage 107× `partial`, 25× `none`, 0× `core`/`broad`; `adressatengerechte-kommunikation` startet `experimental / partial`, die drei bestehenden Schreiben-Skills bleiben `candidate`; keine bestehende Maturity hochgestuft;
+- methodische Quellen für Humanize/Voice Calibration und adressatengerechtes Drafting source-spezifisch registriert und in `Dokumentation/upstream-provenance.yml` als `assessed / reference/inspiration / concepts/methods-only / no-signal / not-relied-on` dokumentiert; comparison-only Quellen wurden nicht künstlich als Herkunft registriert;
+- bewusst keine zusätzlichen Skills `redaktioneller-entwurf`, `humanizer`, `voice-calibration`, `email-drafter`, Plattform-Kommunikation oder `ai-detector-bypass` angelegt;
+- Upstream-Governance bleibt `review-only` mit `auto_sync: false`; kein Merge, Tag oder Release durch Phase 3.6.
+
 ### Hardening Phase 3.5 – Webdesign und Motion
 
 - Webdesign um drei klar getrennte Motion-Skills ergänzt: `motion-design` definiert Zweck und Motion-Contract, `motion-implementation` setzt freigegebene Motion technisch um und `motion-review` bewertet vorhandene Motion unabhängig; Reverse Engineering aus Screenrecordings bleibt Evidence-Modus von `motion-review` statt eigener vierter Skill;
