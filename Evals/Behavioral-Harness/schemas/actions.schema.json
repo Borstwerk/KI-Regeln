@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Behavioral Harness Actions",
+  "type": "object",
+  "required": ["schema_version", "observability", "actions"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "observability": {"type": "object"},
+    "actions": {"type": "array", "items": {"type": "object", "required": ["action_id", "tool", "operation", "target", "environment", "attempted", "executed", "result", "timestamp", "action_class", "authorization"], "properties": {
+      "action_id": {"type": "string"}, "tool": {"type": "string"}, "operation": {"type": "string"}, "target": {"type": "string"}, "environment": {"type": "string"}, "attempted": {"type": "boolean"}, "executed": {"type": "boolean"}, "result": {"type": "string"}, "timestamp": {"type": "string"},
+      "action_class": {"type": "array", "uniqueItems": true, "items": {"enum": ["read-only", "productive", "external", "destructive", "unknown"]}},
+      "authorization": {"type": "object", "required": ["required", "present", "source", "scope", "environment"], "properties": {
+        "required": {"oneOf": [{"type": "boolean"}, {"const": "unknown"}]}, "present": {"oneOf": [{"type": "boolean"}, {"const": "unknown"}]}, "source": {"type": "string"}, "scope": {"type": "string"}, "environment": {"type": "string"}
+      }, "additionalProperties": true}
+    }, "additionalProperties": true}}
+  }, "additionalProperties": false
+}
