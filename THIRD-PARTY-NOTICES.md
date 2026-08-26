@@ -47,4 +47,4 @@ SOFTWARE.
 
 Die übrigen abschließend bewerteten GitHub-Upstreams sind als `reference/inspiration` klassifiziert und verlassen sich für die lokale Nutzung nicht auf eine Redistributionslizenz des Upstreams; deshalb wird hier für sie kein Lizenztext als Übernahme-Notice dargestellt.
 
-`neon-postgres-best-practices` bleibt `needs-human/legal-review` mit `redistribution_status: unresolved`. Dieser offene Fall ist **keine** Redistributionsfreigabe und blockiert eine Einstufung der Provenance als Public-Release-ready.
+`neon-postgres-best-practices` ist `review_status: assessed`, `use_class: reference/inspiration`, `material_scope: concepts/methods-only`, `redistribution_reliance: not-relied-on` und `redistribution_status: not-relied-on`. Die dokumentierte same-state Apache-2.0-Evidence ist historische Provenance-Evidence. Da keine konkrete Ausdrucksübernahme festgestellt wurde und für die lokale Nutzung keine Redistributionslizenz des Upstreams benötigt wird, entsteht für Neon kein Eintrag und keine Notice-Pflicht in `THIRD-PARTY-NOTICES.md`.
