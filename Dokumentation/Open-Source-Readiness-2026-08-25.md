@@ -92,7 +92,6 @@ Finale Klassifikation:
 Damit verbleibt kein `needs-human/legal-review`-Provenance-Record.
 
 ## Exposure-Audit
-## Exposure-Audit
 
 Der permanente Workflow `.github/workflows/open-source-exposure-audit.yml` prüft Current Tree und Reachable History read-only. Sein Dauerzustand verwendet `push` auf `main` und `hardening/**`, `pull_request` sowie `workflow_dispatch`; ein Phase-3-spezifischer Branchname ist nicht Teil des gemergten Workflowzustands.
 
@@ -112,9 +111,15 @@ Auditberichte und CI-Ausgabe enthalten nur Finding-Metadaten wie Commit, Pfad, Z
 
 ## Projektlizenz
 
-`Dokumentation/Lizenzentscheidung-Open-Source.md` empfiehlt MIT als Kandidat für die spätere Projektlizenz. Daraus wurde bewusst **keine** Root-`LICENSE` erzeugt.
+Der menschliche Decision Gate für die Projektlizenz wurde am 2026-08-26 ausdrücklich geschlossen: Das originäre KI-Regeln-Projektmaterial soll unter der **MIT License** veröffentlicht werden.
 
-Offener Blocker: Ein autorisierter Mensch muss den tatsächlichen Rights Holder / Copyright Holder für das Repository festlegen und die Projektlizenzentscheidung freigeben.
+Die Root-`LICENSE` ist vorhanden und enthält den standardmäßigen MIT-Lizenztext mit der neutralen projektbezogenen Copyright-Zeile `Copyright (c) 2026 KI-Regeln contributors`.
+
+Diese Root-MIT-Lizenz betrifft das originäre KI-Regeln-Projektmaterial. Sie relicensed kein Drittmaterial. Tatsächlich redistribution-relevante Fremdanteile bleiben unter ihren jeweils dokumentierten Lizenzen und Notice-/Attributionspflichten; `THIRD-PARTY-NOTICES.md` bleibt dafür maßgeblich.
+
+Die vier Matt-Pocock-Adaptionsfälle behalten ihre same-state-MIT-Evidence und den dokumentierten MIT-Notice. `neon-postgres-best-practices` bleibt `assessed / reference/inspiration / concepts/methods-only / not-relied-on`; seine same-state Apache-2.0-Evidence ist historische Provenance-Evidence und keine benötigte Redistributionsfreigabe.
+
+Der Licensing-Readiness-Bereich ist damit `ready`; die Projektlizenz ist kein offener Public-Release-Blocker mehr.
 
 ## Security Reporting
 
@@ -125,7 +130,6 @@ Das wird nicht als technisch jetzt schon aktivierbare GitHub-Einstellung dargest
 Bis einer dieser Wege tatsächlich verifiziert ist, bleibt Security Reporting ein Public-Release-Gate.
 
 ## Repository-Hygiene und Supply Chain
-## Repository-Hygiene und Supply Chain
 
 `README.md` enthält einen knappen Public Entry Path; `CHANGELOG.md` dokumentiert Hardening Phase 3 unter `Unreleased`. `CONTRIBUTING.md`, `SECURITY.md`, `ACKNOWLEDGEMENTS.md`, `THIRD-PARTY-NOTICES.md`, Pull-Request-Template, Dependabot-Konfiguration und die dokumentierte Branch-Protection-Empfehlung sind vorhanden.
 
@@ -135,9 +139,8 @@ Die permanenten CI-Workflows verwenden read-only `contents`-Permissions. `action
 
 Hardening Phase 3 ist technisch abgeschlossen, sobald auf demselben finalen Branch-Head der Repo-Validator, die reguläre Repo-CI, der Current-Tree-Exposure-Scan, der Reachable-History-Scan und der Base→Head-Diff-Audit erfolgreich geprüft wurden.
 
-Das Repository selbst ist trotz erfolgreichem Phase-3-Hardening **noch nicht Public-Release-ready**, solange diese Release-Gates offen sind:
+Das Repository selbst ist trotz erfolgreichem Phase-3-Hardening **noch nicht Public-Release-ready**, solange der verbleibende Release-Day-Gate offen ist:
 
-1. Rights-Holder-/Root-License-Entscheidung: Ein autorisierter Projekt-/Rights-Holder muss ausdrücklich freigeben, das eigene KI-Regeln-Material unter MIT zu veröffentlichen;
-2. privater Security-Reporting-Pfad: in Phase 4 nach dem Visibility-Wechsel GitHub Private Vulnerability Reporting aktivieren, Funktion prüfen und `SECURITY.md` bestätigen – oder vorher einen autorisierten alternativen privaten Kanal dokumentieren.
+1. privater Security-Reporting-Pfad: in Phase 4 nach dem Visibility-Wechsel GitHub Private Vulnerability Reporting aktivieren, Funktion prüfen und `SECURITY.md` bestätigen – oder vorher einen autorisierten alternativen privaten Kanal dokumentieren und verifizieren.
 
-Der frühere Neon-Provenance-Blocker ist source-spezifisch aufgelöst. Keines der verbleibenden Gates darf durch Automatisierung als erledigt markiert werden.
+Der frühere Neon-Provenance-Blocker und der frühere Projektlizenz-Decision-Gate sind aufgelöst. Der verbleibende Security-Reporting-Gate darf nicht durch Automatisierung als erledigt markiert werden.
