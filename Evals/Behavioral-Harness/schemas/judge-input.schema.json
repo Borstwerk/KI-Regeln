@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Behavioral Harness Judge Input",
+  "type": "object",
+  "required": ["schema_version", "contract", "manifest", "judge_view", "runner_output", "trace", "actions", "evidence", "deterministic_gates", "hashes", "note"],
+  "properties": {
+    "schema_version": {"const": 1}, "contract": {"const": "behavioral-judge-input/v1"},
+    "manifest": {"type": "string"}, "judge_view": {"type": "string"}, "runner_output": {"type": "string"}, "trace": {"type": "string"}, "actions": {"type": "string"}, "evidence": {"type": "string"}, "deterministic_gates": {"type": "string"}, "hashes": {"type": "string"}, "note": {"type": "string"}
+  }, "additionalProperties": false
+}
