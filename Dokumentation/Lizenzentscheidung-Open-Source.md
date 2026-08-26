@@ -1,8 +1,8 @@
 # Lizenzentscheidung für eine spätere Open-Source-Veröffentlichung
 
-Stand: 2026-08-25
+Stand: 2026-08-26
 
-Diese Entscheidungsvorlage betrifft ausschließlich das **eigene KI-Regeln-Material**. Drittmaterial bleibt unabhängig davon unter den jeweils anwendbaren Bedingungen. Die technische Provenance-Prüfung ersetzt keine Rechtsberatung.
+Diese Projektentscheidung betrifft ausschließlich das **originäre KI-Regeln-Material**. Drittmaterial bleibt unabhängig davon unter den jeweils anwendbaren Bedingungen. Die technische Provenance-Prüfung ersetzt keine Rechtsberatung.
 
 ## Zielbild
 
@@ -22,41 +22,33 @@ Die gewünschte Projektrichtung ist permissive Open Source mit möglichst niedri
 
 - enthält keinen so ausdrücklichen Patent Grant und keine Patent-Termination-Mechanik wie Apache-2.0;
 - bietet weniger formalisierte Leitplanken für Notices und Änderungen;
-- löst weder Rights-Holder- noch Third-Party-Provenance-Fragen.
+- löst keine Third-Party-Provenance-Fragen für Fremdmaterial.
 
 ## Apache License 2.0
 
-### Vorteile
+Apache-2.0 wurde als permissive Alternative betrachtet. Sie enthält einen ausdrücklichen Patent Grant und detailliertere Notice-/Änderungsregeln, erzeugt für das derzeit überwiegend dokumentations- und methodenorientierte KI-Regeln-Projekt aber zusätzlichen Prozess ohne festgestellten projektspezifischen Bedarf.
 
-- ebenfalls permissiv;
-- enthält einen ausdrücklichen Patent Grant mit Patent-Termination-Regel;
-- beschreibt Lizenz-/Notice- und Änderungsanforderungen ausführlicher;
-- kann sinnvoll sein, wenn Patentklarheit für Contributors oder Implementierungen eine zentrale Governance-Anforderung ist.
+## Verbindliche Projektentscheidung
 
-### Nachteile
+**MIT entschieden.**
 
-- deutlich länger und prozessreicher als MIT;
-- die NOTICE-Mechanik erhöht den Pflegeaufwand, wenn sie tatsächlich relevant wird;
-- für das derzeit überwiegend dokumentations- und methodenorientierte Repository entsteht aus dem zusätzlichen Mechanismus kein offensichtlich notwendiger Nutzen;
-- auch Apache-2.0 kann ungeklärtes Drittmaterial oder unklare Rechteinhaberschaft nicht nachträglich bereinigen.
+Der autorisierte Projekt-/Rights-Holder-Decision-Gate ist am 2026-08-26 geschlossen worden: Das originäre KI-Regeln-Projektmaterial soll unter der **MIT License** veröffentlicht werden.
 
-## Empfehlung
+Dementsprechend liegt im Repository eine Root-`LICENSE` mit dem standardmäßigen MIT-Lizenztext und dem neutralen projektbezogenen Copyright-Hinweis
 
-Für die derzeitige Struktur von KI-Regeln ist **MIT der bevorzugte Kandidat**: permissiv, leicht verständlich und für die erwartete Wiederverwendung von Regeln, Skills, Dokumentation und kleinen Tools ausreichend schlank.
+`Copyright (c) 2026 KI-Regeln contributors`
 
-Apache-2.0 wäre die stärkere Alternative, falls vor Veröffentlichung ein ausdrücklicher Patent Grant als bewusste Projektanforderung festgelegt wird.
+vor.
 
-## Decision Gate vor Einführung einer Root-Lizenz
+Die Root-MIT-Lizenz wird **nicht** als Relicensing von Drittmaterial verstanden:
 
-Die Empfehlung ist noch **keine wirksame Lizenzierung** des Repositories.
+- tatsächlich redistribution-relevante Fremdanteile bleiben unter ihrer jeweiligen dokumentierten Lizenz und ihren Notice-/Attributionspflichten;
+- `THIRD-PARTY-NOTICES.md` bleibt für solche Fremdanteile maßgeblich;
+- die vier Matt-Pocock-Adaptionsfälle behalten ihre dokumentierte same-state-MIT-Evidence und den dafür geführten MIT-Notice;
+- `neon-postgres-best-practices` ist nach source-spezifischem Review `assessed / reference/inspiration / concepts/methods-only / not-relied-on`; seine same-state Apache-2.0-Evidence ist historische Provenance-Evidence, keine benötigte Redistributionsfreigabe für den lokalen Reference-only-Fall.
 
-Eine Root-`LICENSE` wird erst eingeführt, wenn:
+Repository-Eigentum, GitHub-Organisation oder einzelne Commit-Autorenschaft werden durch diese Dokumentation nicht pauschal zu einer Aussage über die persönliche Rechteinhaberschaft einzelner Personen umgedeutet. Die verwendete Copyright-Zeile ist bewusst projektbezogen und neutral.
 
-1. die Rights-/Copyright-Holder für das eigene Material belastbar bestätigt sind;
-2. redistribution-relevantes Drittmaterial vollständig identifiziert und mit seiner eigenen Lizenz-/Notice-Pflicht isoliert ist;
-3. offene `needs-human/legal-review`-Fälle einer Root-Lizenzierung nicht entgegenstehen;
-4. ein Public-Release-Audit die Einführung ausdrücklich freigibt.
+## Verbleibende Release-Grenze
 
-Repository-Eigentum, GitHub-Organisation oder Commit-Autorenschaft werden dabei nicht automatisch mit vollständiger urheberrechtlicher Rechteinhaberschaft gleichgesetzt.
-
-**Phase-3-Entscheidung:** MIT empfohlen; Root-`LICENSE` bis zur bestätigten Rights-Holder-Entscheidung blockiert.
+Die Projektlizenzentscheidung selbst ist kein offener Public-Release-Blocker mehr. Ein Public Release bleibt dennoch getrennt gated, insbesondere bis der dokumentierte private Security-Reporting-Pfad für den öffentlichen Repositoryzustand tatsächlich eingerichtet und praktisch verifiziert wurde.
