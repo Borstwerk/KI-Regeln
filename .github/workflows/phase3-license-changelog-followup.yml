@@ -47,3 +47,5 @@ jobs:
           test "$(git diff --cached --name-only)" = "CHANGELOG.md"
           git commit -m "docs: record authorized MIT license under unreleased"
           git push origin HEAD:hardening/phase-3-open-source-readiness
+
+# trigger: authorized MIT decision follow-up
