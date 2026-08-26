@@ -19,7 +19,8 @@ Verdichte eine freigegebene Designrichtung in ein konsistentes, lokal dokumentie
 
 - Ersatz für eine noch ungeklärte Designrichtung;
 - Anlass, jede mögliche Zahl und Variante zu abstrahieren;
-- Lizenz für ein überdimensioniertes Komponentenframework.
+- Lizenz für ein überdimensioniertes Komponentenframework;
+- Ersatz für den Entwurf von Motion-Zweck, Gesten oder Choreographie – dafür `motion-design`.
 
 ## Eingaben
 
@@ -27,7 +28,8 @@ Verdichte eine freigegebene Designrichtung in ein konsistentes, lokal dokumentie
 - vorhandene Marke/Referenzen;
 - relevante Accessibility-Anforderungen;
 - vorhandene Komponenten oder Tokens;
-- technische Stylingkonventionen des Projekts.
+- technische Stylingkonventionen des Projekts;
+- freigegebene Motion-Prinzipien oder Motion-Contracts, wenn Motion systematisiert werden soll.
 
 ## Arbeitsweise
 
@@ -36,10 +38,11 @@ Verdichte eine freigegebene Designrichtung in ein konsistentes, lokal dokumentie
 3. Lege Typorollen mit Größe, Gewicht, Zeilenhöhe und Einsatz fest.
 4. Lege Farbrollen einschließlich Fokus-, Fehler- und Disabled-Zuständen fest.
 5. Definiere Spacing- und Surface-Logik.
-6. Begrenze Radius-, Shadow- und Motionvarianten auf begründete Mengen.
+6. Begrenze Radius-, Shadow- und freigegebene Motionvarianten auf begründete Mengen.
 7. Definiere Basiskomponenten nur dort, wo echte Wiederverwendung besteht.
 8. Prüfe Kontrast und lesbare Defaultzustände.
 9. Dokumentiere bewusst erlaubte Ausnahmen.
+10. Konserviere bei Motion nur bereits begründete wiederkehrende Entscheidungen; neue Motion-Sprache wird mit `motion-design` entwickelt.
 
 ## Ausgabe
 
@@ -63,6 +66,7 @@ bewusste Ausnahmen
 - Hierarchie primär durch Typografie und Abstand lösen, nicht immer durch zusätzliche Cards.
 - Keine Varianten nur für hypothetische Zukunftsfälle.
 - Designsystem soll Identität stabilisieren, nicht jede Seite uniform machen.
+- Motion-Tokens dokumentieren freigegebene Systementscheidungen; sie sind kein Ersatz für kontextbezogenes Motion-Design.
 
 ## Stop-Regeln
 
