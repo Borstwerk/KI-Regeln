@@ -133,6 +133,7 @@ sources:
     last_checked: 2026-08-23
     local_impact:
       - Agentenarbeit/Long-Horizon-Handoffs.md
+      - Agentenarbeit/Working-Memory-und-Persistenzgrenzen.md
       - Agentenarbeit/Skills/session-handoff/SKILL.md
 
   # ---------------------------------------------------------------------------
@@ -608,6 +609,19 @@ sources:
     monitor_mode: exact-sha
     cadence: monthly
     observed_sha: 12f3aa141564038a1cda9c6a74e3524e9ec54242
+    last_checked: '2026-08-26'
+    local_impact:
+      - Schreiben/Skills/natuerliches-schreiben/SKILL.md
+
+  - id: shir-humanize-voice-calibration
+    area: Schreiben
+    kind: github-file
+    repository: shir-danishyar/humanize
+    path: references/voice.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: 6fb0e54d17a71cfe0c584e0d684eea752a2b61ed
     last_checked: '2026-08-26'
     local_impact:
       - Schreiben/Skills/natuerliches-schreiben/SKILL.md
