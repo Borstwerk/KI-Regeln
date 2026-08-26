@@ -13,7 +13,15 @@ Prüfe eine implementierte Weboberfläche im Browser auf tatsächliche visuelle,
 
 - UI-Code umgesetzt oder verändert wurde;
 - ein Design oder Greybox implementiert wurde;
-- gerenderte Evidence für Review oder Freigabe benötigt wird.
+- gerenderte Evidence für Review oder Freigabe benötigt wird;
+- ein anderer Review-Skill Browser-/Interaktions-Evidence benötigt.
+
+## Nicht verwenden als
+
+- Ersatz für `motion-review` bei der fachlichen Bewertung von Timing, Easing, Spatial Continuity, Gesture oder Interruptibility;
+- Ersatz für die allgemeine Design-, Accessibility- oder Performancebewertung.
+
+Bei Motion liefert dieser Skill reproduzierbare Browser-/Viewport-/Interaktions-Evidence; die Motion-Craft-Bewertung bleibt bei `motion-review`.
 
 ## Eingaben
 
@@ -39,13 +47,15 @@ Prüfe eine implementierte Weboberfläche im Browser auf tatsächliche visuelle,
 5. Prüfe Browserkonsole und fehlgeschlagene Requests.
 6. Bediene relevante Flows per Tastatur.
 7. Vergleiche gegen Greybox, Designbrief oder freigegebene Referenz.
-8. Sammle geeignete Evidence: Screenshots, visuelle Tests, DOM-/Accessibility-Snapshots oder dokumentierte Interaktionsprüfung.
-9. Benenne Abweichungen offen.
+8. Sammle geeignete Evidence: Screenshots, visuelle Tests, DOM-/Accessibility-Snapshots, Video/Screenrecording oder dokumentierte Interaktionsprüfung.
+9. Bei relevanter Motion prüfe auf Anforderung normale und Reduced-Motion-Zustände sowie wiederholte/unterbrochene Interaktion; liefere die Beobachtung an `motion-review` oder den beauftragenden Skill.
+10. Benenne Abweichungen offen.
 
 ## Regeln
 
 - Code gelesen ≠ UI verifiziert.
 - Screenshot ≠ Interaktion verifiziert.
+- Video ≠ technische Implementierung oder Library bewiesen.
 - neue visuelle Baseline ≠ Änderung automatisch korrekt.
 - ungeprüfte Viewports nicht als bestanden melden.
 - reale oder realistische Inhalte verwenden.
