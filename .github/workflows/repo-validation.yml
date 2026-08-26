@@ -4,8 +4,9 @@ on:
   push:
     branches:
       - main
-      - hardening/phase-3-open-source-readiness
+      - 'hardening/**'
   pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
