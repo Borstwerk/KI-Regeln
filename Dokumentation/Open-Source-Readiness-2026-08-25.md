@@ -29,6 +29,19 @@ Finale technische Provenance-Klassifikation:
 
 Der automatische Ähnlichkeitscheck ist nur ein Signal. `assessed` wurde erst nach Review vergeben; ein offener Zweifelsfall bleibt ausdrücklich offen.
 
+### Bindung an den bewerteten Source-Snapshot
+
+Jeder der 65 Provenance-Einträge hält den konkret bewerteten Snapshot selbst fest:
+
+- Repository;
+- Source Path;
+- beobachteter Ref;
+- beobachteter Blob-SHA.
+
+Der dauerhafte Validator vergleicht diesen `source_snapshot` mit dem aktuellen `github-file`-Eintrag in `Dokumentation/upstream-sources.yml`. Ändert das Monitoring später Repository, Pfad, Ref oder `observed_sha`, schlägt die strukturelle Validierung fehl und verlangt einen expliziten erneuten Provenance-Review. Es gibt keine automatische Provenance-Synchronisation.
+
+Die einmalige Phase-3-Migration wurde nur ausgeführt, nachdem bestätigt war, dass `Dokumentation/upstream-sources.yml` noch exakt denselben Blob (`3690a439169a134cf3bcc14473378db80bc288c1`) wie beim vollständigen 65er Audit hatte. Der dafür temporär benötigte Write-Workflow wurde anschließend wieder entfernt.
+
 ## Matt Pocock – vier getrennte Adaptionsentscheidungen
 
 Für alle vier Fälle ist der jeweilige beobachtete Blob am Repository-Commit `6654f6b60cd9d5be8b54c6fafe44346dabeb3b76` nachgewiesen. Am selben Commit liegt `LICENSE` als MIT vor, Blob `f1dd2c09108dde1a5f56097cee8461b3ea834499`. Der Audit meldete für diese vier Artefakte keinen widersprechenden pfadspezifischen Lizenzhinweis.
@@ -63,7 +76,7 @@ Für alle vier Fälle steht der gemeinsame MIT-Notice in `THIRD-PARTY-NOTICES.md
 
 `neon-postgres-best-practices` bleibt `needs-human/legal-review`.
 
-Der beobachtete Blob `43f3468765949e3db85a3782d90d4826b6c585bd` konnte beim Audit keinem historischen Repository-Commit zugeordnet werden. Dadurch wurde kein belastbarer same-state-Lizenzstand hergestellt und der historische Artefakttext konnte nicht gegen die lokalen Impact-Dateien verglichen werden.
+Der beobachtete Blob `43f3468765949e3db85a3782d90d4826b6c585bd` ist im `source_snapshot` dokumentiert, konnte beim Audit aber keinem historischen Repository-Commit zugeordnet werden. Dadurch wurde kein belastbarer same-state-Lizenzstand hergestellt und der historische Artefakttext konnte nicht gegen die lokalen Impact-Dateien verglichen werden.
 
 Der Eintrag bleibt deshalb:
 
@@ -76,13 +89,21 @@ Das ist keine Redistributionsfreigabe und verhindert `provenance: ready`.
 
 ## Exposure-Audit
 
-Ein vorläufiger Current-Tree-Scan fand keine potentiellen Secret-Werte und keine Binärdateien. Ein vorläufiger Reachable-History-Scan erfasste 662 erreichbare Commits und 874 eindeutige erreichbare Blobs und meldete null potentielle Secret-Funde sowie null Kontextfunde.
+Der permanente Workflow `.github/workflows/open-source-exposure-audit.yml` prüft Current Tree und Reachable History read-only. Sein Dauerzustand verwendet `push` auf `main` und `hardening/**`, `pull_request` sowie `workflow_dispatch`; ein Phase-3-spezifischer Branchname ist nicht Teil des gemergten Workflowzustands.
+
+Die Scanner-/Workflow-Schnittstelle für den History-Report ist auf die kanonischen Felder `commit_count` und `unique_reachable_blob_count` vereinheitlicht. Es wurden keine doppelten Kompatibilitätsfelder eingeführt.
+
+Der Pre-Readiness-Scan auf `7829abf24e301d820047b6a3ccbca80b91fbe187` ergab:
+
+- Current Tree: 0 potentielle Secret-Funde, 9 Kontext-Review-Marker, 0 Binärdateien;
+- die 9 Kontextmarker wurden geprüft und sind erwartbare Begriffe in Governance-/Fachdokumentation, Evals beziehungsweise den Scanner-Patterns selbst, keine Secret-Funde;
+- Reachable History: 691 erreichbare Commits, 900 eindeutige erreichbare Blobs, 0 potentielle Secret-Funde, 0 Kontext-Review-Funde.
 
 Die History-Aussage gilt ausschließlich für Objekte, die aus den im Full-History-Checkout vorhandenen Refs erreichbar sind; unreachable/pruned Git-Objekte sind nicht Teil des Claims.
 
-**Vor Öffnen des Phase-3-PR müssen Current-Tree- und Reachable-History-Scan auf dem finalen Branch-Head erneut erfolgreich laufen.** Bis dahin bleibt `history_exposure.scan_complete: false`.
+Nach dem Commit dieses Readiness-Stands müssen Current-Tree- und Reachable-History-Scan auf dem dadurch entstehenden finalen Branch-Head erneut erfolgreich laufen. Diese CI-Läufe sind die externe, nicht selbstreferenzielle Abschluss-Evidence; ihre Run-IDs werden im PR beziehungsweise Abschlussbericht festgehalten.
 
-Auditberichte enthalten nur Finding-Metadaten wie Commit, Pfad, Zeile und Klasse; gefundene Secretwerte werden nicht ausgegeben.
+Auditberichte und CI-Ausgabe enthalten nur Finding-Metadaten wie Commit, Pfad, Zeile und Klasse; gefundene Secretwerte werden nicht ausgegeben.
 
 ## Projektlizenz
 
@@ -96,13 +117,15 @@ Offener Blocker: Ein autorisierter Mensch muss den tatsächlichen Rights Holder 
 
 Das bleibt ein Public-Release-Blocker. Es wurde keine E-Mail-Adresse oder andere Kontaktmöglichkeit erfunden.
 
-## Supply Chain
+## Repository-Hygiene und Supply Chain
 
-Der Repository-Validator nutzt `contents: read`. `actions/checkout` und `actions/setup-python` sind auf konkrete geprüfte v7-Commit-SHAs gepinnt. Dependabot darf Review-PRs für GitHub Actions erzeugen; Auto-Merge oder automatische Upstream-Synchronisierung existieren nicht.
+`README.md` enthält einen knappen Public Entry Path; `CHANGELOG.md` dokumentiert Hardening Phase 3 unter `Unreleased`. `CONTRIBUTING.md`, `SECURITY.md`, `ACKNOWLEDGEMENTS.md`, `THIRD-PARTY-NOTICES.md`, Pull-Request-Template, Dependabot-Konfiguration und die dokumentierte Branch-Protection-Empfehlung sind vorhanden.
+
+Die permanenten CI-Workflows verwenden read-only `contents`-Permissions. `actions/checkout` und `actions/setup-python` sind auf konkrete geprüfte v7-Commit-SHAs gepinnt. Dependabot darf Review-PRs für GitHub Actions erzeugen; Auto-Merge, automatische Provenance-Synchronisierung und automatische Upstream-Synchronisierung existieren nicht.
 
 ## Release-Gate
 
-Hardening Phase 3 darf technisch per PR reviewt werden, sobald finaler Validator, Diff-Audit und CI auf demselben finalen Branch-Head grün sind.
+Hardening Phase 3 ist technisch abgeschlossen, sobald auf demselben finalen Branch-Head der Repo-Validator, die reguläre Repo-CI, der Current-Tree-Exposure-Scan, der Reachable-History-Scan und der Base→Head-Diff-Audit erfolgreich geprüft wurden.
 
 Das Repository selbst ist trotz erfolgreichem Phase-3-Hardening **noch nicht Public-Release-ready**, solange mindestens diese menschlichen Blocker offen sind:
 

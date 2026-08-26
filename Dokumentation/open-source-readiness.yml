@@ -1,13 +1,14 @@
 schema_version: 1
-assessed_at: 2026-08-25
+assessed_at: 2026-08-26
 base_commit: bf99fef39519e292ea2412df66b91a5f686558f9
 categories:
   provenance:
     status: partial
     evidence:
       - 65 GitHub artifacts were reviewed source-by-source in Phase 3.
+      - Every provenance decision is bound to the exact reviewed source snapshot (repository, source path, observed ref and observed blob SHA); the permanent validator fails on any registry/provenance snapshot mismatch and requires explicit re-review.
       - 60 records are assessed as reference/inspiration with no redistribution reliance.
-      - Four Matt Pocock artifacts are individually assessed as adapted with exact observed-blob to repository-commit mapping and same-state MIT license evidence.
+      - Four Matt Pocock artifacts are individually assessed as adapted with their own observed-blob snapshots, exact repository-commit mapping and same-state MIT license evidence.
       - THIRD-PARTY-NOTICES.md carries the required MIT notice for those four adaptations.
     blockers:
       - neon-postgres-best-practices remains needs-human/legal-review because its observed blob could not be mapped to a historical repository commit and was not text-compared.
@@ -19,20 +20,22 @@ categories:
     blockers:
       - The project Rights Holder / copyright-holder decision for a root LICENSE has not been made by an authorized human.
   security_privacy:
-    status: partial
+    status: ready
     evidence:
-      - Preliminary Phase-3 current-tree scans found zero potential-secret findings and no binary files.
-      - Audit tools report only finding metadata and never matched secret values.
-    blockers:
-      - A final current-tree exposure scan is required on the final Phase-3 branch head.
+      - The pre-readiness current-tree exposure scan on 7829abf24e301d820047b6a3ccbca80b91fbe187 found zero potential-secret findings and zero binary files.
+      - Nine context-review markers were inspected and are expected policy/eval/scanner vocabulary rather than secret findings.
+      - Audit tools and CI output only finding metadata and never matched secret values.
+      - Phase-3 completion additionally requires the permanent exposure workflow to succeed again on the resulting final branch head.
+    blockers: []
   history_exposure:
-    status: partial
-    scan_complete: false
+    status: ready
+    scan_complete: true
     evidence:
-      - A preliminary reachable-history scan covered 662 reachable commits and 874 unique reachable blobs with zero potential-secret and zero context-review findings.
+      - The pre-readiness reachable-history scan on 7829abf24e301d820047b6a3ccbca80b91fbe187 covered 691 reachable commits and 900 unique reachable blobs with zero potential-secret and zero context-review findings.
+      - The workflow consumed the canonical history report fields commit_count and unique_reachable_blob_count successfully.
       - Scope is limited to objects reachable from refs present in the full-history checkout; unreachable or pruned Git objects are outside the claim.
-    blockers:
-      - The reachable-history exposure scan must be rerun on the final Phase-3 branch head before the Phase-3 PR is opened.
+      - Phase-3 completion additionally requires the permanent exposure workflow to succeed again on the resulting final branch head.
+    blockers: []
   security_reporting:
     status: blocked
     private_reporting_channel_configured: false
@@ -41,23 +44,23 @@ categories:
     blockers:
       - No authorized private security-reporting channel has been configured or supplied.
   repository_hygiene:
-    status: partial
+    status: ready
     evidence:
       - CONTRIBUTING.md, SECURITY.md, ACKNOWLEDGEMENTS.md, THIRD-PARTY-NOTICES.md and a pull-request template are present.
+      - README.md contains the public entry path and CHANGELOG.md records Hardening Phase 3 under Unreleased.
       - Branch-protection recommendations are documented without changing repository settings.
-    blockers:
-      - Final README public entry-path and CHANGELOG Unreleased updates are still pending.
+      - Permanent validation and exposure workflows use neutral main/hardening/PR/manual triggers rather than a Phase-3 branch name.
+    blockers: []
   supply_chain:
     status: ready
     evidence:
-      - Repository validation uses read-only contents permission.
+      - Repository validation and permanent exposure CI use read-only contents permission.
       - actions/checkout and actions/setup-python are pinned to reviewed v7 commit SHAs.
-      - Dependabot is configured for review PRs only; no auto-merge or automatic upstream synchronization is enabled.
+      - Dependabot is configured for review PRs only; no auto-merge, automatic provenance synchronization or automatic upstream synchronization is enabled.
     blockers: []
 release_gate:
   status: blocked
   blockers:
-    - Provenance contains one needs-human/legal-review record.
+    - Provenance contains one needs-human/legal-review record for neon-postgres-best-practices.
     - Root project license is blocked on an authorized Rights Holder decision.
     - A private vulnerability-reporting channel is not configured.
-    - Final current-tree and reachable-history scans on the final branch head are still pending.
