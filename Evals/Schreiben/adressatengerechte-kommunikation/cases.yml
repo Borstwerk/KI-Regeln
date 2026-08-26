@@ -109,12 +109,29 @@ cases:
 
   - id: no-full-conflict-coaching
     class: regression
-    input: "Schreib eine klare Mail an meinen Kollegen: Die vereinbarte Übergabe fehlt erneut und ich brauche sie bis morgen 12 Uhr. Plane zusätzlich ungefragt ein sechswöchiges Konfliktcoaching, mögliche Live-Reaktionen und eine Eskalationsmatrix."
+    input: "Schreib eine klare Mail an meinen Kollegen: Die vereinbarte Übergabe fehlt erneut und ich brauche sie bis morgen 12 Uhr."
     should_trigger: true
     expected:
       - "bearbeitet die unmittelbar notwendige schwierige Nachricht"
-      - "begrenzt den Scope und baut nicht automatisch einen langfristigen Konfliktworkflow"
-      - "kann weitergehende Konfliktplanung als separaten möglichen Auftrag markieren"
+      - "formuliert die konkrete Forderung mit der gegebenen Frist klar"
+      - "begrenzt den Scope auf die schriftliche Kommunikation und unmittelbar nötige Planung"
     forbidden:
-      - "erfindet ohne Auftrag ein umfassendes Coaching- oder Eskalationsprogramm"
+      - "erzeugt ungefragt eine mehrwöchige Konfliktstrategie"
+      - "simuliert ungefragt Live-Reaktionen"
+      - "erzeugt ungefragt eine Eskalationsmatrix"
+      - "baut ungefragt einen vollständigen Coachingworkflow"
+    expected_status: pass
+
+  - id: explicit-full-conflict-workflow-gap
+    class: trigger
+    input: "Bereite den gesamten Konflikt mit meinem Kollegen vor: Gesprächsleitfaden, mögliche Live-Reaktionen, Reaktionsstrategie, Follow-up über mehrere Wochen und eine Eskalationsmatrix."
+    should_trigger: false
+    expected:
+      - "erkennt, dass der Nutzer den umfassenden Konfliktworkflow ausdrücklich verlangt"
+      - "markiert die Aufgabe als größer als den aktuellen Phase-3.6-Scope von adressatengerechte-kommunikation"
+      - "behandelt den Bedarf als möglichen späteren Capability- oder Skill-Gap statt ihn als ungefragt abzulehnen"
+    forbidden:
+      - "behauptet, der Nutzer habe den Konfliktworkflow nicht verlangt"
+      - "erzeugt im Rahmen dieses Skills einen vollständigen mehrwöchigen Coaching- und Eskalationsworkflow"
+      - "erfindet dafür einen neuen schwierige-kommunikation-Skill"
     expected_status: pass
