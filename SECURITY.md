@@ -15,9 +15,11 @@ Reine fachliche Meinungsverschiedenheiten oder normale Qualitätsbugs sind keine
 
 Veröffentliche keine echten Secrets und keine unnötigen sensiblen Exploitdetails in öffentlichen Issues, Pull Requests oder Diskussionen.
 
-Für den aktuellen privaten Projektstand ist **noch kein belastbar dokumentierter privater Security-Meldekanal festgelegt**. Vor einer Umstellung auf ein öffentliches Repository muss deshalb entweder GitHubs Private Vulnerability Reporting aktiviert oder ein anderer privater Meldekanal ausdrücklich festgelegt und hier dokumentiert werden.
+Für den aktuellen privaten Projektstand ist **noch kein belastbar dokumentierter privater Security-Meldekanal festgelegt**. GitHub Private Vulnerability Reporting ist für öffentliche Repositories vorgesehen und wird deshalb nicht als im privaten Vorbereitungszustand bereits aktivierbares Pflicht-Setting behandelt.
 
-Bis dieses Gate geschlossen ist, ist die Public-Release-Readiness im Bereich Security Reporting nur teilweise erfüllt.
+Verbindlicher Phase-4-Release-Schritt: Nach dem Visibility-Wechsel Private Vulnerability Reporting aktivieren, praktisch prüfen, dass ein privater Reportweg funktioniert, und anschließend diese `SECURITY.md`-Anleitung bestätigen beziehungsweise ergänzen. Falls vor dem Visibility-Wechsel ein anderer autorisierter privater Meldekanal festgelegt und dokumentiert wird, kann das Gate entsprechend früher geschlossen werden.
+
+Bis ein privater Meldeweg tatsächlich eingerichtet und verifiziert ist, bleibt die Public-Release-Readiness im Bereich Security Reporting blockiert.
 
 ## Umgang mit Secrets
 

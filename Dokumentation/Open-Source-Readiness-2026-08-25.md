@@ -23,11 +23,11 @@ Alle 65 GitHub-Artefakte wurden source-spezifisch geprüft.
 
 Finale technische Provenance-Klassifikation:
 
-- 60 × `reference/inspiration`, `review_status: assessed`, keine Redistributionsabhängigkeit;
+- 61 × `reference/inspiration`, `review_status: assessed`, keine Redistributionsabhängigkeit;
 - 4 × `adapted`, jeweils separat belegt und MIT-Notice-pflichtig;
-- 1 × `needs-human/legal-review` mit bewusst offenem `use_class: unclear`.
+- 0 × `needs-human/legal-review`.
 
-Der automatische Ähnlichkeitscheck ist nur ein Signal. `assessed` wurde erst nach Review vergeben; ein offener Zweifelsfall bleibt ausdrücklich offen.
+Der automatische Ähnlichkeitscheck ist nur ein Signal. `assessed` wurde erst nach source-spezifischem Review vergeben; die Use-Class wurde nicht allein aus einer vorhandenen Lizenz abgeleitet.
 
 ### Bindung an den bewerteten Source-Snapshot
 
@@ -72,21 +72,26 @@ Manuelle Adaptions-Evidence: Der lokale Skill übernimmt als Struktur Glossarbeg
 
 Für alle vier Fälle steht der gemeinsame MIT-Notice in `THIRD-PARTY-NOTICES.md`.
 
-## Offener Provenance-Fall
+## Neon – aufgelöster Provenance-Fall
 
-`neon-postgres-best-practices` bleibt `needs-human/legal-review`.
+Der zuvor offene Fall `neon-postgres-best-practices` wurde am 2026-08-26 source-spezifisch nachgeprüft.
 
-Der beobachtete Blob `43f3468765949e3db85a3782d90d4826b6c585bd` ist im `source_snapshot` dokumentiert, konnte beim Audit aber keinem historischen Repository-Commit zugeordnet werden. Dadurch wurde kein belastbarer same-state-Lizenzstand hergestellt und der historische Artefakttext konnte nicht gegen die lokalen Impact-Dateien verglichen werden.
+Der registrierte Blob `43f3468765949e3db85a3782d90d4826b6c585bd` ist Bestandteil des Repository-Commits `0d9a967085c3bc137ab39ff9e3191c2eb3129d8c` in `neondatabase/postgres-skills`. Am exakt selben Commit liegt die Root-`LICENSE` als Apache License 2.0 mit Blob `b87eca9ebe930dd536fc479611af31e1110c7434`. Unter `skills/postgres-best-practices/` wurde in diesem Zustand keine abweichende `LICENSE`-, `COPYING`- oder `NOTICE`-Datei gefunden.
 
-Der Eintrag bleibt deshalb:
+Die Lizenz wurde nicht als Abkürzung für die Use-Class verwendet. Der registrierte historische `SKILL.md`-Text wurde gegen jede der drei Local-Impact-Dateien einzeln mit demselben Long-Line-/12-Wort-Shingle-Verfahren wie im Phase-3-Audit verglichen. Ergebnis: kein exaktes Long-Line-Signal, kein 12-Wort-Shingle-Signal und kein expliziter Derivation-Marker. Die manuelle Gegenprüfung sieht nur generische Themenüberschneidungen wie Datenmodellierung, Indizes/Query-Optimierung und Migrationen; die lokalen Texte sind eigenständig deutsch formuliert und enthalten keine charakteristische übersetzte oder strukturelle Ausdrucksübernahme aus dem registrierten Upstream-Artefakt.
 
-- `use_class: unclear`;
-- `material_scope: unclear`;
-- `redistribution_reliance: unclear`;
-- `redistribution_status: unresolved`.
+Finale Klassifikation:
 
-Das ist keine Redistributionsfreigabe und verhindert `provenance: ready`.
+- `review_status: assessed`;
+- `use_class: reference/inspiration`;
+- `material_scope: concepts/methods-only`;
+- `redistribution_reliance: not-relied-on`;
+- `redistribution_status: not-relied-on`;
+- `license_spdx: Apache-2.0` als same-state historische Evidence, nicht als benötigte Redistributionsfreigabe.
 
+Damit verbleibt kein `needs-human/legal-review`-Provenance-Record.
+
+## Exposure-Audit
 ## Exposure-Audit
 
 Der permanente Workflow `.github/workflows/open-source-exposure-audit.yml` prüft Current Tree und Reachable History read-only. Sein Dauerzustand verwendet `push` auf `main` und `hardening/**`, `pull_request` sowie `workflow_dispatch`; ein Phase-3-spezifischer Branchname ist nicht Teil des gemergten Workflowzustands.
@@ -113,10 +118,13 @@ Offener Blocker: Ein autorisierter Mensch muss den tatsächlichen Rights Holder 
 
 ## Security Reporting
 
-`SECURITY.md` ist vorhanden. Ein privater Vulnerability-Reporting-Kanal wurde jedoch nicht autorisiert oder konfiguriert.
+`SECURITY.md` ist vorhanden. Ein privater Vulnerability-Reporting-Kanal ist im aktuellen privaten Repositoryzustand noch nicht festgelegt.
 
-Das bleibt ein Public-Release-Blocker. Es wurde keine E-Mail-Adresse oder andere Kontaktmöglichkeit erfunden.
+Das wird nicht als technisch jetzt schon aktivierbare GitHub-Einstellung dargestellt: GitHub Private Vulnerability Reporting ist für öffentliche Repositories vorgesehen. Der zwingende Phase-4-Release-Schritt lautet daher: nach dem Visibility-Wechsel Private Vulnerability Reporting aktivieren, die Funktion praktisch prüfen und anschließend `SECURITY.md` bestätigen. Wird vorher ein anderer autorisierter privater Meldekanal festgelegt und dokumentiert, kann dieses Gate entsprechend früher geschlossen werden.
 
+Bis einer dieser Wege tatsächlich verifiziert ist, bleibt Security Reporting ein Public-Release-Gate.
+
+## Repository-Hygiene und Supply Chain
 ## Repository-Hygiene und Supply Chain
 
 `README.md` enthält einen knappen Public Entry Path; `CHANGELOG.md` dokumentiert Hardening Phase 3 unter `Unreleased`. `CONTRIBUTING.md`, `SECURITY.md`, `ACKNOWLEDGEMENTS.md`, `THIRD-PARTY-NOTICES.md`, Pull-Request-Template, Dependabot-Konfiguration und die dokumentierte Branch-Protection-Empfehlung sind vorhanden.
@@ -127,10 +135,9 @@ Die permanenten CI-Workflows verwenden read-only `contents`-Permissions. `action
 
 Hardening Phase 3 ist technisch abgeschlossen, sobald auf demselben finalen Branch-Head der Repo-Validator, die reguläre Repo-CI, der Current-Tree-Exposure-Scan, der Reachable-History-Scan und der Base→Head-Diff-Audit erfolgreich geprüft wurden.
 
-Das Repository selbst ist trotz erfolgreichem Phase-3-Hardening **noch nicht Public-Release-ready**, solange mindestens diese menschlichen Blocker offen sind:
+Das Repository selbst ist trotz erfolgreichem Phase-3-Hardening **noch nicht Public-Release-ready**, solange diese Release-Gates offen sind:
 
-1. `neon-postgres-best-practices` – Provenance/Legal Review;
-2. Rights-Holder-/Root-License-Entscheidung;
-3. privater Security-Reporting-Kanal.
+1. Rights-Holder-/Root-License-Entscheidung: Ein autorisierter Projekt-/Rights-Holder muss ausdrücklich freigeben, das eigene KI-Regeln-Material unter MIT zu veröffentlichen;
+2. privater Security-Reporting-Pfad: in Phase 4 nach dem Visibility-Wechsel GitHub Private Vulnerability Reporting aktivieren, Funktion prüfen und `SECURITY.md` bestätigen – oder vorher einen autorisierten alternativen privaten Kanal dokumentieren.
 
-Keiner dieser Punkte darf durch Automatisierung als erledigt markiert werden.
+Der frühere Neon-Provenance-Blocker ist source-spezifisch aufgelöst. Keines der verbleibenden Gates darf durch Automatisierung als erledigt markiert werden.

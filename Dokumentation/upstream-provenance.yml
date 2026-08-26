@@ -1,6 +1,6 @@
 schema_version: 2
 source_registry: Dokumentation/upstream-sources.yml
-last_reviewed: 2026-08-25
+last_reviewed: 2026-08-26
 sources:
 - source_id: addyosmani-observability-instrumentation-skill
   reviewed_at: &id001 2026-08-25
@@ -1452,34 +1452,37 @@ sources:
     observed_ref: main
     observed_blob_sha: ceae92ab319216a68274168fba9b63b998b65997
 - source_id: neon-postgres-best-practices
-  reviewed_at: 2026-08-25
-  repository_commit: null
-  use_class: unclear
-  review_status: needs-human/legal-review
-  material_scope: unclear
+  reviewed_at: 2026-08-26
+  repository_commit: 0d9a967085c3bc137ab39ff9e3191c2eb3129d8c
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
   classification_evidence:
-  - The source-specific audit could not map observed blob 43f3468765949e3db85a3782d90d4826b6c585bd to a historical repository
-    commit (historical-commit-not-resolved).
-  - Registered local impacts were therefore not compared against reconstructed historical source text; no final expression/reference
-    classification is made.
-  similarity_audit: not-comparable
-  redistribution_reliance: unclear
-  license_spdx: UNKNOWN
-  license_source: null
-  license_source_commit_or_ref: null
-  license_path: null
-  license_blob_sha: null
+  - The observed Neon artifact blob was independently mapped to repository commit 0d9a967085c3bc137ab39ff9e3191c2eb3129d8c.
+  - Source-specific comparison against all three registered local impacts found no exact long-line, 12-word-shingle or explicit derivation-marker signal; manual review found only generic topic overlap, not distinctive translated or structural expression.
+  - The local use is therefore classified as concepts/methods reference only; Apache-2.0 redistribution permission is documented as same-state evidence but is not relied on for the local classification.
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: Apache-2.0
+  license_source: https://github.com/neondatabase/postgres-skills/blob/0d9a967085c3bc137ab39ff9e3191c2eb3129d8c/LICENSE
+  license_source_commit_or_ref: 0d9a967085c3bc137ab39ff9e3191c2eb3129d8c
+  license_path: LICENSE
+  license_blob_sha: b87eca9ebe930dd536fc479611af31e1110c7434
   path_specific_license_notes:
-  - No path-specific or same-state license conclusion is made without a resolved historical repository commit.
-  license_status_at_observation: unresolved; historical repository commit and same-state license evidence were not established
-  notice_requirement: unknown
-  redistribution_status: unresolved
+  - Same-state audit verified the root Apache-2.0 LICENSE and found no LICENSE, COPYING or NOTICE override under skills/postgres-best-practices/.
+  license_status_at_observation: Apache-2.0 root license verified at the exact repository commit containing the observed artifact blob; no path-specific conflicting license was detected. The license is recorded as historical evidence and is not relied on for reference-only use.
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
   license_evidence:
     artifact_declarations: []
-    same_state_files: []
+    same_state_files:
+    - path: LICENSE
+      blob_sha: b87eca9ebe930dd536fc479611af31e1110c7434
+      spdx: Apache-2.0
     notes:
-    - This record intentionally preserves uncertainty and must not be treated as redistribution permission or public-release
-      readiness.
+    - The observed artifact blob 43f3468765949e3db85a3782d90d4826b6c585bd is present at repository commit 0d9a967085c3bc137ab39ff9e3191c2eb3129d8c.
+    - The root LICENSE was fetched and verified from the same commit.
+    - No concrete expression reliance was found in the registered local impacts, so Apache-2.0 redistribution permission is not required for the local reference-only classification.
   source_snapshot:
     repository: neondatabase/postgres-skills
     source_path: skills/postgres-best-practices/SKILL.md
