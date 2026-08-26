@@ -1,0 +1,113 @@
+skill: motion-review
+schema_version: 1
+
+cases:
+  - id: independent-dialog-review
+    class: outcome
+    input: "Prüfe die bestehende Dialoganimation unabhängig. Sie wirkt beim schnellen Öffnen und Schließen unruhig. Bewerte Zweck, Timing, räumliche Kontinuität und Unterbrechbarkeit, ohne sie direkt umzubauen."
+    should_trigger: true
+    expected:
+      - "prüft Zweck, Timing, Spatial Continuity und Interruptibility getrennt"
+      - "trennt Review von Reimplementation"
+      - "priorisiert Funde nach Auswirkung"
+    forbidden:
+      - "beginnt ungefragt mit einem Redesign oder Codeumbau"
+    expected_status: pass
+
+  - id: video-reverse-engineering
+    class: behavior
+    input: "Analysiere dieses Screenrecording einer bestehenden Kartenanimation. Rekonstruiere beobachtbare Trigger, Reihenfolge und Bewegungsbeziehungen. Die verwendete Library ist unbekannt."
+    should_trigger: true
+    context:
+      capabilities:
+        - video-inspection
+    expected:
+      - "behandelt Videoanalyse als Evidence-Modus des Motion-Reviews"
+      - "trennt Beobachtung, Interpretation und technische Vermutung"
+      - "beschreibt nur aus der Aufnahme tragbare Eigenschaften"
+    forbidden:
+      - "errät die verwendete Library aus dem Video"
+      - "behauptet Reduced-Motion-Verhalten ohne entsprechende Aufnahme"
+    expected_status: pass
+
+  - id: missing-visual-evidence
+    class: behavior
+    input: "Bewerte, ob die Animation visuell natürlich, flüssig und gut unterbrechbar ist. Vorliegen tut nur der CSS- und JavaScript-Quellcode; Browser, Video und Profiler sind nicht verfügbar."
+    should_trigger: true
+    context:
+      capabilities:
+        - repository-read
+    expected:
+      - "kann statische Risiken und Implementierungsstruktur prüfen"
+      - "markiert visuelle Qualität, reales Timinggefühl, Interruptibility und Performance als nicht vollständig verifiziert"
+    forbidden:
+      - "behauptet aus Quellcode allein dass die Animation ruckelfrei oder visuell natürlich ist"
+    expected_status: partial
+
+  - id: reduced-motion-review
+    class: behavior
+    input: "Prüfe diese Seitenübergänge mit und ohne prefers-reduced-motion. Im reduzierten Modus bleibt eine große Zoombewegung aktiv."
+    should_trigger: true
+    context:
+      capabilities:
+        - browser
+    expected:
+      - "behandelt die große Zoombewegung als Motion-Accessibility-Risiko"
+      - "prüft ob Zweck und Orientierung mit einer ruhigeren Alternative erhalten werden können"
+      - "wertet Reduced Motion nicht als reine Kosmetik"
+    forbidden:
+      - "fordert pauschal alle Animationen auf 0ms zu setzen"
+    expected_status: pass
+
+  - id: tool-fit-without-dogma
+    class: regression
+    input: "Reviewe die Motion-Implementierung. Eine kleine Hover-Transition lädt dafür eine neue große Animationslibrary, während eine komplexe bestehende Timeline sauber mit derselben Library orchestriert ist."
+    should_trigger: true
+    expected:
+      - "bewertet Toolangemessenheit pro Aufgabe"
+      - "kann die Library für die kleine Transition als überdimensioniert und für die Timeline als plausibel bewerten"
+      - "berücksichtigt bestehende Projektintegration"
+    forbidden:
+      - "fordert pauschal CSS-only oder pauschal dieselbe Library für alles"
+    expected_status: pass
+
+  - id: static-layout-near-miss
+    class: trigger
+    input: "Reviewe ausschließlich Raster, Abstände, Typografie und visuelle Hierarchie dieses statischen Screens. Es gibt keine Motion."
+    should_trigger: false
+    expected:
+      - "routet den statischen Designreview zu web-design-review"
+    forbidden:
+      - "erfindet Motion-Funde ohne Motiongegenstand"
+    expected_status: pass
+
+  - id: pure-accessibility-near-miss
+    class: trigger
+    input: "Prüfe die Anwendung vollständig auf WCAG, Semantik, Kontrast, Form Labels, Fokus und Tastaturnavigation."
+    should_trigger: false
+    expected:
+      - "routet den umfassenden Accessibility-Audit zu accessibility-review"
+    forbidden:
+      - "reduziert den Auftrag auf Motion-Accessibility"
+    expected_status: pass
+
+  - id: pure-performance-near-miss
+    class: trigger
+    input: "Analysiere die gesamte Frontendperformance: LCP, INP, Netzwerk-Waterfalls, Bundlekosten und Main-Thread-Arbeit."
+    should_trigger: false
+    expected:
+      - "routet die breite Performanceanalyse zu frontend-performance"
+    forbidden:
+      - "macht Motion ohne Evidenz zum Hauptproblem"
+    expected_status: pass
+
+  - id: anti-preference-dogma
+    class: regression
+    input: "Ein bekannter Motion-Autor mag keine linearen Easings und bevorzugt sehr kurze UI-Animationen. Nutze diese Vorlieben als harte Reviewregeln für jede Animation im Produkt."
+    should_trigger: true
+    expected:
+      - "lehnt autorenspezifische Vorlieben als universelle Reviewnorm ab"
+      - "bewertet Easing und Timing gegen Produktkontext, Interaktion und lokale Regeln"
+    forbidden:
+      - "erzeugt Findings allein weil die Autorenpräferenz verletzt wird"
+    expected_status: pass
