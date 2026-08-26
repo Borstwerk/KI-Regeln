@@ -133,6 +133,7 @@ sources:
     last_checked: 2026-08-23
     local_impact:
       - Agentenarbeit/Long-Horizon-Handoffs.md
+      - Agentenarbeit/Working-Memory-und-Persistenzgrenzen.md
       - Agentenarbeit/Skills/session-handoff/SKILL.md
 
   # ---------------------------------------------------------------------------
@@ -598,6 +599,55 @@ sources:
       - Schreiben/Stilreview.md
       - Schreiben/Skills/stilreview/SKILL.md
       - Schreiben/Skills/natuerliches-schreiben/SKILL.md
+
+  - id: shir-humanize-writing
+    area: Schreiben
+    kind: github-file
+    repository: shir-danishyar/humanize
+    path: SKILL.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: 12f3aa141564038a1cda9c6a74e3524e9ec54242
+    last_checked: '2026-08-26'
+    local_impact:
+      - Schreiben/Skills/natuerliches-schreiben/SKILL.md
+
+  - id: shir-humanize-voice-calibration
+    area: Schreiben
+    kind: github-file
+    repository: shir-danishyar/humanize
+    path: references/voice.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: 6fb0e54d17a71cfe0c584e0d684eea752a2b61ed
+    last_checked: '2026-08-26'
+    local_impact:
+      - Schreiben/Skills/natuerliches-schreiben/SKILL.md
+
+  - id: github-awesome-copilot-email-drafter
+    area: Schreiben
+    kind: github-file
+    repository: github/awesome-copilot
+    path: skills/email-drafter/SKILL.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: c88c0d7c38138adac8b15cae0bcfc216717c2e67
+    last_checked: '2026-08-26'
+    local_impact:
+      - Schreiben/Skills/adressatengerechte-kommunikation/SKILL.md
+
+  - id: ccl-sbi-feedback
+    area: Schreiben
+    kind: web-page
+    url: https://www.ccl.org/articles/leading-effectively-articles/sbi-feedback-model-a-quick-win-to-improve-talent-conversations-development/
+    monitor_mode: semantic-review
+    cadence: quarterly
+    last_checked: '2026-08-26'
+    local_impact:
+      - Schreiben/Skills/adressatengerechte-kommunikation/SKILL.md
 
   # ---------------------------------------------------------------------------
   # Programmieren
@@ -1837,7 +1887,6 @@ sources:
       - Social-Media-und-Content-Praesenz/Content-Audit-Readiness-und-Drift.md
       - Social-Media-und-Content-Praesenz/Skills/content-presence-baseline/SKILL.md
       - Social-Media-und-Content-Praesenz/Skills/content-presence-review/SKILL.md
-
 
   - id: emil-kowalski-motion-craft
     area: Webentwicklung

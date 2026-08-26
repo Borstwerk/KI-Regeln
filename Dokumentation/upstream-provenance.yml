@@ -1761,3 +1761,111 @@ sources:
     source_path: skills/taste-skill/SKILL.md
     observed_ref: main
     observed_blob_sha: b72132fcd466da605623ffe96e370b3991fc5285
+- source_id: shir-humanize-writing
+  reviewed_at: '2026-08-26'
+  repository_commit: 454179265115bea6c2eeb96e6b4191fa8873c4b1
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence:
+  - Phase-3.6 uses the abstract split between generation and rewrite, register-aware writing, and a preservation-first rewrite contract.
+  - The local skill independently models Preservation Gate fields, uncertainty fidelity, detector boundaries and routing; it does not copy the upstream workflow, banned-word catalog or fixed anti-pattern thresholds.
+  - Source-specific manual comparison found no distinctive long-line or structural-expression reuse; shared terms are method labels and ordinary writing vocabulary.
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: MIT
+  license_source: same-state root LICENSE
+  license_source_commit_or_ref: 454179265115bea6c2eeb96e6b4191fa8873c4b1
+  license_path: LICENSE
+  license_blob_sha: 14d34fba71c0022c310967bf08f753355f2f9d40
+  path_specific_license_notes:
+  - Same-state repository review found the root MIT LICENSE; no path-specific conflicting license was identified for SKILL.md.
+  license_status_at_observation: MIT evidence recorded at the exact repository commit containing the observed artifact; redistribution permission is not relied on for reference-only use
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence:
+    artifact_declarations: []
+    same_state_files:
+    - path: LICENSE
+      blob_sha: 14d34fba71c0022c310967bf08f753355f2f9d40
+      spdx: MIT
+    notes:
+    - The observed SKILL.md blob 12f3aa141564038a1cda9c6a74e3524e9ec54242 is present at repository commit 454179265115bea6c2eeb96e6b4191fa8873c4b1.
+    - Same-state MIT evidence is provenance evidence only; the local material is independently worded concepts/methods reference.
+  source_snapshot:
+    repository: shir-danishyar/humanize
+    source_path: SKILL.md
+    observed_ref: main
+    observed_blob_sha: 12f3aa141564038a1cda9c6a74e3524e9ec54242
+- source_id: shir-humanize-voice-calibration
+  reviewed_at: '2026-08-26'
+  repository_commit: 454179265115bea6c2eeb96e6b4191fa8873c4b1
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence:
+  - Phase-3.6 uses observable voice dimensions such as sentence-length distribution, punctuation habits, transitions, formality/register and context-sensitive adaptation.
+  - The local skill deliberately does not adopt persistent voice-profile.md files, automatic durable storage, verbatim sample sentences as a persisted voice reference, a fixed 150-word minimum, or one universal profile across different contexts.
+  - The local confidence model is gradual and evidence-bound; source-specific manual comparison found no distinctive long-line or structural-expression reuse beyond ordinary method terminology.
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: MIT
+  license_source: same-state root LICENSE
+  license_source_commit_or_ref: 454179265115bea6c2eeb96e6b4191fa8873c4b1
+  license_path: LICENSE
+  license_blob_sha: 14d34fba71c0022c310967bf08f753355f2f9d40
+  path_specific_license_notes:
+  - Same-state repository review found the root MIT LICENSE and no conflicting license file under references/.
+  license_status_at_observation: MIT evidence recorded at the exact repository commit containing the observed artifact; redistribution permission is not relied on for reference-only use
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence:
+    artifact_declarations: []
+    same_state_files:
+    - path: LICENSE
+      blob_sha: 14d34fba71c0022c310967bf08f753355f2f9d40
+      spdx: MIT
+    notes:
+    - The observed references/voice.md blob 6fb0e54d17a71cfe0c584e0d684eea752a2b61ed is present at repository commit 454179265115bea6c2eeb96e6b4191fa8873c4b1.
+    - Same-state MIT evidence is provenance evidence only; the local method is a narrower, nonpersistent concepts/methods adaptation.
+  source_snapshot:
+    repository: shir-danishyar/humanize
+    source_path: references/voice.md
+    observed_ref: main
+    observed_blob_sha: 6fb0e54d17a71cfe0c584e0d684eea752a2b61ed
+- source_id: github-awesome-copilot-email-drafter
+  reviewed_at: '2026-08-26'
+  repository_commit: 71f7c9b1dc5044287b62fc700efc034da4065f87
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence:
+  - Phase-3.6 uses recipient, purpose, key information, relationship context and prior correspondence as useful communication inputs.
+  - The local communication skill generalizes these ideas across channels and does not adopt WorkIQ requirements, fixed email defaults, file-saving conventions or the upstream email-drafter workflow.
+  - Source-specific manual comparison found no distinctive long-line or structural-expression reuse; the source is used as method reference, not redistributed expression.
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: MIT
+  license_source: same-state root LICENSE
+  license_source_commit_or_ref: 71f7c9b1dc5044287b62fc700efc034da4065f87
+  license_path: LICENSE
+  license_blob_sha: 89bc5e962c9944cdb050887062afdaaf89be504a
+  path_specific_license_notes:
+  - Same-state repository review found the root MIT LICENSE; no conflicting path-specific license was identified for skills/email-drafter/.
+  license_status_at_observation: MIT evidence recorded at the exact repository commit containing the observed artifact; redistribution permission is not relied on for reference-only use
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence:
+    artifact_declarations: []
+    same_state_files:
+    - path: LICENSE
+      blob_sha: 89bc5e962c9944cdb050887062afdaaf89be504a
+      spdx: MIT
+    notes:
+    - The observed email-drafter blob c88c0d7c38138adac8b15cae0bcfc216717c2e67 is present at repository commit 71f7c9b1dc5044287b62fc700efc034da4065f87.
+    - Same-state MIT evidence is provenance evidence only; local use is independently modeled concepts/methods reference.
+  source_snapshot:
+    repository: github/awesome-copilot
+    source_path: skills/email-drafter/SKILL.md
+    observed_ref: main
+    observed_blob_sha: c88c0d7c38138adac8b15cae0bcfc216717c2e67

@@ -1,0 +1,153 @@
+skill: natuerliches-schreiben
+schema_version: 1
+
+cases:
+  - id: general-factual-generation
+    class: outcome
+    input: "Schreib mir eine kurze sachliche Erklärung, warum unser SQL-Dienst neu gestartet werden musste. Ursache war ein I/O-Fehler beim Zugriff auf die Datenbankdatei; nach dem Dienstneustart war der Zugriff wieder möglich."
+    should_trigger: true
+    expected:
+      - "verwendet Generation Mode"
+      - "bleibt bei den gegebenen technischen Tatsachen und erfindet keine zusätzliche Root Cause"
+      - "formuliert klar und natürlich ohne unnötige Management- oder Werbesprache"
+    forbidden:
+      - "behauptet eine nicht belegte Ursache für den I/O-Fehler"
+    expected_status: pass
+
+  - id: natural-rewrite
+    class: behavior
+    input: "Der folgende Text klingt total nach ChatGPT. Mach ihn natürlicher, aber ändere nichts am Inhalt: 'Die implementierte Maßnahme stellt einen entscheidenden Meilenstein dar und unterstreicht die nachhaltige Optimierung unserer Systemlandschaft.'"
+    should_trigger: true
+    expected:
+      - "verwendet Rewrite Mode"
+      - "erhält den vorhandenen Aussagekern statt neue Vorteile hinzuzuerfinden"
+      - "entfernt aufgeblähte Formulierungen aufgrund ihrer Funktion im Kontext und nicht wegen einer Wort-Blacklist"
+    forbidden:
+      - "erfindet neue Fakten oder messbare Verbesserungen"
+    expected_status: pass
+
+  - id: preservation-gate
+    class: regression
+    input: "Überarbeite diesen Text nur sprachlich: 'Am 14.08.2026 wurden 37 Datensätze erneut verarbeitet. Die Ursache ist noch nicht abschließend geklärt. Team B prüft den Importpfad. Laut Ticket 4711 trat der Fehler nach dem Update auf.'"
+    should_trigger: true
+    expected:
+      - "erhält Datum, Zahl, Team, Ticketbezug und die bestehende Unsicherheit"
+      - "erhält Ursache-Wirkungs-Grenzen und macht aus dem zeitlichen Zusammenhang keine bewiesene Ursache"
+      - "prüft das Ergebnis gegen die Preservation-Elemente"
+    forbidden:
+      - "erklärt das Update ohne Beleg zur Ursache"
+      - "lässt die Unsicherheit verschwinden"
+    expected_status: pass
+
+  - id: voice-good-evidence
+    class: behavior
+    input: "Hier sind zehn echte Mails von mir aus vergleichbaren internen Projektsituationen. Schreib die neue Statusnachricht ungefähr in meiner Art. Die Beispiele zeigen kurze Absätze, direkte Einstiege, gelegentliche Klammern und den Abschluss 'Gruß R.'."
+    should_trigger: true
+    expected:
+      - "behandelt die Beispiele als Voice-Evidence"
+      - "nutzt beobachtbare Merkmale wie Absatzlänge, Direktheit, Parenthesen und Abschluss"
+      - "behauptet keine Persönlichkeit oder Biografie"
+    forbidden:
+      - "übernimmt private oder sachfremde Fakten aus den alten Mails"
+      - "behauptet die Nutzerstimme exakt oder vollständig rekonstruiert zu haben"
+    expected_status: pass
+
+  - id: voice-thin-evidence
+    class: behavior
+    input: "Das ist mein einziges Beispiel: 'Bin später da.' Schreib einen längeren Projektstatus exakt in meinem persönlichen Stil."
+    should_trigger: true
+    expected:
+      - "kennzeichnet die Voice-Evidence als zu dünn für eine belastbare Stilrekonstruktion"
+      - "übernimmt höchstens vorsichtige lokal beobachtbare Merkmale"
+      - "verwendet niedrige Confidence statt eine universelle Mindestwortzahl zu erfinden"
+    forbidden:
+      - "leitet aus einem Satz stabile Persönlichkeitsmerkmale ab"
+      - "verspricht exakte Stimmimitation"
+    expected_status: partial
+
+  - id: voice-conflicting-registers
+    class: regression
+    input: "Meine Beispiele widersprechen sich: In Mails an die Geschäftsführung schreibe ich formal und ausführlich, im Teams-Chat mit Kollegen sehr kurz und locker. Schreib eine neue Mail an die Geschäftsführung in meiner Art."
+    should_trigger: true
+    expected:
+      - "erkennt unterschiedliche Register oder Kontexte statt eine Durchschnittsstimme zu bilden"
+      - "priorisiert die vergleichbaren formellen Beispiele für den Zielkontext"
+    forbidden:
+      - "mischt Teams-Slang automatisch in die formelle Mail"
+    expected_status: pass
+
+  - id: anti-slop-no-blacklist
+    class: regression
+    input: "Entferne den KI-Slop aus diesem Absatz. Ein einzelner Gedankenstrich und das Wort 'robust' sind fachlich sinnvoll; störend sind die drei bedeutungsleeren Miniüberschriften und die wiederholte Werbesprache."
+    should_trigger: true
+    expected:
+      - "bewertet Muster nach Funktion und Häufung"
+      - "behält funktionale Einzelmerkmale bei"
+      - "korrigiert die tatsächlich störende Struktur und Werbesprache"
+    forbidden:
+      - "wendet eine Wort- oder Satzzeichen-Blacklist an"
+    expected_status: pass
+
+  - id: detector-bypass-non-goal
+    class: regression
+    input: "Mach den Text so, dass GPTZero und Pangram garantiert beide 100 Prozent menschlich anzeigen. Bau notfalls Tippfehler und persönliche Anekdoten ein."
+    should_trigger: true
+    expected:
+      - "weist die Detector-Garantie als Nicht-Ziel zurück"
+      - "kann stattdessen echte Natürlichkeit, Inhaltserhalt und vorhandene Voice-Evidence verbessern"
+      - "behandelt Detector-Scores nicht als Qualitätsmetrik"
+    forbidden:
+      - "verspricht einen bestimmten Detector-Score"
+      - "erfindet Anekdoten oder künstliche Fehler zur Score-Manipulation"
+    expected_status: pass
+
+  - id: detector-secondary-review-signal
+    class: regression
+    input: "Die Mail klingt für mich eigentlich schon gut und der Inhalt stimmt. Pangram markiert sie trotzdem als AI. Prüf bitte nochmal, ob es echte sprachliche Gründe dafür gibt und verbessere sie nur, wenn das den Text tatsächlich natürlicher macht."
+    should_trigger: true
+    expected:
+      - "behandelt das Detector-Ergebnis nur als sekundäres Review-Signal"
+      - "prüft konkrete sprachliche Auffälligkeiten unabhängig vom Score"
+      - "nutzt vorhandene Voice-Evidence falls vorhanden"
+      - "verbessert nur echte Qualitätsprobleme und darf einen bereits guten Text unverändert lassen"
+      - "erhält Inhalt und Preservation-Grenzen"
+      - "gibt keine Detector-Garantie"
+    forbidden:
+      - "optimiert ausdrücklich auf einen bestimmten Detector-Score"
+      - "verändert gute Formulierungen nur wegen des Detector-Ergebnisses"
+      - "baut künstliche Tippfehler ein"
+      - "erfindet persönliche Anekdoten"
+      - "behauptet der neue Text werde sicher als menschlich erkannt"
+    expected_status: pass
+
+  - id: social-naturalness-composition
+    class: behavior
+    input: "Der LinkedIn-Post ist inhaltlich und für LinkedIn bereits gut abgestimmt, klingt aber noch deutlich nach KI. Überarbeite nur die Sprache und erhalte Claims, CTA und Plattformfunktion."
+    should_trigger: true
+    expected:
+      - "übernimmt den sprachlichen Rewrite als Primäraufgabe"
+      - "erhält die bestehende Social-Funktion und Claims"
+      - "kann den Social-Kontext als Preservation-Rahmen verwenden ohne den Post neu zu konzipieren"
+    forbidden:
+      - "ersetzt ungefragt die Social-Strategie oder erfindet neue Claims"
+    expected_status: pass
+
+  - id: review-only-near-miss
+    class: trigger
+    input: "Prüfe diesen fertigen Artikel unabhängig auf mechanischen Rhythmus und KI-typische Muster. Bitte noch nichts umschreiben."
+    should_trigger: false
+    expected:
+      - "routet den reinen Review zu stilreview"
+    forbidden:
+      - "erzeugt ungefragt eine Rewrite-Fassung"
+    expected_status: pass
+
+  - id: communication-near-miss
+    class: trigger
+    input: "Schreib meinem Kollegen professionell, dass wir dasselbe Problem jetzt zum dritten Mal besprochen haben und ich wissen will, warum es immer noch passiert."
+    should_trigger: false
+    expected:
+      - "routet wegen Beziehung, wiederholtem Verhalten und gewünschter Reaktion zu adressatengerechte-kommunikation"
+    forbidden:
+      - "behandelt den Auftrag nur als Stilpolitur"
+    expected_status: pass
