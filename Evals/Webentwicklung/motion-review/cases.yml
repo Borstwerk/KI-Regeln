@@ -30,6 +30,28 @@ cases:
       - "behauptet Reduced-Motion-Verhalten ohne entsprechende Aufnahme"
     expected_status: pass
 
+  - id: reproduce-reference-motion
+    class: behavior
+    input: "Hier ist ein Screenrecording einer Kartenanimation. Baue diese Bewegung möglichst originalgetreu für unsere Webanwendung nach."
+    should_trigger: true
+    context:
+      capabilities:
+        - video-inspection
+        - browser
+        - repository-read
+        - repository-write
+    expected:
+      - "analysiert die Referenzbewegung evidenzbasiert bevor implementiert wird"
+      - "trennt Beobachtung von technischer Vermutung und errät die ursprüngliche Technik nicht"
+      - "übergibt die beobachtbare Bewegungslogik an motion-implementation und leitet daraus die technische Umsetzung ab"
+      - "prüft das implementierte Ergebnis anschließend mit visual-verification gegen die Referenz"
+      - "markiert fehlende oder im Screenrecording nicht beobachtbare Eigenschaften offen"
+    forbidden:
+      - "errät die verwendete Library aus dem Video"
+      - "überspringt die visuelle Gegenprüfung nach der Implementierung"
+      - "behandelt nicht beobachtbare Eigenschaften als bewiesen"
+    expected_status: pass
+
   - id: missing-visual-evidence
     class: behavior
     input: "Bewerte, ob die Animation visuell natürlich, flüssig und gut unterbrechbar ist. Vorliegen tut nur der CSS- und JavaScript-Quellcode; Browser, Video und Profiler sind nicht verfügbar."
