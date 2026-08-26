@@ -42,7 +42,23 @@ jobs:
                       return value
               return None
 
-          # --- skill-catalog.yml: parser-located minimal insertion ---
+          def render_source_records(records):
+              rendered = yaml.dump(
+                  {'sources': records},
+                  Dumper=IndentDumper,
+                  sort_keys=False,
+                  allow_unicode=True,
+                  width=120,
+                  default_flow_style=False,
+              )
+              header = 'sources:\n'
+              if not rendered.startswith(header):
+                  raise SystemExit('unexpected source serialization')
+              body = rendered[len(header):]
+              if not body.startswith('  - '):
+                  raise SystemExit('unexpected source record indentation')
+              return body[2:].rstrip('\n')
+
           catalog_path = Path('skill-catalog.yml')
           catalog_text = catalog_path.read_text(encoding='utf-8')
           catalog = yaml.safe_load(catalog_text)
@@ -122,7 +138,6 @@ jobs:
               raise SystemExit('catalog minimal rewrite changed unexpected semantics')
           catalog_path.write_text(rebuilt_catalog, encoding='utf-8')
 
-          # --- upstream-sources.yml: local impacts + real technical primary sources ---
           registry_path = Path('Dokumentation/upstream-sources.yml')
           registry_text = registry_path.read_text(encoding='utf-8')
           registry = yaml.safe_load(registry_text)
@@ -213,9 +228,11 @@ jobs:
               raise SystemExit(f'technical source IDs already exist: {sorted(collisions)}')
 
           desired_registry = deepcopy(registry)
+          updated_records = {}
           for record in desired_registry['sources']:
               if isinstance(record, dict) and record.get('id') in impacts:
                   record['local_impact'] = impacts[record['id']]
+                  updated_records[record['id']] = deepcopy(record)
           desired_registry['sources'].extend(technical_sources)
           if desired_registry.get('policy') != policy_before:
               raise SystemExit('policy changed in desired registry')
@@ -227,34 +244,23 @@ jobs:
               raise SystemExit('registry sources YAML node missing')
 
           source_nodes = {}
+          ordered_ids = []
           for node in sources_node.value:
               id_node = mapping_value(node, 'id')
               if isinstance(id_node, yaml.ScalarNode):
                   source_nodes[id_node.value] = node
+                  ordered_ids.append(id_node.value)
+          if ordered_ids[-3:] != ['emil-kowalski-motion-craft', 'mblode-ui-animation', 'taste-design-parameters']:
+              raise SystemExit(f'unexpected Phase 3.5 source tail: {ordered_ids[-3:]}')
 
           ops = []
-          for source_id, paths in impacts.items():
-              node = source_nodes.get(source_id)
-              local_node = mapping_value(node, 'local_impact') if node else None
-              if not isinstance(local_node, yaml.SequenceNode):
-                  raise SystemExit(f'local_impact node missing for {source_id}')
-              first_indent = local_node.start_mark.column
-              replacement = '- ' + paths[0]
-              for path in paths[1:]:
-                  replacement += '\n' + (' ' * first_indent) + '- ' + path
-              ops.append((local_node.start_mark.index, local_node.end_mark.index, replacement))
+          for source_id in ['emil-kowalski-motion-craft', 'mblode-ui-animation']:
+              node = source_nodes[source_id]
+              ops.append((node.start_mark.index, node.end_mark.index, render_source_records([updated_records[source_id]])))
 
-          rendered = yaml.dump(
-              {'sources': technical_sources}, Dumper=IndentDumper, sort_keys=False,
-              allow_unicode=True, width=120, default_flow_style=False,
-          )
-          header = 'sources:\n'
-          if not rendered.startswith(header):
-              raise SystemExit('unexpected technical source serialization')
-          addition_text = rendered[len(header):]
-          if not addition_text.endswith('\n'):
-              addition_text += '\n'
-          ops.append((sources_node.value[-1].end_mark.index, sources_node.value[-1].end_mark.index, '\n' + addition_text))
+          tail_node = source_nodes['taste-design-parameters']
+          tail_records = [updated_records['taste-design-parameters'], *technical_sources]
+          ops.append((tail_node.start_mark.index, tail_node.end_mark.index, render_source_records(tail_records)))
 
           rebuilt_registry = registry_text
           for start, end, replacement in sorted(ops, reverse=True):
@@ -264,6 +270,8 @@ jobs:
               raise SystemExit('registry minimal rewrite changed unexpected semantics')
           if parsed_rebuilt.get('policy') != policy_before:
               raise SystemExit('policy changed during registry rewrite')
+          if len(parsed_rebuilt['sources']) != len(desired_registry['sources']):
+              raise SystemExit('source count changed during registry rewrite')
           registry_path.write_text(rebuilt_registry, encoding='utf-8')
           PY
       - name: Validate synchronized state
