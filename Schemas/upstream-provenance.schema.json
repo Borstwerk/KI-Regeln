@@ -1,45 +1,87 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KI-Regeln upstream provenance",
   "type": "object",
-  "required": ["schema_version", "source_registry", "defaults", "sources"],
+  "additionalProperties": false,
+  "required": ["schema_version", "source_registry", "last_reviewed", "sources"],
   "properties": {
-    "schema_version": {"type": "integer", "minimum": 1},
+    "schema_version": {"const": 2},
     "source_registry": {"const": "Dokumentation/upstream-sources.yml"},
     "last_reviewed": {"type": "string", "format": "date"},
-    "defaults": {
+    "sources": {"type": "array", "items": {"$ref": "#/$defs/source"}}
+  },
+  "$defs": {
+    "useClass": {"enum": ["reference/inspiration", "adapted", "copied/vendored", "unclear"]},
+    "reviewStatus": {"enum": ["assessed", "needs-human/legal-review"]},
+    "materialScope": {"enum": ["concepts/methods-only", "concrete-expression", "unclear"]},
+    "redistributionReliance": {"enum": ["not-relied-on", "required", "unclear"]},
+    "redistributionStatus": {"enum": ["not-relied-on", "permitted", "permitted-with-notice", "unresolved", "not-redistributable"]},
+    "similarityAudit": {"enum": ["no-signal", "low-signal", "medium-signal", "high-signal", "not-comparable"]},
+    "sourceSnapshot": {
       "type": "object",
-      "required": ["use_class", "license_spdx", "license_source", "license_status_at_observation", "notice_requirement", "redistribution_status"],
+      "additionalProperties": false,
+      "required": ["repository", "source_path", "observed_ref", "observed_blob_sha"],
       "properties": {
-        "use_class": {"enum": ["reference/inspiration", "adapted", "copied/vendored"]},
-        "license_spdx": {"type": "string"},
-        "license_source": {"type": ["string", "null"]},
-        "license_status_at_observation": {"type": "string"},
-        "notice_requirement": {"type": "string"},
-        "redistribution_status": {"enum": ["permitted-with-notice", "permitted", "unresolved", "not-redistributable"]}
-      },
-      "additionalProperties": false
+        "repository": {"type": "string", "minLength": 3},
+        "source_path": {"type": "string", "minLength": 1},
+        "observed_ref": {"type": "string", "minLength": 1},
+        "observed_blob_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"}
+      }
     },
-    "sources": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "required": ["source_id"],
-        "properties": {
-          "source_id": {"type": "string"},
-          "use_class": {"enum": ["reference/inspiration", "adapted", "copied/vendored"]},
-          "license_spdx": {"type": "string"},
-          "license_source": {"type": ["string", "null"]},
-          "license_status_at_observation": {"type": "string"},
-          "notice_requirement": {"type": "string"},
-          "redistribution_status": {"enum": ["permitted-with-notice", "permitted", "unresolved", "not-redistributable"]},
-          "repository_commit": {"type": ["string", "null"], "pattern": "^[0-9a-f]{40}$"},
-          "license_path": {"type": ["string", "null"]},
-          "license_blob_sha": {"type": ["string", "null"], "pattern": "^[0-9a-f]{40}$"},
-          "notes": {"type": "string"}
+    "licenseEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifact_declarations", "same_state_files", "notes"],
+      "properties": {
+        "artifact_declarations": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+        "same_state_files": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["path", "blob_sha", "spdx"],
+            "properties": {
+              "path": {"type": "string", "minLength": 1},
+              "blob_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+              "spdx": {"type": "string", "minLength": 1}
+            }
+          }
         },
-        "additionalProperties": false
+        "notes": {"type": "array", "items": {"type": "string", "minLength": 1}}
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_id", "source_snapshot", "reviewed_at", "repository_commit", "use_class", "review_status",
+        "material_scope", "classification_evidence", "similarity_audit", "redistribution_reliance",
+        "license_spdx", "license_source", "license_source_commit_or_ref", "license_path",
+        "license_blob_sha", "path_specific_license_notes", "license_status_at_observation",
+        "notice_requirement", "redistribution_status", "license_evidence"
+      ],
+      "properties": {
+        "source_id": {"type": "string", "minLength": 1},
+        "source_snapshot": {"$ref": "#/$defs/sourceSnapshot"},
+        "reviewed_at": {"type": "string", "format": "date"},
+        "repository_commit": {"type": ["string", "null"], "pattern": "^[0-9a-f]{40}$"},
+        "use_class": {"$ref": "#/$defs/useClass"},
+        "review_status": {"$ref": "#/$defs/reviewStatus"},
+        "material_scope": {"$ref": "#/$defs/materialScope"},
+        "classification_evidence": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+        "similarity_audit": {"$ref": "#/$defs/similarityAudit"},
+        "redistribution_reliance": {"$ref": "#/$defs/redistributionReliance"},
+        "license_spdx": {"type": "string", "minLength": 1},
+        "license_source": {"type": ["string", "null"]},
+        "license_source_commit_or_ref": {"type": ["string", "null"]},
+        "license_path": {"type": ["string", "null"]},
+        "license_blob_sha": {"type": ["string", "null"], "pattern": "^[0-9a-f]{40}$"},
+        "path_specific_license_notes": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "license_status_at_observation": {"type": "string", "minLength": 1},
+        "notice_requirement": {"type": "string", "minLength": 1},
+        "redistribution_status": {"$ref": "#/$defs/redistributionStatus"},
+        "license_evidence": {"$ref": "#/$defs/licenseEvidence"}
       }
     }
-  },
-  "additionalProperties": false
+  }
 }

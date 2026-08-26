@@ -12,6 +12,8 @@ from typing import Any
 import yaml
 from jsonschema import Draft202012Validator, FormatChecker
 
+from public_readiness_checks import validate_public_readiness
+
 ROOT = Path(__file__).resolve().parents[1]
 ERRORS: list[str] = []
 WARNINGS: list[str] = []
@@ -35,7 +37,6 @@ def load_yaml(path: Path) -> Any:
 
 
 def normalize_schema_value(value: Any) -> Any:
-    """Convert YAML-native date values for JSON Schema validation only."""
     if isinstance(value, datetime):
         return value.isoformat()
     if isinstance(value, date):
@@ -51,9 +52,11 @@ def validate_schema(data: Any, schema_path: Path, label: str) -> None:
     schema = load_yaml(schema_path)
     if schema is None or data is None:
         return
-    normalized = normalize_schema_value(data)
     validator = Draft202012Validator(schema, format_checker=FormatChecker())
-    for issue in sorted(validator.iter_errors(normalized), key=lambda e: list(e.absolute_path)):
+    for issue in sorted(
+        validator.iter_errors(normalize_schema_value(data)),
+        key=lambda item: list(item.absolute_path),
+    ):
         loc = ".".join(str(x) for x in issue.absolute_path) or "<root>"
         err("SCHEMA", f"{label} [{loc}]: {issue.message}")
 
@@ -76,11 +79,23 @@ def frontmatter(path: Path) -> tuple[dict[str, Any] | None, str]:
 
 
 def trigger_description(desc: str) -> bool:
-    return bool(re.search(r"\b(verwend(?:en|e)|nutze|geeignet|wenn|falls|bei\s+(?:einem|einer|neuen|bestehenden|fragen|anfragen)|use\s+when|for\s+(?:requests|tasks|cases))\b", desc, re.I))
+    return bool(
+        re.search(
+            r"\b(verwend(?:en|e)|nutze|geeignet|wenn|falls|bei\s+(?:einem|einer|neuen|bestehenden|fragen|anfragen)|use\s+when|for\s+(?:requests|tasks|cases))\b",
+            desc,
+            re.I,
+        )
+    )
 
 
 def near_miss_signal(text: str) -> bool:
-    return bool(re.search(r"\b(nicht\s+(?:verwenden|geeignet|für)|wann\s+nicht|abgrenzung|near[- ]miss|do\s+not\s+use|not\s+for)\b", text, re.I))
+    return bool(
+        re.search(
+            r"\b(nicht\s+(?:verwenden|geeignet|für)|wann\s+nicht|abgrenzung|near[- ]miss|do\s+not\s+use|not\s+for)\b",
+            text,
+            re.I,
+        )
+    )
 
 
 def validate_skills(catalog: dict[str, Any]) -> tuple[dict[str, dict[str, Any]], int]:
@@ -192,7 +207,11 @@ def validate_workflows() -> int:
     if not isinstance(data, dict):
         return 0
     indexed = set(data.get("workflows") or [])
-    real = {str(p.relative_to(ROOT)).replace("\\", "/") for p in (ROOT / "Workflows").glob("*.md") if p.name != "README.md"}
+    real = {
+        str(path.relative_to(ROOT)).replace("\\", "/")
+        for path in (ROOT / "Workflows").glob("*.md")
+        if path.name != "README.md"
+    }
     for path in sorted(indexed - real):
         err("WORKFLOW_INDEX", f"indexed workflow does not exist: {path}")
     for path in sorted(real - indexed):
@@ -210,10 +229,10 @@ def validate_manifest() -> None:
         for value in data.get(section) or []:
             if "<" in value:
                 continue
-            p = ROOT / value
-            if section == "skills" and p.is_dir():
-                p = p / "SKILL.md"
-            if not p.exists():
+            candidate = ROOT / value
+            if section == "skills" and candidate.is_dir():
+                candidate = candidate / "SKILL.md"
+            if not candidate.exists():
                 err("MANIFEST_PATH", f"{section}: missing central path {value}")
 
 
@@ -242,6 +261,7 @@ def validate_upstreams() -> tuple[int, int, int]:
     entries = (pdata or {}).get("sources") if isinstance(pdata, dict) else []
     entries = entries or []
     pids: set[str] = set()
+    open_reviews = 0
     for entry in entries:
         sid = entry.get("source_id")
         if sid in pids:
@@ -249,29 +269,11 @@ def validate_upstreams() -> tuple[int, int, int]:
         pids.add(sid)
         if sid not in github:
             err("PROVENANCE_ID", f"provenance source_id not a github-file upstream: {sid}")
+        if entry.get("review_status") != "assessed":
+            open_reviews += 1
     for sid in sorted(set(github) - pids):
         err("PROVENANCE_MISSING", f"github-file upstream missing source-specific provenance record: {sid}")
-    defaults = (pdata or {}).get("defaults", {}) if isinstance(pdata, dict) else {}
-    unresolved = 0
-    by_provenance = {entry.get("source_id"): entry for entry in entries}
-    for sid in sorted(github):
-        entry = by_provenance.get(sid, {})
-        effective = dict(defaults)
-        effective.update(entry)
-        if effective.get("license_spdx") in (None, "UNKNOWN") or effective.get("redistribution_status") == "unresolved":
-            unresolved += 1
-        if effective.get("license_spdx") in (None, "UNKNOWN") and effective.get("redistribution_status") not in ("unresolved", "not-redistributable"):
-            err("PROVENANCE_LICENSE", f"{sid}: unknown license may not be marked redistributable")
-        if effective.get("use_class") in ("adapted", "copied/vendored") and effective.get("license_spdx") in (None, "UNKNOWN"):
-            err("PROVENANCE_LICENSE", f"{sid}: {effective.get('use_class')} requires resolved license before redistribution")
-        if effective.get("use_class") == "reference/inspiration" and effective.get("notice_requirement") not in ("none", "none-for-reference-only", "unknown"):
-            warn("PROVENANCE_NOTICE", f"{sid}: reference/inspiration should not be presented as vendored notice material")
-        commit = effective.get("repository_commit")
-        license_path = effective.get("license_path")
-        license_blob = effective.get("license_blob_sha")
-        if any(value is not None for value in (commit, license_path, license_blob)) and not all(value is not None for value in (commit, license_path, license_blob)):
-            err("PROVENANCE_EVIDENCE", f"{sid}: same-state license evidence requires repository_commit, license_path and license_blob_sha together")
-    return len(sources), len(github), unresolved
+    return len(sources), len(github), open_reviews
 
 
 def checked_repo_path(raw: str, label: str) -> Path | None:
@@ -300,10 +302,7 @@ def validate_golden_tasks(by_id: dict[str, dict[str, Any]]) -> int:
     if len(task_refs) != len(set(task_refs)):
         err("GOLDEN_SUITE", "duplicate task path in suite.yml")
 
-    real = {
-        str(path.relative_to(ROOT)).replace("\\", "/")
-        for path in base.glob("GT-*/task.yml")
-    }
+    real = {str(path.relative_to(ROOT)).replace("\\", "/") for path in base.glob("GT-*/task.yml")}
     indexed = set(task_refs)
     for missing in sorted(real - indexed):
         err("GOLDEN_SUITE", f"task missing from suite index: {missing}")
@@ -390,18 +389,27 @@ def main() -> int:
     if not isinstance(catalog, dict):
         err("CATALOG", "skill-catalog.yml is not a mapping")
         catalog = {"skills": []}
+
     by_id, skill_count = validate_skills(catalog)
     eval_files = validate_eval_cases(by_id)
     workflow_count = validate_workflows()
     golden_task_count = validate_golden_tasks(by_id)
     validate_manifest()
-    upstream_count, github_upstreams, unresolved = validate_upstreams()
+    upstream_count, github_upstreams, open_reviews = validate_upstreams()
+    redistribution_relevant, legal_reviews = validate_public_readiness(ROOT, err, warn)
 
     print(f"Validated skills: {skill_count}")
     print(f"Validated eval files: {eval_files}")
     print(f"Validated workflows: {workflow_count}")
     print(f"Validated golden tasks: {golden_task_count}")
-    print(f"Validated upstream sources: {upstream_count} ({github_upstreams} GitHub files; {unresolved} unresolved license/provenance records)")
+    print(
+        f"Validated upstream sources: {upstream_count} "
+        f"({github_upstreams} GitHub files; {open_reviews} open provenance review records)"
+    )
+    print(
+        f"Validated public readiness: {redistribution_relevant} redistribution-relevant records; "
+        f"{legal_reviews} legal-review records"
+    )
     for message in WARNINGS:
         print(f"WARNING {message}")
     for message in ERRORS:

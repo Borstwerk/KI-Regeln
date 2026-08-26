@@ -27,6 +27,19 @@ Empfohlener Einstieg:
 
 Nicht das komplette Repository muss für jede Aufgabe geladen werden.
 
+## Public Entry Path
+
+Für eine spätere öffentliche Nutzung sind zusätzlich diese Einstiege maßgeblich:
+
+- `CONTRIBUTING.md` – Beitrags- und Reviewprozess;
+- `SECURITY.md` – Security-Policy und Public-Release-Voraussetzungen;
+- `ACKNOWLEDGEMENTS.md` – methodische Referenzräume ohne künstliche Lizenzübertragung;
+- `THIRD-PARTY-NOTICES.md` – tatsächlich redistribution-relevante Drittmaterial-Notices;
+- `Dokumentation/open-source-readiness.yml` – maschinenlesbarer Readiness- und Release-Gate-Status;
+- `Dokumentation/Open-Source-Readiness-2026-08-25.md` – menschenlesbarer Phase-3-Auditbericht.
+
+Der aktuelle Readiness-Stand ist **kein Public-Release-Gate**: Solange `release_gate.status` nicht `ready` ist, darf aus vorhandenen Dateien keine Veröffentlichungsfreigabe abgeleitet werden. Insbesondere existiert derzeit bewusst keine Root-`LICENSE`, solange Rights Holder und Projektlizenz nicht autorisiert entschieden sind.
+
 ## Struktur
 
 ```text

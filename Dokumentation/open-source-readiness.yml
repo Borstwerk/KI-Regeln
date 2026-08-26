@@ -1,0 +1,68 @@
+schema_version: 1
+assessed_at: 2026-08-26
+base_commit: bf99fef39519e292ea2412df66b91a5f686558f9
+categories:
+  provenance:
+    status: ready
+    evidence:
+      - 65 GitHub artifacts were reviewed source-by-source in Phase 3.
+      - Every provenance decision is bound to the exact reviewed source snapshot (repository, source path, observed ref and observed blob SHA); the permanent validator fails on any registry/provenance snapshot mismatch and requires explicit re-review.
+      - 61 records are assessed as reference/inspiration with no redistribution reliance.
+      - neon-postgres-best-practices is assessed as reference/inspiration after its observed blob was mapped to repository commit 0d9a967085c3bc137ab39ff9e3191c2eb3129d8c and source-specific comparison found no concrete expression signal; the same-state root LICENSE is Apache-2.0 blob b87eca9ebe930dd536fc479611af31e1110c7434.
+      - Four Matt Pocock artifacts are individually assessed as adapted with their own observed-blob snapshots, exact repository-commit mapping and same-state MIT license evidence.
+      - THIRD-PARTY-NOTICES.md carries the required MIT notice for those four adaptations; the Neon reference-only record requires no redistribution notice.
+    blockers: []
+  licensing:
+    status: ready
+    evidence:
+      - "Project license selected: MIT, authorized on 2026-08-26 for the originäre KI-Regeln-Projektmaterial."
+      - Root LICENSE is present with the standard MIT license text and the neutral project-related copyright line Copyright (c) 2026 KI-Regeln contributors.
+      - The root MIT license applies to project-owned KI-Regeln material and does not relicense third-party material.
+      - THIRD-PARTY-NOTICES.md remains authoritative for redistribution-relevant third-party notice and attribution obligations.
+      - Provenance is ready with 61 reference/inspiration records, four adapted Matt Pocock records with same-state MIT evidence/notice, and zero legal-review records; the Neon reference-only record does not rely on redistribution permission.
+    blockers: []
+  security_privacy:
+    status: ready
+    evidence:
+      - The pre-readiness current-tree exposure scan on 7829abf24e301d820047b6a3ccbca80b91fbe187 found zero potential-secret findings and zero binary files.
+      - Nine context-review markers were inspected and are expected policy/eval/scanner vocabulary rather than secret findings.
+      - Audit tools and CI output only finding metadata and never matched secret values.
+      - Phase-3 completion additionally requires the permanent exposure workflow to succeed again on the resulting final branch head.
+    blockers: []
+  history_exposure:
+    status: ready
+    scan_complete: true
+    evidence:
+      - The pre-readiness reachable-history scan on 7829abf24e301d820047b6a3ccbca80b91fbe187 covered 691 reachable commits and 900 unique reachable blobs with zero potential-secret and zero context-review findings.
+      - The workflow consumed the canonical history report fields commit_count and unique_reachable_blob_count successfully.
+      - Scope is limited to objects reachable from refs present in the full-history checkout; unreachable or pruned Git objects are outside the claim.
+      - Phase-3 completion additionally requires the permanent exposure workflow to succeed again on the resulting final branch head.
+    blockers: []
+  security_reporting:
+    status: blocked
+    private_reporting_channel_configured: false
+    evidence:
+      - SECURITY.md requires a private vulnerability-reporting path for the public release state.
+      - GitHub Private Vulnerability Reporting is documented for public repositories, so it is not represented as an enable-now setting for the current private repository.
+      - Phase 4 must, after the visibility change, enable Private Vulnerability Reporting, verify that private reporting works, and confirm SECURITY.md; an explicitly approved alternative private channel may close this gate earlier.
+    blockers:
+      - Establish and verify a private reporting path as a Phase-4 release step after the visibility change, or document and verify an authorized alternative private channel earlier.
+  repository_hygiene:
+    status: ready
+    evidence:
+      - CONTRIBUTING.md, SECURITY.md, ACKNOWLEDGEMENTS.md, THIRD-PARTY-NOTICES.md and a pull-request template are present.
+      - README.md contains the public entry path and CHANGELOG.md records Hardening Phase 3 under Unreleased.
+      - Branch-protection recommendations are documented without changing repository settings.
+      - Permanent validation and exposure workflows use neutral main/hardening/PR/manual triggers rather than a Phase-3 branch name.
+    blockers: []
+  supply_chain:
+    status: ready
+    evidence:
+      - Repository validation and permanent exposure CI use read-only contents permission.
+      - actions/checkout and actions/setup-python are pinned to reviewed v7 commit SHAs.
+      - Dependabot is configured for review PRs only; no auto-merge, automatic provenance synchronization or automatic upstream synchronization is enabled.
+    blockers: []
+release_gate:
+  status: blocked
+  blockers:
+    - A verified private vulnerability-reporting path is still required for the public release state; GitHub Private Vulnerability Reporting is a Phase-4 step after visibility change unless an authorized alternative channel is established earlier.

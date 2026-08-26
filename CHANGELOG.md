@@ -8,6 +8,19 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Hardening Phase 3 – Open-Source Readiness
+
+- maschinenlesbaren Open-Source-Readiness-Status und menschenlesbaren Phase-3-Auditbericht ergänzt; Public-Release-Gates bleiben von erfolgreichem technischem Hardening getrennt;
+- Provenance-Zustandsmodell so gehärtet, dass `assessed` nur abschließend klassifizierte Fälle erlaubt und `needs-human/legal-review` echte Unklarheit mit `use_class: unclear`, `material_scope: unclear`, `redistribution_reliance: unclear` und `redistribution_status: unresolved` ausdrücken kann, ohne daraus Redistributionsfreigabe abzuleiten;
+- alle 65 konkreten GitHub-Upstream-Artefakte source-spezifisch auditiert und `Dokumentation/upstream-provenance.yml` migriert: final 61× `reference/inspiration` ohne Redistributionsabhängigkeit und vier Matt-Pocock-Artefakte jeweils separat als `adapted`; der zunächst offene Neon-Fall wurde nach Auflösung des historischen Blob→Commit-Mappings per Local-Impact-/Expression-Vergleich als `assessed / reference/inspiration` abgeschlossen und trägt same-state Apache-2.0-Evidence;
+- `THIRD-PARTY-NOTICES.md` aus tatsächlich redistribution-relevanten Adaptionsfällen abgeleitet und von `ACKNOWLEDGEMENTS.md` für reine Referenz-/Inspirationsräume getrennt;
+- Current-Tree- und Reachable-History-Exposure-Audits ergänzt; Reports geben nur Finding-Metadaten wie Klasse, Pfad, Zeile und Commit aus, niemals gematchte Secretwerte;
+- Public-Repo-Hygiene mit `CONTRIBUTING.md`, `SECURITY.md`, Pull-Request-Template, Dependabot-Konfiguration, dokumentierter Branch-Protection-Empfehlung und schlankem README-Public-Entry-Path ergänzt;
+- GitHub Actions auf konkrete geprüfte v7-Commit-SHAs gepinnt, Workflowrechte bei `contents: read` belassen und keinen Auto-Merge oder automatischen Upstream-Sync eingeführt;
+- `tools/repo_validator.py` um dauerhafte strukturelle Provenance-/Readiness-Invarianten erweitert, ohne juristische Ähnlichkeits- oder Lizenzentscheidung zu automatisieren;
+- autorisierten Projektlizenz-Decision-Gate geschlossen und Root-`LICENSE` mit MIT für das originäre KI-Regeln-Projektmaterial ergänzt; Drittmaterial wird dadurch nicht relicensed, `THIRD-PARTY-NOTICES.md` bleibt für redistribution-relevante Fremdanteile maßgeblich; Security Reporting bleibt bis zu einem verifizierten privaten Meldeweg als Phase-4-Release-Day-Gate blockiert;
+- keine `SKILL.md`-Fachlogik, Maturity oder Eval-Coverage im Rahmen von Phase 3 hochgestuft; kein Merge, Tag, Release, Visibility-Wechsel oder Branch-Protection-Write durch das Hardening.
+
 ### Hardening Phase 2 – Evals & Golden Tasks
 
 - reproduzierbaren read-only Coverage-Audit für alle 128 katalogisierten Skills ergänzt;

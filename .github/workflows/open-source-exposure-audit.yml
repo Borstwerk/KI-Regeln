@@ -1,0 +1,78 @@
+name: Open-source exposure audit
+
+on:
+  push:
+    branches:
+      - main
+      - 'hardening/**'
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  current-tree:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+      - name: Install audit dependency
+        run: python -m pip install --disable-pip-version-check PyYAML==6.0.2
+      - name: Scan current tree
+        run: python tools/open_source_readiness_audit.py --output "$RUNNER_TEMP/current-tree.json"
+      - name: Enforce sanitized current-tree gate
+        env:
+          REPORT: ${{ runner.temp }}/current-tree.json
+        run: |
+          python - <<'PY'
+          import json, os, sys
+          data=json.load(open(os.environ['REPORT'], encoding='utf-8'))['current_tree']
+          secrets=[f for f in data['findings'] if f['severity']=='potential-secret']
+          context=[f for f in data['findings'] if f['severity']=='review-context']
+          print(f"potential-secret findings: {len(secrets)}")
+          print(f"review-context findings: {len(context)}")
+          print(f"binary files: {len(data['binaries'])}")
+          for finding in secrets + context:
+              print(f"{finding['severity']}|{finding['class']}|{finding['path']}|line={finding['line']}")
+          if secrets:
+              sys.exit(1)
+          PY
+
+  reachable-history:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout full reachable history
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+      - name: Scan reachable history
+        run: python tools/history_exposure_scan.py "$RUNNER_TEMP/reachable-history.json"
+      - name: Enforce sanitized history gate
+        env:
+          REPORT: ${{ runner.temp }}/reachable-history.json
+        run: |
+          python - <<'PY'
+          import json, os, sys
+          data=json.load(open(os.environ['REPORT'], encoding='utf-8'))
+          secrets=[f for f in data['findings'] if f['severity']=='potential-secret']
+          context=[f for f in data['findings'] if f['severity']=='review-context']
+          print(f"reachable commits: {data['commit_count']}")
+          print(f"unique reachable blobs: {data['unique_reachable_blob_count']}")
+          print(f"potential-secret findings: {len(secrets)}")
+          print(f"review-context findings: {len(context)}")
+          for finding in secrets + context:
+              print(f"{finding['severity']}|{finding['class']}|{finding['path']}|line={finding['line']}|commit={finding['commit']}")
+          if secrets:
+              sys.exit(1)
+          PY
