@@ -14,14 +14,14 @@ Der Skill-Katalog beantwortet zusätzlich:
 
 ## Aktueller Bestand
 
-Der Katalog enthält aktuell 128 zentrale Skills:
+Der Katalog enthält aktuell 131 zentrale Skills:
 
 - Arbeitsweisen: 3;
 - Agentenarbeit: 8;
 - Schreiben: 3;
 - Bildarbeit: 4;
 - Programmieren: 4;
-- Webentwicklung: 8;
+- Webentwicklung: 11;
 - Recherche: 7;
 - Wissensmanagement: 7;
 - Schnittstellen und Verträge: 5;
@@ -92,9 +92,13 @@ Für Requirements und Spezifikations-Engineering sind sechs Startfälle je Skill
 
 Für Social Media und Content-Präsenz sind sechs Startfälle je Skill definiert, insgesamt 54. Die erwartete Verteilung ist 36× `pass`, 9× `partial` und 9× `blocked`. Diese 54 Fälle sind derzeit **definiert, aber noch nicht ausgeführt oder bestanden**.
 
+Für Webentwicklung ergänzen `motion-design`, `motion-implementation` und `motion-review` den Bestand als `experimental` mit `partial` Evalabdeckung. Für diese drei Skills sind 26 Motion-Cases definiert. Darunter befindet sich ein kombinierter Screenrecording-Reproduktionsfall, der die Komposition `motion-review → motion-implementation → visual-verification` absichert; er begründet derzeit keinen separaten `motion-reverse-engineering`-Skill. Die 26 Fälle sind **definiert, aber noch nicht als Behavioral Evals ausgeführt oder bestanden**.
+
+Aktueller Gesamtstand nach Phase 3.5: 131 Skills, davon 103× `partial` und 28× `none`, 0× `core`/`broad`; 103 Skill-Evalpacks mit insgesamt 515 definierten Cases. Die drei neuen Skills wurden nicht über `experimental` hinaus hochgestuft.
+
 ## Hardening Phase 2 – Eval Coverage
 
-Der reproduzierbare Coverage-Audit für Phase 2 ergibt aktuell:
+Der Phase-2-Auditstand vor Phase 3.5 betrug:
 
 - 128 Skills insgesamt;
 - 100 Skills mit `partial` Eval Coverage;
@@ -190,7 +194,7 @@ Für Software-Architecture-/System-Design-Skills sollte zusätzlich an realen Sy
 
 Für Requirements-/Specification-Skills sollte zusätzlich an realen Spezifikationen und Stakeholder-/Source-Evidence geprüft werden, ob Soll-Baselines korrekt rekonstruiert, Inferenz sichtbar bleibt, keine Zielwerte erfunden, Acceptance und Traceability sinnvoll getrennt, Changes mit Downstream-Impact erkannt und Validation/Review nicht mit Product Approval verwechselt werden. Ein ausgefülltes PRD, 100 Prozent Traceability oder definierte Evalcases allein reichen nicht als Maturity-Beleg.
 
-Für Social-Media-/Content-Präsenz-Skills sollte zusätzlich an realen Content-Historien, Plattformdaten und Community-Situationen geprüft werden, ob Ziel-/Audience-Fit korrekt erfasst, Plattformfolklore von aktueller Evidence getrennt, Claims und Repurposing sauber behandelt, Performance ohne Scheinkausalität analysiert und Publishing-/Community-Aktionen zuverlässig gegatet werden. Ein gefüllter Content-Kalender, ein viraler Einzelpost oder definierte Evalcases allein reichen nicht als Maturity-Beleg.
+Für Social-Media-/Content-Präsenz-Skills sollte zusätzlich an realen Content-Historien, Plattformdaten und Community-Situationen geprüft werden, ob Ziel-/Audience-Fit korrekt erfasst, Plattformfolklore von aktueller Evidence getrennt, Claims und Repurposing sauber behandelt, Performance ohne Scheinkausalität analysiert und Publishing-/Community-Aktionen zuverlässig gegatet werden. Ein gefüllter Content-Kalender, ein viraler Einzelpost oder definierte Evalcases allein reicht nicht als Maturity-Beleg.
 
 ## Leitgedanke
 
