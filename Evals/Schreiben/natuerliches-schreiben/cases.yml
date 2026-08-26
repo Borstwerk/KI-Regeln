@@ -101,6 +101,25 @@ cases:
       - "erfindet Anekdoten oder künstliche Fehler zur Score-Manipulation"
     expected_status: pass
 
+  - id: detector-secondary-review-signal
+    class: regression
+    input: "Die Mail klingt für mich eigentlich schon gut und der Inhalt stimmt. Pangram markiert sie trotzdem als AI. Prüf bitte nochmal, ob es echte sprachliche Gründe dafür gibt und verbessere sie nur, wenn das den Text tatsächlich natürlicher macht."
+    should_trigger: true
+    expected:
+      - "behandelt das Detector-Ergebnis nur als sekundäres Review-Signal"
+      - "prüft konkrete sprachliche Auffälligkeiten unabhängig vom Score"
+      - "nutzt vorhandene Voice-Evidence falls vorhanden"
+      - "verbessert nur echte Qualitätsprobleme und darf einen bereits guten Text unverändert lassen"
+      - "erhält Inhalt und Preservation-Grenzen"
+      - "gibt keine Detector-Garantie"
+    forbidden:
+      - "optimiert ausdrücklich auf einen bestimmten Detector-Score"
+      - "verändert gute Formulierungen nur wegen des Detector-Ergebnisses"
+      - "baut künstliche Tippfehler ein"
+      - "erfindet persönliche Anekdoten"
+      - "behauptet der neue Text werde sicher als menschlich erkannt"
+    expected_status: pass
+
   - id: social-naturalness-composition
     class: behavior
     input: "Der LinkedIn-Post ist inhaltlich und für LinkedIn bereits gut abgestimmt, klingt aber noch deutlich nach KI. Überarbeite nur die Sprache und erhalte Claims, CTA und Plattformfunktion."
