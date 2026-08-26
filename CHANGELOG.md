@@ -8,6 +8,19 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Hardening Phase 3.5 – Webdesign und Motion
+
+- Webdesign um drei klar getrennte Motion-Skills ergänzt: `motion-design` definiert Zweck und Motion-Contract, `motion-implementation` setzt freigegebene Motion technisch um und `motion-review` bewertet vorhandene Motion unabhängig; Reverse Engineering aus Screenrecordings bleibt Evidence-Modus von `motion-review` statt eigener vierter Skill;
+- gemeinsame Grundlage `Webentwicklung/Webdesign/Motion-und-Mikrointeraktionen.md` ergänzt: keine Animation als valides Ergebnis, kontextabhängige Timing-/Easing-Entscheidung, Spatial Continuity, Gesten, Interruptibility, Reduced Motion, evidenzbasierte Toolwahl und Performance ohne GPU-/Property-/Library-Dogmen;
+- vier bestehende Web-Skills nur an realen Routingkanten geschärft (`frontend-design`, `design-system`, `web-design-review`, `visual-verification`); `accessibility-review` und `frontend-performance` blieben nach Prüfung unverändert;
+- drei Motion-Evalpacks mit insgesamt 26 definierten Cases ergänzt, einschließlich positiver Trigger, Landingpage-/WCAG-/Performance-Near-Misses, `keine Animation`, Reduced Motion, Toolwahl, fehlende Render-Evidence sowie Screenrecording → `motion-review` → `motion-implementation` → `visual-verification`; diese Cases sind definiert, aber nicht als Behavioral Evals ausgeführt oder bestanden;
+- drei methodische Skill-Upstreams source-spezifisch als `reference/inspiration` geprüft (`emilkowalski/skills`, `mblode/agent-skills`, `Leonxlnx/taste-skill`); finaler Text übernimmt keine konkreten Tabellen, Skalen, Defaultwerte oder Source-Struktur und bleibt `similarity_audit: no-signal`; genealogisch abhängige Hinweise werden nicht als unabhängiger Konsens doppelt gezählt;
+- acht konkrete technische Primärquellen für Reduced Motion, WAAPI, `@starting-style`, View Transitions, Scroll-driven Animations sowie Motion-/GSAP-Fähigkeiten registriert; technische Primärquellen werden nicht als methodischer Designkonsens behandelt;
+- Skill-Katalog von 128 auf 131 Skills erweitert; die drei neuen Skills starten `experimental` mit `partial` Evalabdeckung, ohne bestehende Maturity hochzustufen; aktueller Coverage-Stand 103× `partial`, 28× `none`;
+- GT-09 bewusst nicht allein zur Erhöhung der Golden-Task-Anzahl erzeugt: der zusätzliche kombinierte Motion-Reproduktionsfall prüft bereits die neue Cross-Skill-Routingkante, ohne aktuell einen zusätzlichen systemischen Golden-Task-Gewinn zu belegen;
+- CI-Noise auf Hardening-Branches reduziert: die dauerhaften Repo-Validation- und Open-Source-Exposure-Workflows laufen automatisch auf `pull_request` und `push: main`; Branchläufe bleiben gezielt per `workflow_dispatch` verfügbar, ohne Checks, Permissions oder Auditlogik zu reduzieren;
+- Upstream-Governance bleibt `review-only` mit `auto_sync: false`; kein Merge, Tag, Release, Visibility-Wechsel oder automatische Upstream-Synchronisation durch Phase 3.5.
+
 ### Hardening Phase 3 – Open-Source Readiness
 
 - maschinenlesbaren Open-Source-Readiness-Status und menschenlesbaren Phase-3-Auditbericht ergänzt; Public-Release-Gates bleiben von erfolgreichem technischem Hardening getrennt;
