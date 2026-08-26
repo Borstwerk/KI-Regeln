@@ -122,7 +122,7 @@ jobs:
 
           operations = [
               (sources_node.value[-1].end_mark.index, sources_node.value[-1].end_mark.index, '\n' + addition_text),
-              (last_updated_node.start_mark.index, last_updated_node.end_mark.index, '2026-08-26'),
+              (last_updated_node.start_mark.index, last_updated_node.end_mark.index, "'2026-08-26'"),
           ]
           rebuilt = base_text
           for start, end, replacement in sorted(operations, reverse=True):
