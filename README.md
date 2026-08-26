@@ -4,6 +4,14 @@ Dieses Repository sammelt allgemeine, wiederverwendbare Regeln, Arbeitsweisen, S
 
 Ziel ist keine persönliche KI-Konfiguration und keine projektspezifische Wissenssammlung. Enthalten werden nur Regeln, die sich sinnvoll auf andere Nutzer, Projekte oder Aufgaben übertragen lassen.
 
+## Reife und Anspruch
+
+KI-Regeln ist ein experimenteller, systematisch gepflegter Werkzeugkasten für kontrollierte KI-Arbeit. Der Umfang des Katalogs beschreibt das vorhandene Inventar, nicht die Qualität oder Produktionsreife jedes einzelnen Skills.
+
+Reife und Prüfstand werden deshalb getrennt sichtbar gemacht: Skills besitzen explizite Maturity-Level wie `experimental` oder `candidate`, daneben wird die Eval Coverage mit Stufen wie `none` oder `partial` dokumentiert. Ein definierter Evalfall ist noch kein ausgeführter Test, ein ausgeführter Test ist nicht automatisch bestanden, und Same-Model-Smoke-Läufe ersetzen keinen unabhängigen Benchmark.
+
+Zum System gehören außerdem Provenance, Routing, Gates und Evidence. Sie sind keine Begleitdokumentation zu Prompt-Dateien, sondern Teil der Regeln dafür, wann ein Skill eingesetzt werden soll, worauf Aussagen gestützt sind und welche Grenzen oder Freigaben gelten.
+
 ## Grundprinzip
 
 > Allgemeine Arbeitsweise zentral, konkrete Wahrheit lokal.
@@ -31,6 +39,7 @@ Nicht das komplette Repository muss für jede Aufgabe geladen werden.
 
 Für eine spätere öffentliche Nutzung sind zusätzlich diese Einstiege maßgeblich:
 
+- `LICENSE` – MIT-Lizenz für das projekt-eigene KI-Regeln-Material;
 - `CONTRIBUTING.md` – Beitrags- und Reviewprozess;
 - `SECURITY.md` – Security-Policy und Public-Release-Voraussetzungen;
 - `ACKNOWLEDGEMENTS.md` – methodische Referenzräume ohne künstliche Lizenzübertragung;
@@ -38,7 +47,9 @@ Für eine spätere öffentliche Nutzung sind zusätzlich diese Einstiege maßgeb
 - `Dokumentation/open-source-readiness.yml` – maschinenlesbarer Readiness- und Release-Gate-Status;
 - `Dokumentation/Open-Source-Readiness-2026-08-25.md` – menschenlesbarer Phase-3-Auditbericht.
 
-Der aktuelle Readiness-Stand ist **kein Public-Release-Gate**: Solange `release_gate.status` nicht `ready` ist, darf aus vorhandenen Dateien keine Veröffentlichungsfreigabe abgeleitet werden. Insbesondere existiert derzeit bewusst keine Root-`LICENSE`, solange Rights Holder und Projektlizenz nicht autorisiert entschieden sind.
+Die Root-Projektlizenz ist MIT und gilt für das projekt-eigene KI-Regeln-Material. Drittmaterial wird dadurch nicht automatisch unter MIT gestellt; für redistribution-relevante Drittmaterialien bleiben `THIRD-PARTY-NOTICES.md` und die dokumentierte Provenance maßgeblich.
+
+Der Public-Release-Status wird weiterhin ausschließlich über `Dokumentation/open-source-readiness.yml` bestimmt. Aus einer vorhandenen Root-`LICENSE` darf daher keine Veröffentlichungsfreigabe abgeleitet werden: Solange `release_gate.status` nicht `ready` ist, ist der Public Release Gate nicht freigegeben.
 
 ## Struktur
 
@@ -70,6 +81,7 @@ KI-Regeln/
 ├── Dokumentation/
 ├── Vorlagen/
 ├── skill-catalog.yml
+├── LICENSE
 ├── CHANGELOG.md
 └── THIRD-PARTY-NOTICES.md
 ```
