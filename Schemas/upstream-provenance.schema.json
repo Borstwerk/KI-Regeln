@@ -17,6 +17,17 @@
     "redistributionReliance": {"enum": ["not-relied-on", "required", "unclear"]},
     "redistributionStatus": {"enum": ["not-relied-on", "permitted", "permitted-with-notice", "unresolved", "not-redistributable"]},
     "similarityAudit": {"enum": ["no-signal", "low-signal", "medium-signal", "high-signal", "not-comparable"]},
+    "sourceSnapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repository", "source_path", "observed_ref", "observed_blob_sha"],
+      "properties": {
+        "repository": {"type": "string", "minLength": 3},
+        "source_path": {"type": "string", "minLength": 1},
+        "observed_ref": {"type": "string", "minLength": 1},
+        "observed_blob_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"}
+      }
+    },
     "licenseEvidence": {
       "type": "object",
       "additionalProperties": false,
@@ -43,7 +54,7 @@
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "source_id", "reviewed_at", "repository_commit", "use_class", "review_status",
+        "source_id", "source_snapshot", "reviewed_at", "repository_commit", "use_class", "review_status",
         "material_scope", "classification_evidence", "similarity_audit", "redistribution_reliance",
         "license_spdx", "license_source", "license_source_commit_or_ref", "license_path",
         "license_blob_sha", "path_specific_license_notes", "license_status_at_observation",
@@ -51,6 +62,7 @@
       ],
       "properties": {
         "source_id": {"type": "string", "minLength": 1},
+        "source_snapshot": {"$ref": "#/$defs/sourceSnapshot"},
         "reviewed_at": {"type": "string", "format": "date"},
         "repository_commit": {"type": ["string", "null"], "pattern": "^[0-9a-f]{40}$"},
         "use_class": {"$ref": "#/$defs/useClass"},
