@@ -51,7 +51,7 @@ Bei materieller Kommunikationsarbeit vor dem Formulieren so viel wie nötig klä
 8. **Kanal** – E-Mail, Chat, Messenger, formeller Brief oder anderer Kanal?
 9. **Notwendiger Kontext** – Welche Informationen braucht der Empfänger wirklich, um sinnvoll reagieren zu können?
 10. **Direktheit** – Wie klar muss die Aussage sein, damit sie weder ausweicht noch unnötig eskaliert?
-11. **Subtext** – Welche unausgesprochene Bedeutung ist für die Wirkung material und darf nicht versehentlich verdreht werden?
+11. **Subtext** – Welche unausgesprochene Bedeutung ist für die Wirkung materiell und darf nicht versehentlich verdreht werden?
 12. **Preservation** – Welche Fakten, Zahlen, Zusagen, Forderungen, Unsicherheiten oder Verantwortlichkeiten müssen unverändert bleiben?
 
 Fehlenden Kontext nicht mit erfundenen Annahmen über Absichten, Charakter oder Beziehung füllen.
@@ -89,7 +89,7 @@ Für konkretes Feedback kann die Reihenfolge `Situation → beobachtbares Verhal
 
 ### 2. Konfliktkern bestimmen
 
-Nur die Dimensionen aufnehmen, die für den Fall wirklich material sind:
+Nur die Dimensionen aufnehmen, die für den Fall wirklich materiell sind:
 
 - Konfliktgrad;
 - wiederholtes Verhalten;
@@ -167,7 +167,7 @@ Wenn solche Aufgaben später regelmäßig als eigener Workflow auftreten, muss `
 Vor Ausgabe prüfen:
 
 1. Ist der gewünschte Empfängereffekt klar?
-2. Sind Beziehung, Rolle und Hierarchie nur so weit berücksichtigt, wie sie material sind?
+2. Sind Beziehung, Rolle und Hierarchie nur so weit berücksichtigt, wie sie materiell sind?
 3. Sind Tatsachen und Interpretationen getrennt?
 4. Ist die gewünschte Reaktion oder Entscheidung konkret erkennbar?
 5. Ist die Direktheit passend, ohne den Kern weichzuspülen oder persönlich anzugreifen?
