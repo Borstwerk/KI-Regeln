@@ -69,6 +69,19 @@ def validate_public_readiness(root: Path, err: Callable[[str, str], None], warn:
 
     for sid in sorted(set(github_sources) & set(by_id)):
         entry = by_id[sid]
+        source = github_sources[sid]
+        expected_snapshot = {
+            "repository": source.get("repository"),
+            "source_path": source.get("path"),
+            "observed_ref": source.get("ref"),
+            "observed_blob_sha": source.get("observed_sha"),
+        }
+        if entry.get("source_snapshot") != expected_snapshot:
+            err(
+                "PROVENANCE_SNAPSHOT",
+                f"{sid}: provenance source_snapshot does not match upstream-sources.yml; explicit provenance re-review is required",
+            )
+
         use_class = entry.get("use_class")
         review_status = entry.get("review_status")
         material_scope = entry.get("material_scope")
