@@ -1,0 +1,123 @@
+name: Phase 3.5 governance semantic diff probe
+
+on:
+  push:
+    branches:
+      - hardening/phase-3-5-webdesign-motion
+    paths:
+      - .phase35-governance-diagnostic-trigger
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+        with:
+          ref: hardening/phase-3-5-webdesign-motion
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12'
+      - run: python -m pip install --disable-pip-version-check PyYAML==6.0.2
+      - name: Print first registry semantic delta
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from copy import deepcopy
+          import yaml
+
+          class IndentDumper(yaml.SafeDumper):
+              def increase_indent(self, flow=False, indentless=False):
+                  return super().increase_indent(flow, False)
+
+          def mapping_value(node, key_name):
+              for key, value in node.value:
+                  if isinstance(key, yaml.ScalarNode) and key.value == key_name:
+                      return value
+              return None
+
+          def first_diff(a, b, path='$'):
+              if type(a) is not type(b):
+                  return f'{path}: type {type(a).__name__} != {type(b).__name__}: {a!r} != {b!r}'
+              if isinstance(a, dict):
+                  if list(a.keys()) != list(b.keys()):
+                      if set(a.keys()) != set(b.keys()):
+                          return f'{path}: keys differ left={list(a.keys())} right={list(b.keys())}'
+                  for key in a:
+                      d = first_diff(a[key], b[key], f'{path}.{key}')
+                      if d: return d
+                  return None
+              if isinstance(a, list):
+                  if len(a) != len(b):
+                      return f'{path}: list length {len(a)} != {len(b)}'
+                  for i, (x, y) in enumerate(zip(a, b)):
+                      d = first_diff(x, y, f'{path}[{i}]')
+                      if d: return d
+                  return None
+              if a != b:
+                  return f'{path}: {a!r} != {b!r}'
+              return None
+
+          registry_path = Path('Dokumentation/upstream-sources.yml')
+          text = registry_path.read_text(encoding='utf-8')
+          registry = yaml.safe_load(text)
+          impacts = {
+              'emil-kowalski-motion-craft': [
+                  'Dokumentation/Webdesign-Motion-Audit-Phase-3-5.md',
+                  'Webentwicklung/Webdesign/Motion-und-Mikrointeraktionen.md',
+                  'Webentwicklung/Skills/motion-design/SKILL.md',
+                  'Webentwicklung/Skills/motion-review/SKILL.md',
+              ],
+              'mblode-ui-animation': [
+                  'Dokumentation/Webdesign-Motion-Audit-Phase-3-5.md',
+                  'Webentwicklung/Webdesign/Motion-und-Mikrointeraktionen.md',
+                  'Webentwicklung/Skills/motion-design/SKILL.md',
+                  'Webentwicklung/Skills/motion-review/SKILL.md',
+              ],
+              'taste-design-parameters': [
+                  'Dokumentation/Webdesign-Motion-Audit-Phase-3-5.md',
+                  'Webentwicklung/Webdesign/Motion-und-Mikrointeraktionen.md',
+                  'Webentwicklung/Skills/motion-design/SKILL.md',
+              ],
+          }
+          technical = [
+              {'id':'mdn-prefers-reduced-motion','area':'Webentwicklung','kind':'web-page','url':'https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/%40media/prefers-reduced-motion','monitor_mode':'semantic-review','cadence':'quarterly','last_checked':'2026-08-26','local_impact':['Webentwicklung/Webdesign/Motion-und-Mikrointeraktionen.md','Webentwicklung/Skills/motion-design/SKILL.md','Webentwicklung/Skills/motion-implementation/SKILL.md','Webentwicklung/Skills/motion-review/SKILL.md']},
+              {'id':'mdn-web-animations-api','area':'Webentwicklung','kind':'web-page','url':'https://developer.mozilla.org/en-US/docs/Web/API/Web_Animations_API','monitor_mode':'semantic-review','cadence':'quarterly','last_checked':'2026-08-26','local_impact':['Webentwicklung/Webdesign/Motion-und-Mikrointeraktionen.md','Webentwicklung/Skills/motion-implementation/SKILL.md']},
+              {'id':'mdn-starting-style','area':'Webentwicklung','kind':'web-page','url':'https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/%40starting-style','monitor_mode':'semantic-review','cadence':'quarterly','last_checked':'2026-08-26','local_impact':['Webentwicklung/Webdesign/Motion-und-Mikrointeraktionen.md','Webentwicklung/Skills/motion-implementation/SKILL.md']},
+              {'id':'mdn-view-transition-api','area':'Webentwicklung','kind':'web-page','url':'https://developer.mozilla.org/en-US/docs/Web/API/View_Transition_API','monitor_mode':'semantic-review','cadence':'quarterly','last_checked':'2026-08-26','local_impact':['Webentwicklung/Webdesign/Motion-und-Mikrointeraktionen.md','Webentwicklung/Skills/motion-implementation/SKILL.md']},
+              {'id':'mdn-scroll-driven-animations','area':'Webentwicklung','kind':'web-page','url':'https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Scroll-driven_animations','monitor_mode':'semantic-review','cadence':'quarterly','last_checked':'2026-08-26','local_impact':['Webentwicklung/Webdesign/Motion-und-Mikrointeraktionen.md','Webentwicklung/Skills/motion-implementation/SKILL.md']},
+              {'id':'motion-layout-animations-docs','area':'Webentwicklung','kind':'web-page','url':'https://motion.dev/docs/react-layout-animations','monitor_mode':'semantic-review','cadence':'quarterly','last_checked':'2026-08-26','local_impact':['Webentwicklung/Webdesign/Motion-und-Mikrointeraktionen.md','Webentwicklung/Skills/motion-implementation/SKILL.md']},
+              {'id':'gsap-timeline-docs','area':'Webentwicklung','kind':'web-page','url':'https://gsap.com/docs/v3/GSAP/Timeline/','monitor_mode':'semantic-review','cadence':'quarterly','last_checked':'2026-08-26','local_impact':['Webentwicklung/Webdesign/Motion-und-Mikrointeraktionen.md','Webentwicklung/Skills/motion-implementation/SKILL.md']},
+              {'id':'gsap-scrolltrigger-docs','area':'Webentwicklung','kind':'web-page','url':'https://gsap.com/docs/v3/Plugins/ScrollTrigger/','monitor_mode':'semantic-review','cadence':'quarterly','last_checked':'2026-08-26','local_impact':['Webentwicklung/Webdesign/Motion-und-Mikrointeraktionen.md','Webentwicklung/Skills/motion-implementation/SKILL.md']},
+          ]
+          desired = deepcopy(registry)
+          for rec in desired['sources']:
+              if rec.get('id') in impacts:
+                  rec['local_impact'] = impacts[rec['id']]
+          desired['sources'].extend(technical)
+
+          root = yaml.compose(text)
+          nodes = {k.value:v for k,v in root.value}
+          seq = nodes['sources']
+          source_nodes = {}
+          for n in seq.value:
+              ident = mapping_value(n, 'id')
+              if ident: source_nodes[ident.value] = n
+          ops=[]
+          for sid, paths in impacts.items():
+              local=mapping_value(source_nodes[sid], 'local_impact')
+              indent=local.start_mark.column
+              replacement='- '+paths[0]+''.join('\n'+' '*indent+'- '+p for p in paths[1:])
+              ops.append((local.start_mark.index, local.end_mark.index, replacement))
+          rendered=yaml.dump({'sources':technical},Dumper=IndentDumper,sort_keys=False,allow_unicode=True,width=120,default_flow_style=False)
+          addition=rendered[len('sources:\n'):]
+          if not addition.endswith('\n'): addition+='\n'
+          ops.append((seq.value[-1].end_mark.index,seq.value[-1].end_mark.index,'\n'+addition))
+          rebuilt=text
+          for start,end,repl in sorted(ops, reverse=True): rebuilt=rebuilt[:start]+repl+rebuilt[end:]
+          parsed=yaml.safe_load(rebuilt)
+          print(first_diff(parsed, desired) or 'NO_DIFF')
+          print('parsed source count', len(parsed['sources']), 'desired', len(desired['sources']))
+          PY
