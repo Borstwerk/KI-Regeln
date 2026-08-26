@@ -1,372 +1,1648 @@
 schema_version: 2
 source_registry: Dokumentation/upstream-sources.yml
 last_reviewed: 2026-08-25
-
-# Every GitHub artifact was reviewed source-by-source in Phase 3. The YAML anchor
-# only avoids repeating the identical final state for the 60 reference-only cases.
-# `assessed` means final classification; `needs-human/legal-review` preserves uncertainty.
-
 sources:
-  - &assessed-reference
-    source_id: addyosmani-observability-instrumentation-skill
-    reviewed_at: 2026-08-25
-    repository_commit: null
-    use_class: reference/inspiration
-    review_status: assessed
-    material_scope: concepts/methods-only
-    classification_evidence:
-      - Source-specific Phase-3 audit found no exact long-line or 12-word-shingle overlap in registered local impacts and no explicit derivation marker.
-      - The local use is therefore classified as concepts/methods reference only; no upstream redistribution permission is relied on.
-    similarity_audit: no-signal
-    redistribution_reliance: not-relied-on
-    license_spdx: UNKNOWN
-    license_source: null
-    license_source_commit_or_ref: null
-    license_path: null
-    license_blob_sha: null
-    path_specific_license_notes:
-      - Upstream license evidence is not relied on for this reference-only classification.
-    license_status_at_observation: not relied on for redistribution
-    notice_requirement: none-for-reference-only
-    redistribution_status: not-relied-on
-    license_evidence:
-      artifact_declarations: []
-      same_state_files: []
-      notes:
-        - Source-specific audit completed; no redistribution permission is relied on for local reference-only use.
-
-  - <<: *assessed-reference
-    source_id: agent-skills-specification
-
-  - <<: *assessed-reference
-    source_id: anthropic-frontend-design
-
-  - <<: *assessed-reference
-    source_id: anthropic-testing-strategy
-
-  - <<: *assessed-reference
-    source_id: anthropic-webapp-testing
-
-  - <<: *assessed-reference
-    source_id: arjun-capacity-planning-skill
-
-  - <<: *assessed-reference
-    source_id: arjun-ci-pipelines-skill
-
-  - <<: *assessed-reference
-    source_id: arjun-containerization-skill
-
-  - <<: *assessed-reference
-    source_id: arjun-deployment-strategies-skill
-
-  - <<: *assessed-reference
-    source_id: arjun-infrastructure-as-code-skill
-
-  - <<: *assessed-reference
-    source_id: arjun-slo-definition-skill
-
-  - <<: *assessed-reference
-    source_id: blacktwist-content-repurposer-skill
-
-  - <<: *assessed-reference
-    source_id: blacktwist-content-strategy-skill
-
-  - <<: *assessed-reference
-    source_id: context-doctor-skill
-
-  - <<: *assessed-reference
-    source_id: currents-playwright-best-practices
-
-  - <<: *assessed-reference
-    source_id: drader-research
-
-  - <<: *assessed-reference
-    source_id: firecrawl-deep-research
-
-  - <<: *assessed-reference
-    source_id: firzus-frontend-design
-
-  - <<: *assessed-reference
-    source_id: flux-gitops-repo-audit-skill
-
-  - <<: *assessed-reference
-    source_id: hashicorp-terraform-style-guide-skill
-
-  - <<: *assessed-reference
-    source_id: hazamashoken-api-design-principles
-
-  - <<: *assessed-reference
-    source_id: hermes-grounded-citations
-
-  - <<: *assessed-reference
-    source_id: ilm-alan-frontend-design
-
-  - <<: *assessed-reference
-    source_id: impeccable-readme
-
-  - <<: *assessed-reference
-    source_id: inklate-social-audit
-
-  - <<: *assessed-reference
-    source_id: insight-wave-knowledge-distill
-
-  - <<: *assessed-reference
-    source_id: jacob-balslev-api-design
-
-  - <<: *assessed-reference
-    source_id: jacob-balslev-event-contract-design
-
-  - <<: *assessed-reference
-    source_id: jpeetz-design-to-code
-
-  - <<: *assessed-reference
-    source_id: jpeetz-technical-documentation
-
-  - <<: *assessed-reference
-    source_id: jwynia-fact-check
-
-  - <<: *assessed-reference
-    source_id: langchain-deepagents-web-research
-
-  - <<: *assessed-reference
-    source_id: lx-wnk-architecture-design-skill
-
-  - <<: *assessed-reference
-    source_id: lx-wnk-architecture-review-skill
-
-  - <<: *assessed-reference
-    source_id: mblode-docs-writing
-
-  - <<: *assessed-reference
-    source_id: mcollina-documentation
-
-  - <<: *assessed-reference
-    source_id: microsoft-hve-requirements-author
-
-  - <<: *assessed-reference
-    source_id: microsoft-vscode-team-kit-research
-
-  - <<: *assessed-reference
-    source_id: modular-earth-requirements-skill
-
-  - <<: *assessed-reference
-    source_id: mongodb-query-optimizer
-
-  - <<: *assessed-reference
-    source_id: mongodb-schema-design
-
-  - <<: *assessed-reference
-    source_id: obsidian-second-brain-skill
-
-  - <<: *assessed-reference
-    source_id: obsidian-wiki-skills
-
-  - <<: *assessed-reference
-    source_id: openclaw-handoff-skill
-
-  - <<: *assessed-reference
-    source_id: pinchen-system-design-skill
-
-  - <<: *assessed-reference
-    source_id: practicalswan-frontend-design
-
-  - <<: *assessed-reference
-    source_id: practicalswan-research
-
-  - <<: *assessed-reference
-    source_id: prisma-skills-readme
-
-  - <<: *assessed-reference
-    source_id: redis-connections
-
-  - <<: *assessed-reference
-    source_id: redis-core
-
-  - <<: *assessed-reference
-    source_id: redis-security
-
-  - <<: *assessed-reference
-    source_id: social-media-skills-analytics-reporting
-
-  - <<: *assessed-reference
-    source_id: spacey-requirements-analysis
-
-  - <<: *assessed-reference
-    source_id: supabase-postgres-best-practices
-
-  - <<: *assessed-reference
-    source_id: superpowers-verification-before-completion
-
-  - <<: *assessed-reference
-    source_id: vaquarkhan-data-specification-skill
-
-  - <<: *assessed-reference
-    source_id: vaquarkhan-safe-backfill-replay-skill
-
-  - <<: *assessed-reference
-    source_id: vercel-composition-patterns
-
-  - <<: *assessed-reference
-    source_id: vercel-react-best-practices
-
-  - <<: *assessed-reference
-    source_id: vercel-web-design-guidelines
-
-  - source_id: neon-postgres-best-practices
-    reviewed_at: 2026-08-25
-    repository_commit: null
-    use_class: unclear
-    review_status: needs-human/legal-review
-    material_scope: unclear
-    classification_evidence:
-      - The source-specific audit could not map observed blob 43f3468765949e3db85a3782d90d4826b6c585bd to a historical repository commit (historical-commit-not-resolved).
-      - Registered local impacts were therefore not compared against reconstructed historical source text; no final expression/reference classification is made.
-    similarity_audit: not-comparable
-    redistribution_reliance: unclear
-    license_spdx: UNKNOWN
-    license_source: null
-    license_source_commit_or_ref: null
-    license_path: null
-    license_blob_sha: null
-    path_specific_license_notes:
-      - No path-specific or same-state license conclusion is made without a resolved historical repository commit.
-    license_status_at_observation: unresolved; historical repository commit and same-state license evidence were not established
-    notice_requirement: unknown
-    redistribution_status: unresolved
-    license_evidence:
-      artifact_declarations: []
-      same_state_files: []
-      notes:
-        - This record intentionally preserves uncertainty and must not be treated as redistribution permission or public-release readiness.
-
-  - source_id: mattpocock-code-review
-    reviewed_at: 2026-08-25
-    repository_commit: 6654f6b60cd9d5be8b54c6fafe44346dabeb3b76
-    use_class: adapted
-    review_status: assessed
-    material_scope: concrete-expression
-    classification_evidence:
-      - "The observed code-review blob was independently mapped to repository commit 6654f6b60cd9d5be8b54c6fafe44346dabeb3b76."
-      - "Manual review found a strong structural mapping from the upstream two axes Standards/Spec to the local explicit two review axes Code/Repository-Standards and Anforderung/Spezifikation."
-      - "The automated lexical audit found no exact long-line or 12-word-shingle overlap; adaptation classification is based on manual structural review plus pre-Phase-1 repository provenance."
-    similarity_audit: no-signal
-    redistribution_reliance: required
-    license_spdx: MIT
-    license_source: https://github.com/mattpocock/skills/blob/6654f6b60cd9d5be8b54c6fafe44346dabeb3b76/LICENSE
-    license_source_commit_or_ref: 6654f6b60cd9d5be8b54c6fafe44346dabeb3b76
-    license_path: LICENSE
-    license_blob_sha: f1dd2c09108dde1a5f56097cee8461b3ea834499
-    path_specific_license_notes:
-      - Same-state audit reported the root MIT LICENSE and no path-specific license override for this artifact.
-    license_status_at_observation: MIT root license verified at the exact repository commit containing the observed artifact blob; no path-specific conflicting license was detected by the audit.
-    notice_requirement: required
-    redistribution_status: permitted-with-notice
-    license_evidence:
-      artifact_declarations: []
-      same_state_files:
-        - path: LICENSE
-          blob_sha: f1dd2c09108dde1a5f56097cee8461b3ea834499
-          spdx: MIT
-      notes:
-        - The observed artifact blob is present at repository commit 6654f6b60cd9d5be8b54c6fafe44346dabeb3b76.
-        - The root LICENSE was fetched from the same commit.
-        - Pre-Phase-1 THIRD-PARTY-NOTICES.md already recorded this practice area as influenced by mattpocock/skills.
-
-  - source_id: mattpocock-diagnosing-bugs
-    reviewed_at: 2026-08-25
-    repository_commit: 6654f6b60cd9d5be8b54c6fafe44346dabeb3b76
-    use_class: adapted
-    review_status: assessed
-    material_scope: concrete-expression
-    classification_evidence:
-      - "The observed diagnosing-bugs blob was independently mapped to repository commit 6654f6b60cd9d5be8b54c6fafe44346dabeb3b76."
-      - "Manual review found the local diagnosis skill preserves the distinctive progression feedback loop/reproduction, minimization, falsifiable hypotheses, targeted instrumentation, regression-before-fix, and closure verification."
-      - "The automated lexical audit found no exact long-line or 12-word-shingle overlap; adaptation classification is based on manual structural review plus pre-Phase-1 repository provenance."
-    similarity_audit: no-signal
-    redistribution_reliance: required
-    license_spdx: MIT
-    license_source: https://github.com/mattpocock/skills/blob/6654f6b60cd9d5be8b54c6fafe44346dabeb3b76/LICENSE
-    license_source_commit_or_ref: 6654f6b60cd9d5be8b54c6fafe44346dabeb3b76
-    license_path: LICENSE
-    license_blob_sha: f1dd2c09108dde1a5f56097cee8461b3ea834499
-    path_specific_license_notes:
-      - Same-state audit reported the root MIT LICENSE and no path-specific license override for this artifact.
-    license_status_at_observation: MIT root license verified at the exact repository commit containing the observed artifact blob; no path-specific conflicting license was detected by the audit.
-    notice_requirement: required
-    redistribution_status: permitted-with-notice
-    license_evidence:
-      artifact_declarations: []
-      same_state_files:
-        - path: LICENSE
-          blob_sha: f1dd2c09108dde1a5f56097cee8461b3ea834499
-          spdx: MIT
-      notes:
-        - The observed artifact blob is present at repository commit 6654f6b60cd9d5be8b54c6fafe44346dabeb3b76.
-        - The root LICENSE was fetched from the same commit.
-        - Pre-Phase-1 THIRD-PARTY-NOTICES.md already recorded this practice area as influenced by mattpocock/skills.
-
-  - source_id: mattpocock-domain-modeling
-    reviewed_at: 2026-08-25
-    repository_commit: 6654f6b60cd9d5be8b54c6fafe44346dabeb3b76
-    use_class: adapted
-    review_status: assessed
-    material_scope: concrete-expression
-    classification_evidence:
-      - "The observed domain-modeling blob was independently mapped to repository commit 6654f6b60cd9d5be8b54c6fafe44346dabeb3b76."
-      - "Manual review found the local skill retains the upstream pattern of challenging glossary terms, sharpening canonical terminology, testing concrete boundary scenarios, cross-checking code, and using ADRs sparingly for durable/surprising trade-offs, while adding substantial local scope and persistence guidance."
-      - "The automated lexical audit found no exact long-line or 12-word-shingle overlap; adaptation classification is based on manual structural review plus pre-Phase-1 repository provenance."
-    similarity_audit: no-signal
-    redistribution_reliance: required
-    license_spdx: MIT
-    license_source: https://github.com/mattpocock/skills/blob/6654f6b60cd9d5be8b54c6fafe44346dabeb3b76/LICENSE
-    license_source_commit_or_ref: 6654f6b60cd9d5be8b54c6fafe44346dabeb3b76
-    license_path: LICENSE
-    license_blob_sha: f1dd2c09108dde1a5f56097cee8461b3ea834499
-    path_specific_license_notes:
-      - Same-state audit reported the root MIT LICENSE and no path-specific license override for this artifact.
-    license_status_at_observation: MIT root license verified at the exact repository commit containing the observed artifact blob; no path-specific conflicting license was detected by the audit.
-    notice_requirement: required
-    redistribution_status: permitted-with-notice
-    license_evidence:
-      artifact_declarations: []
-      same_state_files:
-        - path: LICENSE
-          blob_sha: f1dd2c09108dde1a5f56097cee8461b3ea834499
-          spdx: MIT
-      notes:
-        - The observed artifact blob is present at repository commit 6654f6b60cd9d5be8b54c6fafe44346dabeb3b76.
-        - The root LICENSE was fetched from the same commit.
-        - Pre-Phase-1 THIRD-PARTY-NOTICES.md already recorded this practice area as influenced by mattpocock/skills.
-
-  - source_id: mattpocock-tdd
-    reviewed_at: 2026-08-25
-    repository_commit: 6654f6b60cd9d5be8b54c6fafe44346dabeb3b76
-    use_class: adapted
-    review_status: assessed
-    material_scope: concrete-expression
-    classification_evidence:
-      - "The observed TDD blob was independently mapped to repository commit 6654f6b60cd9d5be8b54c6fafe44346dabeb3b76."
-      - "Manual review found the local TDD skill preserves the distinctive red/green small-slice sequence, behavior-over-internals testing, independent expected values, and rejection of writing all tests before implementation."
-      - "The automated lexical audit found no exact long-line or 12-word-shingle overlap; adaptation classification is based on manual structural review plus pre-Phase-1 repository provenance."
-    similarity_audit: no-signal
-    redistribution_reliance: required
-    license_spdx: MIT
-    license_source: https://github.com/mattpocock/skills/blob/6654f6b60cd9d5be8b54c6fafe44346dabeb3b76/LICENSE
-    license_source_commit_or_ref: 6654f6b60cd9d5be8b54c6fafe44346dabeb3b76
-    license_path: LICENSE
-    license_blob_sha: f1dd2c09108dde1a5f56097cee8461b3ea834499
-    path_specific_license_notes:
-      - Same-state audit reported the root MIT LICENSE and no path-specific license override for this artifact.
-    license_status_at_observation: MIT root license verified at the exact repository commit containing the observed artifact blob; no path-specific conflicting license was detected by the audit.
-    notice_requirement: required
-    redistribution_status: permitted-with-notice
-    license_evidence:
-      artifact_declarations: []
-      same_state_files:
-        - path: LICENSE
-          blob_sha: f1dd2c09108dde1a5f56097cee8461b3ea834499
-          spdx: MIT
-      notes:
-        - The observed artifact blob is present at repository commit 6654f6b60cd9d5be8b54c6fafe44346dabeb3b76.
-        - The root LICENSE was fetched from the same commit.
-        - Pre-Phase-1 THIRD-PARTY-NOTICES.md already recorded this practice area as influenced by mattpocock/skills.
+- source_id: addyosmani-observability-instrumentation-skill
+  reviewed_at: &id001 2026-08-25
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: &id002
+  - Source-specific Phase-3 audit found no exact long-line or 12-word-shingle overlap in registered local impacts and no explicit
+    derivation marker.
+  - The local use is therefore classified as concepts/methods reference only; no upstream redistribution permission is relied
+    on.
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: &id003
+  - Upstream license evidence is not relied on for this reference-only classification.
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: &id004
+    artifact_declarations: []
+    same_state_files: []
+    notes:
+    - Source-specific audit completed; no redistribution permission is relied on for local reference-only use.
+  source_snapshot:
+    repository: addyosmani/agent-skills
+    source_path: skills/observability-and-instrumentation/SKILL.md
+    observed_ref: main
+    observed_blob_sha: 7d56593ec599cce0bae12aa46862884d0208cc59
+- source_id: agent-skills-specification
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: agentskills/agentskills
+    source_path: docs/specification.mdx
+    observed_ref: main
+    observed_blob_sha: d9a2db099d905da8b879a5c6f996728073985279
+- source_id: anthropic-frontend-design
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: anthropics/skills
+    source_path: skills/frontend-design/SKILL.md
+    observed_ref: main
+    observed_blob_sha: decdff43d05908b4c1fc2cfd2d80fc5743440934
+- source_id: anthropic-testing-strategy
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: anthropics/knowledge-work-plugins
+    source_path: engineering/skills/testing-strategy/SKILL.md
+    observed_ref: main
+    observed_blob_sha: 4ff59410c8fe67872a98ca97135815b778ca1219
+- source_id: anthropic-webapp-testing
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: anthropics/skills
+    source_path: skills/webapp-testing/SKILL.md
+    observed_ref: main
+    observed_blob_sha: 4726215301db64a0cc4d41fc3219c61f37a30f4a
+- source_id: arjun-capacity-planning-skill
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: arjunprabhulal/agent-skills
+    source_path: skills/sre/capacity-planning/SKILL.md
+    observed_ref: main
+    observed_blob_sha: a10e829e30486b8f662a4abd7c1b9b9f3f8a18e3
+- source_id: arjun-ci-pipelines-skill
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: arjunprabhulal/agent-skills
+    source_path: skills/devops/ci-pipelines/SKILL.md
+    observed_ref: main
+    observed_blob_sha: 3d84f58687c6619298b91d35d5086e1626262fe8
+- source_id: arjun-containerization-skill
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: arjunprabhulal/agent-skills
+    source_path: skills/devops/containerization/SKILL.md
+    observed_ref: main
+    observed_blob_sha: 839e3b4dcd012eab7617bc22285ad884232e6f25
+- source_id: arjun-deployment-strategies-skill
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: arjunprabhulal/agent-skills
+    source_path: skills/devops/deployment-strategies/SKILL.md
+    observed_ref: main
+    observed_blob_sha: 10a689c8c1455b3c19952b9537c52a183c872503
+- source_id: arjun-infrastructure-as-code-skill
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: arjunprabhulal/agent-skills
+    source_path: skills/devops/infrastructure-as-code/SKILL.md
+    observed_ref: main
+    observed_blob_sha: 625fdcdab226ea729623cf4cb5ed0621487269a3
+- source_id: arjun-slo-definition-skill
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: arjunprabhulal/agent-skills
+    source_path: skills/sre/slo-definition/SKILL.md
+    observed_ref: main
+    observed_blob_sha: 7bd532345ac98d2d8b38302e613ff351fddabaa9
+- source_id: blacktwist-content-repurposer-skill
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: blacktwist/social-media-skills
+    source_path: skills/content-repurposer-sms/SKILL.md
+    observed_ref: main
+    observed_blob_sha: 03e0d2398cb513ee19dd80f19d24dfe58ed701a3
+- source_id: blacktwist-content-strategy-skill
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: blacktwist/social-media-skills
+    source_path: skills/content-strategy-sms/SKILL.md
+    observed_ref: main
+    observed_blob_sha: b4eefa218107e9c8402bf8318abd1cce38f383f1
+- source_id: context-doctor-skill
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: jzOcb/context-doctor
+    source_path: SKILL.md
+    observed_ref: main
+    observed_blob_sha: a0bf345b213cafb5f6571305d9503c21fb920242
+- source_id: currents-playwright-best-practices
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: currents-dev/playwright-best-practices-skill
+    source_path: playwright-best-practices/SKILL.md
+    observed_ref: main
+    observed_blob_sha: 0da736253c343081ab8c0cb9802729a707c23196
+- source_id: drader-research
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: drader/researcher_agent
+    source_path: skills/research/SKILL.md
+    observed_ref: main
+    observed_blob_sha: 9e37617786957bfabc8f003848ddf59a8b8c4650
+- source_id: firecrawl-deep-research
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: firecrawl/web-agent
+    source_path: agent-core/src/skills/definitions/deep-research/SKILL.md
+    observed_ref: main
+    observed_blob_sha: aeebe902cfee721a772b72fde3c11a5f9b989219
+- source_id: firzus-frontend-design
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: Firzus/agent-skills
+    source_path: skills/web/frontend-design/SKILL.md
+    observed_ref: main
+    observed_blob_sha: ea7afbef65d56f72c06fc5c445d6aa2d95e06ba3
+- source_id: flux-gitops-repo-audit-skill
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: fluxcd/agent-skills
+    source_path: skills/gitops-repo-audit/SKILL.md
+    observed_ref: main
+    observed_blob_sha: 255b7166e1c684351e5184458b1fef178ec4ab67
+- source_id: hashicorp-terraform-style-guide-skill
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: hashicorp/agent-skills
+    source_path: plugins/terraform/skills/terraform-style-guide/SKILL.md
+    observed_ref: main
+    observed_blob_sha: 77610a87f56ba79e6003dcec8d82fd36fc5c6d51
+- source_id: hazamashoken-api-design-principles
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: hazamashoken/api-design-ai-skills
+    source_path: skills/api-design-principles/SKILL.md
+    observed_ref: main
+    observed_blob_sha: 61853683589dbb8c256f3c8ad55d6bbe33e3409f
+- source_id: hermes-grounded-citations
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: NousResearch/hermes-agent
+    source_path: skills/research/grounded-citations/SKILL.md
+    observed_ref: main
+    observed_blob_sha: 4c767369f4d97960925c7c2e73ffa192f95fe583
+- source_id: ilm-alan-frontend-design
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: Ilm-Alan/frontend-design
+    source_path: SKILL.md
+    observed_ref: main
+    observed_blob_sha: 4b3d8574d46d1dd86475db266f8d6da48eb07127
+- source_id: impeccable-readme
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: pbakaus/impeccable
+    source_path: README.md
+    observed_ref: main
+    observed_blob_sha: 3a71f5981c2872c3eaad7464daf50aa16d7974b6
+- source_id: inklate-social-audit
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: inklate/social-skills
+    source_path: skills/social-audit/SKILL.md
+    observed_ref: main
+    observed_blob_sha: de89934532c0203052f12158df32032469afab77
+- source_id: insight-wave-knowledge-distill
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: cogni-work/insight-wave
+    source_path: cogni-knowledge/skills/knowledge-distill/SKILL.md
+    observed_ref: main
+    observed_blob_sha: 2770f88b4e00f4be98a6a4afcaf66f49b9776b63
+- source_id: jacob-balslev-api-design
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: jacob-balslev/skills
+    source_path: skills/backend-engineering/api-design/SKILL.md
+    observed_ref: main
+    observed_blob_sha: 8692c89695c66e356a8e55db2a17ce87e1d79279
+- source_id: jacob-balslev-event-contract-design
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: jacob-balslev/skills
+    source_path: skills/software-architecture/event-contract-design/SKILL.md
+    observed_ref: main
+    observed_blob_sha: 7edd830e036e2fa70df674ea17d307bd8239c407
+- source_id: jpeetz-design-to-code
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: JPeetz/agent-skills
+    source_path: design-to-code/SKILL.md
+    observed_ref: main
+    observed_blob_sha: 272c9c1dd208925b3fb500b3e01df405439757f4
+- source_id: jpeetz-technical-documentation
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: JPeetz/agent-skills
+    source_path: technical-documentation/SKILL.md
+    observed_ref: main
+    observed_blob_sha: 3616059286b7d7f84adc5e91ba1498114aeb53f1
+- source_id: jwynia-fact-check
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: jwynia/agent-skills
+    source_path: skills/general/research/verification/fact-check/SKILL.md
+    observed_ref: main
+    observed_blob_sha: 0c2dd8e7330b9d3fab7926a7f5de5ad5ebbfa932
+- source_id: langchain-deepagents-web-research
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: langchain-ai/deepagents
+    source_path: libs/cli/examples/skills/web-research/SKILL.md
+    observed_ref: main
+    observed_blob_sha: 63424a2c5ea395146a4d12e1b6c1104b3c23bff5
+- source_id: lx-wnk-architecture-design-skill
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: lx-wnk/skills
+    source_path: skills/architecture-design/SKILL.md
+    observed_ref: main
+    observed_blob_sha: 05ad3d2cb5e19bb9b5218ecb33b5eebe97985cc0
+- source_id: lx-wnk-architecture-review-skill
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: lx-wnk/skills
+    source_path: skills/architecture-review/SKILL.md
+    observed_ref: main
+    observed_blob_sha: 6be36cfa38b20ba27673419ff7043cf87cffdbc9
+- source_id: mblode-docs-writing
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: mblode/agent-skills
+    source_path: skills/docs-writing/SKILL.md
+    observed_ref: main
+    observed_blob_sha: 1d9a8530f20ae6dda523fc87e85a66e24ed49473
+- source_id: mcollina-documentation
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: mcollina/skills
+    source_path: skills/documentation/SKILL.md
+    observed_ref: main
+    observed_blob_sha: dae5144584a07b60287eac57f0786665b38b3559
+- source_id: microsoft-hve-requirements-author
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: microsoft/hve-core
+    source_path: .github/skills/project-planning/requirements-author/SKILL.md
+    observed_ref: main
+    observed_blob_sha: ebeca3bfba19ee3cba90648df16cb4fddac5c319
+- source_id: microsoft-vscode-team-kit-research
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: microsoft/vscode-team-kit
+    source_path: research/skills/research/SKILL.md
+    observed_ref: main
+    observed_blob_sha: fcb44f50392b70ca7cf729a0a668274eebbf812b
+- source_id: modular-earth-requirements-skill
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: Modular-Earth-LLC/solutions-architecture-agent
+    source_path: skills/requirements/SKILL.md
+    observed_ref: main
+    observed_blob_sha: 06ab931a6898d5f9f455d0b2d00ee7fabad9f15c
+- source_id: mongodb-query-optimizer
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: mongodb/agent-skills
+    source_path: plugins/mongodb/skills/mongodb-query-optimizer/SKILL.md
+    observed_ref: main
+    observed_blob_sha: c71f2f5e9afd8b6cd73380169e0ff5c3f9402944
+- source_id: mongodb-schema-design
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: mongodb/agent-skills
+    source_path: plugins/mongodb/skills/mongodb-schema-design/SKILL.md
+    observed_ref: main
+    observed_blob_sha: e2237d15ead78ce33a4753ca8dc8e6e0bba854cf
+- source_id: obsidian-second-brain-skill
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: eugeniughelbur/obsidian-second-brain
+    source_path: SKILL.md
+    observed_ref: main
+    observed_blob_sha: 37556b336e8314672b39af8f97bda18516634ddf
+- source_id: obsidian-wiki-skills
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: Ar9av/obsidian-wiki
+    source_path: docs/skills.md
+    observed_ref: main
+    observed_blob_sha: 05fad2e6bb27ee263a019c786b3120ff78c6996b
+- source_id: openclaw-handoff-skill
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: openclaw/agent-skills
+    source_path: skills/handoff/SKILL.md
+    observed_ref: main
+    observed_blob_sha: 50054b4079bcc25492e27cae7b72ea748a853cc9
+- source_id: pinchen-system-design-skill
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: pinchen147/system-design-skill
+    source_path: skills/system-design/SKILL.md
+    observed_ref: main
+    observed_blob_sha: 8ea4d9b0d1ee929896aa519bc03964e2a8746291
+- source_id: practicalswan-frontend-design
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: PracticalSwan/agent-skills
+    source_path: frontend-design/SKILL.md
+    observed_ref: main
+    observed_blob_sha: 5691eba965c7dfe93d774a2ffeb7eb025fa27180
+- source_id: practicalswan-research
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: PracticalSwan/agent-skills
+    source_path: research/SKILL.md
+    observed_ref: main
+    observed_blob_sha: 3a6f4b71128de829a4ca610908c104c070f33b02
+- source_id: prisma-skills-readme
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: prisma/prisma
+    source_path: skills/README.md
+    observed_ref: main
+    observed_blob_sha: 889bb5e1cf410c7751b51fc6c529f5fe3d44aec1
+- source_id: redis-connections
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: redis/agent-skills
+    source_path: skills/redis-connections/SKILL.md
+    observed_ref: main
+    observed_blob_sha: 53f367a9a4ed6a4bf9c3c29a441dcfa1ee91a114
+- source_id: redis-core
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: redis/agent-skills
+    source_path: skills/redis-core/SKILL.md
+    observed_ref: main
+    observed_blob_sha: a62be86377ad672f5f9f2301a492cc4ee726d3cc
+- source_id: redis-security
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: redis/agent-skills
+    source_path: skills/redis-security/SKILL.md
+    observed_ref: main
+    observed_blob_sha: 661ba11f06c9a31203dfe6b828bd2c714d0a258e
+- source_id: social-media-skills-analytics-reporting
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: social-media-skills/skills
+    source_path: skills/analytics-and-reporting/SKILL.md
+    observed_ref: main
+    observed_blob_sha: bf851b46b375f6c9952f54245f5fa49ff7da0371
+- source_id: spacey-requirements-analysis
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: Spacey6849/AgentSkills
+    source_path: .claude/skills/requirements-analysis/SKILL.md
+    observed_ref: main
+    observed_blob_sha: 4a9193522eb25f9029e09dbab5579224420dc0bb
+- source_id: supabase-postgres-best-practices
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: supabase/agent-skills
+    source_path: skills/supabase-postgres-best-practices/SKILL.md
+    observed_ref: main
+    observed_blob_sha: 6400792389dfcc82c81953054e546bd72ebcd259
+- source_id: superpowers-verification-before-completion
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: obra/superpowers
+    source_path: skills/verification-before-completion/SKILL.md
+    observed_ref: main
+    observed_blob_sha: 7d45333cc4a49c57a80df6c1fe2fa777a207afbc
+- source_id: vaquarkhan-data-specification-skill
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: vaquarkhan/data-engineering-agent-skills
+    source_path: skills/data-specification/SKILL.md
+    observed_ref: main
+    observed_blob_sha: a44f83926c8152a7546c8c579ed3ae6e6178e19e
+- source_id: vaquarkhan-safe-backfill-replay-skill
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: vaquarkhan/data-engineering-agent-skills
+    source_path: skills/safe-backfill-and-replay-orchestration/SKILL.md
+    observed_ref: main
+    observed_blob_sha: 59ebc645604d70a8900818ad4dfdeb29d40eaa36
+- source_id: vercel-composition-patterns
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: vercel-labs/agent-skills
+    source_path: skills/composition-patterns/SKILL.md
+    observed_ref: main
+    observed_blob_sha: d07025bf943345bc1cf15eb923594f889ff881f0
+- source_id: vercel-react-best-practices
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: vercel-labs/agent-skills
+    source_path: skills/react-best-practices/SKILL.md
+    observed_ref: main
+    observed_blob_sha: 237988de4a66dd8a71d30a2c24ebe1a86b58d04e
+- source_id: vercel-web-design-guidelines
+  reviewed_at: *id001
+  repository_commit: null
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence: *id002
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes: *id003
+  license_status_at_observation: not relied on for redistribution
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence: *id004
+  source_snapshot:
+    repository: vercel-labs/agent-skills
+    source_path: skills/web-design-guidelines/SKILL.md
+    observed_ref: main
+    observed_blob_sha: ceae92ab319216a68274168fba9b63b998b65997
+- source_id: neon-postgres-best-practices
+  reviewed_at: 2026-08-25
+  repository_commit: null
+  use_class: unclear
+  review_status: needs-human/legal-review
+  material_scope: unclear
+  classification_evidence:
+  - The source-specific audit could not map observed blob 43f3468765949e3db85a3782d90d4826b6c585bd to a historical repository
+    commit (historical-commit-not-resolved).
+  - Registered local impacts were therefore not compared against reconstructed historical source text; no final expression/reference
+    classification is made.
+  similarity_audit: not-comparable
+  redistribution_reliance: unclear
+  license_spdx: UNKNOWN
+  license_source: null
+  license_source_commit_or_ref: null
+  license_path: null
+  license_blob_sha: null
+  path_specific_license_notes:
+  - No path-specific or same-state license conclusion is made without a resolved historical repository commit.
+  license_status_at_observation: unresolved; historical repository commit and same-state license evidence were not established
+  notice_requirement: unknown
+  redistribution_status: unresolved
+  license_evidence:
+    artifact_declarations: []
+    same_state_files: []
+    notes:
+    - This record intentionally preserves uncertainty and must not be treated as redistribution permission or public-release
+      readiness.
+  source_snapshot:
+    repository: neondatabase/postgres-skills
+    source_path: skills/postgres-best-practices/SKILL.md
+    observed_ref: main
+    observed_blob_sha: 43f3468765949e3db85a3782d90d4826b6c585bd
+- source_id: mattpocock-code-review
+  reviewed_at: 2026-08-25
+  repository_commit: 6654f6b60cd9d5be8b54c6fafe44346dabeb3b76
+  use_class: adapted
+  review_status: assessed
+  material_scope: concrete-expression
+  classification_evidence:
+  - The observed code-review blob was independently mapped to repository commit 6654f6b60cd9d5be8b54c6fafe44346dabeb3b76.
+  - Manual review found a strong structural mapping from the upstream two axes Standards/Spec to the local explicit two review
+    axes Code/Repository-Standards and Anforderung/Spezifikation.
+  - The automated lexical audit found no exact long-line or 12-word-shingle overlap; adaptation classification is based on
+    manual structural review plus pre-Phase-1 repository provenance.
+  similarity_audit: no-signal
+  redistribution_reliance: required
+  license_spdx: MIT
+  license_source: https://github.com/mattpocock/skills/blob/6654f6b60cd9d5be8b54c6fafe44346dabeb3b76/LICENSE
+  license_source_commit_or_ref: 6654f6b60cd9d5be8b54c6fafe44346dabeb3b76
+  license_path: LICENSE
+  license_blob_sha: f1dd2c09108dde1a5f56097cee8461b3ea834499
+  path_specific_license_notes:
+  - Same-state audit reported the root MIT LICENSE and no path-specific license override for this artifact.
+  license_status_at_observation: MIT root license verified at the exact repository commit containing the observed artifact
+    blob; no path-specific conflicting license was detected by the audit.
+  notice_requirement: required
+  redistribution_status: permitted-with-notice
+  license_evidence:
+    artifact_declarations: []
+    same_state_files:
+    - path: LICENSE
+      blob_sha: f1dd2c09108dde1a5f56097cee8461b3ea834499
+      spdx: MIT
+    notes:
+    - The observed artifact blob is present at repository commit 6654f6b60cd9d5be8b54c6fafe44346dabeb3b76.
+    - The root LICENSE was fetched from the same commit.
+    - Pre-Phase-1 THIRD-PARTY-NOTICES.md already recorded this practice area as influenced by mattpocock/skills.
+  source_snapshot:
+    repository: mattpocock/skills
+    source_path: skills/engineering/code-review/SKILL.md
+    observed_ref: main
+    observed_blob_sha: e28d7acbf7b3bb4d7817b7eb5d9c105af03f6ec4
+- source_id: mattpocock-diagnosing-bugs
+  reviewed_at: 2026-08-25
+  repository_commit: 6654f6b60cd9d5be8b54c6fafe44346dabeb3b76
+  use_class: adapted
+  review_status: assessed
+  material_scope: concrete-expression
+  classification_evidence:
+  - The observed diagnosing-bugs blob was independently mapped to repository commit 6654f6b60cd9d5be8b54c6fafe44346dabeb3b76.
+  - Manual review found the local diagnosis skill preserves the distinctive progression feedback loop/reproduction, minimization,
+    falsifiable hypotheses, targeted instrumentation, regression-before-fix, and closure verification.
+  - The automated lexical audit found no exact long-line or 12-word-shingle overlap; adaptation classification is based on
+    manual structural review plus pre-Phase-1 repository provenance.
+  similarity_audit: no-signal
+  redistribution_reliance: required
+  license_spdx: MIT
+  license_source: https://github.com/mattpocock/skills/blob/6654f6b60cd9d5be8b54c6fafe44346dabeb3b76/LICENSE
+  license_source_commit_or_ref: 6654f6b60cd9d5be8b54c6fafe44346dabeb3b76
+  license_path: LICENSE
+  license_blob_sha: f1dd2c09108dde1a5f56097cee8461b3ea834499
+  path_specific_license_notes:
+  - Same-state audit reported the root MIT LICENSE and no path-specific license override for this artifact.
+  license_status_at_observation: MIT root license verified at the exact repository commit containing the observed artifact
+    blob; no path-specific conflicting license was detected by the audit.
+  notice_requirement: required
+  redistribution_status: permitted-with-notice
+  license_evidence:
+    artifact_declarations: []
+    same_state_files:
+    - path: LICENSE
+      blob_sha: f1dd2c09108dde1a5f56097cee8461b3ea834499
+      spdx: MIT
+    notes:
+    - The observed artifact blob is present at repository commit 6654f6b60cd9d5be8b54c6fafe44346dabeb3b76.
+    - The root LICENSE was fetched from the same commit.
+    - Pre-Phase-1 THIRD-PARTY-NOTICES.md already recorded this practice area as influenced by mattpocock/skills.
+  source_snapshot:
+    repository: mattpocock/skills
+    source_path: skills/engineering/diagnosing-bugs/SKILL.md
+    observed_ref: main
+    observed_blob_sha: 061c25a524acaa93d4534e9e08a793c0a5fe45fd
+- source_id: mattpocock-domain-modeling
+  reviewed_at: 2026-08-25
+  repository_commit: 6654f6b60cd9d5be8b54c6fafe44346dabeb3b76
+  use_class: adapted
+  review_status: assessed
+  material_scope: concrete-expression
+  classification_evidence:
+  - The observed domain-modeling blob was independently mapped to repository commit 6654f6b60cd9d5be8b54c6fafe44346dabeb3b76.
+  - Manual review found the local skill retains the upstream pattern of challenging glossary terms, sharpening canonical terminology,
+    testing concrete boundary scenarios, cross-checking code, and using ADRs sparingly for durable/surprising trade-offs,
+    while adding substantial local scope and persistence guidance.
+  - The automated lexical audit found no exact long-line or 12-word-shingle overlap; adaptation classification is based on
+    manual structural review plus pre-Phase-1 repository provenance.
+  similarity_audit: no-signal
+  redistribution_reliance: required
+  license_spdx: MIT
+  license_source: https://github.com/mattpocock/skills/blob/6654f6b60cd9d5be8b54c6fafe44346dabeb3b76/LICENSE
+  license_source_commit_or_ref: 6654f6b60cd9d5be8b54c6fafe44346dabeb3b76
+  license_path: LICENSE
+  license_blob_sha: f1dd2c09108dde1a5f56097cee8461b3ea834499
+  path_specific_license_notes:
+  - Same-state audit reported the root MIT LICENSE and no path-specific license override for this artifact.
+  license_status_at_observation: MIT root license verified at the exact repository commit containing the observed artifact
+    blob; no path-specific conflicting license was detected by the audit.
+  notice_requirement: required
+  redistribution_status: permitted-with-notice
+  license_evidence:
+    artifact_declarations: []
+    same_state_files:
+    - path: LICENSE
+      blob_sha: f1dd2c09108dde1a5f56097cee8461b3ea834499
+      spdx: MIT
+    notes:
+    - The observed artifact blob is present at repository commit 6654f6b60cd9d5be8b54c6fafe44346dabeb3b76.
+    - The root LICENSE was fetched from the same commit.
+    - Pre-Phase-1 THIRD-PARTY-NOTICES.md already recorded this practice area as influenced by mattpocock/skills.
+  source_snapshot:
+    repository: mattpocock/skills
+    source_path: skills/engineering/domain-modeling/SKILL.md
+    observed_ref: main
+    observed_blob_sha: 9b97707e19ef1f590aada356f2b3f6bb881f91be
+- source_id: mattpocock-tdd
+  reviewed_at: 2026-08-25
+  repository_commit: 6654f6b60cd9d5be8b54c6fafe44346dabeb3b76
+  use_class: adapted
+  review_status: assessed
+  material_scope: concrete-expression
+  classification_evidence:
+  - The observed TDD blob was independently mapped to repository commit 6654f6b60cd9d5be8b54c6fafe44346dabeb3b76.
+  - Manual review found the local TDD skill preserves the distinctive red/green small-slice sequence, behavior-over-internals
+    testing, independent expected values, and rejection of writing all tests before implementation.
+  - The automated lexical audit found no exact long-line or 12-word-shingle overlap; adaptation classification is based on
+    manual structural review plus pre-Phase-1 repository provenance.
+  similarity_audit: no-signal
+  redistribution_reliance: required
+  license_spdx: MIT
+  license_source: https://github.com/mattpocock/skills/blob/6654f6b60cd9d5be8b54c6fafe44346dabeb3b76/LICENSE
+  license_source_commit_or_ref: 6654f6b60cd9d5be8b54c6fafe44346dabeb3b76
+  license_path: LICENSE
+  license_blob_sha: f1dd2c09108dde1a5f56097cee8461b3ea834499
+  path_specific_license_notes:
+  - Same-state audit reported the root MIT LICENSE and no path-specific license override for this artifact.
+  license_status_at_observation: MIT root license verified at the exact repository commit containing the observed artifact
+    blob; no path-specific conflicting license was detected by the audit.
+  notice_requirement: required
+  redistribution_status: permitted-with-notice
+  license_evidence:
+    artifact_declarations: []
+    same_state_files:
+    - path: LICENSE
+      blob_sha: f1dd2c09108dde1a5f56097cee8461b3ea834499
+      spdx: MIT
+    notes:
+    - The observed artifact blob is present at repository commit 6654f6b60cd9d5be8b54c6fafe44346dabeb3b76.
+    - The root LICENSE was fetched from the same commit.
+    - Pre-Phase-1 THIRD-PARTY-NOTICES.md already recorded this practice area as influenced by mattpocock/skills.
+  source_snapshot:
+    repository: mattpocock/skills
+    source_path: skills/engineering/tdd/SKILL.md
+    observed_ref: main
+    observed_blob_sha: 8fc086710806190ee7c4baa32089cb877a75736a
