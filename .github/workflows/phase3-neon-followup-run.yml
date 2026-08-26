@@ -1,3 +1,4 @@
+# One-time Phase-3 audit retrigger; this workflow removes itself after success.
 name: Phase 3 Neon provenance follow-up runner
 
 on:
