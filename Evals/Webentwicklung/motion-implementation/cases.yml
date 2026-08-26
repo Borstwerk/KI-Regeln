@@ -1,0 +1,99 @@
+skill: motion-implementation
+schema_version: 1
+
+cases:
+  - id: simple-transition-no-library
+    class: behavior
+    input: "Implementiere den bereits freigegebenen Hoverzustand: Der Button soll bei Hover nur leicht seine Deckkraft ändern. Das Projekt hat bisher keine Animationslibrary."
+    should_trigger: true
+    expected:
+      - "wählt eine einfache ausreichende Webmechanik"
+      - "vermeidet eine neue Animationsdependency ohne Bedarf"
+      - "hält die bestehende Motion-Spezifikation ein"
+    forbidden:
+      - "führt GSAP oder Motion allein wegen des Animationsthemas ein"
+    expected_status: pass
+
+  - id: complex-timeline-no-css-dogma
+    class: behavior
+    input: "Implementiere eine freigegebene scrollgebundene Produktstory mit mehreren synchronisierten Abschnitten, Pinning und reversibler Timeline. Das Projekt nutzt bereits GSAP und ScrollTrigger."
+    should_trigger: true
+    expected:
+      - "berücksichtigt bestehende Projektintegration und Orchestrierungsanforderungen"
+      - "prüft GSAP und ScrollTrigger als plausiblen Kandidaten"
+      - "begründet die Wahl statt CSS-only als Dogma zu setzen"
+    forbidden:
+      - "verbietet JavaScript pauschal als langsam"
+      - "behauptet GSAP sei für jede Animation grundsätzlich besser"
+    expected_status: pass
+
+  - id: waapi-runtime-control
+    class: outcome
+    input: "Die Animation ist spezifiziert. Wir brauchen Play, Pause und Reverse aus JavaScript, wollen aber keine zusätzliche Dependency. Setze sie mit Webplattformmitteln um."
+    should_trigger: true
+    expected:
+      - "prüft die Web Animations API für Playback-Kontrolle"
+      - "hält technische Aussagen an Primärdokumentation"
+      - "berücksichtigt Cleanup und Zustandslogik"
+    forbidden:
+      - "erfindet nicht vorhandene Browser- oder Performancegarantien"
+    expected_status: pass
+
+  - id: reduced-motion-implementation
+    class: behavior
+    input: "Implementiere die definierte Panelanimation einschließlich Reduced Motion. Die reduzierte Variante soll den Zustandswechsel weiterhin verständlich zeigen, aber ohne große Translation."
+    should_trigger: true
+    expected:
+      - "implementiert eine alternative reduzierte Darstellung"
+      - "erhält notwendiges Zustandsfeedback"
+      - "behandelt prefers-reduced-motion als echte Ausführungsvariante"
+    forbidden:
+      - "setzt reflexartig jede Dauer auf 0ms wenn dadurch der Zustandswechsel unverständlich wird"
+    expected_status: pass
+
+  - id: landingpage-near-miss
+    class: trigger
+    input: "Entwirf eine Landingpage mit passender Typografie, Farbwelt und Bildsprache."
+    should_trigger: false
+    expected:
+      - "routet allgemeine Art Direction zu frontend-design"
+    forbidden:
+      - "beginnt ohne Motion-Contract eine Animationsimplementierung"
+    expected_status: pass
+
+  - id: accessibility-near-miss
+    class: trigger
+    input: "Führe einen vollständigen Accessibility-Audit der Anwendung durch, inklusive Semantik, Kontrast, Fokus und Tastatur."
+    should_trigger: false
+    expected:
+      - "routet die Aufgabe zu accessibility-review"
+    forbidden:
+      - "ersetzt den umfassenden Audit durch Motion-Implementation"
+    expected_status: pass
+
+  - id: general-performance-near-miss
+    class: trigger
+    input: "Die Seite ruckelt beim Scrollen und reagiert langsam. Finde mit dem Browser-Profiler die Ursache."
+    should_trigger: false
+    expected:
+      - "routet die allgemeine Performanceursache zu frontend-performance"
+    forbidden:
+      - "nimmt ohne Motion-Scope eine Animation als Ursache an"
+    expected_status: pass
+
+  - id: no-render-evidence
+    class: regression
+    input: "Implementiere diese Dialoganimation im Repository und bestätige danach, dass sie visuell flüssig, auf Mobile korrekt und im Reduced-Motion-Modus sauber ist. Du hast Repositoryzugriff, aber keinen Browser, kein Video und keinen Profiler."
+    should_trigger: true
+    context:
+      capabilities:
+        - repository-read
+        - repository-write
+    expected:
+      - "kann die Codeimplementierung durchführen"
+      - "markiert visuelle, mobile und Laufzeitverifikation als nicht durchgeführt"
+      - "behauptet keine Performance ohne Messung"
+    forbidden:
+      - "meldet die Animation ohne Renderzugriff als visuell verifiziert"
+      - "behauptet 60fps oder ruckelfrei ohne Profiler-Evidence"
+    expected_status: partial
