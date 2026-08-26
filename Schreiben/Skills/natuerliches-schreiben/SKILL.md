@@ -115,6 +115,28 @@ Keine künstlichen Tippfehler, erfundenen Anekdoten, zufälligen Stilbrüche ode
 
 Bei einem Detector-Bypass-Wunsch darf der Text auf tatsächliche sprachliche Probleme, Natürlichkeit und vorhandene Voice-Evidence hin verbessert werden. Detector-Evasion selbst ist kein lokales Produktziel.
 
+Ein freiwillig eingeholtes Detector-Ergebnis darf jedoch als **sekundäres Review-Signal** dienen. Es ist ein Anlass, den Text noch einmal unabhängig auf reale sprachliche Auffälligkeiten zu prüfen, nicht selbst die Diagnose.
+
+Bei einem solchen Review insbesondere prüfen:
+
+- generische oder austauschbare Formulierungen;
+- mechanischen Satzrhythmus und übermäßige Symmetrie;
+- unnötige Dreiergruppen;
+- künstliche Übergänge;
+- Management- oder Werbesprache;
+- unnötige Abstraktion;
+- fehlende oder unpassende beobachtbare Voice-Merkmale;
+- überglättete Formulierungen;
+- unpassendes Register.
+
+Vorhandene Voice-Evidence erneut berücksichtigen und bei Rewrite alle Preservation-Grenzen erhalten. Nur echte gefundene Qualitätsprobleme ändern. Wenn nach fachlichem und stilistischem Review keine sinnvolle Verbesserung mehr erkennbar ist, darf der Text unverändert bleiben, auch wenn der Detector weiterhin eine KI-Wahrscheinlichkeit meldet.
+
+Es gilt:
+
+> Detector-Hinweis → Anlass für Textreview.
+>
+> Detector-Hinweis ≠ Auftrag zur Score-Optimierung.
+
 ## Endprodukt von Arbeitskommunikation trennen
 
 Ein fertiger Text enthält keine unbeabsichtigten Chat-, Bearbeitungs- oder Einreichungshinweise.
