@@ -30,7 +30,7 @@ jobs:
         run: python -m pip install --disable-pip-version-check PyYAML==6.0.2
 
       - name: Run verified Neon follow-up
-        run: python tools/phase3_neon_followup.py
+        run: PYTHONPATH=. python tools/phase3_neon_followup.py
 
       - name: Commit reviewed follow-up and remove temporary audit files
         shell: bash
