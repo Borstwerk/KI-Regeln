@@ -15,7 +15,7 @@ categories:
   licensing:
     status: ready
     evidence:
-      - Project license selected: MIT, authorized on 2026-08-26 for the originäre KI-Regeln-Projektmaterial.
+      - "Project license selected: MIT, authorized on 2026-08-26 for the originäre KI-Regeln-Projektmaterial."
       - Root LICENSE is present with the standard MIT license text and the neutral project-related copyright line Copyright (c) 2026 KI-Regeln contributors.
       - The root MIT license applies to project-owned KI-Regeln material and does not relicense third-party material.
       - THIRD-PARTY-NOTICES.md remains authoritative for redistribution-relevant third-party notice and attribution obligations.
