@@ -13,12 +13,14 @@ categories:
       - THIRD-PARTY-NOTICES.md carries the required MIT notice for those four adaptations; the Neon reference-only record requires no redistribution notice.
     blockers: []
   licensing:
-    status: blocked
+    status: ready
     evidence:
-      - Dokumentation/Lizenzentscheidung-Open-Source.md recommends MIT as the project-license candidate.
-      - No root LICENSE has been created merely from that recommendation.
-    blockers:
-      - The project Rights Holder / copyright-holder decision for a root LICENSE has not been made by an authorized human.
+      - Project license selected: MIT, authorized on 2026-08-26 for the originäre KI-Regeln-Projektmaterial.
+      - Root LICENSE is present with the standard MIT license text and the neutral project-related copyright line Copyright (c) 2026 KI-Regeln contributors.
+      - The root MIT license applies to project-owned KI-Regeln material and does not relicense third-party material.
+      - THIRD-PARTY-NOTICES.md remains authoritative for redistribution-relevant third-party notice and attribution obligations.
+      - Provenance is ready with 61 reference/inspiration records, four adapted Matt Pocock records with same-state MIT evidence/notice, and zero legal-review records; the Neon reference-only record does not rely on redistribution permission.
+    blockers: []
   security_privacy:
     status: ready
     evidence:
@@ -63,5 +65,4 @@ categories:
 release_gate:
   status: blocked
   blockers:
-    - Root project license is blocked on an authorized Rights Holder decision to publish the project-owned KI-Regeln material under MIT.
     - A verified private vulnerability-reporting path is still required for the public release state; GitHub Private Vulnerability Reporting is a Phase-4 step after visibility change unless an authorized alternative channel is established earlier.
