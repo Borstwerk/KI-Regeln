@@ -27,11 +27,35 @@ jobs:
           git show 36b55acb51c3a98f72e340c03f2af75788c65e7f:Dokumentation/upstream-sources.yml > /tmp/upstream-sources.base.yml
           python - <<'PY'
           from pathlib import Path
+          from copy import deepcopy
           import yaml
 
           class IndentDumper(yaml.SafeDumper):
               def increase_indent(self, flow=False, indentless=False):
                   return super().increase_indent(flow, False)
+
+          def first_diff(a, b, path='$'):
+              if type(a) is not type(b):
+                  return f'{path}: type {type(a).__name__} != {type(b).__name__}: {a!r} != {b!r}'
+              if isinstance(a, dict):
+                  if set(a) != set(b):
+                      return f'{path}: keys differ: only-left={sorted(set(a)-set(b))}, only-right={sorted(set(b)-set(a))}'
+                  for key in a:
+                      diff = first_diff(a[key], b[key], f'{path}.{key}')
+                      if diff:
+                          return diff
+                  return None
+              if isinstance(a, list):
+                  if len(a) != len(b):
+                      return f'{path}: list length {len(a)} != {len(b)}'
+                  for idx, (left, right) in enumerate(zip(a, b)):
+                      diff = first_diff(left, right, f'{path}[{idx}]')
+                      if diff:
+                          return diff
+                  return None
+              if a != b:
+                  return f'{path}: {a!r} != {b!r}'
+              return None
 
           current_path = Path('Dokumentation/upstream-sources.yml')
           base_path = Path('/tmp/upstream-sources.base.yml')
@@ -64,6 +88,12 @@ jobs:
                   raise SystemExit(f'expected exactly one record for {source_id}')
               additions.append(matches[0])
 
+          expected = deepcopy(base)
+          expected['last_updated'] = current['last_updated']
+          expected['sources'].extend(additions)
+          if expected != current:
+              raise SystemExit('current registry already differs semantically from base + approved records: ' + str(first_diff(expected, current)))
+
           root = yaml.compose(base_text)
           if not isinstance(root, yaml.MappingNode):
               raise SystemExit('base registry root must be a mapping node')
@@ -75,9 +105,8 @@ jobs:
           if not isinstance(last_updated_node, yaml.ScalarNode):
               raise SystemExit('base last_updated must be a scalar')
 
-          wrapped = {'sources': additions}
           rendered = yaml.dump(
-              wrapped,
+              {'sources': additions},
               Dumper=IndentDumper,
               sort_keys=False,
               allow_unicode=True,
@@ -91,7 +120,6 @@ jobs:
           if not addition_text.endswith('\n'):
               addition_text += '\n'
 
-          # Work from right to left so parser-derived marks stay valid.
           operations = [
               (sources_node.value[-1].end_mark.index, sources_node.value[-1].end_mark.index, '\n' + addition_text),
               (last_updated_node.start_mark.index, last_updated_node.end_mark.index, '2026-08-26'),
@@ -102,7 +130,7 @@ jobs:
 
           rewritten = yaml.safe_load(rebuilt)
           if rewritten != current:
-              raise SystemExit('minimal rebuild changed registry semantics')
+              raise SystemExit('minimal rebuild changed registry semantics: ' + str(first_diff(rewritten, current)))
           current_path.write_text(rebuilt, encoding='utf-8')
           PY
           python tools/repo_validator.py
