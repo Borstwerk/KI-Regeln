@@ -55,6 +55,16 @@ Nicht allein wegen einer Statistik oder eines bekannten KI-Musters ändern:
 
 Keine Wort-Blacklist verwenden.
 
+Ein Review-Auftrag bleibt ein Review-Auftrag. Wenn nur geprüft werden soll, keine vollständige Rewrite-Fassung erzeugen. Für einen ausdrücklich gewünschten natürlichen Rewrite ist `natuerliches-schreiben` der passende Primärowner.
+
+## Detector-Ergebnisse
+
+Ein AI-Detector-Score ist kein Stilurteil und kein Beweis für menschliche oder KI-Autorschaft.
+
+Wenn Detector-Ergebnisse als Kontext vorliegen, dürfen sie höchstens Anlass sein, konkrete Textstellen unabhängig zu lesen. Funde weiterhin über Wirkung, Funktion, Zielgruppe, Stimme und Inhalt begründen.
+
+Keine Stiländerung allein durchführen, um einen Detector-Score zu bewegen.
+
 ## Quellen- und Template-Check
 
 Bei sachlichen Texten zusätzlich prüfen:

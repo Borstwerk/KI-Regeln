@@ -1,0 +1,120 @@
+skill: adressatengerechte-kommunikation
+schema_version: 1
+
+cases:
+  - id: repeated-problem-colleague
+    class: behavior
+    input: "Schreib meinem Kollegen professionell, dass wir dasselbe Problem jetzt zum dritten Mal besprochen haben und ich wissen will, warum es immer noch passiert."
+    should_trigger: true
+    expected:
+      - "behandelt Beziehung, Vorgeschichte und gewünschte Antwort als materielle Kommunikationsparameter"
+      - "benennt die Wiederholung sachlich und verlangt eine konkrete Erklärung"
+      - "verwendet Difficult-Communication-Modus ohne Absichten zu erfinden"
+    forbidden:
+      - "weichspült den Kern zu einer unverbindlichen freundlichen Abstimmung"
+      - "greift den Kollegen persönlich an"
+    expected_status: pass
+
+  - id: raw-frustration-controlled-directness
+    class: behavior
+    input: "Ich würde ihn eigentlich fragen, ob er Lack gesoffen hat. Schreib das professionell, aber bitte nicht so weich, dass die Aussage verloren geht. Kontext: Er hat zum dritten Mal dieselbe freigegebene Konfiguration ohne Rücksprache zurückgesetzt."
+    should_trigger: true
+    expected:
+      - "übersetzt die Beleidigung in kontrollierte Direktheit"
+      - "erhält den belegten Kern des wiederholten Zurücksetzens und die notwendige Grenzsetzung"
+      - "trennt beobachtbares Verhalten von einer Behauptung über Charakter oder Absicht"
+    forbidden:
+      - "übernimmt die Beleidigung"
+      - "macht aus der klaren Grenzsetzung eine unverbindliche Harmonieformel"
+    expected_status: pass
+
+  - id: manager-priority-tradeoff
+    class: behavior
+    input: "Ich kann die zusätzliche Aufgabe übernehmen, aber dann bleibt die andere liegen. Schreib das meinem Chef."
+    should_trigger: true
+    expected:
+      - "macht Hierarchie und Entscheidungsbedarf sichtbar"
+      - "formuliert den Kapazitäts-Trade-off ohne zusätzliche Leistung zu versprechen"
+      - "fordert oder ermöglicht eine Priorisierungsentscheidung"
+    forbidden:
+      - "verspricht beide Aufgaben gleichzeitig zu erledigen"
+      - "formuliert den Zielkonflikt als persönliche Beschwerde"
+    expected_status: pass
+
+  - id: supplier-formal-complaint
+    class: outcome
+    input: "Formuliere eine formelle Beschwerde an einen Lieferanten. Drei zugesagte Liefertermine wurden verfehlt; dadurch konnte unser geplanter Rollout nicht starten. Wir wollen einen belastbaren neuen Termin und eine Erklärung, welche Maßnahmen die erneute Verzögerung verhindern."
+    should_trigger: true
+    expected:
+      - "strukturiert belegbaren Sachverhalt, Impact und gewünschte Abhilfe"
+      - "passt Form und Direktheit an einen formellen externen Empfänger an"
+      - "formuliert eine klare Forderung ohne erfundene rechtliche Drohung"
+    forbidden:
+      - "erfindet Vertragsstrafen, Fristen oder Rechtspositionen"
+    expected_status: pass
+
+  - id: recipient-thread-context
+    class: behavior
+    input: "Antworte der Projektleiterin auf den bestehenden Mailthread. Sie fragt erneut nach dem Termin. Im Thread haben wir bereits erklärt, dass die Freigabe des Fachbereichs fehlt. Bitte antworte knapp und fordere eine Entscheidung, ob ohne Freigabe verschoben werden soll."
+    should_trigger: true
+    expected:
+      - "nutzt den Thread als Vorgeschichte und erhält den bekannten Blocker"
+      - "macht die gewünschte Entscheidung explizit"
+      - "vermeidet Wiederholung von Kontext, den die Empfängerin bereits kennt, soweit er nicht zur Entscheidung nötig ist"
+    forbidden:
+      - "erfindet eine erteilte oder verweigerte Freigabe"
+    expected_status: pass
+
+  - id: channel-is-parameter
+    class: regression
+    input: "Formuliere denselben sachlichen Status einmal als kurze Teams-Nachricht und einmal als formelle E-Mail an einen externen Stakeholder. Sachverhalt und gewünschte Entscheidung sind identisch."
+    should_trigger: true
+    expected:
+      - "behält denselben Kommunikationskern bei"
+      - "passt Länge, Gruß, Struktur und Formalität an den Kanal und Empfänger an"
+      - "behandelt E-Mail und Teams als Kanalmodi statt als getrennte Skills"
+    forbidden:
+      - "ändert den Sachverhalt nur wegen des Kanals"
+    expected_status: pass
+
+  - id: trivial-messenger-near-miss
+    class: trigger
+    input: "Schreib meiner Frau kurz per WhatsApp, dass ich später komme."
+    should_trigger: false
+    expected:
+      - "vermeidet einen schweren Kommunikationsworkflow und erlaubt eine direkte kurze Formulierung beziehungsweise natuerliches-schreiben"
+    forbidden:
+      - "analysiert ungefragt Konfliktgrad, Eskalationsleiter oder Verhandlungsraum"
+    expected_status: pass
+
+  - id: pure-naturalness-near-miss
+    class: trigger
+    input: "Der vorhandene Text an meinen Kollegen ist inhaltlich genau richtig. Er klingt nur steif und nach ChatGPT. Mach ihn natürlicher, ohne etwas an der Aussage zu ändern."
+    should_trigger: false
+    expected:
+      - "routet das reine Sprachproblem zu natuerliches-schreiben"
+    forbidden:
+      - "erfindet neue Kommunikationsziele oder Konflikte"
+    expected_status: pass
+
+  - id: social-repurposing-near-miss
+    class: trigger
+    input: "Mach aus diesem Fachtext einen LinkedIn-Post und passe Struktur, Hook und CTA an LinkedIn an."
+    should_trigger: false
+    expected:
+      - "routet die Transformation zu content-repurposing und social-content-design"
+    forbidden:
+      - "zieht Social-Ownership in den allgemeinen Kommunikationsskill"
+    expected_status: pass
+
+  - id: no-full-conflict-coaching
+    class: regression
+    input: "Schreib eine klare Mail an meinen Kollegen: Die vereinbarte Übergabe fehlt erneut und ich brauche sie bis morgen 12 Uhr. Plane zusätzlich ungefragt ein sechswöchiges Konfliktcoaching, mögliche Live-Reaktionen und eine Eskalationsmatrix."
+    should_trigger: true
+    expected:
+      - "bearbeitet die unmittelbar notwendige schwierige Nachricht"
+      - "begrenzt den Scope und baut nicht automatisch einen langfristigen Konfliktworkflow"
+      - "kann weitergehende Konfliktplanung als separaten möglichen Auftrag markieren"
+    forbidden:
+      - "erfindet ohne Auftrag ein umfassendes Coaching- oder Eskalationsprogramm"
+    expected_status: pass

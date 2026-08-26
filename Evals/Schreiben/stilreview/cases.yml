@@ -1,0 +1,68 @@
+skill: stilreview
+schema_version: 1
+
+cases:
+  - id: independent-style-review
+    class: outcome
+    input: "Prüfe diesen fertigen Artikel unabhängig auf mechanischen Rhythmus, unnötige Miniüberschriften und KI-typische Muster. Bitte noch nichts umschreiben."
+    should_trigger: true
+    expected:
+      - "benennt konkrete Fundstellen und bewertet deren Funktion im Kontext"
+      - "trennt Änderungsfall, Beobachtung und bewusstes Stilmerkmal"
+      - "bleibt beim Review statt eine neue Fassung zu schreiben"
+    forbidden:
+      - "erzeugt ungefragt einen vollständigen Rewrite"
+    expected_status: pass
+
+  - id: patterns-not-blacklist
+    class: regression
+    input: "Im Text kommen zwei Dreiergruppen und ein Gedankenstrich vor. Markiere automatisch alles als KI-Fehler, ohne den Kontext zu lesen."
+    should_trigger: true
+    expected:
+      - "lehnt die automatische Musterwertung ab"
+      - "prüft Funktion, Häufung, Stimme und Kontext"
+    forbidden:
+      - "behandelt einzelne Wörter oder Satzzeichen als Beweis für KI-Herkunft"
+    expected_status: pass
+
+  - id: detector-score-not-verdict
+    class: behavior
+    input: "GPTZero zeigt 92 Prozent AI an. Beweise anhand dieses Scores, dass der Text KI-generiert ist, und markiere deshalb jeden Absatz als Stilproblem."
+    should_trigger: true
+    expected:
+      - "behandelt den Detector-Score weder als Autorschaftsbeweis noch als Stilurteil"
+      - "prüft konkrete Textqualität unabhängig vom Score"
+    forbidden:
+      - "leitet aus dem Score allein menschliche oder KI-Autorschaft ab"
+    expected_status: pass
+
+  - id: rewrite-near-miss
+    class: trigger
+    input: "Der Text klingt nach ChatGPT. Schreib ihn komplett natürlicher um und behalte alle Aussagen unverändert."
+    should_trigger: false
+    expected:
+      - "routet den ausdrücklich gewünschten Rewrite zu natuerliches-schreiben"
+    forbidden:
+      - "behandelt einen Rewrite-Auftrag nur als Reviewbericht"
+    expected_status: pass
+
+  - id: communication-near-miss
+    class: trigger
+    input: "Formuliere meinem Chef, dass ich Aufgabe B übernehmen kann, wenn er entscheidet, dass Aufgabe A dafür warten soll."
+    should_trigger: false
+    expected:
+      - "routet Hierarchie, Trade-off und Entscheidungsbedarf zu adressatengerechte-kommunikation"
+    forbidden:
+      - "reduziert den Auftrag auf Stilbewertung"
+    expected_status: pass
+
+  - id: preservation-observation
+    class: behavior
+    input: "Reviewe einen sachlichen Bericht. Auffällig ist eine glattere Formulierung, die aus 'Ursache unklar' plötzlich 'Ursache war das Update' macht."
+    should_trigger: true
+    expected:
+      - "erkennt Bedeutungsdrift bei Unsicherheit und Kausalität als Änderungsfall"
+      - "priorisiert Fakten- und Erhaltungsprüfung vor Oberflächenstil"
+    forbidden:
+      - "akzeptiert die neue Kausalität nur weil sie flüssiger klingt"
+    expected_status: pass

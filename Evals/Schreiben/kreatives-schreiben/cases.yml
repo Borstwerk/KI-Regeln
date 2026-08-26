@@ -1,0 +1,66 @@
+skill: kreatives-schreiben
+schema_version: 1
+
+cases:
+  - id: scene-with-canon
+    class: outcome
+    input: "Schreib die nächste Szene des Romans. Die Figuren- und Weltregeln im Projekt sind verbindlich; der Abschnitt soll die bestehende Szene direkt fortsetzen, ohne nachträgliche Erklärung des bereits gezeigten Konflikts."
+    should_trigger: true
+    expected:
+      - "liest Kanon und Anschlussvorgaben vor dem Schreiben"
+      - "priorisiert Szene, Figurenstimme und Kontinuität vor allgemeiner Glättung"
+      - "vermeidet unnötige Nacherklärung einer bereits verständlichen Szene"
+    forbidden:
+      - "ändert etablierte Weltregeln für stilistische Bequemlichkeit"
+    expected_status: pass
+
+  - id: distinct-dialogue-voices
+    class: behavior
+    input: "Überarbeite diesen Dialog so, dass die zwei etablierten Figuren wieder unterscheidbar klingen. Inhalt, Wissensstände und Handlung sollen gleich bleiben."
+    should_trigger: true
+    expected:
+      - "schützt Inhalt und Wissensstände"
+      - "stellt unterscheidbare Figurenstimmen her ohne den Dialog perfekt glatt zu machen"
+    forbidden:
+      - "gibt beiden Figuren dieselbe neutrale Sprecherstimme"
+    expected_status: pass
+
+  - id: action-spatial-clarity
+    class: behavior
+    input: "Schreib eine kurze Actionszene im engen Maschinenraum. Wichtig ist, dass jederzeit klar bleibt, wer wo steht und wodurch die nächste Handlung ausgelöst wird."
+    should_trigger: true
+    expected:
+      - "priorisiert räumliche Klarheit und Ursache-Folge vor dramatischer Wortdichte"
+    forbidden:
+      - "opfert nachvollziehbaren Raumablauf für abstrakte Bedeutungsprosa"
+    expected_status: pass
+
+  - id: factual-writing-near-miss
+    class: trigger
+    input: "Schreib eine kurze sachliche Erklärung für unser Ticketsystem, warum ein SQL-Dienst neu gestartet werden musste."
+    should_trigger: false
+    expected:
+      - "routet allgemeine sachliche Prosa zu natuerliches-schreiben"
+    forbidden:
+      - "behandelt den Sachtext als kreative Szene"
+    expected_status: pass
+
+  - id: workplace-message-near-miss
+    class: trigger
+    input: "Schreib meinem Kollegen deutlich, dass das vereinbarte Problem zum dritten Mal wieder aufgetreten ist und ich eine Erklärung brauche."
+    should_trigger: false
+    expected:
+      - "routet die adressaten- und konfliktbezogene Nachricht zu adressatengerechte-kommunikation"
+    forbidden:
+      - "behandelt Arbeitsplatzkommunikation als fiktionalen Dialog"
+    expected_status: pass
+
+  - id: style-review-near-miss
+    class: trigger
+    input: "Prüfe das fertige Kapitel nur auf wiederkehrende KI-typische Absatzmechanik und Stilbrüche. Noch nicht umschreiben."
+    should_trigger: false
+    expected:
+      - "routet den unabhängigen Review zu stilreview"
+    forbidden:
+      - "schreibt das Kapitel ungefragt neu"
+    expected_status: pass
