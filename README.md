@@ -484,9 +484,7 @@ Operative Skills:
 
 ## Skill-Katalog und Maturity
 
-`skill-catalog.yml` ist das maschinenlesbare Inventar der zentralen Skills.
-
-Aktuell enthält der Katalog 128 zentrale Skills.
+`skill-catalog.yml` ist das maschinenlesbare Inventar der zentralen Skills und führt den jeweils aktuellen Bestand sowie dessen Reife- und Evalabdeckung.
 
 Reifestufen:
 
