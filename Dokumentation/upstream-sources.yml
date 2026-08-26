@@ -1,1843 +1,1680 @@
 schema_version: 2
-last_updated: 2026-08-25
-
-# Mutable external sources whose changes may affect local rules or skills.
-# A changed upstream is a review signal, never an automatic sync instruction.
-#
-# monitor_mode:
-#   exact-sha       -> compare a GitHub file blob SHA
-#   semantic-review -> reopen a living web page and review relevant concepts
-#
-# cadence:
-#   monthly         -> check on every monthly maintenance run
-#   quarterly       -> check when a quarterly review is due
-
+last_updated: '2026-08-26'
 sources:
-  # ---------------------------------------------------------------------------
-  # Grundlagen / Mensch-KI
-  # ---------------------------------------------------------------------------
-  - id: microsoft-hax-guidelines
-    area: Grundlagen
-    kind: web-page
-    url: https://www.microsoft.com/en-us/haxtoolkit/ai-guidelines/
-    monitor_mode: semantic-review
-    cadence: quarterly
-    last_checked: 2026-08-23
-    local_impact:
-      - Grundlagen/Mensch-KI-Interaktion.md
-      - Grundlagen/Vertrauen-und-Denkautonomie.md
-      - Grundlagen/Zusammenarbeit-mit-KI.md
-
-  # ---------------------------------------------------------------------------
-  # Agentenarbeit / Context Engineering
-  # ---------------------------------------------------------------------------
-  - id: anthropic-effective-context-engineering
-    area: Agentenarbeit
-    kind: web-page
-    url: https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents
-    monitor_mode: semantic-review
-    cadence: monthly
-    last_checked: 2026-08-23
-    local_impact:
-      - Agentenarbeit/Context-Engineering.md
-      - Agentenarbeit/Context-Budget-und-Token-Effizienz.md
-      - Agentenarbeit/Context-Rot-und-Signalqualitaet.md
-      - Agentenarbeit/Context-Compaction.md
-      - Agentenarbeit/Skills/context-engineering/SKILL.md
-      - Agentenarbeit/Skills/context-compaction/SKILL.md
-
-  - id: anthropic-long-running-agent-harnesses
-    area: Agentenarbeit
-    kind: web-page
-    url: https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents
-    monitor_mode: semantic-review
-    cadence: quarterly
-    last_checked: 2026-08-23
-    local_impact:
-      - Agentenarbeit/Long-Horizon-Handoffs.md
-      - Agentenarbeit/Working-Memory-und-Persistenzgrenzen.md
-      - Agentenarbeit/Skills/session-handoff/SKILL.md
-      - Workflows/Long-Horizon-Agentenarbeit.md
-
-  - id: openai-gpt56-context-efficiency
-    area: Agentenarbeit
-    kind: web-page
-    url: https://openai.com/index/gpt-5-6-frontier-intelligence-efficiency/
-    monitor_mode: semantic-review
-    cadence: monthly
-    last_checked: 2026-08-23
-    local_impact:
-      - Agentenarbeit/Context-Budget-und-Token-Effizienz.md
-      - Agentenarbeit/Tool-Outputs-und-Context-Offloading.md
-      - Agentenarbeit/Prompt-Caching-und-stabile-Kontexte.md
-      - Agentenarbeit/Skills/context-audit/SKILL.md
-
-  - id: openai-responses-context-compaction
-    area: Agentenarbeit
-    kind: web-page
-    url: https://openai.com/index/equip-responses-api-computer-environment/
-    monitor_mode: semantic-review
-    cadence: monthly
-    last_checked: 2026-08-23
-    local_impact:
-      - Agentenarbeit/Context-Compaction.md
-      - Agentenarbeit/Skills/context-compaction/SKILL.md
-
-  - id: langchain-memory-concepts
-    area: Agentenarbeit
-    kind: web-page
-    url: https://docs.langchain.com/oss/python/concepts/memory
-    monitor_mode: semantic-review
-    cadence: monthly
-    last_checked: 2026-08-23
-    local_impact:
-      - Agentenarbeit/Working-Memory-und-Persistenzgrenzen.md
-      - Agentenarbeit/Context-Engineering.md
-      - Agentenarbeit/Skills/context-engineering/SKILL.md
-
-  - id: opentelemetry-genai-usage-conventions
-    area: Agentenarbeit
-    kind: web-page
-    url: https://opentelemetry.io/docs/specs/semconv/registry/attributes/gen-ai/
-    monitor_mode: semantic-review
-    cadence: monthly
-    last_checked: 2026-08-23
-    local_impact:
-      - Agentenarbeit/Context-Budget-und-Token-Effizienz.md
-      - Agentenarbeit/Observability-und-Traceability.md
-      - Agentenarbeit/Trace-Datenmodell.md
-
-  - id: context-doctor-skill
-    area: Agentenarbeit
-    kind: github-file
-    repository: jzOcb/context-doctor
-    path: SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: a0bf345b213cafb5f6571305d9503c21fb920242
-    last_checked: 2026-08-23
-    local_impact:
-      - Agentenarbeit/Context-Budget-und-Token-Effizienz.md
-      - Agentenarbeit/Skills/context-audit/SKILL.md
-
-  - id: openclaw-handoff-skill
-    area: Agentenarbeit
-    kind: github-file
-    repository: openclaw/agent-skills
-    path: skills/handoff/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: 50054b4079bcc25492e27cae7b72ea748a853cc9
-    last_checked: 2026-08-23
-    local_impact:
-      - Agentenarbeit/Long-Horizon-Handoffs.md
-      - Agentenarbeit/Skills/session-handoff/SKILL.md
-
-  # ---------------------------------------------------------------------------
-  # Wissensmanagement / Knowledge Bases
-  # ---------------------------------------------------------------------------
-  - id: kcs-practices-guide
-    area: Wissensmanagement
-    kind: web-page
-    url: https://library.serviceinnovation.org/KCS/KCS_v6/KCS_v6_Practices_Guide
-    monitor_mode: semantic-review
-    cadence: quarterly
-    last_checked: 2026-08-23
-    local_impact:
-      - Wissensmanagement/Capture-Ingest-und-Triage.md
-      - Wissensmanagement/Aktualitaet-Staleness-und-Lifecycle.md
-      - Wissensmanagement/Qualitaet-Dubletten-Orphans-und-Drift.md
-      - Wissensmanagement/Skills/knowledge-ingest/SKILL.md
-      - Wissensmanagement/Skills/knowledge-maintenance/SKILL.md
-
-  - id: obsidian-wiki-skills
-    area: Wissensmanagement
-    kind: github-file
-    repository: Ar9av/obsidian-wiki
-    path: docs/skills.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: 05fad2e6bb27ee263a019c786b3120ff78c6996b
-    last_checked: 2026-08-23
-    local_impact:
-      - Wissensmanagement/README.md
-      - Wissensmanagement/Retrieval-Findability-und-Wissensabfrage.md
-      - Wissensmanagement/Qualitaet-Dubletten-Orphans-und-Drift.md
-      - Workflows/Wissensbasis-Aufbauen-und-Pflegen.md
-
-  - id: obsidian-second-brain-skill
-    area: Wissensmanagement
-    kind: github-file
-    repository: eugeniughelbur/obsidian-second-brain
-    path: SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: 37556b336e8314672b39af8f97bda18516634ddf
-    last_checked: 2026-08-23
-    local_impact:
-      - Wissensmanagement/Capture-Ingest-und-Triage.md
-      - Wissensmanagement/Provenance-Evidence-und-Source-of-Truth.md
-      - Wissensmanagement/Aktualitaet-Staleness-und-Lifecycle.md
-      - Wissensmanagement/Skills/knowledge-ingest/SKILL.md
-
-  - id: insight-wave-knowledge-distill
-    area: Wissensmanagement
-    kind: github-file
-    repository: cogni-work/insight-wave
-    path: cogni-knowledge/skills/knowledge-distill/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: 2770f88b4e00f4be98a6a4afcaf66f49b9776b63
-    last_checked: 2026-08-23
-    local_impact:
-      - Wissensmanagement/Wissenseinheiten-und-Granularitaet.md
-      - Wissensmanagement/Provenance-Evidence-und-Source-of-Truth.md
-      - Wissensmanagement/Skills/knowledge-distill/SKILL.md
-
-  - id: openai-knowledge-retrieval
-    area: Wissensmanagement
-    kind: web-page
-    url: https://openai.com/solutions/blueprints/knowledge-retrieval/
-    monitor_mode: semantic-review
-    cadence: monthly
-    last_checked: 2026-08-23
-    local_impact:
-      - Wissensmanagement/Retrieval-Findability-und-Wissensabfrage.md
-      - Wissensmanagement/Skills/knowledge-query/SKILL.md
-
-  # ---------------------------------------------------------------------------
-  # Schnittstellen und Vertraege
-  # ---------------------------------------------------------------------------
-  - id: openapi-specification
-    area: Schnittstellen-und-Vertraege
-    kind: web-page
-    url: https://spec.openapis.org/oas/
-    monitor_mode: semantic-review
-    cadence: quarterly
-    last_checked: 2026-08-24
-    local_impact:
-      - Schnittstellen-und-Vertraege/HTTP-API-Design.md
-      - Schnittstellen-und-Vertraege/Webhooks-und-Callbacks.md
-      - Schnittstellen-und-Vertraege/Contract-First-und-Machine-Readable-Artefakte.md
-      - Schnittstellen-und-Vertraege/Skills/http-api-design/SKILL.md
-
-  - id: google-api-compatibility-versioning
-    area: Schnittstellen-und-Vertraege
-    kind: web-page
-    url: https://google.aip.dev/general
-    monitor_mode: semantic-review
-    cadence: monthly
-    last_checked: 2026-08-24
-    local_impact:
-      - Schnittstellen-und-Vertraege/Compatibility-Versioning-und-Deprecation.md
-      - Schnittstellen-und-Vertraege/Schemas-Semantik-und-Fehlervertraege.md
-      - Schnittstellen-und-Vertraege/Skills/contract-change-review/SKILL.md
-      - Schnittstellen-und-Vertraege/Skills/http-api-design/SKILL.md
-
-  - id: graphql-specification
-    area: Schnittstellen-und-Vertraege
-    kind: web-page
-    url: https://spec.graphql.org/
-    monitor_mode: semantic-review
-    cadence: quarterly
-    last_checked: 2026-08-24
-    local_impact:
-      - Schnittstellen-und-Vertraege/GraphQL-Vertraege-und-Schemaevolution.md
-      - Schnittstellen-und-Vertraege/Paradigmen-und-Schnittstellenauswahl.md
-      - Schnittstellen-und-Vertraege/Skills/interface-design/SKILL.md
-      - Schnittstellen-und-Vertraege/Skills/contract-change-review/SKILL.md
-
-  - id: protobuf-programming-guides
-    area: Schnittstellen-und-Vertraege
-    kind: web-page
-    url: https://protobuf.dev/programming-guides/
-    monitor_mode: semantic-review
-    cadence: quarterly
-    last_checked: 2026-08-24
-    local_impact:
-      - Schnittstellen-und-Vertraege/RPC-IDL-und-Protobuf-Vertraege.md
-      - Schnittstellen-und-Vertraege/Compatibility-Versioning-und-Deprecation.md
-      - Schnittstellen-und-Vertraege/Skills/contract-change-review/SKILL.md
-
-  - id: asyncapi-reference
-    area: Schnittstellen-und-Vertraege
-    kind: web-page
-    url: https://www.asyncapi.com/docs/reference
-    monitor_mode: semantic-review
-    cadence: quarterly
-    last_checked: 2026-08-24
-    local_impact:
-      - Schnittstellen-und-Vertraege/Event-und-Async-Vertraege.md
-      - Schnittstellen-und-Vertraege/Contract-First-und-Machine-Readable-Artefakte.md
-      - Schnittstellen-und-Vertraege/Skills/event-contract-design/SKILL.md
-
-  - id: hazamashoken-api-design-principles
-    area: Schnittstellen-und-Vertraege
-    kind: github-file
-    repository: hazamashoken/api-design-ai-skills
-    path: skills/api-design-principles/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: 61853683589dbb8c256f3c8ad55d6bbe33e3409f
-    last_checked: 2026-08-24
-    local_impact:
-      - Schnittstellen-und-Vertraege/Consumer-Provider-und-Vertragsmodell.md
-      - Schnittstellen-und-Vertraege/Paradigmen-und-Schnittstellenauswahl.md
-      - Schnittstellen-und-Vertraege/Skills/interface-design/SKILL.md
-      - Schnittstellen-und-Vertraege/Skills/http-api-design/SKILL.md
-
-  - id: jacob-balslev-api-design
-    area: Schnittstellen-und-Vertraege
-    kind: github-file
-    repository: jacob-balslev/skills
-    path: skills/backend-engineering/api-design/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: 8692c89695c66e356a8e55db2a17ce87e1d79279
-    last_checked: 2026-08-24
-    local_impact:
-      - Schnittstellen-und-Vertraege/HTTP-API-Design.md
-      - Schnittstellen-und-Vertraege/Compatibility-Versioning-und-Deprecation.md
-      - Schnittstellen-und-Vertraege/Skills/http-api-design/SKILL.md
-      - Schnittstellen-und-Vertraege/Skills/interface-review/SKILL.md
-
-  - id: jacob-balslev-event-contract-design
-    area: Schnittstellen-und-Vertraege
-    kind: github-file
-    repository: jacob-balslev/skills
-    path: skills/software-architecture/event-contract-design/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: 7edd830e036e2fa70df674ea17d307bd8239c407
-    last_checked: 2026-08-24
-    local_impact:
-      - Schnittstellen-und-Vertraege/Event-und-Async-Vertraege.md
-      - Schnittstellen-und-Vertraege/Skills/event-contract-design/SKILL.md
-
-  # ---------------------------------------------------------------------------
-  # Infrastruktur und DevOps
-  # ---------------------------------------------------------------------------
-  - id: terraform-plan-state-docs
-    area: Infrastruktur-und-DevOps
-    kind: web-page
-    url: https://developer.hashicorp.com/terraform/cli/commands/plan
-    monitor_mode: semantic-review
-    cadence: monthly
-    last_checked: 2026-08-24
-    local_impact:
-      - Infrastruktur-und-DevOps/Desired-State-und-Infrastructure-as-Code.md
-      - Infrastruktur-und-DevOps/State-Ownership-Drift-und-Reconciliation.md
-      - Infrastruktur-und-DevOps/Change-Preview-Plan-Apply-und-Gates.md
-      - Infrastruktur-und-DevOps/Skills/infrastructure-as-code/SKILL.md
-      - Infrastruktur-und-DevOps/Skills/infrastructure-change-review/SKILL.md
-
-  - id: opentofu-plan-docs
-    area: Infrastruktur-und-DevOps
-    kind: web-page
-    url: https://opentofu.org/docs/cli/commands/plan/
-    monitor_mode: semantic-review
-    cadence: quarterly
-    last_checked: 2026-08-24
-    local_impact:
-      - Infrastruktur-und-DevOps/Desired-State-und-Infrastructure-as-Code.md
-      - Infrastruktur-und-DevOps/Change-Preview-Plan-Apply-und-Gates.md
-      - Infrastruktur-und-DevOps/State-Ownership-Drift-und-Reconciliation.md
-      - Infrastruktur-und-DevOps/Skills/infrastructure-change-review/SKILL.md
-
-  - id: kubernetes-controller-deployment-docs
-    area: Infrastruktur-und-DevOps
-    kind: web-page
-    url: https://kubernetes.io/docs/concepts/architecture/controller/
-    monitor_mode: semantic-review
-    cadence: quarterly
-    last_checked: 2026-08-24
-    local_impact:
-      - Infrastruktur-und-DevOps/GitOps-und-Continuous-Reconciliation.md
-      - Infrastruktur-und-DevOps/Kubernetes-Workloads-und-Rollouts.md
-      - Infrastruktur-und-DevOps/Skills/gitops-design/SKILL.md
-      - Infrastruktur-und-DevOps/Skills/deployment-strategy/SKILL.md
-
-  - id: opengitops-principles
-    area: Infrastruktur-und-DevOps
-    kind: web-page
-    url: https://opengitops.dev/
-    monitor_mode: semantic-review
-    cadence: quarterly
-    last_checked: 2026-08-24
-    local_impact:
-      - Infrastruktur-und-DevOps/GitOps-und-Continuous-Reconciliation.md
-      - Infrastruktur-und-DevOps/Skills/gitops-design/SKILL.md
-      - Workflows/Build-Deploy-und-Promotion.md
-
-  - id: argo-rollouts-docs
-    area: Infrastruktur-und-DevOps
-    kind: web-page
-    url: https://argoproj.github.io/rollouts/
-    monitor_mode: semantic-review
-    cadence: quarterly
-    last_checked: 2026-08-24
-    local_impact:
-      - Infrastruktur-und-DevOps/Deployment-Strategien-Promotion-und-Rollback.md
-      - Infrastruktur-und-DevOps/Kubernetes-Workloads-und-Rollouts.md
-      - Infrastruktur-und-DevOps/Skills/deployment-strategy/SKILL.md
-
-  - id: open-policy-agent-docs
-    area: Infrastruktur-und-DevOps
-    kind: web-page
-    url: https://www.openpolicyagent.org/docs
-    monitor_mode: semantic-review
-    cadence: quarterly
-    last_checked: 2026-08-24
-    local_impact:
-      - Infrastruktur-und-DevOps/Policy-as-Code-und-Guardrails.md
-      - Infrastruktur-und-DevOps/Skills/ci-pipeline-design/SKILL.md
-      - Infrastruktur-und-DevOps/Skills/infrastructure-review/SKILL.md
-
-  - id: slsa-provenance
-    area: Infrastruktur-und-DevOps
-    kind: web-page
-    url: https://slsa.dev/spec/v1.2/provenance
-    monitor_mode: semantic-review
-    cadence: quarterly
-    last_checked: 2026-08-24
-    local_impact:
-      - Infrastruktur-und-DevOps/Build-Artefakte-Provenance-und-Reproduzierbarkeit.md
-      - Infrastruktur-und-DevOps/Skills/container-build/SKILL.md
-      - Workflows/Build-Deploy-und-Promotion.md
-
-  - id: docker-multi-stage-builds
-    area: Infrastruktur-und-DevOps
-    kind: web-page
-    url: https://docs.docker.com/build/building/multi-stage/
-    monitor_mode: semantic-review
-    cadence: quarterly
-    last_checked: 2026-08-24
-    local_impact:
-      - Infrastruktur-und-DevOps/Container-Build-und-Runtime-Vertrag.md
-      - Infrastruktur-und-DevOps/Skills/container-build/SKILL.md
-
-  - id: hashicorp-terraform-style-guide-skill
-    area: Infrastruktur-und-DevOps
-    kind: github-file
-    repository: hashicorp/agent-skills
-    path: plugins/terraform/skills/terraform-style-guide/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: 77610a87f56ba79e6003dcec8d82fd36fc5c6d51
-    last_checked: 2026-08-24
-    local_impact:
-      - Infrastruktur-und-DevOps/Desired-State-und-Infrastructure-as-Code.md
-      - Infrastruktur-und-DevOps/Secrets-Permissions-und-Execution-Boundaries.md
-      - Infrastruktur-und-DevOps/Skills/infrastructure-as-code/SKILL.md
-
-  - id: flux-gitops-repo-audit-skill
-    area: Infrastruktur-und-DevOps
-    kind: github-file
-    repository: fluxcd/agent-skills
-    path: skills/gitops-repo-audit/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: 255b7166e1c684351e5184458b1fef178ec4ab67
-    last_checked: 2026-08-24
-    local_impact:
-      - Infrastruktur-und-DevOps/GitOps-und-Continuous-Reconciliation.md
-      - Infrastruktur-und-DevOps/Kubernetes-Workloads-und-Rollouts.md
-      - Infrastruktur-und-DevOps/Skills/gitops-design/SKILL.md
-      - Infrastruktur-und-DevOps/Skills/infrastructure-review/SKILL.md
-
-  - id: arjun-infrastructure-as-code-skill
-    area: Infrastruktur-und-DevOps
-    kind: github-file
-    repository: arjunprabhulal/agent-skills
-    path: skills/devops/infrastructure-as-code/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: 625fdcdab226ea729623cf4cb5ed0621487269a3
-    last_checked: 2026-08-24
-    local_impact:
-      - Infrastruktur-und-DevOps/Desired-State-und-Infrastructure-as-Code.md
-      - Infrastruktur-und-DevOps/State-Ownership-Drift-und-Reconciliation.md
-      - Infrastruktur-und-DevOps/Change-Preview-Plan-Apply-und-Gates.md
-      - Infrastruktur-und-DevOps/Skills/infrastructure-as-code/SKILL.md
-      - Infrastruktur-und-DevOps/Skills/infrastructure-change-review/SKILL.md
-
-  - id: arjun-ci-pipelines-skill
-    area: Infrastruktur-und-DevOps
-    kind: github-file
-    repository: arjunprabhulal/agent-skills
-    path: skills/devops/ci-pipelines/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: 3d84f58687c6619298b91d35d5086e1626262fe8
-    last_checked: 2026-08-24
-    local_impact:
-      - Infrastruktur-und-DevOps/CI-Pipelines-und-Automation.md
-      - Infrastruktur-und-DevOps/Skills/ci-pipeline-design/SKILL.md
-
-  - id: arjun-containerization-skill
-    area: Infrastruktur-und-DevOps
-    kind: github-file
-    repository: arjunprabhulal/agent-skills
-    path: skills/devops/containerization/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: 839e3b4dcd012eab7617bc22285ad884232e6f25
-    last_checked: 2026-08-24
-    local_impact:
-      - Infrastruktur-und-DevOps/Container-Build-und-Runtime-Vertrag.md
-      - Infrastruktur-und-DevOps/Skills/container-build/SKILL.md
-
-  - id: arjun-deployment-strategies-skill
-    area: Infrastruktur-und-DevOps
-    kind: github-file
-    repository: arjunprabhulal/agent-skills
-    path: skills/devops/deployment-strategies/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: 10a689c8c1455b3c19952b9537c52a183c872503
-    last_checked: 2026-08-24
-    local_impact:
-      - Infrastruktur-und-DevOps/Deployment-Strategien-Promotion-und-Rollback.md
-      - Infrastruktur-und-DevOps/Skills/deployment-strategy/SKILL.md
-      - Workflows/Build-Deploy-und-Promotion.md
-
-  # ---------------------------------------------------------------------------
-  # Reliability und System-Observability
-  # ---------------------------------------------------------------------------
-  - id: opentelemetry-signals
-    area: Reliability-und-System-Observability
-    kind: web-page
-    url: https://opentelemetry.io/docs/concepts/signals/
-    monitor_mode: semantic-review
-    cadence: monthly
-    last_checked: 2026-08-24
-    local_impact:
-      - Reliability-und-System-Observability/System-Observability-und-Telemetrie.md
-      - Reliability-und-System-Observability/Skills/system-observability-design/SKILL.md
-
-  - id: opentelemetry-semantic-conventions
-    area: Reliability-und-System-Observability
-    kind: web-page
-    url: https://opentelemetry.io/docs/specs/semconv/
-    monitor_mode: semantic-review
-    cadence: monthly
-    last_checked: 2026-08-24
-    local_impact:
-      - Reliability-und-System-Observability/System-Observability-und-Telemetrie.md
-      - Reliability-und-System-Observability/Skills/system-observability-design/SKILL.md
-
-  - id: arjun-slo-definition-skill
-    area: Reliability-und-System-Observability
-    kind: github-file
-    repository: arjunprabhulal/agent-skills
-    path: skills/sre/slo-definition/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: 7bd532345ac98d2d8b38302e613ff351fddabaa9
-    last_checked: 2026-08-24
-    local_impact:
-      - Reliability-und-System-Observability/Reliability-Ziele-SLIs-SLOs-und-Error-Budgets.md
-      - Reliability-und-System-Observability/Skills/slo-design/SKILL.md
-
-  - id: arjun-capacity-planning-skill
-    area: Reliability-und-System-Observability
-    kind: github-file
-    repository: arjunprabhulal/agent-skills
-    path: skills/sre/capacity-planning/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: a10e829e30486b8f662a4abd7c1b9b9f3f8a18e3
-    last_checked: 2026-08-24
-    local_impact:
-      - Reliability-und-System-Observability/Capacity-Saturation-und-Dependency-Health.md
-      - Reliability-und-System-Observability/Skills/capacity-planning/SKILL.md
-
-  - id: addyosmani-observability-instrumentation-skill
-    area: Reliability-und-System-Observability
-    kind: github-file
-    repository: addyosmani/agent-skills
-    path: skills/observability-and-instrumentation/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: 7d56593ec599cce0bae12aa46862884d0208cc59
-    last_checked: 2026-08-24
-    local_impact:
-      - Reliability-und-System-Observability/System-Observability-und-Telemetrie.md
-      - Reliability-und-System-Observability/Alerting-und-Actionability.md
-      - Reliability-und-System-Observability/Skills/system-observability-design/SKILL.md
-      - Reliability-und-System-Observability/Skills/alert-design/SKILL.md
-
-  # ---------------------------------------------------------------------------
-  # Schreiben
-  # ---------------------------------------------------------------------------
-  - id: wikipedia-signs-ai-writing
-    area: Schreiben
-    kind: web-page
-    url: https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing
-    monitor_mode: semantic-review
-    cadence: quarterly
-    last_checked: 2026-08-23
-    local_impact:
-      - Schreiben/Stilreview.md
-      - Schreiben/Skills/stilreview/SKILL.md
-      - Schreiben/Skills/natuerliches-schreiben/SKILL.md
-
-  # ---------------------------------------------------------------------------
-  # Programmieren
-  # ---------------------------------------------------------------------------
-  - id: mattpocock-tdd
-    area: Programmieren
-    kind: github-file
-    repository: mattpocock/skills
-    path: skills/engineering/tdd/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: 8fc086710806190ee7c4baa32089cb877a75736a
-    last_checked: 2026-08-23
-    local_impact:
-      - Programmieren/Skills/tdd/SKILL.md
-      - Programmieren/Entwicklungsprozess.md
-
-  - id: mattpocock-diagnosing-bugs
-    area: Programmieren
-    kind: github-file
-    repository: mattpocock/skills
-    path: skills/engineering/diagnosing-bugs/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: 061c25a524acaa93d4534e9e08a793c0a5fe45fd
-    last_checked: 2026-08-23
-    local_impact:
-      - Programmieren/Skills/diagnose/SKILL.md
-      - Programmieren/Entwicklungsprozess.md
-
-  - id: mattpocock-code-review
-    area: Programmieren
-    kind: github-file
-    repository: mattpocock/skills
-    path: skills/engineering/code-review/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: e28d7acbf7b3bb4d7817b7eb5d9c105af03f6ec4
-    last_checked: 2026-08-23
-    local_impact:
-      - Programmieren/Skills/code-review/SKILL.md
-      - Programmieren/Agent-Anweisungen.md
-
-  - id: mattpocock-domain-modeling
-    area: Programmieren
-    kind: github-file
-    repository: mattpocock/skills
-    path: skills/engineering/domain-modeling/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: 9b97707e19ef1f590aada356f2b3f6bb881f91be
-    last_checked: 2026-08-23
-    local_impact:
-      - Programmieren/Skills/domain-modeling/SKILL.md
-      - Programmieren/Entwicklungsprozess.md
-
-  # ---------------------------------------------------------------------------
-  # Bildarbeit – lebende Produktdokumentation
-  # ---------------------------------------------------------------------------
-  - id: adobe-firefly-style-reference
-    area: Bildarbeit
-    kind: web-page
-    url: https://developer.adobe.com/firefly-services/docs/firefly-api/guides/concepts/style-image-reference/
-    monitor_mode: semantic-review
-    cadence: monthly
-    last_checked: 2026-08-23
-    local_impact:
-      - Bildarbeit/Stil-und-Referenzsysteme.md
-      - Bildarbeit/Skills/bild-prebrief/SKILL.md
-
-  - id: adobe-firefly-structure-reference
-    area: Bildarbeit
-    kind: web-page
-    url: https://developer.adobe.com/firefly-services/docs/firefly-api/guides/concepts/structure-image-reference/
-    monitor_mode: semantic-review
-    cadence: monthly
-    last_checked: 2026-08-23
-    local_impact:
-      - Bildarbeit/Stil-und-Referenzsysteme.md
-      - Bildarbeit/Szenenplanung-und-Komposition.md
-
-  - id: midjourney-character-reference
-    area: Bildarbeit
-    kind: web-page
-    url: https://docs.midjourney.com/hc/en-us/articles/32162917505293-Character-Reference
-    monitor_mode: semantic-review
-    cadence: monthly
-    last_checked: 2026-08-23
-    local_impact:
-      - Bildarbeit/Charaktere-Objekte-und-Orte.md
-      - Bildarbeit/Stil-und-Referenzsysteme.md
-
-  - id: midjourney-omni-reference
-    area: Bildarbeit
-    kind: web-page
-    url: https://docs.midjourney.com/hc/en-us/articles/36285124473997-Omni-Reference
-    monitor_mode: semantic-review
-    cadence: monthly
-    last_checked: 2026-08-23
-    local_impact:
-      - Bildarbeit/Charaktere-Objekte-und-Orte.md
-      - Bildarbeit/Stil-und-Referenzsysteme.md
-
-  - id: midjourney-style-creator
-    area: Bildarbeit
-    kind: web-page
-    url: https://docs.midjourney.com/hc/en-us/articles/41308374558221-Style-Creator
-    monitor_mode: semantic-review
-    cadence: monthly
-    last_checked: 2026-08-23
-    local_impact:
-      - Bildarbeit/Stil-und-Referenzsysteme.md
-
-  # ---------------------------------------------------------------------------
-  # Webentwicklung
-  # ---------------------------------------------------------------------------
-  - id: anthropic-frontend-design
-    area: Webentwicklung
-    kind: github-file
-    repository: anthropics/skills
-    path: skills/frontend-design/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: decdff43d05908b4c1fc2cfd2d80fc5743440934
-    last_checked: 2026-08-23
-    local_impact:
-      - Webentwicklung/Webdesign/Designrichtung-und-Identitaet.md
-      - Webentwicklung/Skills/frontend-design/SKILL.md
-
-  - id: impeccable-readme
-    area: Webentwicklung
-    kind: github-file
-    repository: pbakaus/impeccable
-    path: README.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: 3a71f5981c2872c3eaad7464daf50aa16d7974b6
-    last_checked: 2026-08-23
-    local_impact:
-      - Webentwicklung/Webdesign/Content-und-Anti-Slop.md
-      - Webentwicklung/Webdesign/Webdesign-Review.md
-      - Webentwicklung/Skills/web-design-review/SKILL.md
-      - Webentwicklung/Skills/design-system/SKILL.md
-
-  - id: firzus-frontend-design
-    area: Webentwicklung
-    kind: github-file
-    repository: Firzus/agent-skills
-    path: skills/web/frontend-design/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: ea7afbef65d56f72c06fc5c445d6aa2d95e06ba3
-    last_checked: 2026-08-23
-    local_impact:
-      - Webentwicklung/Webdesign/Informationsarchitektur-und-Greyboxing.md
-      - Webentwicklung/Skills/design-system/SKILL.md
-      - Webentwicklung/Skills/greybox/SKILL.md
-      - Webentwicklung/Skills/web-content/SKILL.md
-
-  - id: practicalswan-frontend-design
-    area: Webentwicklung
-    kind: github-file
-    repository: PracticalSwan/agent-skills
-    path: frontend-design/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: 5691eba965c7dfe93d774a2ffeb7eb025fa27180
-    observed_version: "2.0"
-    last_checked: 2026-08-23
-    local_impact:
-      - Webentwicklung/Webdesign/Responsive-und-Interaktion.md
-      - Webentwicklung/Frontend/Accessibility.md
-      - Webentwicklung/Frontend/Responsive-Implementierung.md
-      - Webentwicklung/Skills/accessibility-review/SKILL.md
-      - Webentwicklung/Skills/visual-verification/SKILL.md
-
-  - id: ilm-alan-frontend-design
-    area: Webentwicklung
-    kind: github-file
-    repository: Ilm-Alan/frontend-design
-    path: SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: 4b3d8574d46d1dd86475db266f8d6da48eb07127
-    last_checked: 2026-08-23
-    local_impact:
-      - Webentwicklung/Webdesign/Content-und-Anti-Slop.md
-      - Webentwicklung/Skills/web-content/SKILL.md
-
-  - id: jpeetz-design-to-code
-    area: Webentwicklung
-    kind: github-file
-    repository: JPeetz/agent-skills
-    path: design-to-code/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: 272c9c1dd208925b3fb500b3e01df405439757f4
-    observed_version: 1.0.0
-    last_checked: 2026-08-23
-    local_impact:
-      - Webentwicklung/Frontend/Responsive-Implementierung.md
-      - Webentwicklung/Frontend/Render-und-Browser-Verifikation.md
-      - Webentwicklung/Skills/visual-verification/SKILL.md
-
-  - id: vercel-web-design-guidelines
-    area: Webentwicklung
-    kind: github-file
-    repository: vercel-labs/agent-skills
-    path: skills/web-design-guidelines/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: ceae92ab319216a68274168fba9b63b998b65997
-    observed_version: 1.0.0
-    last_checked: 2026-08-23
-    local_impact:
-      - Webentwicklung/Webdesign/Webdesign-Review.md
-      - Webentwicklung/Skills/web-design-review/SKILL.md
-      - Webentwicklung/Skills/accessibility-review/SKILL.md
-
-  - id: vercel-react-best-practices
-    area: Webentwicklung
-    kind: github-file
-    repository: vercel-labs/agent-skills
-    path: skills/react-best-practices/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: 237988de4a66dd8a71d30a2c24ebe1a86b58d04e
-    observed_version: 1.0.0
-    last_checked: 2026-08-23
-    local_impact:
-      - Webentwicklung/Frontend/Performance.md
-      - Webentwicklung/Skills/frontend-performance/SKILL.md
-
-  - id: vercel-composition-patterns
-    area: Webentwicklung
-    kind: github-file
-    repository: vercel-labs/agent-skills
-    path: skills/composition-patterns/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: d07025bf943345bc1cf15eb923594f889ff881f0
-    last_checked: 2026-08-23
-    local_impact:
-      - Webentwicklung/Frontend/Komponentenarchitektur.md
-
-  # ---------------------------------------------------------------------------
-  # Recherche
-  # ---------------------------------------------------------------------------
-  - id: openai-deep-research-help
-    area: Recherche
-    kind: web-page
-    url: https://help.openai.com/de-de/articles/10500283-tiefgehende-recherche
-    monitor_mode: semantic-review
-    cadence: monthly
-    last_checked: 2026-08-23
-    local_impact:
-      - Recherche/Suchmodi-und-Research-Tiefe.md
-      - Recherche/Rechercheplanung-und-Fragezerlegung.md
-      - Recherche/Skills/research-plan/SKILL.md
-      - Recherche/Skills/deep-research/SKILL.md
-
-  - id: firecrawl-deep-research
-    area: Recherche
-    kind: github-file
-    repository: firecrawl/web-agent
-    path: agent-core/src/skills/definitions/deep-research/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: aeebe902cfee721a772b72fde3c11a5f9b989219
-    last_checked: 2026-08-23
-    local_impact:
-      - Recherche/Rechercheplanung-und-Fragezerlegung.md
-      - Recherche/Skills/deep-research/SKILL.md
-
-  - id: practicalswan-research
-    area: Recherche
-    kind: github-file
-    repository: PracticalSwan/agent-skills
-    path: research/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: 3a6f4b71128de829a4ca610908c104c070f33b02
-    observed_version: "2.0"
-    last_checked: 2026-08-23
-    local_impact:
-      - Recherche/Quellenstrategie-und-Quellenqualitaet.md
-      - Recherche/Skills/source-evaluation/SKILL.md
-
-  - id: hermes-grounded-citations
-    area: Recherche
-    kind: github-file
-    repository: NousResearch/hermes-agent
-    path: skills/research/grounded-citations/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: 4c767369f4d97960925c7c2e73ffa192f95fe583
-    observed_version: 1.1.0
-    last_checked: 2026-08-23
-    local_impact:
-      - Recherche/Claim-Evidence-und-Zitationshygiene.md
-      - Recherche/Skills/citation-audit/SKILL.md
-
-  - id: jwynia-fact-check
-    area: Recherche
-    kind: github-file
-    repository: jwynia/agent-skills
-    path: skills/general/research/verification/fact-check/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: 0c2dd8e7330b9d3fab7926a7f5de5ad5ebbfa932
-    observed_version: "1.0"
-    last_checked: 2026-08-23
-    local_impact:
-      - Recherche/Claim-Evidence-und-Zitationshygiene.md
-      - Recherche/Skills/claim-verification/SKILL.md
-      - Recherche/Skills/citation-audit/SKILL.md
-
-  - id: langchain-deepagents-web-research
-    area: Recherche
-    kind: github-file
-    repository: langchain-ai/deepagents
-    path: libs/cli/examples/skills/web-research/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: 63424a2c5ea395146a4d12e1b6c1104b3c23bff5
-    last_checked: 2026-08-23
-    local_impact:
-      - Recherche/Rechercheplanung-und-Fragezerlegung.md
-      - Recherche/Skills/research-plan/SKILL.md
-      - Recherche/Skills/deep-research/SKILL.md
-
-  - id: microsoft-vscode-team-kit-research
-    area: Recherche
-    kind: github-file
-    repository: microsoft/vscode-team-kit
-    path: research/skills/research/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: fcb44f50392b70ca7cf729a0a668274eebbf812b
-    last_checked: 2026-08-23
-    local_impact:
-      - Recherche/Triangulation-Widerspruch-und-Confidence.md
-      - Recherche/Synthese-und-Coverage.md
-      - Recherche/Skills/deep-research/SKILL.md
-
-  - id: drader-research
-    area: Recherche
-    kind: github-file
-    repository: drader/researcher_agent
-    path: skills/research/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: 9e37617786957bfabc8f003848ddf59a8b8c4650
-    observed_version: "0.1.0"
-    last_checked: 2026-08-23
-    local_impact:
-      - Recherche/Suchmodi-und-Research-Tiefe.md
-      - Recherche/Quellenstrategie-und-Quellenqualitaet.md
-      - Recherche/Skills/source-evaluation/SKILL.md
-      - Recherche/Skills/claim-verification/SKILL.md
-
-  # ---------------------------------------------------------------------------
-  # Dokumentationserstellung
-  # ---------------------------------------------------------------------------
-  - id: google-developer-style-guide
-    area: Dokumentationserstellung
-    kind: web-page
-    url: https://developers.google.com/style
-    monitor_mode: semantic-review
-    cadence: quarterly
-    last_checked: 2026-08-23
-    local_impact:
-      - Dokumentationserstellung/Technischer-Schreibstil.md
-      - Dokumentationserstellung/Skills/technical-writing/SKILL.md
-      - Dokumentationserstellung/Skills/docs-review/SKILL.md
-
-  - id: write-the-docs-docs-as-code
-    area: Dokumentationserstellung
-    kind: web-page
-    url: https://www.writethedocs.org/guide/docs-as-code/
-    monitor_mode: semantic-review
-    cadence: quarterly
-    last_checked: 2026-08-23
-    local_impact:
-      - Dokumentationserstellung/Docs-as-Code-und-Wartbarkeit.md
-      - Dokumentationserstellung/Dokumentationsreview-und-Drift.md
-
-  - id: good-docs-project-templates
-    area: Dokumentationserstellung
-    kind: web-page
-    url: https://www.thegooddocsproject.dev/template
-    monitor_mode: semantic-review
-    cadence: quarterly
-    last_checked: 2026-08-23
-    local_impact:
-      - Dokumentationserstellung/Vorlagen/README.template.md
-      - Dokumentationserstellung/Vorlagen/ADR.template.md
-      - Dokumentationserstellung/Vorlagen/Runbook.template.md
-      - Dokumentationserstellung/Vorlagen/How-To.template.md
-      - Dokumentationserstellung/Vorlagen/Tutorial.template.md
-
-  - id: vale-agent-skills
-    area: Dokumentationserstellung
-    kind: web-page
-    url: https://vale.sh/skills
-    monitor_mode: semantic-review
-    cadence: monthly
-    last_checked: 2026-08-23
-    local_impact:
-      - Dokumentationserstellung/Docs-as-Code-und-Wartbarkeit.md
-      - Dokumentationserstellung/Dokumentationsreview-und-Drift.md
-
-  - id: mcollina-documentation
-    area: Dokumentationserstellung
-    kind: github-file
-    repository: mcollina/skills
-    path: skills/documentation/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: dae5144584a07b60287eac57f0786665b38b3559
-    last_checked: 2026-08-23
-    local_impact:
-      - Dokumentationserstellung/Dokumenttypen-und-Diataxis.md
-      - Dokumentationserstellung/Skills/docs-plan/SKILL.md
-      - Dokumentationserstellung/Skills/tutorial/SKILL.md
-      - Dokumentationserstellung/Skills/how-to/SKILL.md
-      - Dokumentationserstellung/Skills/reference-docs/SKILL.md
-      - Dokumentationserstellung/Skills/explanation-docs/SKILL.md
-
-  - id: mblode-docs-writing
-    area: Dokumentationserstellung
-    kind: github-file
-    repository: mblode/agent-skills
-    path: skills/docs-writing/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: 1d9a8530f20ae6dda523fc87e85a66e24ed49473
-    last_checked: 2026-08-23
-    local_impact:
-      - Dokumentationserstellung/Technischer-Schreibstil.md
-      - Dokumentationserstellung/Beispiele-Code-und-Verifikation.md
-      - Dokumentationserstellung/Dokumentationsreview-und-Drift.md
-      - Dokumentationserstellung/Skills/technical-writing/SKILL.md
-      - Dokumentationserstellung/Skills/docs-review/SKILL.md
-
-  - id: jpeetz-technical-documentation
-    area: Dokumentationserstellung
-    kind: github-file
-    repository: JPeetz/agent-skills
-    path: technical-documentation/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: 3616059286b7d7f84adc5e91ba1498114aeb53f1
-    observed_version: 1.0.0
-    last_checked: 2026-08-23
-    local_impact:
-      - Dokumentationserstellung/README.md
-      - Dokumentationserstellung/Skills/readme/SKILL.md
-      - Dokumentationserstellung/Skills/adr/SKILL.md
-      - Dokumentationserstellung/Skills/runbook/SKILL.md
-
-  # ---------------------------------------------------------------------------
-  # Datenbanken
-  # ---------------------------------------------------------------------------
-  - id: supabase-postgres-best-practices
-    area: Datenbanken
-    kind: github-file
-    repository: supabase/agent-skills
-    path: skills/supabase-postgres-best-practices/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: 6400792389dfcc82c81953054e546bd72ebcd259
-    observed_version: "1.1.1"
-    last_checked: 2026-08-23
-    local_impact:
-      - Datenbanken/Datenmodellierung-und-Zugriffsmuster.md
-      - Datenbanken/Indizes-und-Execution-Plans.md
-      - Datenbanken/Connections-Pooling-und-Ressourcen.md
-      - Datenbanken/Transaktionen-Isolation-und-Concurrency.md
-      - Datenbanken/Skills/query-performance/SKILL.md
-
-  - id: neon-postgres-best-practices
-    area: Datenbanken
-    kind: github-file
-    repository: neondatabase/postgres-skills
-    path: skills/postgres-best-practices/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: 43f3468765949e3db85a3782d90d4826b6c585bd
-    last_checked: 2026-08-23
-    local_impact:
-      - Datenbanken/Datenmodellierung-und-Zugriffsmuster.md
-      - Datenbanken/Indizes-und-Execution-Plans.md
-      - Datenbanken/Migrationen-Backfills-und-Rollback.md
-
-  - id: mongodb-schema-design
-    area: Datenbanken
-    kind: github-file
-    repository: mongodb/agent-skills
-    path: plugins/mongodb/skills/mongodb-schema-design/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: e2237d15ead78ce33a4753ca8dc8e6e0bba854cf
-    observed_version: "1.0.0"
-    last_checked: 2026-08-23
-    local_impact:
-      - Datenbanken/Datenmodellierung-und-Zugriffsmuster.md
-      - Datenbanken/Schema-Constraints-und-Integritaet.md
-      - Datenbanken/Migrationen-Backfills-und-Rollback.md
-      - Datenbanken/Skills/database-design/SKILL.md
-      - Datenbanken/Skills/schema-migration/SKILL.md
-
-  - id: mongodb-query-optimizer
-    area: Datenbanken
-    kind: github-file
-    repository: mongodb/agent-skills
-    path: plugins/mongodb/skills/mongodb-query-optimizer/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: c71f2f5e9afd8b6cd73380169e0ff5c3f9402944
-    observed_version: "1.0.0"
-    last_checked: 2026-08-23
-    local_impact:
-      - Datenbanken/Indizes-und-Execution-Plans.md
-      - Datenbanken/Monitoring-und-Diagnose.md
-      - Datenbanken/Skills/query-performance/SKILL.md
-
-  - id: redis-core
-    area: Datenbanken
-    kind: github-file
-    repository: redis/agent-skills
-    path: skills/redis-core/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: a62be86377ad672f5f9f2301a492cc4ee726d3cc
-    observed_version: "0.1.0"
-    last_checked: 2026-08-23
-    local_impact:
-      - Datenbanken/Datenmodellierung-und-Zugriffsmuster.md
-      - Datenbanken/Skills/database-design/SKILL.md
-
-  - id: redis-connections
-    area: Datenbanken
-    kind: github-file
-    repository: redis/agent-skills
-    path: skills/redis-connections/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: 53f367a9a4ed6a4bf9c3c29a441dcfa1ee91a114
-    observed_version: "0.1.0"
-    last_checked: 2026-08-23
-    local_impact:
-      - Datenbanken/Connections-Pooling-und-Ressourcen.md
-      - Datenbanken/Skills/database-operations/SKILL.md
-
-  - id: redis-security
-    area: Datenbanken
-    kind: github-file
-    repository: redis/agent-skills
-    path: skills/redis-security/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: 661ba11f06c9a31203dfe6b828bd2c714d0a258e
-    observed_version: "0.1.0"
-    last_checked: 2026-08-23
-    local_impact:
-      - Datenbanken/Security-und-Datenzugriff.md
-      - Datenbanken/Skills/database-operations/SKILL.md
-      - Sicherheit/Tool-Rechte-und-Least-Privilege.md
-
-  - id: prisma-skills-readme
-    area: Datenbanken
-    kind: github-file
-    repository: prisma/prisma
-    path: skills/README.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: 889bb5e1cf410c7751b51fc6c529f5fe3d44aec1
-    last_checked: 2026-08-23
-    local_impact:
-      - Datenbanken/README.md
-      - Datenbanken/Migrationen-Backfills-und-Rollback.md
-      - Datenbanken/Skills/schema-migration/SKILL.md
-      - Skill-Engineering/Toolanforderungen-und-Fallbacks.md
-
-  - id: postgresql-current-docs
-    area: Datenbanken
-    kind: web-page
-    url: https://www.postgresql.org/docs/current/
-    monitor_mode: semantic-review
-    cadence: quarterly
-    last_checked: 2026-08-23
-    local_impact:
-      - Datenbanken/Indizes-und-Execution-Plans.md
-      - Datenbanken/Transaktionen-Isolation-und-Concurrency.md
-      - Datenbanken/Migrationen-Backfills-und-Rollback.md
-
-  - id: prisma-migrate-docs
-    area: Datenbanken
-    kind: web-page
-    url: https://www.prisma.io/docs/orm/prisma-migrate
-    monitor_mode: semantic-review
-    cadence: monthly
-    last_checked: 2026-08-23
-    local_impact:
-      - Datenbanken/Migrationen-Backfills-und-Rollback.md
-      - Datenbanken/Skills/schema-migration/SKILL.md
-
-  # ---------------------------------------------------------------------------
-  # Testing und QA
-  # ---------------------------------------------------------------------------
-  - id: anthropic-testing-strategy
-    area: Testing-und-QA
-    kind: github-file
-    repository: anthropics/knowledge-work-plugins
-    path: engineering/skills/testing-strategy/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: 4ff59410c8fe67872a98ca97135815b778ca1219
-    last_checked: 2026-08-23
-    local_impact:
-      - Testing-und-QA/Teststrategie-und-Risikobasiertes-Testen.md
-      - Testing-und-QA/Testebenen-und-Testportfolio.md
-      - Testing-und-QA/Skills/test-strategy/SKILL.md
-
-  - id: anthropic-webapp-testing
-    area: Testing-und-QA
-    kind: github-file
-    repository: anthropics/skills
-    path: skills/webapp-testing/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: 4726215301db64a0cc4d41fc3219c61f37a30f4a
-    last_checked: 2026-08-23
-    local_impact:
-      - Testing-und-QA/End-to-End-und-Nutzerverhalten.md
-      - Testing-und-QA/Skills/e2e-testing/SKILL.md
-
-  - id: currents-playwright-best-practices
-    area: Testing-und-QA
-    kind: github-file
-    repository: currents-dev/playwright-best-practices-skill
-    path: playwright-best-practices/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: 0da736253c343081ab8c0cb9802729a707c23196
-    observed_version: "1.2"
-    last_checked: 2026-08-23
-    local_impact:
-      - Testing-und-QA/Test-Seams-Doubles-und-Reale-Abhaengigkeiten.md
-      - Testing-und-QA/Testdaten-Isolation-und-Hermetik.md
-      - Testing-und-QA/Flaky-Tests-und-Determinismus.md
-      - Testing-und-QA/Failure-Recovery-und-Negativtests.md
-      - Testing-und-QA/Skills/flaky-test-diagnosis/SKILL.md
-      - Testing-und-QA/Skills/failure-testing/SKILL.md
-
-  - id: superpowers-verification-before-completion
-    area: Testing-und-QA
-    kind: github-file
-    repository: obra/superpowers
-    path: skills/verification-before-completion/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: 7d45333cc4a49c57a80df6c1fe2fa777a207afbc
-    last_checked: 2026-08-23
-    local_impact:
-      - Agentenarbeit/Skills/verification-loop/SKILL.md
-      - Testing-und-QA/Testautomatisierung-CI-und-Evidence.md
-      - Workflows/Teststrategie-und-QA.md
-
-  - id: istqb-ctfl-v4
-    area: Testing-und-QA
-    kind: web-page
-    url: https://istqb.org/certifications/certified-tester-foundation-level-ctfl-v4-0/
-    monitor_mode: semantic-review
-    cadence: quarterly
-    last_checked: 2026-08-23
-    local_impact:
-      - Testing-und-QA/Teststrategie-und-Risikobasiertes-Testen.md
-      - Testing-und-QA/Testebenen-und-Testportfolio.md
-      - Testing-und-QA/Testdesign-und-Testfaelle.md
-      - Testing-und-QA/Exploratives-Testen-und-Release-Evidence.md
-
-  - id: playwright-best-practices
-    area: Testing-und-QA
-    kind: web-page
-    url: https://playwright.dev/docs/best-practices
-    monitor_mode: semantic-review
-    cadence: monthly
-    last_checked: 2026-08-23
-    local_impact:
-      - Testing-und-QA/Testdaten-Isolation-und-Hermetik.md
-      - Testing-und-QA/End-to-End-und-Nutzerverhalten.md
-      - Testing-und-QA/Flaky-Tests-und-Determinismus.md
-
-  - id: pact-docs
-    area: Testing-und-QA
-    kind: web-page
-    url: https://docs.pact.io/
-    monitor_mode: semantic-review
-    cadence: quarterly
-    last_checked: 2026-08-23
-    local_impact:
-      - Testing-und-QA/Integration-und-Contract-Testing.md
-      - Testing-und-QA/Skills/contract-testing/SKILL.md
-
-  - id: testcontainers-getting-started
-    area: Testing-und-QA
-    kind: web-page
-    url: https://testcontainers.com/getting-started/
-    monitor_mode: semantic-review
-    cadence: quarterly
-    last_checked: 2026-08-23
-    local_impact:
-      - Testing-und-QA/Test-Seams-Doubles-und-Reale-Abhaengigkeiten.md
-      - Testing-und-QA/Testdaten-Isolation-und-Hermetik.md
-      - Testing-und-QA/Skills/integration-testing/SKILL.md
-
-  # ---------------------------------------------------------------------------
-  # Skill Engineering
-  # ---------------------------------------------------------------------------
-  - id: agent-skills-specification
-    area: Skill-Engineering
-    kind: github-file
-    repository: agentskills/agentskills
-    path: docs/specification.mdx
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: d9a2db099d905da8b879a5c6f996728073985279
-    last_checked: 2026-08-23
-    local_impact:
-      - Skill-Engineering/Skill-Struktur-und-Progressive-Disclosure.md
-      - Skill-Engineering/Trigger-und-Description-Design.md
-      - Skill-Engineering/Skills/skill-authoring/SKILL.md
-      - Skill-Engineering/Skills/skill-review/SKILL.md
-      - skill-catalog.yml
-
-  # ---------------------------------------------------------------------------
-  # Sicherheit – lebende Sicherheitsrahmen
-  # ---------------------------------------------------------------------------
-  - id: owasp-agentic-skills-top-10
-    area: Sicherheit
-    kind: web-page
-    url: https://owasp.org/www-project-agentic-skills-top-10/
-    monitor_mode: semantic-review
-    cadence: monthly
-    last_checked: 2026-08-23
-    local_impact:
-      - Sicherheit/Skill-Supply-Chain.md
-      - Sicherheit/Security-Review-fuer-Skills.md
-      - Sicherheit/Skills/skill-security-review/SKILL.md
-
-  - id: owasp-agentic-applications-top-10-2026
-    area: Sicherheit
-    kind: web-page
-    url: https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/
-    monitor_mode: semantic-review
-    cadence: quarterly
-    last_checked: 2026-08-23
-    local_impact:
-      - Sicherheit/README.md
-      - Sicherheit/Tool-Rechte-und-Least-Privilege.md
-      - Sicherheit/MCP-und-externe-Tools.md
-      - Sicherheit/Sandbox-und-Isolation.md
-
-  # ---------------------------------------------------------------------------
-  # Data Engineering
-  # ---------------------------------------------------------------------------
-  - id: apache-airflow-core-concepts
-    area: Data-Engineering
-    kind: web-page
-    url: https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/
-    monitor_mode: semantic-review
-    cadence: monthly
-    last_checked: 2026-08-24
-    local_impact:
-      - Data-Engineering/Orchestrierung-Abhaengigkeiten-und-Reprocessing.md
-      - Data-Engineering/Transformationen-Inkrementalitaet-und-Backfills.md
-      - Data-Engineering/Skills/data-orchestration-design/SKILL.md
-      - Data-Engineering/Skills/data-transformation-design/SKILL.md
-      - Workflows/Backfill-und-Reprocessing.md
-
-  - id: apache-beam-programming-guide
-    area: Data-Engineering
-    kind: web-page
-    url: https://beam.apache.org/documentation/programming-guide/
-    monitor_mode: semantic-review
-    cadence: quarterly
-    last_checked: 2026-08-24
-    local_impact:
-      - Data-Engineering/Batch-Streaming-und-Zeitsemantik.md
-      - Data-Engineering/Skills/data-ingestion-design/SKILL.md
-      - Data-Engineering/Skills/data-engineering-review/SKILL.md
-
-  - id: apache-kafka-streams-configs
-    area: Data-Engineering
-    kind: web-page
-    url: https://kafka.apache.org/documentation/#streamsconfigs
-    monitor_mode: semantic-review
-    cadence: quarterly
-    last_checked: 2026-08-24
-    local_impact:
-      - Data-Engineering/Batch-Streaming-und-Zeitsemantik.md
-      - Data-Engineering/Ingestion-CDC-und-Replay.md
-      - Data-Engineering/Skills/data-ingestion-design/SKILL.md
-
-  - id: openlineage-docs
-    area: Data-Engineering
-    kind: web-page
-    url: https://openlineage.io/docs/
-    monitor_mode: semantic-review
-    cadence: monthly
-    last_checked: 2026-08-24
-    local_impact:
-      - Data-Engineering/Lineage-Provenance-und-Impact-Analyse.md
-      - Data-Engineering/Skills/data-lineage-analysis/SKILL.md
-      - Data-Engineering/Skills/data-engineering-review/SKILL.md
-
-  - id: open-data-contract-standard
-    area: Data-Engineering
-    kind: web-page
-    url: https://docs.datacontract.com/open-data-contract-standard
-    monitor_mode: semantic-review
-    cadence: monthly
-    last_checked: 2026-08-24
-    local_impact:
-      - Data-Engineering/Data-Contracts-Schema-und-Evolution.md
-      - Data-Engineering/Skills/data-contract-design/SKILL.md
-      - Data-Engineering/Skills/data-quality-design/SKILL.md
-
-  - id: vaquarkhan-data-specification-skill
-    area: Data-Engineering
-    kind: github-file
-    repository: vaquarkhan/data-engineering-agent-skills
-    path: skills/data-specification/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: a44f83926c8152a7546c8c579ed3ae6e6178e19e
-    last_checked: 2026-08-24
-    local_impact:
-      - Data-Engineering/README.md
-      - Data-Engineering/Skills/data-pipeline-design/SKILL.md
-      - Data-Engineering/Skills/data-ingestion-design/SKILL.md
-      - Data-Engineering/Skills/analytical-data-modeling/SKILL.md
-      - Data-Engineering/Skills/data-engineering-review/SKILL.md
-
-  - id: vaquarkhan-safe-backfill-replay-skill
-    area: Data-Engineering
-    kind: github-file
-    repository: vaquarkhan/data-engineering-agent-skills
-    path: skills/safe-backfill-and-replay-orchestration/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: 59ebc645604d70a8900818ad4dfdeb29d40eaa36
-    last_checked: 2026-08-24
-    local_impact:
-      - Data-Engineering/Transformationen-Inkrementalitaet-und-Backfills.md
-      - Data-Engineering/Skills/data-transformation-design/SKILL.md
-      - Data-Engineering/Skills/data-orchestration-design/SKILL.md
-      - Workflows/Backfill-und-Reprocessing.md
-
-  # ---------------------------------------------------------------------------
-  # Software Architecture und System Design
-  # ---------------------------------------------------------------------------
-  - id: c4-model-diagrams
-    area: Software-Architecture-und-System-Design
-    kind: web-page
-    url: https://c4model.com/diagrams
-    monitor_mode: semantic-review
-    cadence: monthly
-    last_checked: 2026-08-24
-    local_impact:
-      - Software-Architecture-und-System-Design/Systemkontext-Grenzen-und-Ownership.md
-      - Software-Architecture-und-System-Design/Architekturevidence-Views-ADRs-und-Dokumentation.md
-      - Software-Architecture-und-System-Design/Skills/architecture-baseline/SKILL.md
-
-  - id: arc42-documentation
-    area: Software-Architecture-und-System-Design
-    kind: web-page
-    url: https://docs.arc42.org/home/
-    monitor_mode: semantic-review
-    cadence: monthly
-    last_checked: 2026-08-24
-    local_impact:
-      - Software-Architecture-und-System-Design/Architekturevidence-Views-ADRs-und-Dokumentation.md
-      - Software-Architecture-und-System-Design/Skills/architecture-review/SKILL.md
-
-  - id: sei-atam
-    area: Software-Architecture-und-System-Design
-    kind: web-page
-    url: https://www.sei.cmu.edu/library/the-architecture-tradeoff-analysis-method/
-    monitor_mode: semantic-review
-    cadence: monthly
-    last_checked: 2026-08-24
-    local_impact:
-      - Software-Architecture-und-System-Design/Qualitaetsattribute-Szenarien-und-Trade-offs.md
-      - Software-Architecture-und-System-Design/Skills/architecture-tradeoff-analysis/SKILL.md
-      - Software-Architecture-und-System-Design/Skills/system-design/SKILL.md
-      - Software-Architecture-und-System-Design/Skills/architecture-review/SKILL.md
-
-  - id: azure-architecture-styles
-    area: Software-Architecture-und-System-Design
-    kind: web-page
-    url: https://learn.microsoft.com/en-us/azure/architecture/guide/architecture-styles/
-    monitor_mode: semantic-review
-    cadence: monthly
-    last_checked: 2026-08-24
-    local_impact:
-      - Software-Architecture-und-System-Design/Architekturstile-und-Patterns.md
-      - Software-Architecture-und-System-Design/Skills/system-design/SKILL.md
-      - Software-Architecture-und-System-Design/Skills/architecture-tradeoff-analysis/SKILL.md
-
-  - id: pinchen-system-design-skill
-    area: Software-Architecture-und-System-Design
-    kind: github-file
-    repository: pinchen147/system-design-skill
-    path: skills/system-design/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: 8ea4d9b0d1ee929896aa519bc03964e2a8746291
-    last_checked: 2026-08-24
-    local_impact:
-      - Software-Architecture-und-System-Design/Architekturziele-Drivers-und-Constraints.md
-      - Software-Architecture-und-System-Design/Runtime-Flows-State-und-Koordination.md
-      - Software-Architecture-und-System-Design/Qualitaetsattribute-Szenarien-und-Trade-offs.md
-      - Software-Architecture-und-System-Design/Skills/system-design/SKILL.md
-      - Software-Architecture-und-System-Design/Skills/architecture-review/SKILL.md
-
-  - id: lx-wnk-architecture-design-skill
-    area: Software-Architecture-und-System-Design
-    kind: github-file
-    repository: lx-wnk/skills
-    path: skills/architecture-design/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: 05ad3d2cb5e19bb9b5218ecb33b5eebe97985cc0
-    last_checked: 2026-08-24
-    local_impact:
-      - Software-Architecture-und-System-Design/Dekomposition-Module-Services-und-Abhaengigkeiten.md
-      - Software-Architecture-und-System-Design/Skills/architecture-decomposition/SKILL.md
-      - Software-Architecture-und-System-Design/Skills/system-design/SKILL.md
-
-  - id: lx-wnk-architecture-review-skill
-    area: Software-Architecture-und-System-Design
-    kind: github-file
-    repository: lx-wnk/skills
-    path: skills/architecture-review/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: 6be36cfa38b20ba27673419ff7043cf87cffdbc9
-    last_checked: 2026-08-24
-    local_impact:
-      - Software-Architecture-und-System-Design/Conformance-Fitness-Functions-und-Drift.md
-      - Software-Architecture-und-System-Design/Skills/architecture-conformance-review/SKILL.md
-      - Software-Architecture-und-System-Design/Skills/architecture-review/SKILL.md
-
-  # ---------------------------------------------------------------------------
-  # Requirements und Spezifikations-Engineering
-  # ---------------------------------------------------------------------------
-  - id: ireb-cpre-foundation
-    area: Requirements-und-Spezifikations-Engineering
-    kind: web-page
-    url: https://cpre.ireb.org/en/concept/foundationlevel
-    monitor_mode: semantic-review
-    cadence: monthly
-    last_checked: 2026-08-25
-    local_impact:
-      - Requirements-und-Spezifikations-Engineering/README.md
-      - Requirements-und-Spezifikations-Engineering/Anforderungsqualitaet-und-Sprachregeln.md
-      - Requirements-und-Spezifikations-Engineering/Validation-Verifikation-und-Readiness.md
-      - Requirements-und-Spezifikations-Engineering/Skills/requirements-specification/SKILL.md
-      - Requirements-und-Spezifikations-Engineering/Skills/requirements-validation/SKILL.md
-
-  - id: ireb-requirements-elicitation
-    area: Requirements-und-Spezifikations-Engineering
-    kind: web-page
-    url: https://cpre.ireb.org/en/concept/requirements-elicitation
-    monitor_mode: semantic-review
-    cadence: monthly
-    last_checked: 2026-08-25
-    local_impact:
-      - Requirements-und-Spezifikations-Engineering/Stakeholder-Bedarf-Ziele-und-Quellen.md
-      - Requirements-und-Spezifikations-Engineering/Elicitation-und-Konfliktklaerung.md
-      - Requirements-und-Spezifikations-Engineering/Skills/requirements-elicitation/SKILL.md
-
-  - id: iso-29148-edition3-draft
-    area: Requirements-und-Spezifikations-Engineering
-    kind: web-page
-    url: https://www.iso.org/standard/94091.html
-    monitor_mode: semantic-review
-    cadence: monthly
-    last_checked: 2026-08-25
-    local_impact:
-      - Requirements-und-Spezifikations-Engineering/Anforderungsqualitaet-und-Sprachregeln.md
-      - Requirements-und-Spezifikations-Engineering/Traceability-Provenance-und-Coverage.md
-      - Requirements-und-Spezifikations-Engineering/Requirements-Change-Baselines-und-Lifecycle.md
-      - Requirements-und-Spezifikations-Engineering/Quellen-und-Inspirationen.md
-
-  - id: nasa-system-design-requirements
-    area: Requirements-und-Spezifikations-Engineering
-    kind: web-page
-    url: https://www.nasa.gov/reference/4-0-system-design-processes/
-    monitor_mode: semantic-review
-    cadence: monthly
-    last_checked: 2026-08-25
-    local_impact:
-      - Requirements-und-Spezifikations-Engineering/Stakeholder-Bedarf-Ziele-und-Quellen.md
-      - Requirements-und-Spezifikations-Engineering/Qualitaetsanforderungen-und-messbare-Ziele.md
-      - Requirements-und-Spezifikations-Engineering/Validation-Verifikation-und-Readiness.md
-      - Requirements-und-Spezifikations-Engineering/Skills/requirements-validation/SKILL.md
-
-  - id: nasa-se-handbook-appendix-requirements
-    area: Requirements-und-Spezifikations-Engineering
-    kind: web-page
-    url: https://www.nasa.gov/reference/system-engineering-handbook-appendix/
-    monitor_mode: semantic-review
-    cadence: monthly
-    last_checked: 2026-08-25
-    local_impact:
-      - Requirements-und-Spezifikations-Engineering/Anforderungsqualitaet-und-Sprachregeln.md
-      - Requirements-und-Spezifikations-Engineering/Akzeptanzkriterien-und-Verifikationsabsicht.md
-      - Requirements-und-Spezifikations-Engineering/Skills/acceptance-criteria-design/SKILL.md
-
-  - id: modular-earth-requirements-skill
-    area: Requirements-und-Spezifikations-Engineering
-    kind: github-file
-    repository: Modular-Earth-LLC/solutions-architecture-agent
-    path: skills/requirements/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: 06ab931a6898d5f9f455d0b2d00ee7fabad9f15c
-    last_checked: 2026-08-25
-    local_impact:
-      - Requirements-und-Spezifikations-Engineering/Elicitation-und-Konfliktklaerung.md
-      - Requirements-und-Spezifikations-Engineering/Scope-Annahmen-und-Constraints.md
-      - Requirements-und-Spezifikations-Engineering/Skills/requirements-elicitation/SKILL.md
-      - Requirements-und-Spezifikations-Engineering/Skills/requirements-specification/SKILL.md
-
-  - id: microsoft-hve-requirements-author
-    area: Requirements-und-Spezifikations-Engineering
-    kind: github-file
-    repository: microsoft/hve-core
-    path: .github/skills/project-planning/requirements-author/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: ebeca3bfba19ee3cba90648df16cb4fddac5c319
-    last_checked: 2026-08-25
-    local_impact:
-      - Requirements-und-Spezifikations-Engineering/Traceability-Provenance-und-Coverage.md
-      - Requirements-und-Spezifikations-Engineering/Requirements-Change-Baselines-und-Lifecycle.md
-      - Requirements-und-Spezifikations-Engineering/Skills/requirements-traceability/SKILL.md
-      - Requirements-und-Spezifikations-Engineering/Skills/requirements-change-analysis/SKILL.md
-      - Requirements-und-Spezifikations-Engineering/Skills/requirements-review/SKILL.md
-
-  - id: spacey-requirements-analysis
-    area: Requirements-und-Spezifikations-Engineering
-    kind: github-file
-    repository: Spacey6849/AgentSkills
-    path: .claude/skills/requirements-analysis/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: 4a9193522eb25f9029e09dbab5579224420dc0bb
-    last_checked: 2026-08-25
-    local_impact:
-      - Requirements-und-Spezifikations-Engineering/Anforderungsqualitaet-und-Sprachregeln.md
-      - Requirements-und-Spezifikations-Engineering/Akzeptanzkriterien-und-Verifikationsabsicht.md
-      - Requirements-und-Spezifikations-Engineering/Skills/requirements-specification/SKILL.md
-      - Requirements-und-Spezifikations-Engineering/Skills/acceptance-criteria-design/SKILL.md
-      - Requirements-und-Spezifikations-Engineering/Skills/requirements-review/SKILL.md
-
-  # ---------------------------------------------------------------------------
-  # Social Media und Content-Praesenz
-  # ---------------------------------------------------------------------------
-  - id: linkedin-build-your-voice
-    area: Social-Media-und-Content-Praesenz
-    kind: web-page
-    url: https://www.linkedin.com/help/linkedin/answer/a7134086
-    monitor_mode: semantic-review
-    cadence: monthly
-    last_checked: 2026-08-25
-    local_impact:
-      - Social-Media-und-Content-Praesenz/Ziele-Audience-Positionierung-und-Praesenz.md
-      - Social-Media-und-Content-Praesenz/Social-Content-Hooks-Struktur-und-CTA.md
-      - Social-Media-und-Content-Praesenz/Skills/social-content-design/SKILL.md
-
-  - id: linkedin-post-analytics
-    area: Social-Media-und-Content-Praesenz
-    kind: web-page
-    url: https://www.linkedin.com/help/linkedin/answer/a516972
-    monitor_mode: semantic-review
-    cadence: monthly
-    last_checked: 2026-08-25
-    local_impact:
-      - Social-Media-und-Content-Praesenz/Performance-Metriken-Lernschleifen-und-Experimente.md
-      - Social-Media-und-Content-Praesenz/Skills/content-performance-analysis/SKILL.md
-      - Social-Media-und-Content-Praesenz/Skills/content-presence-review/SKILL.md
-
-  - id: meta-rewarding-original-creators
-    area: Social-Media-und-Content-Praesenz
-    kind: web-page
-    url: https://about.fb.com/news/2026/03/rewarding-original-creators-on-facebook/
-    monitor_mode: semantic-review
-    cadence: monthly
-    last_checked: 2026-08-25
-    local_impact:
-      - Social-Media-und-Content-Praesenz/Repurposing-Originalitaet-und-Provenance.md
-      - Social-Media-und-Content-Praesenz/Plattformrollen-und-native-Adaption.md
-      - Social-Media-und-Content-Praesenz/Skills/content-repurposing/SKILL.md
-      - Social-Media-und-Content-Praesenz/Skills/platform-content-adaptation/SKILL.md
-
-  - id: youtube-posts-tips
-    area: Social-Media-und-Content-Praesenz
-    kind: web-page
-    url: https://support.google.com/youtube/answer/11912631
-    monitor_mode: semantic-review
-    cadence: monthly
-    last_checked: 2026-08-25
-    local_impact:
-      - Social-Media-und-Content-Praesenz/Plattformrollen-und-native-Adaption.md
-      - Social-Media-und-Content-Praesenz/Skills/platform-content-adaptation/SKILL.md
-      - Social-Media-und-Content-Praesenz/Skills/social-content-strategy/SKILL.md
-
-  - id: ftc-endorsements-influencers-reviews
-    area: Social-Media-und-Content-Praesenz
-    kind: web-page
-    url: https://www.ftc.gov/business-guidance/advertising-marketing/endorsements-influencers-reviews
-    monitor_mode: semantic-review
-    cadence: monthly
-    last_checked: 2026-08-25
-    local_impact:
-      - Social-Media-und-Content-Praesenz/Claims-Disclosure-Rechte-und-Content-Risiken.md
-      - Social-Media-und-Content-Praesenz/Skills/social-content-design/SKILL.md
-      - Social-Media-und-Content-Praesenz/Skills/content-presence-review/SKILL.md
-
-  - id: blacktwist-content-strategy-skill
-    area: Social-Media-und-Content-Praesenz
-    kind: github-file
-    repository: blacktwist/social-media-skills
-    path: skills/content-strategy-sms/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: b4eefa218107e9c8402bf8318abd1cce38f383f1
-    last_checked: 2026-08-25
-    local_impact:
-      - Social-Media-und-Content-Praesenz/Ziele-Audience-Positionierung-und-Praesenz.md
-      - Social-Media-und-Content-Praesenz/Content-Saeulen-Themen-und-Formate.md
-      - Social-Media-und-Content-Praesenz/Editorialsystem-Kadenz-und-Ressourcen.md
-      - Social-Media-und-Content-Praesenz/Skills/social-content-strategy/SKILL.md
-      - Social-Media-und-Content-Praesenz/Skills/editorial-planning/SKILL.md
-
-  - id: blacktwist-content-repurposer-skill
-    area: Social-Media-und-Content-Praesenz
-    kind: github-file
-    repository: blacktwist/social-media-skills
-    path: skills/content-repurposer-sms/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: 03e0d2398cb513ee19dd80f19d24dfe58ed701a3
-    last_checked: 2026-08-25
-    local_impact:
-      - Social-Media-und-Content-Praesenz/Repurposing-Originalitaet-und-Provenance.md
-      - Social-Media-und-Content-Praesenz/Skills/content-repurposing/SKILL.md
-      - Social-Media-und-Content-Praesenz/Skills/platform-content-adaptation/SKILL.md
-
-  - id: social-media-skills-analytics-reporting
-    area: Social-Media-und-Content-Praesenz
-    kind: github-file
-    repository: social-media-skills/skills
-    path: skills/analytics-and-reporting/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: bf851b46b375f6c9952f54245f5fa49ff7da0371
-    last_checked: 2026-08-25
-    local_impact:
-      - Social-Media-und-Content-Praesenz/Performance-Metriken-Lernschleifen-und-Experimente.md
-      - Social-Media-und-Content-Praesenz/Skills/content-performance-analysis/SKILL.md
-      - Social-Media-und-Content-Praesenz/Skills/content-presence-review/SKILL.md
-
-  - id: inklate-social-audit
-    area: Social-Media-und-Content-Praesenz
-    kind: github-file
-    repository: inklate/social-skills
-    path: skills/social-audit/SKILL.md
-    ref: main
-    monitor_mode: exact-sha
-    cadence: monthly
-    observed_sha: de89934532c0203052f12158df32032469afab77
-    last_checked: 2026-08-25
-    local_impact:
-      - Social-Media-und-Content-Praesenz/Content-Audit-Readiness-und-Drift.md
-      - Social-Media-und-Content-Praesenz/Skills/content-presence-baseline/SKILL.md
-      - Social-Media-und-Content-Praesenz/Skills/content-presence-review/SKILL.md
-
+- id: microsoft-hax-guidelines
+  area: Grundlagen
+  kind: web-page
+  url: https://www.microsoft.com/en-us/haxtoolkit/ai-guidelines/
+  monitor_mode: semantic-review
+  cadence: quarterly
+  last_checked: 2026-08-23
+  local_impact:
+  - Grundlagen/Mensch-KI-Interaktion.md
+  - Grundlagen/Vertrauen-und-Denkautonomie.md
+  - Grundlagen/Zusammenarbeit-mit-KI.md
+- id: anthropic-effective-context-engineering
+  area: Agentenarbeit
+  kind: web-page
+  url: https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents
+  monitor_mode: semantic-review
+  cadence: monthly
+  last_checked: 2026-08-23
+  local_impact:
+  - Agentenarbeit/Context-Engineering.md
+  - Agentenarbeit/Context-Budget-und-Token-Effizienz.md
+  - Agentenarbeit/Context-Rot-und-Signalqualitaet.md
+  - Agentenarbeit/Context-Compaction.md
+  - Agentenarbeit/Skills/context-engineering/SKILL.md
+  - Agentenarbeit/Skills/context-compaction/SKILL.md
+- id: anthropic-long-running-agent-harnesses
+  area: Agentenarbeit
+  kind: web-page
+  url: https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents
+  monitor_mode: semantic-review
+  cadence: quarterly
+  last_checked: 2026-08-23
+  local_impact:
+  - Agentenarbeit/Long-Horizon-Handoffs.md
+  - Agentenarbeit/Working-Memory-und-Persistenzgrenzen.md
+  - Agentenarbeit/Skills/session-handoff/SKILL.md
+  - Workflows/Long-Horizon-Agentenarbeit.md
+- id: openai-gpt56-context-efficiency
+  area: Agentenarbeit
+  kind: web-page
+  url: https://openai.com/index/gpt-5-6-frontier-intelligence-efficiency/
+  monitor_mode: semantic-review
+  cadence: monthly
+  last_checked: 2026-08-23
+  local_impact:
+  - Agentenarbeit/Context-Budget-und-Token-Effizienz.md
+  - Agentenarbeit/Tool-Outputs-und-Context-Offloading.md
+  - Agentenarbeit/Prompt-Caching-und-stabile-Kontexte.md
+  - Agentenarbeit/Skills/context-audit/SKILL.md
+- id: openai-responses-context-compaction
+  area: Agentenarbeit
+  kind: web-page
+  url: https://openai.com/index/equip-responses-api-computer-environment/
+  monitor_mode: semantic-review
+  cadence: monthly
+  last_checked: 2026-08-23
+  local_impact:
+  - Agentenarbeit/Context-Compaction.md
+  - Agentenarbeit/Skills/context-compaction/SKILL.md
+- id: langchain-memory-concepts
+  area: Agentenarbeit
+  kind: web-page
+  url: https://docs.langchain.com/oss/python/concepts/memory
+  monitor_mode: semantic-review
+  cadence: monthly
+  last_checked: 2026-08-23
+  local_impact:
+  - Agentenarbeit/Working-Memory-und-Persistenzgrenzen.md
+  - Agentenarbeit/Context-Engineering.md
+  - Agentenarbeit/Skills/context-engineering/SKILL.md
+- id: opentelemetry-genai-usage-conventions
+  area: Agentenarbeit
+  kind: web-page
+  url: https://opentelemetry.io/docs/specs/semconv/registry/attributes/gen-ai/
+  monitor_mode: semantic-review
+  cadence: monthly
+  last_checked: 2026-08-23
+  local_impact:
+  - Agentenarbeit/Context-Budget-und-Token-Effizienz.md
+  - Agentenarbeit/Observability-und-Traceability.md
+  - Agentenarbeit/Trace-Datenmodell.md
+- id: context-doctor-skill
+  area: Agentenarbeit
+  kind: github-file
+  repository: jzOcb/context-doctor
+  path: SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: a0bf345b213cafb5f6571305d9503c21fb920242
+  last_checked: 2026-08-23
+  local_impact:
+  - Agentenarbeit/Context-Budget-und-Token-Effizienz.md
+  - Agentenarbeit/Skills/context-audit/SKILL.md
+- id: openclaw-handoff-skill
+  area: Agentenarbeit
+  kind: github-file
+  repository: openclaw/agent-skills
+  path: skills/handoff/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: 50054b4079bcc25492e27cae7b72ea748a853cc9
+  last_checked: 2026-08-23
+  local_impact:
+  - Agentenarbeit/Long-Horizon-Handoffs.md
+  - Agentenarbeit/Skills/session-handoff/SKILL.md
+- id: kcs-practices-guide
+  area: Wissensmanagement
+  kind: web-page
+  url: https://library.serviceinnovation.org/KCS/KCS_v6/KCS_v6_Practices_Guide
+  monitor_mode: semantic-review
+  cadence: quarterly
+  last_checked: 2026-08-23
+  local_impact:
+  - Wissensmanagement/Capture-Ingest-und-Triage.md
+  - Wissensmanagement/Aktualitaet-Staleness-und-Lifecycle.md
+  - Wissensmanagement/Qualitaet-Dubletten-Orphans-und-Drift.md
+  - Wissensmanagement/Skills/knowledge-ingest/SKILL.md
+  - Wissensmanagement/Skills/knowledge-maintenance/SKILL.md
+- id: obsidian-wiki-skills
+  area: Wissensmanagement
+  kind: github-file
+  repository: Ar9av/obsidian-wiki
+  path: docs/skills.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: 05fad2e6bb27ee263a019c786b3120ff78c6996b
+  last_checked: 2026-08-23
+  local_impact:
+  - Wissensmanagement/README.md
+  - Wissensmanagement/Retrieval-Findability-und-Wissensabfrage.md
+  - Wissensmanagement/Qualitaet-Dubletten-Orphans-und-Drift.md
+  - Workflows/Wissensbasis-Aufbauen-und-Pflegen.md
+- id: obsidian-second-brain-skill
+  area: Wissensmanagement
+  kind: github-file
+  repository: eugeniughelbur/obsidian-second-brain
+  path: SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: 37556b336e8314672b39af8f97bda18516634ddf
+  last_checked: 2026-08-23
+  local_impact:
+  - Wissensmanagement/Capture-Ingest-und-Triage.md
+  - Wissensmanagement/Provenance-Evidence-und-Source-of-Truth.md
+  - Wissensmanagement/Aktualitaet-Staleness-und-Lifecycle.md
+  - Wissensmanagement/Skills/knowledge-ingest/SKILL.md
+- id: insight-wave-knowledge-distill
+  area: Wissensmanagement
+  kind: github-file
+  repository: cogni-work/insight-wave
+  path: cogni-knowledge/skills/knowledge-distill/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: 2770f88b4e00f4be98a6a4afcaf66f49b9776b63
+  last_checked: 2026-08-23
+  local_impact:
+  - Wissensmanagement/Wissenseinheiten-und-Granularitaet.md
+  - Wissensmanagement/Provenance-Evidence-und-Source-of-Truth.md
+  - Wissensmanagement/Skills/knowledge-distill/SKILL.md
+- id: openai-knowledge-retrieval
+  area: Wissensmanagement
+  kind: web-page
+  url: https://openai.com/solutions/blueprints/knowledge-retrieval/
+  monitor_mode: semantic-review
+  cadence: monthly
+  last_checked: 2026-08-23
+  local_impact:
+  - Wissensmanagement/Retrieval-Findability-und-Wissensabfrage.md
+  - Wissensmanagement/Skills/knowledge-query/SKILL.md
+- id: openapi-specification
+  area: Schnittstellen-und-Vertraege
+  kind: web-page
+  url: https://spec.openapis.org/oas/
+  monitor_mode: semantic-review
+  cadence: quarterly
+  last_checked: 2026-08-24
+  local_impact:
+  - Schnittstellen-und-Vertraege/HTTP-API-Design.md
+  - Schnittstellen-und-Vertraege/Webhooks-und-Callbacks.md
+  - Schnittstellen-und-Vertraege/Contract-First-und-Machine-Readable-Artefakte.md
+  - Schnittstellen-und-Vertraege/Skills/http-api-design/SKILL.md
+- id: google-api-compatibility-versioning
+  area: Schnittstellen-und-Vertraege
+  kind: web-page
+  url: https://google.aip.dev/general
+  monitor_mode: semantic-review
+  cadence: monthly
+  last_checked: 2026-08-24
+  local_impact:
+  - Schnittstellen-und-Vertraege/Compatibility-Versioning-und-Deprecation.md
+  - Schnittstellen-und-Vertraege/Schemas-Semantik-und-Fehlervertraege.md
+  - Schnittstellen-und-Vertraege/Skills/contract-change-review/SKILL.md
+  - Schnittstellen-und-Vertraege/Skills/http-api-design/SKILL.md
+- id: graphql-specification
+  area: Schnittstellen-und-Vertraege
+  kind: web-page
+  url: https://spec.graphql.org/
+  monitor_mode: semantic-review
+  cadence: quarterly
+  last_checked: 2026-08-24
+  local_impact:
+  - Schnittstellen-und-Vertraege/GraphQL-Vertraege-und-Schemaevolution.md
+  - Schnittstellen-und-Vertraege/Paradigmen-und-Schnittstellenauswahl.md
+  - Schnittstellen-und-Vertraege/Skills/interface-design/SKILL.md
+  - Schnittstellen-und-Vertraege/Skills/contract-change-review/SKILL.md
+- id: protobuf-programming-guides
+  area: Schnittstellen-und-Vertraege
+  kind: web-page
+  url: https://protobuf.dev/programming-guides/
+  monitor_mode: semantic-review
+  cadence: quarterly
+  last_checked: 2026-08-24
+  local_impact:
+  - Schnittstellen-und-Vertraege/RPC-IDL-und-Protobuf-Vertraege.md
+  - Schnittstellen-und-Vertraege/Compatibility-Versioning-und-Deprecation.md
+  - Schnittstellen-und-Vertraege/Skills/contract-change-review/SKILL.md
+- id: asyncapi-reference
+  area: Schnittstellen-und-Vertraege
+  kind: web-page
+  url: https://www.asyncapi.com/docs/reference
+  monitor_mode: semantic-review
+  cadence: quarterly
+  last_checked: 2026-08-24
+  local_impact:
+  - Schnittstellen-und-Vertraege/Event-und-Async-Vertraege.md
+  - Schnittstellen-und-Vertraege/Contract-First-und-Machine-Readable-Artefakte.md
+  - Schnittstellen-und-Vertraege/Skills/event-contract-design/SKILL.md
+- id: hazamashoken-api-design-principles
+  area: Schnittstellen-und-Vertraege
+  kind: github-file
+  repository: hazamashoken/api-design-ai-skills
+  path: skills/api-design-principles/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: 61853683589dbb8c256f3c8ad55d6bbe33e3409f
+  last_checked: 2026-08-24
+  local_impact:
+  - Schnittstellen-und-Vertraege/Consumer-Provider-und-Vertragsmodell.md
+  - Schnittstellen-und-Vertraege/Paradigmen-und-Schnittstellenauswahl.md
+  - Schnittstellen-und-Vertraege/Skills/interface-design/SKILL.md
+  - Schnittstellen-und-Vertraege/Skills/http-api-design/SKILL.md
+- id: jacob-balslev-api-design
+  area: Schnittstellen-und-Vertraege
+  kind: github-file
+  repository: jacob-balslev/skills
+  path: skills/backend-engineering/api-design/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: 8692c89695c66e356a8e55db2a17ce87e1d79279
+  last_checked: 2026-08-24
+  local_impact:
+  - Schnittstellen-und-Vertraege/HTTP-API-Design.md
+  - Schnittstellen-und-Vertraege/Compatibility-Versioning-und-Deprecation.md
+  - Schnittstellen-und-Vertraege/Skills/http-api-design/SKILL.md
+  - Schnittstellen-und-Vertraege/Skills/interface-review/SKILL.md
+- id: jacob-balslev-event-contract-design
+  area: Schnittstellen-und-Vertraege
+  kind: github-file
+  repository: jacob-balslev/skills
+  path: skills/software-architecture/event-contract-design/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: 7edd830e036e2fa70df674ea17d307bd8239c407
+  last_checked: 2026-08-24
+  local_impact:
+  - Schnittstellen-und-Vertraege/Event-und-Async-Vertraege.md
+  - Schnittstellen-und-Vertraege/Skills/event-contract-design/SKILL.md
+- id: terraform-plan-state-docs
+  area: Infrastruktur-und-DevOps
+  kind: web-page
+  url: https://developer.hashicorp.com/terraform/cli/commands/plan
+  monitor_mode: semantic-review
+  cadence: monthly
+  last_checked: 2026-08-24
+  local_impact:
+  - Infrastruktur-und-DevOps/Desired-State-und-Infrastructure-as-Code.md
+  - Infrastruktur-und-DevOps/State-Ownership-Drift-und-Reconciliation.md
+  - Infrastruktur-und-DevOps/Change-Preview-Plan-Apply-und-Gates.md
+  - Infrastruktur-und-DevOps/Skills/infrastructure-as-code/SKILL.md
+  - Infrastruktur-und-DevOps/Skills/infrastructure-change-review/SKILL.md
+- id: opentofu-plan-docs
+  area: Infrastruktur-und-DevOps
+  kind: web-page
+  url: https://opentofu.org/docs/cli/commands/plan/
+  monitor_mode: semantic-review
+  cadence: quarterly
+  last_checked: 2026-08-24
+  local_impact:
+  - Infrastruktur-und-DevOps/Desired-State-und-Infrastructure-as-Code.md
+  - Infrastruktur-und-DevOps/Change-Preview-Plan-Apply-und-Gates.md
+  - Infrastruktur-und-DevOps/State-Ownership-Drift-und-Reconciliation.md
+  - Infrastruktur-und-DevOps/Skills/infrastructure-change-review/SKILL.md
+- id: kubernetes-controller-deployment-docs
+  area: Infrastruktur-und-DevOps
+  kind: web-page
+  url: https://kubernetes.io/docs/concepts/architecture/controller/
+  monitor_mode: semantic-review
+  cadence: quarterly
+  last_checked: 2026-08-24
+  local_impact:
+  - Infrastruktur-und-DevOps/GitOps-und-Continuous-Reconciliation.md
+  - Infrastruktur-und-DevOps/Kubernetes-Workloads-und-Rollouts.md
+  - Infrastruktur-und-DevOps/Skills/gitops-design/SKILL.md
+  - Infrastruktur-und-DevOps/Skills/deployment-strategy/SKILL.md
+- id: opengitops-principles
+  area: Infrastruktur-und-DevOps
+  kind: web-page
+  url: https://opengitops.dev/
+  monitor_mode: semantic-review
+  cadence: quarterly
+  last_checked: 2026-08-24
+  local_impact:
+  - Infrastruktur-und-DevOps/GitOps-und-Continuous-Reconciliation.md
+  - Infrastruktur-und-DevOps/Skills/gitops-design/SKILL.md
+  - Workflows/Build-Deploy-und-Promotion.md
+- id: argo-rollouts-docs
+  area: Infrastruktur-und-DevOps
+  kind: web-page
+  url: https://argoproj.github.io/rollouts/
+  monitor_mode: semantic-review
+  cadence: quarterly
+  last_checked: 2026-08-24
+  local_impact:
+  - Infrastruktur-und-DevOps/Deployment-Strategien-Promotion-und-Rollback.md
+  - Infrastruktur-und-DevOps/Kubernetes-Workloads-und-Rollouts.md
+  - Infrastruktur-und-DevOps/Skills/deployment-strategy/SKILL.md
+- id: open-policy-agent-docs
+  area: Infrastruktur-und-DevOps
+  kind: web-page
+  url: https://www.openpolicyagent.org/docs
+  monitor_mode: semantic-review
+  cadence: quarterly
+  last_checked: 2026-08-24
+  local_impact:
+  - Infrastruktur-und-DevOps/Policy-as-Code-und-Guardrails.md
+  - Infrastruktur-und-DevOps/Skills/ci-pipeline-design/SKILL.md
+  - Infrastruktur-und-DevOps/Skills/infrastructure-review/SKILL.md
+- id: slsa-provenance
+  area: Infrastruktur-und-DevOps
+  kind: web-page
+  url: https://slsa.dev/spec/v1.2/provenance
+  monitor_mode: semantic-review
+  cadence: quarterly
+  last_checked: 2026-08-24
+  local_impact:
+  - Infrastruktur-und-DevOps/Build-Artefakte-Provenance-und-Reproduzierbarkeit.md
+  - Infrastruktur-und-DevOps/Skills/container-build/SKILL.md
+  - Workflows/Build-Deploy-und-Promotion.md
+- id: docker-multi-stage-builds
+  area: Infrastruktur-und-DevOps
+  kind: web-page
+  url: https://docs.docker.com/build/building/multi-stage/
+  monitor_mode: semantic-review
+  cadence: quarterly
+  last_checked: 2026-08-24
+  local_impact:
+  - Infrastruktur-und-DevOps/Container-Build-und-Runtime-Vertrag.md
+  - Infrastruktur-und-DevOps/Skills/container-build/SKILL.md
+- id: hashicorp-terraform-style-guide-skill
+  area: Infrastruktur-und-DevOps
+  kind: github-file
+  repository: hashicorp/agent-skills
+  path: plugins/terraform/skills/terraform-style-guide/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: 77610a87f56ba79e6003dcec8d82fd36fc5c6d51
+  last_checked: 2026-08-24
+  local_impact:
+  - Infrastruktur-und-DevOps/Desired-State-und-Infrastructure-as-Code.md
+  - Infrastruktur-und-DevOps/Secrets-Permissions-und-Execution-Boundaries.md
+  - Infrastruktur-und-DevOps/Skills/infrastructure-as-code/SKILL.md
+- id: flux-gitops-repo-audit-skill
+  area: Infrastruktur-und-DevOps
+  kind: github-file
+  repository: fluxcd/agent-skills
+  path: skills/gitops-repo-audit/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: 255b7166e1c684351e5184458b1fef178ec4ab67
+  last_checked: 2026-08-24
+  local_impact:
+  - Infrastruktur-und-DevOps/GitOps-und-Continuous-Reconciliation.md
+  - Infrastruktur-und-DevOps/Kubernetes-Workloads-und-Rollouts.md
+  - Infrastruktur-und-DevOps/Skills/gitops-design/SKILL.md
+  - Infrastruktur-und-DevOps/Skills/infrastructure-review/SKILL.md
+- id: arjun-infrastructure-as-code-skill
+  area: Infrastruktur-und-DevOps
+  kind: github-file
+  repository: arjunprabhulal/agent-skills
+  path: skills/devops/infrastructure-as-code/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: 625fdcdab226ea729623cf4cb5ed0621487269a3
+  last_checked: 2026-08-24
+  local_impact:
+  - Infrastruktur-und-DevOps/Desired-State-und-Infrastructure-as-Code.md
+  - Infrastruktur-und-DevOps/State-Ownership-Drift-und-Reconciliation.md
+  - Infrastruktur-und-DevOps/Change-Preview-Plan-Apply-und-Gates.md
+  - Infrastruktur-und-DevOps/Skills/infrastructure-as-code/SKILL.md
+  - Infrastruktur-und-DevOps/Skills/infrastructure-change-review/SKILL.md
+- id: arjun-ci-pipelines-skill
+  area: Infrastruktur-und-DevOps
+  kind: github-file
+  repository: arjunprabhulal/agent-skills
+  path: skills/devops/ci-pipelines/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: 3d84f58687c6619298b91d35d5086e1626262fe8
+  last_checked: 2026-08-24
+  local_impact:
+  - Infrastruktur-und-DevOps/CI-Pipelines-und-Automation.md
+  - Infrastruktur-und-DevOps/Skills/ci-pipeline-design/SKILL.md
+- id: arjun-containerization-skill
+  area: Infrastruktur-und-DevOps
+  kind: github-file
+  repository: arjunprabhulal/agent-skills
+  path: skills/devops/containerization/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: 839e3b4dcd012eab7617bc22285ad884232e6f25
+  last_checked: 2026-08-24
+  local_impact:
+  - Infrastruktur-und-DevOps/Container-Build-und-Runtime-Vertrag.md
+  - Infrastruktur-und-DevOps/Skills/container-build/SKILL.md
+- id: arjun-deployment-strategies-skill
+  area: Infrastruktur-und-DevOps
+  kind: github-file
+  repository: arjunprabhulal/agent-skills
+  path: skills/devops/deployment-strategies/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: 10a689c8c1455b3c19952b9537c52a183c872503
+  last_checked: 2026-08-24
+  local_impact:
+  - Infrastruktur-und-DevOps/Deployment-Strategien-Promotion-und-Rollback.md
+  - Infrastruktur-und-DevOps/Skills/deployment-strategy/SKILL.md
+  - Workflows/Build-Deploy-und-Promotion.md
+- id: opentelemetry-signals
+  area: Reliability-und-System-Observability
+  kind: web-page
+  url: https://opentelemetry.io/docs/concepts/signals/
+  monitor_mode: semantic-review
+  cadence: monthly
+  last_checked: 2026-08-24
+  local_impact:
+  - Reliability-und-System-Observability/System-Observability-und-Telemetrie.md
+  - Reliability-und-System-Observability/Skills/system-observability-design/SKILL.md
+- id: opentelemetry-semantic-conventions
+  area: Reliability-und-System-Observability
+  kind: web-page
+  url: https://opentelemetry.io/docs/specs/semconv/
+  monitor_mode: semantic-review
+  cadence: monthly
+  last_checked: 2026-08-24
+  local_impact:
+  - Reliability-und-System-Observability/System-Observability-und-Telemetrie.md
+  - Reliability-und-System-Observability/Skills/system-observability-design/SKILL.md
+- id: arjun-slo-definition-skill
+  area: Reliability-und-System-Observability
+  kind: github-file
+  repository: arjunprabhulal/agent-skills
+  path: skills/sre/slo-definition/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: 7bd532345ac98d2d8b38302e613ff351fddabaa9
+  last_checked: 2026-08-24
+  local_impact:
+  - Reliability-und-System-Observability/Reliability-Ziele-SLIs-SLOs-und-Error-Budgets.md
+  - Reliability-und-System-Observability/Skills/slo-design/SKILL.md
+- id: arjun-capacity-planning-skill
+  area: Reliability-und-System-Observability
+  kind: github-file
+  repository: arjunprabhulal/agent-skills
+  path: skills/sre/capacity-planning/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: a10e829e30486b8f662a4abd7c1b9b9f3f8a18e3
+  last_checked: 2026-08-24
+  local_impact:
+  - Reliability-und-System-Observability/Capacity-Saturation-und-Dependency-Health.md
+  - Reliability-und-System-Observability/Skills/capacity-planning/SKILL.md
+- id: addyosmani-observability-instrumentation-skill
+  area: Reliability-und-System-Observability
+  kind: github-file
+  repository: addyosmani/agent-skills
+  path: skills/observability-and-instrumentation/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: 7d56593ec599cce0bae12aa46862884d0208cc59
+  last_checked: 2026-08-24
+  local_impact:
+  - Reliability-und-System-Observability/System-Observability-und-Telemetrie.md
+  - Reliability-und-System-Observability/Alerting-und-Actionability.md
+  - Reliability-und-System-Observability/Skills/system-observability-design/SKILL.md
+  - Reliability-und-System-Observability/Skills/alert-design/SKILL.md
+- id: wikipedia-signs-ai-writing
+  area: Schreiben
+  kind: web-page
+  url: https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing
+  monitor_mode: semantic-review
+  cadence: quarterly
+  last_checked: 2026-08-23
+  local_impact:
+  - Schreiben/Stilreview.md
+  - Schreiben/Skills/stilreview/SKILL.md
+  - Schreiben/Skills/natuerliches-schreiben/SKILL.md
+- id: mattpocock-tdd
+  area: Programmieren
+  kind: github-file
+  repository: mattpocock/skills
+  path: skills/engineering/tdd/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: 8fc086710806190ee7c4baa32089cb877a75736a
+  last_checked: 2026-08-23
+  local_impact:
+  - Programmieren/Skills/tdd/SKILL.md
+  - Programmieren/Entwicklungsprozess.md
+- id: mattpocock-diagnosing-bugs
+  area: Programmieren
+  kind: github-file
+  repository: mattpocock/skills
+  path: skills/engineering/diagnosing-bugs/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: 061c25a524acaa93d4534e9e08a793c0a5fe45fd
+  last_checked: 2026-08-23
+  local_impact:
+  - Programmieren/Skills/diagnose/SKILL.md
+  - Programmieren/Entwicklungsprozess.md
+- id: mattpocock-code-review
+  area: Programmieren
+  kind: github-file
+  repository: mattpocock/skills
+  path: skills/engineering/code-review/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: e28d7acbf7b3bb4d7817b7eb5d9c105af03f6ec4
+  last_checked: 2026-08-23
+  local_impact:
+  - Programmieren/Skills/code-review/SKILL.md
+  - Programmieren/Agent-Anweisungen.md
+- id: mattpocock-domain-modeling
+  area: Programmieren
+  kind: github-file
+  repository: mattpocock/skills
+  path: skills/engineering/domain-modeling/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: 9b97707e19ef1f590aada356f2b3f6bb881f91be
+  last_checked: 2026-08-23
+  local_impact:
+  - Programmieren/Skills/domain-modeling/SKILL.md
+  - Programmieren/Entwicklungsprozess.md
+- id: adobe-firefly-style-reference
+  area: Bildarbeit
+  kind: web-page
+  url: https://developer.adobe.com/firefly-services/docs/firefly-api/guides/concepts/style-image-reference/
+  monitor_mode: semantic-review
+  cadence: monthly
+  last_checked: 2026-08-23
+  local_impact:
+  - Bildarbeit/Stil-und-Referenzsysteme.md
+  - Bildarbeit/Skills/bild-prebrief/SKILL.md
+- id: adobe-firefly-structure-reference
+  area: Bildarbeit
+  kind: web-page
+  url: https://developer.adobe.com/firefly-services/docs/firefly-api/guides/concepts/structure-image-reference/
+  monitor_mode: semantic-review
+  cadence: monthly
+  last_checked: 2026-08-23
+  local_impact:
+  - Bildarbeit/Stil-und-Referenzsysteme.md
+  - Bildarbeit/Szenenplanung-und-Komposition.md
+- id: midjourney-character-reference
+  area: Bildarbeit
+  kind: web-page
+  url: https://docs.midjourney.com/hc/en-us/articles/32162917505293-Character-Reference
+  monitor_mode: semantic-review
+  cadence: monthly
+  last_checked: 2026-08-23
+  local_impact:
+  - Bildarbeit/Charaktere-Objekte-und-Orte.md
+  - Bildarbeit/Stil-und-Referenzsysteme.md
+- id: midjourney-omni-reference
+  area: Bildarbeit
+  kind: web-page
+  url: https://docs.midjourney.com/hc/en-us/articles/36285124473997-Omni-Reference
+  monitor_mode: semantic-review
+  cadence: monthly
+  last_checked: 2026-08-23
+  local_impact:
+  - Bildarbeit/Charaktere-Objekte-und-Orte.md
+  - Bildarbeit/Stil-und-Referenzsysteme.md
+- id: midjourney-style-creator
+  area: Bildarbeit
+  kind: web-page
+  url: https://docs.midjourney.com/hc/en-us/articles/41308374558221-Style-Creator
+  monitor_mode: semantic-review
+  cadence: monthly
+  last_checked: 2026-08-23
+  local_impact:
+  - Bildarbeit/Stil-und-Referenzsysteme.md
+- id: anthropic-frontend-design
+  area: Webentwicklung
+  kind: github-file
+  repository: anthropics/skills
+  path: skills/frontend-design/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: decdff43d05908b4c1fc2cfd2d80fc5743440934
+  last_checked: 2026-08-23
+  local_impact:
+  - Webentwicklung/Webdesign/Designrichtung-und-Identitaet.md
+  - Webentwicklung/Skills/frontend-design/SKILL.md
+- id: impeccable-readme
+  area: Webentwicklung
+  kind: github-file
+  repository: pbakaus/impeccable
+  path: README.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: 3a71f5981c2872c3eaad7464daf50aa16d7974b6
+  last_checked: 2026-08-23
+  local_impact:
+  - Webentwicklung/Webdesign/Content-und-Anti-Slop.md
+  - Webentwicklung/Webdesign/Webdesign-Review.md
+  - Webentwicklung/Skills/web-design-review/SKILL.md
+  - Webentwicklung/Skills/design-system/SKILL.md
+- id: firzus-frontend-design
+  area: Webentwicklung
+  kind: github-file
+  repository: Firzus/agent-skills
+  path: skills/web/frontend-design/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: ea7afbef65d56f72c06fc5c445d6aa2d95e06ba3
+  last_checked: 2026-08-23
+  local_impact:
+  - Webentwicklung/Webdesign/Informationsarchitektur-und-Greyboxing.md
+  - Webentwicklung/Skills/design-system/SKILL.md
+  - Webentwicklung/Skills/greybox/SKILL.md
+  - Webentwicklung/Skills/web-content/SKILL.md
+- id: practicalswan-frontend-design
+  area: Webentwicklung
+  kind: github-file
+  repository: PracticalSwan/agent-skills
+  path: frontend-design/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: 5691eba965c7dfe93d774a2ffeb7eb025fa27180
+  observed_version: '2.0'
+  last_checked: 2026-08-23
+  local_impact:
+  - Webentwicklung/Webdesign/Responsive-und-Interaktion.md
+  - Webentwicklung/Frontend/Accessibility.md
+  - Webentwicklung/Frontend/Responsive-Implementierung.md
+  - Webentwicklung/Skills/accessibility-review/SKILL.md
+  - Webentwicklung/Skills/visual-verification/SKILL.md
+- id: ilm-alan-frontend-design
+  area: Webentwicklung
+  kind: github-file
+  repository: Ilm-Alan/frontend-design
+  path: SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: 4b3d8574d46d1dd86475db266f8d6da48eb07127
+  last_checked: 2026-08-23
+  local_impact:
+  - Webentwicklung/Webdesign/Content-und-Anti-Slop.md
+  - Webentwicklung/Skills/web-content/SKILL.md
+- id: jpeetz-design-to-code
+  area: Webentwicklung
+  kind: github-file
+  repository: JPeetz/agent-skills
+  path: design-to-code/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: 272c9c1dd208925b3fb500b3e01df405439757f4
+  observed_version: 1.0.0
+  last_checked: 2026-08-23
+  local_impact:
+  - Webentwicklung/Frontend/Responsive-Implementierung.md
+  - Webentwicklung/Frontend/Render-und-Browser-Verifikation.md
+  - Webentwicklung/Skills/visual-verification/SKILL.md
+- id: vercel-web-design-guidelines
+  area: Webentwicklung
+  kind: github-file
+  repository: vercel-labs/agent-skills
+  path: skills/web-design-guidelines/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: ceae92ab319216a68274168fba9b63b998b65997
+  observed_version: 1.0.0
+  last_checked: 2026-08-23
+  local_impact:
+  - Webentwicklung/Webdesign/Webdesign-Review.md
+  - Webentwicklung/Skills/web-design-review/SKILL.md
+  - Webentwicklung/Skills/accessibility-review/SKILL.md
+- id: vercel-react-best-practices
+  area: Webentwicklung
+  kind: github-file
+  repository: vercel-labs/agent-skills
+  path: skills/react-best-practices/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: 237988de4a66dd8a71d30a2c24ebe1a86b58d04e
+  observed_version: 1.0.0
+  last_checked: 2026-08-23
+  local_impact:
+  - Webentwicklung/Frontend/Performance.md
+  - Webentwicklung/Skills/frontend-performance/SKILL.md
+- id: vercel-composition-patterns
+  area: Webentwicklung
+  kind: github-file
+  repository: vercel-labs/agent-skills
+  path: skills/composition-patterns/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: d07025bf943345bc1cf15eb923594f889ff881f0
+  last_checked: 2026-08-23
+  local_impact:
+  - Webentwicklung/Frontend/Komponentenarchitektur.md
+- id: openai-deep-research-help
+  area: Recherche
+  kind: web-page
+  url: https://help.openai.com/de-de/articles/10500283-tiefgehende-recherche
+  monitor_mode: semantic-review
+  cadence: monthly
+  last_checked: 2026-08-23
+  local_impact:
+  - Recherche/Suchmodi-und-Research-Tiefe.md
+  - Recherche/Rechercheplanung-und-Fragezerlegung.md
+  - Recherche/Skills/research-plan/SKILL.md
+  - Recherche/Skills/deep-research/SKILL.md
+- id: firecrawl-deep-research
+  area: Recherche
+  kind: github-file
+  repository: firecrawl/web-agent
+  path: agent-core/src/skills/definitions/deep-research/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: aeebe902cfee721a772b72fde3c11a5f9b989219
+  last_checked: 2026-08-23
+  local_impact:
+  - Recherche/Rechercheplanung-und-Fragezerlegung.md
+  - Recherche/Skills/deep-research/SKILL.md
+- id: practicalswan-research
+  area: Recherche
+  kind: github-file
+  repository: PracticalSwan/agent-skills
+  path: research/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: 3a6f4b71128de829a4ca610908c104c070f33b02
+  observed_version: '2.0'
+  last_checked: 2026-08-23
+  local_impact:
+  - Recherche/Quellenstrategie-und-Quellenqualitaet.md
+  - Recherche/Skills/source-evaluation/SKILL.md
+- id: hermes-grounded-citations
+  area: Recherche
+  kind: github-file
+  repository: NousResearch/hermes-agent
+  path: skills/research/grounded-citations/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: 4c767369f4d97960925c7c2e73ffa192f95fe583
+  observed_version: 1.1.0
+  last_checked: 2026-08-23
+  local_impact:
+  - Recherche/Claim-Evidence-und-Zitationshygiene.md
+  - Recherche/Skills/citation-audit/SKILL.md
+- id: jwynia-fact-check
+  area: Recherche
+  kind: github-file
+  repository: jwynia/agent-skills
+  path: skills/general/research/verification/fact-check/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: 0c2dd8e7330b9d3fab7926a7f5de5ad5ebbfa932
+  observed_version: '1.0'
+  last_checked: 2026-08-23
+  local_impact:
+  - Recherche/Claim-Evidence-und-Zitationshygiene.md
+  - Recherche/Skills/claim-verification/SKILL.md
+  - Recherche/Skills/citation-audit/SKILL.md
+- id: langchain-deepagents-web-research
+  area: Recherche
+  kind: github-file
+  repository: langchain-ai/deepagents
+  path: libs/cli/examples/skills/web-research/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: 63424a2c5ea395146a4d12e1b6c1104b3c23bff5
+  last_checked: 2026-08-23
+  local_impact:
+  - Recherche/Rechercheplanung-und-Fragezerlegung.md
+  - Recherche/Skills/research-plan/SKILL.md
+  - Recherche/Skills/deep-research/SKILL.md
+- id: microsoft-vscode-team-kit-research
+  area: Recherche
+  kind: github-file
+  repository: microsoft/vscode-team-kit
+  path: research/skills/research/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: fcb44f50392b70ca7cf729a0a668274eebbf812b
+  last_checked: 2026-08-23
+  local_impact:
+  - Recherche/Triangulation-Widerspruch-und-Confidence.md
+  - Recherche/Synthese-und-Coverage.md
+  - Recherche/Skills/deep-research/SKILL.md
+- id: drader-research
+  area: Recherche
+  kind: github-file
+  repository: drader/researcher_agent
+  path: skills/research/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: 9e37617786957bfabc8f003848ddf59a8b8c4650
+  observed_version: 0.1.0
+  last_checked: 2026-08-23
+  local_impact:
+  - Recherche/Suchmodi-und-Research-Tiefe.md
+  - Recherche/Quellenstrategie-und-Quellenqualitaet.md
+  - Recherche/Skills/source-evaluation/SKILL.md
+  - Recherche/Skills/claim-verification/SKILL.md
+- id: google-developer-style-guide
+  area: Dokumentationserstellung
+  kind: web-page
+  url: https://developers.google.com/style
+  monitor_mode: semantic-review
+  cadence: quarterly
+  last_checked: 2026-08-23
+  local_impact:
+  - Dokumentationserstellung/Technischer-Schreibstil.md
+  - Dokumentationserstellung/Skills/technical-writing/SKILL.md
+  - Dokumentationserstellung/Skills/docs-review/SKILL.md
+- id: write-the-docs-docs-as-code
+  area: Dokumentationserstellung
+  kind: web-page
+  url: https://www.writethedocs.org/guide/docs-as-code/
+  monitor_mode: semantic-review
+  cadence: quarterly
+  last_checked: 2026-08-23
+  local_impact:
+  - Dokumentationserstellung/Docs-as-Code-und-Wartbarkeit.md
+  - Dokumentationserstellung/Dokumentationsreview-und-Drift.md
+- id: good-docs-project-templates
+  area: Dokumentationserstellung
+  kind: web-page
+  url: https://www.thegooddocsproject.dev/template
+  monitor_mode: semantic-review
+  cadence: quarterly
+  last_checked: 2026-08-23
+  local_impact:
+  - Dokumentationserstellung/Vorlagen/README.template.md
+  - Dokumentationserstellung/Vorlagen/ADR.template.md
+  - Dokumentationserstellung/Vorlagen/Runbook.template.md
+  - Dokumentationserstellung/Vorlagen/How-To.template.md
+  - Dokumentationserstellung/Vorlagen/Tutorial.template.md
+- id: vale-agent-skills
+  area: Dokumentationserstellung
+  kind: web-page
+  url: https://vale.sh/skills
+  monitor_mode: semantic-review
+  cadence: monthly
+  last_checked: 2026-08-23
+  local_impact:
+  - Dokumentationserstellung/Docs-as-Code-und-Wartbarkeit.md
+  - Dokumentationserstellung/Dokumentationsreview-und-Drift.md
+- id: mcollina-documentation
+  area: Dokumentationserstellung
+  kind: github-file
+  repository: mcollina/skills
+  path: skills/documentation/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: dae5144584a07b60287eac57f0786665b38b3559
+  last_checked: 2026-08-23
+  local_impact:
+  - Dokumentationserstellung/Dokumenttypen-und-Diataxis.md
+  - Dokumentationserstellung/Skills/docs-plan/SKILL.md
+  - Dokumentationserstellung/Skills/tutorial/SKILL.md
+  - Dokumentationserstellung/Skills/how-to/SKILL.md
+  - Dokumentationserstellung/Skills/reference-docs/SKILL.md
+  - Dokumentationserstellung/Skills/explanation-docs/SKILL.md
+- id: mblode-docs-writing
+  area: Dokumentationserstellung
+  kind: github-file
+  repository: mblode/agent-skills
+  path: skills/docs-writing/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: 1d9a8530f20ae6dda523fc87e85a66e24ed49473
+  last_checked: 2026-08-23
+  local_impact:
+  - Dokumentationserstellung/Technischer-Schreibstil.md
+  - Dokumentationserstellung/Beispiele-Code-und-Verifikation.md
+  - Dokumentationserstellung/Dokumentationsreview-und-Drift.md
+  - Dokumentationserstellung/Skills/technical-writing/SKILL.md
+  - Dokumentationserstellung/Skills/docs-review/SKILL.md
+- id: jpeetz-technical-documentation
+  area: Dokumentationserstellung
+  kind: github-file
+  repository: JPeetz/agent-skills
+  path: technical-documentation/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: 3616059286b7d7f84adc5e91ba1498114aeb53f1
+  observed_version: 1.0.0
+  last_checked: 2026-08-23
+  local_impact:
+  - Dokumentationserstellung/README.md
+  - Dokumentationserstellung/Skills/readme/SKILL.md
+  - Dokumentationserstellung/Skills/adr/SKILL.md
+  - Dokumentationserstellung/Skills/runbook/SKILL.md
+- id: supabase-postgres-best-practices
+  area: Datenbanken
+  kind: github-file
+  repository: supabase/agent-skills
+  path: skills/supabase-postgres-best-practices/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: 6400792389dfcc82c81953054e546bd72ebcd259
+  observed_version: 1.1.1
+  last_checked: 2026-08-23
+  local_impact:
+  - Datenbanken/Datenmodellierung-und-Zugriffsmuster.md
+  - Datenbanken/Indizes-und-Execution-Plans.md
+  - Datenbanken/Connections-Pooling-und-Ressourcen.md
+  - Datenbanken/Transaktionen-Isolation-und-Concurrency.md
+  - Datenbanken/Skills/query-performance/SKILL.md
+- id: neon-postgres-best-practices
+  area: Datenbanken
+  kind: github-file
+  repository: neondatabase/postgres-skills
+  path: skills/postgres-best-practices/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: 43f3468765949e3db85a3782d90d4826b6c585bd
+  last_checked: 2026-08-23
+  local_impact:
+  - Datenbanken/Datenmodellierung-und-Zugriffsmuster.md
+  - Datenbanken/Indizes-und-Execution-Plans.md
+  - Datenbanken/Migrationen-Backfills-und-Rollback.md
+- id: mongodb-schema-design
+  area: Datenbanken
+  kind: github-file
+  repository: mongodb/agent-skills
+  path: plugins/mongodb/skills/mongodb-schema-design/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: e2237d15ead78ce33a4753ca8dc8e6e0bba854cf
+  observed_version: 1.0.0
+  last_checked: 2026-08-23
+  local_impact:
+  - Datenbanken/Datenmodellierung-und-Zugriffsmuster.md
+  - Datenbanken/Schema-Constraints-und-Integritaet.md
+  - Datenbanken/Migrationen-Backfills-und-Rollback.md
+  - Datenbanken/Skills/database-design/SKILL.md
+  - Datenbanken/Skills/schema-migration/SKILL.md
+- id: mongodb-query-optimizer
+  area: Datenbanken
+  kind: github-file
+  repository: mongodb/agent-skills
+  path: plugins/mongodb/skills/mongodb-query-optimizer/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: c71f2f5e9afd8b6cd73380169e0ff5c3f9402944
+  observed_version: 1.0.0
+  last_checked: 2026-08-23
+  local_impact:
+  - Datenbanken/Indizes-und-Execution-Plans.md
+  - Datenbanken/Monitoring-und-Diagnose.md
+  - Datenbanken/Skills/query-performance/SKILL.md
+- id: redis-core
+  area: Datenbanken
+  kind: github-file
+  repository: redis/agent-skills
+  path: skills/redis-core/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: a62be86377ad672f5f9f2301a492cc4ee726d3cc
+  observed_version: 0.1.0
+  last_checked: 2026-08-23
+  local_impact:
+  - Datenbanken/Datenmodellierung-und-Zugriffsmuster.md
+  - Datenbanken/Skills/database-design/SKILL.md
+- id: redis-connections
+  area: Datenbanken
+  kind: github-file
+  repository: redis/agent-skills
+  path: skills/redis-connections/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: 53f367a9a4ed6a4bf9c3c29a441dcfa1ee91a114
+  observed_version: 0.1.0
+  last_checked: 2026-08-23
+  local_impact:
+  - Datenbanken/Connections-Pooling-und-Ressourcen.md
+  - Datenbanken/Skills/database-operations/SKILL.md
+- id: redis-security
+  area: Datenbanken
+  kind: github-file
+  repository: redis/agent-skills
+  path: skills/redis-security/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: 661ba11f06c9a31203dfe6b828bd2c714d0a258e
+  observed_version: 0.1.0
+  last_checked: 2026-08-23
+  local_impact:
+  - Datenbanken/Security-und-Datenzugriff.md
+  - Datenbanken/Skills/database-operations/SKILL.md
+  - Sicherheit/Tool-Rechte-und-Least-Privilege.md
+- id: prisma-skills-readme
+  area: Datenbanken
+  kind: github-file
+  repository: prisma/prisma
+  path: skills/README.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: 889bb5e1cf410c7751b51fc6c529f5fe3d44aec1
+  last_checked: 2026-08-23
+  local_impact:
+  - Datenbanken/README.md
+  - Datenbanken/Migrationen-Backfills-und-Rollback.md
+  - Datenbanken/Skills/schema-migration/SKILL.md
+  - Skill-Engineering/Toolanforderungen-und-Fallbacks.md
+- id: postgresql-current-docs
+  area: Datenbanken
+  kind: web-page
+  url: https://www.postgresql.org/docs/current/
+  monitor_mode: semantic-review
+  cadence: quarterly
+  last_checked: 2026-08-23
+  local_impact:
+  - Datenbanken/Indizes-und-Execution-Plans.md
+  - Datenbanken/Transaktionen-Isolation-und-Concurrency.md
+  - Datenbanken/Migrationen-Backfills-und-Rollback.md
+- id: prisma-migrate-docs
+  area: Datenbanken
+  kind: web-page
+  url: https://www.prisma.io/docs/orm/prisma-migrate
+  monitor_mode: semantic-review
+  cadence: monthly
+  last_checked: 2026-08-23
+  local_impact:
+  - Datenbanken/Migrationen-Backfills-und-Rollback.md
+  - Datenbanken/Skills/schema-migration/SKILL.md
+- id: anthropic-testing-strategy
+  area: Testing-und-QA
+  kind: github-file
+  repository: anthropics/knowledge-work-plugins
+  path: engineering/skills/testing-strategy/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: 4ff59410c8fe67872a98ca97135815b778ca1219
+  last_checked: 2026-08-23
+  local_impact:
+  - Testing-und-QA/Teststrategie-und-Risikobasiertes-Testen.md
+  - Testing-und-QA/Testebenen-und-Testportfolio.md
+  - Testing-und-QA/Skills/test-strategy/SKILL.md
+- id: anthropic-webapp-testing
+  area: Testing-und-QA
+  kind: github-file
+  repository: anthropics/skills
+  path: skills/webapp-testing/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: 4726215301db64a0cc4d41fc3219c61f37a30f4a
+  last_checked: 2026-08-23
+  local_impact:
+  - Testing-und-QA/End-to-End-und-Nutzerverhalten.md
+  - Testing-und-QA/Skills/e2e-testing/SKILL.md
+- id: currents-playwright-best-practices
+  area: Testing-und-QA
+  kind: github-file
+  repository: currents-dev/playwright-best-practices-skill
+  path: playwright-best-practices/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: 0da736253c343081ab8c0cb9802729a707c23196
+  observed_version: '1.2'
+  last_checked: 2026-08-23
+  local_impact:
+  - Testing-und-QA/Test-Seams-Doubles-und-Reale-Abhaengigkeiten.md
+  - Testing-und-QA/Testdaten-Isolation-und-Hermetik.md
+  - Testing-und-QA/Flaky-Tests-und-Determinismus.md
+  - Testing-und-QA/Failure-Recovery-und-Negativtests.md
+  - Testing-und-QA/Skills/flaky-test-diagnosis/SKILL.md
+  - Testing-und-QA/Skills/failure-testing/SKILL.md
+- id: superpowers-verification-before-completion
+  area: Testing-und-QA
+  kind: github-file
+  repository: obra/superpowers
+  path: skills/verification-before-completion/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: 7d45333cc4a49c57a80df6c1fe2fa777a207afbc
+  last_checked: 2026-08-23
+  local_impact:
+  - Agentenarbeit/Skills/verification-loop/SKILL.md
+  - Testing-und-QA/Testautomatisierung-CI-und-Evidence.md
+  - Workflows/Teststrategie-und-QA.md
+- id: istqb-ctfl-v4
+  area: Testing-und-QA
+  kind: web-page
+  url: https://istqb.org/certifications/certified-tester-foundation-level-ctfl-v4-0/
+  monitor_mode: semantic-review
+  cadence: quarterly
+  last_checked: 2026-08-23
+  local_impact:
+  - Testing-und-QA/Teststrategie-und-Risikobasiertes-Testen.md
+  - Testing-und-QA/Testebenen-und-Testportfolio.md
+  - Testing-und-QA/Testdesign-und-Testfaelle.md
+  - Testing-und-QA/Exploratives-Testen-und-Release-Evidence.md
+- id: playwright-best-practices
+  area: Testing-und-QA
+  kind: web-page
+  url: https://playwright.dev/docs/best-practices
+  monitor_mode: semantic-review
+  cadence: monthly
+  last_checked: 2026-08-23
+  local_impact:
+  - Testing-und-QA/Testdaten-Isolation-und-Hermetik.md
+  - Testing-und-QA/End-to-End-und-Nutzerverhalten.md
+  - Testing-und-QA/Flaky-Tests-und-Determinismus.md
+- id: pact-docs
+  area: Testing-und-QA
+  kind: web-page
+  url: https://docs.pact.io/
+  monitor_mode: semantic-review
+  cadence: quarterly
+  last_checked: 2026-08-23
+  local_impact:
+  - Testing-und-QA/Integration-und-Contract-Testing.md
+  - Testing-und-QA/Skills/contract-testing/SKILL.md
+- id: testcontainers-getting-started
+  area: Testing-und-QA
+  kind: web-page
+  url: https://testcontainers.com/getting-started/
+  monitor_mode: semantic-review
+  cadence: quarterly
+  last_checked: 2026-08-23
+  local_impact:
+  - Testing-und-QA/Test-Seams-Doubles-und-Reale-Abhaengigkeiten.md
+  - Testing-und-QA/Testdaten-Isolation-und-Hermetik.md
+  - Testing-und-QA/Skills/integration-testing/SKILL.md
+- id: agent-skills-specification
+  area: Skill-Engineering
+  kind: github-file
+  repository: agentskills/agentskills
+  path: docs/specification.mdx
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: d9a2db099d905da8b879a5c6f996728073985279
+  last_checked: 2026-08-23
+  local_impact:
+  - Skill-Engineering/Skill-Struktur-und-Progressive-Disclosure.md
+  - Skill-Engineering/Trigger-und-Description-Design.md
+  - Skill-Engineering/Skills/skill-authoring/SKILL.md
+  - Skill-Engineering/Skills/skill-review/SKILL.md
+  - skill-catalog.yml
+- id: owasp-agentic-skills-top-10
+  area: Sicherheit
+  kind: web-page
+  url: https://owasp.org/www-project-agentic-skills-top-10/
+  monitor_mode: semantic-review
+  cadence: monthly
+  last_checked: 2026-08-23
+  local_impact:
+  - Sicherheit/Skill-Supply-Chain.md
+  - Sicherheit/Security-Review-fuer-Skills.md
+  - Sicherheit/Skills/skill-security-review/SKILL.md
+- id: owasp-agentic-applications-top-10-2026
+  area: Sicherheit
+  kind: web-page
+  url: https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/
+  monitor_mode: semantic-review
+  cadence: quarterly
+  last_checked: 2026-08-23
+  local_impact:
+  - Sicherheit/README.md
+  - Sicherheit/Tool-Rechte-und-Least-Privilege.md
+  - Sicherheit/MCP-und-externe-Tools.md
+  - Sicherheit/Sandbox-und-Isolation.md
+- id: apache-airflow-core-concepts
+  area: Data-Engineering
+  kind: web-page
+  url: https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/
+  monitor_mode: semantic-review
+  cadence: monthly
+  last_checked: 2026-08-24
+  local_impact:
+  - Data-Engineering/Orchestrierung-Abhaengigkeiten-und-Reprocessing.md
+  - Data-Engineering/Transformationen-Inkrementalitaet-und-Backfills.md
+  - Data-Engineering/Skills/data-orchestration-design/SKILL.md
+  - Data-Engineering/Skills/data-transformation-design/SKILL.md
+  - Workflows/Backfill-und-Reprocessing.md
+- id: apache-beam-programming-guide
+  area: Data-Engineering
+  kind: web-page
+  url: https://beam.apache.org/documentation/programming-guide/
+  monitor_mode: semantic-review
+  cadence: quarterly
+  last_checked: 2026-08-24
+  local_impact:
+  - Data-Engineering/Batch-Streaming-und-Zeitsemantik.md
+  - Data-Engineering/Skills/data-ingestion-design/SKILL.md
+  - Data-Engineering/Skills/data-engineering-review/SKILL.md
+- id: apache-kafka-streams-configs
+  area: Data-Engineering
+  kind: web-page
+  url: https://kafka.apache.org/documentation/#streamsconfigs
+  monitor_mode: semantic-review
+  cadence: quarterly
+  last_checked: 2026-08-24
+  local_impact:
+  - Data-Engineering/Batch-Streaming-und-Zeitsemantik.md
+  - Data-Engineering/Ingestion-CDC-und-Replay.md
+  - Data-Engineering/Skills/data-ingestion-design/SKILL.md
+- id: openlineage-docs
+  area: Data-Engineering
+  kind: web-page
+  url: https://openlineage.io/docs/
+  monitor_mode: semantic-review
+  cadence: monthly
+  last_checked: 2026-08-24
+  local_impact:
+  - Data-Engineering/Lineage-Provenance-und-Impact-Analyse.md
+  - Data-Engineering/Skills/data-lineage-analysis/SKILL.md
+  - Data-Engineering/Skills/data-engineering-review/SKILL.md
+- id: open-data-contract-standard
+  area: Data-Engineering
+  kind: web-page
+  url: https://docs.datacontract.com/open-data-contract-standard
+  monitor_mode: semantic-review
+  cadence: monthly
+  last_checked: 2026-08-24
+  local_impact:
+  - Data-Engineering/Data-Contracts-Schema-und-Evolution.md
+  - Data-Engineering/Skills/data-contract-design/SKILL.md
+  - Data-Engineering/Skills/data-quality-design/SKILL.md
+- id: vaquarkhan-data-specification-skill
+  area: Data-Engineering
+  kind: github-file
+  repository: vaquarkhan/data-engineering-agent-skills
+  path: skills/data-specification/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: a44f83926c8152a7546c8c579ed3ae6e6178e19e
+  last_checked: 2026-08-24
+  local_impact:
+  - Data-Engineering/README.md
+  - Data-Engineering/Skills/data-pipeline-design/SKILL.md
+  - Data-Engineering/Skills/data-ingestion-design/SKILL.md
+  - Data-Engineering/Skills/analytical-data-modeling/SKILL.md
+  - Data-Engineering/Skills/data-engineering-review/SKILL.md
+- id: vaquarkhan-safe-backfill-replay-skill
+  area: Data-Engineering
+  kind: github-file
+  repository: vaquarkhan/data-engineering-agent-skills
+  path: skills/safe-backfill-and-replay-orchestration/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: 59ebc645604d70a8900818ad4dfdeb29d40eaa36
+  last_checked: 2026-08-24
+  local_impact:
+  - Data-Engineering/Transformationen-Inkrementalitaet-und-Backfills.md
+  - Data-Engineering/Skills/data-transformation-design/SKILL.md
+  - Data-Engineering/Skills/data-orchestration-design/SKILL.md
+  - Workflows/Backfill-und-Reprocessing.md
+- id: c4-model-diagrams
+  area: Software-Architecture-und-System-Design
+  kind: web-page
+  url: https://c4model.com/diagrams
+  monitor_mode: semantic-review
+  cadence: monthly
+  last_checked: 2026-08-24
+  local_impact:
+  - Software-Architecture-und-System-Design/Systemkontext-Grenzen-und-Ownership.md
+  - Software-Architecture-und-System-Design/Architekturevidence-Views-ADRs-und-Dokumentation.md
+  - Software-Architecture-und-System-Design/Skills/architecture-baseline/SKILL.md
+- id: arc42-documentation
+  area: Software-Architecture-und-System-Design
+  kind: web-page
+  url: https://docs.arc42.org/home/
+  monitor_mode: semantic-review
+  cadence: monthly
+  last_checked: 2026-08-24
+  local_impact:
+  - Software-Architecture-und-System-Design/Architekturevidence-Views-ADRs-und-Dokumentation.md
+  - Software-Architecture-und-System-Design/Skills/architecture-review/SKILL.md
+- id: sei-atam
+  area: Software-Architecture-und-System-Design
+  kind: web-page
+  url: https://www.sei.cmu.edu/library/the-architecture-tradeoff-analysis-method/
+  monitor_mode: semantic-review
+  cadence: monthly
+  last_checked: 2026-08-24
+  local_impact:
+  - Software-Architecture-und-System-Design/Qualitaetsattribute-Szenarien-und-Trade-offs.md
+  - Software-Architecture-und-System-Design/Skills/architecture-tradeoff-analysis/SKILL.md
+  - Software-Architecture-und-System-Design/Skills/system-design/SKILL.md
+  - Software-Architecture-und-System-Design/Skills/architecture-review/SKILL.md
+- id: azure-architecture-styles
+  area: Software-Architecture-und-System-Design
+  kind: web-page
+  url: https://learn.microsoft.com/en-us/azure/architecture/guide/architecture-styles/
+  monitor_mode: semantic-review
+  cadence: monthly
+  last_checked: 2026-08-24
+  local_impact:
+  - Software-Architecture-und-System-Design/Architekturstile-und-Patterns.md
+  - Software-Architecture-und-System-Design/Skills/system-design/SKILL.md
+  - Software-Architecture-und-System-Design/Skills/architecture-tradeoff-analysis/SKILL.md
+- id: pinchen-system-design-skill
+  area: Software-Architecture-und-System-Design
+  kind: github-file
+  repository: pinchen147/system-design-skill
+  path: skills/system-design/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: 8ea4d9b0d1ee929896aa519bc03964e2a8746291
+  last_checked: 2026-08-24
+  local_impact:
+  - Software-Architecture-und-System-Design/Architekturziele-Drivers-und-Constraints.md
+  - Software-Architecture-und-System-Design/Runtime-Flows-State-und-Koordination.md
+  - Software-Architecture-und-System-Design/Qualitaetsattribute-Szenarien-und-Trade-offs.md
+  - Software-Architecture-und-System-Design/Skills/system-design/SKILL.md
+  - Software-Architecture-und-System-Design/Skills/architecture-review/SKILL.md
+- id: lx-wnk-architecture-design-skill
+  area: Software-Architecture-und-System-Design
+  kind: github-file
+  repository: lx-wnk/skills
+  path: skills/architecture-design/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: 05ad3d2cb5e19bb9b5218ecb33b5eebe97985cc0
+  last_checked: 2026-08-24
+  local_impact:
+  - Software-Architecture-und-System-Design/Dekomposition-Module-Services-und-Abhaengigkeiten.md
+  - Software-Architecture-und-System-Design/Skills/architecture-decomposition/SKILL.md
+  - Software-Architecture-und-System-Design/Skills/system-design/SKILL.md
+- id: lx-wnk-architecture-review-skill
+  area: Software-Architecture-und-System-Design
+  kind: github-file
+  repository: lx-wnk/skills
+  path: skills/architecture-review/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: 6be36cfa38b20ba27673419ff7043cf87cffdbc9
+  last_checked: 2026-08-24
+  local_impact:
+  - Software-Architecture-und-System-Design/Conformance-Fitness-Functions-und-Drift.md
+  - Software-Architecture-und-System-Design/Skills/architecture-conformance-review/SKILL.md
+  - Software-Architecture-und-System-Design/Skills/architecture-review/SKILL.md
+- id: ireb-cpre-foundation
+  area: Requirements-und-Spezifikations-Engineering
+  kind: web-page
+  url: https://cpre.ireb.org/en/concept/foundationlevel
+  monitor_mode: semantic-review
+  cadence: monthly
+  last_checked: 2026-08-25
+  local_impact:
+  - Requirements-und-Spezifikations-Engineering/README.md
+  - Requirements-und-Spezifikations-Engineering/Anforderungsqualitaet-und-Sprachregeln.md
+  - Requirements-und-Spezifikations-Engineering/Validation-Verifikation-und-Readiness.md
+  - Requirements-und-Spezifikations-Engineering/Skills/requirements-specification/SKILL.md
+  - Requirements-und-Spezifikations-Engineering/Skills/requirements-validation/SKILL.md
+- id: ireb-requirements-elicitation
+  area: Requirements-und-Spezifikations-Engineering
+  kind: web-page
+  url: https://cpre.ireb.org/en/concept/requirements-elicitation
+  monitor_mode: semantic-review
+  cadence: monthly
+  last_checked: 2026-08-25
+  local_impact:
+  - Requirements-und-Spezifikations-Engineering/Stakeholder-Bedarf-Ziele-und-Quellen.md
+  - Requirements-und-Spezifikations-Engineering/Elicitation-und-Konfliktklaerung.md
+  - Requirements-und-Spezifikations-Engineering/Skills/requirements-elicitation/SKILL.md
+- id: iso-29148-edition3-draft
+  area: Requirements-und-Spezifikations-Engineering
+  kind: web-page
+  url: https://www.iso.org/standard/94091.html
+  monitor_mode: semantic-review
+  cadence: monthly
+  last_checked: 2026-08-25
+  local_impact:
+  - Requirements-und-Spezifikations-Engineering/Anforderungsqualitaet-und-Sprachregeln.md
+  - Requirements-und-Spezifikations-Engineering/Traceability-Provenance-und-Coverage.md
+  - Requirements-und-Spezifikations-Engineering/Requirements-Change-Baselines-und-Lifecycle.md
+  - Requirements-und-Spezifikations-Engineering/Quellen-und-Inspirationen.md
+- id: nasa-system-design-requirements
+  area: Requirements-und-Spezifikations-Engineering
+  kind: web-page
+  url: https://www.nasa.gov/reference/4-0-system-design-processes/
+  monitor_mode: semantic-review
+  cadence: monthly
+  last_checked: 2026-08-25
+  local_impact:
+  - Requirements-und-Spezifikations-Engineering/Stakeholder-Bedarf-Ziele-und-Quellen.md
+  - Requirements-und-Spezifikations-Engineering/Qualitaetsanforderungen-und-messbare-Ziele.md
+  - Requirements-und-Spezifikations-Engineering/Validation-Verifikation-und-Readiness.md
+  - Requirements-und-Spezifikations-Engineering/Skills/requirements-validation/SKILL.md
+- id: nasa-se-handbook-appendix-requirements
+  area: Requirements-und-Spezifikations-Engineering
+  kind: web-page
+  url: https://www.nasa.gov/reference/system-engineering-handbook-appendix/
+  monitor_mode: semantic-review
+  cadence: monthly
+  last_checked: 2026-08-25
+  local_impact:
+  - Requirements-und-Spezifikations-Engineering/Anforderungsqualitaet-und-Sprachregeln.md
+  - Requirements-und-Spezifikations-Engineering/Akzeptanzkriterien-und-Verifikationsabsicht.md
+  - Requirements-und-Spezifikations-Engineering/Skills/acceptance-criteria-design/SKILL.md
+- id: modular-earth-requirements-skill
+  area: Requirements-und-Spezifikations-Engineering
+  kind: github-file
+  repository: Modular-Earth-LLC/solutions-architecture-agent
+  path: skills/requirements/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: 06ab931a6898d5f9f455d0b2d00ee7fabad9f15c
+  last_checked: 2026-08-25
+  local_impact:
+  - Requirements-und-Spezifikations-Engineering/Elicitation-und-Konfliktklaerung.md
+  - Requirements-und-Spezifikations-Engineering/Scope-Annahmen-und-Constraints.md
+  - Requirements-und-Spezifikations-Engineering/Skills/requirements-elicitation/SKILL.md
+  - Requirements-und-Spezifikations-Engineering/Skills/requirements-specification/SKILL.md
+- id: microsoft-hve-requirements-author
+  area: Requirements-und-Spezifikations-Engineering
+  kind: github-file
+  repository: microsoft/hve-core
+  path: .github/skills/project-planning/requirements-author/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: ebeca3bfba19ee3cba90648df16cb4fddac5c319
+  last_checked: 2026-08-25
+  local_impact:
+  - Requirements-und-Spezifikations-Engineering/Traceability-Provenance-und-Coverage.md
+  - Requirements-und-Spezifikations-Engineering/Requirements-Change-Baselines-und-Lifecycle.md
+  - Requirements-und-Spezifikations-Engineering/Skills/requirements-traceability/SKILL.md
+  - Requirements-und-Spezifikations-Engineering/Skills/requirements-change-analysis/SKILL.md
+  - Requirements-und-Spezifikations-Engineering/Skills/requirements-review/SKILL.md
+- id: spacey-requirements-analysis
+  area: Requirements-und-Spezifikations-Engineering
+  kind: github-file
+  repository: Spacey6849/AgentSkills
+  path: .claude/skills/requirements-analysis/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: 4a9193522eb25f9029e09dbab5579224420dc0bb
+  last_checked: 2026-08-25
+  local_impact:
+  - Requirements-und-Spezifikations-Engineering/Anforderungsqualitaet-und-Sprachregeln.md
+  - Requirements-und-Spezifikations-Engineering/Akzeptanzkriterien-und-Verifikationsabsicht.md
+  - Requirements-und-Spezifikations-Engineering/Skills/requirements-specification/SKILL.md
+  - Requirements-und-Spezifikations-Engineering/Skills/acceptance-criteria-design/SKILL.md
+  - Requirements-und-Spezifikations-Engineering/Skills/requirements-review/SKILL.md
+- id: linkedin-build-your-voice
+  area: Social-Media-und-Content-Praesenz
+  kind: web-page
+  url: https://www.linkedin.com/help/linkedin/answer/a7134086
+  monitor_mode: semantic-review
+  cadence: monthly
+  last_checked: 2026-08-25
+  local_impact:
+  - Social-Media-und-Content-Praesenz/Ziele-Audience-Positionierung-und-Praesenz.md
+  - Social-Media-und-Content-Praesenz/Social-Content-Hooks-Struktur-und-CTA.md
+  - Social-Media-und-Content-Praesenz/Skills/social-content-design/SKILL.md
+- id: linkedin-post-analytics
+  area: Social-Media-und-Content-Praesenz
+  kind: web-page
+  url: https://www.linkedin.com/help/linkedin/answer/a516972
+  monitor_mode: semantic-review
+  cadence: monthly
+  last_checked: 2026-08-25
+  local_impact:
+  - Social-Media-und-Content-Praesenz/Performance-Metriken-Lernschleifen-und-Experimente.md
+  - Social-Media-und-Content-Praesenz/Skills/content-performance-analysis/SKILL.md
+  - Social-Media-und-Content-Praesenz/Skills/content-presence-review/SKILL.md
+- id: meta-rewarding-original-creators
+  area: Social-Media-und-Content-Praesenz
+  kind: web-page
+  url: https://about.fb.com/news/2026/03/rewarding-original-creators-on-facebook/
+  monitor_mode: semantic-review
+  cadence: monthly
+  last_checked: 2026-08-25
+  local_impact:
+  - Social-Media-und-Content-Praesenz/Repurposing-Originalitaet-und-Provenance.md
+  - Social-Media-und-Content-Praesenz/Plattformrollen-und-native-Adaption.md
+  - Social-Media-und-Content-Praesenz/Skills/content-repurposing/SKILL.md
+  - Social-Media-und-Content-Praesenz/Skills/platform-content-adaptation/SKILL.md
+- id: youtube-posts-tips
+  area: Social-Media-und-Content-Praesenz
+  kind: web-page
+  url: https://support.google.com/youtube/answer/11912631
+  monitor_mode: semantic-review
+  cadence: monthly
+  last_checked: 2026-08-25
+  local_impact:
+  - Social-Media-und-Content-Praesenz/Plattformrollen-und-native-Adaption.md
+  - Social-Media-und-Content-Praesenz/Skills/platform-content-adaptation/SKILL.md
+  - Social-Media-und-Content-Praesenz/Skills/social-content-strategy/SKILL.md
+- id: ftc-endorsements-influencers-reviews
+  area: Social-Media-und-Content-Praesenz
+  kind: web-page
+  url: https://www.ftc.gov/business-guidance/advertising-marketing/endorsements-influencers-reviews
+  monitor_mode: semantic-review
+  cadence: monthly
+  last_checked: 2026-08-25
+  local_impact:
+  - Social-Media-und-Content-Praesenz/Claims-Disclosure-Rechte-und-Content-Risiken.md
+  - Social-Media-und-Content-Praesenz/Skills/social-content-design/SKILL.md
+  - Social-Media-und-Content-Praesenz/Skills/content-presence-review/SKILL.md
+- id: blacktwist-content-strategy-skill
+  area: Social-Media-und-Content-Praesenz
+  kind: github-file
+  repository: blacktwist/social-media-skills
+  path: skills/content-strategy-sms/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: b4eefa218107e9c8402bf8318abd1cce38f383f1
+  last_checked: 2026-08-25
+  local_impact:
+  - Social-Media-und-Content-Praesenz/Ziele-Audience-Positionierung-und-Praesenz.md
+  - Social-Media-und-Content-Praesenz/Content-Saeulen-Themen-und-Formate.md
+  - Social-Media-und-Content-Praesenz/Editorialsystem-Kadenz-und-Ressourcen.md
+  - Social-Media-und-Content-Praesenz/Skills/social-content-strategy/SKILL.md
+  - Social-Media-und-Content-Praesenz/Skills/editorial-planning/SKILL.md
+- id: blacktwist-content-repurposer-skill
+  area: Social-Media-und-Content-Praesenz
+  kind: github-file
+  repository: blacktwist/social-media-skills
+  path: skills/content-repurposer-sms/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: 03e0d2398cb513ee19dd80f19d24dfe58ed701a3
+  last_checked: 2026-08-25
+  local_impact:
+  - Social-Media-und-Content-Praesenz/Repurposing-Originalitaet-und-Provenance.md
+  - Social-Media-und-Content-Praesenz/Skills/content-repurposing/SKILL.md
+  - Social-Media-und-Content-Praesenz/Skills/platform-content-adaptation/SKILL.md
+- id: social-media-skills-analytics-reporting
+  area: Social-Media-und-Content-Praesenz
+  kind: github-file
+  repository: social-media-skills/skills
+  path: skills/analytics-and-reporting/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: bf851b46b375f6c9952f54245f5fa49ff7da0371
+  last_checked: 2026-08-25
+  local_impact:
+  - Social-Media-und-Content-Praesenz/Performance-Metriken-Lernschleifen-und-Experimente.md
+  - Social-Media-und-Content-Praesenz/Skills/content-performance-analysis/SKILL.md
+  - Social-Media-und-Content-Praesenz/Skills/content-presence-review/SKILL.md
+- id: inklate-social-audit
+  area: Social-Media-und-Content-Praesenz
+  kind: github-file
+  repository: inklate/social-skills
+  path: skills/social-audit/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: de89934532c0203052f12158df32032469afab77
+  last_checked: 2026-08-25
+  local_impact:
+  - Social-Media-und-Content-Praesenz/Content-Audit-Readiness-und-Drift.md
+  - Social-Media-und-Content-Praesenz/Skills/content-presence-baseline/SKILL.md
+  - Social-Media-und-Content-Praesenz/Skills/content-presence-review/SKILL.md
+- id: emil-kowalski-motion-craft
+  area: Webentwicklung
+  kind: github-file
+  repository: emilkowalski/skills
+  path: skills/animate/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: 159fe0753228ab9d43fce274bd2c24433f3c4771
+  last_checked: '2026-08-26'
+  local_impact:
+  - Dokumentation/Webdesign-Motion-Audit-Phase-3-5.md
+- id: mblode-ui-animation
+  area: Webentwicklung
+  kind: github-file
+  repository: mblode/agent-skills
+  path: skills/ui-animation/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: 9c771273462e5ad42687e8d7240ef786e115fd71
+  last_checked: '2026-08-26'
+  local_impact:
+  - Dokumentation/Webdesign-Motion-Audit-Phase-3-5.md
+- id: taste-design-parameters
+  area: Webentwicklung
+  kind: github-file
+  repository: Leonxlnx/taste-skill
+  path: skills/taste-skill/SKILL.md
+  ref: main
+  monitor_mode: exact-sha
+  cadence: monthly
+  observed_sha: b72132fcd466da605623ffe96e370b3991fc5285
+  last_checked: '2026-08-26'
+  local_impact:
+  - Dokumentation/Webdesign-Motion-Audit-Phase-3-5.md
 policy:
   on_change: review-only
   auto_sync: false

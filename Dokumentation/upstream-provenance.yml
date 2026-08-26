@@ -1,6 +1,6 @@
 schema_version: 2
 source_registry: Dokumentation/upstream-sources.yml
-last_reviewed: 2026-08-26
+last_reviewed: '2026-08-26'
 sources:
 - source_id: addyosmani-observability-instrumentation-skill
   reviewed_at: &id001 2026-08-25
@@ -1459,8 +1459,10 @@ sources:
   material_scope: concepts/methods-only
   classification_evidence:
   - The observed Neon artifact blob was independently mapped to repository commit 0d9a967085c3bc137ab39ff9e3191c2eb3129d8c.
-  - Source-specific comparison against all three registered local impacts found no exact long-line, 12-word-shingle or explicit derivation-marker signal; manual review found only generic topic overlap, not distinctive translated or structural expression.
-  - The local use is therefore classified as concepts/methods reference only; Apache-2.0 redistribution permission is documented as same-state evidence but is not relied on for the local classification.
+  - Source-specific comparison against all three registered local impacts found no exact long-line, 12-word-shingle or explicit
+    derivation-marker signal; manual review found only generic topic overlap, not distinctive translated or structural expression.
+  - The local use is therefore classified as concepts/methods reference only; Apache-2.0 redistribution permission is documented
+    as same-state evidence but is not relied on for the local classification.
   similarity_audit: no-signal
   redistribution_reliance: not-relied-on
   license_spdx: Apache-2.0
@@ -1470,7 +1472,9 @@ sources:
   license_blob_sha: b87eca9ebe930dd536fc479611af31e1110c7434
   path_specific_license_notes:
   - Same-state audit verified the root Apache-2.0 LICENSE and found no LICENSE, COPYING or NOTICE override under skills/postgres-best-practices/.
-  license_status_at_observation: Apache-2.0 root license verified at the exact repository commit containing the observed artifact blob; no path-specific conflicting license was detected. The license is recorded as historical evidence and is not relied on for reference-only use.
+  license_status_at_observation: Apache-2.0 root license verified at the exact repository commit containing the observed artifact
+    blob; no path-specific conflicting license was detected. The license is recorded as historical evidence and is not relied
+    on for reference-only use.
   notice_requirement: none-for-reference-only
   redistribution_status: not-relied-on
   license_evidence:
@@ -1482,7 +1486,8 @@ sources:
     notes:
     - The observed artifact blob 43f3468765949e3db85a3782d90d4826b6c585bd is present at repository commit 0d9a967085c3bc137ab39ff9e3191c2eb3129d8c.
     - The root LICENSE was fetched and verified from the same commit.
-    - No concrete expression reliance was found in the registered local impacts, so Apache-2.0 redistribution permission is not required for the local reference-only classification.
+    - No concrete expression reliance was found in the registered local impacts, so Apache-2.0 redistribution permission is
+      not required for the local reference-only classification.
   source_snapshot:
     repository: neondatabase/postgres-skills
     source_path: skills/postgres-best-practices/SKILL.md
@@ -1649,3 +1654,110 @@ sources:
     source_path: skills/engineering/tdd/SKILL.md
     observed_ref: main
     observed_blob_sha: 8fc086710806190ee7c4baa32089cb877a75736a
+- source_id: emil-kowalski-motion-craft
+  reviewed_at: '2026-08-26'
+  repository_commit: d23d7f88a2e21c9e4b1418c7abe420f5c1052ba7
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence:
+  - Phase-3.5 source-specific review uses purpose, frequency, spatial-continuity and interruptibility concepts without copying
+    source wording, fixed timing rules or source structure.
+  - Author-specific duration, easing and performance absolutes were explicitly rejected as universal local truth.
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: MIT
+  license_source: same-state root LICENSE
+  license_source_commit_or_ref: d23d7f88a2e21c9e4b1418c7abe420f5c1052ba7
+  license_path: LICENSE
+  license_blob_sha: 57b46f1fd11dc62351ea548104a88aa3f659c11b
+  path_specific_license_notes:
+  - No conflicting path-specific license file was found for skills/animate in the reviewed tree.
+  license_status_at_observation: MIT evidence recorded; redistribution permission not relied on for reference-only use
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence:
+    artifact_declarations: []
+    same_state_files:
+    - path: LICENSE
+      blob_sha: 57b46f1fd11dc62351ea548104a88aa3f659c11b
+      spdx: MIT
+    notes:
+    - Same-state MIT evidence is provenance evidence only; the local material is independently worded reference use.
+  source_snapshot:
+    repository: emilkowalski/skills
+    source_path: skills/animate/SKILL.md
+    observed_ref: main
+    observed_blob_sha: 159fe0753228ab9d43fce274bd2c24433f3c4771
+- source_id: mblode-ui-animation
+  reviewed_at: '2026-08-26'
+  repository_commit: e97a3b383f5944f90d41eb92b24b4fb3b917a7f9
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence:
+  - Phase-3.5 review uses gesture, choreography and evidence/reverse-engineering concepts without copying source wording or
+    workflow structure.
+  - Emil-like craft heuristics in this source are treated as dependent evidence and are not double-counted as independent
+    consensus.
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: MIT
+  license_source: same-state root LICENSE.md
+  license_source_commit_or_ref: e97a3b383f5944f90d41eb92b24b4fb3b917a7f9
+  license_path: LICENSE.md
+  license_blob_sha: c5a1d56c6d623c72d077f8aab56b31d7dc371cbb
+  path_specific_license_notes:
+  - No conflicting path-specific license file was found for skills/ui-animation in the reviewed tree.
+  license_status_at_observation: MIT evidence recorded; redistribution permission not relied on for reference-only use
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence:
+    artifact_declarations: []
+    same_state_files:
+    - path: LICENSE.md
+      blob_sha: c5a1d56c6d623c72d077f8aab56b31d7dc371cbb
+      spdx: MIT
+    notes:
+    - Same-state MIT evidence is provenance evidence only; local use is concepts/methods reference.
+  source_snapshot:
+    repository: mblode/agent-skills
+    source_path: skills/ui-animation/SKILL.md
+    observed_ref: main
+    observed_blob_sha: 9c771273462e5ad42687e8d7240ef786e115fd71
+- source_id: taste-design-parameters
+  reviewed_at: '2026-08-26'
+  repository_commit: ccbc15639c97057cbfcf32ecebc38ef716e4bb37
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence:
+  - Only the abstract idea of making fuzzy design direction explicit through multiple parameters is used; source names, scales,
+    defaults and taste judgments are not copied.
+  - UI UX Pro Max is documented as genealogically dependent on Taste for the three-slider idea and is not counted as independent
+    consensus.
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: MIT
+  license_source: same-state root LICENSE
+  license_source_commit_or_ref: ccbc15639c97057cbfcf32ecebc38ef716e4bb37
+  license_path: LICENSE
+  license_blob_sha: 48a2f6640b81ff8eca9ce7f6a96337692713ef5b
+  path_specific_license_notes:
+  - No conflicting path-specific license file was found for skills/taste-skill in the reviewed tree.
+  license_status_at_observation: MIT evidence recorded; redistribution permission not relied on for reference-only use
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence:
+    artifact_declarations: []
+    same_state_files:
+    - path: LICENSE
+      blob_sha: 48a2f6640b81ff8eca9ce7f6a96337692713ef5b
+      spdx: MIT
+    notes:
+    - Same-state MIT evidence is provenance evidence only; local use is independently modeled concepts/methods reference.
+  source_snapshot:
+    repository: Leonxlnx/taste-skill
+    source_path: skills/taste-skill/SKILL.md
+    observed_ref: main
+    observed_blob_sha: b72132fcd466da605623ffe96e370b3991fc5285
