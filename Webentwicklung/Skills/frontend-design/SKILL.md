@@ -19,7 +19,8 @@ Entwickle für eine Website oder Weboberfläche eine konkrete, begründete Desig
 
 - Ersatz für lokale Markenregeln;
 - automatischen Komplett-Redesign-Auftrag;
-- Accessibility- oder Performance-Review.
+- Accessibility- oder Performance-Review;
+- Detailentwurf von Timing, Easing, Gesten oder Motion-Choreographie – dafür `motion-design`.
 
 ## Vor Beginn klären
 
@@ -39,6 +40,7 @@ Entwickle für eine Website oder Weboberfläche eine konkrete, begründete Desig
 5. Benenne explizit unpassende oder generische Defaultmuster.
 6. Prüfe, ob Hero und Hauptabschnitte aus dem Inhalt statt aus einem Standardtemplate entstehen.
 7. Übergib die Richtung als klaren Designbrief oder lokale `DESIGN.md`-Grundlage.
+8. Wenn Interaktionscharakter konkrete Motion benötigt, übergib Produkt-, Marken- und Intensitätsrahmen an `motion-design`, statt die Motion-Details hier auszuarbeiten.
 
 ## Anti-Slop-Check
 
