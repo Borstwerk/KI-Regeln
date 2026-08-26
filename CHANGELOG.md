@@ -18,7 +18,7 @@ Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunäch
 - Public-Repo-Hygiene mit `CONTRIBUTING.md`, `SECURITY.md`, Pull-Request-Template, Dependabot-Konfiguration, dokumentierter Branch-Protection-Empfehlung und schlankem README-Public-Entry-Path ergänzt;
 - GitHub Actions auf konkrete geprüfte v7-Commit-SHAs gepinnt, Workflowrechte bei `contents: read` belassen und keinen Auto-Merge oder automatischen Upstream-Sync eingeführt;
 - `tools/repo_validator.py` um dauerhafte strukturelle Provenance-/Readiness-Invarianten erweitert, ohne juristische Ähnlichkeits- oder Lizenzentscheidung zu automatisieren;
-- Root-`LICENSE` bewusst nicht allein aus der MIT-Empfehlung erzeugt: ausdrückliche Rights-Holder-/Projektlizenzentscheidung bleibt Blocker; Security Reporting bleibt bis zu einem verifizierten privaten Meldeweg blockiert, wobei GitHub Private Vulnerability Reporting als Phase-4-Schritt nach dem Visibility-Wechsel behandelt wird und ein autorisierter alternativer privater Kanal das Gate früher schließen kann;
+- autorisierten Projektlizenz-Decision-Gate geschlossen und Root-`LICENSE` mit MIT für das originäre KI-Regeln-Projektmaterial ergänzt; Drittmaterial wird dadurch nicht relicensed, `THIRD-PARTY-NOTICES.md` bleibt für redistribution-relevante Fremdanteile maßgeblich; Security Reporting bleibt bis zu einem verifizierten privaten Meldeweg als Phase-4-Release-Day-Gate blockiert;
 - keine `SKILL.md`-Fachlogik, Maturity oder Eval-Coverage im Rahmen von Phase 3 hochgestuft; kein Merge, Tag, Release, Visibility-Wechsel oder Branch-Protection-Write durch das Hardening.
 
 ### Hardening Phase 2 – Evals & Golden Tasks
