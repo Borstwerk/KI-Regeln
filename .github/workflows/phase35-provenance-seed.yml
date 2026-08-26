@@ -1,0 +1,54 @@
+name: Phase 3.5 provenance seed
+
+on:
+  push:
+    branches:
+      - hardening/phase-3-5-webdesign-motion
+    paths:
+      - .phase35-provenance-trigger
+
+permissions:
+  contents: write
+
+jobs:
+  seed:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+        with:
+          ref: hardening/phase-3-5-webdesign-motion
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12'
+      - run: python -m pip install --disable-pip-version-check PyYAML==6.0.2 jsonschema==4.25.1
+      - name: Append reviewed sources and provenance
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          registry = Path('Dokumentation/upstream-sources.yml')
+          provenance = Path('Dokumentation/upstream-provenance.yml')
+          r = registry.read_text(encoding='utf-8')
+          p = provenance.read_text(encoding='utf-8')
+          ids = ['emil-kowalski-motion-craft', 'mblode-ui-animation', 'taste-design-parameters']
+          for source_id in ids:
+              if f'id: {source_id}' in r or f'source_id: {source_id}' in p:
+                  raise SystemExit(f'duplicate source id: {source_id}')
+          if 'Dokumentation/Webdesign-Motion-Audit-Phase-3-5.md' not in Path('.').glob('**/*'):
+              pass
+          r = r.replace('last_updated: 2026-08-25', 'last_updated: 2026-08-26', 1)
+          r += '''\n\n  # ---------------------------------------------------------------------------\n  # Webentwicklung / Motion (Phase 3.5)\n  # ---------------------------------------------------------------------------\n  - id: emil-kowalski-motion-craft\n    area: Webentwicklung\n    kind: github-file\n    repository: emilkowalski/skills\n    path: skills/animate/SKILL.md\n    ref: main\n    monitor_mode: exact-sha\n    cadence: monthly\n    observed_sha: 159fe0753228ab9d43fce274bd2c24433f3c4771\n    last_checked: 2026-08-26\n    local_impact:\n      - Dokumentation/Webdesign-Motion-Audit-Phase-3-5.md\n\n  - id: mblode-ui-animation\n    area: Webentwicklung\n    kind: github-file\n    repository: mblode/agent-skills\n    path: skills/ui-animation/SKILL.md\n    ref: main\n    monitor_mode: exact-sha\n    cadence: monthly\n    observed_sha: 9c771273462e5ad42687e8d7240ef786e115fd71\n    last_checked: 2026-08-26\n    local_impact:\n      - Dokumentation/Webdesign-Motion-Audit-Phase-3-5.md\n\n  - id: taste-design-parameters\n    area: Webentwicklung\n    kind: github-file\n    repository: Leonxlnx/taste-skill\n    path: skills/taste-skill/SKILL.md\n    ref: main\n    monitor_mode: exact-sha\n    cadence: monthly\n    observed_sha: b72132fcd466da605623ffe96e370b3991fc5285\n    last_checked: 2026-08-26\n    local_impact:\n      - Dokumentation/Webdesign-Motion-Audit-Phase-3-5.md\n'''
+          p += '''\n- source_id: emil-kowalski-motion-craft\n  reviewed_at: 2026-08-26\n  repository_commit: d23d7f88a2e21c9e4b1418c7abe420f5c1052ba7\n  use_class: reference/inspiration\n  review_status: assessed\n  material_scope: concepts/methods-only\n  classification_evidence:\n    - Phase-3.5 source-specific review uses purpose, frequency, spatial-continuity and interruptibility concepts without copying source wording, fixed timing rules or source structure.\n    - Author-specific duration, easing and performance absolutes were explicitly rejected as universal local truth.\n  similarity_audit: no-signal\n  redistribution_reliance: not-relied-on\n  license_spdx: MIT\n  license_source: same-state root LICENSE\n  license_source_commit_or_ref: d23d7f88a2e21c9e4b1418c7abe420f5c1052ba7\n  license_path: LICENSE\n  license_blob_sha: 57b46f1fd11dc62351ea548104a88aa3f659c11b\n  path_specific_license_notes:\n    - No conflicting path-specific license file was found for skills/animate in the reviewed tree.\n  license_status_at_observation: MIT evidence recorded; redistribution permission not relied on for reference-only use\n  notice_requirement: none-for-reference-only\n  redistribution_status: not-relied-on\n  license_evidence:\n    artifact_declarations: []\n    same_state_files:\n      - path: LICENSE\n        blob_sha: 57b46f1fd11dc62351ea548104a88aa3f659c11b\n        spdx: MIT\n    notes:\n      - Same-state MIT evidence is provenance evidence only; the local material is independently worded reference use.\n  source_snapshot:\n    repository: emilkowalski/skills\n    source_path: skills/animate/SKILL.md\n    observed_ref: main\n    observed_blob_sha: 159fe0753228ab9d43fce274bd2c24433f3c4771\n- source_id: mblode-ui-animation\n  reviewed_at: 2026-08-26\n  repository_commit: e97a3b383f5944f90d41eb92b24b4fb3b917a7f9\n  use_class: reference/inspiration\n  review_status: assessed\n  material_scope: concepts/methods-only\n  classification_evidence:\n    - Phase-3.5 review uses gesture, choreography and evidence/reverse-engineering concepts without copying source wording or workflow structure.\n    - Emil-like craft heuristics in this source are treated as dependent evidence and are not double-counted as independent consensus.\n  similarity_audit: no-signal\n  redistribution_reliance: not-relied-on\n  license_spdx: MIT\n  license_source: same-state root LICENSE.md\n  license_source_commit_or_ref: e97a3b383f5944f90d41eb92b24b4fb3b917a7f9\n  license_path: LICENSE.md\n  license_blob_sha: c5a1d56c6d623c72d077f8aab56b31d7dc371cbb\n  path_specific_license_notes:\n    - No conflicting path-specific license file was found for skills/ui-animation in the reviewed tree.\n  license_status_at_observation: MIT evidence recorded; redistribution permission not relied on for reference-only use\n  notice_requirement: none-for-reference-only\n  redistribution_status: not-relied-on\n  license_evidence:\n    artifact_declarations: []\n    same_state_files:\n      - path: LICENSE.md\n        blob_sha: c5a1d56c6d623c72d077f8aab56b31d7dc371cbb\n        spdx: MIT\n    notes:\n      - Same-state MIT evidence is provenance evidence only; local use is concepts/methods reference.\n  source_snapshot:\n    repository: mblode/agent-skills\n    source_path: skills/ui-animation/SKILL.md\n    observed_ref: main\n    observed_blob_sha: 9c771273462e5ad42687e8d7240ef786e115fd71\n- source_id: taste-design-parameters\n  reviewed_at: 2026-08-26\n  repository_commit: ccbc15639c97057cbfcf32ecebc38ef716e4bb37\n  use_class: reference/inspiration\n  review_status: assessed\n  material_scope: concepts/methods-only\n  classification_evidence:\n    - Only the abstract idea of making fuzzy design direction explicit through multiple parameters is used; source names, scales, defaults and taste judgments are not copied.\n    - UI UX Pro Max is documented as genealogically dependent on Taste for the three slider idea and is not counted as independent consensus.\n  similarity_audit: no-signal\n  redistribution_reliance: not-relied-on\n  license_spdx: MIT\n  license_source: same-state root LICENSE\n  license_source_commit_or_ref: ccbc15639c97057cbfcf32ecebc38ef716e4bb37\n  license_path: LICENSE\n  license_blob_sha: 48a2f6640b81ff8eca9ce7f6a96337692713ef5b\n  path_specific_license_notes:\n    - No conflicting path-specific license file was found for skills/taste-skill in the reviewed tree.\n  license_status_at_observation: MIT evidence recorded; redistribution permission not relied on for reference-only use\n  notice_requirement: none-for-reference-only\n  redistribution_status: not-relied-on\n  license_evidence:\n    artifact_declarations: []\n    same_state_files:\n      - path: LICENSE\n        blob_sha: 48a2f6640b81ff8eca9ce7f6a96337692713ef5b\n        spdx: MIT\n    notes:\n      - Same-state MIT evidence is provenance evidence only; local use is independently modeled concepts/methods reference.\n  source_snapshot:\n    repository: Leonxlnx/taste-skill\n    source_path: skills/taste-skill/SKILL.md\n    observed_ref: main\n    observed_blob_sha: b72132fcd466da605623ffe96e370b3991fc5285\n'''
+          registry.write_text(r, encoding='utf-8')
+          provenance.write_text(p, encoding='utf-8')
+          PY
+      - name: Validate seeded state
+        run: python tools/repo_validator.py
+      - name: Commit seeded provenance and self-clean
+        run: |
+          rm -f .github/workflows/phase35-provenance-seed.yml .phase35-provenance-trigger
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Dokumentation/upstream-sources.yml Dokumentation/upstream-provenance.yml .github/workflows/phase35-provenance-seed.yml .phase35-provenance-trigger
+          git commit -m "provenance: register Phase 3.5 motion sources"
+          git push origin HEAD:hardening/phase-3-5-webdesign-motion
