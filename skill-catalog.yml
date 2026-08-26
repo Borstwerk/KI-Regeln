@@ -1,5 +1,5 @@
 schema_version: 2
-last_updated: 2026-08-25
+last_updated: 2026-08-26
 
 maturity_levels: [experimental, candidate, stable, deprecated, retired]
 eval_coverage_levels: [none, partial, core, broad]
@@ -35,6 +35,9 @@ skills:
   - {id: accessibility-review, area: Webentwicklung, path: Webentwicklung/Skills/accessibility-review/SKILL.md, maturity: experimental, eval_coverage: none, purpose: "Weboberflächen auf semantische und bedienbare Accessibility prüfen.", capabilities: [browser-preferred]}
   - {id: frontend-performance, area: Webentwicklung, path: Webentwicklung/Skills/frontend-performance/SKILL.md, maturity: experimental, eval_coverage: none, purpose: "Frontendperformance messungsbasiert diagnostizieren und verbessern.", capabilities: [measurement-preferred]}
   - {id: visual-verification, area: Webentwicklung, path: Webentwicklung/Skills/visual-verification/SKILL.md, maturity: experimental, eval_coverage: none, purpose: "Weboberflächen in realen Renderzuständen und Viewports verifizieren.", capabilities: [browser-required]}
+  - {id: motion-design, area: Webentwicklung, path: Webentwicklung/Skills/motion-design/SKILL.md, maturity: experimental, eval_coverage: partial, purpose: "Zweck, Intensität und Verhalten von Web-Motion als Motion-Contract definieren.", related: [frontend-design, design-system, motion-implementation, motion-review]}
+  - {id: motion-implementation, area: Webentwicklung, path: Webentwicklung/Skills/motion-implementation/SKILL.md, maturity: experimental, eval_coverage: partial, purpose: "Definierte Web-Motion mit einer kontextgerechten Webplattform- oder Library-Mechanik umsetzen.", capabilities: [repository-read-preferred, browser-preferred], related: [motion-design, motion-review, frontend-performance, visual-verification]}
+  - {id: motion-review, area: Webentwicklung, path: Webentwicklung/Skills/motion-review/SKILL.md, maturity: experimental, eval_coverage: partial, purpose: "Vorhandene Web-Motion unabhängig, evidenzbezogen und ohne ungefragte Reimplementation prüfen.", capabilities: [browser-preferred], related: [motion-design, motion-implementation, accessibility-review, frontend-performance, visual-verification]}
   - {id: web-search, area: Recherche, path: Recherche/Skills/web-search/SKILL.md, maturity: experimental, eval_coverage: partial, purpose: "Aktuelle Fakten schnell über Webquellen recherchieren und belegen.", capabilities: [web-required]}
   - {id: research-plan, area: Recherche, path: Recherche/Skills/research-plan/SKILL.md, maturity: experimental, eval_coverage: partial, purpose: "Größere Recherche in Fragen, Perspektiven, Quellenarten und Coverage planen."}
   - {id: deep-research, area: Recherche, path: Recherche/Skills/deep-research/SKILL.md, maturity: experimental, eval_coverage: partial, purpose: "Mehrperspektivische, iterative Multi-Source-Recherche orchestrieren.", capabilities: [web-required], related: [research-plan]}

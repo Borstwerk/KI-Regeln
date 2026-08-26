@@ -16,6 +16,13 @@ Prüfe eine bestehende gerenderte Weboberfläche kritisch gegen Produktziel, lok
 - visuelle Qualität unabhängig von der erzeugenden Instanz geprüft werden soll;
 - ein bestehendes UI nach AI-Slop-Risiken untersucht werden soll.
 
+## Nicht verwenden als
+
+- detaillierten Review von Timing, Easing, Spatial Continuity, Gesture oder Interruptibility vorhandener Motion – dafür `motion-review`;
+- allgemeine Accessibility- oder Performanceprüfung.
+
+Offensichtlich unmotivierte oder störende Motion darf als Designproblem benannt werden. Der fachliche Motion-Craft-Review wird bei Bedarf an `motion-review` übergeben.
+
 ## Eingaben
 
 - gerenderte Oberfläche oder aussagekräftige Screenshots;
@@ -40,6 +47,7 @@ Prüfe eine bestehende gerenderte Weboberfläche kritisch gegen Produktziel, lok
 6. Benenne Ursache und Wirkung statt nur kosmetische Vorlieben.
 7. Schütze starke bestehende Entscheidungen vor unnötigem Redesign.
 8. Erfinde keine neue Markenrichtung, wenn nur Review beauftragt ist.
+9. Wenn die Reviewfrage speziell reale Motion betrifft, komponiere mit `motion-review` statt Motion-Craft hier zu duplizieren.
 
 ## Typische Anti-Slop-Funde
 

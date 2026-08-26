@@ -1,5 +1,5 @@
 schema_version: 2
-last_updated: 2026-08-25
+last_updated: '2026-08-26'
 
 # Mutable external sources whose changes may affect local rules or skills.
 # A changed upstream is a review signal, never an automatic sync instruction.
@@ -1838,6 +1838,133 @@ sources:
       - Social-Media-und-Content-Praesenz/Skills/content-presence-baseline/SKILL.md
       - Social-Media-und-Content-Praesenz/Skills/content-presence-review/SKILL.md
 
+
+  - id: emil-kowalski-motion-craft
+    area: Webentwicklung
+    kind: github-file
+    repository: emilkowalski/skills
+    path: skills/animate/SKILL.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: 159fe0753228ab9d43fce274bd2c24433f3c4771
+    last_checked: '2026-08-26'
+    local_impact:
+      - Dokumentation/Webdesign-Motion-Audit-Phase-3-5.md
+      - Webentwicklung/Webdesign/Motion-und-Mikrointeraktionen.md
+      - Webentwicklung/Skills/motion-design/SKILL.md
+      - Webentwicklung/Skills/motion-review/SKILL.md
+  - id: mblode-ui-animation
+    area: Webentwicklung
+    kind: github-file
+    repository: mblode/agent-skills
+    path: skills/ui-animation/SKILL.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: 9c771273462e5ad42687e8d7240ef786e115fd71
+    last_checked: '2026-08-26'
+    local_impact:
+      - Dokumentation/Webdesign-Motion-Audit-Phase-3-5.md
+      - Webentwicklung/Webdesign/Motion-und-Mikrointeraktionen.md
+      - Webentwicklung/Skills/motion-design/SKILL.md
+      - Webentwicklung/Skills/motion-review/SKILL.md
+  - id: taste-design-parameters
+    area: Webentwicklung
+    kind: github-file
+    repository: Leonxlnx/taste-skill
+    path: skills/taste-skill/SKILL.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: b72132fcd466da605623ffe96e370b3991fc5285
+    last_checked: '2026-08-26'
+    local_impact:
+      - Dokumentation/Webdesign-Motion-Audit-Phase-3-5.md
+      - Webentwicklung/Webdesign/Motion-und-Mikrointeraktionen.md
+      - Webentwicklung/Skills/motion-design/SKILL.md
+  - id: mdn-prefers-reduced-motion
+    area: Webentwicklung
+    kind: web-page
+    url: https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/%40media/prefers-reduced-motion
+    monitor_mode: semantic-review
+    cadence: quarterly
+    last_checked: '2026-08-26'
+    local_impact:
+      - Webentwicklung/Webdesign/Motion-und-Mikrointeraktionen.md
+      - Webentwicklung/Skills/motion-design/SKILL.md
+      - Webentwicklung/Skills/motion-implementation/SKILL.md
+      - Webentwicklung/Skills/motion-review/SKILL.md
+  - id: mdn-web-animations-api
+    area: Webentwicklung
+    kind: web-page
+    url: https://developer.mozilla.org/en-US/docs/Web/API/Web_Animations_API
+    monitor_mode: semantic-review
+    cadence: quarterly
+    last_checked: '2026-08-26'
+    local_impact:
+      - Webentwicklung/Webdesign/Motion-und-Mikrointeraktionen.md
+      - Webentwicklung/Skills/motion-implementation/SKILL.md
+  - id: mdn-starting-style
+    area: Webentwicklung
+    kind: web-page
+    url: https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/%40starting-style
+    monitor_mode: semantic-review
+    cadence: quarterly
+    last_checked: '2026-08-26'
+    local_impact:
+      - Webentwicklung/Webdesign/Motion-und-Mikrointeraktionen.md
+      - Webentwicklung/Skills/motion-implementation/SKILL.md
+  - id: mdn-view-transition-api
+    area: Webentwicklung
+    kind: web-page
+    url: https://developer.mozilla.org/en-US/docs/Web/API/View_Transition_API
+    monitor_mode: semantic-review
+    cadence: quarterly
+    last_checked: '2026-08-26'
+    local_impact:
+      - Webentwicklung/Webdesign/Motion-und-Mikrointeraktionen.md
+      - Webentwicklung/Skills/motion-implementation/SKILL.md
+  - id: mdn-scroll-driven-animations
+    area: Webentwicklung
+    kind: web-page
+    url: https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Scroll-driven_animations
+    monitor_mode: semantic-review
+    cadence: quarterly
+    last_checked: '2026-08-26'
+    local_impact:
+      - Webentwicklung/Webdesign/Motion-und-Mikrointeraktionen.md
+      - Webentwicklung/Skills/motion-implementation/SKILL.md
+  - id: motion-layout-animations-docs
+    area: Webentwicklung
+    kind: web-page
+    url: https://motion.dev/docs/react-layout-animations
+    monitor_mode: semantic-review
+    cadence: quarterly
+    last_checked: '2026-08-26'
+    local_impact:
+      - Webentwicklung/Webdesign/Motion-und-Mikrointeraktionen.md
+      - Webentwicklung/Skills/motion-implementation/SKILL.md
+  - id: gsap-timeline-docs
+    area: Webentwicklung
+    kind: web-page
+    url: https://gsap.com/docs/v3/GSAP/Timeline/
+    monitor_mode: semantic-review
+    cadence: quarterly
+    last_checked: '2026-08-26'
+    local_impact:
+      - Webentwicklung/Webdesign/Motion-und-Mikrointeraktionen.md
+      - Webentwicklung/Skills/motion-implementation/SKILL.md
+  - id: gsap-scrolltrigger-docs
+    area: Webentwicklung
+    kind: web-page
+    url: https://gsap.com/docs/v3/Plugins/ScrollTrigger/
+    monitor_mode: semantic-review
+    cadence: quarterly
+    last_checked: '2026-08-26'
+    local_impact:
+      - Webentwicklung/Webdesign/Motion-und-Mikrointeraktionen.md
+      - Webentwicklung/Skills/motion-implementation/SKILL.md
 policy:
   on_change: review-only
   auto_sync: false

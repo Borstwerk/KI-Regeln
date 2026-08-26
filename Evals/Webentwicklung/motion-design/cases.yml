@@ -1,0 +1,93 @@
+skill: motion-design
+schema_version: 1
+
+cases:
+  - id: microinteraction-contract
+    class: outcome
+    input: "Definiere die Motion für einen Favoriten-Button: Beim Aktivieren soll klar werden, dass der Artikel gespeichert wurde. Die Interaktion wird sehr häufig benutzt."
+    should_trigger: true
+    expected:
+      - "benennt den Zweck der Bewegung als Zustandsfeedback"
+      - "berücksichtigt die hohe Interaktionsfrequenz"
+      - "liefert einen Motion-Contract statt sofort eine Library festzulegen"
+      - "definiert eine Reduced-Motion-Variante"
+    forbidden:
+      - "behandelt eine feste Dauer oder Easing-Kurve als universelle Best Practice"
+      - "wählt ungefragt GSAP oder Motion als Pflichtwerkzeug"
+    expected_status: pass
+
+  - id: no-animation-is-valid
+    class: behavior
+    input: "Unser Tabellenfilter läuft bei jeder einzelnen Auswahl. Soll der Ergebnisbereich bei jedem Filterwechsel sichtbar ein- und ausfahren? Die Anwender klicken dutzende Male pro Stunde."
+    should_trigger: true
+    expected:
+      - "prüft den konkreten Orientierungs- oder Feedbacknutzen"
+      - "behandelt keine Animation oder stark reduzierte Motion als legitimes Ergebnis"
+      - "berücksichtigt die Wiederholungsfrequenz"
+    forbidden:
+      - "fügt Motion nur hinzu weil moderne Interfaces animiert sein sollten"
+    expected_status: pass
+
+  - id: gesture-choreography
+    class: behavior
+    input: "Entwirf das Bewegungsverhalten eines mobilen Kartenstapels beim Drag: Richtungswechsel, Loslassen und Abbruch sollen sich nachvollziehbar anfühlen."
+    should_trigger: true
+    expected:
+      - "definiert kontinuierliche Eingabe, Constraints und Loslassverhalten"
+      - "berücksichtigt Interruptibility und gegenteilige Eingabe"
+      - "trennt Bewegungslogik von späterer technischer Implementierung"
+    forbidden:
+      - "reduziert die Aufgabe auf eine feste Tween-Dauer"
+    expected_status: pass
+
+  - id: landingpage-near-miss
+    class: trigger
+    input: "Entwirf eine eigenständige Landingpage für eine kleine Fahrradmanufaktur. Typografie, Farbe und Komposition sollen zur Marke passen."
+    should_trigger: false
+    expected:
+      - "routet die allgemeine visuelle Richtung zu frontend-design"
+    forbidden:
+      - "macht Motion ungefragt zum Hauptgegenstand der Art Direction"
+    expected_status: pass
+
+  - id: accessibility-near-miss
+    class: trigger
+    input: "Prüfe die Seite vollständig auf WCAG-Probleme, Semantik, Fokusreihenfolge und Kontrast."
+    should_trigger: false
+    expected:
+      - "routet den umfassenden Accessibility-Auftrag zu accessibility-review"
+    forbidden:
+      - "ersetzt den WCAG-Audit durch einen Motion-Review"
+    expected_status: pass
+
+  - id: performance-near-miss
+    class: trigger
+    input: "Warum braucht unsere Produktseite auf einem Mittelklasse-Android so lange bis sie interaktiv ist? Profiliere die Frontendperformance."
+    should_trigger: false
+    expected:
+      - "routet die allgemeine Performanceanalyse zu frontend-performance"
+    forbidden:
+      - "unterstellt ohne Evidenz dass Animation die Ursache ist"
+    expected_status: pass
+
+  - id: reduced-motion-alternative
+    class: behavior
+    input: "Beim Öffnen eines Detailpanels zeigt die Bewegung, aus welcher Tabellenzeile es stammt. Definiere eine Reduced-Motion-Variante, ohne die Orientierung zu verlieren."
+    should_trigger: true
+    expected:
+      - "erhält die notwendige Zustands- oder Herkunftsinformation"
+      - "reduziert oder ersetzt vestibulär problematische Bewegung statt pauschal alles auf 0ms zu setzen"
+    forbidden:
+      - "setzt Reduced Motion mit vollständigem Informationsverlust gleich"
+    expected_status: pass
+
+  - id: anti-author-dogma
+    class: regression
+    input: "Ein bekannter Motion-Designer empfiehlt für UI-Animationen immer dieselbe kurze Dauer und immer dieselbe Easing-Kurve. Übernimm das als feste Regel für unser Designsystem."
+    should_trigger: true
+    expected:
+      - "behandelt Autorenpräferenzen als Kontext oder Startpunkt statt universelle Wahrheit"
+      - "leitet Timing und Easing aus Produkt, Frequenz und Interaktion ab"
+    forbidden:
+      - "macht die genannte Autorenpräferenz ohne projektspezifische Evidenz zur Pflichtregel"
+    expected_status: pass
