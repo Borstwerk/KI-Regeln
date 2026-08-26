@@ -1,0 +1,241 @@
+name: Phase 3.5 governance sync corrected
+
+on:
+  push:
+    branches:
+      - hardening/phase-3-5-webdesign-motion
+    paths:
+      - .phase35-governance-sync-corrected-trigger
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+        with:
+          ref: hardening/phase-3-5-webdesign-motion
+          fetch-depth: 0
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12'
+      - run: python -m pip install --disable-pip-version-check PyYAML==6.0.2 jsonschema==4.25.1
+      - name: Mutate catalog and sources with semantic equality gates
+        run: |
+          python - <<'PY'
+          from copy import deepcopy
+          from datetime import date
+          from pathlib import Path
+          import yaml
+
+          class IndentDumper(yaml.SafeDumper):
+              def increase_indent(self, flow=False, indentless=False):
+                  return super().increase_indent(flow, False)
+
+          def mapping_value(node, key_name):
+              if not isinstance(node, yaml.MappingNode):
+                  return None
+              for key, value in node.value:
+                  if isinstance(key, yaml.ScalarNode) and key.value == key_name:
+                      return value
+              return None
+
+          def render_records(records):
+              rendered = yaml.dump(
+                  {'sources': records},
+                  Dumper=IndentDumper,
+                  sort_keys=False,
+                  allow_unicode=True,
+                  width=120,
+                  default_flow_style=False,
+              )
+              header = 'sources:\n'
+              if not rendered.startswith(header):
+                  raise SystemExit('unexpected sources serialization')
+              body = rendered[len(header):]
+              if not body.startswith('  - '):
+                  raise SystemExit('unexpected first source prefix')
+              # The original sequence prefix of the first replaced record remains.
+              return body[4:].rstrip('\n')
+
+          # ---- Catalog: exactly three new records after visual-verification ----
+          catalog_path = Path('skill-catalog.yml')
+          catalog_text = catalog_path.read_text(encoding='utf-8')
+          catalog = yaml.safe_load(catalog_text)
+          if not isinstance(catalog, dict) or not isinstance(catalog.get('skills'), list):
+              raise SystemExit('catalog structure invalid')
+
+          new_skills = [
+              {
+                  'id': 'motion-design',
+                  'area': 'Webentwicklung',
+                  'path': 'Webentwicklung/Skills/motion-design/SKILL.md',
+                  'maturity': 'experimental',
+                  'eval_coverage': 'partial',
+                  'purpose': 'Zweck, Intensität und Verhalten von Web-Motion als Motion-Contract definieren.',
+                  'related': ['frontend-design', 'design-system', 'motion-implementation', 'motion-review'],
+              },
+              {
+                  'id': 'motion-implementation',
+                  'area': 'Webentwicklung',
+                  'path': 'Webentwicklung/Skills/motion-implementation/SKILL.md',
+                  'maturity': 'experimental',
+                  'eval_coverage': 'partial',
+                  'purpose': 'Definierte Web-Motion mit einer kontextgerechten Webplattform- oder Library-Mechanik umsetzen.',
+                  'capabilities': ['repository-read-preferred', 'browser-preferred'],
+                  'related': ['motion-design', 'motion-review', 'frontend-performance', 'visual-verification'],
+              },
+              {
+                  'id': 'motion-review',
+                  'area': 'Webentwicklung',
+                  'path': 'Webentwicklung/Skills/motion-review/SKILL.md',
+                  'maturity': 'experimental',
+                  'eval_coverage': 'partial',
+                  'purpose': 'Vorhandene Web-Motion unabhängig, evidenzbezogen und ohne ungefragte Reimplementation prüfen.',
+                  'capabilities': ['browser-preferred'],
+                  'related': ['motion-design', 'motion-implementation', 'accessibility-review', 'frontend-performance', 'visual-verification'],
+              },
+          ]
+          existing_skill_ids = [s.get('id') for s in catalog['skills'] if isinstance(s, dict)]
+          if any(record['id'] in existing_skill_ids for record in new_skills):
+              raise SystemExit('Phase 3.5 skill already present before corrected sync')
+          visual_index = existing_skill_ids.index('visual-verification')
+
+          desired_catalog = deepcopy(catalog)
+          desired_catalog['last_updated'] = date(2026, 8, 26)
+          for offset, record in enumerate(new_skills, start=1):
+              desired_catalog['skills'].insert(visual_index + offset, record)
+
+          catalog_root = yaml.compose(catalog_text)
+          catalog_nodes = {k.value: v for k, v in catalog_root.value if isinstance(k, yaml.ScalarNode)}
+          skills_node = catalog_nodes.get('skills')
+          last_updated_node = catalog_nodes.get('last_updated')
+          if not isinstance(skills_node, yaml.SequenceNode) or not isinstance(last_updated_node, yaml.ScalarNode):
+              raise SystemExit('catalog YAML nodes invalid')
+          visual_node = None
+          for node in skills_node.value:
+              ident = mapping_value(node, 'id')
+              if isinstance(ident, yaml.ScalarNode) and ident.value == 'visual-verification':
+                  visual_node = node
+                  break
+          if visual_node is None:
+              raise SystemExit('visual-verification YAML node missing')
+
+          catalog_lines = [
+              '  - {id: motion-design, area: Webentwicklung, path: Webentwicklung/Skills/motion-design/SKILL.md, maturity: experimental, eval_coverage: partial, purpose: "Zweck, Intensität und Verhalten von Web-Motion als Motion-Contract definieren.", related: [frontend-design, design-system, motion-implementation, motion-review]}',
+              '  - {id: motion-implementation, area: Webentwicklung, path: Webentwicklung/Skills/motion-implementation/SKILL.md, maturity: experimental, eval_coverage: partial, purpose: "Definierte Web-Motion mit einer kontextgerechten Webplattform- oder Library-Mechanik umsetzen.", capabilities: [repository-read-preferred, browser-preferred], related: [motion-design, motion-review, frontend-performance, visual-verification]}',
+              '  - {id: motion-review, area: Webentwicklung, path: Webentwicklung/Skills/motion-review/SKILL.md, maturity: experimental, eval_coverage: partial, purpose: "Vorhandene Web-Motion unabhängig, evidenzbezogen und ohne ungefragte Reimplementation prüfen.", capabilities: [browser-preferred], related: [motion-design, motion-implementation, accessibility-review, frontend-performance, visual-verification]}',
+          ]
+          catalog_ops = [
+              (visual_node.end_mark.index, visual_node.end_mark.index, '\n' + '\n'.join(catalog_lines)),
+              (last_updated_node.start_mark.index, last_updated_node.end_mark.index, '2026-08-26'),
+          ]
+          rebuilt_catalog = catalog_text
+          for start, end, replacement in sorted(catalog_ops, reverse=True):
+              rebuilt_catalog = rebuilt_catalog[:start] + replacement + rebuilt_catalog[end:]
+          parsed_catalog = yaml.safe_load(rebuilt_catalog)
+          if parsed_catalog != desired_catalog:
+              raise SystemExit('catalog semantic equality gate failed')
+          catalog_path.write_text(rebuilt_catalog, encoding='utf-8')
+
+          # ---- Registry: replace one contiguous tail, then verify exact semantics ----
+          registry_path = Path('Dokumentation/upstream-sources.yml')
+          registry_text = registry_path.read_text(encoding='utf-8')
+          registry = yaml.safe_load(registry_text)
+          if not isinstance(registry, dict) or not isinstance(registry.get('sources'), list):
+              raise SystemExit('registry structure invalid')
+          policy_before = deepcopy(registry.get('policy'))
+
+          impacts = {
+              'emil-kowalski-motion-craft': [
+                  'Dokumentation/Webdesign-Motion-Audit-Phase-3-5.md',
+                  'Webentwicklung/Webdesign/Motion-und-Mikrointeraktionen.md',
+                  'Webentwicklung/Skills/motion-design/SKILL.md',
+                  'Webentwicklung/Skills/motion-review/SKILL.md',
+              ],
+              'mblode-ui-animation': [
+                  'Dokumentation/Webdesign-Motion-Audit-Phase-3-5.md',
+                  'Webentwicklung/Webdesign/Motion-und-Mikrointeraktionen.md',
+                  'Webentwicklung/Skills/motion-design/SKILL.md',
+                  'Webentwicklung/Skills/motion-review/SKILL.md',
+              ],
+              'taste-design-parameters': [
+                  'Dokumentation/Webdesign-Motion-Audit-Phase-3-5.md',
+                  'Webentwicklung/Webdesign/Motion-und-Mikrointeraktionen.md',
+                  'Webentwicklung/Skills/motion-design/SKILL.md',
+              ],
+          }
+
+          technical_sources = [
+              {'id': 'mdn-prefers-reduced-motion', 'area': 'Webentwicklung', 'kind': 'web-page', 'url': 'https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/%40media/prefers-reduced-motion', 'monitor_mode': 'semantic-review', 'cadence': 'quarterly', 'last_checked': '2026-08-26', 'local_impact': ['Webentwicklung/Webdesign/Motion-und-Mikrointeraktionen.md', 'Webentwicklung/Skills/motion-design/SKILL.md', 'Webentwicklung/Skills/motion-implementation/SKILL.md', 'Webentwicklung/Skills/motion-review/SKILL.md']},
+              {'id': 'mdn-web-animations-api', 'area': 'Webentwicklung', 'kind': 'web-page', 'url': 'https://developer.mozilla.org/en-US/docs/Web/API/Web_Animations_API', 'monitor_mode': 'semantic-review', 'cadence': 'quarterly', 'last_checked': '2026-08-26', 'local_impact': ['Webentwicklung/Webdesign/Motion-und-Mikrointeraktionen.md', 'Webentwicklung/Skills/motion-implementation/SKILL.md']},
+              {'id': 'mdn-starting-style', 'area': 'Webentwicklung', 'kind': 'web-page', 'url': 'https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/%40starting-style', 'monitor_mode': 'semantic-review', 'cadence': 'quarterly', 'last_checked': '2026-08-26', 'local_impact': ['Webentwicklung/Webdesign/Motion-und-Mikrointeraktionen.md', 'Webentwicklung/Skills/motion-implementation/SKILL.md']},
+              {'id': 'mdn-view-transition-api', 'area': 'Webentwicklung', 'kind': 'web-page', 'url': 'https://developer.mozilla.org/en-US/docs/Web/API/View_Transition_API', 'monitor_mode': 'semantic-review', 'cadence': 'quarterly', 'last_checked': '2026-08-26', 'local_impact': ['Webentwicklung/Webdesign/Motion-und-Mikrointeraktionen.md', 'Webentwicklung/Skills/motion-implementation/SKILL.md']},
+              {'id': 'mdn-scroll-driven-animations', 'area': 'Webentwicklung', 'kind': 'web-page', 'url': 'https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Scroll-driven_animations', 'monitor_mode': 'semantic-review', 'cadence': 'quarterly', 'last_checked': '2026-08-26', 'local_impact': ['Webentwicklung/Webdesign/Motion-und-Mikrointeraktionen.md', 'Webentwicklung/Skills/motion-implementation/SKILL.md']},
+              {'id': 'motion-layout-animations-docs', 'area': 'Webentwicklung', 'kind': 'web-page', 'url': 'https://motion.dev/docs/react-layout-animations', 'monitor_mode': 'semantic-review', 'cadence': 'quarterly', 'last_checked': '2026-08-26', 'local_impact': ['Webentwicklung/Webdesign/Motion-und-Mikrointeraktionen.md', 'Webentwicklung/Skills/motion-implementation/SKILL.md']},
+              {'id': 'gsap-timeline-docs', 'area': 'Webentwicklung', 'kind': 'web-page', 'url': 'https://gsap.com/docs/v3/GSAP/Timeline/', 'monitor_mode': 'semantic-review', 'cadence': 'quarterly', 'last_checked': '2026-08-26', 'local_impact': ['Webentwicklung/Webdesign/Motion-und-Mikrointeraktionen.md', 'Webentwicklung/Skills/motion-implementation/SKILL.md']},
+              {'id': 'gsap-scrolltrigger-docs', 'area': 'Webentwicklung', 'kind': 'web-page', 'url': 'https://gsap.com/docs/v3/Plugins/ScrollTrigger/', 'monitor_mode': 'semantic-review', 'cadence': 'quarterly', 'last_checked': '2026-08-26', 'local_impact': ['Webentwicklung/Webdesign/Motion-und-Mikrointeraktionen.md', 'Webentwicklung/Skills/motion-implementation/SKILL.md']},
+          ]
+
+          existing_source_ids = [s.get('id') for s in registry['sources'] if isinstance(s, dict)]
+          if existing_source_ids[-3:] != ['emil-kowalski-motion-craft', 'mblode-ui-animation', 'taste-design-parameters']:
+              raise SystemExit(f'unexpected methodical source tail: {existing_source_ids[-3:]}')
+          if set(s['id'] for s in technical_sources) & set(existing_source_ids):
+              raise SystemExit('one or more technical sources already registered')
+
+          desired_registry = deepcopy(registry)
+          for record in desired_registry['sources']:
+              if isinstance(record, dict) and record.get('id') in impacts:
+                  record['local_impact'] = impacts[record['id']]
+          desired_registry['sources'].extend(technical_sources)
+          if desired_registry.get('policy') != policy_before:
+              raise SystemExit('policy drift in desired registry')
+
+          registry_root = yaml.compose(registry_text)
+          registry_nodes = {k.value: v for k, v in registry_root.value if isinstance(k, yaml.ScalarNode)}
+          sources_node = registry_nodes.get('sources')
+          if not isinstance(sources_node, yaml.SequenceNode):
+              raise SystemExit('sources YAML node missing')
+          nodes_by_id = {}
+          for node in sources_node.value:
+              ident = mapping_value(node, 'id')
+              if isinstance(ident, yaml.ScalarNode):
+                  nodes_by_id[ident.value] = node
+
+          first_tail_node = nodes_by_id['emil-kowalski-motion-craft']
+          last_tail_node = nodes_by_id['taste-design-parameters']
+          tail_records = [
+              next(r for r in desired_registry['sources'] if r.get('id') == 'emil-kowalski-motion-craft'),
+              next(r for r in desired_registry['sources'] if r.get('id') == 'mblode-ui-animation'),
+              next(r for r in desired_registry['sources'] if r.get('id') == 'taste-design-parameters'),
+              *technical_sources,
+          ]
+          replacement = render_records(tail_records)
+          rebuilt_registry = (
+              registry_text[:first_tail_node.start_mark.index]
+              + replacement
+              + registry_text[last_tail_node.end_mark.index:]
+          )
+          parsed_registry = yaml.safe_load(rebuilt_registry)
+          if parsed_registry != desired_registry:
+              raise SystemExit('registry semantic equality gate failed')
+          if parsed_registry.get('policy') != policy_before:
+              raise SystemExit('registry policy equality gate failed')
+          if len(parsed_registry['sources']) != len(desired_registry['sources']):
+              raise SystemExit('registry source-count gate failed')
+          registry_path.write_text(rebuilt_registry, encoding='utf-8')
+          PY
+      - name: Validate synchronized state
+        run: |
+          python tools/repo_validator.py
+          python tools/eval_coverage_audit.py --summary
+          git diff --check
+      - name: Commit governance data only
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add skill-catalog.yml Dokumentation/upstream-sources.yml
+          git commit -m "chore: synchronize Phase 3.5 catalog and sources"
+          git push origin HEAD:hardening/phase-3-5-webdesign-motion
