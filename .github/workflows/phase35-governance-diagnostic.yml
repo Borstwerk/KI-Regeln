@@ -42,9 +42,8 @@ jobs:
               if type(a) is not type(b):
                   return f'{path}: type {type(a).__name__} != {type(b).__name__}: {a!r} != {b!r}'
               if isinstance(a, dict):
-                  if list(a.keys()) != list(b.keys()):
-                      if set(a.keys()) != set(b.keys()):
-                          return f'{path}: keys differ left={list(a.keys())} right={list(b.keys())}'
+                  if set(a.keys()) != set(b.keys()):
+                      return f'{path}: keys differ left={list(a.keys())} right={list(b.keys())}'
                   for key in a:
                       d = first_diff(a[key], b[key], f'{path}.{key}')
                       if d: return d
@@ -60,8 +59,7 @@ jobs:
                   return f'{path}: {a!r} != {b!r}'
               return None
 
-          registry_path = Path('Dokumentation/upstream-sources.yml')
-          text = registry_path.read_text(encoding='utf-8')
+          text = Path('Dokumentation/upstream-sources.yml').read_text(encoding='utf-8')
           registry = yaml.safe_load(text)
           impacts = {
               'emil-kowalski-motion-craft': [
@@ -118,6 +116,15 @@ jobs:
           rebuilt=text
           for start,end,repl in sorted(ops, reverse=True): rebuilt=rebuilt[:start]+repl+rebuilt[end:]
           parsed=yaml.safe_load(rebuilt)
+
+          parsed_ids=[r.get('id') for r in parsed['sources']]
+          desired_ids=[r.get('id') for r in desired['sources']]
           print(first_diff(parsed, desired) or 'NO_DIFF')
-          print('parsed source count', len(parsed['sources']), 'desired', len(desired['sources']))
+          print('parsed source count', len(parsed_ids), 'desired', len(desired_ids))
+          print('missing IDs:', [x for x in desired_ids if x not in set(parsed_ids)])
+          print('unexpected IDs:', [x for x in parsed_ids if x not in set(desired_ids)])
+          for i,(left,right) in enumerate(zip(parsed_ids, desired_ids)):
+              if left != right:
+                  print('first ID order delta:', i, left, '!=', right)
+                  break
           PY
