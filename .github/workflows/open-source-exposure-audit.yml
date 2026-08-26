@@ -3,7 +3,9 @@ name: Open-source exposure audit
 on:
   push:
     branches:
-      - hardening/phase-3-open-source-readiness
+      - main
+      - 'hardening/**'
+  pull_request:
   workflow_dispatch:
 
 permissions:
@@ -65,8 +67,8 @@ jobs:
           data=json.load(open(os.environ['REPORT'], encoding='utf-8'))
           secrets=[f for f in data['findings'] if f['severity']=='potential-secret']
           context=[f for f in data['findings'] if f['severity']=='review-context']
-          print(f"reachable commits: {data['commits']}")
-          print(f"unique reachable blobs: {data['unique_reachable_blobs']}")
+          print(f"reachable commits: {data['commit_count']}")
+          print(f"unique reachable blobs: {data['unique_reachable_blob_count']}")
           print(f"potential-secret findings: {len(secrets)}")
           print(f"review-context findings: {len(context)}")
           for finding in secrets + context:
