@@ -18,44 +18,13 @@ jobs:
         with:
           ref: hardening/phase-3-5-webdesign-motion
       - name: Update changelog and catalog docs
+        run: python tools/phase35_finalize_docs.py
+      - name: Validate diff and commit documentation
         run: |
-          python - <<'PY'
-          from pathlib import Path
-
-          changelog = Path('CHANGELOG.md')
-          text = changelog.read_text(encoding='utf-8')
-          anchor = 'Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.\n\n'
-          section = '''### Hardening Phase 3.5 – Webdesign und Motion\n\n- Webdesign um drei klar getrennte Motion-Skills ergänzt: `motion-design` definiert Zweck und Motion-Contract, `motion-implementation` setzt freigegebene Motion technisch um und `motion-review` bewertet vorhandene Motion unabhängig; Reverse Engineering aus Screenrecordings bleibt Evidence-Modus von `motion-review` statt eigener vierter Skill;\n- gemeinsame Grundlage `Webentwicklung/Webdesign/Motion-und-Mikrointeraktionen.md` ergänzt: keine Animation als valides Ergebnis, kontextabhängige Timing-/Easing-Entscheidung, Spatial Continuity, Gesten, Interruptibility, Reduced Motion, evidenzbasierte Toolwahl und Performance ohne GPU-/Property-/Library-Dogmen;\n- vier bestehende Web-Skills nur an realen Routingkanten geschärft (`frontend-design`, `design-system`, `web-design-review`, `visual-verification`); `accessibility-review` und `frontend-performance` blieben nach Prüfung unverändert;\n- drei Motion-Evalpacks mit insgesamt 26 definierten Cases ergänzt, einschließlich positiver Trigger, Landingpage-/WCAG-/Performance-Near-Misses, `keine Animation`, Reduced Motion, Toolwahl, fehlende Render-Evidence sowie Screenrecording → `motion-review` → `motion-implementation` → `visual-verification`; diese Cases sind definiert, aber nicht als Behavioral Evals ausgeführt oder bestanden;\n- drei methodische Skill-Upstreams source-spezifisch als `reference/inspiration` geprüft (`emilkowalski/skills`, `mblode/agent-skills`, `Leonxlnx/taste-skill`); finaler Text übernimmt keine konkreten Tabellen, Skalen, Defaultwerte oder Source-Struktur und bleibt `similarity_audit: no-signal`; genealogisch abhängige Hinweise werden nicht als unabhängiger Konsens doppelt gezählt;\n- acht konkrete technische Primärquellen für Reduced Motion, WAAPI, `@starting-style`, View Transitions, Scroll-driven Animations sowie Motion-/GSAP-Fähigkeiten registriert; technische Primärquellen werden nicht als methodischer Designkonsens behandelt;\n- Skill-Katalog von 128 auf 131 Skills erweitert; die drei neuen Skills starten `experimental` mit `partial` Evalabdeckung, ohne bestehende Maturity hochzustufen; aktueller Coverage-Stand 103× `partial`, 28× `none`;\n- GT-09 bewusst nicht allein zur Erhöhung der Golden-Task-Anzahl erzeugt: der zusätzliche kombinierte Motion-Reproduktionsfall prüft bereits die neue Cross-Skill-Routingkante, ohne aktuell einen zusätzlichen systemischen Golden-Task-Gewinn zu belegen;\n- Upstream-Governance bleibt `review-only` mit `auto_sync: false`; kein Merge, Tag, Release, Visibility-Wechsel oder automatische Upstream-Synchronisation durch Phase 3.5.\n\n'''
-          if section in text:
-              raise SystemExit('Phase 3.5 changelog section already present')
-          if text.count(anchor) != 1:
-              raise SystemExit('unexpected changelog anchor count')
-          changelog.write_text(text.replace(anchor, anchor + section), encoding='utf-8')
-
-          catalog = Path('Dokumentation/Skill-Katalog.md')
-          text = catalog.read_text(encoding='utf-8')
-          replacements = {
-              'Der Katalog enthält aktuell 128 zentrale Skills:': 'Der Katalog enthält aktuell 131 zentrale Skills:',
-              '- Webentwicklung: 8;': '- Webentwicklung: 11;',
-              'Der reproduzierbare Coverage-Audit für Phase 2 ergibt aktuell:\n\n- 128 Skills insgesamt;\n- 100 Skills mit `partial` Eval Coverage;\n- 28 Skills mit `none`;\n- 0 Skills mit `core` oder `broad`;\n- 100 Evalpacks mit insgesamt 489 definierten Skill-Cases.': 'Der Phase-2-Auditstand vor Phase 3.5 betrug:\n\n- 128 Skills insgesamt;\n- 100 Skills mit `partial` Eval Coverage;\n- 28 Skills mit `none`;\n- 0 Skills mit `core` oder `broad`;\n- 100 Evalpacks mit insgesamt 489 definierten Skill-Cases.',
-          }
-          for old, new in replacements.items():
-              if text.count(old) != 1:
-                  raise SystemExit(f'unexpected catalog replacement count for {old!r}: {text.count(old)}')
-              text = text.replace(old, new)
-
-          motion_paragraph = '''\nFür Webentwicklung ergänzen `motion-design`, `motion-implementation` und `motion-review` den Bestand als `experimental` mit `partial` Evalabdeckung. Für diese drei Skills sind 26 Motion-Cases definiert. Darunter befindet sich ein kombinierter Screenrecording-Reproduktionsfall, der die Komposition `motion-review → motion-implementation → visual-verification` absichert; er begründet derzeit keinen separaten `motion-reverse-engineering`-Skill. Die 26 Fälle sind **definiert, aber noch nicht als Behavioral Evals ausgeführt oder bestanden**.\n\nAktueller Gesamtstand nach Phase 3.5: 131 Skills, davon 103× `partial` und 28× `none`, 0× `core`/`broad`; 103 Skill-Evalpacks mit insgesamt 515 definierten Cases. Die drei neuen Skills wurden nicht über `experimental` hinaus hochgestuft.\n'''
-          anchor2 = 'Für Social Media und Content-Präsenz sind sechs Startfälle je Skill definiert, insgesamt 54. Die erwartete Verteilung ist 36× `pass`, 9× `partial` und 9× `blocked`. Diese 54 Fälle sind derzeit **definiert, aber noch nicht ausgeführt oder bestanden**.\n'
-          if text.count(anchor2) != 1:
-              raise SystemExit('motion catalog insertion anchor missing')
-          text = text.replace(anchor2, anchor2 + motion_paragraph)
-          catalog.write_text(text, encoding='utf-8')
-          PY
-      - name: Commit documentation only
-        run: |
+          git diff --check
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add CHANGELOG.md Dokumentation/Skill-Katalog.md
-          git diff --check
+          rm -f tools/phase35_finalize_docs.py .phase35-final-docs-trigger
+          git add CHANGELOG.md Dokumentation/Skill-Katalog.md tools/phase35_finalize_docs.py .phase35-final-docs-trigger
           git commit -m "docs: finalize Phase 3.5 change record"
           git push origin HEAD:hardening/phase-3-5-webdesign-motion
