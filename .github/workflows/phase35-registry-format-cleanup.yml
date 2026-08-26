@@ -1,0 +1,84 @@
+name: Phase 3.5 registry format cleanup
+
+on:
+  push:
+    branches:
+      - hardening/phase-3-5-webdesign-motion
+    paths:
+      - .phase35-registry-cleanup-trigger
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+        with:
+          ref: hardening/phase-3-5-webdesign-motion
+          fetch-depth: 0
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12'
+      - run: python -m pip install --disable-pip-version-check PyYAML==6.0.2 ruamel.yaml==0.19.1 jsonschema==4.25.1
+      - name: Restore base formatting and retain structured additions
+        run: |
+          git show 36b55acb51c3a98f72e340c03f2af75788c65e7f:Dokumentation/upstream-sources.yml > /tmp/upstream-sources.base.yml
+          python - <<'PY'
+          from pathlib import Path
+          import yaml
+          from ruamel.yaml import YAML
+
+          current_path = Path('Dokumentation/upstream-sources.yml')
+          base_path = Path('/tmp/upstream-sources.base.yml')
+          ids = [
+              'emil-kowalski-motion-craft',
+              'mblode-ui-animation',
+              'taste-design-parameters',
+          ]
+
+          current = yaml.safe_load(current_path.read_text(encoding='utf-8'))
+          base = yaml.safe_load(base_path.read_text(encoding='utf-8'))
+          if not isinstance(current, dict) or not isinstance(base, dict):
+              raise SystemExit('registry documents must be mappings')
+          if not isinstance(current.get('sources'), list) or not isinstance(base.get('sources'), list):
+              raise SystemExit('registry sources must be lists')
+          if current.get('policy') != base.get('policy'):
+              raise SystemExit('policy drift detected')
+
+          base_ids = {record.get('id') for record in base['sources'] if isinstance(record, dict)}
+          current_ids = {record.get('id') for record in current['sources'] if isinstance(record, dict)}
+          if current_ids != base_ids | set(ids):
+              raise SystemExit('current registry differs from base by more than the three Phase 3.5 IDs')
+
+          additions = []
+          for source_id in ids:
+              matches = [record for record in current['sources'] if isinstance(record, dict) and record.get('id') == source_id]
+              if len(matches) != 1:
+                  raise SystemExit(f'expected exactly one current record for {source_id}')
+              additions.append(matches[0])
+
+          ryaml = YAML()
+          ryaml.preserve_quotes = True
+          with base_path.open('r', encoding='utf-8') as fh:
+              doc = ryaml.load(fh)
+          doc['sources'].extend(additions)
+          doc['last_updated'] = '2026-08-26'
+          with current_path.open('w', encoding='utf-8') as fh:
+              ryaml.dump(doc, fh)
+
+          rewritten = yaml.safe_load(current_path.read_text(encoding='utf-8'))
+          if rewritten != current:
+              raise SystemExit('round-trip cleanup changed registry semantics')
+          PY
+          python tools/repo_validator.py
+          git diff --stat -- Dokumentation/upstream-sources.yml
+      - name: Commit cleanup and self-clean
+        run: |
+          rm -f .github/workflows/phase35-registry-format-cleanup.yml .phase35-registry-cleanup-trigger
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Dokumentation/upstream-sources.yml .github/workflows/phase35-registry-format-cleanup.yml .phase35-registry-cleanup-trigger
+          git commit -m "chore: minimize Phase 3.5 registry diff"
+          git push origin HEAD:hardening/phase-3-5-webdesign-motion
