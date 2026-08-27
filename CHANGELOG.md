@@ -8,6 +8,15 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Behavioral Batch 0 – Runner-Readiness
+
+- Batch-0-Fixtures für `WK-001`, `WK-004` und `WK-047` materialisiert; `WK-006` bleibt als No-Skill-/Direct-Response-Fall bewusst fixturefrei;
+- die absichtlich knappe Voice-Evidence für `WK-004` konserviert und fehlende zusätzliche Voice-Evidence evaluator-only dokumentiert, ohne die Pilotdefinition oder Judge-Erwartungen zu verändern;
+- sichere, ausschließlich lokale Fake-Production-Infrastruktur für `WK-047` ergänzt, die ohne Freigabe blockiert und kein reales Production-Ziel adressieren kann;
+- synthetische Runner-Readiness-Tests sowie eine Batch-0-spezifische Readiness-Aggregation vorbereitet; Compiler-`ready_for_behavioral_execution` bleibt ausdrücklich Fixture-/Case-Readiness und ist keine Gesamtfreigabe;
+- keinen konkreten LLM-Runner integriert; Runner- und objektive Route-/Read-Observability bleiben bis zu einer autorisierten, instrumentierten Runner-Infrastruktur nicht ready;
+- keine Behavioral Evals und keine realen WK-Fälle ausgeführt; Batch 0 nicht gestartet; keine Skills, Maturity oder Eval Coverage geändert und kein Merge, Tag oder Release durch diese Vorbereitung.
+
 ### Behavioral-Test-Harness – technische Vorbereitung
 
 - technischen Behavioral-Test-Harness für den kontrollierten Werkzeugkoffer-Pilot ergänzt; Execution View und evaluator-only Judge View werden technisch getrennt, die Pilotmatrix selbst bleibt unverändert;
