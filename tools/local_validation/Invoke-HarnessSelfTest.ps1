@@ -194,10 +194,10 @@ try {
     $r = Invoke-FixtureValidation -ValidationState $SharedState -HarnessArguments @('-Quick')
     Add-Result 5 'invalid YAML' ($r.ExitCode -eq 1 -and (Has-Code $r.Report 'YAML')) ("exit={0}" -f $r.ExitCode)
 
-    # 6. Remove one source-specific provenance record.
+    # 6. Remove a provenance record that only uses aliases; keep the anchor-defining first record intact.
     Reset-Fixture
     $options = [System.Text.RegularExpressions.RegexOptions]::Multiline -bor [System.Text.RegularExpressions.RegexOptions]::Singleline
-    Replace-FileText 'Dokumentation/upstream-provenance.yml' '^- source_id: addyosmani-observability-instrumentation-skill\r?\n.*?(?=^- source_id:)' '' $options
+    Replace-FileText 'Dokumentation/upstream-provenance.yml' '^- source_id: agent-skills-specification\r?\n.*?(?=^- source_id:)' '' $options
     $r = Invoke-FixtureValidation -ValidationState $SharedState -HarnessArguments @('-Quick')
     Add-Result 6 'missing provenance entry' ($r.ExitCode -eq 1 -and (Has-Code $r.Report 'PROVENANCE_MISSING')) ("exit={0}" -f $r.ExitCode)
 
@@ -212,7 +212,7 @@ try {
     $secretFixture = Join-Path $Worktree '__validation_exposure_fixture.txt'
     $tokenPrefix = 'gh' + 'p_'
     $tokenBody = '1234567890' + 'ABCDEFGHIJKLMNOPQRST'
-    Write-Utf8NoBom -Path $secretFixture -Text ("synthetic={0}{1}`n" -f $tokenPrefix, $tokenBody)
+    Write-Utf8NoBom -Path $secretFixture -Text ("synthetic={0}{1}{2}" -f $tokenPrefix, $tokenBody, [Environment]::NewLine)
     & git.exe -C $Worktree add '__validation_exposure_fixture.txt' | Out-Null
     $r = Invoke-FixtureValidation -ValidationState $SharedState -HarnessArguments @('-Release')
     Add-Result 8 'synthetic exposure finding' ($r.ExitCode -eq 1 -and (Has-Code $r.Report 'EXPOSURE_GITHUB_TOKEN')) ("exit={0}" -f $r.ExitCode)
@@ -223,7 +223,7 @@ try {
     $mailLocal = 'qa-validation'
     $mailSeparator = [char]64
     $mailDomain = 'example' + '.com'
-    Write-Utf8NoBom -Path $warningFixture -Text ("synthetic-contact={0}{1}{2}`n" -f $mailLocal, $mailSeparator, $mailDomain)
+    Write-Utf8NoBom -Path $warningFixture -Text ("synthetic-contact={0}{1}{2}{3}" -f $mailLocal, $mailSeparator, $mailDomain, [Environment]::NewLine)
     & git.exe -C $Worktree add '__validation_warning_fixture.txt' | Out-Null
     $r = Invoke-FixtureValidation -ValidationState $SharedState -HarnessArguments @('-Release')
     $warningFound = (Has-Code $r.Report 'CONTEXT_EMAIL_ADDRESS')
