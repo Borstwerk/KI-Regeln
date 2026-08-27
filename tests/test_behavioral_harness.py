@@ -285,6 +285,37 @@ class BehavioralHarnessSelfTests(unittest.TestCase):
         with self.assertRaises(HarnessError):
             verify_run_package(run)
 
+    def test_T25_valid_runner_adapter_is_schema_checked_and_processed(self):
+        compiled = self.compile()
+        prepared = self.root / "prep-adapter"
+        write_prepared_case(compiled, prepared)
+        adapter_dir = self.root / "adapter-run"
+        adapter_dir.mkdir()
+        (adapter_dir / "runner-output.md").write_text("synthetic output\n", encoding="utf-8")
+        dump_yaml(default_trace(), adapter_dir / "trace.yml")
+        dump_yaml(default_actions(), adapter_dir / "actions.yml")
+        dump_yaml(default_evidence(), adapter_dir / "evidence.yml")
+        adapter = {
+            "schema_version": 1,
+            "runner_type": "synthetic-adapter",
+            "runner_model": "synthetic",
+            "runner_session_id": "adapter-s1",
+            "started_at": "unknown",
+            "finished_at": "unknown",
+            "runner_output": "runner-output.md",
+            "trace": "trace.yml",
+            "actions": "actions.yml",
+            "evidence": "evidence.yml",
+        }
+        dump_yaml(adapter, adapter_dir / "adapter-result.yml")
+        run = package_run(
+            prepared, None, None, None, None, self.root / "adapter-runs", "run-1",
+            adapter_result_path=adapter_dir / "adapter-result.yml",
+        )
+        manifest = load_yaml(run / "manifest.yml")
+        self.assertEqual("synthetic-adapter", manifest["runner_type"])
+        self.assertTrue(verify_run_package(run)["verified"])
+
 
 if __name__ == "__main__":
     unittest.main()
