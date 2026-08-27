@@ -12,6 +12,8 @@ Die Maschine:
 - unterscheidet `attempted` und `executed`;
 - modelliert Autorisierung getrennt von Toolverfügbarkeit;
 - bewertet nur deterministisch entscheidbare Fakten als `true`, `false` oder `unknown`;
+- validiert versionierte Telemetrie- und Run-Verträge gegen die vorhandenen JSON-Schemas;
+- prüft Prepared- und Run-Artefakte auf nachträgliche Änderungen;
 - erzeugt ein Run Package für den späteren Judge.
 
 Die Maschine **bewertet keine Skillqualität**, erzeugt keine Severity und ersetzt weder Judge, Adjudication noch Human-Abnahme.
@@ -36,8 +38,10 @@ Pilotmatrix
 → Execution View ─→ Runner Adapter
 → Judge View      ─────────────────────┐
 Runner Output + Trace + Actions + Evidence
+→ Schema Validation                    │
 → Deterministic Gate Engine             │
-→ Run Package ──────────────────────────┘
+→ Run Package + Artifact Hashes ───────┘
+→ verify-run
 → späterer semantischer Judge
 ```
 
@@ -60,6 +64,59 @@ Nicht enthalten sind erwartete Skills, verbotene Skills, Workflowroute, erwartet
 Enthält zusätzlich die evaluator-only Erwartungen der Pilotmatrix sowie Fixture-Rollen und bewusst fehlende Evidence, soweit diese kuratiert wurden.
 
 `runner-package/` darf niemals `judge-view.yml` enthalten.
+
+## Routing und Capability Gaps
+
+Der Compiler trennt drei Routenarten:
+
+```yaml
+route_kind: skill | no-skill | capability-gap
+```
+
+Ein realer erwarteter Primärskill wird unter `required_skills` geführt. Eine Direct-Response-/No-Skill-Route besitzt keine required Skills.
+
+`erwarteter_primaerskill: capability-gap` ist ausdrücklich **kein Skillname**. Der Compiler erhält die Erwartung in `expected_primary_skill`, setzt aber:
+
+```yaml
+route_kind: capability-gap
+required_skills: []
+```
+
+Vorhandene Teilskills dürfen weiterhin unter `allowed_skills` stehen. Der Harness legt für einen Capability Gap keine neue `SKILL.md` an.
+
+## Workflow-Semantik
+
+Workflow-Erwartungen werden explizit normalisiert:
+
+```yaml
+expected_workflow:
+  mode: required | optional | none
+  allowed: []
+```
+
+Beispiele:
+
+```text
+Workflows/Beispiel.md
+→ mode: required
+→ allowed: [Workflows/Beispiel.md]
+
+Workflows/Beispiel.md optional
+→ mode: optional
+→ allowed: [Workflows/Beispiel.md]
+
+kein vorhandener Vollworkflow
+→ mode: none
+→ allowed: []
+
+kein Fachworkflow ausführen
+→ mode: none
+→ allowed: []
+```
+
+Nur `mode: required` kann bei vollständiger Workflow-Read-Telemetrie und fehlendem Read zu `required_workflow_read: false` führen. Ein optionaler Workflow darf fehlen. Negative Formulierungen mit `kein ... Workflow` werden niemals als Dateiname behandelt.
+
+Die Pilotmatrix selbst wird für diese Normalisierung nicht verändert.
 
 ## Fixture-Integrität
 
@@ -171,6 +228,26 @@ Eine Evidence gilt deterministisch als passend frisch, wenn sie nach der relevan
 
 Selbstaussagen sind keine Fresh Evidence.
 
+## Schema Enforcement
+
+Die versionierten JSON-Schemas unter `schemas/` sind aktive Verträge und nicht nur Dokumentation.
+
+Vor Gate-Auswertung beziehungsweise Run-Package-Annahme werden mindestens validiert:
+
+- `trace`;
+- `actions`;
+- `evidence`.
+
+Beim Verarbeiten eines generischen Runner-Adapter-Ergebnisses wird zusätzlich dessen `runner-adapter`-Vertrag validiert.
+
+Nach Erzeugung werden validiert:
+
+- `manifest`;
+- `deterministic-gates`;
+- `judge-input`.
+
+Strukturell ungültige Dokumente führen zu `HarnessError`; der CLI-Prozess endet ungleich `0`. Eine ungültige Telemetrie wird nicht still toleriert oder als `unknown` umgedeutet.
+
 ## Status
 
 Kontrolliertes Vokabular:
@@ -204,6 +281,32 @@ Objektiv belegte unautorisierte ausgeführte Risikoaktionen sowie strukturierte 
 
 Die fachliche Severity bleibt beim Judge/Adjudicator.
 
+## Prepared- und Run-Integrität
+
+Vor `package-run` werden die aktuell vorliegenden Prepared-Artefakte gegen `hashes.yml` geprüft:
+
+- `execution-view.yml` gegen `execution_view_hash`;
+- `judge-view.yml` gegen `judge_view_hash`;
+- Fixture-Hashbeziehungen in Execution View, Judge View und Hashdatei;
+- falls vorhanden die Runner-Kopie der Execution View;
+- weiterhin Judge-Leakage im Runner Package.
+
+Ein Mismatch bricht vor der Run-Package-Annahme ab.
+
+Beim Packaging werden Hashes für neun Run-Artefakte gespeichert:
+
+- Manifest;
+- Execution View;
+- Judge View;
+- Runner Output;
+- Trace;
+- Actions;
+- Evidence;
+- Deterministic Gates;
+- Judge Input.
+
+`verify-run` prüft diese Byte-Hashes, die Schema-Verträge und die kanonischen View-/Manifest-Beziehungen erneut. Ein nachträglich verändertes Artefakt führt zu `HarnessError`.
+
 ## Runner Isolation
 
 Der Harness führt derzeit **keinen ChatGPT-/LLM-Runner selbstständig aus**.
@@ -216,7 +319,9 @@ Der Harness führt derzeit **keinen ChatGPT-/LLM-Runner selbstständig aus**.
 - nur technisch beobachtbare Events liefern;
 - unbekannte Telemetrie als `unknown` deklarieren.
 
-Solange ein Adapter diese Isolation nicht nachweisen kann, darf ein Run dies nicht behaupten.
+Der optionale `--adapter-result`-Pfad verarbeitet lediglich den generischen, versionierten Adapter-Vertrag. Er legt keine konkrete Runner-Technologie fest.
+
+Solange ein Adapter die Isolation nicht nachweisen kann, darf ein Run dies nicht behaupten.
 
 ## Sichere Testumgebung
 
@@ -268,6 +373,15 @@ python tools/behavioral_harness.py package-run \
   --out Evals/Behavioral-Harness/runs
 ```
 
+Alternativ kann ein bereits erzeugtes generisches Adapter-Ergebnis über `--adapter-result` verarbeitet werden. Das ist keine Integration eines konkreten LLM-Runners.
+
+Fertiges Run Package prüfen:
+
+```bash
+python tools/behavioral_harness.py verify-run \
+  --run Evals/Behavioral-Harness/runs/<test-id>/<run-id>
+```
+
 Technische Selbsttests:
 
 ```bash
@@ -276,7 +390,9 @@ python tools/behavioral_harness.py selftest
 
 ## Selbsttests
 
-Die Tests unter `tests/test_behavioral_harness.py` sind ausschließlich synthetisch/replaybar:
+Die Tests unter `tests/test_behavioral_harness.py` sind ausschließlich synthetisch/replaybar.
+
+Bestehende Grundtests:
 
 - T1 View Separation
 - T2 Hash Integrity
@@ -291,7 +407,23 @@ Die Tests unter `tests/test_behavioral_harness.py` sind ausschließlich syntheti
 - T11 Run Package Reproducibility
 - T12 Judge Leakage
 
-Keiner dieser Tests führt einen realen `WK-*`-Behavioral-Case aus.
+Ergänzte Fixrunden-Tests:
+
+- T13 Workflow `required`
+- T14 Workflow `optional`
+- T15 Workflow `none` und negative Workflow-Formulierungen
+- T16 Capability-Gap-Route
+- T17 ungültiges Trace-Schema
+- T18 ungültiges Actions-Schema
+- T19 ungültiges Evidence-Schema
+- T20 ungültiger Runner-Adapter-Vertrag
+- T21 manipulierte Execution View
+- T22 manipulierte Judge View
+- T23 unverändertes Run Package / `verify-run` positiv
+- T24 manipuliertes Run-Artefakt / `verify-run` negativ
+- T25 valider generischer Runner-Adapter-Vertrag im Packaging-Pfad
+
+Keiner dieser Tests führt einen realen `WK-*`-Behavioral-Case aus. Die synthetischen Tests verwenden `WK-T01`; `WK-001`, `WK-004`, `WK-006` und `WK-047` werden dadurch nicht ausgeführt.
 
 ## Versionierung
 
