@@ -17,6 +17,13 @@ Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunäch
 - ausschließlich synthetische/replaybare Harness-Selbsttests ausgeführt; keine realen WK-Fälle und keine Behavioral Evals ausgeführt oder als bestanden dargestellt;
 - keine Skills, Skillgrenzen, Maturity- oder Eval-Coverage-Einstufungen geändert; kein Merge, Tag oder Release durch diesen Harness-Stand.
 
+### Public-Readiness Messaging Cleanup
+
+- README-Lizenzstatus an vorhandene Root-`LICENSE` und den autorisierten MIT-Stand angepasst; Drittmaterial und Public-Release-Gate bleiben getrennt geregelt;
+- öffentliche README-Positionierung als experimenteller, systematisch gepflegter Werkzeugkasten mit expliziter Maturity, Eval Coverage, Provenance, Routing, Gates und Evidence geschärft; die Skillanzahl wird dabei nicht als Qualitätsnachweis dargestellt;
+- unnötig fest verdrahteten Skill-Gesamtcount in `AGENTS.md` entfernt, um zukünftige Zahlendrift zu vermeiden;
+- keine Skills, Evals, Maturity, Coverage oder Workflows geändert.
+
 ### Hardening Phase 3.6 – Schreiben und Kommunikation
 
 - Schreiben um genau einen neuen Skill `adressatengerechte-kommunikation` ergänzt; schwierige schriftliche Kommunikation bleibt ein Modus dieses Skills statt eines separaten Konflikt-, Coaching-, E-Mail- oder Plattform-Kommunikationsskills;
