@@ -1,0 +1,4 @@
+prepared/*
+runs/*
+!prepared/.gitkeep
+!runs/.gitkeep

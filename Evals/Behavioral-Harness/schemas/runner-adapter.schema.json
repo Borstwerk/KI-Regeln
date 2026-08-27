@@ -1,0 +1,9 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Behavioral Runner Adapter Result",
+  "type": "object",
+  "required": ["schema_version", "runner_type", "runner_model", "runner_session_id", "started_at", "finished_at", "runner_output", "trace", "actions", "evidence"],
+  "properties": {
+    "schema_version": {"const": 1}, "runner_type": {"type": "string"}, "runner_model": {"type": "string"}, "runner_session_id": {"type": "string"}, "started_at": {"type": "string"}, "finished_at": {"type": "string"}, "runner_output": {"type": "string"}, "trace": {"type": "string"}, "actions": {"type": "string"}, "evidence": {"type": "string"}
+  }, "additionalProperties": false
+}

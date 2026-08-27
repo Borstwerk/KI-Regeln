@@ -8,6 +8,15 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Behavioral-Test-Harness – technische Vorbereitung
+
+- technischen Behavioral-Test-Harness für den kontrollierten Werkzeugkoffer-Pilot ergänzt; Execution View und evaluator-only Judge View werden technisch getrennt, die Pilotmatrix selbst bleibt unverändert;
+- Tri-State-Observability (`true` / `false` / `unknown`), Tool-/Action-Trace mit `attempted` versus `executed`, getrennte Authorization-Evidence und Fresh-Evidence-Beziehungen für strukturierte Claims vorbereitet;
+- Workflow-Erwartungen explizit als `required`, `optional` oder `none` normalisiert und Capability-Gap-Routen von realen Skill-Routen getrennt, ohne neue Skills anzulegen;
+- versionierte JSON-Schemas im normalen Harness-Pfad als verbindliche Verträge aktiviert sowie Prepared-/Run-Hashprüfung und `verify-run` zur Erkennung nachträglicher Artefaktänderungen ergänzt;
+- ausschließlich synthetische/replaybare Harness-Selbsttests ausgeführt; keine realen WK-Fälle und keine Behavioral Evals ausgeführt oder als bestanden dargestellt;
+- keine Skills, Skillgrenzen, Maturity- oder Eval-Coverage-Einstufungen geändert; kein Merge, Tag oder Release durch diesen Harness-Stand.
+
 ### Public-Readiness Messaging Cleanup
 
 - README-Lizenzstatus an vorhandene Root-`LICENSE` und den autorisierten MIT-Stand angepasst; Drittmaterial und Public-Release-Gate bleiben getrennt geregelt;

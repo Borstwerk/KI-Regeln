@@ -1,0 +1,25 @@
+schema_version: 1
+repository: Borstwerk/KI-Regeln
+base_commit: 9027d8d49b327ff663f8cddd29ef7e27eaedc0d4
+expected_test_count: 50
+artifacts:
+  KI-Regeln-Werkzeugkoffer-Testvorbereitung.md:
+    role: test-architecture
+    sha256: sha256:e2dbf3eccf9f414468a5d6cdfbd5e8c76b74b39f4fda74c1ef3c48bc184618d7
+    size_bytes: 19998
+  KI-Regeln-Pilot-Testmatrix.yml:
+    role: behavioral-pilot-source-of-truth
+    sha256: sha256:2c758271a5e4a5e7cc6134d664bc774d2071ba7e93d7b6c19b56ee17d50036a6
+    size_bytes: 60352
+  KI-Regeln-Pilot-Testmatrix.csv:
+    role: tabular-mirror
+    sha256: sha256:ebc3297f5da91d09b4886ceb352a586c3823e26519e0d8e2752f22e65597ec02
+    size_bytes: 40880
+  KI-Regeln-Skill-Priorisierung.csv:
+    role: prioritization-support
+    sha256: sha256:f5b94a3a5817199f5c65774a2da6cf175a39ad5eb1b414913b1bdc8b7e4d9aaa
+    size_bytes: 19232
+  KI-Regeln-Skill-Differenzmatrix.csv:
+    role: differentiation-support
+    sha256: sha256:06c76a4a5c4d7b9099af8c68e590732384815862f05bc7d967b31530e1f50425
+    size_bytes: 10837

@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Behavioral Harness Evidence",
+  "type": "object",
+  "required": ["schema_version", "observability", "evidence", "claims"],
+  "properties": {
+    "schema_version": {"const": 1}, "observability": {"type": "object"},
+    "evidence": {"type": "array", "items": {"type": "object", "required": ["evidence_id", "source", "created_at", "artifact_ref", "commit_or_state_ref", "environment", "verification_type"], "properties": {
+      "evidence_id": {"type": "string"}, "source": {"type": "string"}, "created_at": {"type": "string"}, "artifact_ref": {"type": "string"}, "commit_or_state_ref": {"type": "string"}, "environment": {"type": "string"}, "verification_type": {"type": "string"}
+    }, "additionalProperties": true}},
+    "claims": {"type": "array", "items": {"type": "object", "required": ["claim_id", "claim_type", "raw", "created_at", "artifact_ref", "commit_or_state_ref", "environment", "fresh_evidence"], "properties": {
+      "claim_id": {"type": "string"}, "claim_type": {"enum": ["completion", "pass", "deployed", "tested", "checked", "blocked", "partial", "other"]}, "raw": {"type": "string"}, "created_at": {"type": "string"}, "relevant_change_at": {"type": ["string", "null"]}, "artifact_ref": {"type": "string"}, "commit_or_state_ref": {"type": "string"}, "environment": {"type": "string"}, "acceptable_verification_types": {"type": "array", "items": {"type": "string"}},
+      "fresh_evidence": {"type": "object", "required": ["required", "refs"], "properties": {"required": {"oneOf": [{"type": "boolean"}, {"const": "unknown"}]}, "present": {"oneOf": [{"type": "boolean"}, {"const": "unknown"}]}, "refs": {"type": "array", "items": {"type": "string"}}, "relation_to_claim": {}}, "additionalProperties": true}
+    }, "additionalProperties": true}}
+  }, "additionalProperties": false
+}

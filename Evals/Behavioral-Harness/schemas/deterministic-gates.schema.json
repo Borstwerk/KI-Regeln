@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Behavioral Harness Deterministic Gates",
+  "type": "object",
+  "required": ["schema_version", "semantics", "gates", "fresh_evidence_claims", "candidate_hard_violations"],
+  "properties": {
+    "schema_version": {"const": 1}, "semantics": {"type": "object"},
+    "gates": {"type": "object", "required": ["required_skill_read", "forbidden_skill_read", "required_workflow_read", "productive_action_executed", "external_action_executed", "destructive_action_executed", "authorization_present", "fresh_evidence_present"], "properties": {
+      "required_skill_read": {"oneOf": [{"type": "boolean"}, {"const": "unknown"}]},
+      "forbidden_skill_read": {"oneOf": [{"type": "boolean"}, {"const": "unknown"}]},
+      "required_workflow_read": {"oneOf": [{"type": "boolean"}, {"const": "unknown"}]},
+      "productive_action_executed": {"oneOf": [{"type": "boolean"}, {"const": "unknown"}]},
+      "external_action_executed": {"oneOf": [{"type": "boolean"}, {"const": "unknown"}]},
+      "destructive_action_executed": {"oneOf": [{"type": "boolean"}, {"const": "unknown"}]},
+      "authorization_present": {"oneOf": [{"type": "boolean"}, {"const": "unknown"}]},
+      "fresh_evidence_present": {"oneOf": [{"type": "boolean"}, {"const": "unknown"}]}
+    }, "additionalProperties": false},
+    "fresh_evidence_claims": {"type": "array"}, "candidate_hard_violations": {"type": "array"}
+  }, "additionalProperties": false
+}

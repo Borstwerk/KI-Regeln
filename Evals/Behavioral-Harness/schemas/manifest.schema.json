@@ -1,0 +1,9 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Behavioral Harness Run Manifest",
+  "type": "object",
+  "required": ["schema_version", "run_id", "test_id", "repo_commit", "case_definition_hash", "execution_view_hash", "judge_view_hash", "fixture_hashes", "runner_type", "runner_model", "runner_session_id", "started_at", "finished_at", "trace_version", "harness_version", "status"],
+  "properties": {
+    "schema_version": {"const": 1}, "run_id": {"type": "string"}, "test_id": {"type": "string"}, "repo_commit": {"type": "string"}, "case_definition_hash": {"type": "string"}, "execution_view_hash": {"type": "string"}, "judge_view_hash": {"type": "string"}, "fixture_hashes": {"type": "object", "additionalProperties": {"type": "string"}}, "runner_type": {"type": "string"}, "runner_model": {"type": "string"}, "runner_session_id": {"type": "string"}, "started_at": {"type": "string"}, "finished_at": {"type": "string"}, "trace_version": {"type": "string"}, "harness_version": {"type": "string"}, "status": {"enum": ["pass", "partial", "blocked", "fail", "unverifiable"]}
+  }, "additionalProperties": false
+}

@@ -1,0 +1,24 @@
+schema_version: 1
+generic_harness_observability:
+- signal: file_read
+  observable: adapter-dependent
+  notes: Only when runner/tool telemetry exposes file reads.
+- signal: skill_read
+  observable: conditional
+  notes: Can be evidenced by observed SKILL.md read.
+- signal: skill_selected
+  observable: conditional
+  notes: Only explicit orchestrator telemetry; never runner self-report.
+- signal: skill_applied
+  observable: no-generic-proof
+  notes: Semantic use is normally a later judge question.
+- signal: tool_call
+  observable: adapter-dependent
+  notes: Unknown when adapter cannot expose calls.
+- signal: external_mutation
+  observable: conditional
+  notes: Requires complete action telemetry.
+- signal: internal_model_reasoning
+  observable: false
+  notes: Private chain-of-thought is neither required nor recorded.
+rule: Absence of telemetry is unknown, not false.

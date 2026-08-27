@@ -1,0 +1,12 @@
+schema_version: 1
+description: Optional evaluator-only fixture role overrides. Empty until fixtures
+  are curated; compiler uses role=unknown rather than guessing.
+roles:
+- authoritative-source
+- supporting-source
+- intentionally-incomplete
+- distractor
+- policy
+- expected-missing-evidence
+- unknown
+cases: {}
