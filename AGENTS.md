@@ -23,7 +23,7 @@ Typischer Startkontext:
 - passende Einträge aus `skill-catalog.yml`;
 - danach nur die ausgewählten Skills bzw. Workflows.
 
-Nicht erforderlich: komplettes Repository, alle 128 katalogisierten Skills, vollständige Nutzungsdokumentation oder alle Fachhandbücher.
+Nicht erforderlich: komplettes Repository, alle katalogisierten Skills, vollständige Nutzungsdokumentation oder alle Fachhandbücher.
 
 ## Harte Grenzen
 
