@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "uv": {
+    "version": "0.12.6",
+    "assets": {
+      "windows-x64": {
+        "file": "uv-x86_64-pc-windows-msvc.zip",
+        "url": "https://github.com/astral-sh/uv/releases/download/0.12.6/uv-x86_64-pc-windows-msvc.zip",
+        "sha256": "df7cb9f243eae1621400d4fcf5b1b3d90f20e264ece91b64deb3b0078abca6ef"
+      },
+      "windows-arm64": {
+        "file": "uv-aarch64-pc-windows-msvc.zip",
+        "url": "https://github.com/astral-sh/uv/releases/download/0.12.6/uv-aarch64-pc-windows-msvc.zip",
+        "sha256": "6dda514fbbe3152d980758e0f6347116060114d7d24932fc0ea5d8063f8b253a"
+      }
+    }
+  },
+  "python": {
+    "implementation": "cpython",
+    "version": "3.12.12"
+  },
+  "dependencies": {
+    "requirements": "tools/local_validation/requirements.lock"
+  }
+}
