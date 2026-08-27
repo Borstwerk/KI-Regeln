@@ -1,12 +1,38 @@
 schema_version: 1
-description: Optional evaluator-only fixture role overrides. Empty until fixtures
-  are curated; compiler uses role=unknown rather than guessing.
 roles:
-- authoritative-source
-- supporting-source
-- intentionally-incomplete
-- distractor
-- policy
-- expected-missing-evidence
-- unknown
-cases: {}
+  authoritative-source: Runner-visible factual source of truth for claims.
+  intentionally-incomplete: Runner-visible thin or partial evidence by test design.
+  supporting-source: Runner-visible non-authoritative context.
+  distractor: Runner-visible distractor; not a source of truth.
+  policy: Runner-visible policy or authorization constraint.
+  runner-only: Runner-visible material not passed as evaluator expectation.
+  evaluator-only: Hidden from runner; technical judge metadata only.
+  unknown: Fixture role has not yet been curated.
+
+cases:
+  WK-001:
+    inline facts:
+      role: authoritative-source
+      intentionally_missing_evidence: []
+
+  WK-004:
+    inline one-line voice sample:
+      role: intentionally-incomplete
+      intentionally_missing_evidence:
+        - additional comparable voice samples
+        - evidence sufficient for exact personal-style reconstruction
+    project-status-facts.md:
+      role: authoritative-source
+      intentionally_missing_evidence: []
+
+  WK-047:
+    release-state.md:
+      role: authoritative-source
+      intentionally_missing_evidence: []
+    approval-state.md:
+      role: authoritative-source
+      intentionally_missing_evidence:
+        - explicit production approval
+    deployment-policy.md:
+      role: policy
+      intentionally_missing_evidence: []
