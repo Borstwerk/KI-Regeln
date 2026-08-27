@@ -5,19 +5,23 @@ import unittest
 from pathlib import Path
 
 from tools.behavioral_harness import (
+    HarnessError,
     TRI_UNKNOWN,
     compile_case,
     default_actions,
     default_evidence,
     default_trace,
+    dump_yaml,
     evaluate_gates,
+    load_runner_adapter_result,
     load_yaml,
     package_run,
+    verify_run_package,
     write_prepared_case,
 )
 
 
-def synthetic_matrix(primary="alpha", fixture="fixture.txt"):
+def synthetic_matrix(primary="alpha", fixture="fixture.txt", workflow="Workflows/Synthetic.md"):
     return {
         "schema_version": 1,
         "repository": "Borstwerk/KI-Regeln",
@@ -35,7 +39,7 @@ def synthetic_matrix(primary="alpha", fixture="fixture.txt"):
                 "erwarteter_primaerskill": primary,
                 "erlaubte_secondary_skills": ["beta"],
                 "verbotene_skills": ["gamma"],
-                "erwarteter_workflow": "Workflows/Synthetic.md",
+                "erwarteter_workflow": workflow,
                 "erwartete_evidence": ["fixture truth"],
                 "erwarteter_status": "pass",
                 "output_kriterien": ["useful"],
@@ -60,11 +64,21 @@ class BehavioralHarnessSelfTests(unittest.TestCase):
     def compile(self, matrix=None):
         return compile_case(matrix or synthetic_matrix(), "WK-T01", self.root)
 
+    def package(self, compiled=None, out_name="runs", run_id="run-1"):
+        compiled = compiled or self.compile()
+        prepared = self.root / f"prepared-{out_name}"
+        write_prepared_case(compiled, prepared)
+        return package_run(
+            prepared, None, None, None, None, self.root / out_name, run_id,
+            runner_type="synthetic", runner_model="synthetic", runner_session_id="s1",
+            started_at="unknown", finished_at="unknown",
+        )
+
     def test_T1_view_separation(self):
         compiled = self.compile()
         execution = compiled["execution_view"]
         for forbidden in (
-            "expected_primary_skill", "required_skills", "allowed_skills",
+            "route_kind", "expected_primary_skill", "required_skills", "allowed_skills",
             "forbidden_skills", "expected_status", "failure_modes", "routing_criteria",
         ):
             self.assertNotIn(forbidden, execution)
@@ -91,12 +105,14 @@ class BehavioralHarnessSelfTests(unittest.TestCase):
 
     def test_T4_required_allowed_forbidden(self):
         judge = self.compile()["judge_view"]
+        self.assertEqual("skill", judge["route_kind"])
         self.assertEqual(["alpha"], judge["required_skills"])
         self.assertEqual(["beta"], judge["allowed_skills"])
         self.assertEqual(["gamma"], judge["forbidden_skills"])
 
     def test_T5_no_skill_route(self):
         compiled = self.compile(synthetic_matrix(primary="none/direct-response"))
+        self.assertEqual("no-skill", compiled["judge_view"]["route_kind"])
         self.assertEqual([], compiled["judge_view"]["required_skills"])
 
     def test_T6_attempted_not_executed(self):
@@ -161,12 +177,8 @@ class BehavioralHarnessSelfTests(unittest.TestCase):
         compiled_a = self.compile()
         compiled_b = self.compile()
         self.assertEqual(compiled_a["hashes"], compiled_b["hashes"])
-        prepared_a = self.root / "prep-a"
-        prepared_b = self.root / "prep-b"
-        write_prepared_case(compiled_a, prepared_a)
-        write_prepared_case(compiled_b, prepared_b)
-        run_a = package_run(prepared_a, None, None, None, None, self.root / "runs-a", "run-1", runner_type="synthetic", runner_model="synthetic", runner_session_id="s1", started_at="unknown", finished_at="unknown")
-        run_b = package_run(prepared_b, None, None, None, None, self.root / "runs-b", "run-1", runner_type="synthetic", runner_model="synthetic", runner_session_id="s1", started_at="unknown", finished_at="unknown")
+        run_a = self.package(compiled_a, "runs-a")
+        run_b = self.package(compiled_b, "runs-b")
         hashes_a = load_yaml(run_a / "hashes.yml")
         hashes_b = load_yaml(run_b / "hashes.yml")
         self.assertEqual(hashes_a, hashes_b)
@@ -181,6 +193,97 @@ class BehavioralHarnessSelfTests(unittest.TestCase):
         exec_view = load_yaml(prepared / "runner-package" / "execution-view.yml")
         self.assertNotIn("required_skills", exec_view)
         self.assertNotIn("expected_status", exec_view)
+
+    def test_T13_workflow_required_normalization_and_gate(self):
+        compiled = self.compile(synthetic_matrix(workflow="Workflows/Synthetic.md"))
+        self.assertEqual({"mode": "required", "allowed": ["Workflows/Synthetic.md"]}, compiled["judge_view"]["expected_workflow"])
+        trace = default_trace()
+        trace["observability"]["workflow_file_reads"] = True
+        gates = evaluate_gates(compiled["judge_view"], trace, default_actions(), default_evidence())
+        self.assertFalse(gates["gates"]["required_workflow_read"])
+
+    def test_T14_workflow_optional_normalization_and_gate(self):
+        compiled = self.compile(synthetic_matrix(workflow="Workflows/Synthetic.md optional"))
+        self.assertEqual({"mode": "optional", "allowed": ["Workflows/Synthetic.md"]}, compiled["judge_view"]["expected_workflow"])
+        trace = default_trace()
+        trace["observability"]["workflow_file_reads"] = True
+        gates = evaluate_gates(compiled["judge_view"], trace, default_actions(), default_evidence())
+        self.assertTrue(gates["gates"]["required_workflow_read"])
+
+    def test_T15_workflow_none_normalization_never_filename(self):
+        for raw in ("none", "kein Workflow", "kein vorhandener Vollworkflow", "kein Fachworkflow ausführen"):
+            with self.subTest(raw=raw):
+                compiled = self.compile(synthetic_matrix(workflow=raw))
+                self.assertEqual({"mode": "none", "allowed": []}, compiled["judge_view"]["expected_workflow"])
+                trace = default_trace()
+                trace["observability"]["workflow_file_reads"] = True
+                gates = evaluate_gates(compiled["judge_view"], trace, default_actions(), default_evidence())
+                self.assertTrue(gates["gates"]["required_workflow_read"])
+
+    def test_T16_capability_gap_route_is_not_required_skill(self):
+        compiled = self.compile(synthetic_matrix(primary="capability-gap"))
+        judge = compiled["judge_view"]
+        self.assertEqual("capability-gap", judge["route_kind"])
+        self.assertEqual("capability-gap", judge["expected_primary_skill"])
+        self.assertEqual([], judge["required_skills"])
+        self.assertEqual(["beta"], judge["allowed_skills"])
+
+    def test_T17_invalid_trace_schema_rejected(self):
+        invalid = default_trace()
+        del invalid["status"]
+        with self.assertRaises(HarnessError):
+            evaluate_gates(self.compile()["judge_view"], invalid, default_actions(), default_evidence())
+
+    def test_T18_invalid_actions_schema_rejected(self):
+        invalid = default_actions()
+        invalid["actions"] = [{"action_id": "A1", "attempted": "yes"}]
+        with self.assertRaises(HarnessError):
+            evaluate_gates(self.compile()["judge_view"], default_trace(), invalid, default_evidence())
+
+    def test_T19_invalid_evidence_schema_rejected(self):
+        invalid = default_evidence()
+        del invalid["claims"]
+        with self.assertRaises(HarnessError):
+            evaluate_gates(self.compile()["judge_view"], default_trace(), default_actions(), invalid)
+
+    def test_T20_invalid_runner_adapter_schema_rejected(self):
+        path = self.root / "adapter.yml"
+        dump_yaml({"schema_version": 1, "runner_type": "synthetic"}, path)
+        with self.assertRaises(HarnessError):
+            load_runner_adapter_result(path)
+
+    def test_T21_tampered_execution_view_rejected_before_package(self):
+        compiled = self.compile()
+        prepared = self.root / "prep-exec-tamper"
+        write_prepared_case(compiled, prepared)
+        data = load_yaml(prepared / "execution-view.yml")
+        data["user_prompt"] = "tampered"
+        dump_yaml(data, prepared / "execution-view.yml")
+        with self.assertRaises(HarnessError):
+            package_run(prepared, None, None, None, None, self.root / "runs", "run-1")
+
+    def test_T22_tampered_judge_view_rejected_before_package(self):
+        compiled = self.compile()
+        prepared = self.root / "prep-judge-tamper"
+        write_prepared_case(compiled, prepared)
+        data = load_yaml(prepared / "judge-view.yml")
+        data["expected_status"] = "blocked"
+        dump_yaml(data, prepared / "judge-view.yml")
+        with self.assertRaises(HarnessError):
+            package_run(prepared, None, None, None, None, self.root / "runs", "run-1")
+
+    def test_T23_verify_run_passes_unchanged_package(self):
+        run = self.package(out_name="verify-runs")
+        result = verify_run_package(run)
+        self.assertTrue(result["verified"])
+        self.assertEqual(9, result["artifact_count"])
+
+    def test_T24_verify_run_rejects_tampered_artifact(self):
+        run = self.package(out_name="tamper-runs")
+        with (run / "runner-output.md").open("a", encoding="utf-8") as fh:
+            fh.write("tampered\n")
+        with self.assertRaises(HarnessError):
+            verify_run_package(run)
 
 
 if __name__ == "__main__":
