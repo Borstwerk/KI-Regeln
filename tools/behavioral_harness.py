@@ -42,8 +42,8 @@ def load_or_default(src: Path | None, default: dict[str, Any]) -> dict[str, Any]
 
 
 def _resolve_adapter_ref(adapter_path: Path, value: str, label: str) -> Path:
-    rel = _safe_rel(str(value))
-    if rel is None:
+    rel = Path(str(value))
+    if rel.is_absolute() or ".." in rel.parts:
         raise HarnessError(f"runner adapter {label} must be a safe relative path")
     path = (adapter_path.parent / rel).resolve()
     if not path.is_file():
