@@ -1,5 +1,16 @@
 #!/usr/bin/env python3
 """CLI and immutable packaging for the KI-Regeln behavioral-test harness."""
+from __future__ import annotations
+
+import argparse
+import copy
+import shutil
+import sys
+from pathlib import Path
+from typing import Any
+
+import yaml
+
 try:
     from .behavioral_harness_core import *
     from .behavioral_harness_gates import *
@@ -7,15 +18,44 @@ except ImportError:  # direct execution: python tools/behavioral_harness.py
     from behavioral_harness_core import *
     from behavioral_harness_gates import *
 
-def copy_or_default(src: Path | None, default: dict[str, Any], dst: Path) -> dict[str, Any]:
+
+RUN_ARTIFACT_NAMES = (
+    "manifest.yml",
+    "execution-view.yml",
+    "judge-view.yml",
+    "runner-output.md",
+    "trace.yml",
+    "actions.yml",
+    "evidence.yml",
+    "deterministic-gates.yml",
+    "judge-input.yml",
+)
+
+
+def load_or_default(src: Path | None, default: dict[str, Any]) -> dict[str, Any]:
     if src is None:
-        data = copy.deepcopy(default)
-        dump_yaml(data, dst)
-        return data
+        return copy.deepcopy(default)
     data = load_yaml(src)
     if not isinstance(data, dict):
         raise HarnessError(f"expected mapping in {src}")
-    dump_yaml(data, dst)
+    return data
+
+
+def _resolve_adapter_ref(adapter_path: Path, value: str, label: str) -> Path:
+    rel = _safe_rel(str(value))
+    if rel is None:
+        raise HarnessError(f"runner adapter {label} must be a safe relative path")
+    path = (adapter_path.parent / rel).resolve()
+    if not path.is_file():
+        raise HarnessError(f"runner adapter {label} missing: {path}")
+    return path
+
+
+def load_runner_adapter_result(path: Path) -> dict[str, Any]:
+    data = load_yaml(path)
+    if not isinstance(data, dict):
+        raise HarnessError(f"runner adapter result must be a mapping: {path}")
+    validate_document(data, "runner-adapter", "runner adapter result")
     return data
 
 
@@ -32,31 +72,33 @@ def package_run(
     runner_session_id: str = "unknown",
     started_at: str = "unknown",
     finished_at: str = "unknown",
+    adapter_result_path: Path | None = None,
 ) -> Path:
-    execution = load_yaml(prepared_dir / "execution-view.yml")
-    judge = load_yaml(prepared_dir / "judge-view.yml")
-    hashes = load_yaml(prepared_dir / "hashes.yml")
+    prepared = verify_prepared_integrity(prepared_dir)
+    execution = prepared["execution"]
+    judge = prepared["judge"]
+    hashes = prepared["hashes"]
     test_id = str(execution["test_id"])
 
-    target = out_root / test_id / run_id
-    if target.exists():
-        raise HarnessError(f"run package already exists: {target}")
-    target.mkdir(parents=True)
+    if adapter_result_path is not None:
+        adapter = load_runner_adapter_result(adapter_result_path)
+        runner_type = str(adapter["runner_type"])
+        runner_model = str(adapter["runner_model"])
+        runner_session_id = str(adapter["runner_session_id"])
+        started_at = str(adapter["started_at"])
+        finished_at = str(adapter["finished_at"])
+        runner_output = _resolve_adapter_ref(adapter_result_path, adapter["runner_output"], "runner_output")
+        trace_path = _resolve_adapter_ref(adapter_result_path, adapter["trace"], "trace")
+        actions_path = _resolve_adapter_ref(adapter_result_path, adapter["actions"], "actions")
+        evidence_path = _resolve_adapter_ref(adapter_result_path, adapter["evidence"], "evidence")
 
-    shutil.copy2(prepared_dir / "execution-view.yml", target / "execution-view.yml")
-    shutil.copy2(prepared_dir / "judge-view.yml", target / "judge-view.yml")
-    shutil.copy2(prepared_dir / "hashes.yml", target / "hashes.yml")
-
-    if runner_output is None:
-        (target / "runner-output.md").write_text("", encoding="utf-8")
-    else:
-        shutil.copy2(runner_output, target / "runner-output.md")
-
-    trace = copy_or_default(trace_path, default_trace(), target / "trace.yml")
-    actions = copy_or_default(actions_path, default_actions(), target / "actions.yml")
-    evidence = copy_or_default(evidence_path, default_evidence(), target / "evidence.yml")
+    trace = load_or_default(trace_path, default_trace())
+    actions = load_or_default(actions_path, default_actions())
+    evidence = load_or_default(evidence_path, default_evidence())
+    validate_document(trace, "trace", "trace")
+    validate_document(actions, "actions", "actions")
+    validate_document(evidence, "evidence", "evidence")
     gates = evaluate_gates(judge, trace, actions, evidence)
-    dump_yaml(gates, target / "deterministic-gates.yml")
 
     observed_status = normalize_status((trace.get("status") or {}).get("observed_status"))
     manifest = {
@@ -77,7 +119,7 @@ def package_run(
         "harness_version": HARNESS_VERSION,
         "status": observed_status,
     }
-    dump_yaml(manifest, target / "manifest.yml")
+    validate_document(manifest, "manifest", "manifest")
 
     judge_input = {
         "schema_version": SCHEMA_VERSION,
@@ -92,25 +134,90 @@ def package_run(
         "hashes": "hashes.yml",
         "note": "Technical facts only. Semantic judgment, severity, adjudication and human acceptance are out of scope.",
     }
+    validate_document(judge_input, "judge-input", "judge input")
+    validate_document(gates, "deterministic-gates", "deterministic gates")
+
+    target = out_root / test_id / run_id
+    if target.exists():
+        raise HarnessError(f"run package already exists: {target}")
+    target.mkdir(parents=True)
+
+    shutil.copy2(prepared_dir / "execution-view.yml", target / "execution-view.yml")
+    shutil.copy2(prepared_dir / "judge-view.yml", target / "judge-view.yml")
+    shutil.copy2(prepared_dir / "hashes.yml", target / "hashes.yml")
+
+    if runner_output is None:
+        (target / "runner-output.md").write_text("", encoding="utf-8")
+    else:
+        shutil.copy2(runner_output, target / "runner-output.md")
+
+    dump_yaml(trace, target / "trace.yml")
+    dump_yaml(actions, target / "actions.yml")
+    dump_yaml(evidence, target / "evidence.yml")
+    dump_yaml(gates, target / "deterministic-gates.yml")
+    dump_yaml(manifest, target / "manifest.yml")
     dump_yaml(judge_input, target / "judge-input.yml")
 
     final_hashes = copy.deepcopy(hashes)
-    final_hashes["run_artifact_hashes"] = {
-        name: hash_file(target / name)
-        for name in (
-            "manifest.yml",
-            "execution-view.yml",
-            "judge-view.yml",
-            "runner-output.md",
-            "trace.yml",
-            "actions.yml",
-            "evidence.yml",
-            "deterministic-gates.yml",
-            "judge-input.yml",
-        )
-    }
+    final_hashes["run_artifact_hashes"] = {name: hash_file(target / name) for name in RUN_ARTIFACT_NAMES}
     dump_yaml(final_hashes, target / "hashes.yml")
+    verify_run_package(target)
     return target
+
+
+def verify_run_package(run_dir: Path) -> dict[str, Any]:
+    hashes_path = run_dir / "hashes.yml"
+    if not hashes_path.is_file():
+        raise HarnessError(f"run hashes missing: {hashes_path}")
+    hashes = load_yaml(hashes_path)
+    if not isinstance(hashes, dict):
+        raise HarnessError("run hashes.yml must be a mapping")
+
+    recorded = hashes.get("run_artifact_hashes")
+    if not isinstance(recorded, dict):
+        raise HarnessError("run_artifact_hashes missing from hashes.yml")
+
+    for name in RUN_ARTIFACT_NAMES:
+        path = run_dir / name
+        if not path.is_file():
+            raise HarnessError(f"run artifact missing: {path}")
+        expected = recorded.get(name)
+        actual = hash_file(path)
+        if not expected:
+            raise HarnessError(f"run artifact hash missing for {name}")
+        if actual != expected:
+            raise HarnessError(f"run artifact hash mismatch for {name}: expected {expected}, got {actual}")
+
+    execution = load_yaml(run_dir / "execution-view.yml")
+    judge = load_yaml(run_dir / "judge-view.yml")
+    manifest = load_yaml(run_dir / "manifest.yml")
+    trace = load_yaml(run_dir / "trace.yml")
+    actions = load_yaml(run_dir / "actions.yml")
+    evidence = load_yaml(run_dir / "evidence.yml")
+    gates = load_yaml(run_dir / "deterministic-gates.yml")
+    judge_input = load_yaml(run_dir / "judge-input.yml")
+
+    validate_document(trace, "trace", "trace")
+    validate_document(actions, "actions", "actions")
+    validate_document(evidence, "evidence", "evidence")
+    validate_document(manifest, "manifest", "manifest")
+    validate_document(gates, "deterministic-gates", "deterministic gates")
+    validate_document(judge_input, "judge-input", "judge input")
+
+    if hash_object(execution) != hashes.get("execution_view_hash"):
+        raise HarnessError("run execution-view canonical hash mismatch")
+    if hash_object(judge) != hashes.get("judge_view_hash"):
+        raise HarnessError("run judge-view canonical hash mismatch")
+    if manifest.get("execution_view_hash") != hashes.get("execution_view_hash"):
+        raise HarnessError("manifest/execution_view_hash relationship mismatch")
+    if manifest.get("judge_view_hash") != hashes.get("judge_view_hash"):
+        raise HarnessError("manifest/judge_view_hash relationship mismatch")
+    if manifest.get("case_definition_hash") != hashes.get("case_definition_hash"):
+        raise HarnessError("manifest/case_definition_hash relationship mismatch")
+    if manifest.get("fixture_hashes") != hashes.get("fixture_hashes"):
+        raise HarnessError("manifest/fixture_hashes relationship mismatch")
+
+    return {"verified": True, "run_id": manifest.get("run_id"), "test_id": manifest.get("test_id"), "artifact_count": len(RUN_ARTIFACT_NAMES)}
 
 
 def validate_matrix_unchanged(matrix: dict[str, Any]) -> None:
@@ -128,9 +235,7 @@ def cli_prepare(args: argparse.Namespace) -> int:
     verify_locked_matrix(matrix_path, matrix)
     validate_matrix_unchanged(matrix)
     overrides = load_yaml(Path(args.fixture_roles).resolve()) if args.fixture_roles else {}
-    compiled = compile_case(
-        matrix, args.test_id, repo_root, repo_commit=args.repo_commit, role_overrides=overrides
-    )
+    compiled = compile_case(matrix, args.test_id, repo_root, repo_commit=args.repo_commit, role_overrides=overrides)
     out = Path(args.out).resolve()
     write_prepared_case(compiled, out)
     print(out)
@@ -151,6 +256,7 @@ def cli_package(args: argparse.Namespace) -> int:
         runner_session_id=args.runner_session_id,
         started_at=args.started_at,
         finished_at=args.finished_at,
+        adapter_result_path=Path(args.adapter_result).resolve() if args.adapter_result else None,
     )
     print(target)
     return 0
@@ -166,13 +272,15 @@ def cli_gates(args: argparse.Namespace) -> int:
     return 0
 
 
+def cli_verify_run(args: argparse.Namespace) -> int:
+    result = verify_run_package(Path(args.run).resolve())
+    print(yaml.safe_dump(result, allow_unicode=True, sort_keys=False), end="")
+    return 0
+
+
 def cli_selftest(_: argparse.Namespace) -> int:
     import subprocess
-
-    return subprocess.call(
-        [sys.executable, "-m", "unittest", "-v", "tests.test_behavioral_harness"],
-        cwd=ROOT,
-    )
+    return subprocess.call([sys.executable, "-m", "unittest", "-v", "tests.test_behavioral_harness"], cwd=ROOT)
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -194,6 +302,7 @@ def build_parser() -> argparse.ArgumentParser:
     package.add_argument("--trace")
     package.add_argument("--actions")
     package.add_argument("--evidence")
+    package.add_argument("--adapter-result", help="Optional generic runner-adapter result YAML; schema validated before use")
     package.add_argument("--out", required=True)
     package.add_argument("--run-id", required=True)
     package.add_argument("--runner-type", default="unknown")
@@ -209,6 +318,10 @@ def build_parser() -> argparse.ArgumentParser:
     gates.add_argument("--actions")
     gates.add_argument("--evidence")
     gates.set_defaults(func=cli_gates)
+
+    verify = sub.add_parser("verify-run", help="Verify packaged run artifact hashes and schema contracts")
+    verify.add_argument("--run", required=True)
+    verify.set_defaults(func=cli_verify_run)
 
     selftest = sub.add_parser("selftest", help="Run synthetic/replay harness self-tests only")
     selftest.set_defaults(func=cli_selftest)
