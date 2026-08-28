@@ -170,7 +170,7 @@ Neuer tool- und formatneutraler Hauptbereich für Requirements Elicitation, Spez
 - Readiness-Verdicts `READY_FOR_LOCAL_GATE`, `READY_WITH_FINDINGS`, `BLOCKED` und `UNVERIFIED` liefern Evidence für die nächste lokale Entscheidung, aber keine fachliche Abnahme oder Implementierungs-/Releasefreigabe;
 - acht neue Skills `requirements-baseline`, `requirements-elicitation`, `requirements-specification`, `acceptance-criteria-design`, `requirements-traceability`, `requirements-change-analysis`, `requirements-validation` und `requirements-review`;
 - alle acht Requirements-Skills starten `experimental` mit `partial` Evalabdeckung;
-- 48 Evalfälle definiert, sechs je Skill, einschließlich Code-/Ist-vs.-Soll-Fällen, Clarity-Score-/User-Story-/Gherkin-/MoSCoW-Dogmen, erfundenen Quality Targets, Acceptance-vs.-Test-Near-Misses, Traceability-Autofix, Change-Autorisierung, fehlender Stakeholder-/Source-Evidence und Approval-/Deployment-Gates; diese 48 Fälle sind **definiert, aber nicht als Behavioral Evals ausgeführt oder bestanden**;
+- 48 Evalfälle definiert, sechs je Skill, einschließlich Code-/Ist-vs.-Soll-Fällen, Clarity-Score-/User-Story-/Gherkin-/MoSCoW-Dogmen, erfundenen Quality Targets, Acceptance-vs.-Test-Near-Misses, Traceability-Autofix, Change-Autorisierung, fehlender Stakeholder-/Source-Evidence und Approval-/Deployment-Gates; diese 48 Fälle sind **definiert, aber noch nicht als Behavioral Evals ausgeführt oder bestanden**;
 - fünf Workflows `Requirements-Baseline-und-Spezifikation.md`, `Requirements-Elicitation-und-Klaerung.md`, `Acceptance-Traceability-und-Handoff.md`, `Requirements-Change-und-Impact.md` und `Requirements-Readiness-Review.md`;
 - neues menschliches `Dokumentation/Skill-Handbuch-Requirements-und-Spezifikations-Engineering.md`;
 - `Software-Architecture-und-System-Design/`, `Reliability-und-System-Observability/`, `Data-Engineering/`, `Testing-und-QA/` und `Schnittstellen-und-Vertraege/` mit dem realen Requirements-Bereich verbunden;
@@ -329,7 +329,7 @@ Neuer technologieübergreifender Hauptbereich für Interface- und Contract-Engin
 - Workflow `Workflows/Schnittstellenvertrag-Entwerfen-und-Aendern.md`;
 - menschliches `Dokumentation/Skill-Handbuch-Schnittstellen-und-Vertraege.md`;
 - Quellenbasis aus OpenAPI, HTTP RFCs, Google AIPs, GraphQL, Protobuf/gRPC, AsyncAPI, CloudEvents und aktuellen API-/Event-Agent-Skills;
-- aktive Upstreams aus OpenAPI, Google AIPs, GraphQL, Protobuf und AsyncAPI semantisch sowie drei tatsächlich einflussreiche API-/Event-Skills per Blob-SHA registriert.
+- aktive Upstreams aus OpenAPI, Google AIPs, GraphQL, Protobuf und AsyncAPI semantisch sowie drei konkret verwendete API-/Event-Skills per Blob-SHA registriert.
 
 ### Wissensmanagement / Knowledge Bases
 
@@ -467,7 +467,7 @@ Bereich `Evals/` erweitert:
 - erste Evalpacks für `deep-research`, `docs-review`, `frontend-design`, `diagnose`, `code-review` und `skill-authoring`;
 - zusätzliche Evalpacks für alle sieben Datenbank-Skills mit Schema-Source-of-Truth-, Query-Safety-, `EXPLAIN ANALYZE`-, Migration-, Concurrency-, Restore- und Review-Gate-Fällen;
 - zusätzliche Evalpacks für alle neun Testing-und-QA-Skills, unter anderem zu fehlendem Oracle, Mock-/Contract-Drift, E2E-Near-Misses, Flakiness trotz Retry, Failure Testing vs. Chaos Engineering und Testsignal-Review;
-- zusätzliche Evalpacks für `context-engineering`, `context-audit`, `context-compaction` und `session-handoff`, unter anderem zu fehlender Tokenmessung, Context Bloat, Compaction-Verlust, Handoff- und Knowledge-Base-Grenzfällen;
+- zusätzliche Evalpacks für `context-engineering`, `context-audit`, `context-compaction` und `session-handoff`, unter anderem zu fehlender Tokenmessung, Context Bloat, Compaction-Verlust, erfundenen Freigaben und Persistent-Knowledge-Near-Misses;
 - zusätzliche Evalpacks für alle sieben Wissensmanagement-Skills, unter anderem zu Tool-Bias, Search-before-Create, Provenance, sensibler Persistenz, Bulk-Gates, Distillation, Synthese-Evidence, Duplicate-/Orphan-Entscheidungen, Retrieval und Review-Coverage;
 - zusätzliche Evalpacks für alle fünf Schnittstellen-/Contract-Skills, unter anderem zu Transportdogma, Framework-Near-Misses, Datenbankmodell-Leaks, unbekannten Enum-Werten, Source-/Wire-Trennung, rollout-sensitive Changes und fehlenden Baselines;
 - zusätzliche Evalpacks für alle sieben Infrastruktur-/DevOps-Skills, unter anderem zu Drift, State-Sensitivität, stale Previews, destructive Replacements, CI-Secret-Grenzen, Container-Runtime-Verträgen, Rollback-Grenzen und GitOps-Reconciliation;
@@ -553,7 +553,7 @@ Erweitert und vollständig auditiert:
 - Testing-und-QA-Upstreams aus Anthropic, Currents und Superpowers per Blob-SHA sowie ISTQB, Playwright, Pact und Testcontainers semantisch registriert;
 - Context-/Long-Horizon-Upstreams aus Anthropic, OpenAI, LangChain und OpenTelemetry semantisch sowie `context-doctor` und OpenClaw `handoff` per Blob-SHA registriert;
 - Wissensmanagement-Upstreams aus KCS und OpenAI Retrieval semantisch sowie `obsidian-wiki`, `obsidian-second-brain` und `knowledge-distill` per Blob-SHA registriert;
-- Schnittstellen-/Contract-Upstreams aus OpenAPI, Google AIPs, GraphQL, Protobuf und AsyncAPI semantisch sowie drei tatsächlich verwendete API-/Event-Skills per Blob-SHA registriert;
+- Schnittstellen-/Contract-Upstreams aus OpenAPI, Google AIPs, GraphQL, Protobuf und AsyncAPI semantisch sowie drei konkret verwendete API-/Event-Skills per Blob-SHA registriert;
 - Infrastruktur-/DevOps-Upstreams aus Terraform, OpenTofu, Kubernetes, OpenGitOps, Argo Rollouts, OPA, SLSA und Docker Build semantisch sowie HashiCorp-, Flux- und ausgewählte IaC/CI/Container/Deployment-Skills per Blob-SHA registriert;
 - stabile HTTP-/Problem-Details-/Deprecation-RFCs und weitere formatbezogene Referenzen bewusst in der Fachquellendatei statt als künstliche schnelle Sync-Dependencies geführt;
 - W3C PROV, ISO 30401 und toolbezogene Hilfedokumentation als stabile Fachreferenzen im Bereich dokumentiert statt künstlich als schnelle mutable Dependencies zu behandeln;
