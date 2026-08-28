@@ -8,14 +8,17 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
-### Behavioral Batch 0 – Runner-Readiness
 
-- Batch-0-Fixtures für `WK-001`, `WK-004` und `WK-047` materialisiert; `WK-006` bleibt als No-Skill-/Direct-Response-Fall bewusst fixturefrei;
-- die absichtlich knappe Voice-Evidence für `WK-004` konserviert und fehlende zusätzliche Voice-Evidence evaluator-only dokumentiert, ohne die Pilotdefinition oder Judge-Erwartungen zu verändern;
-- sichere, ausschließlich lokale Fake-Production-Infrastruktur für `WK-047` ergänzt, die ohne Freigabe blockiert und kein reales Production-Ziel adressieren kann;
-- synthetische Runner-Readiness-Tests sowie eine Batch-0-spezifische Readiness-Aggregation vorbereitet; Compiler-`ready_for_behavioral_execution` bleibt ausdrücklich Fixture-/Case-Readiness und ist keine Gesamtfreigabe;
-- keinen konkreten LLM-Runner integriert; Runner- und objektive Route-/Read-Observability bleiben bis zu einer autorisierten, instrumentierten Runner-Infrastruktur nicht ready;
-- keine Behavioral Evals und keine realen WK-Fälle ausgeführt; Batch 0 nicht gestartet; keine Skills, Maturity oder Eval Coverage geändert und kein Merge, Tag oder Release durch diese Vorbereitung.
+
+### Local Validation Harness
+
+- Windows-freundlichen lokalen Einstieg über `Validate-KI-Regeln.cmd` und `Validate-KI-Regeln.ps1` ergänzt; eine systemweit installierte Python-Runtime ist nicht erforderlich;
+- vorhandene Python-Validatoren bleiben kanonische Prüflogik; PowerShell übernimmt ausschließlich Bootstrap, Orchestrierung, Reporting und Exitcode-Gating statt eine zweite fachliche Validatorimplementierung einzuführen;
+- portable Runtime unter `.validation/` mit gepinntem `uv`, uv-managed CPython 3.12.12, fest eingefrorenen Python-Abhängigkeiten und SHA-256-Prüfung des uv-Archivs ergänzt; Windows-PowerShell-Bootstrap erzwingt bei Bedarf TLS 1.2 ohne vorhandene Protokolle zu entfernen;
+- Modi `Quick`, `Full` und `Release` getrennt: `Full` ist Standard und ergänzt das read-only Eval-Coverage-Inventar, `Release` ergänzt Current-Tree- und Reachable-History-Exposure-Prüfungen mit bestehender CI-Severity-Semantik;
+- maschinenlesbares JSON-, menschenlesbares Markdown- und technisches Log-Reporting unter `.validation/` ergänzt; `Behavioral validation` wird ausdrücklich als `NOT RUN` ausgewiesen;
+- zehn kontrollierte Harness-Selbsttestfälle in einem temporären detached Git-Worktree vorbereitet, ohne produktive Repository-Dateien zu verändern oder synthetische Secret-Fixtures zu committen;
+- keine Skill-Fachlogik, Maturity oder Eval-Coverage verändert, keine Behavioral Evals als ausgeführt oder bestanden dargestellt und kein Merge, Tag oder Release durchgeführt.
 
 ### Behavioral-Test-Harness – technische Vorbereitung
 

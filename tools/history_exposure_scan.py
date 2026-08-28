@@ -13,6 +13,7 @@ import subprocess
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
+CAT_FILE_TIMEOUT_SECONDS = 120
 
 PATTERNS = {
     "private-key": r"-----BEGIN (RSA |EC |OPENSSH |DSA )?PRIVATE KEY-----",
@@ -85,24 +86,27 @@ def unique_reachable_blob_count() -> int:
     objects = run("git", "rev-list", "--objects", "--all").splitlines()
     if not objects:
         return 0
-    proc = subprocess.Popen(
-        ["git", "cat-file", "--batch-check=%(objecttype)"],
-        cwd=ROOT,
-        text=True,
-        stdin=subprocess.PIPE,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-    )
-    assert proc.stdin is not None and proc.stdout is not None
-    for line in objects:
-        proc.stdin.write(line.split(" ", 1)[0] + "\n")
-    proc.stdin.close()
-    count = sum(1 for line in proc.stdout if line.strip() == "blob")
-    stderr = proc.stderr.read() if proc.stderr else ""
-    code = proc.wait()
-    if code:
-        raise SystemExit(f"git cat-file failed: {stderr}")
-    return count
+
+    object_ids = [line.split(" ", 1)[0] for line in objects if line.strip()]
+    payload = "".join(f"{object_id}\n" for object_id in object_ids)
+    try:
+        proc = subprocess.run(
+            ["git", "cat-file", "--batch-check=%(objecttype)"],
+            cwd=ROOT,
+            text=True,
+            input=payload,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            timeout=CAT_FILE_TIMEOUT_SECONDS,
+        )
+    except subprocess.TimeoutExpired as exc:
+        raise SystemExit(
+            f"git cat-file timed out after {CAT_FILE_TIMEOUT_SECONDS}s"
+        ) from exc
+
+    if proc.returncode:
+        raise SystemExit(f"git cat-file failed: {proc.stderr}")
+    return sum(1 for line in proc.stdout.splitlines() if line.strip() == "blob")
 
 
 def main() -> int:
