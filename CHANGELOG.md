@@ -149,7 +149,7 @@ Neuer tool- und formatneutraler Hauptbereich für Requirements Elicitation, Spez
 - Elicitation über Interviews, Workshops, Dokumentanalyse, Beobachtung und technische Evidence nach Kontext statt festem Fragebogen oder Vollständigkeitsscore;
 - Problem, Ziel, Scope, Out-of-Scope, Constraints, Assumptions, Dependencies und offene Fragen als explizite Ebenen;
 - funktionale Anforderungen beschreiben benötigtes Verhalten beziehungsweise Capability, ohne frühzeitig Architektur, Framework, Datenbank oder konkrete Implementierung festzuschreiben;
-- Quality Requirements werden über relevantes Objekt/Flow, Bedingung, Messidee und bestätigten Zielwert formuliert statt mit unprüfbaren Adjektiven wie „schnell“, „skalierbar` oder „hochverfügbar`;
+- Quality Requirements werden über relevantes Objekt/Flow, Bedingung, Messidee und bestätigten Zielwert formuliert statt mit unprüfbaren Adjektiven wie „schnell“, „skalierbar“ oder „hochverfügbar“;
 - fehlende Performance-, Availability-, RTO/RPO-, Capacity-, Kosten- oder andere Zielwerte werden nicht erfunden; sie bleiben Missing Evidence beziehungsweise lokale Entscheidung;
 - Acceptance Criteria als beobachtbare Akzeptanzbedingungen von konkreten Testfällen, Testdaten und Testautomatisierung getrennt;
 - EARS, Given-When-Then, Gherkin, User Stories, Use Cases, PRD, BRD und SRS als optionale Formate und Techniken statt Pflichtmodell;
