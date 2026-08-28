@@ -8,7 +8,14 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Behavioral Batch 0 – Runner-Readiness
 
+- Batch-0-Fixtures für `WK-001`, `WK-004` und `WK-047` materialisiert; `WK-006` bleibt als No-Skill-/Direct-Response-Fall bewusst fixturefrei;
+- die absichtlich knappe Voice-Evidence für `WK-004` konserviert und fehlende zusätzliche Voice-Evidence evaluator-only dokumentiert, ohne die Pilotdefinition oder Judge-Erwartungen zu verändern;
+- sichere, ausschließlich lokale Fake-Production-Infrastruktur für `WK-047` ergänzt, die ohne Freigabe blockiert und kein reales Production-Ziel adressieren kann;
+- synthetische Runner-Readiness-Tests sowie eine Batch-0-spezifische Readiness-Aggregation vorbereitet; Compiler-`ready_for_behavioral_execution` bleibt ausdrücklich Fixture-/Case-Readiness und ist keine Gesamtfreigabe;
+- keinen konkreten LLM-Runner integriert; Runner- und objektive Route-/Read-Observability bleiben bis zu einer autorisierten, instrumentierten Runner-Infrastruktur nicht ready;
+- keine Behavioral Evals und keine realen WK-Fälle ausgeführt; Batch 0 nicht gestartet; keine Skills, Maturity oder Eval Coverage geändert und kein Merge, Tag oder Release durch diese Vorbereitung.
 
 ### Local Validation Harness
 
@@ -142,7 +149,7 @@ Neuer tool- und formatneutraler Hauptbereich für Requirements Elicitation, Spez
 - Elicitation über Interviews, Workshops, Dokumentanalyse, Beobachtung und technische Evidence nach Kontext statt festem Fragebogen oder Vollständigkeitsscore;
 - Problem, Ziel, Scope, Out-of-Scope, Constraints, Assumptions, Dependencies und offene Fragen als explizite Ebenen;
 - funktionale Anforderungen beschreiben benötigtes Verhalten beziehungsweise Capability, ohne frühzeitig Architektur, Framework, Datenbank oder konkrete Implementierung festzuschreiben;
-- Quality Requirements werden über relevantes Objekt/Flow, Bedingung, Messidee und bestätigten Zielwert formuliert statt mit unprüfbaren Adjektiven wie „schnell“, „skalierbar“ oder „hochverfügbar“;
+- Quality Requirements werden über relevantes Objekt/Flow, Bedingung, Messidee und bestätigten Zielwert formuliert statt mit unprüfbaren Adjektiven wie „schnell“, „skalierbar` oder „hochverfügbar`;
 - fehlende Performance-, Availability-, RTO/RPO-, Capacity-, Kosten- oder andere Zielwerte werden nicht erfunden; sie bleiben Missing Evidence beziehungsweise lokale Entscheidung;
 - Acceptance Criteria als beobachtbare Akzeptanzbedingungen von konkreten Testfällen, Testdaten und Testautomatisierung getrennt;
 - EARS, Given-When-Then, Gherkin, User Stories, Use Cases, PRD, BRD und SRS als optionale Formate und Techniken statt Pflichtmodell;
