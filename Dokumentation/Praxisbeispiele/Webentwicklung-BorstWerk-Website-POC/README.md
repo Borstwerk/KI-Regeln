@@ -166,6 +166,10 @@ Im konkreten Proof of Concept entstanden drei zusammengehörige, aber nicht iden
 
 Die gemeinsame visuelle Sprache wurde damit an fachlich unterschiedlichen Seiten gegengeprüft, statt nur auf einer einzelnen Landingpage zu funktionieren.
 
+![Ergebnisübersicht des BorstWerk-Website-POC mit Homepage in Light und Dark Mode sowie E-Rechnung und GoBD-Doku](images/ergebnis-uebersicht.jpg)
+
+Die Abbildung ist eine kuratierte Ergebnisübersicht aus dem bereitgestellten POC-Stand v0.8. Sie zeigt bewusst nur ausgewählte Desktop-Zustände und ist keine vollständige Visual-Verification-Evidence aller getesteten Viewports und Interaktionszustände.
+
 Dieses Ergebnis ist projektspezifisch. KI-Regeln enthält daraus **keine allgemeine Regel**, dass Websites wie Werkblätter aussehen sollten oder dass Light/Dark Mode immer erforderlich ist.
 
 ## 8. Was das Beispiel zeigt
@@ -192,9 +196,9 @@ Es beweist **nicht**:
 
 ## 10. Evidence und Veröffentlichungsgrenze
 
-Die lokale Vorschau des Beispiels enthielt zusätzlich gerenderte Darstellungen der Seiten. Diese Bilddateien wurden in die hier dokumentierte Fassung nicht übernommen, weil die bereitgestellte Vorschau sie nur referenzierte und nicht enthielt.
+Die Ergebnisübersicht wurde aus dem für dieses Praxisbeispiel bereitgestellten Website-POC v0.8 gerendert. Sie dient der technischen Einordnung des dokumentierten Ergebnisses, nicht als Benchmark oder vollständiger Nachweis aller im Arbeitslauf genannten Prüfungen.
 
-Für eine spätere Erweiterung mit Screenshots oder anderen Projektartefakten gilt deshalb weiterhin:
+Für spätere Erweiterungen mit weiteren Screenshots oder anderen Projektartefakten gilt weiterhin:
 
 - Veröffentlichbarkeit bewusst prüfen;
 - private Projektinformationen entfernen;
