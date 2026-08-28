@@ -255,3 +255,8 @@ Quelle erhalten
 ```
 
 Damit zeigt der Fall einen anderen Arbeitsmodus als ein einmaliges Erzeugungsprojekt: kontinuierliche, provenance-bewusste Wissenspflege über viele Sitzungen hinweg.
+
+## 13. Zentrale Referenzen
+
+- [Workflow „Wissensbasis aufbauen und pflegen“](../../../Workflows/Wissensbasis-Aufbauen-und-Pflegen.md)
+- [Skill-Katalog mit Maturity und Eval Coverage](../../../skill-catalog.yml)
