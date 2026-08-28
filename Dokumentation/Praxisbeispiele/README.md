@@ -9,8 +9,9 @@ Sie dienen der **technischen Orientierung**, nicht der Vermarktung. Ein Beispiel
 | Beispiel | Bereich | Charakter |
 |---|---|---|
 | [BorstWerk-Website als Proof of Concept](Webentwicklung-BorstWerk-Website-POC/README.md) | Webentwicklung | größerer Multi-Skill-Arbeitslauf mit Human Gates und Browser-Evidence |
+| [Kinderbuch-Illustrationen „Indiana Hood“ – Band 14](Bildentwicklung-Indiana-Hood-Band-14/README.md) | Bildarbeit | iterative Bildserie mit Referenzkanon, Human Gates, Same-Model-Review und kontrollierten Neubauten |
 
-Ein zweites Beispiel wird erst ergänzt, wenn ein realer Fall einen deutlich anderen Nutzungsmodus zeigt, etwa eine kleine technische Aufgabe mit wenigen Skills. Es wird kein Beispiel nur zur Erhöhung der Anzahl erzeugt.
+Weitere Beispiele werden nur ergänzt, wenn ein realer Fall einen zusätzlichen Nutzungsmodus sichtbar macht. Es wird kein Beispiel nur zur Erhöhung der Anzahl erzeugt.
 
 ## Was ein gutes Praxisbeispiel beantworten sollte
 
