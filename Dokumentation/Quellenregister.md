@@ -4,11 +4,13 @@
 
 Die fachbezogenen `Quellen-und-Inspirationen.md`-Dateien dokumentieren, **woher Konzepte stammen**.
 
-Dieses Register ergänzt eine zweite Frage:
+Dieses Register ergänzt zwei weitere Fragen:
+
+> Wo suchen wir systematisch nach neuen Kandidaten?
 
 > Welche externen Quellen können sich verändern und sollten deshalb aktiv auf Updates überwacht werden?
 
-Die maschinenlesbare Liste steht in `upstream-sources.yml`.
+Die Discovery-only-Radarliste steht in `radar-sources.yml`. Die maschinenlesbare Liste bereits konkret relevanter veränderlicher Quellen steht in `upstream-sources.yml`.
 
 Der letzte vollständige Bereichsaudit ist dokumentiert in `Upstream-Audit-2026-08-23.md`.
 
@@ -47,9 +49,17 @@ Beispiele:
 - Skill-Kataloge;
 - Community-Verzeichnisse;
 - Übersichtsseiten;
+- offizielle Engineering-/Research-Hubs;
+- wiederkehrende Suchthemen;
 - Sammlungen, aus denen aktuell keine konkrete lokale Regel abgeleitet ist.
 
-Sie helfen beim Finden neuer Kandidaten, sind aber keine lokale Dependency.
+Sie helfen beim Finden neuer Kandidaten, sind aber keine lokale Dependency. Wiederkehrende Discovery-Quellen und Suchthemen werden in `radar-sources.yml` geführt.
+
+Dabei gilt:
+
+> Radarquelle ≠ Upstream ≠ Übernahme.
+
+Ein Radar-Fund wird erst dann zu einem aktiven Upstream, wenn eine konkrete Quelle bewusst geprüft wurde, lokal tatsächlich Einfluss erhält und ihre Nutzung/Provenance eingeordnet wurde.
 
 ## Monitoring-Arten
 
@@ -164,6 +174,8 @@ relevante Funktion / Terminologie / Empfehlung geändert?
       übernehmen / beobachten / verwerfen
 ```
 
+Der monatliche Radar-Check liest zusätzlich `radar-sources.yml`, um neue Kandidaten außerhalb bereits bekannter Upstreams zu entdecken. Radar-Funde verändern weder `upstream-sources.yml` noch Fachregeln automatisch.
+
 ## Keine automatische Synchronisierung
 
 Ein Upstream-Update führt **niemals automatisch** zu einer Änderung unserer Skills.
@@ -197,14 +209,14 @@ Bei einem geänderten Upstream prüfen:
 Bei jeder neuen externen Quelle zuerst klassifizieren:
 
 ```text
-konkrete mutable Abhängigkeit?
+nur Discovery / Radar?
+→ radar-sources.yml
+
+konkrete mutable Abhängigkeit nach bewusster Prüfung?
 → upstream-sources.yml
 
 stabile Evidenz / Grundlagenquelle?
 → Fachbereich/Quellen-und-Inspirationen.md
-
-nur Discovery / Radar?
-→ als Radarquelle dokumentieren, kein künstlicher Sync-Trigger
 ```
 
 Ein aktiver Upstream-Eintrag lohnt sich insbesondere, wenn:
@@ -227,11 +239,14 @@ Wenn eine Quelle verschwindet oder nicht mehr gepflegt wird:
 ## Verhältnis zu den Fachquellen
 
 ```text
+Dokumentation/radar-sources.yml
+→ Wo suchen wir nach neuen Kandidaten, ohne bereits eine Abhängigkeit zu behaupten?
+
 Fachbereich/Quellen-und-Inspirationen.md
 → Was hat uns fachlich beeinflusst?
 
 Dokumentation/upstream-sources.yml
-→ Welche veränderlichen Quellen beobachten wir aktiv?
+→ Welche veränderlichen Quellen beobachten wir aktiv, weil sie lokalen Einfluss haben?
 
 Dokumentation/Upstream-Audit-*.md
 → Warum wurde eine Quelle so klassifiziert?

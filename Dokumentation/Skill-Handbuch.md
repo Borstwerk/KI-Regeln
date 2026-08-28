@@ -67,4 +67,12 @@ Für jeden ausgewählten Skill prüfen:
 
 ## Abschluss
 
-Vor Abschluss mindestens Auftragserfüllung, Quellen-/Evidence-Treue, offene Annahmen, nicht ausgeführte Prüfungen und notwendige Gates nennen. Bei Änderungen am Repository zusätzlich `python tools/repo_validator.py` ausführen.
+Vor Abschluss mindestens Auftragserfüllung, Quellen-/Evidence-Treue, offene Annahmen, nicht ausgeführte Prüfungen und notwendige Gates nennen.
+
+Bei Änderungen am Repository bevorzugt den lokalen Validation Harness verwenden; keine globale Python-Installation voraussetzen:
+
+```powershell
+.\Validate-KI-Regeln.ps1 -Quick
+```
+
+Je nach Änderungsumfang `-Full` oder `-Release` verwenden. Kann der vorgesehene Prüfstand in der aktuellen Laufzeit nicht ausgeführt werden, `NOT RUN` beziehungsweise `UNVERIFIED` melden statt einen erfolgreichen Lauf abzuleiten. Details: `Local-Validation-Harness.md`.

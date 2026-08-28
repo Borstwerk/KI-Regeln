@@ -1,0 +1,187 @@
+schema_version: 1
+last_updated: '2026-08-28'
+
+# Discovery-only sources and recurring search topics.
+#
+# Purpose:
+#   Find new skills, methods, specifications, security guidance and AI-working
+#   patterns that may be worth reviewing for KI-Regeln.
+#
+# Important:
+#   - Radar source != local dependency.
+#   - Discovery != adoption.
+#   - A finding becomes an upstream only after deliberate local assessment and
+#     concrete influence on KI-Regeln.
+#   - No source or search result may modify the repository automatically.
+
+policy:
+  source_role: discovery-only
+  auto_adopt: false
+  auto_sync: false
+  promotion_target: Dokumentation/upstream-sources.yml
+  promotion_rule: >-
+    Promote only after a concrete source has been reviewed, is materially
+    relevant to a local rule or skill, and its provenance/use class has been
+    deliberately assessed.
+
+sources:
+  - id: agent-skills-specification
+    kind: github-repository
+    url: https://github.com/agentskills/agentskills
+    cadence: monthly
+    areas:
+      - Skill-Engineering
+      - Agentenarbeit
+    purpose: Open Agent-Skills format, specification and reference implementation.
+    watch_for:
+      - specification changes
+      - metadata and discovery semantics
+      - packaging or distribution proposals
+      - compatibility and client-model changes
+
+  - id: agent-skills-example-collection
+    kind: github-repository
+    url: https://github.com/agentskills/skills
+    cadence: monthly
+    areas:
+      - Skill-Engineering
+    purpose: Example-skill collection around the open Agent Skills format.
+    watch_for:
+      - new recurring capability patterns
+      - useful skill boundaries
+      - bundled reference/script/asset patterns
+      - anti-patterns worth rejecting
+
+  - id: anthropic-public-skills
+    kind: github-repository
+    url: https://github.com/anthropics/skills
+    cadence: monthly
+    areas:
+      - Skill-Engineering
+      - Dokumentationserstellung
+      - Schreiben
+      - Agentenarbeit
+    purpose: Public production-oriented Agent Skills and implementation patterns.
+    watch_for:
+      - genuinely new capabilities
+      - improved methods for existing capabilities
+      - review or refinement loops
+      - progressive-disclosure patterns
+
+  - id: github-awesome-copilot
+    kind: github-repository
+    url: https://github.com/github/awesome-copilot
+    cadence: monthly
+    areas:
+      - Skill-Engineering
+      - Programmieren
+      - Testing-und-QA
+      - Dokumentationserstellung
+      - Agentenarbeit
+    purpose: Broad maintained collection of agents, skills, instructions and workflows.
+    watch_for:
+      - new skills with distinct recurring jobs
+      - routing and near-miss patterns
+      - agent/skill/workflow separation
+      - evaluation or review methods
+
+  - id: owasp-agentic-skills-top10
+    kind: web-page
+    url: https://owasp.org/www-project-agentic-skills-top-10/
+    cadence: monthly
+    areas:
+      - Sicherheit
+      - Skill-Engineering
+      - Agentenarbeit
+    purpose: Security risks and mitigations specifically for agentic skills.
+    watch_for:
+      - new or revised skill-supply-chain risks
+      - permission and execution-boundary guidance
+      - provenance and installation risks
+      - malicious or over-privileged skill patterns
+
+  - id: owasp-agentic-applications-top10
+    kind: web-page
+    url: https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/
+    cadence: monthly
+    areas:
+      - Sicherheit
+      - Agentenarbeit
+    purpose: Broader agentic-application security developments beyond individual skills.
+    watch_for:
+      - new agentic threat classes
+      - tool and memory risks
+      - authorization and human-gate guidance
+      - observability and governance recommendations
+
+  - id: anthropic-engineering
+    kind: web-page
+    url: https://www.anthropic.com/engineering
+    cadence: monthly
+    areas:
+      - Agentenarbeit
+      - Recherche
+      - Programmieren
+    purpose: Engineering guidance on agents, context, harnesses and model-assisted work.
+    watch_for:
+      - agent orchestration methods
+      - context and long-horizon techniques
+      - evaluation and harness patterns
+      - tool-use reliability methods
+
+  - id: openai-index
+    kind: web-page
+    url: https://openai.com/index/
+    cadence: monthly
+    areas:
+      - Agentenarbeit
+      - Recherche
+      - Programmieren
+    purpose: Official product, research and engineering developments with possible workflow impact.
+    watch_for:
+      - new agent or tool-use capabilities
+      - context and efficiency methods
+      - evaluation approaches
+      - new interaction patterns worth generalizing
+
+  - id: google-deepmind-blog
+    kind: web-page
+    url: https://deepmind.google/discover/blog/
+    cadence: monthly
+    areas:
+      - Agentenarbeit
+      - Recherche
+    purpose: Research and engineering developments that may reveal new reusable AI-working patterns.
+    watch_for:
+      - agentic planning and tool-use research
+      - reasoning and evaluation methods
+      - multimodal capability changes
+      - human-AI collaboration findings
+
+  - id: search-new-agent-skills
+    kind: search-topic
+    query: 'new Agent Skills SKILL.md GitHub reusable AI agent skills'
+    cadence: monthly
+    areas:
+      - Skill-Engineering
+    purpose: Discover useful skill repositories outside the already known collections.
+    watch_for:
+      - capability gaps in KI-Regeln
+      - substantially different skill workflows
+      - repeated methods appearing across independent sources
+      - active maintained repositories with clear provenance
+
+  - id: search-agent-engineering-methods
+    kind: search-topic
+    query: 'AI agent engineering context harness evaluation tool use reflection review refinement research'
+    cadence: monthly
+    areas:
+      - Agentenarbeit
+      - Skill-Engineering
+      - Sicherheit
+    purpose: Discover new general methods rather than only new named skills.
+    watch_for:
+      - orchestration and review loops
+      - context and working-state methods
+      - evaluator and observability patterns
+      - safety and authorization improvements
