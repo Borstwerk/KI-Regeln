@@ -7,9 +7,9 @@ KI-Regeln wird evidence-basiert gepflegt: allgemeine Arbeitsweise ist zentral, k
 1. Von einem aktuellen `main` einen thematisch engen Branch erstellen.
 2. Nur den notwendigen Scope ändern.
 3. Relevante Sources of Truth, bestehende Regeln und lokale Entscheidungen beachten.
-4. `python tools/repo_validator.py` ausführen.
+4. Den vorhandenen Local Validation Harness passend zum Scope ausführen; eine systemweit installierte Python-Runtime ist dafür nicht erforderlich. Für kleine Änderungen mindestens `./Validate-KI-Regeln.ps1 -Quick`, für breitere Prüfstände `-Full` oder `-Release` verwenden.
 5. Änderungen per Pull Request nach `main` einbringen.
-6. CI und Review abwarten; ein grüner Validator ersetzt keinen fachlichen Review.
+6. Fachlichen Review abwarten und ausgeführte Prüfungen samt `PASS`, `FAIL`, `NOT RUN` oder `UNVERIFIED` ehrlich dokumentieren. GitHub-Actions-Workflows sind ein ergänzender, derzeit bewusst manuell gestarteter Prüfweg und ersetzen den lokalen Prüfstand nicht.
 
 Direkte Änderungen an `main` sind für den späteren öffentlichen Betriebsmodus nicht vorgesehen.
 
