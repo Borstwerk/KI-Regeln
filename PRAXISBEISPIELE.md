@@ -9,6 +9,8 @@ Der Zweck ist bewusst praktisch: technisch interessierte Nutzer sollen sehen kö
 ## Beispiele
 
 - [Webentwicklung: BorstWerk-Website als Proof of Concept](Dokumentation/Praxisbeispiele/Webentwicklung-BorstWerk-Website-POC/README.md) – ein größerer Arbeitslauf über Kontext, Greybox, Design, Implementierung, Review und Browser-Evidence.
+- [Bildentwicklung: Kinderbuch-Illustrationen „Indiana Hood“ – Band 14](Dokumentation/Praxisbeispiele/Bildentwicklung-Indiana-Hood-Band-14/README.md) – eine iterative Bildserie mit Referenzkanon, Human Gates und kontrollierten Neubauten.
+- [Wissensmanagement: Agentengepflegter Obsidian-Wissensvault](Dokumentation/Praxisbeispiele/Wissensmanagement-Agentengepflegter-Obsidian-Wissensvault/README.md) – kontinuierliche, provenance-bewusste Wissenspflege über viele Sitzungen mit Korrekturen, Wartung und Datenschutzgrenzen.
 
 Weitere Beispiele werden nur ergänzt, wenn ein echter, ausreichend dokumentierter Fall einen anderen Arbeitsmodus sinnvoll zeigt. Es gibt keinen Zielwert für die Anzahl der Praxisbeispiele.
 
