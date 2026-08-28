@@ -12,10 +12,11 @@ Der Arbeitslauf folgte grob diesem Muster:
 Kapiteltext + Projektkanon + Referenzbilder
 → Bildplanung / Pre-Brief
 → Generierung
-→ Human Gate
+→ menschliche Sichtung
 → Bildreview
-→ Keeper / lokaler Fix / Feinschliff / kontrollierter Neubau
-→ erneute Generierung
+→ Urteil + Änderungsstrategie
+→ Human Gate
+→ gezielte Revision oder Freigabe
 → erneutes Review
 → Serien-Kontinuitätscheck
 → Freigabe
@@ -72,6 +73,8 @@ Im dokumentierten Arbeitslauf spielten insbesondere diese Skills eine Rolle:
 
 Zusätzlich waren die allgemeinen Bildarbeit-Regeln zu Quellenpriorität, Referenzsystemen, Szenenplanung, Kontinuität sowie Bildprüfung und Freigabe relevant.
 
+Der iterative Teil des Arbeitslaufs ist eine konkrete Ausprägung des allgemeinen [Review-Revise-Loop](../../../Workflows/Review-Revise-Loop.md): Fachreview und Änderungsstrategie werden von der eigentlichen Revision getrennt; ein Review allein autorisiert noch keine Änderung.
+
 ## 4. Rollenverteilung Mensch / KI
 
 ### Mensch
@@ -83,7 +86,7 @@ Der Mensch:
 - bestätigte oder korrigierte die lokale Projektwahrheit;
 - prüfte jede Generierung visuell;
 - brachte konkrete Findings ein, etwa falsche Figuren, menschliche Hände, falsche Größenrelationen oder einen falschen Szenenmoment;
-- entschied, ob ein Bild freigegeben oder weiterbearbeitet wird;
+- entschied nach dem Review, ob ein Bild freigegeben oder weiterbearbeitet wird;
 - akzeptierte bewusst eine ältere Fassung, wenn eine neue Korrektur das Gesamtbild verschlechterte.
 
 ### KI-Assistent
@@ -106,13 +109,16 @@ Die Zusammenarbeit folgte bewusst einer kurzen, wiederholbaren Schleife:
 
 ```text
 Bild erzeugen
-→ Mensch prüft
+→ Mensch sichtet das Ergebnis
 → „Dein Urteil?“
 → KI bewertet Aufgabe, Identität, Anatomie, Komposition und Kontinuität
-→ genau einen nächsten Status festlegen
-→ korrigieren oder freigeben
+→ genau einen nächsten Status und einen möglichst engen Eingriff empfehlen
+→ Human Gate: freigeben, Änderung bestätigen oder neu ausrichten
+→ gezielt korrigieren oder kontrolliert neu bauen
 → erneut prüfen
 ```
+
+Die wiederkehrende Frage „Dein Urteil?“ war damit der **Review-Trigger**, nicht bereits die Änderungsfreigabe. Erst eine anschließende Entscheidung wie „machen wir so“ autorisierte die nächste Revision innerhalb des vereinbarten Scopes.
 
 Typische Status im konkreten Arbeitslauf waren:
 
@@ -192,9 +198,9 @@ Ein früher Coverentwurf war visuell eindrucksvoll, machte jedoch ein Motiv aus 
 
 Kapiteltext und Referenzbilder gaben eine belastbare Grundlage, gegen die Generierungen geprüft werden konnten. Dadurch ließen sich auch attraktive Fehlbilder begründet ablehnen.
 
-### Kurze Human Gates
+### Kurze Review-Schleifen und klare Human Gates
 
-Die wiederkehrende Frage „Dein Urteil?“ erzeugte eine kleine, wirksame Prüfschleife. Die KI musste das eigene Ergebnis nicht verteidigen, sondern erneut gegen die Produktionsaufgabe prüfen.
+Die wiederkehrende Frage „Dein Urteil?“ löste eine kleine, wirksame Prüfschleife aus. Die KI musste das eigene Ergebnis nicht verteidigen, sondern erneut gegen die Produktionsaufgabe prüfen. Die Entscheidung über Freigabe oder den empfohlenen nächsten Eingriff blieb anschließend beim Menschen.
 
 ### Eingriffstiefe statt pauschaler Neugenerierung
 
@@ -238,7 +244,11 @@ Ein weiterer Edit ist nicht automatisch ein Fortschritt. Gerade bei starken Keep
 
 Im konkreten Arbeitslauf entstand eine vollständige Bildserie mit 16 Innenillustrationen und einem Cover. Die einzelnen Bilder unterscheiden sich stark in Szene und Komposition, werden aber über wiederkehrende Figuren, Referenzen, Stil und Zustandslogik als gemeinsame Produktion zusammengehalten.
 
-Für dieses Praxisbeispiel wird bewusst nur eine kleine kuratierte Evidence verwendet. Rohchatlogs und sämtliche Zwischenbilder sind zum Verständnis des Arbeitsprinzips nicht erforderlich.
+Die folgende Collage zeigt eine kuratierte Auswahl freigegebener Motive aus dem Arbeitslauf. Sie veranschaulicht das sichtbare Ergebnis, ohne eine vollständige Produktionsdokumentation aller 17 finalen Motive oder sämtlicher Zwischenstände zu behaupten.
+
+![Kuratierte Ergebnis-Collage mit freigegebenen Illustrationen aus Indiana Hood Band 14](images/Band14-Collage.png)
+
+Für dieses Praxisbeispiel wird bewusst nur eine kleine kuratierte Evidence verwendet: ein Fehler-/Korrekturvergleich und die Ergebnis-Collage. Rohchatlogs und sämtliche Zwischenbilder sind zum Verständnis des Arbeitsprinzips nicht erforderlich.
 
 Das Ergebnis ist projektspezifisch. KI-Regeln enthält daraus **keine allgemeine Regel**, wie eine Kinderbuchreihe auszusehen hat oder welche Figurengestaltung für andere Projekte geeignet ist.
 
@@ -269,7 +279,7 @@ Es beweist **nicht**:
 
 ## 12. Evidence und Veröffentlichungsgrenze
 
-Das Vergleichsbild zeigt einen bewusst ausgewählten Fehlversuch und einen später freigegebenen Stand derselben Szene. Es dient der technischen Einordnung des dokumentierten Lernpunkts, nicht als Benchmark für Bildmodelle.
+Das Vergleichsbild zeigt einen bewusst ausgewählten Fehlversuch und einen später freigegebenen Stand derselben Szene. Die Ergebnis-Collage zeigt zusätzlich eine kuratierte Auswahl freigegebener Motive. Beide dienen der technischen Einordnung des dokumentierten Arbeitsprinzips, nicht als Benchmark für Bildmodelle oder als vollständiger Nachweis aller Produktionsschritte.
 
 Für weitere Projektartefakte gilt weiterhin:
 
@@ -289,10 +299,11 @@ Auftrag und Kapiteltext lesen
 → passende Bildarbeit-Skills auswählen
 → Szenenmoment und Ausschlüsse festlegen
 → Bild generieren
-→ Human Gate
+→ Mensch sichtet das Ergebnis
 → kritisch reviewen
-→ genau einen nächsten Status wählen
-→ lokal korrigieren oder kontrolliert neu bauen
+→ nächsten Status und Änderungsstrategie bestimmen
+→ erforderliches Human Gate
+→ lokal korrigieren, kontrolliert neu bauen oder freigeben
 → erneut reviewen
 → Keeper einfrieren
 → Bildfolge auf Serienkontinuität prüfen
