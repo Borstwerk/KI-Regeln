@@ -8,6 +8,14 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Discovery- und Entry-Path-Polish
+
+- Discovery-only-Registry `Dokumentation/radar-sources.yml` ergänzt, um neue Skills, Methoden, Spezifikationen, Security-Hinweise und relevante KI-Entwicklungen systematisch zu finden, ohne Radarquelle, Upstream oder lokale Übernahme gleichzusetzen;
+- Quellenregister und Dokumentation auf die Trennung `Discovery ≠ Adoption` sowie `Radarquelle ≠ Upstream` geschärft; neue Funde bleiben Review-Kandidaten und dürfen weder Regeln noch das Repository automatisch verändern;
+- Root-README um einen kompakten Abschnitt `KI-Regeln in 60 Sekunden` und einen sichtbaren Einstieg in die Praxisbeispiele ergänzt;
+- `AGENTS.md` und `Dokumentation/Skill-Handbuch.md` auf den vorhandenen Local Validation Harness als bevorzugten Repo-Prüfweg ausgerichtet; eine systemweit installierte Python-Runtime wird nicht mehr vorausgesetzt und nicht ausgeführte Prüfungen bleiben `NOT RUN` beziehungsweise `UNVERIFIED`;
+- keine neuen Skills angelegt, keine Maturity oder Eval Coverage verändert, keine Behavioral Evals ausgeführt oder als bestanden dargestellt und kein Tag oder Release erzeugt.
+
 ### Review-Revise Loop
 
 - fachübergreifenden Workflow `Workflows/Review-Revise-Loop.md` ergänzt für den wiederkehrenden Zyklus Auftrag/Ergebnis → kritischer Fachreview → Urteil und Findings → Änderungsstrategie → erforderliches Human Gate → gezielte Revision → erneuter Review;
@@ -180,7 +188,7 @@ Neuer tool- und formatneutraler Hauptbereich für Requirements Elicitation, Spez
 - acht aktive Requirements-Upstreams registriert: IREB Foundation, IREB Elicitation, NASA Requirements Engineering, NASA SE Handbook Appendix und ISO/IEC/IEEE 29148 Edition 3 Draft per semantischem Monatsreview sowie `Modular-Earth-LLC/solutions-architecture-agent`, `microsoft/hve-core` `requirements-author` und `Spacey6849/AgentSkills` `requirements-analysis` per konkretem Repositorypfad und geprüftem Blob-SHA;
 - ISO/IEC/IEEE 29148 Edition 3 ausdrücklich als Draft-Upstream behandelt, damit ein späterer Final-Release als Review-Signal erkannt wird, ohne den Draft heute als endgültigen Normstand auszugeben;
 - öffentliche Agent-Skills als methodische Upstreams eingeplant, ohne BANT-/GenAI-/AWS-Speziallogik, BRD/PRD-Zwang, feste Clarity Scores oder andere hostspezifische Prozessvorgaben zu zentralen Regeln zu machen;
-- Upstream-Governance bleibt `on_change: review-only` und `auto_sync: false`.
+- Upstream-Governance bleibt `on_change: review-only` mit `auto_sync: false`.
 
 ### Software Architecture und System Design
 
