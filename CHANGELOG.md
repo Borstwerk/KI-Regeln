@@ -8,6 +8,15 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Review-Revise Loop
+
+- fachübergreifenden Workflow `Workflows/Review-Revise-Loop.md` ergänzt für den wiederkehrenden Zyklus Auftrag/Ergebnis → kritischer Fachreview → Urteil und Findings → Änderungsstrategie → erforderliches Human Gate → gezielte Revision → erneuter Review;
+- den Workflow ausdrücklich von `verification-loop` abgegrenzt: reproduzierbare Verifikation und fachlich-qualitative Review-/Revisionssteuerung können kombiniert werden, sind aber nicht dasselbe;
+- Review und Änderung getrennt: ein Auftrag wie „dein Urteil?“ oder „deine Meinung?“ autorisiert noch keine Revision; Toolverfügbarkeit, Review-Finding oder APPROVE ersetzen keine separat erforderliche externe Freigabe;
+- Same-Model-Review ausdrücklich nicht als unabhängig behandelt; `bildreview` entsprechend von „unabhängig geprüft“ auf „kritisch geprüft“ gehärtet, ohne seine Fachlogik oder Statusklassen zu verändern;
+- `Workflows/Bildserie.md` als konkretes Domänenbeispiel an den allgemeinen Review-Revise Loop angebunden und `workflow-index.yml` um den neuen Workflow ergänzt;
+- keine neuen Skills angelegt, keine Maturity oder Eval Coverage verändert, keine Behavioral Evals ausgeführt oder als bestanden dargestellt und kein Tag oder Release erzeugt.
+
 ### Behavioral Batch 0 – Runner-Readiness
 
 - Batch-0-Fixtures für `WK-001`, `WK-004` und `WK-047` materialisiert; `WK-006` bleibt als No-Skill-/Direct-Response-Fall bewusst fixturefrei;

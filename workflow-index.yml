@@ -32,6 +32,7 @@ workflows:
   - Workflows/Requirements-Elicitation-und-Klaerung.md
   - Workflows/Requirements-Readiness-Review.md
   - Workflows/Resilience-Game-Day.md
+  - Workflows/Review-Revise-Loop.md
   - Workflows/Schnittstellenvertrag-Entwerfen-und-Aendern.md
   - Workflows/Software-Feature.md
   - Workflows/Systemgrenze-und-Dekomposition.md

@@ -1,6 +1,6 @@
 ---
 name: bildreview
-description: Prüft eine einzelne Bildgenerierung auf Aufgabe, Identität, Kontinuität, Anatomie, Physik, Stil und entscheidet zwischen Keeper, Feinschliff oder Neubau. Verwenden nach einer Bildgenerierung, wenn Produktionsauftrag und Ergebnis unabhängig geprüft und ein enger nächster Status gewählt werden sollen.
+description: Prüft eine einzelne Bildgenerierung auf Aufgabe, Identität, Kontinuität, Anatomie, Physik, Stil und entscheidet zwischen Keeper, Feinschliff oder Neubau. Verwenden nach einer Bildgenerierung, wenn Produktionsauftrag und Ergebnis kritisch geprüft und ein enger nächster Status gewählt werden sollen.
 ---
 
 # Bildreview
@@ -10,6 +10,8 @@ Dieser Skill nutzt `../../Bildpruefung-und-Freigabe.md` sowie bei Serien zusätz
 ## Ziel
 
 Nicht nur bewerten, ob ein Bild attraktiv ist, sondern ob es die konkrete Produktionsaufgabe korrekt erfüllt.
+
+Ein Review durch dasselbe Modell oder denselben Chat kann kritisch und nützlich sein, ist aber nicht allein dadurch unabhängig. Unabhängigkeit nur behaupten, wenn die konkrete Prüfanordnung sie tatsächlich herstellt.
 
 ## Ablauf
 
