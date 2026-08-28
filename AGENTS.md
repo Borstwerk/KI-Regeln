@@ -25,6 +25,20 @@ Typischer Startkontext:
 
 Nicht erforderlich: komplettes Repository, alle katalogisierten Skills, vollständige Nutzungsdokumentation oder alle Fachhandbücher.
 
+## Repository-Validierung
+
+Bei Änderungen am Repository den vorhandenen lokalen Validation Harness bevorzugen. Keine systemweit installierte Python-Runtime voraussetzen.
+
+Unter Windows:
+
+```powershell
+.\Validate-KI-Regeln.ps1 -Quick
+```
+
+Für breitere Prüfungen je nach Scope `-Full` oder `-Release` verwenden. Details stehen in `Dokumentation/Local-Validation-Harness.md`.
+
+Die vorhandenen Python-Validatoren bleiben kanonische Prüflogik hinter dem Harness. Wenn die vorgesehene Prüfung in der aktuellen Laufzeit nicht ausgeführt werden kann, den Status als `NOT RUN` beziehungsweise `UNVERIFIED` sichtbar machen statt einen Pass zu behaupten.
+
 ## Harte Grenzen
 
 - Keine Maturity-Hochstufung aus Plausibilität oder wenigen Beispielen ableiten.
