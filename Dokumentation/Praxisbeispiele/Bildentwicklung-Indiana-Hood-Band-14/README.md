@@ -137,7 +137,7 @@ In einer Szene am offenen Kalkrand sollte Indiana Hood als kleine Eule einen Mec
 
 **Korrektur:** Der Fehler wurde nicht endlos mit demselben Mikro-Fix bekämpft. Die **Aktionslogik der Szene wurde geändert**, sodass der kritische Griffkontakt anders beziehungsweise weniger handähnlich dargestellt werden konnte.
 
-![Vergleich eines Fehlversuchs mit menschlicher Handlogik und der freigegebenen Fassung nach geänderter Aktionslogik](images/handproblem-vorher-nachher.jpg)
+![Vergleich eines Fehlversuchs mit menschlicher Handlogik und der freigegebenen Fassung nach geänderter Aktionslogik](images/Band14-Beispiel-Handproblem-repo.jpg)
 
 Die linke Fassung ist gerade deshalb nützlich als Evidence, weil die Komposition grundsätzlich funktionierte, der Kontakt am Mechanismus aber anatomisch unbrauchbar blieb. Die rechte Fassung zeigt keinen „besseren Negativprompt“, sondern eine veränderte Lösung für dieselbe Szene.
 
