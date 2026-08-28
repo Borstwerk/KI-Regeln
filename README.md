@@ -4,6 +4,25 @@ Dieses Repository sammelt allgemeine, wiederverwendbare Regeln, Arbeitsweisen, S
 
 Ziel ist keine persönliche KI-Konfiguration und keine projektspezifische Wissenssammlung. Enthalten werden nur Regeln, die sich sinnvoll auf andere Nutzer, Projekte oder Aufgaben übertragen lassen.
 
+## KI-Regeln in 60 Sekunden
+
+KI-Regeln ist ein Werkzeugkasten für kontrollierte KI-Arbeit. Nicht das ganze Repository wird in jeden Prompt geladen. Stattdessen beginnt die Arbeit mit einem konkreten Auftrag und der lokalen Projektwahrheit; danach werden nur die passenden Regeln, Skills oder Workflows herangezogen.
+
+```text
+konkreter Auftrag
+→ lokale Projektwahrheit / Sources of Truth
+→ passenden Workflow oder Skill wählen
+→ KI arbeitet innerhalb dieser Grenzen
+→ Evidence / Review / Verification
+→ Human Gate, wenn eine Entscheidung oder Außenwirkung es erfordert
+```
+
+Die allgemeinen Regeln helfen beim **Wie**. Das konkrete Projekt bestimmt weiterhin das **Was**.
+
+- Praktischer Einstieg: [`PRAXISBEISPIELE.md`](PRAXISBEISPIELE.md)
+- Nutzung in eigenen Projekten: [`Dokumentation/Nutzung-des-Repositories.md`](Dokumentation/Nutzung-des-Repositories.md)
+- Einstieg für KI-Agenten: [`AGENTS.md`](AGENTS.md)
+
 ## Reife und Anspruch
 
 KI-Regeln ist ein experimenteller, systematisch gepflegter Werkzeugkasten für kontrollierte KI-Arbeit. Der Umfang des Katalogs beschreibt das vorhandene Inventar, nicht die Qualität oder Produktionsreife jedes einzelnen Skills.
@@ -28,10 +47,11 @@ Das bedeutet:
 Empfohlener Einstieg:
 
 1. diese README für das Gesamtmodell;
-2. `Dokumentation/Nutzung-des-Repositories.md` für den praktischen Einsatz;
-3. `Dokumentation/Skill-Handbuch.md` zur Auswahl geeigneter Skills;
-4. `Dokumentation/Skill-Katalog.md` für Reifegrad und Evalabdeckung;
-5. danach nur die für das eigene Vorhaben relevanten Regeln, Skills und Workflows.
+2. `PRAXISBEISPIELE.md` für einen konkreten realen Arbeitsablauf;
+3. `Dokumentation/Nutzung-des-Repositories.md` für den praktischen Einsatz;
+4. `Dokumentation/Skill-Handbuch.md` zur Auswahl geeigneter Skills;
+5. `Dokumentation/Skill-Katalog.md` für Reifegrad und Evalabdeckung;
+6. danach nur die für das eigene Vorhaben relevanten Regeln, Skills und Workflows.
 
 Nicht das komplette Repository muss für jede Aufgabe geladen werden.
 
