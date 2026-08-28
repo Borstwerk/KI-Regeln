@@ -122,7 +122,6 @@ sources:
       - Agentenarbeit
       - Recherche
       - Programmieren
-      - Context-Engineering
     purpose: Engineering guidance on agents, context, harnesses and model-assisted work.
     watch_for:
       - agent orchestration methods
@@ -138,7 +137,6 @@ sources:
       - Agentenarbeit
       - Recherche
       - Programmieren
-      - Context-Engineering
     purpose: Official product, research and engineering developments with possible workflow impact.
     watch_for:
       - new agent or tool-use capabilities
