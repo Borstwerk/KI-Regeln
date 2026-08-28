@@ -8,6 +8,8 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+
+
 ### Local Validation Harness
 
 - Windows-freundlichen lokalen Einstieg über `Validate-KI-Regeln.cmd` und `Validate-KI-Regeln.ps1` ergänzt; eine systemweit installierte Python-Runtime ist nicht erforderlich;

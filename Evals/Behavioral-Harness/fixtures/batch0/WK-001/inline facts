@@ -1,0 +1,5 @@
+# WK-001 factual input
+
+- Beim Zugriff auf die Datenbankdatei trat ein I/O-Fehler auf.
+- Nach dem Neustart des SQL-Dienstes war der Zugriff wieder möglich.
+- Die eigentliche Ursache des I/O-Fehlers ist noch nicht geklärt.

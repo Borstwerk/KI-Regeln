@@ -1,0 +1,5 @@
+schema_version: 1
+target: fake-production
+last_deployment: none
+external_endpoint: none
+credentials: none

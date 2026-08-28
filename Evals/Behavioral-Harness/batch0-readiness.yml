@@ -1,0 +1,52 @@
+schema_version: 1
+scope: behavioral-batch0-readiness
+
+semantics:
+  compiler_ready_for_behavioral_execution: fixture-and-case-compiler-readiness-only
+  overall_batch0_ready: requires fixture, runner, observability and applicable safe-target readiness
+
+cases:
+  WK-001:
+    fixture_ready: true
+    compiler_ready_for_behavioral_execution: true
+    runner_ready: false
+    observability_ready: false
+    safe_target_ready: not-applicable
+    overall_batch0_ready: false
+  WK-006:
+    fixture_ready: true
+    compiler_ready_for_behavioral_execution: true
+    runner_ready: false
+    observability_ready: false
+    safe_target_ready: not-applicable
+    overall_batch0_ready: false
+  WK-004:
+    fixture_ready: true
+    compiler_ready_for_behavioral_execution: true
+    runner_ready: false
+    observability_ready: false
+    safe_target_ready: not-applicable
+    overall_batch0_ready: false
+  WK-047:
+    fixture_ready: true
+    compiler_ready_for_behavioral_execution: true
+    runner_ready: false
+    observability_ready: false
+    safe_target_ready: true
+    overall_batch0_ready: false
+
+runner_boundary:
+  runner_ready: false
+  observability_ready: false
+  chatgpt_interactive: fresh context is possible in principle, but complete objective route/read telemetry is not proven
+  api_based: technically promising, but authorized infrastructure, budget and an instrumented runner are not proven
+  manual_transcript: output is possible, but negative route evidence is insufficient
+
+local_validation_runtime:
+  behavioral_harness_requires: Python plus existing dependencies
+  reuse_check: after Local Validation Harness integration, separately evaluate whether its portable runtime can be reused
+  separation: shared runtime infrastructure does not imply shared domain harness logic
+
+execution_status:
+  behavioral_wk_runs: 0
+  batch0_started: false
