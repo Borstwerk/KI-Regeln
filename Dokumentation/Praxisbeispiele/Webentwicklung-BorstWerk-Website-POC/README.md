@@ -214,7 +214,7 @@ Auftrag verstehen
 → Designrichtung konkretisieren
 → Human Gate
 → implementieren
-→ unabhängig/kritisch reviewen
+→ kritisch reviewen
 → im Browser verifizieren
 → Finding beheben
 → erneut verifizieren
