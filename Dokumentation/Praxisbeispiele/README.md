@@ -10,6 +10,7 @@ Sie dienen der **technischen Orientierung**, nicht der Vermarktung. Ein Beispiel
 |---|---|---|
 | [BorstWerk-Website als Proof of Concept](Webentwicklung-BorstWerk-Website-POC/README.md) | Webentwicklung | größerer Multi-Skill-Arbeitslauf mit Human Gates und Browser-Evidence |
 | [Kinderbuch-Illustrationen „Indiana Hood“ – Band 14](Bildentwicklung-Indiana-Hood-Band-14/README.md) | Bildarbeit | iterative Bildserie mit Referenzkanon, Human Gates, Same-Model-Review und kontrollierten Neubauten |
+| [Agentengepflegter Obsidian-Wissensvault](Wissensmanagement-Agentengepflegter-Obsidian-Wissensvault/README.md) | Wissensmanagement | kontinuierlicher Multi-Session-Ingest mit Provenance, Korrekturen, Synthese, Wartung und Datenschutzgrenzen |
 
 Weitere Beispiele werden nur ergänzt, wenn ein realer Fall einen zusätzlichen Nutzungsmodus sichtbar macht. Es wird kein Beispiel nur zur Erhöhung der Anzahl erzeugt.
 
