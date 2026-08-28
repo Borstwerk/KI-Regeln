@@ -9,6 +9,7 @@ Er richtet sich vor allem an Menschen, die:
 - Regeln in eigene Projekte übernehmen wollen;
 - den Bestand regelmäßig auf Aktualität prüfen möchten;
 - nachvollziehen möchten, welche externen Skills und Quellen aktiv beobachtet werden;
+- neue externe Kandidaten und Trends systematisch beobachten möchten;
 - Reifegrad und Evalabdeckung von Skills einschätzen möchten.
 
 ## Inhalte
@@ -33,7 +34,8 @@ Er richtet sich vor allem an Menschen, die:
 - `../Evals/` – wiederholbare Trigger-, Behavior-, Outcome- und Regressionsevals;
 - `../Workflows/` – Recipes für wiederkehrende Skill-Ketten;
 - `Pflege-und-Aktualisierung.md` – beschreibt Pflegeprozess, Review-Rhythmus und den Umgang mit neuen Quellen und Entwicklungen;
-- `Quellenregister.md` – erklärt Quellenklassen, Monitoring-Arten und den Umgang mit veränderlichen Upstreams;
+- `Quellenregister.md` – erklärt Quellenklassen, Discovery, Monitoring-Arten und den Umgang mit veränderlichen Upstreams;
+- `radar-sources.yml` – maschinenlesbare Discovery-only-Liste für wiederkehrende Trend-/Skill-/Methodensuche; Radarquellen sind noch keine lokalen Abhängigkeiten;
 - `upstream-sources.yml` – maschinenlesbare Liste aktiv beobachteter Upstreams mit Monitoring-Modus, Cadence, geprüftem SHA/Stand und lokalem Einfluss;
 - `Upstream-Audit-2026-08-23.md` – dokumentiert den ersten vollständigen Audit der damaligen Fachbereiche;
 - `Upstream-Audit-2026-08-23-Ergaenzung.md` – ergänzt den Audit um Skill Engineering, Sicherheit, Evals und Workflows.
@@ -58,17 +60,21 @@ experimental
 
 `stable` ist kein Standardwert. Die Einstufung soll durch reale Nutzung, passende Evals und – bei relevanten Capabilities – Security Review gestützt sein.
 
-## Quellen und Upstreams
+## Quellen, Radar und Upstreams
 
 Fachbereiche besitzen eigene `Quellen-und-Inspirationen.md`-Dateien. Sie beantworten:
 
 > Welche externen Konzepte haben diesen Bereich beeinflusst?
 
-Das zentrale Quellenregister beantwortet zusätzlich:
+`radar-sources.yml` beantwortet davor die Discovery-Frage:
 
-> Welche veränderlichen Quellen beobachten wir aktiv auf Updates?
+> Wo suchen wir regelmäßig nach neuen Skills, Methoden, Spezifikationen oder relevanten Entwicklungen?
 
-Aktuell gibt es zwei Monitoring-Arten:
+Das zentrale Quellenregister und `upstream-sources.yml` beantworten anschließend:
+
+> Welche veränderlichen Quellen beobachten wir aktiv, weil sie bereits konkreten lokalen Einfluss haben?
+
+Aktuell gibt es für aktive Upstreams zwei Monitoring-Arten:
 
 - `exact-sha` für konkrete GitHub-Dateien;
 - `semantic-review` für lebende Web- und Produktdokumentation.
@@ -77,6 +83,8 @@ Zusätzlich unterscheiden wir zwischen monatlich und quartalsweise zu prüfenden
 
 Dabei gilt:
 
+> Discovery ≠ Adoption.
+
 > Upstream-Änderung = Review-Signal, nicht automatischer Sync.
 
 ## Für Einsteiger
@@ -84,22 +92,23 @@ Dabei gilt:
 Wer das Repository zum ersten Mal verwendet, sollte in dieser Reihenfolge lesen:
 
 1. `../README.md`
-2. `Nutzung-des-Repositories.md`
-3. `Skill-Handbuch.md`
-4. bei Auswahl oder Bewertung von Skills `Skill-Katalog.md`
-5. bei längerer Agentenarbeit oder Context-/Tokenfragen zusätzlich `Skill-Handbuch-Context-und-Long-Horizon.md`
-6. bei persistenter Wissensarbeit zusätzlich `Skill-Handbuch-Wissensmanagement.md`
-7. bei Schnittstellen-/API-/Contract-Arbeit zusätzlich `Skill-Handbuch-Schnittstellen-und-Vertraege.md`
-8. bei Infrastruktur-/DevOps-/IaC-Arbeit zusätzlich `Skill-Handbuch-Infrastruktur-und-DevOps.md`
-9. bei Reliability-/Observability-/SRE-Arbeit zusätzlich `Skill-Handbuch-Reliability-und-System-Observability.md`
-10. bei Data-Engineering-/ETL-/CDC-/Warehouse-Arbeit zusätzlich `Skill-Handbuch-Data-Engineering.md`
-11. bei Software-Architecture-/System-Design-Arbeit zusätzlich `Skill-Handbuch-Software-Architecture-und-System-Design.md`
-12. bei Requirements-/Specification-Arbeit zusätzlich `Skill-Handbuch-Requirements-und-Spezifikations-Engineering.md`
-13. bei Social-Media-/Content-Präsenz-Arbeit zusätzlich `Skill-Handbuch-Social-Media-und-Content-Praesenz.md`
-14. bei Dokumentationsarbeit zusätzlich `Skill-Handbuch-Dokumentationserstellung.md`
-15. bei Datenbankarbeit zusätzlich `Skill-Handbuch-Datenbanken.md`
-16. bei Testing-/QA-Arbeit zusätzlich `Skill-Handbuch-Testing-und-QA.md`
-17. bei Skill-/Security-Arbeit zusätzlich `Skill-Handbuch-Meta-und-Sicherheit.md`
-18. erst danach die für das eigene Vorhaben relevanten Regel-, Skill- und Workflow-Dateien.
+2. `../PRAXISBEISPIELE.md` für einen konkreten Arbeitsablauf
+3. `Nutzung-des-Repositories.md`
+4. `Skill-Handbuch.md`
+5. bei Auswahl oder Bewertung von Skills `Skill-Katalog.md`
+6. bei längerer Agentenarbeit oder Context-/Tokenfragen zusätzlich `Skill-Handbuch-Context-und-Long-Horizon.md`
+7. bei persistenter Wissensarbeit zusätzlich `Skill-Handbuch-Wissensmanagement.md`
+8. bei Schnittstellen-/API-/Contract-Arbeit zusätzlich `Skill-Handbuch-Schnittstellen-und-Vertraege.md`
+9. bei Infrastruktur-/DevOps-/IaC-Arbeit zusätzlich `Skill-Handbuch-Infrastruktur-und-DevOps.md`
+10. bei Reliability-/Observability-/SRE-Arbeit zusätzlich `Skill-Handbuch-Reliability-und-System-Observability.md`
+11. bei Data-Engineering-/ETL-/CDC-/Warehouse-Arbeit zusätzlich `Skill-Handbuch-Data-Engineering.md`
+12. bei Software-Architecture-/System-Design-Arbeit zusätzlich `Skill-Handbuch-Software-Architecture-und-System-Design.md`
+13. bei Requirements-/Specification-Arbeit zusätzlich `Skill-Handbuch-Requirements-und-Spezifikations-Engineering.md`
+14. bei Social-Media-/Content-Präsenz-Arbeit zusätzlich `Skill-Handbuch-Social-Media-und-Content-Praesenz.md`
+15. bei Dokumentationsarbeit zusätzlich `Skill-Handbuch-Dokumentationserstellung.md`
+16. bei Datenbankarbeit zusätzlich `Skill-Handbuch-Datenbanken.md`
+17. bei Testing-/QA-Arbeit zusätzlich `Skill-Handbuch-Testing-und-QA.md`
+18. bei Skill-/Security-Arbeit zusätzlich `Skill-Handbuch-Meta-und-Sicherheit.md`
+19. erst danach die für das eigene Vorhaben relevanten Regel-, Skill- und Workflow-Dateien.
 
 Nicht das komplette Repository muss für jede Aufgabe geladen oder übernommen werden. Gute Nutzung bedeutet gezielte Auswahl.
