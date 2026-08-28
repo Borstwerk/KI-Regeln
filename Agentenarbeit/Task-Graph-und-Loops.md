@@ -137,6 +137,30 @@ Arbeiten
 
 Dieser Loop bleibt im Scope des Knotens.
 
+## Review-Revise als fachübergreifender Workflow
+
+Nicht jede Iteration ist primär ein deterministischer Verifikationsloop. Bei Bildern, Texten, Konzepten, Plänen, Webseiten oder delegierter Agentenarbeit kann ein fachliches Urteil mit menschlicher Richtungsentscheidung zwischen zwei Revisionen nötig sein.
+
+Dafür existiert `../Workflows/Review-Revise-Loop.md`:
+
+```text
+Ergebnis
+→ kritischer Fachreview
+→ Urteil und Findings
+→ Änderungsstrategie
+→ erforderliches Human Gate
+→ Revision
+→ erneuter Review
+```
+
+Abgrenzung:
+
+- `verification-loop` prüft einen freigegebenen Arbeitsschritt gegen reproduzierbare Evidence und korrigiert innerhalb seines Scopes;
+- `Review-Revise-Loop` orchestriert fachliches Review, qualitative Entscheidung, Human Gate und nächste Revision;
+- beide können kombiniert werden;
+- ein bloßes Review autorisiert keine Änderung und keine externe Aktion;
+- Same-Model-Review ist nicht automatisch unabhängig.
+
 ## Stop-Kriterien
 
 Ein Loop darf nicht unbegrenzt laufen.
