@@ -41,15 +41,28 @@ python tools/behavioral_harness_claude.py run \
 
 Common model aliases such as `sonnet`, `opus` or `haiku` are rejected. The caller must provide an explicit full model identifier.
 
-The adapter only relies on capabilities that the concrete binary reports through `--help`. Required capabilities are:
+The adapter only relies on required capabilities that the concrete binary reports through `--help`. Required capabilities are:
 
 - headless/print mode;
 - `--output-format` with `stream-json`;
 - explicit model selection;
-- allowed-tool control;
-- denied-tool control.
+- `--tools` to restrict built-in tools to `Read`;
+- allowed-tool permission control;
+- denied-tool control, including `mcp__*`.
 
-Optional controls are used only when the concrete binary reports them, including explicit session IDs, session-persistence control, MCP config isolation and controlled system prompt support. `--resume` and `--continue` are never used. No `--restricted` capability is assumed.
+`--allowedTools` is **not** treated as tool isolation. It only pre-approves the requested `Read` tool. The actual built-in tool boundary is requested with `--tools Read`; MCP tools are separately denied and an empty MCP config is requested where supported.
+
+Optional defense-in-depth controls are used only when the concrete binary reports them, including:
+
+- `--bare` to suppress project/user customizations where supported;
+- `--restricted` for its documented working-directory file boundary where supported;
+- `--no-chrome` where supported;
+- explicit session IDs;
+- session-persistence control;
+- MCP config isolation;
+- controlled system prompt support.
+
+`--resume` and `--continue` are never used. The adapter does not assume that `--restricted`, `--bare` or any other optional flag exists on an unprobed binary.
 
 ## Runtime shape
 
@@ -65,12 +78,17 @@ temporary-runtime/
 
 The actual Claude process runs with `task/` as its working directory. Package files are made read-only where the host filesystem permits it. A `CLAUDE.md` inside the copied runner package is rejected before model execution.
 
-This is **not an OS/container sandbox**. A different CWD plus copied files does not prove that the process cannot read other host paths. Therefore filesystem-isolation facts remain `unknown` unless later runtime evidence proves more.
+A temporary directory alone is **not** an OS/container sandbox. Without a verified stronger file boundary, it does not prove that the process cannot read other host paths.
+
+When the concrete binary proves `--restricted` is available and the run actually launches with that flag, the adapter may treat the documented working-directory confinement as filesystem-boundary evidence only if the observed tool set is exactly `Read`, observed MCP servers are empty and no outside-package/external access was observed. Without that combination the affected fields remain `unknown` or become `false` on a known violation.
 
 ## Tool and data policy
 
-The requested task tool set is `Read` only. The adapter denies at least:
+The requested built-in task tool set is exactly `Read`.
 
+The adapter additionally denies at least:
+
+- all MCP tools via `mcp__*`;
 - Bash;
 - Edit;
 - Write;
@@ -114,7 +132,7 @@ The adapter deliberately distinguishes intent from runtime evidence. Examples in
 
 The model fingerprint includes the controllable/observable model state such as requested/observed model, provider selection, system-prompt hash and explicit `not_exposed` markers for unavailable generation parameters.
 
-The runtime fingerprint includes Claude Code version, adapter version/code hash, normalized CLI controls, allowlisted environment controls, requested/observed tool policy, MCP/plugin/hook observations, persistence/memory controls, filesystem policy and network policy.
+The runtime fingerprint includes Claude Code version, adapter version/code hash, normalized CLI controls, allowlisted environment controls, requested/observed tool policy, MCP/plugin/hook observations, session/memory controls, filesystem policy and network policy.
 
 Per-response session IDs, temporary paths, task prompt text and the intentional baseline/skill package-content difference are normalized out of the runtime fingerprint. The treatment difference is therefore not allowed to create fingerprint inequality by construction.
 
@@ -122,7 +140,7 @@ Per-response session IDs, temporary paths, task prompt text and the intentional 
 
 R2 intentionally does not infer proof from configuration intent.
 
-With the current non-sandboxed runtime, the expected conservative values are normally:
+The conservative default without a proved restricted file boundary is:
 
 ```yaml
 fresh_context: unknown
@@ -133,8 +151,10 @@ package_only_access: unknown
 
 Known violations can become `false`. For example an observed MCP/external data path makes `network_disabled: false`, and an observed successful file access outside the task package makes `package_only_access: false`.
 
-The adapter currently does **not** emit `true` for these isolation fields merely because flags, a fresh UUID, a temporary directory or an empty config were requested. Consequently its first real smoke pair is expected to be methodologically `partial` unless a stronger sandbox/evidence layer is added.
+If the concrete Claude Code binary proves and accepts `--restricted`, and runtime observation also shows exactly `Read`, zero MCP servers and no outside-package/external access, `repository_access_disabled` and `package_only_access` may become `true` from that documented file boundary. This does not upgrade `fresh_context` or `network_disabled`.
+
+The adapter currently never emits `fresh_context: true` and never emits `network_disabled: true`: a new process/config/session is strong intent evidence but not proof of zero inherited/provider state, and disabling model-visible retrieval does not prove provider transport is the sole egress. Consequently the first real smoke pair is expected to remain methodologically `partial` with this adapter alone.
 
 ## Tests
 
-`tests/test_behavioral_harness_claude.py` uses synthetic process/stream fixtures and makes no real Claude calls. It covers the requested success/error/evidence cases, including model/session mismatch, unexpected tools/MCPs, malformed streams, secret handling and fingerprint invariance across the treatment package difference.
+`tests/test_behavioral_harness_claude.py` uses synthetic process/stream fixtures and makes no real Claude calls. It covers the requested success/error/evidence cases, including model/session mismatch, unexpected tools/MCPs, malformed streams, secret handling, launch-policy enforcement, conservative isolation evidence and fingerprint invariance across the treatment package difference.
