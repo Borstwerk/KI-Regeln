@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -33,7 +34,17 @@ Usage: claude [options]
   --permission-mode <mode>
   --resume
   --continue
+  --safe-mode
+  --disable-slash-commands
+  --include-hook-events
+  --add-dir <directories...>
+  --plugin-dir <path>
+  --fallback-model <model>
+  --agents <json>
 """
+DOCTOR_NO_POLICY = "Claude Code doctor\nManaged settings (remote): none configured for this organization\n"
+DOCTOR_WITH_POLICY = "Claude Code doctor\nManaged settings (remote): policy from acme-corp\n"
+DOCTOR_SILENT = "Claude Code doctor\nRunning: native (2.1.251)\n"
 
 
 def write_yaml(path: Path, data: Any) -> None:
@@ -123,6 +134,12 @@ def stream_json(
     final_text: str = "supported — source supports the claim.",
     skill: bool = False,
     wrong_result_session: str | None = None,
+    plugins: list[Any] | None = None,
+    plugin_errors: list[Any] | None = None,
+    mcp_server_errors: list[Any] | None = None,
+    hook_events: int = 0,
+    plugin_install_events: int = 0,
+    extra_init: bool = False,
 ) -> str:
     tools = ["Read"] if tools is None else tools
     init = {
@@ -132,11 +149,22 @@ def stream_json(
         "model": model,
         "tools": tools,
         "mcp_servers": [] if mcp is None else mcp,
-        "plugins": [],
+        "plugins": [] if plugins is None else plugins,
         "hooks": [],
         "permissionMode": "default",
     }
-    events: list[dict[str, Any]] = [init]
+    if plugin_errors is not None:
+        init["plugin_errors"] = plugin_errors
+    if mcp_server_errors is not None:
+        init["mcp_server_errors"] = mcp_server_errors
+    events: list[dict[str, Any]] = []
+    for i in range(hook_events):
+        events.append({"type": "system", "subtype": "hook_started", "session_id": session, "uuid": f"hook-{i}"})
+    for i in range(plugin_install_events):
+        events.append({"type": "system", "subtype": "plugin_install", "session_id": session, "status": "started"})
+    events.append(init)
+    if extra_init:
+        events.append(dict(init))
     reads = ["sources/01-source.md"] + (["instructions/SKILL.md"] if skill else [])
     for i, target in enumerate(reads, start=1):
         tid = f"tool-{i}"
@@ -171,10 +199,12 @@ def stream_json(
 
 
 class FakeRunner:
-    def __init__(self, *, actual_factory=None, version_rc=0, help_text=HELP):
+    def __init__(self, *, actual_factory=None, version_rc=0, help_text=HELP, doctor_text=DOCTOR_NO_POLICY, doctor_rc=0):
         self.actual_factory = actual_factory
         self.version_rc = version_rc
         self.help_text = help_text
+        self.doctor_text = doctor_text
+        self.doctor_rc = doctor_rc
         self.calls = []
 
     def __call__(self, argv, *, cwd=None, env=None, input_text=None):
@@ -183,6 +213,8 @@ class FakeRunner:
             return adapter.ProcessResult(self.version_rc, "2.1.0\n" if self.version_rc == 0 else "", "")
         if argv[-1:] == ["--help"]:
             return adapter.ProcessResult(0, self.help_text, "")
+        if argv[-1:] == ["doctor"]:
+            return adapter.ProcessResult(self.doctor_rc, self.doctor_text, "")
         if self.actual_factory is None:
             session = argv[argv.index("--session-id") + 1]
             return adapter.ProcessResult(0, stream_json(session=session), "")
@@ -193,8 +225,19 @@ class AdapterTests(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         self.root = Path(self.tmp.name)
+        self.managed_dir = self.root / "managed"
+        self.managed_dir.mkdir()
+        self.real_managed_paths = adapter.MANAGED_POLICY_PATHS
+        adapter.MANAGED_POLICY_PATHS = {
+            sys.platform: (
+                str(self.managed_dir / "managed-settings.json"),
+                str(self.managed_dir / "managed-settings.d"),
+                str(self.managed_dir / "managed-mcp.json"),
+            )
+        }
 
     def tearDown(self):
+        adapter.MANAGED_POLICY_PATHS = self.real_managed_paths
         self.tmp.cleanup()
 
     def run_one(self, fake: FakeRunner, *, prepared=None, out_name="out", model=MODEL, session="11111111-1111-4111-8111-111111111111"):
@@ -213,6 +256,11 @@ class AdapterTests(unittest.TestCase):
 
     def load(self, out: Path, name: str):
         return yaml.safe_load((out / name).read_text(encoding="utf-8"))
+
+    def launch_call(self, fake: FakeRunner):
+        launches = [call for call in fake.calls if "-p" in call[0]]
+        self.assertEqual(1, len(launches))
+        return launches[0]
 
     def test_01_successful_run_emits_canonical_adapter_artifacts(self):
         out = self.run_one(FakeRunner())
@@ -378,7 +426,7 @@ class AdapterTests(unittest.TestCase):
     def test_20_launch_policy_restricts_tools_and_never_resumes(self):
         fake = FakeRunner()
         self.run_one(fake, out_name="launch-policy")
-        argv = fake.calls[2][0]
+        argv = self.launch_call(fake)[0]
         self.assertEqual("Read", argv[argv.index("--tools") + 1])
         self.assertIn("--allowedTools", argv)
         deny_index = argv.index("--disallowedTools")
@@ -388,6 +436,214 @@ class AdapterTests(unittest.TestCase):
         self.assertIn("--no-session-persistence", argv)
         self.assertNotIn("--resume", argv)
         self.assertNotIn("--continue", argv)
+
+    # --- R3-a: fresh-context hardening -----------------------------------
+
+    def full_env(self):
+        return {
+            "PATH": "/usr/bin", "LANG": "C.UTF-8",
+            "ANTHROPIC_API_KEY": "TEST_AUTH_VALUE_DO_NOT_PERSIST",
+            "ANTHROPIC_BASE_URL": "https://api.anthropic.com",
+            "CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD": "1",
+            "CLAUDE_ADDITIONAL_DIRECTORIES": "/opt/other",
+            "CLAUDE_CODE_SYNC_SKILLS": "1",
+            "CLAUDE_CODE_SYNC_SESSION_REFS": "1",
+            "CLAUDE_EFFORT": "high",
+            "MAX_THINKING_TOKENS": "9000",
+            "ANTHROPIC_MODEL": "claude-smuggled-model",
+            "UNRELATED_HOST_VAR": "keep-out",
+        }
+
+    def shared_prepared(self):
+        if getattr(self, "_prepared", None) is None:
+            self._prepared = make_prepared(self.root)
+        return self._prepared
+
+    def run_env(self, fake, *, base_env, out_name):
+        prepared = self.shared_prepared()
+        out = self.root / out_name
+        adapter.execute_prepared_response(
+            prepared, model=MODEL, out_dir=out, claude_binary="claude",
+            session_id="11111111-1111-4111-8111-111111111111",
+            process_runner=fake, base_env=base_env,
+        )
+        return out
+
+    def test_21_environment_allowlist_drops_unlisted_agent_variables(self):
+        fake = FakeRunner()
+        out = self.run_env(fake, base_env=self.full_env(), out_name="env-allowlist")
+        child_env = self.launch_call(fake)[2]
+        for name in (
+            "CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD", "CLAUDE_ADDITIONAL_DIRECTORIES",
+            "CLAUDE_CODE_SYNC_SKILLS", "CLAUDE_CODE_SYNC_SESSION_REFS",
+            "CLAUDE_EFFORT", "MAX_THINKING_TOKENS", "ANTHROPIC_MODEL", "UNRELATED_HOST_VAR",
+        ):
+            self.assertNotIn(name, child_env)
+        self.assertEqual("/usr/bin", child_env["PATH"])
+        self.assertEqual("https://api.anthropic.com", child_env["ANTHROPIC_BASE_URL"])
+        self.assertEqual("TEST_AUTH_VALUE_DO_NOT_PERSIST", child_env["ANTHROPIC_API_KEY"])
+        self.assertEqual("1", child_env["CLAUDE_CODE_DISABLE_CLAUDE_MDS"])
+        self.assertEqual("1", child_env["CLAUDE_CODE_SKIP_PROMPT_HISTORY"])
+        self.assertEqual("1", child_env["DISABLE_UPDATES"])
+        policy = self.load(out, "evidence.yml")["evidence"][0]["configured"]["environment"]["policy"]
+        self.assertEqual("explicit-allowlist", policy["policy"])
+        self.assertIn("CLAUDE_EFFORT", policy["removed_agent_names"])
+        self.assertIn("CLAUDE_CODE_SYNC_SKILLS", policy["removed_agent_names"])
+        self.assertIn("ANTHROPIC_API_KEY", policy["inherited_names"])
+        self.assertEqual(1, policy["removed_other_count"])
+
+    def test_22_removed_generation_variables_are_named_and_never_claimed_exposed(self):
+        out = self.run_env(FakeRunner(), base_env=self.full_env(), out_name="env-generation")
+        pre = self.load(out, "model-configuration-preimage.yml")
+        self.assertEqual("not_exposed", pre["effort_or_thinking_mode"])
+        self.assertEqual("not_exposed", pre["thinking_token_budget"])
+        self.assertEqual("not_exposed", pre["model_environment_override"])
+        self.assertEqual(
+            ["ANTHROPIC_MODEL", "CLAUDE_EFFORT", "MAX_THINKING_TOKENS"],
+            pre["generation_environment_removed"],
+        )
+
+    def test_23_generation_environment_changes_the_model_fingerprint(self):
+        clean = {"PATH": "/usr/bin", "ANTHROPIC_API_KEY": "TEST_AUTH_VALUE_DO_NOT_PERSIST"}
+        out1 = self.run_env(FakeRunner(), base_env=clean, out_name="fp-clean")
+        out2 = self.run_env(FakeRunner(), base_env=dict(clean, CLAUDE_EFFORT="high"), out_name="fp-effort")
+        self.assertNotEqual(
+            self.load(out1, "method-evidence.yml")["model_configuration_fingerprint"],
+            self.load(out2, "method-evidence.yml")["model_configuration_fingerprint"],
+        )
+
+    def test_24_no_secret_value_reaches_persisted_artifacts(self):
+        out = self.run_env(FakeRunner(), base_env=self.full_env(), out_name="env-secrets")
+        combined = "\n".join(p.read_text(encoding="utf-8") for p in out.iterdir() if p.is_file())
+        self.assertNotIn("TEST_AUTH_VALUE_DO_NOT_PERSIST", combined)
+        self.assertIn("ANTHROPIC_API_KEY", combined)
+
+    def test_25_safe_mode_controls_are_launched_when_probed(self):
+        fake = FakeRunner()
+        self.run_one(fake, out_name="safe-mode-on")
+        argv = self.launch_call(fake)[0]
+        for flag in ("--safe-mode", "--disable-slash-commands", "--include-hook-events"):
+            self.assertIn(flag, argv)
+
+    def test_26_missing_safe_mode_capability_is_not_assumed(self):
+        help_text = HELP.replace("  --safe-mode\n", "")
+        fake = FakeRunner(help_text=help_text)
+        out = self.run_one(fake, out_name="safe-mode-off")
+        self.assertNotIn("--safe-mode", self.launch_call(fake)[0])
+        self.assertTrue(fake.calls)
+        method = self.load(out, "method-evidence.yml")
+        self.assertEqual("unknown", method["fresh_context"])
+        report = self.load(out, "evidence.yml")["evidence"][0]["fresh_context_assessment"]
+        self.assertIn("safe_mode_requested", report["unproven"])
+
+    def test_27_complete_evidence_yields_fresh_context_true(self):
+        out = self.run_one(FakeRunner(), out_name="fresh-true")
+        method = self.load(out, "method-evidence.yml")
+        self.assertTrue(method["fresh_context"])
+        report = self.load(out, "evidence.yml")["evidence"][0]["fresh_context_assessment"]
+        self.assertEqual([], report["violated"])
+        self.assertEqual([], report["unproven"])
+
+    def test_28_hook_lifecycle_events_make_fresh_context_false(self):
+        def actual(argv, cwd, env):
+            session = argv[argv.index("--session-id") + 1]
+            return adapter.ProcessResult(0, stream_json(session=session, hook_events=2), "")
+        out = self.run_one(FakeRunner(actual_factory=actual), out_name="fresh-hooks")
+        self.assertFalse(self.load(out, "method-evidence.yml")["fresh_context"])
+        report = self.load(out, "evidence.yml")["evidence"][0]["fresh_context_assessment"]
+        self.assertIn("no_hook_lifecycle_events", report["violated"])
+        self.assertEqual(2, self.load(out, "evidence.yml")["evidence"][0]["observed"]["hook_event_count"])
+
+    def test_29_observed_plugins_make_fresh_context_false(self):
+        def actual(argv, cwd, env):
+            session = argv[argv.index("--session-id") + 1]
+            return adapter.ProcessResult(0, stream_json(session=session, plugins=[{"name": "leaked", "path": "/p"}]), "")
+        out = self.run_one(FakeRunner(actual_factory=actual), out_name="fresh-plugins")
+        self.assertFalse(self.load(out, "method-evidence.yml")["fresh_context"])
+        self.assertIn("no_observed_plugins", self.load(out, "evidence.yml")["evidence"][0]["fresh_context_assessment"]["violated"])
+
+    def test_30_observed_mcp_servers_make_fresh_context_false(self):
+        def actual(argv, cwd, env):
+            session = argv[argv.index("--session-id") + 1]
+            return adapter.ProcessResult(0, stream_json(session=session, mcp=[{"name": "leaked"}]), "")
+        out = self.run_one(FakeRunner(actual_factory=actual), out_name="fresh-mcp")
+        self.assertFalse(self.load(out, "method-evidence.yml")["fresh_context"])
+        self.assertIn("no_observed_mcp_servers", self.load(out, "evidence.yml")["evidence"][0]["fresh_context_assessment"]["violated"])
+
+    def test_31_plugin_install_and_error_events_make_fresh_context_false(self):
+        def actual(argv, cwd, env):
+            session = argv[argv.index("--session-id") + 1]
+            return adapter.ProcessResult(
+                0, stream_json(session=session, plugin_install_events=1, plugin_errors=[{"plugin": "x", "message": "boom"}]), ""
+            )
+        out = self.run_one(FakeRunner(actual_factory=actual), out_name="fresh-plugin-install")
+        report = self.load(out, "evidence.yml")["evidence"][0]["fresh_context_assessment"]
+        self.assertFalse(self.load(out, "method-evidence.yml")["fresh_context"])
+        self.assertIn("no_plugin_install_events", report["violated"])
+        self.assertIn("no_plugin_errors", report["violated"])
+
+    def test_32_second_init_event_makes_fresh_context_false(self):
+        def actual(argv, cwd, env):
+            session = argv[argv.index("--session-id") + 1]
+            return adapter.ProcessResult(0, stream_json(session=session, extra_init=True), "")
+        out = self.run_one(FakeRunner(actual_factory=actual), out_name="fresh-two-inits")
+        self.assertFalse(self.load(out, "method-evidence.yml")["fresh_context"])
+        self.assertIn("single_init_event", self.load(out, "evidence.yml")["evidence"][0]["fresh_context_assessment"]["violated"])
+
+    def test_33_local_managed_policy_file_prevents_fresh_context_true(self):
+        (self.managed_dir / "managed-settings.json").write_text("{}", encoding="utf-8")
+        out = self.run_one(FakeRunner(), out_name="managed-local")
+        method = self.load(out, "method-evidence.yml")
+        self.assertIsNot(True, method["fresh_context"])
+        self.assertFalse(method["fresh_context"])
+        managed = self.load(out, "evidence.yml")["evidence"][0]["preflight_observed"]["managed_policy"]
+        self.assertTrue(managed["local_policy_present"])
+        self.assertFalse(managed["managed_policy_absent"])
+
+    def test_34_remote_managed_policy_prevents_fresh_context_true(self):
+        out = self.run_one(FakeRunner(doctor_text=DOCTOR_WITH_POLICY), out_name="managed-remote")
+        method = self.load(out, "method-evidence.yml")
+        self.assertIsNot(True, method["fresh_context"])
+        managed = self.load(out, "evidence.yml")["evidence"][0]["preflight_observed"]["managed_policy"]
+        self.assertTrue(managed["remote_policy_present"])
+        self.assertIn("acme-corp", managed["remote_status_line"])
+
+    def test_35_unreadable_managed_policy_status_stays_unknown(self):
+        prepared = self.shared_prepared()
+        for fake, name in ((FakeRunner(doctor_text=DOCTOR_SILENT), "managed-silent"),
+                           (FakeRunner(doctor_rc=1), "managed-failed")):
+            out = self.run_one(fake, prepared=prepared, out_name=name)
+            method = self.load(out, "method-evidence.yml")
+            self.assertEqual("unknown", method["fresh_context"])
+            managed = self.load(out, "evidence.yml")["evidence"][0]["preflight_observed"]["managed_policy"]
+            self.assertEqual("unknown", managed["remote_policy_present"])
+            self.assertEqual("unknown", managed["managed_policy_absent"])
+
+    def test_36_missing_runtime_tool_evidence_keeps_fresh_context_unknown(self):
+        def actual(argv, cwd, env):
+            session = argv[argv.index("--session-id") + 1]
+            events = [json.loads(x) for x in stream_json(session=session).splitlines()]
+            events[0].pop("tools", None)
+            return adapter.ProcessResult(0, "\n".join(json.dumps(e) for e in events) + "\n", "")
+        out = self.run_one(FakeRunner(actual_factory=actual), out_name="fresh-no-tools")
+        self.assertEqual("unknown", self.load(out, "method-evidence.yml")["fresh_context"])
+        self.assertIn("observed_tools_match_policy", self.load(out, "evidence.yml")["evidence"][0]["fresh_context_assessment"]["unproven"])
+
+    def test_37_network_disabled_is_never_true_after_r3a(self):
+        out = self.run_one(FakeRunner(), out_name="network-still-unknown")
+        method = self.load(out, "method-evidence.yml")
+        self.assertTrue(method["fresh_context"])
+        self.assertEqual("unknown", method["network_disabled"])
+        runtime = self.load(out, "runtime-configuration-preimage.yml")
+        self.assertFalse(runtime["network_policy"]["os_level_egress_enforcement"])
+
+    def test_38_managed_policy_preflight_uses_no_model_task(self):
+        fake = FakeRunner()
+        self.run_one(fake, out_name="preflight-order")
+        doctor = [call for call in fake.calls if call[0][-1:] == ["doctor"]]
+        self.assertEqual(1, len(doctor))
+        self.assertNotIn("-p", doctor[0][0])
+        self.assertNotIn("CLAUDE_EFFORT", doctor[0][2])
 
 
 if __name__ == "__main__":

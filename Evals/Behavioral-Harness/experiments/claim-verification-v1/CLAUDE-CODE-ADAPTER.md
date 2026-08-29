@@ -1,4 +1,4 @@
-# Claude Code Runner Adapter – Phase 4.2A-R2
+# Claude Code Runner Adapter – Phase 4.2A-R2/R3-a
 
 ## Status
 
@@ -56,11 +56,18 @@ Optional defense-in-depth controls are used only when the concrete binary report
 
 - `--bare` to suppress project/user customizations where supported;
 - `--restricted` for its documented working-directory file boundary where supported;
+- `--safe-mode` to keep customizations (CLAUDE.md, skills, plugins, hooks, MCP, commands, agents) from loading;
+- `--disable-slash-commands`, which does not touch the independent variable because the treatment is a read fixture, not a slash command;
+- `--include-hook-events`, so that the absence of hook activity is observable rather than merely assumed;
 - `--no-chrome` where supported;
 - explicit session IDs;
 - session-persistence control;
 - MCP config isolation;
 - controlled system prompt support.
+
+The probe also detects context-extending options (`--add-dir`, `--plugin-dir`, `--plugin-url`, `--agents`, `--fallback-model`, `--fork-session`). The adapter never passes them, and the launch policy records structurally that neither a context-extending nor a session-carryover flag reached the argv.
+
+None of the R3-a additions are required capabilities. On an older binary that does not report them the adapter still runs, and the facts they would have proved stay `unknown` instead of being assumed.
 
 `--resume` and `--continue` are never used. The adapter does not assume that `--restricted`, `--bare` or any other optional flag exists on an unprobed binary.
 
@@ -77,6 +84,32 @@ temporary-runtime/
 ```
 
 The actual Claude process runs with `task/` as its working directory. Package files are made read-only where the host filesystem permits it. A `CLAUDE.md` inside the copied runner package is rejected before model execution.
+
+### Environment policy
+
+The child process no longer inherits the parent environment. It receives an explicit allowlist covering process start, locale/encoding, authentication, provider transport and the adapter's own documented controls, plus:
+
+```text
+CLAUDE_CODE_DISABLE_CLAUDE_MDS=1
+CLAUDE_CODE_SKIP_PROMPT_HISTORY=1
+DISABLE_UPDATES=1
+DISABLE_AUTOUPDATER=1
+DISABLE_TELEMETRY=1
+DISABLE_ERROR_REPORTING=1
+DISABLE_BUG_COMMAND=1
+CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1
+```
+
+Every other `CLAUDE_*`, `CLAUDE_CODE_*` and `ANTHROPIC_*` variable is dropped unless explicitly allowlisted, because an inherited value such as `CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD`, `CLAUDE_ADDITIONAL_DIRECTORIES` or `CLAUDE_EFFORT` would silently change the run. Evidence records the inherited names and the removed agent/generation names; values of authentication variables are never persisted.
+
+### Managed-policy preflight
+
+Managed settings survive `--restricted`, `--bare` and `--safe-mode` by documented design, and server-managed settings arrive over the network, so a local file check alone cannot clear them. Before the model launch the adapter therefore observes, without any model task:
+
+- the platform's managed settings file, managed settings drop-in directory and managed MCP file;
+- the remote managed-settings status line reported by `claude doctor`.
+
+An unreadable or unparsable status is recorded as `unknown`. It is never read as "no policy".
 
 A temporary directory alone is **not** an OS/container sandbox. Without a verified stronger file boundary, it does not prove that the process cannot read other host paths.
 
@@ -136,14 +169,48 @@ The runtime fingerprint includes Claude Code version, adapter version/code hash,
 
 Per-response session IDs, temporary paths, task prompt text and the intentional baseline/skill package-content difference are normalized out of the runtime fingerprint. The treatment difference is therefore not allowed to create fingerprint inequality by construction.
 
+## Fresh-context evidence
+
+`fresh_context` is derived, not configured. It becomes `true` only when every required fact below is simultaneously known and satisfied, `false` as soon as one is known to be violated, and `unknown` whenever one is unproven.
+
+Configured and structural:
+
+- new process per response;
+- explicit session ID requested;
+- no resume, continue or fork flag in the argv;
+- session persistence disabled by flag and prompt history disabled by environment;
+- own ephemeral config directory;
+- CLAUDE.md and auto memory disabled by environment plus `--bare`;
+- no context-extending flag in the argv;
+- `--restricted`, `--safe-mode` and `--disable-slash-commands` requested;
+- controlled system prompt;
+- strict MCP config with an empty MCP file;
+- environment allowlist applied.
+
+Preflight-observed:
+
+- no local managed policy file, drop-in directory or managed MCP file;
+- no remote managed settings reported by `claude doctor`.
+
+Runtime-observed:
+
+- exactly one `system/init` event;
+- observed session ID equal to the requested one;
+- observed tools exactly the allowed policy;
+- no MCP servers and no MCP server errors;
+- no plugins and no plugin errors;
+- no hook lifecycle events, with `--include-hook-events` actually in force;
+- no plugin-install events.
+
+The assessment is persisted with each individual check plus the `violated` and `unproven` lists, so a `partial` pair shows exactly which fact is missing.
+
 ## Method-evidence boundary
 
-R2 intentionally does not infer proof from configuration intent.
+The adapter does not infer proof from configuration intent.
 
 The conservative default without a proved restricted file boundary is:
 
 ```yaml
-fresh_context: unknown
 network_disabled: unknown
 repository_access_disabled: unknown
 package_only_access: unknown
@@ -153,8 +220,14 @@ Known violations can become `false`. For example an observed MCP/external data p
 
 If the concrete Claude Code binary proves and accepts `--restricted`, and runtime observation also shows exactly `Read`, zero MCP servers and no outside-package/external access, `repository_access_disabled` and `package_only_access` may become `true` from that documented file boundary. This does not upgrade `fresh_context` or `network_disabled`.
 
-The adapter currently never emits `fresh_context: true` and never emits `network_disabled: true`: a new process/config/session is strong intent evidence but not proof of zero inherited/provider state, and disabling model-visible retrieval does not prove provider transport is the sole egress. Consequently the first real smoke pair is expected to remain methodologically `partial` with this adapter alone.
+The adapter still never emits `network_disabled: true`. R3-a adds no OS- or container-level egress enforcement, and under the paired contract a clean observed tool surface does not prove that no task-external data path was *available*: the absence of one fetch tool is not the absence of every external path, and disabling model-visible retrieval does not prove that provider transport is the sole egress. Reaching `true` would require an egress-enforcement layer that is deliberately out of scope here.
+
+Consequently a first real smoke pair can now reach `fresh_context: true` when the runtime observations support it, but remains methodologically `partial` overall as long as `network_disabled` stays `unknown`.
+
+`fresh_context: true` also stays a statement about the *runner* context. Provider-internal state such as prompt caching or server-side history remains unobservable and is not claimed.
 
 ## Tests
 
 `tests/test_behavioral_harness_claude.py` uses synthetic process/stream fixtures and makes no real Claude calls. It covers the requested success/error/evidence cases, including model/session mismatch, unexpected tools/MCPs, malformed streams, secret handling, launch-policy enforcement, conservative isolation evidence and fingerprint invariance across the treatment package difference.
+
+R3-a adds coverage for the environment allowlist and the removal of unlisted agent/generation variables, the generation-environment sensitivity of the model fingerprint, safe-mode capability present versus absent, hook/plugin/MCP/plugin-install/second-init observations forcing `fresh_context: false`, local and remote managed policy preventing `true`, an unreadable managed-policy status staying `unknown`, missing runtime evidence staying `unknown`, complete evidence reaching `true`, and `network_disabled` never becoming `true` through R3-a. The managed-policy paths are redirected into a temporary directory so the suite never depends on the host's real policy files.
