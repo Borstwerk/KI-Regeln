@@ -17,6 +17,7 @@ Usage: claude [options]
   --output-format <format> text|json|stream-json
   --verbose
   --model <model>
+  --tools <tools>
   --allowedTools <tools>
   --disallowedTools <tools>
   --session-id <uuid>
@@ -24,6 +25,9 @@ Usage: claude [options]
   --mcp-config <file>
   --strict-mcp-config
   --system-prompt <text>
+  --bare
+  --restricted
+  --no-chrome
   --settings <file>
   --setting-sources <sources>
   --permission-mode <mode>
@@ -203,7 +207,7 @@ class AdapterTests(unittest.TestCase):
             claude_binary="claude",
             session_id=session,
             process_runner=fake,
-            base_env={"ANTHROPIC_API_KEY": "SUPER-SECRET-KEY"},
+            base_env={"ANTHROPIC_API_KEY": "TEST_AUTH_VALUE_DO_NOT_PERSIST"},
         )
         return out
 
@@ -223,7 +227,8 @@ class AdapterTests(unittest.TestCase):
         self.assertEqual("runner-output.md", result["runner_output"])
         method = self.load(out, "method-evidence.yml")
         self.assertEqual("behavioral-paired-run-method-evidence/v1", method["contract"])
-        self.assertEqual("unknown", method["package_only_access"])
+        self.assertTrue(method["package_only_access"])
+        self.assertTrue(method["repository_access_disabled"])
 
     def test_02_observed_model_equal_requested(self):
         out = self.run_one(FakeRunner())
@@ -317,7 +322,7 @@ class AdapterTests(unittest.TestCase):
     def test_13_secrets_are_not_persisted(self):
         out = self.run_one(FakeRunner())
         combined = "\n".join(p.read_text(encoding="utf-8") for p in out.iterdir() if p.is_file())
-        self.assertNotIn("SUPER-SECRET-KEY", combined)
+        self.assertNotIn("TEST_AUTH_VALUE_DO_NOT_PERSIST", combined)
         ev = self.load(out, "evidence.yml")["evidence"][0]
         self.assertTrue(ev["configured"]["environment"]["auth_presence"]["ANTHROPIC_API_KEY"]["present"])
         self.assertNotIn("value", ev["configured"]["environment"]["auth_presence"]["ANTHROPIC_API_KEY"])
@@ -352,16 +357,37 @@ class AdapterTests(unittest.TestCase):
         with self.assertRaisesRegex(adapter.AdapterError, "contains CLAUDE.md"):
             self.run_one(FakeRunner(), prepared=prepared, out_name="claude-md")
 
-    def test_17_model_alias_is_rejected(self):
+    def test_17_without_restricted_file_boundary_stays_unknown(self):
+        help_without_restricted = HELP.replace("  --restricted\n", "")
+        out = self.run_one(FakeRunner(help_text=help_without_restricted), out_name="no-restricted")
+        method = self.load(out, "method-evidence.yml")
+        self.assertEqual("unknown", method["package_only_access"])
+        self.assertEqual("unknown", method["repository_access_disabled"])
+
+    def test_18_model_alias_is_rejected(self):
         with self.assertRaisesRegex(adapter.AdapterError, "model aliases"):
             self.run_one(FakeRunner(), model="sonnet", out_name="alias")
 
-    def test_18_required_capability_missing_fails_before_model_call(self):
+    def test_19_required_capability_missing_fails_before_model_call(self):
         help_without_stream = HELP.replace("stream-json", "json")
         fake = FakeRunner(help_text=help_without_stream)
         with self.assertRaisesRegex(adapter.AdapterError, "lacks required adapter capabilities"):
             self.run_one(fake, out_name="missing-cap")
         self.assertEqual(2, len(fake.calls))
+
+    def test_20_launch_policy_restricts_tools_and_never_resumes(self):
+        fake = FakeRunner()
+        self.run_one(fake, out_name="launch-policy")
+        argv = fake.calls[2][0]
+        self.assertEqual("Read", argv[argv.index("--tools") + 1])
+        self.assertIn("--allowedTools", argv)
+        deny_index = argv.index("--disallowedTools")
+        self.assertIn("mcp__*", argv[deny_index + 1:])
+        self.assertIn("--bare", argv)
+        self.assertIn("--restricted", argv)
+        self.assertIn("--no-session-persistence", argv)
+        self.assertNotIn("--resume", argv)
+        self.assertNotIn("--continue", argv)
 
 
 if __name__ == "__main__":
