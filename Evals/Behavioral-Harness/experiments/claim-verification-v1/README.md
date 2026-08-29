@@ -4,37 +4,89 @@
 
 This directory defines the first controlled paired-skill pilot for `claim-verification`.
 
-It does **not** record a behavioral pass. At the time this pilot definition was added, no isolated LLM runner was integrated into the repository harness and no A/B model responses were executed by this change.
+It records **method preparation only**. No isolated LLM A/B responses, semantic blind judgments or skill-effect results are created by this repository change.
 
-The experiment asks one narrow question:
+The experiment asks:
 
-> Under the same prompt, same package-local evidence, same model and same runner conditions, does making the `claim-verification` skill instruction available change observable claim-verification behavior?
+> Under the same prompt, same package-local evidence, same model and same sufficiently evidenced runner conditions, does making the `claim-verification` skill instruction available change observable claim-verification behavior?
 
 This is a pilot method check, not a public benchmark and not evidence for a Maturity or Eval Coverage promotion.
 
 ## Controlled variable
 
-For every pair, the following stay constant:
+For each pair, the intended constants are:
 
-- user prompt;
-- subject-matter source files and their byte hashes;
-- pinned target-skill repository commit;
-- allowed read-only package interface;
+- identical user prompt;
+- identical subject-source files and byte hashes;
+- identical subject-fixture roles;
+- pinned repository/skill version;
+- package-only read interface;
 - no web access;
-- no repository access outside the prepared runner package;
-- semantic judge contract and precommitted ground truth;
-- model identity and model configuration, as far as the external runner can document them.
+- no repository access outside the prepared package;
+- identical model identity and generation configuration;
+- identical runner/tool/runtime configuration;
+- fresh isolated contexts;
+- identical semantic judge contract and precommitted ground truth.
 
 The intended independent variable is only:
 
-- **baseline:** `claim-verification` is not present in the runner package;
-- **skill:** the exact pinned `Recherche/Skills/claim-verification/SKILL.md` is present as the only additional instruction artifact.
+- **baseline:** no `claim-verification` instruction artifact;
+- **skill:** the exact pinned `Recherche/Skills/claim-verification/SKILL.md` as the only treatment-specific instruction artifact.
 
-The baseline is explicitly forbidden from reading the target skill. The skill treatment requires it. Ordinary harness route telemetry remains the source of technical evidence when the runner adapter can observe file reads.
+Both treatments receive the same five verdict labels in the user prompt, so the skill does not win merely by defining vocabulary.
+
+## Fixture roles
+
+Every subject fixture declares an explicit role using the existing Behavioral-Harness vocabulary rather than a new paired-eval taxonomy:
+
+- `authoritative-source`;
+- `intentionally-incomplete`;
+- `supporting-source`;
+- `distractor`;
+- `policy`;
+- `runner-only`.
+
+`evaluator-only` and `unknown` are not valid subject-fixture roles for this executable pilot.
+
+The treatment-only skill file is generated separately as `skill-instruction`; it is not a subject-source role.
+
+For `CV-05-primary-vs-summary`, the current API reference is `authoritative-source`, while the search summary and community guide are `supporting-source`. This prevents harness metadata from flattening deliberately different source authority.
+
+## Precommitted classification ground truth
+
+Each case contains structured classification metadata:
+
+```yaml
+classification:
+  preferred: partial
+  accepted_alternatives:
+    unsupported:
+      conditions:
+        - explicit precommitted condition
+  disallowed:
+    - supported
+    - conflicting
+    - not-verified
+```
+
+Rules:
+
+- exactly one `preferred` label;
+- alternatives exist only when explicitly declared before execution;
+- every accepted alternative requires at least one explicit condition;
+- all five known labels must be partitioned into preferred/accepted versus disallowed;
+- unknown labels are rejected;
+- the legacy one-value `expected_classification` field is rejected for paired pilots.
+
+`CV-02` accepts `unsupported` only when the response explicitly distinguishes Enterprise 30 seconds from Standard 60 seconds and explains why the universal claim is false.
+
+`CV-06` accepts `partial` only when generic at-rest encryption is kept separate from the unverified AES-256-GCM mechanism.
+
+The full classification contract remains in the treatment-blind judge contract.
 
 ## Case set
 
-`experiment.yml` defines six precommitted cases:
+`experiment.yml` defines six synthetic local cases:
 
 1. exact support;
 2. population/scope partial support;
@@ -43,69 +95,32 @@ The baseline is explicitly forbidden from reading the target skill. The skill tr
 5. current primary source versus stale summary/secondary material;
 6. insufficient evidence for a specific encryption algorithm.
 
-All source documents are synthetic local fixtures. No live web lookup is needed or allowed.
+No live web lookup is required or allowed.
 
-The five skill classifications are used as an output contract for **both** treatments:
+## Treatment order
 
-- `supported`;
-- `partial`;
-- `conflicting`;
-- `unsupported`;
-- `not-verified`.
+A coordinator-only blind seed selects the starting treatment deterministically for each experiment/case. Repetitions then alternate the first treatment.
 
-Giving the baseline the same label vocabulary prevents a trivial advantage caused only by the skill defining the names of its verdict classes.
+That yields:
 
-## Ground truth
+- reproducible order for the same experiment/case/seed/repetition;
+- counterbalancing across repetitions;
+- no hard-coded baseline-first assumption;
+- no post-result manual order adjustment.
 
-Ground truth is stored in `experiment.yml` before model execution and includes per case:
-
-- expected classification;
-- decisive evidence;
-- decisive reasoning;
-- known traps;
-- allowed uncertainty;
-- hard failures.
-
-Do not rewrite these fields after seeing model responses. A changed ground truth creates a new experiment version.
-
-## Evaluation
-
-The judge evaluates dimensions separately. There is intentionally no opaque aggregate percentage.
-
-Core dimensions include:
-
-- classification;
-- decisive evidence use;
-- source hierarchy;
-- time/version scope;
-- population/scope;
-- conflict handling;
-- missing evidence;
-- uncertainty calibration;
-- unsupported additions.
-
-`overhead` is diagnostic only. A longer answer is not automatically worse, and a shorter answer is not automatically better.
-
-Hard failures are evaluated independently from prose quality.
+`control.yml` stores the opaque response execution order. `judge-contract.yml`, `parity.yml` and the blind judge package do **not** expose treatment mapping or execution order.
 
 ## Repetitions
 
-The experiment recommends **three repetitions per case and treatment**.
-
-With six cases this is:
+The experiment recommends three paired repetitions per case:
 
 - 6 cases;
-- 3 paired repetitions per case;
 - 18 A/B pairs;
-- 36 model responses.
+- 36 responses.
 
-This is still a small pilot. Repetition is used to expose stochastic instability, not to manufacture statistical significance.
-
-Each response must use a fresh isolated runner context. If the same known runner session is reused for both sides of a pair, blind pair packaging rejects it.
+Repetition exposes stochastic instability; it does not manufacture statistical significance.
 
 ## Preparation
-
-Prepare one pair with a coordinator-only blind seed:
 
 ```bash
 python tools/behavioral_harness_pair.py prepare-pair CV-01-supported \
@@ -115,38 +130,28 @@ python tools/behavioral_harness_pair.py prepare-pair CV-01-supported \
   --out Evals/Behavioral-Harness/prepared/CV-01-supported-r1
 ```
 
-Then verify the prepared pair:
+Verify before execution:
 
 ```bash
 python tools/behavioral_harness_pair.py verify-pair \
   --paired Evals/Behavioral-Harness/prepared/CV-01-supported-r1
 ```
 
-Prepared files are ignored by Git. The pair contains:
+Prepared output contains:
 
-- `control.yml` – coordinator-only treatment mapping;
-- `judge-contract.yml` – ground truth and dimension contract with opaque response IDs, but no treatment mapping;
-- two response directories using ordinary Behavioral-Harness prepared-case files;
-- self-contained runner packages containing the same subject sources;
-- only the skill treatment additionally contains the pinned skill instruction.
+- coordinator-only `control.yml`;
+- treatment-blind `judge-contract.yml`;
+- two ordinary Behavioral-Harness prepared response directories;
+- identical subject sources;
+- one treatment-only skill instruction file.
 
-Do not give `control.yml` to the runner or semantic judge.
+Prepared/run directories remain ignored by Git.
 
 ## Runner execution
 
-The repository harness still does not start an LLM runner itself.
+The repository harness still does not start an LLM runner.
 
-Each opaque response runner package must therefore be executed by an external adapter that:
-
-- creates a fresh context;
-- uses the same model and model configuration for both responses in the pair;
-- exposes no web access;
-- exposes no repository access outside the runner package;
-- keeps judge/control files hidden;
-- records observable telemetry using the existing runner-adapter contract;
-- does not self-report the treatment in the final answer.
-
-Package each completed response with the existing command:
+A later external runner must execute each opaque response in a fresh context and keep control/judge data hidden. Ordinary run packaging remains canonical:
 
 ```bash
 python tools/behavioral_harness.py package-run \
@@ -156,7 +161,97 @@ python tools/behavioral_harness.py package-run \
   --out Evals/Behavioral-Harness/runs
 ```
 
-`package-run` and `verify-run` remain the canonical technical run-package path. The paired helper does not replace them.
+`behavioral_harness_pair.py` does not replace compile, telemetry, `package-run` or `verify-run`.
+
+## Pair-specific method evidence
+
+Technical run packaging and methodological A/B eligibility are deliberately separate.
+
+A concrete external runner may provide one pair-method evidence sidecar per response:
+
+```yaml
+schema_version: 1
+contract: behavioral-paired-run-method-evidence/v1
+response_id: R-...
+runner_type: <must match run manifest>
+runner_model: <must match run manifest>
+runner_session_id: <must match run manifest>
+model_configuration_fingerprint: sha256:<normalized runner/model config>
+runtime_configuration_fingerprint: sha256:<normalized tool/runtime config>
+fresh_context: true
+network_disabled: true
+repository_access_disabled: true
+package_only_access: true
+```
+
+For unavailable evidence use the existing Harness tri-state value `unknown`; do not guess.
+
+### Model configuration fingerprint
+
+The later runner should normalize and hash all model-generation settings it can actually control or observe, for example:
+
+- provider/model identifier or revision when exposed;
+- temperature;
+- top-p/top-k where applicable;
+- max-output settings;
+- deterministic seed when supported;
+- reasoning/thinking mode and budget when applicable;
+- stable system-instruction template **excluding the intended treatment artifact**.
+
+Unavailable provider settings remain unknown; they are not reconstructed.
+
+### Runtime configuration fingerprint
+
+The later runner should normalize and hash the actual execution environment relevant to parity, for example:
+
+- adapter/version;
+- enabled tool/capability set;
+- tool permission mode;
+- network policy;
+- repository/filesystem mount policy;
+- other provider runtime controls that could change the response.
+
+The baseline/skill package-content difference itself must not be folded into this fingerprint, because that is the independent variable.
+
+## Method-validity gate
+
+`package-blind-pair` accepts technically verified run packages even when method evidence is incomplete or a known parity mismatch exists. Such a pair can be stored and inspected.
+
+The blind package records tri-state parity facts and derives `method_evidence_status` using the repository's existing status vocabulary:
+
+- `pass` – all required parity/isolation evidence is known and satisfied;
+- `partial` – run packages exist, but at least one required method fact is `unknown`;
+- `fail` – at least one required parity/isolation fact is known false.
+
+Only:
+
+```yaml
+method_evidence_status: pass
+comparison_eligible: true
+```
+
+is valid input for a later With-vs-Without skill-effect comparison.
+
+`partial` and `fail` are **not behavioral skill results**. They describe only method evidence.
+
+Required method facts include:
+
+- same prompt;
+- same subject sources;
+- same subject roles;
+- same prepared runtime contract;
+- same pinned repository version;
+- pinned target-skill version;
+- same known runner model;
+- same known runner type;
+- distinct sessions;
+- sidecar identity consistent with the canonical run manifest;
+- same model-configuration fingerprint;
+- same runtime-configuration fingerprint;
+- fresh-context evidence;
+- network disabled;
+- repository access disabled;
+- package-only access.
 
 ## Blind judge package
 
@@ -165,38 +260,34 @@ After both ordinary run packages exist:
 ```bash
 python tools/behavioral_harness_pair.py package-blind-pair \
   --paired Evals/Behavioral-Harness/prepared/CV-01-supported-r1 \
-  --run <run-dir-for-first-opaque-response> \
-  --run <run-dir-for-second-opaque-response> \
+  --run <run-dir-1> \
+  --run <run-dir-2> \
+  --method-evidence <method-evidence-1.yml> \
+  --method-evidence <method-evidence-2.yml> \
   --out <blind-judge-package-dir>
 ```
+
+Method evidence arguments are optional. Missing evidence remains `unknown`, which makes the method status `partial` rather than silently valid.
 
 The blind package contains:
 
 - precommitted ground truth;
+- explicit source roles;
 - evaluation dimensions;
-- parity information;
+- method parity facts/status;
 - two outputs under opaque response IDs;
-- no baseline/skill mapping.
+- no baseline/skill mapping;
+- no execution order.
 
-The helper refuses blind packaging if the output explicitly discloses the target skill ID or labels itself as a baseline/skill condition.
+Treatment disclosure in runner output still prevents blind packaging.
 
-Only after semantic judging is complete should the coordinator unblind using `control.yml`.
-
-## Known limitation: model configuration fingerprint
-
-The current generic runner-adapter/run-manifest contracts record model identity but do not yet carry a normalized configuration fingerprint for temperature, seed, system prompt or provider-specific settings.
-
-Therefore:
-
-- model identity parity can be checked from run packages;
-- prompt/source/runtime parity can be checked by the paired preparer;
-- full model-configuration parity must remain **UNVERIFIED** unless the concrete external runner records it separately.
-
-This limitation is intentionally documented instead of silently treating same model name as same configuration.
+Only after semantic judging is complete may the coordinator unblind with `control.yml`.
 
 ## Interpretation boundary
 
-Even if every paired run later favors the skill treatment, this experiment would establish at most evidence about:
+Even a later `method_evidence_status: pass` says only that the A/B **method conditions were sufficiently evidenced**. It does not say the skill passed.
+
+Even if later paired responses favor the skill, conclusions remain limited to:
 
 - this skill version;
 - this controlled source corpus;
@@ -204,4 +295,4 @@ Even if every paired run later favors the skill treatment, this experiment would
 - these six failure modes;
 - this runner and judge procedure.
 
-It would not establish model-independent skill effectiveness, general benchmark superiority, `stable` maturity or `core`/`broad` eval coverage.
+It does not establish model-independent effectiveness, benchmark superiority, `stable` maturity or `core`/`broad` Eval Coverage.
