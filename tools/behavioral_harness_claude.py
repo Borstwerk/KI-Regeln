@@ -25,7 +25,7 @@ RUNNER_TYPE = "claude-code"
 METHOD_CONTRACT = "behavioral-paired-run-method-evidence/v1"
 UNKNOWN = "unknown"
 ALLOWED_TOOLS = ("Read",)
-DENIED_TOOLS = ("Bash", "Edit", "Write", "WebSearch", "WebFetch", "NotebookEdit", "Task")
+DENIED_TOOLS = ("mcp__*", "Bash", "Edit", "Write", "WebSearch", "WebFetch", "NotebookEdit", "Task")
 CONTROL_ENV = {
     "DISABLE_AUTOUPDATER": "1",
     "DISABLE_TELEMETRY": "1",
@@ -148,8 +148,9 @@ def _flags(help_text: str) -> dict[str, bool]:
     return {
         "print": has("--print") or re.search(r"(?:^|\s)-p(?:\s|,|$)", help_text) is not None,
         "output_format": has("--output-format"), "stream_json": "stream-json" in help_text,
-        "verbose": has("--verbose"), "model": has("--model"),
+        "verbose": has("--verbose"), "model": has("--model"), "tools": has("--tools"),
         "allowed_tools": has("--allowedTools"), "disallowed_tools": has("--disallowedTools"),
+        "bare": has("--bare"), "restricted": has("--restricted"), "no_chrome": has("--no-chrome"),
         "session_id": has("--session-id"), "no_session_persistence": has("--no-session-persistence"),
         "mcp_config": has("--mcp-config"), "strict_mcp_config": has("--strict-mcp-config"),
         "system_prompt": has("--system-prompt"), "settings": has("--settings"),
@@ -165,7 +166,7 @@ def probe_claude_code(binary: str, runner: ProcessRunner = _run) -> dict[str, An
     if help_result.returncode != 0:
         raise AdapterError(f"Claude Code --help failed with exit code {help_result.returncode}")
     capabilities = _flags(help_result.stdout + "\n" + help_result.stderr)
-    required = ("print", "output_format", "stream_json", "model", "allowed_tools", "disallowed_tools")
+    required = ("print", "output_format", "stream_json", "model", "tools", "allowed_tools", "disallowed_tools")
     missing = [x for x in required if not capabilities[x]]
     return {
         "binary": binary, "version": (version.stdout or version.stderr).strip() or UNKNOWN,
@@ -216,8 +217,14 @@ def _argv(binary: str, model: str, prompt: str, session: str, caps: Mapping[str,
     normalized = ["<claude-binary>", "-p", "--output-format", "stream-json"]
     if caps.get("verbose"):
         argv.append("--verbose"); normalized.append("--verbose")
-    common = ["--model", model, "--allowedTools", ",".join(ALLOWED_TOOLS), "--disallowedTools", ",".join(DENIED_TOOLS)]
+    common = ["--model", model, "--tools", ",".join(ALLOWED_TOOLS), "--allowedTools", *ALLOWED_TOOLS, "--disallowedTools", *DENIED_TOOLS]
     argv += common; normalized += common
+    if caps.get("bare"):
+        argv.append("--bare"); normalized.append("--bare")
+    if caps.get("restricted"):
+        argv.append("--restricted"); normalized.append("--restricted")
+    if caps.get("no_chrome"):
+        argv.append("--no-chrome"); normalized.append("--no-chrome")
     if caps.get("session_id"):
         argv += ["--session-id", session]; normalized += ["--session-id", "<per-response-session-id>"]
     if caps.get("no_session_persistence"):
@@ -235,6 +242,8 @@ def _argv(binary: str, model: str, prompt: str, session: str, caps: Mapping[str,
         "empty_mcp_config_requested": bool(caps.get("mcp_config")),
         "strict_mcp_config_requested": bool(caps.get("mcp_config") and caps.get("strict_mcp_config")),
         "controlled_system_prompt_requested": bool(caps.get("system_prompt")),
+        "bare_requested": bool(caps.get("bare")), "restricted_requested": bool(caps.get("restricted")),
+        "no_chrome_requested": bool(caps.get("no_chrome")),
         "normalized_argv": normalized,
     }
     return argv, controls
@@ -390,8 +399,8 @@ def _preimages(model: str, stream: Mapping[str, Any], probe: Mapping[str, Any], 
         "mcp_policy": {"empty_config_requested": controls["empty_mcp_config_requested"], "strict_config_requested": controls["strict_mcp_config_requested"], "observed_servers": stream["observed_mcp_servers"]},
         "plugins_observed": stream["observed_plugins"], "hooks_observed": stream["observed_hooks"],
         "session_persistence": {"disabled_by_supported_flag": controls["session_persistence_disabled_by_flag"], "no_resume_or_continue": True},
-        "memory_and_instructions": {"ephemeral_claude_config_dir": True, "runner_package_contains_claude_md": False, "runtime_confirmation": UNKNOWN},
-        "filesystem_isolation": {"ephemeral_package_copy": True, "task_files_read_only_requested": read_only, "os_or_container_sandbox": False},
+        "memory_and_instructions": {"ephemeral_claude_config_dir": True, "bare_requested": controls["bare_requested"], "runner_package_contains_claude_md": False, "runtime_confirmation": UNKNOWN},
+        "filesystem_isolation": {"ephemeral_package_copy": True, "task_files_read_only_requested": read_only, "restricted_mode_requested": controls["restricted_requested"], "os_or_container_sandbox": False},
         "network_policy": {"task_external_network_disabled_intended": True, "provider_transport_required": True, "os_level_egress_enforcement": False},
         "treatment_package_difference_excluded": True,
     }
@@ -435,17 +444,22 @@ def _evidence(probe, argv, model, requested_session, stream, env, controls, stdo
     return {"schema_version": 1, "observability": {"evidence_complete": True, "claims_complete": True}, "evidence": items, "claims": []}
 
 
-def _method(response_id, stream, actions, outside, model_fp, runtime_fp):
+def _method(response_id, stream, actions, outside, controls, model_fp, runtime_fp):
     tools, mcp = stream["observed_tools"], stream["observed_mcp_servers"]
     names = set(tools) if isinstance(tools, list) else set()
     external_action = any(x.get("executed") is True and "external" in set(x.get("action_class") or []) for x in actions["actions"])
     external_path = bool(names & {"WebSearch", "WebFetch"}) or bool(isinstance(mcp, list) and mcp) or external_action
+    restricted_file_boundary = (
+        controls.get("restricted_requested") is True
+        and tools == ["Read"] and mcp == [] and not outside and not external_action
+    )
     return {
         "schema_version": 1, "contract": METHOD_CONTRACT, "response_id": response_id, "runner_type": RUNNER_TYPE,
         "runner_model": stream["observed_model"], "runner_session_id": stream["observed_session_id"],
         "model_configuration_fingerprint": model_fp, "runtime_configuration_fingerprint": runtime_fp,
         "fresh_context": UNKNOWN, "network_disabled": False if external_path else UNKNOWN,
-        "repository_access_disabled": UNKNOWN, "package_only_access": False if (outside or external_action) else UNKNOWN,
+        "repository_access_disabled": True if restricted_file_boundary else UNKNOWN,
+        "package_only_access": False if (outside or external_action) else True if restricted_file_boundary else UNKNOWN,
     }
 
 
@@ -487,7 +501,7 @@ def execute_prepared_response(
         model_pre, runtime_pre = _preimages(model, stream, probe, controls, env_evidence, read_only)
         model_fp, runtime_fp = _hash_obj(model_pre), _hash_obj(runtime_pre)
         evidence = _evidence(probe, argv, model, requested_session, stream, env_evidence, controls, result.stdout, result.stderr, started, finished, reads, read_only)
-        method = _method(response_id, stream, actions, outside, model_fp, runtime_fp)
+        method = _method(response_id, stream, actions, outside, controls, model_fp, runtime_fp)
         adapter_result = {
             "schema_version": 1, "runner_type": RUNNER_TYPE, "runner_model": stream["observed_model"],
             "runner_session_id": stream["observed_session_id"], "started_at": started, "finished_at": finished,
