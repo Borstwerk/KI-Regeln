@@ -22,6 +22,20 @@ CONTROL_CONTRACT = 'behavioral-paired-control/v1'
 BLIND_JUDGE_CONTRACT = 'behavioral-paired-blind-judge/v1'
 BLIND_INPUT_CONTRACT = 'behavioral-paired-blind-input/v1'
 METHOD_EVIDENCE_CONTRACT = 'behavioral-paired-run-method-evidence/v1'
+# Runner contract boundaries for METHOD_EVIDENCE_CONTRACT (semantics only, no schema change).
+# For paired remote-model runs, `network_disabled` means that no task-external network or data
+# access is available for solving the task; only the technically necessary transport to the
+# configured model provider may be permitted. It is not a claim that no packet leaves the process.
+# `model_configuration_fingerprint` and `runtime_configuration_fingerprint` prove equality of the
+# controllable and observable configuration only, never of invisible provider-internal state.
+# A method-evidence `pass` therefore requires evidenced facts, not intent:
+#   a set flag is not proven isolation;
+#   a requested model is not an observed model;
+#   a new session id is not a proven fresh context;
+#   a missing fetch tool is not a missing external data path;
+#   an identical intended config hash is not an identical effective run.
+# Values a runner cannot observe stay TRI_UNKNOWN; they are never guessed or back-filled.
+# See Evals/Behavioral-Harness/experiments/claim-verification-v1/README.md.
 TREATMENTS = ('baseline', 'skill')
 CLASSIFICATION_LABELS = {'supported', 'partial', 'conflicting', 'unsupported', 'not-verified'}
 SUBJECT_FIXTURE_ROLES = {'authoritative-source', 'intentionally-incomplete', 'supporting-source', 'distractor', 'policy', 'runner-only'}

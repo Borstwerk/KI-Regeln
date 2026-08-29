@@ -21,7 +21,7 @@ For each pair, the intended constants are:
 - identical subject-fixture roles;
 - pinned repository/skill version;
 - package-only read interface;
-- no web access;
+- no task-external network or data access;
 - no repository access outside the prepared package;
 - identical model identity and generation configuration;
 - identical runner/tool/runtime configuration;
@@ -186,6 +186,23 @@ package_only_access: true
 
 For unavailable evidence use the existing Harness tri-state value `unknown`; do not guess.
 
+### Isolation semantics for remote-model runners
+
+A paired run executed against a remote model provider still needs an honest reading of the isolation facts. For paired remote-LLM runs the following definition is binding:
+
+> `network_disabled` means that **no task-external network or data access is available for solving the task**. Only the technically necessary transport to the configured model provider may be permitted.
+
+It therefore does **not** claim that no network packet leaves the process. It does claim:
+
+- no web search, fetch or other retrieval capability usable by the model;
+- no further API, package index, database or remote filesystem reachable as task input;
+- no provider-side retrieval or tool augmentation adding content beyond the prepared package;
+- the provider transport carries only the prepared task material and the run's own output.
+
+If a task-external data path is known to exist, `network_disabled` is `false`. If such a path can neither be excluded nor demonstrated as excluded, the value is `unknown`. The value is `true` only where the runner can evidence that the provider transport is the sole permitted egress.
+
+`repository_access_disabled` and `package_only_access` keep their literal meaning: the repository working tree lies outside the runtime the model can read, and the prepared runner package is the only task data area.
+
 ### Model configuration fingerprint
 
 The later runner should normalize and hash all model-generation settings it can actually control or observe, for example:
@@ -200,6 +217,10 @@ The later runner should normalize and hash all model-generation settings it can 
 
 Unavailable provider settings remain unknown; they are not reconstructed.
 
+`model_configuration_fingerprint` proves equality of the **controllable and observable** model/runner configuration across the two responses of a pair.
+
+It does **not** prove equality of invisible provider-internal state, for example undisclosed serving revisions, routing or fallback between backends, provider-side default changes, capacity-dependent behaviour, or hidden system-prompt fragments injected by the provider.
+
 ### Runtime configuration fingerprint
 
 The later runner should normalize and hash the actual execution environment relevant to parity, for example:
@@ -212,6 +233,10 @@ The later runner should normalize and hash the actual execution environment rele
 - other provider runtime controls that could change the response.
 
 The baseline/skill package-content difference itself must not be folded into this fingerprint, because that is the independent variable.
+
+`runtime_configuration_fingerprint` proves the same kind of fact for the execution environment: equality of the controllable and observable runner configuration. It does not prove equality of provider-internal runtime state, and it does not prove that a declared policy was actually enforced — enforcement requires its own isolation evidence.
+
+Values a runner cannot read stay `unknown`. Fabricating, defaulting or back-filling an unobserved value invalidates the fingerprint and therefore the pair.
 
 ## Method-validity gate
 
@@ -252,6 +277,68 @@ Required method facts include:
 - network disabled;
 - repository access disabled;
 - package-only access.
+
+### What a `pass` must not be inferred from
+
+`method_evidence_status: pass` requires the adapter to actually evidence those facts. Specifically:
+
+- **a set flag is not proven isolation** – a CLI flag or config key documents intent; the run must additionally show the effect (for example the observed tool set, an absent capability, a denied access);
+- **a requested model is not an observed model** – `runner_model` must reflect what the runtime reported back, not what was asked for; if the runtime reports no model identity, the value is `unknown`;
+- **a new session UUID is not a proven fresh context** – a fresh identifier alone does not exclude carried-over memory, resumed transcripts, user/project instruction files or provider-side history;
+- **the absence of one fetch capability is not the absence of every external data path** – excluding a single web tool says nothing about other tools, MCP servers, plugins or provider-side retrieval;
+- **an identical intended configuration hash is not an identical effective run** – the fingerprint covers the requested configuration; that both responses actually ran under it must follow from observed runtime evidence.
+
+Where such proof is missing, the affected fact stays `unknown` and the pair is `partial`. `partial` is a valid, storable result; a wrongly claimed `pass` is not.
+
+## Claude Code runner evidence requirements
+
+This section defines the **minimum evidence** a later Claude Code based runner adapter must emit so that its pairs can be assessed against the method-validity gate at all. The adapter itself is not part of this change, and no Claude Code run has been executed.
+
+### No dependency on undocumented CLI capabilities
+
+The adapter contract must not require any Claude Code capability that is neither documented in the current official CLI reference nor demonstrated on the concretely installed version. In particular, no method fact may depend on an assumed blanket restriction flag such as `--restricted`.
+
+Every capability the adapter relies on is verified against the installed binary at adapter build time. Anything not verifiable there is recorded as `unknown` instead of assumed. If the installed version does offer additional restriction flags, they may be used as defense in depth; they are never a necessary component of a method `pass` and never replace observed runtime evidence.
+
+### Launch evidence
+
+Recorded at process start, per response:
+
+- the concrete Claude Code version, as reported by the installed binary;
+- the complete CLI argument vector, verbatim;
+- the relevant environment configuration (at minimum config directory, memory/`CLAUDE.md` handling, session-persistence and telemetry/update controls);
+- the requested model, as the full model name passed to the run;
+- the session id passed to the run.
+
+### Runtime evidence
+
+Read back from the machine-readable event stream (`system`/`init` and later records), as far as the runtime actually reports it:
+
+- observed model;
+- available tools;
+- MCP servers;
+- plugins;
+- session id as reported by the runtime.
+
+Anything the runtime does not report is `unknown`. Where observed and requested values diverge — the model above all — the observed value governs and the divergence is recorded rather than smoothed over.
+
+### Isolation evidence
+
+Isolation must not rest on the model's self-report. The adapter evidences:
+
+- a fresh runtime per response;
+- an own config directory per response;
+- no resume/continue use;
+- session persistence disabled;
+- `CLAUDE.md`/memory loading disabled;
+- the repository located outside the runtime accessible to the model;
+- the runner package as the only task data area;
+- a minimal tool set;
+- MCP servers disabled;
+- task-external network access prevented;
+- provider transport permitted separately.
+
+For each item the adapter records both the configured intent (flag, environment variable, mount) and an observable confirmation (for example the reported tool list, an empty config directory, a directory listing the runtime cannot produce). Where only intent exists, the corresponding method fact stays `unknown`.
 
 ## Blind judge package
 
