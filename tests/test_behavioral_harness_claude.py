@@ -8,7 +8,7 @@ from typing import Any
 
 import yaml
 
-import behavioral_harness_claude as adapter
+from tools import behavioral_harness_claude as adapter
 
 MODEL = "claude-sonnet-4-20250514"
 HELP = """
