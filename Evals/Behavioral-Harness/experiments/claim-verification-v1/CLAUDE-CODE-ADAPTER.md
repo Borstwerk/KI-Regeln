@@ -116,6 +116,34 @@ transport_configuration:
 
 Two responses whose effective transport configuration differs therefore cannot share a runtime fingerprint. Authentication variables keep presence/absence only — they are neither hashed nor stored — so rotating a key does not change the fingerprint and never reaches an artifact. Endpoint configuration keeps its existing presence-plus-hash form.
 
+### Authentication preflight
+
+Bare mode does not read OAuth credentials or the system keychain, so a run without a supported credential fails inside the model process rather than at startup. The adapter therefore classifies the authentication path from the effective child environment *before* launching:
+
+| `auth_mode` | Recognised when |
+| --- | --- |
+| `anthropic-api-key` | `ANTHROPIC_API_KEY` is present in the child environment |
+| `bedrock` | `CLAUDE_CODE_USE_BEDROCK=1` is explicitly set |
+| `vertex` | `CLAUDE_CODE_USE_VERTEX=1` is explicitly set |
+| `unsupported-or-missing` | none of the above |
+
+Present AWS or Google credentials never imply Bedrock or Vertex on their own; only the explicit selector counts. When the mode is `unsupported-or-missing` and bare mode is in force, the adapter aborts **before** the model process with a message that names no credential value.
+
+Host-internal credential channels — `CLAUDE_CODE_OAUTH_TOKEN_FILE_DESCRIPTOR` and its siblings — are neither added to the environment allowlist nor treated as a proven bare-mode authentication path. When such a variable exists in the parent environment, evidence records only that its name was seen and ignored.
+
+Evidence carries the mode and a presence boolean:
+
+```yaml
+authentication:
+  mode: anthropic-api-key
+  credential_present: true
+  host_only_channels_ignored: []
+```
+
+The mode enters the runtime fingerprint, so two responses authenticated through different paths cannot share one. Rotating a secret within the same mode does not change the fingerprint, because no credential value is stored or hashed.
+
+The auth preflight is not a model run, not method evidence and not behavioral evidence.
+
 ### Managed-policy preflight
 
 Managed settings survive `--restricted`, `--bare` and `--safe-mode` by documented design, and server-managed settings arrive over the network, so a local file check alone cannot clear them. Before the model launch the adapter therefore observes, without any model task:
@@ -128,6 +156,27 @@ An unreadable or unparsable status is recorded as `unknown`. It is never read as
 A temporary directory alone is **not** an OS/container sandbox. Without a verified stronger file boundary, it does not prove that the process cannot read other host paths.
 
 When the concrete binary proves `--restricted` is available and the run actually launches with that flag, the adapter may treat the documented working-directory confinement as filesystem-boundary evidence only if the observed tool set is exactly `Read`, observed MCP servers are empty and no outside-package/external access was observed. Without that combination the affected fields remain `unknown` or become `false` on a known violation.
+
+## Failure diagnosis
+
+A non-zero Claude Code exit is a single-attempt runner's most expensive event, so the adapter extracts a safe diagnosis instead of discarding everything. stdout is parsed as `stream-json` **in memory only** and reduced to a category drawn from a fixed allowlist:
+
+```text
+authentication_failed  oauth_org_not_allowed  billing_error  rate_limit  overloaded
+invalid_request  model_not_found  server_error  max_output_tokens  unknown
+```
+
+A category is accepted only when it appears as a structured field value (`error`, `error_type` or `subtype`) and is on that list. Anything else, including an unrecognised category name and unparsable output, normalizes to `unknown`; the unrecognised name itself is not carried over.
+
+The raised error names the exit code, the category, the structured event count, whether stdout contained malformed lines, and the stdout/stderr hashes. Raw stdout, raw stderr, `result` text, the prompt and any credential information are never persisted or echoed:
+
+```text
+Claude Code process failed with exit code 1; failure_category=authentication_failed;
+structured_event_count=2; malformed_stdout_lines=False;
+stdout_sha256=sha256:...; stderr_sha256=sha256:...
+```
+
+No output directory is created on a failed run, so a failure can never leave partial evidence behind.
 
 ## Tool and data policy
 
@@ -246,6 +295,8 @@ Consequently a first real smoke pair can now reach `fresh_context: true` when th
 ## Tests
 
 `tests/test_behavioral_harness_claude.py` uses synthetic process/stream fixtures and makes no real Claude calls. It covers the requested success/error/evidence cases, including model/session mismatch, unexpected tools/MCPs, malformed streams, secret handling, launch-policy enforcement, conservative isolation evidence and fingerprint invariance across the treatment package difference.
+
+R3-b0.1 adds coverage for the authentication preflight (API key allows the launch; a missing credential aborts before any model process; AWS credentials alone are not Bedrock; explicit Bedrock and Vertex are recognised; a host OAuth channel is neither allowlisted nor accepted; the auth mode moves the runtime fingerprint while a rotated secret does not) and for the failure classification (authentication, model-not-found and rate-limit categories, malformed stdout, an unlisted category normalising to `unknown`, and no model text, prompt or secret in the error message).
 
 R3-a.1 adds coverage for loaded hooks versus hook activity (empty plus no events, loaded hooks without events, unknown hook state, an event without loaded hooks), for transport-configuration parity (identical configuration keeps the runtime fingerprint; a changed proxy, region, CA bundle or Vertex region changes it), for transport values being hashed rather than stored, for a rotated secret neither reaching an artifact nor moving the fingerprint, and for the check count.
 

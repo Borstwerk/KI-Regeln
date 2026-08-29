@@ -304,7 +304,8 @@ class AdapterTests(unittest.TestCase):
         for idx in (1, 2):
             out = self.root / f"unique-{idx}"
             adapter.execute_prepared_response(
-                prepared, model=MODEL, out_dir=out, claude_binary="claude", process_runner=fake, base_env={}
+                prepared, model=MODEL, out_dir=out, claude_binary="claude", process_runner=fake,
+                base_env={"ANTHROPIC_API_KEY": "TEST_AUTH_VALUE_DO_NOT_PERSIST"},
             )
             sessions.append(self.load(out, "adapter-result.yml")["runner_session_id"])
         self.assertEqual(2, len(set(sessions)))
@@ -739,6 +740,150 @@ class AdapterTests(unittest.TestCase):
     def test_47_fresh_context_check_count_matches_documentation(self):
         out = self.run_one(FakeRunner(), out_name="check-count")
         self.assertEqual(25, len(self.assessment(out)["checks"]))
+
+    # --- R3-b0.1: authentication preflight --------------------------------
+
+    def auth_env(self, **overrides):
+        base = {"PATH": "/usr/bin"}
+        base.update(overrides)
+        return base
+
+    def authentication(self, out: Path):
+        return self.load(out, "evidence.yml")["evidence"][0]["configured"]["environment"]["authentication"]
+
+    def test_48_anthropic_api_key_allows_the_launch(self):
+        fake = FakeRunner()
+        out = self.run_env(fake, base_env=self.auth_env(ANTHROPIC_API_KEY="TEST_AUTH_VALUE_DO_NOT_PERSIST"), out_name="auth-key")
+        self.assertEqual(1, len([c for c in fake.calls if "-p" in c[0]]))
+        auth = self.authentication(out)
+        self.assertEqual("anthropic-api-key", auth["mode"])
+        self.assertTrue(auth["credential_present"])
+
+    def test_49_missing_credential_fails_before_any_model_process(self):
+        fake = FakeRunner()
+        prepared = self.shared_prepared()
+        with self.assertRaisesRegex(adapter.AdapterError, "no supported authentication path for bare mode"):
+            adapter.execute_prepared_response(
+                prepared, model=MODEL, out_dir=self.root / "auth-missing", claude_binary="claude",
+                process_runner=fake, base_env=self.auth_env(),
+            )
+        self.assertEqual([], [c for c in fake.calls if "-p" in c[0]])
+        self.assertFalse((self.root / "auth-missing").exists())
+
+    def test_50_aws_credentials_alone_are_not_bedrock(self):
+        auth = adapter._auth(
+            {"AWS_ACCESS_KEY_ID": "k", "AWS_SECRET_ACCESS_KEY": "s"},
+            {"AWS_ACCESS_KEY_ID": "k", "AWS_SECRET_ACCESS_KEY": "s"},
+        )
+        self.assertEqual(adapter.AUTH_UNSUPPORTED, auth["mode"])
+        self.assertFalse(auth["credential_present"])
+        fake = FakeRunner()
+        with self.assertRaisesRegex(adapter.AdapterError, "no supported authentication path"):
+            adapter.execute_prepared_response(
+                self.shared_prepared(), model=MODEL, out_dir=self.root / "aws-only", claude_binary="claude",
+                process_runner=fake, base_env=self.auth_env(AWS_ACCESS_KEY_ID="k", AWS_SECRET_ACCESS_KEY="s"),
+            )
+        self.assertEqual([], [c for c in fake.calls if "-p" in c[0]])
+
+    def test_51_explicit_bedrock_is_recognised(self):
+        env = self.auth_env(CLAUDE_CODE_USE_BEDROCK="1", AWS_ACCESS_KEY_ID="k", AWS_SECRET_ACCESS_KEY="s")
+        out = self.run_env(FakeRunner(), base_env=env, out_name="auth-bedrock")
+        auth = self.authentication(out)
+        self.assertEqual("bedrock", auth["mode"])
+        self.assertTrue(auth["credential_present"])
+        self.assertEqual("bedrock", self.load(out, "evidence.yml")["evidence"][0]["configured"]["environment"]["provider"])
+
+    def test_52_explicit_vertex_is_recognised(self):
+        env = self.auth_env(CLAUDE_CODE_USE_VERTEX="1", GOOGLE_APPLICATION_CREDENTIALS="/tmp/adc.json")
+        out = self.run_env(FakeRunner(), base_env=env, out_name="auth-vertex")
+        auth = self.authentication(out)
+        self.assertEqual("vertex", auth["mode"])
+        self.assertTrue(auth["credential_present"])
+
+    def test_53_host_oauth_channel_is_not_a_supported_bare_auth_path(self):
+        base = {"PATH": "/usr/bin", "CLAUDE_CODE_OAUTH_TOKEN_FILE_DESCRIPTOR": "17"}
+        env, _ = adapter._child_env(base, Path("/tmp/cfg"))
+        self.assertNotIn("CLAUDE_CODE_OAUTH_TOKEN_FILE_DESCRIPTOR", env)
+        auth = adapter._auth(env, base)
+        self.assertEqual(adapter.AUTH_UNSUPPORTED, auth["mode"])
+        self.assertEqual(["CLAUDE_CODE_OAUTH_TOKEN_FILE_DESCRIPTOR"], auth["host_only_channels_ignored"])
+        fake = FakeRunner()
+        with self.assertRaisesRegex(adapter.AdapterError, "no supported authentication path"):
+            adapter.execute_prepared_response(
+                self.shared_prepared(), model=MODEL, out_dir=self.root / "auth-oauth", claude_binary="claude",
+                process_runner=fake, base_env=base,
+            )
+        self.assertEqual([], [c for c in fake.calls if "-p" in c[0]])
+
+    def test_54_auth_mode_enters_the_runtime_fingerprint_but_the_secret_does_not(self):
+        key_out = self.run_env(FakeRunner(), base_env=self.auth_env(ANTHROPIC_API_KEY="TEST_AUTH_VALUE_DO_NOT_PERSIST"), out_name="auth-fp-key")
+        bedrock_out = self.run_env(
+            FakeRunner(),
+            base_env=self.auth_env(CLAUDE_CODE_USE_BEDROCK="1", AWS_ACCESS_KEY_ID="k", AWS_SECRET_ACCESS_KEY="s"),
+            out_name="auth-fp-bedrock",
+        )
+        self.assertNotEqual(self.runtime_fp(key_out), self.runtime_fp(bedrock_out))
+        rotated = self.run_env(FakeRunner(), base_env=self.auth_env(ANTHROPIC_API_KEY="A_DIFFERENT_SECRET_VALUE"), out_name="auth-fp-rotated")
+        self.assertEqual(self.runtime_fp(key_out), self.runtime_fp(rotated))
+        for out in (key_out, rotated):
+            combined = "\n".join(f.read_text(encoding="utf-8") for f in out.iterdir() if f.is_file())
+            self.assertNotIn("TEST_AUTH_VALUE_DO_NOT_PERSIST", combined)
+            self.assertNotIn("A_DIFFERENT_SECRET_VALUE", combined)
+
+    # --- R3-b0.1: safe non-zero diagnosis ---------------------------------
+
+    def fail_with(self, stdout: str, out_name: str, *, stderr: str = ""):
+        def actual(argv, cwd, env):
+            return adapter.ProcessResult(1, stdout, stderr)
+        with self.assertRaises(adapter.AdapterError) as ctx:
+            self.run_one(FakeRunner(actual_factory=actual), out_name=out_name)
+        self.assertFalse((self.root / out_name).exists())
+        return str(ctx.exception)
+
+    def test_55_authentication_failure_is_classified(self):
+        stdout = json.dumps({"type": "system", "subtype": "api_retry", "error": "authentication_failed", "attempt": 1}) + "\n"
+        message = self.fail_with(stdout, "fail-auth")
+        self.assertIn("failure_category=authentication_failed", message)
+        self.assertIn("stdout_sha256=sha256:", message)
+        self.assertIn("stderr_sha256=sha256:", message)
+
+    def test_56_model_not_found_is_classified(self):
+        stdout = json.dumps({"type": "system", "subtype": "api_retry", "error": "model_not_found"}) + "\n"
+        self.assertIn("failure_category=model_not_found", self.fail_with(stdout, "fail-model"))
+
+    def test_57_rate_limit_is_classified(self):
+        stdout = json.dumps({"type": "system", "subtype": "api_retry", "error": "rate_limit"}) + "\n"
+        self.assertIn("failure_category=rate_limit", self.fail_with(stdout, "fail-rate"))
+
+    def test_58_malformed_stdout_stays_unknown_and_is_counted(self):
+        message = self.fail_with("not json at all\n[1,2,3]\n", "fail-malformed")
+        self.assertIn("failure_category=unknown", message)
+        self.assertIn("malformed_stdout_lines=True", message)
+        self.assertIn("structured_event_count=0", message)
+
+    def test_59_unlisted_error_category_normalises_to_unknown(self):
+        stdout = json.dumps({"type": "system", "subtype": "api_retry", "error": "quantum_flux_anomaly"}) + "\n"
+        message = self.fail_with(stdout, "fail-unlisted")
+        self.assertIn("failure_category=unknown", message)
+        self.assertNotIn("quantum_flux_anomaly", message)
+
+    def test_60_failure_message_leaks_no_model_text_prompt_or_secret(self):
+        stdout = "\n".join([
+            json.dumps({"type": "system", "subtype": "api_retry", "error": "authentication_failed"}),
+            json.dumps({"type": "result", "subtype": "error", "is_error": True,
+                        "result": "Invalid API key SUPER_SECRET_LEAK; please run /login"}),
+        ]) + "\n"
+        message = self.fail_with(stdout, "fail-noleak", stderr="raw stderr with TEST_AUTH_VALUE_DO_NOT_PERSIST")
+        for forbidden in ("SUPER_SECRET_LEAK", "/login", "Invalid API key", "TEST_AUTH_VALUE_DO_NOT_PERSIST",
+                          "runtime observation", "Verify the claim"):
+            self.assertNotIn(forbidden, message)
+        self.assertIn("failure_category=authentication_failed", message)
+
+    def test_61_zero_exit_path_is_unchanged_by_the_diagnosis(self):
+        out = self.run_one(FakeRunner(), out_name="diagnosis-no-regression")
+        method = self.load(out, "method-evidence.yml")
+        self.assertTrue(method["fresh_context"])
+        self.assertEqual("unknown", method["network_disabled"])
 
 
 if __name__ == "__main__":

@@ -62,6 +62,17 @@ MANAGED_POLICY_PATHS = {
     "darwin": ("/Library/Application Support/ClaudeCode/managed-settings.json", "/Library/Application Support/ClaudeCode/managed-settings.d", "/Library/Application Support/ClaudeCode/managed-mcp.json"),
     "win32": ("C:\\Program Files\\ClaudeCode\\managed-settings.json", "C:\\Program Files\\ClaudeCode\\managed-settings.d", "C:\\Program Files\\ClaudeCode\\managed-mcp.json"),
 }
+# Authentication paths this adapter is willing to launch bare mode with. Host-internal
+# credential channels (OAuth token file descriptors, keychain) are deliberately absent:
+# bare mode does not read them, and they are not part of the adapter contract.
+AUTH_UNSUPPORTED = "unsupported-or-missing"
+HOST_ONLY_AUTH_ENV = ("CLAUDE_CODE_OAUTH_TOKEN_FILE_DESCRIPTOR", "CLAUDE_CODE_OAUTH_TOKEN", "CLAUDE_CODE_OAUTH_TOKEN_FILE")
+# Structured failure categories Claude Code reports; anything else normalizes to unknown.
+FAILURE_CATEGORIES = {
+    "authentication_failed", "oauth_org_not_allowed", "billing_error", "rate_limit", "overloaded",
+    "invalid_request", "model_not_found", "server_error", "max_output_tokens", "unknown",
+}
+FAILURE_KEYS = ("error", "error_type", "subtype")
 REMOTE_MANAGED_PREFIX = "Managed settings (remote):"
 REMOTE_MANAGED_NONE = "none configured"
 HOOK_LIFECYCLE_EVENTS = {"hook_started", "hook_progress", "hook_response"}
@@ -289,10 +300,62 @@ def _managed_policy(binary: str, env: Mapping[str, str], cwd: Path, runner: Proc
     }
 
 
-def _environment(env: Mapping[str, str], policy: Mapping[str, Any]) -> dict[str, Any]:
+def _auth(env: Mapping[str, str], base: Mapping[str, str]) -> dict[str, Any]:
+    """Classify the authentication path from the effective child environment.
+
+    Bedrock and Vertex count only when explicitly selected; present AWS or Google
+    credentials alone never imply that provider. Only credential presence is recorded,
+    never a value and never a hash.
+    """
+    if env.get("CLAUDE_CODE_USE_BEDROCK") == "1":
+        mode = "bedrock"
+        present: Any = True if (env.get("AWS_ACCESS_KEY_ID") and env.get("AWS_SECRET_ACCESS_KEY")) else UNKNOWN
+    elif env.get("CLAUDE_CODE_USE_VERTEX") == "1":
+        mode = "vertex"
+        present = True if env.get("GOOGLE_APPLICATION_CREDENTIALS") else UNKNOWN
+    elif env.get("ANTHROPIC_API_KEY"):
+        mode, present = "anthropic-api-key", True
+    else:
+        mode, present = AUTH_UNSUPPORTED, False
+    return {
+        "schema_version": 1, "mode": mode, "credential_present": present,
+        "host_only_channels_ignored": sorted(k for k in base if k in HOST_ONLY_AUTH_ENV),
+    }
+
+
+def _classify_failure(stdout: str) -> dict[str, Any]:
+    """Extract a safe failure category from a non-zero run. No raw text is retained."""
+    events, malformed = [], False
+    for line in stdout.splitlines():
+        if not line.strip():
+            continue
+        try:
+            event = json.loads(line)
+        except json.JSONDecodeError:
+            malformed = True
+            continue
+        if isinstance(event, dict):
+            events.append(event)
+        else:
+            malformed = True
+    category = "unknown"
+    for event in reversed(events):
+        named = [event.get(key) for key in FAILURE_KEYS]
+        allowed = [x for x in named if isinstance(x, str) and x in FAILURE_CATEGORIES]
+        if allowed:
+            category = allowed[0]
+            break
+    return {
+        "failure_category": category, "structured_event_count": len(events),
+        "malformed_stdout_lines": malformed,
+        "error_event_count": sum(1 for e in events if e.get("is_error") is True),
+    }
+
+
+def _environment(env: Mapping[str, str], policy: Mapping[str, Any], auth: Mapping[str, Any]) -> dict[str, Any]:
     provider = "bedrock" if env.get("CLAUDE_CODE_USE_BEDROCK") == "1" else "vertex" if env.get("CLAUDE_CODE_USE_VERTEX") == "1" else "anthropic"
     return {
-        "provider": provider, "policy": dict(policy),
+        "provider": provider, "policy": dict(policy), "authentication": dict(auth),
         "claude_config_dir": "<ephemeral-per-response>" if env.get("CLAUDE_CONFIG_DIR") else UNKNOWN,
         "controls": {k: env.get(k, UNKNOWN) for k in sorted(CONTROL_ENV)},
         "auth_presence": {k: {"present": bool(env.get(k))} for k in sorted(SECRET_ENV)},
@@ -692,13 +755,27 @@ def execute_prepared_response(
             raise AdapterError("runner package contains CLAUDE.md; automatic instruction loading is not allowed")
         empty_mcp = root / "empty-mcp.json"; empty_mcp.write_text('{"mcpServers": {}}\n', encoding="utf-8")
         read_only = _read_only(task)
-        env, env_policy = _child_env(base_env if base_env is not None else os.environ, config)
-        env_evidence = _environment(env, env_policy)
+        base = base_env if base_env is not None else os.environ
+        env, env_policy = _child_env(base, config)
+        auth = _auth(env, base)
+        if auth["mode"] == AUTH_UNSUPPORTED and probe["capabilities"].get("bare"):
+            raise AdapterError(
+                "Claude Code runner has no supported authentication path for bare mode; "
+                "expected ANTHROPIC_API_KEY, or explicit CLAUDE_CODE_USE_BEDROCK=1 / CLAUDE_CODE_USE_VERTEX=1"
+            )
+        env_evidence = _environment(env, env_policy, auth)
         managed = _managed_policy(claude_binary, env, task, process_runner)
         argv, controls = _argv(claude_binary, model, _prompt(execution), requested_session, probe["capabilities"], empty_mcp)
         started = _now(); result = process_runner(argv, cwd=task, env=env, input_text=None); finished = _now()
         if result.returncode != 0:
-            raise AdapterError(f"Claude Code process failed with exit code {result.returncode}; stderr_sha256={_hash_text(result.stderr)}")
+            diagnosis = _classify_failure(result.stdout)
+            raise AdapterError(
+                f"Claude Code process failed with exit code {result.returncode}; "
+                f"failure_category={diagnosis['failure_category']}; "
+                f"structured_event_count={diagnosis['structured_event_count']}; "
+                f"malformed_stdout_lines={diagnosis['malformed_stdout_lines']}; "
+                f"stdout_sha256={_hash_text(result.stdout)}; stderr_sha256={_hash_text(result.stderr)}"
+            )
         stream = _parse_stream(result.stdout)
         if controls["explicit_session_id"] and stream["observed_session_id"] != requested_session:
             raise AdapterError(f"runtime session id mismatch: requested {requested_session}, observed {stream['observed_session_id']}")
