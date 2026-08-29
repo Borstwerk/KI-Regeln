@@ -300,6 +300,12 @@ def _environment(env: Mapping[str, str], policy: Mapping[str, Any]) -> dict[str,
             k: {"present": bool(env.get(k)), "value_hash": _hash_text(env[k]) if env.get(k) else UNKNOWN}
             for k in sorted(ENDPOINT_ENV)
         },
+        # Allowlisted, non-secret transport settings still change the effective run,
+        # so they enter the fingerprint as presence plus hash — never as raw values.
+        "transport_configuration": {
+            k: {"present": bool(env.get(k)), "value_hash": _hash_text(env[k]) if env.get(k) else UNKNOWN}
+            for k in sorted(TRANSPORT_ENV)
+        },
     }
 
 
@@ -356,6 +362,15 @@ def _mcp(raw: Any):
     if isinstance(raw, dict): return sorted(str(k) for k in raw)
     if isinstance(raw, list):
         return sorted(str(x if isinstance(x, str) else x.get("name") or x.get("server") or x.get("id") or x) for x in raw)
+    return UNKNOWN
+
+
+def _empty(value: Any) -> Any:
+    """True when the value is provably an empty collection, False when provably non-empty."""
+    if value == UNKNOWN or value is None or isinstance(value, bool):
+        return UNKNOWN
+    if isinstance(value, (list, tuple, set, dict, str)):
+        return not value
     return UNKNOWN
 
 
@@ -533,6 +548,8 @@ def _fresh_context(controls: Mapping[str, Any], stream: Mapping[str, Any], manag
         "no_mcp_server_errors": not stream["observed_mcp_server_errors"],
         "no_observed_plugins": UNKNOWN if plugins == UNKNOWN else not plugins,
         "no_plugin_errors": not stream["observed_plugin_errors"],
+        # Loaded hook configuration and hook activity during the run are different facts.
+        "no_observed_hooks": _empty(stream["observed_hooks"]),
         "no_hook_lifecycle_events": False if hooks else (True if controls["hook_events_observable"] else UNKNOWN),
         "no_plugin_install_events": stream["plugin_install_event_count"] == 0,
     }

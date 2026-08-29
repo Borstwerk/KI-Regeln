@@ -140,6 +140,8 @@ def stream_json(
     hook_events: int = 0,
     plugin_install_events: int = 0,
     extra_init: bool = False,
+    hooks: Any = None,
+    drop_hooks: bool = False,
 ) -> str:
     tools = ["Read"] if tools is None else tools
     init = {
@@ -150,9 +152,11 @@ def stream_json(
         "tools": tools,
         "mcp_servers": [] if mcp is None else mcp,
         "plugins": [] if plugins is None else plugins,
-        "hooks": [],
+        "hooks": [] if hooks is None else hooks,
         "permissionMode": "default",
     }
+    if drop_hooks:
+        init.pop("hooks")
     if plugin_errors is not None:
         init["plugin_errors"] = plugin_errors
     if mcp_server_errors is not None:
@@ -644,6 +648,97 @@ class AdapterTests(unittest.TestCase):
         self.assertEqual(1, len(doctor))
         self.assertNotIn("-p", doctor[0][0])
         self.assertNotIn("CLAUDE_EFFORT", doctor[0][2])
+
+    # --- R3-a.1: loaded hooks and transport-configuration parity ----------
+
+    def run_stream(self, out_name, **stream_kwargs):
+        def actual(argv, cwd, env):
+            session = argv[argv.index("--session-id") + 1]
+            return adapter.ProcessResult(0, stream_json(session=session, **stream_kwargs), "")
+        return self.run_one(FakeRunner(actual_factory=actual), out_name=out_name)
+
+    def assessment(self, out: Path):
+        return self.load(out, "evidence.yml")["evidence"][0]["fresh_context_assessment"]
+
+    def test_39_no_hooks_and_no_hook_events_allows_fresh_context_true(self):
+        out = self.run_stream("hooks-empty", hooks=[], hook_events=0)
+        report = self.assessment(out)
+        self.assertTrue(report["checks"]["no_observed_hooks"])
+        self.assertTrue(report["checks"]["no_hook_lifecycle_events"])
+        self.assertTrue(self.load(out, "method-evidence.yml")["fresh_context"])
+
+    def test_40_loaded_hooks_without_events_make_fresh_context_false(self):
+        out = self.run_stream("hooks-loaded", hooks={"SessionStart": [{"matcher": "*"}]}, hook_events=0)
+        report = self.assessment(out)
+        self.assertFalse(report["checks"]["no_observed_hooks"])
+        self.assertTrue(report["checks"]["no_hook_lifecycle_events"])
+        self.assertIn("no_observed_hooks", report["violated"])
+        self.assertFalse(self.load(out, "method-evidence.yml")["fresh_context"])
+
+    def test_41_unknown_hook_state_prevents_fresh_context_true(self):
+        out = self.run_stream("hooks-unknown", drop_hooks=True)
+        report = self.assessment(out)
+        self.assertEqual("unknown", report["checks"]["no_observed_hooks"])
+        self.assertIn("no_observed_hooks", report["unproven"])
+        self.assertEqual("unknown", self.load(out, "method-evidence.yml")["fresh_context"])
+
+    def test_42_hook_event_without_loaded_hooks_still_makes_fresh_context_false(self):
+        out = self.run_stream("hooks-event-only", hooks=[], hook_events=1)
+        report = self.assessment(out)
+        self.assertTrue(report["checks"]["no_observed_hooks"])
+        self.assertFalse(report["checks"]["no_hook_lifecycle_events"])
+        self.assertFalse(self.load(out, "method-evidence.yml")["fresh_context"])
+
+    def transport_env(self, **overrides):
+        base = {"PATH": "/usr/bin", "ANTHROPIC_API_KEY": "TEST_AUTH_VALUE_DO_NOT_PERSIST",
+                "HTTPS_PROXY": "http://proxy.internal:3128"}
+        base.update(overrides)
+        return base
+
+    def runtime_fp(self, out: Path):
+        return self.load(out, "method-evidence.yml")["runtime_configuration_fingerprint"]
+
+    def test_43_identical_transport_configuration_keeps_runtime_fingerprint(self):
+        out1 = self.run_env(FakeRunner(), base_env=self.transport_env(), out_name="tp-same-1")
+        out2 = self.run_env(FakeRunner(), base_env=self.transport_env(), out_name="tp-same-2")
+        self.assertEqual(self.runtime_fp(out1), self.runtime_fp(out2))
+
+    def test_44_transport_configuration_changes_runtime_fingerprint(self):
+        reference = self.run_env(FakeRunner(), base_env=self.transport_env(), out_name="tp-ref")
+        cases = {
+            "tp-proxy": self.transport_env(HTTPS_PROXY="http://other.internal:8080"),
+            "tp-region": self.transport_env(AWS_REGION="eu-central-1"),
+            "tp-ca": self.transport_env(NODE_EXTRA_CA_CERTS="/etc/ssl/other-ca.pem"),
+            "tp-vertex": self.transport_env(CLOUD_ML_REGION="europe-west4"),
+        }
+        for name, env in cases.items():
+            out = self.run_env(FakeRunner(), base_env=env, out_name=name)
+            self.assertNotEqual(self.runtime_fp(reference), self.runtime_fp(out), name)
+
+    def test_45_transport_values_are_hashed_and_secrets_stay_presence_only(self):
+        out = self.run_env(FakeRunner(), base_env=self.transport_env(), out_name="tp-hashes")
+        environment = self.load(out, "evidence.yml")["evidence"][0]["configured"]["environment"]
+        proxy = environment["transport_configuration"]["HTTPS_PROXY"]
+        self.assertTrue(proxy["present"])
+        self.assertTrue(str(proxy["value_hash"]).startswith("sha256:"))
+        self.assertEqual({"present": False, "value_hash": "unknown"}, environment["transport_configuration"]["AWS_PROFILE"])
+        self.assertEqual({"present": True}, environment["auth_presence"]["ANTHROPIC_API_KEY"])
+        combined = "\n".join(f.read_text(encoding="utf-8") for f in out.iterdir() if f.is_file())
+        self.assertNotIn("proxy.internal", combined)
+        self.assertNotIn("TEST_AUTH_VALUE_DO_NOT_PERSIST", combined)
+
+    def test_46_changed_secret_value_does_not_reach_artifacts(self):
+        out1 = self.run_env(FakeRunner(), base_env=self.transport_env(), out_name="secret-1")
+        out2 = self.run_env(FakeRunner(), base_env=self.transport_env(ANTHROPIC_API_KEY="SECOND_SECRET_VALUE"), out_name="secret-2")
+        for out in (out1, out2):
+            combined = "\n".join(f.read_text(encoding="utf-8") for f in out.iterdir() if f.is_file())
+            self.assertNotIn("TEST_AUTH_VALUE_DO_NOT_PERSIST", combined)
+            self.assertNotIn("SECOND_SECRET_VALUE", combined)
+        self.assertEqual(self.runtime_fp(out1), self.runtime_fp(out2))
+
+    def test_47_fresh_context_check_count_matches_documentation(self):
+        out = self.run_one(FakeRunner(), out_name="check-count")
+        self.assertEqual(25, len(self.assessment(out)["checks"]))
 
 
 if __name__ == "__main__":

@@ -102,6 +102,20 @@ CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1
 
 Every other `CLAUDE_*`, `CLAUDE_CODE_*` and `ANTHROPIC_*` variable is dropped unless explicitly allowlisted, because an inherited value such as `CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD`, `CLAUDE_ADDITIONAL_DIRECTORIES` or `CLAUDE_EFFORT` would silently change the run. Evidence records the inherited names and the removed agent/generation names; values of authentication variables are never persisted.
 
+An allowlisted variable still changes the effective run, so the non-secret transport settings (proxy, provider region/profile, CA bundle, Bedrock/Vertex selection) enter the runtime fingerprint as presence plus hash:
+
+```yaml
+transport_configuration:
+  HTTPS_PROXY:
+    present: true
+    value_hash: sha256:...
+  AWS_PROFILE:
+    present: false
+    value_hash: unknown
+```
+
+Two responses whose effective transport configuration differs therefore cannot share a runtime fingerprint. Authentication variables keep presence/absence only — they are neither hashed nor stored — so rotating a key does not change the fingerprint and never reaches an artifact. Endpoint configuration keeps its existing presence-plus-hash form.
+
 ### Managed-policy preflight
 
 Managed settings survive `--restricted`, `--bare` and `--safe-mode` by documented design, and server-managed settings arrive over the network, so a local file check alone cannot clear them. Before the model launch the adapter therefore observes, without any model task:
@@ -199,10 +213,13 @@ Runtime-observed:
 - observed tools exactly the allowed policy;
 - no MCP servers and no MCP server errors;
 - no plugins and no plugin errors;
+- no loaded hook configuration in `system/init`;
 - no hook lifecycle events, with `--include-hook-events` actually in force;
 - no plugin-install events.
 
-The assessment is persisted with each individual check plus the `violated` and `unproven` lists, so a `partial` pair shows exactly which fact is missing.
+Loaded hooks and hook activity are separate facts and both are required. `no_observed_hooks` reads the hook state reported by `system/init` — provably empty is `true`, provably non-empty is `false`, an absent or uninterpretable state is `unknown` — so a run whose hooks were configured but never fired cannot reach `fresh_context: true`. `no_hook_lifecycle_events` covers the opposite case, a hook that actually ran.
+
+The assessment is persisted with each individual check plus the `violated` and `unproven` lists, so a `partial` pair shows exactly which fact is missing. It currently holds 25 checks: 14 configured/structural, 1 preflight-observed and 10 runtime-observed. The number is a consistency anchor for the test suite, not a quality statement.
 
 ## Method-evidence boundary
 
@@ -229,5 +246,7 @@ Consequently a first real smoke pair can now reach `fresh_context: true` when th
 ## Tests
 
 `tests/test_behavioral_harness_claude.py` uses synthetic process/stream fixtures and makes no real Claude calls. It covers the requested success/error/evidence cases, including model/session mismatch, unexpected tools/MCPs, malformed streams, secret handling, launch-policy enforcement, conservative isolation evidence and fingerprint invariance across the treatment package difference.
+
+R3-a.1 adds coverage for loaded hooks versus hook activity (empty plus no events, loaded hooks without events, unknown hook state, an event without loaded hooks), for transport-configuration parity (identical configuration keeps the runtime fingerprint; a changed proxy, region, CA bundle or Vertex region changes it), for transport values being hashed rather than stored, for a rotated secret neither reaching an artifact nor moving the fingerprint, and for the check count.
 
 R3-a adds coverage for the environment allowlist and the removal of unlisted agent/generation variables, the generation-environment sensitivity of the model fingerprint, safe-mode capability present versus absent, hook/plugin/MCP/plugin-install/second-init observations forcing `fresh_context: false`, local and remote managed policy preventing `true`, an unreadable managed-policy status staying `unknown`, missing runtime evidence staying `unknown`, complete evidence reaching `true`, and `network_disabled` never becoming `true` through R3-a. The managed-policy paths are redirected into a temporary directory so the suite never depends on the host's real policy files.
