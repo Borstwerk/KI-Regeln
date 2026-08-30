@@ -37,6 +37,10 @@ Für belastbare Findings die relevanten Primärtexte und aktuellen Kanonquellen 
 
 Wenn die Textfunktion nicht eindeutig ist, Unsicherheit markieren.
 
+## Abgrenzung
+
+Nicht verwenden, wenn ausschließlich Stil, Rhythmus oder Natürlichkeit geprüft werden sollen; dafür `stilreview` nutzen. Neue Plotplanung gehört zu `plot-und-storystruktur`, direkte Textrevision ohne vorherige Freigabe ist nicht Teil dieses read-only Reviews.
+
 ## Ausgabeformat
 
 ```markdown
