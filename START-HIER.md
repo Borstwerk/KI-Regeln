@@ -87,9 +87,9 @@ Grundregel:
 
 ## Warum gibt es KI-Regeln?
 
-KI-Regeln entstand aus einer einfachen Beobachtung: Viele Menschen können ihre Arbeit und private Projekte mit generativer KI verbessern, möchten aber nicht zuerst selbst zu KI-Spezialisten werden.
+KI-Regeln entstand aus dem Wunsch, Menschen im eigenen Umfeld einen praktikablen Zugang zu KI-gestützter Arbeit zu geben – auch dann, wenn sie sich nicht zuerst selbst tief mit KI-Systemen beschäftigen möchten.
 
-Der Werkzeugkasten soll diese Lücke schließen. Er sammelt wiederverwendbare Arbeitsweisen so, dass eine KI von einem **konkreten Problem** zu den passenden Methoden routen kann, während Quellen, Unsicherheit, Prüfungen und menschliche Entscheidungen sichtbar bleiben.
+Aus einzelnen Regeln und Arbeitsweisen entstand deshalb schrittweise ein allgemeiner Werkzeugkasten. Er soll diese Lücke schließen: Eine KI kann von einem **konkreten Problem** zu den passenden Methoden routen, während Quellen, Unsicherheit, Prüfungen und menschliche Entscheidungen sichtbar bleiben.
 
 Das Ziel ist deshalb nicht, für jede denkbare Aufgabe einen fertigen Prompt anzubieten. Das Ziel ist ein belastbares Arbeitsmodell:
 
