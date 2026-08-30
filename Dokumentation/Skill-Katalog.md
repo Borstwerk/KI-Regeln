@@ -14,12 +14,13 @@ Der Skill-Katalog beantwortet zusätzlich:
 
 ## Aktueller Bestand
 
-Der Katalog enthält aktuell 137 zentrale Skills:
+Der Katalog enthält aktuell 143 zentrale Skills:
 
 - Arbeitsweisen: 3;
 - Agentenarbeit: 8;
 - Schreiben: 4;
 - Storyentwicklung und Fiktion: 5;
+- Finanzen: 6;
 - Bildarbeit: 4;
 - Programmieren: 4;
 - Webentwicklung: 11;
@@ -81,7 +82,7 @@ Empfohlene Werte:
 
 Maturity und Eval Coverage sind nicht identisch. Ein Skill kann viel Praxis haben und trotzdem noch unzureichende formale Evals besitzen.
 
-Aktuell besitzt `context-engineering` als bestehender `candidate` `partial` Evalabdeckung. Die ergänzten Context-Skills, alle sieben Wissensmanagement-Skills, alle fünf Schnittstellen-/Contract-Skills, alle sieben Infrastruktur-/DevOps-Skills, alle acht Reliability-/System-Observability-Skills, alle neun Data-Engineering-Skills, alle sieben Software-Architecture-/System-Design-Skills, alle acht Requirements-/Specification-Skills, alle neun Social-Media-/Content-Präsenz-Skills und alle fünf Storyentwicklung-/Fiktion-Skills starten beziehungsweise bleiben bewusst `experimental` mit `partial` Evalabdeckung.
+Aktuell besitzt `context-engineering` als bestehender `candidate` `partial` Evalabdeckung. Die ergänzten Context-Skills, alle sieben Wissensmanagement-Skills, alle fünf Schnittstellen-/Contract-Skills, alle sieben Infrastruktur-/DevOps-Skills, alle acht Reliability-/System-Observability-Skills, alle neun Data-Engineering-Skills, alle sieben Software-Architecture-/System-Design-Skills, alle acht Requirements-/Specification-Skills, alle neun Social-Media-/Content-Präsenz-Skills, alle fünf Storyentwicklung-/Fiktion-Skills und alle sechs Finanz-Skills starten beziehungsweise bleiben bewusst `experimental` mit `partial` Evalabdeckung.
 
 Für Reliability sind sechs Startfälle je Skill definiert, insgesamt 48. Der erste Same-Model-Smoke-Lauf wurde am 2026-08-24 ausgeführt; das ersetzt keinen unabhängigen verblindeten Benchmark und rechtfertigt allein keine Hochstufung.
 
@@ -103,7 +104,11 @@ Der Gesamtstand nach Phase 3.6 betrug 132 Skills, davon 107× `partial` und 25×
 
 Storyentwicklung und Fiktion ergänzt fünf neue Skills – `story-bible`, `figurenentwicklung`, `plot-und-storystruktur`, `worldbuilding` und `story-kontinuitaet` – jeweils als `experimental` mit `partial` Evalabdeckung. Dafür sind fünf Evalpacks mit jeweils fünf Startfällen definiert, insgesamt 25. Diese Fälle sind **definiert, aber nicht ausgeführt oder bestanden**. `kreatives-schreiben` bleibt `candidate`; seine Maturity wurde nicht angehoben.
 
-Aktueller Gesamtstand: 137 Skills, davon 112× `partial` und 25× `none`, 0× `core`/`broad`; 112 Skill-Evalpacks mit insgesamt 575 definierten Cases. Die fünf Story-Skills erhöhen den Bestand und die definierte Coverage, sind aber noch kein Behavioral-Qualitätsnachweis.
+Der Gesamtstand nach Storyentwicklung und Fiktion betrug 137 Skills, davon 112× `partial` und 25× `none`, 0× `core`/`broad`; 112 Skill-Evalpacks mit insgesamt 575 definierten Cases.
+
+Finanzen ergänzt sechs neue Skills – `finanzstatus-und-cashflow`, `ruecklagenplanung`, `schuldenstrategie`, `vermoegensprojektion`, `portfolioanalyse` und `anlagevergleich` – jeweils als `experimental` mit `partial` Evalabdeckung. Dafür sind sechs Evalpacks mit jeweils fünf Startfällen definiert, insgesamt 30. Diese Fälle sind **definiert, aber nicht ausgeführt oder bestanden**. Die neue Coverage ist kein Nachweis für Beratungsgüte, Renditequalität oder Behavioral-Erfolg.
+
+Aktueller Gesamtstand: 143 Skills, davon 118× `partial` und 25× `none`, 0× `core`/`broad`; 118 Skill-Evalpacks mit insgesamt 605 definierten Cases.
 
 ## Hardening Phase 2 – Eval Coverage
 
@@ -159,7 +164,9 @@ Der Katalog kann Fähigkeiten nennen, die für einen Skill relevant sind, z. B.:
 - `social-analytics-access-preferred`;
 - `social-community-source-access-preferred`;
 - `web-preferred-for-current-platform-evidence`;
-- `social-external-actions-gated`.
+- `social-external-actions-gated`;
+- `web-preferred-for-current-financial-evidence`;
+- `financial-external-actions-gated`.
 
 Diese Angaben ersetzen nicht die detaillierten Fallback- und Rechte-Regeln des Skills.
 
@@ -206,6 +213,8 @@ Für Requirements-/Specification-Skills sollte zusätzlich an realen Spezifikati
 Für Social-Media-/Content-Präsenz-Skills sollte zusätzlich an realen Content-Historien, Plattformdaten und Community-Situationen geprüft werden, ob Ziel-/Audience-Fit korrekt erfasst, Plattformfolklore von aktueller Evidence getrennt, Claims und Repurposing sauber behandelt, Performance ohne Scheinkausalität analysiert und Publishing-/Community-Aktionen zuverlässig gegatet werden. Ein gefüllter Content-Kalender, ein viraler Einzelpost oder definierte Evalcases allein reichen nicht für eine Hochstufung.
 
 Für Storyentwicklung-/Fiktion-Skills sollte zusätzlich an realen Erzählprojekten geprüft werden, ob Kanon und Planung getrennt bleiben, Figurenwissen und Zustände über längere Strecken korrekt fortgeführt, Storymodelle nicht mechanisch erzwungen, Worldbuilding-Folgen plausibel berücksichtigt und Kontinuitätsfindings ohne ungefragte Retcons erkannt werden. Eine vollständige Story-Bible oder definierte Evalcases allein reichen nicht für eine Hochstufung.
+
+Für Finanz-Skills sollte zusätzlich an realen, kontrollierten Finanzplanungs- und Analysefällen geprüft werden, ob fehlende Daten nicht erfunden, Renditeannahmen als Annahmen markiert, aktuelle Produkt-/Steuerdaten frisch belegt, Risiko/Kosten/Liquidität gemeinsam berücksichtigt und externe Finanzaktionen zuverlässig gegatet werden. Ein plausibles Rechenbeispiel, ein vollständiger Plan oder definierte Evalcases allein reichen nicht für eine Hochstufung.
 
 ## Leitgedanke
 
