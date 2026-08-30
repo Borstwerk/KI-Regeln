@@ -8,14 +8,16 @@ Finanzarbeit mit KI soll Annahmen, Datenstand, Unsicherheit, Risiken und Entsche
 
 ### Analyse vor Empfehlung
 
-Vor einer Empfehlung mindestens klären:
+Vor einer Empfehlung die für die konkrete Entscheidung materiellen Punkte klären:
 
 - Ziel und Zeithorizont;
-- aktuelle finanzielle Ausgangslage;
+- finanzielle Ausgangslage nur soweit sie für Tragfähigkeit, Liquidität oder Risiko relevant ist;
 - Liquiditätsbedarf;
 - relevante Risiken und Verpflichtungen;
 - bekannte Kosten;
 - Unsicherheiten und fehlende Evidence.
+
+Keine zusätzlichen sensiblen Finanzdaten allein aus Vollständigkeitsdrang erheben oder persistieren.
 
 ### Rendite nie isoliert betrachten
 
