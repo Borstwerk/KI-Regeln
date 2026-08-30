@@ -71,7 +71,13 @@ Diese Tabelle ist Orientierung, keine starre Routingmatrix. Ein reales Problem k
 
 ## Warum gibt es KI-Regeln?
 
-KI-Regeln entstand aus dem Wunsch, Menschen im eigenen Umfeld einen praktikablen Zugang zu KI-gestützter Arbeit zu geben – auch dann, wenn sie sich nicht zuerst selbst tief mit KI-Systemen beschäftigen möchten.
+KI-Regeln entstand aus dem Wunsch, Menschen im eigenen Umfeld – ursprünglich ganz konkret Familie und Freunden – einen praktikablen Zugang zu KI-gestützter Arbeit zu geben, auch dann, wenn sie sich nicht zuerst selbst tief mit KI-Systemen beschäftigen möchten.
+
+Die Ausgangsfrage war deshalb nicht: *Wie baut man möglichst viele Skills?*
+
+Sondern eher:
+
+> **Wie kann jemand mit einem realen Problem anfangen, ohne vorher den Werkzeugkasten verstehen zu müssen?**
 
 Aus einzelnen Regeln und Arbeitsweisen entstand deshalb schrittweise ein allgemeiner Werkzeugkasten. Statt für jede denkbare Aufgabe einen fertigen „Superprompt“ anzubieten, werden wiederverwendbare Arbeitsweisen so strukturiert, dass eine KI von einem konkreten Problem zu den passenden Werkzeugen routen kann.
 
@@ -85,6 +91,8 @@ Problem
 ```
 
 Dabei bleiben Quellen, Annahmen, Unsicherheiten, Prüfungen und erforderliche menschliche Entscheidungen sichtbar.
+
+KI-Regeln ist Teil von **BorstWerk**. Die übergeordnete Idee dahinter ist dieselbe wie bei den anderen Projekten: Aus einer konkreten Aufgabe entsteht ein Werkzeug – nicht automatisch eine Plattform.
 
 ## Grundprinzip
 
@@ -224,6 +232,18 @@ Maßgeblich sind zusätzlich:
 - [`Dokumentation/Open-Source-Readiness-2026-08-25.md`](Dokumentation/Open-Source-Readiness-2026-08-25.md) – historischer Phase-3-Auditbericht.
 
 Eine vorhandene Root-`LICENSE` ist keine automatische Veröffentlichungsfreigabe. Der Public-Release-Status wird weiterhin ausschließlich über `Dokumentation/open-source-readiness.yml` bestimmt.
+
+## Teil von BorstWerk
+
+BorstWerk ist ein privates, nicht-kommerzielles Projekt, das aus konkreten Problemen im eigenen Alltag und im Umfeld von Familie und Freunden gewachsen ist.
+
+Die gemeinsame Idee lautet:
+
+> **Nicht jede Aufgabe braucht eine Plattform. Manchmal braucht sie einfach ein Werkzeug.**
+
+KI-Regeln ist die Variante dieser Idee für KI-gestützte Arbeit: Der Nutzer bringt das Problem; der Werkzeugkasten hilft dabei, die passende Arbeitsweise kontrolliert auszuwählen und anzuwenden.
+
+Mehr zu BorstWerk: [github.com/Borstwerk](https://github.com/Borstwerk)
 
 ---
 
