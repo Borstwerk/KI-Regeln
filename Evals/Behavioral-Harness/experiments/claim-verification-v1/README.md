@@ -163,9 +163,9 @@ Prepared/run directories remain ignored by Git.
 
 ## Runner execution
 
-The repository harness still does not start an LLM runner.
+The generic `behavioral_harness.py` still starts no LLM runner itself; that separation is unchanged. Execution is the job of a concrete runner adapter, and this pilot now has one: `tools/behavioral_harness_claude.py`, documented in `CLAUDE-CODE-ADAPTER.md`. It has been executed against a real Claude Code runtime for the CV-01 smoke described in `METHOD-RESULT.md`.
 
-A later external runner must execute each opaque response in a fresh context and keep control/judge data hidden. Ordinary run packaging remains canonical:
+Any runner adapter must execute each opaque response in a fresh context and keep control/judge data hidden. Ordinary run packaging remains canonical:
 
 ```bash
 python tools/behavioral_harness.py package-run \
@@ -219,7 +219,7 @@ If a task-external data path is known to exist, `network_disabled` is `false`. I
 
 ### Model configuration fingerprint
 
-The later runner should normalize and hash all model-generation settings it can actually control or observe, for example:
+The runner should normalize and hash all model-generation settings it can actually control or observe, for example:
 
 - provider/model identifier or revision when exposed;
 - temperature;
@@ -237,7 +237,7 @@ It does **not** prove equality of invisible provider-internal state, for example
 
 ### Runtime configuration fingerprint
 
-The later runner should normalize and hash the actual execution environment relevant to parity, for example:
+The runner should normalize and hash the actual execution environment relevant to parity, for example:
 
 - adapter/version;
 - enabled tool/capability set;
@@ -306,7 +306,7 @@ Where such proof is missing, the affected fact stays `unknown` and the pair is `
 
 ## Claude Code runner evidence requirements
 
-This section defines the **minimum evidence** a later Claude Code based runner adapter must emit so that its pairs can be assessed against the method-validity gate at all. The adapter itself is not part of this change, and no Claude Code run has been executed.
+This section defines the **minimum evidence** a Claude Code based runner adapter must emit so that its pairs can be assessed against the method-validity gate at all. It was written before the adapter existed; the adapter now exists as `tools/behavioral_harness_claude.py` and has been run against a real Claude Code runtime, so the requirements below are the contract it is held to rather than a forward-looking wish list.
 
 ### No dependency on undocumented CLI capabilities
 

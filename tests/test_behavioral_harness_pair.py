@@ -390,6 +390,68 @@ class BehavioralHarnessPairTests(unittest.TestCase):
                 self.root / "blind-disclosure",
             )
 
+    def test_P12a_disclosure_forms_are_rejected(self):
+        """Each form must be refused end to end, not just by the predicate."""
+        pair_dir = self.prepare()
+        response_ids = sorted(load_yaml(pair_dir / "control.yml")["response_assignments"])
+        forms = {
+            "skill-treatment": "This answer comes from the skill treatment.\n",
+            "baseline-treatment": "I am the baseline treatment for this case.\n",
+            "skill-instruction": "I followed the skill instruction supplied to me.\n",
+            "treatment-instruction": "The treatment instruction told me to cite sources.\n",
+            "instruction-path": "I read instructions/SKILL.md before answering.\n",
+            "target-skill-id": "I used claim-verification for this answer.\n",
+            "skill-variant": "This is the skill variant of the run.\n",
+            "baseline-condition": "Answering under the baseline condition.\n",
+        }
+        for label, body in forms.items():
+            with self.subTest(form=label):
+                disclosure = self.root / f"disc-{label}.md"
+                disclosure.write_text(body, encoding="utf-8")
+                run_dirs = [
+                    package_run(
+                        pair_dir / "responses" / response_id,
+                        disclosure if index == 1 else None,
+                        None, None, None,
+                        self.root / f"runs-{label}",
+                        f"run-{label}-{index}",
+                        runner_type="synthetic", runner_model="same-model",
+                        runner_session_id=f"session-{label}-{index}",
+                        started_at="unknown", finished_at="unknown",
+                    )
+                    for index, response_id in enumerate(response_ids, start=1)
+                ]
+                with self.assertRaises(HarnessError):
+                    package_blind_pair(pair_dir, run_dirs, self.root / f"blind-{label}")
+
+    def test_P12b_ordinary_subject_language_still_packages_blind(self):
+        """Negative control: normal wording, including the bare word 'skill', must pass."""
+        pair_dir = self.prepare()
+        response_ids = sorted(load_yaml(pair_dir / "control.yml")["response_assignments"])
+        answer = self.root / "ordinary.md"
+        answer.write_text(
+            "Verdict: supported.\n\n"
+            "The release notes state the value directly, and the admin guide agrees.\n"
+            "Assessing this well takes skill and care; the baseline throughput quoted in\n"
+            "the report is 30 seconds, and the instruction in the policy document is clear.\n",
+            encoding="utf-8",
+        )
+        run_dirs = [
+            package_run(
+                pair_dir / "responses" / response_id,
+                answer, None, None, None,
+                self.root / "runs-ordinary",
+                f"run-ordinary-{index}",
+                runner_type="synthetic", runner_model="same-model",
+                runner_session_id=f"session-ordinary-{index}",
+                started_at="unknown", finished_at="unknown",
+            )
+            for index, response_id in enumerate(response_ids, start=1)
+        ]
+        blind = package_blind_pair(pair_dir, run_dirs, self.root / "blind-ordinary")
+        parity = load_yaml(blind / "parity.yml")
+        self.assertFalse(parity["treatment_disclosure_detected"])
+
 
 class ClaimVerificationExperimentContractTests(unittest.TestCase):
     def test_actual_cv05_source_roles_are_not_flattened(self):

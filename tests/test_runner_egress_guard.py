@@ -123,6 +123,20 @@ class GuardConfigTests(unittest.TestCase):
         with self.assertRaisesRegex(guard.GuardError, "explicit port"):
             guard.upstream_target({"HTTPS_PROXY": "http://proxy.internal"})
 
+    def test_05a_http_upstream_with_explicit_port_is_accepted(self):
+        t = guard.upstream_target({"HTTPS_PROXY": "http://proxy.internal:3128"})
+        self.assertEqual(("proxy.internal", 3128), (t.host, t.port))
+
+    def test_05b_https_upstream_fails_closed_because_no_tls_is_implemented(self):
+        """The guard opens a plain socket and speaks CONNECT; https:// must not be accepted."""
+        for value in ("https://proxy.internal:3128", "https://proxy.internal:443"):
+            with self.subTest(value=value):
+                with self.assertRaisesRegex(guard.GuardError, "must be http"):
+                    guard.upstream_target({"HTTPS_PROXY": value})
+        with self.assertRaisesRegex(guard.GuardError, "must be http"):
+            guard.FixedDestinationGuard.from_env(
+                {"ANTHROPIC_BASE_URL": f"https://{PROVIDER}", "HTTPS_PROXY": "https://proxy.internal:3128"})
+
 
 class ConnectParserTests(unittest.TestCase):
     allowed = guard.GuardTarget(PROVIDER, 443)

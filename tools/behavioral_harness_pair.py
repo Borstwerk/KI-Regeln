@@ -40,6 +40,36 @@ TREATMENTS = ('baseline', 'skill')
 CLASSIFICATION_LABELS = {'supported', 'partial', 'conflicting', 'unsupported', 'not-verified'}
 SUBJECT_FIXTURE_ROLES = {'authoritative-source', 'intentionally-incomplete', 'supporting-source', 'distractor', 'policy', 'runner-only'}
 TRI_UNKNOWN = 'unknown'
+# Unambiguous experiment-disclosure markers. Deliberately narrow: an output may discuss
+# a skill, a baseline or an instruction in ordinary subject-matter language without
+# revealing that it is one arm of a controlled experiment. Only the pairing of an arm
+# name with an experiment-design noun counts, plus the treatment instruction artifact
+# itself and the pinned target-skill identifier.
+DISCLOSURE_ARMS = ('skill', 'baseline', 'treatment', 'control')
+DISCLOSURE_NOUNS = ('treatment', 'variant', 'condition', 'arm', 'group', 'instruction', 'instruction file')
+DISCLOSURE_PHRASES = (
+    'treatment instruction', 'skill instruction', 'instruction artifact',
+    'with-vs-without', 'with vs without', 'a/b test', 'ab test',
+    'i was given the skill', 'i was not given the skill',
+)
+TREATMENT_INSTRUCTION_DIR = 'instructions/'
+
+
+def _treatment_disclosed(text: str, target_skill: str) -> bool:
+    """Detect an unambiguous disclosure of the experimental treatment in runner output.
+
+    Narrow by design: ordinary use of the word "skill" or "baseline" is not a
+    disclosure. An arm name combined with an experiment-design noun is, as are the
+    treatment instruction artifact and the pinned target-skill identifier.
+    """
+    lower = text.lower()
+    if target_skill and target_skill.lower() in lower:
+        return True
+    if TREATMENT_INSTRUCTION_DIR in lower or 'skill.md' in lower:
+        return True
+    if any(phrase in lower for phrase in DISCLOSURE_PHRASES):
+        return True
+    return any(f'{arm} {noun}' in lower for arm in DISCLOSURE_ARMS for noun in DISCLOSURE_NOUNS)
 
 def _safe_rel(raw: str, label: str) -> Path:
     path = Path(raw)
@@ -521,8 +551,7 @@ def package_blind_pair(pair_dir: Path, run_dirs: list[Path], out_dir: Path, meth
     disclosure: dict[str, bool] = {}
     for response_id, item in runs.items():
         text = (item['dir'] / 'runner-output.md').read_text(encoding='utf-8')
-        lower = text.lower()
-        disclosure[response_id] = bool(target_skill and target_skill.lower() in lower or 'skill variant' in lower or 'baseline variant' in lower or ('baseline condition' in lower))
+        disclosure[response_id] = _treatment_disclosed(text, target_skill)
     if any(disclosure.values()):
         raise HarnessError('treatment disclosure detected in runner output; blind judge packaging refused')
     method_evidence = _load_method_evidence_map(method_evidence_paths, expected_ids)

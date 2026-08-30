@@ -113,8 +113,11 @@ def upstream_target(env: Mapping[str, str]) -> GuardTarget:
     if not raw:
         raise GuardError("upstream proxy configuration is missing")
     parts = urlsplit(raw.strip())
-    if parts.scheme not in ("http", "https"):
-        raise GuardError("upstream proxy must be http or https")
+    if parts.scheme != "http":
+        # The guard opens a plain TCP socket to the upstream and speaks HTTP CONNECT on
+        # it. There is no TLS to the upstream proxy, so accepting an https:// upstream
+        # would silently talk cleartext to a port expecting TLS. Fail closed instead.
+        raise GuardError("upstream proxy must be http; TLS to the upstream proxy is not implemented")
     if not parts.hostname:
         raise GuardError("upstream proxy has no host")
     try:
