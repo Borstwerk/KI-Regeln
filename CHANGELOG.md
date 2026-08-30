@@ -8,6 +8,18 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Storyentwicklung und Fiktion
+
+- neuen toolneutralen Fachbereich `Storyentwicklung-und-Fiktion/` ergänzt, der narrativen Kanon und Story-Bible, Figuren und Beziehungen, Plot/Arcs, Worldbuilding sowie Langzeitkontinuität getrennt von der konkreten Prosa-Ausarbeitung behandelt;
+- fünf eng geschnittene Skills `story-bible`, `figurenentwicklung`, `plot-und-storystruktur`, `worldbuilding` und `story-kontinuitaet` ergänzt; alle fünf starten `experimental` mit `partial` Evalabdeckung, ohne bestehende Maturity hochzustufen;
+- `kreatives-schreiben` an den neuen Bereich angebunden und fachlich abgegrenzt: Storyentwicklung plant und schützt narrative Wahrheit, `kreatives-schreiben` bleibt für die konkrete Szene oder das Kapitel als Prosa zuständig;
+- Workflow `Workflows/Storyprojekt-von-Idee-bis-Manuskript.md` ergänzt und in `workflow-index.yml` registriert; Review-/Revisionen bleiben an den allgemeinen `Review-Revise-Loop` und erforderliche Human Gates gebunden;
+- fünf Story-Evalpacks mit jeweils fünf Startfällen ergänzt, insgesamt 25 definierte Cases; diese Fälle sind **definiert, aber nicht als Behavioral Evals ausgeführt oder bestanden**;
+- Storystruktur-Modelle wie Drei-Akt, Hero's Journey oder andere Beat-Modelle nur als optionale Linsen behandelt; Planung wird nicht mit bereits erzähltem Kanon gleichgesetzt und Worldbuilding nicht als Lore-Mengenwettbewerb modelliert;
+- methodischen Referenzraum `danjdewhurst/story-skills` (MIT) fachlokal als `reference/inspiration` dokumentiert; keine Story-CLI-, Node/Bun-, Projektstruktur-, Template- oder fremde Skilltext-Abhängigkeit übernommen und keine Redistribution fremden Materials vorausgesetzt;
+- Skill-Katalog und menschliche Katalogdokumentation auf 137 Skills, 112× `partial`, 25× `none`, 0× `core`/`broad`, 112 Skill-Evalpacks und 575 definierte Cases aktualisiert; zusätzliche Coverage ist kein Behavioral-Qualitätsnachweis;
+- kein Tag, Release oder automatische externe Synchronisation durch diese Erweiterung.
+
 ### Discovery- und Entry-Path-Polish
 
 - Discovery-only-Registry `Dokumentation/radar-sources.yml` ergänzt, um neue Skills, Methoden, Spezifikationen, Security-Hinweise und relevante KI-Entwicklungen systematisch zu finden, ohne Radarquelle, Upstream oder lokale Übernahme gleichzusetzen;
@@ -178,7 +190,7 @@ Neuer tool- und formatneutraler Hauptbereich für Requirements Elicitation, Spez
 - Readiness-Verdicts `READY_FOR_LOCAL_GATE`, `READY_WITH_FINDINGS`, `BLOCKED` und `UNVERIFIED` liefern Evidence für die nächste lokale Entscheidung, aber keine fachliche Abnahme oder Implementierungs-/Releasefreigabe;
 - acht neue Skills `requirements-baseline`, `requirements-elicitation`, `requirements-specification`, `acceptance-criteria-design`, `requirements-traceability`, `requirements-change-analysis`, `requirements-validation` und `requirements-review`;
 - alle acht Requirements-Skills starten `experimental` mit `partial` Evalabdeckung;
-- 48 Evalfälle definiert, sechs je Skill, einschließlich Code-/Ist-vs.-Soll-Fällen, Clarity-Score-/User-Story-/Gherkin-/MoSCoW-Dogmen, erfundenen Quality Targets, Acceptance-vs.-Test-Near-Misses, Traceability-Autofix, Change-Autorisierung, fehlender Stakeholder-/Source-Evidence und Approval-/Deployment-Gates; diese 48 Fälle sind **definiert, aber noch nicht als Behavioral Evals ausgeführt oder bestanden**;
+- 48 Evalfälle definiert, sechs je Skill, einschließlich Code-/Ist-vs.-Soll-Fällen, Clarity-Score-/User-Story-/Gherkin-/MoSCoW-Dogmen, erfundenen Quality Targets, Acceptance-vs.-Test-Near-Misses, Traceability-Autofix, Change-Autorisierung, fehlender Stakeholder-/Source-Evidence und Approval-/Deployment-Gates; diese 48 Fälle sind **definiert, aber noch nicht ausgeführt oder bestanden**;
 - fünf Workflows `Requirements-Baseline-und-Spezifikation.md`, `Requirements-Elicitation-und-Klaerung.md`, `Acceptance-Traceability-und-Handoff.md`, `Requirements-Change-und-Impact.md` und `Requirements-Readiness-Review.md`;
 - neues menschliches `Dokumentation/Skill-Handbuch-Requirements-und-Spezifikations-Engineering.md`;
 - `Software-Architecture-und-System-Design/`, `Reliability-und-System-Observability/`, `Data-Engineering/`, `Testing-und-QA/` und `Schnittstellen-und-Vertraege/` mit dem realen Requirements-Bereich verbunden;
