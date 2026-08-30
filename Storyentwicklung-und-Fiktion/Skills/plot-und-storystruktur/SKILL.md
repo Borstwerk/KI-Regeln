@@ -38,6 +38,10 @@ Storyproblem
 → optional hilfreiches Modell
 ```
 
+## Abgrenzung
+
+Nicht verwenden, wenn nur fertige Prosa geschrieben werden soll; dafür `kreatives-schreiben` nutzen. Ein reiner Widerspruchscheck vorhandener Kapitel gehört zu `story-kontinuitaet`, die Pflege bestätigter narrativer Wahrheit zu `story-bible`.
+
 ## Regeln
 
 - Planung und erzählten Stand trennen.
