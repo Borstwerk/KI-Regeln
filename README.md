@@ -37,7 +37,7 @@ Zum System gehören außerdem Provenance, Routing, Gates und Evidence. Sie sind 
 
 Das bedeutet:
 
-- allgemeine Kommunikations-, Reflexions-, Recherche-, Wissensmanagement-, Schnittstellen-/Contract-, Infrastruktur-/DevOps-, Reliability-/System-Observability-, Data-Engineering-, Software-Architecture-/System-Design-, Requirements-/Specification-Engineering-, Social-Media-/Content-Präsenz-, Dokumentations-, Schreib-, Story-/Fiktions-, Bild-, Web-, Datenbank-, Testing-, Agenten-, Sicherheits- und Entwicklungsregeln liegen hier;
+- allgemeine Kommunikations-, Reflexions-, Recherche-, Wissensmanagement-, Schnittstellen-/Contract-, Infrastruktur-/DevOps-, Reliability-/System-Observability-, Data-Engineering-, Software-Architecture-/System-Design-, Requirements-/Specification-Engineering-, Social-Media-/Content-Präsenz-, Dokumentations-, Schreib-, Story-/Fiktions-, Finanz-, Bild-, Web-, Datenbank-, Testing-, Agenten-, Sicherheits- und Entwicklungsregeln liegen hier;
 - projektspezifische Anforderungen, Stakeholderentscheidungen, Zielwerte, Architecture Drivers und Constraints, Systemgrenzen, Ownership, konkrete Architekturentscheidungen, Research-Fragen, interne Quellen, Wissensbestände, Fachmodelle, reale Schnittstellen/Consumer, Data-Engineering-Sources-of-Truth und Grains, Infrastrukturtools/Provider/Accounts/Cluster, reales Datenbankschema, konkrete Testumgebung, SLO-Werte, Alert-Schwellen, Severity-/On-Call-Modelle, RTO/RPO, Capacity Limits, Recovery-/Failover-Regeln, Markenregeln, Zielgruppen, Content-Ziele, Plattformaccounts/-rollen, reale Analyticsdefinitionen, Publishing-/Approval-Regeln, visuelle Bibeln und Sonderregeln bleiben im jeweiligen Projekt;
 - persönliche Profile oder unnötige personenbezogene Details gehören nicht in dieses Repository;
 - ein Skill ersetzt niemals die tatsächliche Spezifikation oder Dokumentation eines Projekts.
@@ -90,6 +90,7 @@ KI-Regeln/
 ├── Dokumentationserstellung/
 ├── Schreiben/
 ├── Storyentwicklung-und-Fiktion/
+├── Finanzen/
 ├── Bildarbeit/
 ├── Webentwicklung/
 ├── Programmieren/
@@ -454,6 +455,34 @@ Review ≠ Änderungsfreigabe
 Die fünf Story-Skills starten `experimental` mit `partial` Evalabdeckung. Für sie sind 25 Startfälle definiert; diese Fälle sind **definiert, aber noch nicht als Behavioral Evals ausgeführt oder bestanden**.
 
 > Eine Geschichte ist mehr als gute Prosa. Narrative Wahrheit muss über Zeit, Figuren, Wissen und Konsequenzen nachvollziehbar bleiben.
+
+## Finanzen
+
+Tool- und jurisdiktionsneutrale Regeln für persönliche Finanzplanung, Vermögensentwicklung und sachliche Investmentanalyse mit expliziten Annahmen, aktuellem Datenstand und getrennten Human Gates für reale Finanzaktionen.
+
+Operative Skills:
+
+- `finanzstatus-und-cashflow`;
+- `ruecklagenplanung`;
+- `schuldenstrategie`;
+- `vermoegensprojektion`;
+- `portfolioanalyse`;
+- `anlagevergleich`.
+
+Zentrale Trennungen:
+
+```text
+Projektion ≠ Prognose ≠ Garantie
+historische Rendite ≠ zukünftige Rendite
+Modellannahme ≠ Fakt
+Diversifikation ≠ Verlustschutz
+Analyse / Review ≠ Finanzaktions-Autorisierung
+aktuelle Steuer-/Produktregel ≠ zeitlose zentrale Wahrheit
+```
+
+Konkrete Markt-, Produkt-, Steuer- und Regulierungsdaten werden bei Materialität aktuell und jurisdiktionsbezogen geprüft. Die sechs Finanz-Skills starten `experimental` mit `partial` Evalabdeckung. Für sie sind 30 Startfälle definiert; diese Fälle sind **definiert, aber noch nicht als Behavioral Evals ausgeführt oder bestanden**.
+
+> Ein guter Finanzplan macht Entscheidungen belastbarer. Er macht die Zukunft nicht sicher.
 
 ## Bildarbeit
 

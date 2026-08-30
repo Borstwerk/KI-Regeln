@@ -24,6 +24,7 @@ workflows:
   - Workflows/Long-Horizon-Agentenarbeit.md
   - Workflows/Neue-Datenquelle-und-Ingestion.md
   - Workflows/Operational-Readiness-Review.md
+  - Workflows/Persoenliche-Finanzplanung.md
   - Workflows/Post-Incident-Learning.md
   - Workflows/Produktionsincident.md
   - Workflows/Reliability-Baseline-und-SLOs.md

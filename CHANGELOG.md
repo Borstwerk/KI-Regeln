@@ -8,6 +8,18 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Finanzen
+
+- neuen tool- und jurisdiktionsneutralen Fachbereich `Finanzen/` für persönliche Finanzplanung, Cashflow, Rücklagen, Schulden, Vermögensprojektionen, Portfolioanalyse und sachlichen Anlagevergleich ergänzt;
+- sechs eng geschnittene Skills `finanzstatus-und-cashflow`, `ruecklagenplanung`, `schuldenstrategie`, `vermoegensprojektion`, `portfolioanalyse` und `anlagevergleich` ergänzt; alle sechs starten `experimental` mit `partial` Evalabdeckung, ohne bestehende Maturity hochzustufen;
+- Workflow `Workflows/Persoenliche-Finanzplanung.md` ergänzt und in `workflow-index.yml` registriert; Finanzbaseline, Liquidität, Schulden, Szenarien, Portfolio und Anlagevergleich werden nur soweit kombiniert, wie der konkrete Auftrag sie benötigt;
+- harte Finanzgrenzen verankert: `Projektion ≠ Prognose ≠ Garantie`, historische Rendite ist keine Zukunftsrendite, Diversifikation garantiert keinen Verlustschutz und Analyse/Review autorisiert keine Überweisung, Konto-/Vertragsänderung oder Kauf-/Verkaufsorder;
+- aktuelle Markt-, Produkt-, Steuer- und Regulierungsdaten als zeit- und jurisdiktionsabhängige Evidence behandelt; fehlende aktuelle Werte werden nicht aus Modellgedächtnis oder US-spezifischen Defaults ergänzt;
+- sechs Finance-Evalpacks mit jeweils fünf Startfällen ergänzt, insgesamt 30 definierte Cases; diese Fälle sind **definiert, aber nicht als Behavioral Evals ausgeführt oder bestanden**;
+- SEC/Investor.gov und CFPB als öffentliche methodische Primär-/Behördenreferenzen sowie `anthropics/financial-services` (Apache-2.0) als methodischen Agent-Skill-Referenzraum dokumentiert; 401(k), IRA, Roth, 529, Social Security, Wash-Sale- oder andere US-spezifische Logik wird nicht zur allgemeinen KI-Regeln-Wahrheit;
+- Skill-Katalog und menschliche Katalogdokumentation auf 143 Skills, 118× `partial`, 25× `none`, 0× `core`/`broad`, 118 Skill-Evalpacks und 605 definierte Cases aktualisiert; zusätzliche Coverage ist kein Nachweis für Beratungsgüte, Renditequalität oder Behavioral-Erfolg;
+- keine Broker-/Bank-Automation, kein Buy/Hold/Sell-Automatismus, kein Tag, Release oder automatische externe Synchronisation durch diese Erweiterung.
+
 ### Storyentwicklung und Fiktion
 
 - neuen toolneutralen Fachbereich `Storyentwicklung-und-Fiktion/` ergänzt, der narrativen Kanon und Story-Bible, Figuren und Beziehungen, Plot/Arcs, Worldbuilding sowie Langzeitkontinuität getrennt von der konkreten Prosa-Ausarbeitung behandelt;
