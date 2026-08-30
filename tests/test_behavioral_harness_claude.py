@@ -142,6 +142,8 @@ def stream_json(
     extra_init: bool = False,
     hooks: Any = None,
     drop_hooks: bool = False,
+    drop_plugin_errors: bool = False,
+    drop_mcp_errors: bool = False,
 ) -> str:
     tools = ["Read"] if tools is None else tools
     init = {
@@ -157,6 +159,10 @@ def stream_json(
     }
     if drop_hooks:
         init.pop("hooks")
+    if drop_plugin_errors:
+        init.pop("plugin_errors", None)
+    if drop_mcp_errors:
+        init.pop("mcp_server_errors", None)
     if plugin_errors is not None:
         init["plugin_errors"] = plugin_errors
     if mcp_server_errors is not None:
@@ -436,7 +442,8 @@ class AdapterTests(unittest.TestCase):
         self.assertIn("--allowedTools", argv)
         deny_index = argv.index("--disallowedTools")
         self.assertIn("mcp__*", argv[deny_index + 1:])
-        self.assertIn("--bare", argv)
+        self.assertNotIn("--bare", argv)
+        self.assertIn("--safe-mode", argv)
         self.assertIn("--restricted", argv)
         self.assertIn("--no-session-persistence", argv)
         self.assertNotIn("--resume", argv)
@@ -530,16 +537,25 @@ class AdapterTests(unittest.TestCase):
         for flag in ("--safe-mode", "--disable-slash-commands", "--include-hook-events"):
             self.assertIn(flag, argv)
 
-    def test_26_missing_safe_mode_capability_is_not_assumed(self):
-        help_text = HELP.replace("  --safe-mode\n", "")
-        fake = FakeRunner(help_text=help_text)
-        out = self.run_one(fake, out_name="safe-mode-off")
-        self.assertNotIn("--safe-mode", self.launch_call(fake)[0])
-        self.assertTrue(fake.calls)
-        method = self.load(out, "method-evidence.yml")
-        self.assertEqual("unknown", method["fresh_context"])
-        report = self.load(out, "evidence.yml")["evidence"][0]["fresh_context_assessment"]
-        self.assertIn("safe_mode_requested", report["unproven"])
+    def test_26_missing_safe_mode_capability_fails_before_any_model_process(self):
+        fake = FakeRunner(help_text=HELP.replace("  --safe-mode\n", ""))
+        with self.assertRaisesRegex(adapter.AdapterError, "does not support --safe-mode"):
+            self.run_one(fake, out_name="safe-mode-off")
+        self.assertEqual([], [c for c in fake.calls if "-p" in c[0]])
+        self.assertFalse((self.root / "safe-mode-off").exists())
+
+    def test_26b_bare_is_never_requested_even_when_available(self):
+        fake = FakeRunner()
+        out = self.run_one(fake, out_name="bare-not-requested")
+        controls = self.load(out, "evidence.yml")["evidence"][0]["configured"]["launch_controls"]
+        self.assertFalse(controls["bare_requested"])
+        self.assertTrue(controls["bare_capability_available"])
+        self.assertTrue(controls["safe_mode_requested"])
+        self.assertNotIn("--bare", self.launch_call(fake)[0])
+        runtime = self.load(out, "runtime-configuration-preimage.yml")
+        self.assertNotIn("--bare", runtime["cli_argv_normalized"])
+        self.assertIn("--safe-mode", runtime["cli_argv_normalized"])
+        self.assertEqual("0.2.0", runtime["adapter_version"])
 
     def test_27_complete_evidence_yields_fresh_context_true(self):
         out = self.run_one(FakeRunner(), out_name="fresh-true")
@@ -661,34 +677,80 @@ class AdapterTests(unittest.TestCase):
     def assessment(self, out: Path):
         return self.load(out, "evidence.yml")["evidence"][0]["fresh_context_assessment"]
 
-    def test_39_no_hooks_and_no_hook_events_allows_fresh_context_true(self):
+    def test_39_G_explicitly_empty_hooks_allow_fresh_context_true(self):
         out = self.run_stream("hooks-empty", hooks=[], hook_events=0)
         report = self.assessment(out)
-        self.assertTrue(report["checks"]["no_observed_hooks"])
+        self.assertTrue(report["checks"]["no_loaded_hooks"])
         self.assertTrue(report["checks"]["no_hook_lifecycle_events"])
         self.assertTrue(self.load(out, "method-evidence.yml")["fresh_context"])
 
-    def test_40_loaded_hooks_without_events_make_fresh_context_false(self):
+    def test_40_F_non_empty_hooks_make_fresh_context_false(self):
         out = self.run_stream("hooks-loaded", hooks={"SessionStart": [{"matcher": "*"}]}, hook_events=0)
         report = self.assessment(out)
-        self.assertFalse(report["checks"]["no_observed_hooks"])
+        self.assertFalse(report["checks"]["no_loaded_hooks"])
         self.assertTrue(report["checks"]["no_hook_lifecycle_events"])
-        self.assertIn("no_observed_hooks", report["violated"])
+        self.assertIn("no_loaded_hooks", report["violated"])
         self.assertFalse(self.load(out, "method-evidence.yml")["fresh_context"])
 
-    def test_41_unknown_hook_state_prevents_fresh_context_true(self):
-        out = self.run_stream("hooks-unknown", drop_hooks=True)
+    def test_41_absent_hook_field_is_proved_by_the_substitute_chain(self):
+        """The real R3b0.2a stream shape: safe mode reports no hooks field at all."""
+        out = self.run_stream("hooks-absent", drop_hooks=True, drop_plugin_errors=True, drop_mcp_errors=True)
         report = self.assessment(out)
-        self.assertEqual("unknown", report["checks"]["no_observed_hooks"])
-        self.assertIn("no_observed_hooks", report["unproven"])
-        self.assertEqual("unknown", self.load(out, "method-evidence.yml")["fresh_context"])
+        self.assertTrue(report["checks"]["no_loaded_hooks"])
+        self.assertEqual([], report["violated"])
+        self.assertEqual([], report["unproven"])
+        self.assertTrue(self.load(out, "method-evidence.yml")["fresh_context"])
 
-    def test_42_hook_event_without_loaded_hooks_still_makes_fresh_context_false(self):
-        out = self.run_stream("hooks-event-only", hooks=[], hook_events=1)
+    def test_42_E_hook_event_with_absent_hook_field_makes_fresh_context_false(self):
+        out = self.run_stream("hooks-event-only", drop_hooks=True, hook_events=1)
         report = self.assessment(out)
-        self.assertTrue(report["checks"]["no_observed_hooks"])
+        self.assertEqual("unknown", report["checks"]["no_loaded_hooks"])
         self.assertFalse(report["checks"]["no_hook_lifecycle_events"])
         self.assertFalse(self.load(out, "method-evidence.yml")["fresh_context"])
+
+    def test_42a_A_absent_hook_field_with_unknown_managed_policy_stays_unknown(self):
+        def actual(argv, cwd, env):
+            session = argv[argv.index("--session-id") + 1]
+            return adapter.ProcessResult(0, stream_json(session=session, drop_hooks=True), "")
+        out = self.run_one(FakeRunner(actual_factory=actual, doctor_text=DOCTOR_SILENT), out_name="hooks-managed-unknown")
+        report = self.assessment(out)
+        self.assertEqual("unknown", report["checks"]["no_loaded_hooks"])
+        self.assertEqual("unknown", report["checks"]["no_managed_policy"])
+        self.assertEqual("unknown", self.load(out, "method-evidence.yml")["fresh_context"])
+
+    def test_42b_B_absent_hook_field_with_present_managed_policy_is_not_true(self):
+        (self.managed_dir / "managed-settings.json").write_text("{}", encoding="utf-8")
+        def actual(argv, cwd, env):
+            session = argv[argv.index("--session-id") + 1]
+            return adapter.ProcessResult(0, stream_json(session=session, drop_hooks=True), "")
+        out = self.run_one(FakeRunner(actual_factory=actual), out_name="hooks-managed-present")
+        report = self.assessment(out)
+        self.assertEqual("unknown", report["checks"]["no_loaded_hooks"])
+        self.assertFalse(report["checks"]["no_managed_policy"])
+        self.assertFalse(self.load(out, "method-evidence.yml")["fresh_context"])
+
+    def test_42c_D_absent_hook_field_without_hook_observation_stays_unknown(self):
+        fake = FakeRunner(help_text=HELP.replace("  --include-hook-events\n", ""))
+        def actual(argv, cwd, env):
+            session = argv[argv.index("--session-id") + 1]
+            return adapter.ProcessResult(0, stream_json(session=session, drop_hooks=True), "")
+        fake.actual_factory = actual
+        out = self.run_one(fake, out_name="hooks-not-observable")
+        report = self.assessment(out)
+        self.assertNotIn("--include-hook-events", self.launch_call(fake)[0])
+        self.assertEqual("unknown", report["checks"]["no_loaded_hooks"])
+        self.assertEqual("unknown", self.load(out, "method-evidence.yml")["fresh_context"])
+
+    def test_42d_C_substitute_chain_requires_safe_mode(self):
+        stream = {"observed_hooks": adapter.UNKNOWN, "hook_event_count": 0}
+        managed = {"managed_policy_absent": True}
+        base = {"safe_mode_requested": True, "hook_events_observable": True}
+        self.assertTrue(adapter._loaded_hooks(stream, base, managed))
+        self.assertEqual(adapter.UNKNOWN, adapter._loaded_hooks(stream, dict(base, safe_mode_requested=False), managed))
+        self.assertEqual(adapter.UNKNOWN, adapter._loaded_hooks(stream, base, {"managed_policy_absent": adapter.UNKNOWN}))
+        self.assertEqual(adapter.UNKNOWN, adapter._loaded_hooks(stream, dict(base, hook_events_observable=False), managed))
+        # a reported state always wins over the substitute chain
+        self.assertFalse(adapter._loaded_hooks({"observed_hooks": ["x"], "hook_event_count": 0}, base, managed))
 
     def transport_env(self, **overrides):
         base = {"PATH": "/usr/bin", "ANTHROPIC_API_KEY": "TEST_AUTH_VALUE_DO_NOT_PERSIST",
@@ -739,7 +801,10 @@ class AdapterTests(unittest.TestCase):
 
     def test_47_fresh_context_check_count_matches_documentation(self):
         out = self.run_one(FakeRunner(), out_name="check-count")
-        self.assertEqual(25, len(self.assessment(out)["checks"]))
+        checks = self.assessment(out)["checks"]
+        self.assertEqual(25, len(checks))
+        self.assertIn("no_loaded_hooks", checks)
+        self.assertNotIn("no_observed_hooks", checks)
 
     # --- R3-b0.1: authentication preflight --------------------------------
 
@@ -759,31 +824,36 @@ class AdapterTests(unittest.TestCase):
         self.assertEqual("anthropic-api-key", auth["mode"])
         self.assertTrue(auth["credential_present"])
 
-    def test_49_missing_credential_fails_before_any_model_process(self):
+    def test_49_no_explicit_credential_uses_the_claude_managed_path(self):
         fake = FakeRunner()
-        prepared = self.shared_prepared()
-        with self.assertRaisesRegex(adapter.AdapterError, "no supported authentication path for bare mode"):
-            adapter.execute_prepared_response(
-                prepared, model=MODEL, out_dir=self.root / "auth-missing", claude_binary="claude",
-                process_runner=fake, base_env=self.auth_env(),
-            )
-        self.assertEqual([], [c for c in fake.calls if "-p" in c[0]])
-        self.assertFalse((self.root / "auth-missing").exists())
+        out = self.run_env(fake, base_env=self.auth_env(), out_name="auth-managed")
+        auth = self.authentication(out)
+        self.assertEqual(adapter.AUTH_CLAUDE_MANAGED, auth["mode"])
+        self.assertEqual("unknown", auth["credential_present"])
+        self.assertEqual(1, len([c for c in fake.calls if "-p" in c[0]]))
 
-    def test_50_aws_credentials_alone_are_not_bedrock(self):
-        auth = adapter._auth(
-            {"AWS_ACCESS_KEY_ID": "k", "AWS_SECRET_ACCESS_KEY": "s"},
-            {"AWS_ACCESS_KEY_ID": "k", "AWS_SECRET_ACCESS_KEY": "s"},
-        )
+    def test_49b_managed_path_claims_runtime_auth_only_after_a_successful_process(self):
+        pre = adapter._auth({"PATH": "/usr/bin"}, {"PATH": "/usr/bin"}, bare_requested=False)
+        self.assertEqual("unknown", pre["runtime_authenticated"])
+        self.assertEqual("unknown", pre["credential_present"])
+        out = self.run_env(FakeRunner(), base_env=self.auth_env(), out_name="auth-managed-runtime")
+        self.assertTrue(self.authentication(out)["runtime_authenticated"])
+
+    def test_49c_bare_path_still_refuses_without_a_documented_credential(self):
+        auth = adapter._auth({"PATH": "/usr/bin"}, {"PATH": "/usr/bin"}, bare_requested=True)
         self.assertEqual(adapter.AUTH_UNSUPPORTED, auth["mode"])
         self.assertFalse(auth["credential_present"])
-        fake = FakeRunner()
-        with self.assertRaisesRegex(adapter.AdapterError, "no supported authentication path"):
-            adapter.execute_prepared_response(
-                self.shared_prepared(), model=MODEL, out_dir=self.root / "aws-only", claude_binary="claude",
-                process_runner=fake, base_env=self.auth_env(AWS_ACCESS_KEY_ID="k", AWS_SECRET_ACCESS_KEY="s"),
-            )
-        self.assertEqual([], [c for c in fake.calls if "-p" in c[0]])
+
+    def test_50_aws_credentials_alone_are_not_bedrock(self):
+        env = {"AWS_ACCESS_KEY_ID": "k", "AWS_SECRET_ACCESS_KEY": "s"}
+        self.assertEqual(adapter.AUTH_UNSUPPORTED, adapter._auth(env, env, bare_requested=True)["mode"])
+        self.assertEqual(adapter.AUTH_CLAUDE_MANAGED, adapter._auth(env, env, bare_requested=False)["mode"])
+        out = self.run_env(FakeRunner(), base_env=self.auth_env(AWS_ACCESS_KEY_ID="k", AWS_SECRET_ACCESS_KEY="s"), out_name="aws-only")
+        self.assertEqual(adapter.AUTH_CLAUDE_MANAGED, self.authentication(out)["mode"])
+
+    def test_50b_google_credentials_alone_are_not_vertex(self):
+        env = {"GOOGLE_APPLICATION_CREDENTIALS": "/tmp/adc.json"}
+        self.assertEqual(adapter.AUTH_CLAUDE_MANAGED, adapter._auth(env, env, bare_requested=False)["mode"])
 
     def test_51_explicit_bedrock_is_recognised(self):
         env = self.auth_env(CLAUDE_CODE_USE_BEDROCK="1", AWS_ACCESS_KEY_ID="k", AWS_SECRET_ACCESS_KEY="s")
@@ -800,20 +870,19 @@ class AdapterTests(unittest.TestCase):
         self.assertEqual("vertex", auth["mode"])
         self.assertTrue(auth["credential_present"])
 
-    def test_53_host_oauth_channel_is_not_a_supported_bare_auth_path(self):
+    def test_53_host_oauth_channel_stays_outside_the_allowlist(self):
         base = {"PATH": "/usr/bin", "CLAUDE_CODE_OAUTH_TOKEN_FILE_DESCRIPTOR": "17"}
         env, _ = adapter._child_env(base, Path("/tmp/cfg"))
         self.assertNotIn("CLAUDE_CODE_OAUTH_TOKEN_FILE_DESCRIPTOR", env)
-        auth = adapter._auth(env, base)
-        self.assertEqual(adapter.AUTH_UNSUPPORTED, auth["mode"])
+        for name in ("CLAUDE_CODE_OAUTH_TOKEN_FILE_DESCRIPTOR", "CLAUDE_CODE_OAUTH_TOKEN", "CLAUDE_CODE_OAUTH_TOKEN_FILE"):
+            self.assertNotIn(name, adapter.ENV_ALLOWLIST)
+        auth = adapter._auth(env, base, bare_requested=False)
+        self.assertEqual(adapter.AUTH_CLAUDE_MANAGED, auth["mode"])
         self.assertEqual(["CLAUDE_CODE_OAUTH_TOKEN_FILE_DESCRIPTOR"], auth["host_only_channels_ignored"])
-        fake = FakeRunner()
-        with self.assertRaisesRegex(adapter.AdapterError, "no supported authentication path"):
-            adapter.execute_prepared_response(
-                self.shared_prepared(), model=MODEL, out_dir=self.root / "auth-oauth", claude_binary="claude",
-                process_runner=fake, base_env=base,
-            )
-        self.assertEqual([], [c for c in fake.calls if "-p" in c[0]])
+        out = self.run_env(FakeRunner(), base_env=base, out_name="auth-oauth")
+        combined = "\n".join(f.read_text(encoding="utf-8") for f in out.iterdir() if f.is_file())
+        self.assertNotIn("CLAUDE_CODE_OAUTH_TOKEN_FILE_DESCRIPTOR=", combined)
+        self.assertNotIn('"17"', combined)
 
     def test_54_auth_mode_enters_the_runtime_fingerprint_but_the_secret_does_not(self):
         key_out = self.run_env(FakeRunner(), base_env=self.auth_env(ANTHROPIC_API_KEY="TEST_AUTH_VALUE_DO_NOT_PERSIST"), out_name="auth-fp-key")
@@ -878,6 +947,44 @@ class AdapterTests(unittest.TestCase):
                           "runtime observation", "Verify the claim"):
             self.assertNotIn(forbidden, message)
         self.assertIn("failure_category=authentication_failed", message)
+
+    def test_60b_observed_r3b0_2a_stream_shape_reaches_fresh_context_true(self):
+        """Replays the shape of the one real non-bare safe-mode turn that was observed.
+
+        Synthetic fixture, not behavioral evidence: one init, requested model and session
+        echoed back, tools exactly Read, empty MCP and plugins, no hooks field at all,
+        no error keys, no hook or plugin-install events, successful result.
+        """
+        session = "11111111-1111-4111-8111-111111111111"
+        def actual(argv, cwd, env):
+            self.assertNotIn("--bare", argv)
+            self.assertIn("--safe-mode", argv)
+            self.assertIn("--include-hook-events", argv)
+            return adapter.ProcessResult(0, stream_json(
+                session=argv[argv.index("--session-id") + 1], tools=["Read"], mcp=[], plugins=[],
+                drop_hooks=True, drop_plugin_errors=True, drop_mcp_errors=True,
+                hook_events=0, plugin_install_events=0,
+            ), "")
+        out = self.run_one(FakeRunner(actual_factory=actual), out_name="r3b02a-shape", session=session)
+        observed = self.load(out, "evidence.yml")["evidence"][0]["observed"]
+        self.assertEqual(MODEL, observed["runner_model"])
+        self.assertEqual(session, observed["runner_session_id"])
+        self.assertEqual(1, observed["init_event_count"])
+        self.assertEqual(["Read"], observed["tools"])
+        self.assertEqual([], observed["mcp_servers"])
+        self.assertEqual([], observed["plugins"])
+        self.assertEqual("unknown", observed["hooks"])
+        self.assertEqual(0, observed["hook_event_count"])
+        self.assertEqual(0, observed["plugin_install_event_count"])
+        self.assertEqual([], observed["plugin_errors"])
+        self.assertEqual([], observed["mcp_server_errors"])
+        report = self.assessment(out)
+        self.assertTrue(report["checks"]["no_loaded_hooks"])
+        self.assertEqual([], report["violated"])
+        self.assertEqual([], report["unproven"])
+        method = self.load(out, "method-evidence.yml")
+        self.assertTrue(method["fresh_context"])
+        self.assertEqual("unknown", method["network_disabled"])
 
     def test_61_zero_exit_path_is_unchanged_by_the_diagnosis(self):
         out = self.run_one(FakeRunner(), out_name="diagnosis-no-regression")

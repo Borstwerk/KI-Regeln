@@ -20,7 +20,7 @@ from typing import Any, Callable, Mapping
 
 import yaml
 
-VERSION = "0.1.0"
+VERSION = "0.2.0"
 RUNNER_TYPE = "claude-code"
 METHOD_CONTRACT = "behavioral-paired-run-method-evidence/v1"
 UNKNOWN = "unknown"
@@ -66,6 +66,10 @@ MANAGED_POLICY_PATHS = {
 # credential channels (OAuth token file descriptors, keychain) are deliberately absent:
 # bare mode does not read them, and they are not part of the adapter contract.
 AUTH_UNSUPPORTED = "unsupported-or-missing"
+# The non-bare safe-mode path lets Claude Code use its own managed authentication. The name
+# asserts nothing about the credential itself: not its value, not its transport, not that the
+# runtime will actually authenticate. Only a successful model process proves the last part.
+AUTH_CLAUDE_MANAGED = "claude-managed-auth"
 HOST_ONLY_AUTH_ENV = ("CLAUDE_CODE_OAUTH_TOKEN_FILE_DESCRIPTOR", "CLAUDE_CODE_OAUTH_TOKEN", "CLAUDE_CODE_OAUTH_TOKEN_FILE")
 # Structured failure categories Claude Code reports; anything else normalizes to unknown.
 FAILURE_CATEGORIES = {
@@ -300,12 +304,14 @@ def _managed_policy(binary: str, env: Mapping[str, str], cwd: Path, runner: Proc
     }
 
 
-def _auth(env: Mapping[str, str], base: Mapping[str, str]) -> dict[str, Any]:
+def _auth(env: Mapping[str, str], base: Mapping[str, str], *, bare_requested: bool) -> dict[str, Any]:
     """Classify the authentication path from the effective child environment.
 
     Bedrock and Vertex count only when explicitly selected; present AWS or Google
     credentials alone never imply that provider. Only credential presence is recorded,
-    never a value and never a hash.
+    never a value and never a hash. Without an explicit credential the non-bare path
+    falls back to Claude Code's own managed authentication, which stays unproven until
+    a model process actually succeeds; the bare path has no such fallback.
     """
     if env.get("CLAUDE_CODE_USE_BEDROCK") == "1":
         mode = "bedrock"
@@ -315,10 +321,13 @@ def _auth(env: Mapping[str, str], base: Mapping[str, str]) -> dict[str, Any]:
         present = True if env.get("GOOGLE_APPLICATION_CREDENTIALS") else UNKNOWN
     elif env.get("ANTHROPIC_API_KEY"):
         mode, present = "anthropic-api-key", True
-    else:
+    elif bare_requested:
         mode, present = AUTH_UNSUPPORTED, False
+    else:
+        mode, present = AUTH_CLAUDE_MANAGED, UNKNOWN
     return {
         "schema_version": 1, "mode": mode, "credential_present": present,
+        "runtime_authenticated": UNKNOWN,
         "host_only_channels_ignored": sorted(k for k in base if k in HOST_ONLY_AUTH_ENV),
     }
 
@@ -379,8 +388,9 @@ def _argv(binary: str, model: str, prompt: str, session: str, caps: Mapping[str,
         argv.append("--verbose"); normalized.append("--verbose")
     common = ["--model", model, "--tools", ",".join(ALLOWED_TOOLS), "--allowedTools", *ALLOWED_TOOLS, "--disallowedTools", *DENIED_TOOLS]
     argv += common; normalized += common
-    if caps.get("bare"):
-        argv.append("--bare"); normalized.append("--bare")
+    # --bare is deliberately not requested: it never reads the managed subscription
+    # authentication, which made every run on a host-managed platform fail before init.
+    # --safe-mode closes the same customization sources and is required instead.
     if caps.get("restricted"):
         argv.append("--restricted"); normalized.append("--restricted")
     if caps.get("safe_mode"):
@@ -408,7 +418,8 @@ def _argv(binary: str, model: str, prompt: str, session: str, caps: Mapping[str,
         "empty_mcp_config_requested": bool(caps.get("mcp_config")),
         "strict_mcp_config_requested": bool(caps.get("mcp_config") and caps.get("strict_mcp_config")),
         "controlled_system_prompt_requested": bool(caps.get("system_prompt")),
-        "bare_requested": bool(caps.get("bare")), "restricted_requested": bool(caps.get("restricted")),
+        "bare_requested": False, "bare_capability_available": bool(caps.get("bare")),
+        "restricted_requested": bool(caps.get("restricted")),
         "safe_mode_requested": bool(caps.get("safe_mode")),
         "slash_commands_disabled_requested": bool(caps.get("disable_slash_commands")),
         "hook_events_observable": bool(caps.get("include_hook_events")),
@@ -577,6 +588,26 @@ def _code_hash() -> str:
     except OSError: return UNKNOWN
 
 
+def _loaded_hooks(stream: Mapping[str, Any], controls: Mapping[str, Any], managed: Mapping[str, Any]) -> Any:
+    """Decide whether no hook configuration was loaded.
+
+    A reported hook state always wins. When `system/init` carries no hook field at all —
+    which is what safe mode does on the observed runtime — absence is only provable from
+    the safe-mode contract plus the absence of a managed-policy exception plus an active
+    hook-event observation that stayed silent. Anything less stays unknown.
+    """
+    reported = _empty(stream["observed_hooks"])
+    if reported != UNKNOWN:
+        return reported
+    substitute = (
+        controls["safe_mode_requested"] is True
+        and managed["managed_policy_absent"] is True
+        and controls["hook_events_observable"] is True
+        and stream["hook_event_count"] == 0
+    )
+    return True if substitute else UNKNOWN
+
+
 def _fresh_context(controls: Mapping[str, Any], stream: Mapping[str, Any], managed: Mapping[str, Any], policy: Mapping[str, Any]):
     """Derive fresh_context from configured, preflight-observed and runtime-observed facts.
 
@@ -593,7 +624,10 @@ def _fresh_context(controls: Mapping[str, Any], stream: Mapping[str, Any], manag
         "session_persistence_disabled": True if controls["session_persistence_disabled_by_flag"] else UNKNOWN,
         "prompt_history_disabled": CONTROL_ENV.get("CLAUDE_CODE_SKIP_PROMPT_HISTORY") == "1",
         "own_empty_config_dir": bool(policy.get("config_dir_overridden")),
-        "claude_md_and_auto_memory_disabled": True if (CONTROL_ENV.get("CLAUDE_CODE_DISABLE_CLAUDE_MDS") == "1" and controls["bare_requested"]) else UNKNOWN,
+        "claude_md_and_auto_memory_disabled": True if (
+            CONTROL_ENV.get("CLAUDE_CODE_DISABLE_CLAUDE_MDS") == "1"
+            and (controls["safe_mode_requested"] or controls["bare_requested"])
+        ) else UNKNOWN,
         "no_additional_context_sources": controls["no_context_extending_flags"],
         "restricted_requested": True if controls["restricted_requested"] else UNKNOWN,
         "safe_mode_requested": True if controls["safe_mode_requested"] else UNKNOWN,
@@ -612,7 +646,7 @@ def _fresh_context(controls: Mapping[str, Any], stream: Mapping[str, Any], manag
         "no_observed_plugins": UNKNOWN if plugins == UNKNOWN else not plugins,
         "no_plugin_errors": not stream["observed_plugin_errors"],
         # Loaded hook configuration and hook activity during the run are different facts.
-        "no_observed_hooks": _empty(stream["observed_hooks"]),
+        "no_loaded_hooks": _loaded_hooks(stream, controls, managed),
         "no_hook_lifecycle_events": False if hooks else (True if controls["hook_events_observable"] else UNKNOWN),
         "no_plugin_install_events": stream["plugin_install_event_count"] == 0,
     }
@@ -648,6 +682,7 @@ def _preimages(model: str, stream: Mapping[str, Any], probe: Mapping[str, Any], 
         "session_persistence": {"disabled_by_supported_flag": controls["session_persistence_disabled_by_flag"], "prompt_history_disabled_by_env": True, "no_resume_or_continue": True},
         "memory_and_instructions": {
             "ephemeral_claude_config_dir": True, "bare_requested": controls["bare_requested"],
+            "bare_capability_available": controls["bare_capability_available"],
             "safe_mode_requested": controls["safe_mode_requested"],
             "slash_commands_disabled_requested": controls["slash_commands_disabled_requested"],
             "claude_md_disabled_by_env": True, "runner_package_contains_claude_md": False,
@@ -662,7 +697,13 @@ def _preimages(model: str, stream: Mapping[str, Any], probe: Mapping[str, Any], 
         },
         "fresh_context_assessment": dict(fresh),
         "filesystem_isolation": {"ephemeral_package_copy": True, "task_files_read_only_requested": read_only, "restricted_mode_requested": controls["restricted_requested"], "os_or_container_sandbox": False},
-        "network_policy": {"task_external_network_disabled_intended": True, "provider_transport_required": True, "os_level_egress_enforcement": False},
+        "network_policy": {
+            "task_external_network_disabled_intended": True, "provider_transport_required": True,
+            "os_level_egress_enforcement": False,
+            # The non-bare path does not suppress background prefetch or plugin sync the way
+            # --bare documents. That is a network-observation question, not a context source.
+            "background_prefetch_or_sync_absent": UNKNOWN,
+        },
         "treatment_package_difference_excluded": True,
     }
     return model_pre, runtime_pre
@@ -744,6 +785,11 @@ def execute_prepared_response(
     probe = probe_claude_code(claude_binary, process_runner)
     if not probe["required_capabilities_present"]:
         raise AdapterError("Claude Code binary lacks required adapter capabilities: " + ", ".join(probe["missing_required_capabilities"]))
+    if not probe["capabilities"].get("safe_mode"):
+        raise AdapterError(
+            "Claude Code binary does not support --safe-mode; the adapter does not fall back to --bare, "
+            "which never reads managed authentication and closes fewer customization sources"
+        )
     out_dir = out_dir.resolve()
     if out_dir.exists(): raise AdapterError(f"output directory already exists: {out_dir}")
     requested_session = session_id or str(uuid.uuid4())
@@ -757,15 +803,14 @@ def execute_prepared_response(
         read_only = _read_only(task)
         base = base_env if base_env is not None else os.environ
         env, env_policy = _child_env(base, config)
-        auth = _auth(env, base)
-        if auth["mode"] == AUTH_UNSUPPORTED and probe["capabilities"].get("bare"):
+        argv, controls = _argv(claude_binary, model, _prompt(execution), requested_session, probe["capabilities"], empty_mcp)
+        auth = _auth(env, base, bare_requested=controls["bare_requested"])
+        if auth["mode"] == AUTH_UNSUPPORTED:
             raise AdapterError(
                 "Claude Code runner has no supported authentication path for bare mode; "
                 "expected ANTHROPIC_API_KEY, or explicit CLAUDE_CODE_USE_BEDROCK=1 / CLAUDE_CODE_USE_VERTEX=1"
             )
-        env_evidence = _environment(env, env_policy, auth)
         managed = _managed_policy(claude_binary, env, task, process_runner)
-        argv, controls = _argv(claude_binary, model, _prompt(execution), requested_session, probe["capabilities"], empty_mcp)
         started = _now(); result = process_runner(argv, cwd=task, env=env, input_text=None); finished = _now()
         if result.returncode != 0:
             diagnosis = _classify_failure(result.stdout)
@@ -776,6 +821,9 @@ def execute_prepared_response(
                 f"malformed_stdout_lines={diagnosis['malformed_stdout_lines']}; "
                 f"stdout_sha256={_hash_text(result.stdout)}; stderr_sha256={_hash_text(result.stderr)}"
             )
+        # The process returned zero with a usable stream, so the runtime did authenticate.
+        auth = dict(auth, runtime_authenticated=True)
+        env_evidence = _environment(env, env_policy, auth)
         stream = _parse_stream(result.stdout)
         if controls["explicit_session_id"] and stream["observed_session_id"] != requested_session:
             raise AdapterError(f"runtime session id mismatch: requested {requested_session}, observed {stream['observed_session_id']}")

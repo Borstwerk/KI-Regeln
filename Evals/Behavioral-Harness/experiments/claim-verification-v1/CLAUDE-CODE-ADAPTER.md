@@ -54,9 +54,8 @@ The adapter only relies on required capabilities that the concrete binary report
 
 Optional defense-in-depth controls are used only when the concrete binary reports them, including:
 
-- `--bare` to suppress project/user customizations where supported;
 - `--restricted` for its documented working-directory file boundary where supported;
-- `--safe-mode` to keep customizations (CLAUDE.md, skills, plugins, hooks, MCP, commands, agents) from loading;
+- `--safe-mode` to keep customizations (CLAUDE.md, skills, plugins, hooks, MCP, commands, agents) from loading — **required**, see below;
 - `--disable-slash-commands`, which does not touch the independent variable because the treatment is a read fixture, not a slash command;
 - `--include-hook-events`, so that the absence of hook activity is observable rather than merely assumed;
 - `--no-chrome` where supported;
@@ -67,9 +66,17 @@ Optional defense-in-depth controls are used only when the concrete binary report
 
 The probe also detects context-extending options (`--add-dir`, `--plugin-dir`, `--plugin-url`, `--agents`, `--fallback-model`, `--fork-session`). The adapter never passes them, and the launch policy records structurally that neither a context-extending nor a session-carryover flag reached the argv.
 
-None of the R3-a additions are required capabilities. On an older binary that does not report them the adapter still runs, and the facts they would have proved stay `unknown` instead of being assumed.
+None of the remaining R3-a additions are required capabilities. On an older binary that does not report them the adapter still runs, and the facts they would have proved stay `unknown` instead of being assumed.
 
-`--resume` and `--continue` are never used. The adapter does not assume that `--restricted`, `--bare` or any other optional flag exists on an unprobed binary.
+`--resume` and `--continue` are never used. The adapter does not assume that `--restricted` or any other optional flag exists on an unprobed binary.
+
+### `--bare` is not used; `--safe-mode` is required
+
+`--bare` never reads Claude Code's managed authentication. On a host-managed platform that made every run fail with a non-zero exit before `system/init`, with no observable evidence at all. The adapter therefore **never passes `--bare`**, even when the probe reports the capability: `bare_requested` is always `false`, and `bare_capability_available` records only that the binary has it.
+
+`--safe-mode` takes over as the central isolation control and is consequently **required**. A binary that does not report it makes the adapter fail before any model process; there is no fallback to `--bare` and no weaker runtime. `--safe-mode` closes the same customization sources as `--bare` — CLAUDE.md, skills, plugins, hooks, MCP servers, custom commands, agents, output styles, workflows, auto memory — and additionally does not load managed plugins, managed skills, managed CLAUDE.md or policy-configured MCP servers.
+
+What `--bare` additionally suppressed and `--safe-mode` does not document is background prefetch and plugin sync. That is non-task background traffic, not a prompt, memory or settings source, so it is recorded as `background_prefetch_or_sync_absent: unknown` in the runtime preimage and is a question for network observation, never a hidden fresh-context source.
 
 ## Runtime shape
 
@@ -125,9 +132,14 @@ Bare mode does not read OAuth credentials or the system keychain, so a run witho
 | `anthropic-api-key` | `ANTHROPIC_API_KEY` is present in the child environment |
 | `bedrock` | `CLAUDE_CODE_USE_BEDROCK=1` is explicitly set |
 | `vertex` | `CLAUDE_CODE_USE_VERTEX=1` is explicitly set |
-| `unsupported-or-missing` | none of the above |
+| `claude-managed-auth` | none of the above, on the non-bare path: Claude Code uses its own managed authentication |
+| `unsupported-or-missing` | none of the above, and bare mode was requested |
 
-Present AWS or Google credentials never imply Bedrock or Vertex on their own; only the explicit selector counts. When the mode is `unsupported-or-missing` and bare mode is in force, the adapter aborts **before** the model process with a message that names no credential value.
+Present AWS or Google credentials never imply Bedrock or Vertex on their own; only the explicit selector counts.
+
+`claude-managed-auth` asserts only that the non-bare process may use the authentication Claude Code manages itself. It asserts nothing about the credential value, its transport, or whether the runtime will actually authenticate, so it carries `credential_present: unknown` and `runtime_authenticated: unknown`. Only a model process that exits zero with a usable stream upgrades the latter to `true`; there is no credential fail-fast on this path, and a runtime authentication failure is classified afterwards as `authentication_failed` without a retry.
+
+The `unsupported-or-missing` abort therefore remains reserved for a bare-mode request, which the productive path no longer makes.
 
 Host-internal credential channels — `CLAUDE_CODE_OAUTH_TOKEN_FILE_DESCRIPTOR` and its siblings — are neither added to the environment allowlist nor treated as a proven bare-mode authentication path. When such a variable exists in the parent environment, evidence records only that its name was seen and ignored.
 
@@ -262,13 +274,23 @@ Runtime-observed:
 - observed tools exactly the allowed policy;
 - no MCP servers and no MCP server errors;
 - no plugins and no plugin errors;
-- no loaded hook configuration in `system/init`;
+- no loaded hook configuration (`no_loaded_hooks`);
 - no hook lifecycle events, with `--include-hook-events` actually in force;
 - no plugin-install events.
 
-Loaded hooks and hook activity are separate facts and both are required. `no_observed_hooks` reads the hook state reported by `system/init` — provably empty is `true`, provably non-empty is `false`, an absent or uninterpretable state is `unknown` — so a run whose hooks were configured but never fired cannot reach `fresh_context: true`. `no_hook_lifecycle_events` covers the opposite case, a hook that actually ran.
+Loaded hooks and hook activity are separate facts and both are required. `no_hook_lifecycle_events` covers a hook that actually ran. `no_loaded_hooks` covers configuration that was loaded but stayed silent — and its value does **not** necessarily come from an `init.hooks` field, because safe mode on the observed runtime reports no such field at all:
 
-The assessment is persisted with each individual check plus the `violated` and `unproven` lists, so a `partial` pair shows exactly which fact is missing. It currently holds 25 checks: 14 configured/structural, 1 preflight-observed and 10 runtime-observed. The number is a consistency anchor for the test suite, not a quality statement.
+| `system/init` hook state | result |
+| --- | --- |
+| present and empty | `true` |
+| present and non-empty | `false` |
+| absent or uninterpretable | `true` **only** when `safe_mode_requested`, `managed_policy_absent is True`, `hook_events_observable` and zero hook lifecycle events all hold; otherwise `unknown` |
+
+The substitute chain is the safe-mode contract, plus the absence of a managed-policy exception path, plus an active runtime hook observation that stayed silent. A missing field is never read as an empty hook list on its own. A reported state always wins: an explicitly non-empty `init.hooks` is `false` regardless of safe mode, and an observed hook lifecycle event keeps `fresh_context` away from `true` through its own check.
+
+Managed policy stays a separate mandatory gate. Safe mode does not make it irrelevant — policy-configured hooks are precisely why that gate exists.
+
+The assessment is persisted with each individual check plus the `violated` and `unproven` lists, so a `partial` pair shows exactly which fact is missing. It currently holds 25 checks: 14 configured/structural, 1 preflight-observed and 10 runtime-observed. R3-b0.3 replaced `no_observed_hooks` with `no_loaded_hooks` rather than adding a check, so the number is unchanged. The number is a consistency anchor for the test suite, not a quality statement.
 
 ## Method-evidence boundary
 
@@ -295,6 +317,8 @@ Consequently a first real smoke pair can now reach `fresh_context: true` when th
 ## Tests
 
 `tests/test_behavioral_harness_claude.py` uses synthetic process/stream fixtures and makes no real Claude calls. It covers the requested success/error/evidence cases, including model/session mismatch, unexpected tools/MCPs, malformed streams, secret handling, launch-policy enforcement, conservative isolation evidence and fingerprint invariance across the treatment package difference.
+
+R3-b0.3 adds coverage for the runtime switch: `--safe-mode` present in the argv and `--bare` absent even when the capability exists, a missing `--safe-mode` capability aborting before any model process, the adapter version in the runtime fingerprint, the seven hook cases from the table above (including a unit-level check of the substitute chain), the managed authentication path and its `runtime_authenticated` upgrade, AWS or Google credentials alone still not selecting a provider, the host OAuth channel staying outside the allowlist, and a replay of the observed non-bare stream shape reaching `fresh_context: true` while `network_disabled` stays `unknown`.
 
 R3-b0.1 adds coverage for the authentication preflight (API key allows the launch; a missing credential aborts before any model process; AWS credentials alone are not Bedrock; explicit Bedrock and Vertex are recognised; a host OAuth channel is neither allowlisted nor accepted; the auth mode moves the runtime fingerprint while a rotated secret does not) and for the failure classification (authentication, model-not-found and rate-limit categories, malformed stdout, an unlisted category normalising to `unknown`, and no model text, prompt or secret in the error message).
 
