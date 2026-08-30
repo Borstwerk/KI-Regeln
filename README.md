@@ -415,7 +415,7 @@ Draft / Review ≠ Publishing-Freigabe
 
 Postingfrequenzen, beste Uhrzeiten, Hashtagzahlen, Content-Pillar-Prozente, Rankinggewichte und Plattform-KPI-Zielwerte sind keine zentralen Defaults. Plattformmechaniken sind mutable Evidence und werden bei Materialität aktuell geprüft.
 
-Für die neun Social-Media-/Content-Präsenz-Skills sind 54 Startfälle definiert; erwartete Verteilung 36× `pass`, 9× `partial` und 9× `blocked`. Sie sind derzeit **definiert, aber noch nicht als Behavioral Evals ausgeführt oder bestanden**.
+Für die neun Social-Media-/Content-Präsenz-Skills sind 54 Startfälle definiert; erwartete Verteilung 36× `pass`, 9× `partial`, 9× `blocked`. Sie sind derzeit **definiert, aber noch nicht als Behavioral Evals ausgeführt oder bestanden**.
 
 > Ziel, Publikum und belegte Aussage vor Algorithmusfolklore.
 
