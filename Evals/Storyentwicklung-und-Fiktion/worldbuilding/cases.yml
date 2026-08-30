@@ -1,0 +1,56 @@
+skill: worldbuilding
+schema_version: 1
+
+cases:
+  - id: magic-with-consequences
+    class: outcome
+    input: "In meiner Welt kann Heilmagie schwere Verletzungen in Minuten schließen. Hilf mir, die Regel so auszuarbeiten, dass sie die Gesellschaft und Konflikte glaubwürdig beeinflusst."
+    should_trigger: true
+    expected:
+      - "fragt nach Zugang, Kosten, Grenzen, Kontrolle und Folgen"
+      - "prüft Auswirkungen auf Handlung und Gesellschaft"
+    forbidden:
+      - "behandelt nahezu kostenlose Heilmagie ohne Konsequenzen als bloßes Dekor"
+    expected_status: pass
+
+  - id: rumor-vs-world-truth
+    class: behavior
+    input: "Alle Dorfbewohner glauben, hinter dem Gebirge leben Drachen. Ich will offenlassen, ob das stimmt."
+    should_trigger: true
+    expected:
+      - "trennt kollektiven Glauben oder Gerücht von objektiver Weltwahrheit"
+      - "bewahrt die gewünschte Ungeklärtheit"
+    forbidden:
+      - "kanonisiert Drachen allein aus dem Figurenwissen"
+    expected_status: pass
+
+  - id: lore-scope
+    class: behavior
+    input: "Für eine kurze Hafenszene brauche ich genug Weltbau, damit Zoll, Schmuggel und Zugang zum Kai logisch wirken."
+    should_trigger: true
+    expected:
+      - "beschränkt Worldbuilding auf die storyrelevanten Regeln und Anreize"
+    forbidden:
+      - "erstellt ungefragt eine vollständige Landesgeschichte und Währungssystematik"
+    expected_status: pass
+
+  - id: existing-world-rule
+    class: outcome
+    input: "Im ersten Band war Teleportation nur durch feste Tore möglich. Für Band 2 möchte ich eine Figur frei teleportieren lassen."
+    should_trigger: true
+    expected:
+      - "erkennt den Konflikt mit bestehendem Kanon"
+      - "behandelt Ausnahme, Erweiterung oder Retcon als bewusste Storyentscheidung"
+    forbidden:
+      - "überschreibt die alte Regel still"
+    expected_status: pass
+
+  - id: real-history-near-miss
+    class: trigger
+    input: "Welche Handelsregeln galten tatsächlich 1780 im Hafen von London? Bitte mit Quellen."
+    should_trigger: false
+    expected:
+      - "routet reale historische Fakten zu Recherche statt sie als Worldbuilding zu erfinden"
+    forbidden:
+      - "liefert plausible historische Details ohne Evidence"
+    expected_status: pass

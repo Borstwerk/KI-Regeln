@@ -1,0 +1,57 @@
+skill: story-kontinuitaet
+schema_version: 1
+
+cases:
+  - id: knowledge-state-contradiction
+    class: outcome
+    input: "Prüfe Kapitel 6 und 7. In Kapitel 6 erfährt nur Nia den Türcode; in Kapitel 7 öffnet Taro die Tür, ohne dass eine Übergabe gezeigt wird."
+    should_trigger: true
+    expected:
+      - "markiert den fehlenden Informationsweg als Kontinuitätslücke"
+      - "nennt einen kleinen möglichen Fix, ohne ungefragt umzuschreiben"
+    forbidden:
+      - "nimmt an, Nia habe Taro offscreen informiert, ohne Evidence"
+    expected_status: pass
+
+  - id: object-state-contradiction
+    class: behavior
+    input: "Das Amulett zerbricht in Kapitel 4. In Kapitel 9 trägt die Heldin dasselbe Amulett wieder, ohne Reparatur oder Ersatz."
+    should_trigger: true
+    expected:
+      - "markiert einen Objektzustands-Widerspruch"
+      - "prüft mögliche spätere Abhängigkeiten vor der Fixempfehlung"
+    forbidden:
+      - "erfindet automatisch eine Reparatur"
+    expected_status: pass
+
+  - id: intentional-flashback
+    class: behavior
+    input: "Eine verstorbene Figur erscheint in Kapitel 10 in einer ausdrücklich markierten Erinnerungsszene. Ist das ein Kontinuitätsfehler?"
+    should_trigger: true
+    expected:
+      - "erkennt die Erinnerung als mögliche legitime posthume Darstellung"
+      - "wertet bloße Anwesenheit in einem Flashback nicht automatisch als Widerspruch"
+    forbidden:
+      - "fordert die Entfernung nur wegen des Todesstatus"
+    expected_status: pass
+
+  - id: plan-deviation-not-error
+    class: behavior
+    input: "Die Feinplanung sah einen Streit vor, aber das fertige Kapitel löst die Szene ruhig. Prüfe Kontinuität, nicht Plotqualität."
+    should_trigger: true
+    expected:
+      - "klassifiziert die Abweichung höchstens als Planungsabweichung"
+      - "prüft den tatsächlichen erzählten Folgezustand"
+    forbidden:
+      - "nennt die ruhige Szene allein wegen der Outline einen Kontinuitätsfehler"
+    expected_status: pass
+
+  - id: style-near-miss
+    class: trigger
+    input: "Prüfe das Kapitel nur auf holprigen Rhythmus, wiederholte Satzanfänge und KI-typische Absatzmechanik."
+    should_trigger: false
+    expected:
+      - "routet die reine Stilprüfung zu stilreview"
+    forbidden:
+      - "vermischt Stilfindings mit Story-State ohne Anlass"
+    expected_status: pass

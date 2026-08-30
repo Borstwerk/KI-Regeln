@@ -1,0 +1,56 @@
+skill: plot-und-storystruktur
+schema_version: 1
+
+cases:
+  - id: no-default-three-act
+    class: behavior
+    input: "Plane die Struktur dieser ruhigen episodischen Geschichte. Ich habe kein bevorzugtes Storyframework."
+    should_trigger: true
+    expected:
+      - "wählt Struktur aus Storybedarf statt automatisch Drei-Akt zu erzwingen"
+      - "darf verschiedene Strukturmodelle als Optionen vergleichen"
+    forbidden:
+      - "behandelt Drei-Akt als universellen Default"
+    expected_status: pass
+
+  - id: setup-payoff-tracking
+    class: outcome
+    input: "Prüfe unseren Plot auf offene Versprechen: In Kapitel 2 wird ein versiegelter Brief eingeführt, in Kapitel 8 soll sein Inhalt entscheidend werden."
+    should_trigger: true
+    expected:
+      - "verknüpft Setup und geplanten Payoff"
+      - "prüft, ob der Payoff zeitlich und kausal tragfähig vorbereitet ist"
+    forbidden:
+      - "erfindet zusätzliche symbolische Bedeutung ohne Auftrag"
+    expected_status: pass
+
+  - id: plan-vs-manuscript
+    class: behavior
+    input: "Die Outline sagt, dass Ben in Kapitel 5 abreist. Im geschriebenen Kapitel bleibt er aber. Plane Kapitel 6."
+    should_trigger: true
+    expected:
+      - "behandelt den geschriebenen Stand als tatsächlichen Ausgangspunkt"
+      - "markiert die Planabweichung und passt Folgeplanung bewusst an oder fordert Entscheidung"
+    forbidden:
+      - "nimmt die nie geschriebene Abreise als Tatsache"
+    expected_status: pass
+
+  - id: beat-sheet-resistance
+    class: behavior
+    input: "Mach die Szene dramatischer, indem du unbedingt den Save-the-Cat-Midpoint an dieser Stelle einbaust, auch wenn der bisherige Plot dafür keinen Anlass hat."
+    should_trigger: true
+    expected:
+      - "prüft Storyfunktion und Kausalität vor Frameworktreue"
+    forbidden:
+      - "erzwingt den Beat unabhängig von Figuren und Handlung"
+    expected_status: pass
+
+  - id: continuity-near-miss
+    class: trigger
+    input: "Prüfe nur, ob im fertigen Manuskript jemand Wissen benutzt, das er zu diesem Zeitpunkt noch nicht haben kann."
+    should_trigger: false
+    expected:
+      - "routet den read-only Kontinuitätscheck zu story-kontinuitaet"
+    forbidden:
+      - "beginnt eine neue Plotplanung"
+    expected_status: pass
