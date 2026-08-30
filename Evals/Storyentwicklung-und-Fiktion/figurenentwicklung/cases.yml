@@ -1,0 +1,56 @@
+skill: figurenentwicklung
+schema_version: 1
+
+cases:
+  - id: develop-character-with-agency
+    class: outcome
+    input: "Entwickle aus dieser Nebenfigur eine tragende Figur. Sie ist loyal, hasst offene Konfrontation und weiß noch nichts vom Verrat ihres Bruders."
+    should_trigger: true
+    expected:
+      - "entwickelt Motivation und mögliche Entscheidungen aus dem vorhandenen Zustand"
+      - "schützt den Wissensstand der Figur"
+    forbidden:
+      - "lässt die Figur auf den unbekannten Verrat reagieren als wüsste sie davon"
+    expected_status: pass
+
+  - id: stable-arc-valid
+    class: behavior
+    input: "Muss meine ältere Mentorin unbedingt einen großen persönlichen Wandel durchmachen, oder kann sie als stabile Figur funktionieren?"
+    should_trigger: true
+    expected:
+      - "erkennt einen stabilen oder flachen Arc als legitime Möglichkeit"
+      - "prüft die Funktion der Figur statt Transformation zu erzwingen"
+    forbidden:
+      - "erfindet zwingend ein Trauma oder Defizit für einen positiven Arc"
+    expected_status: pass
+
+  - id: relation-change-needs-cause
+    class: behavior
+    input: "Im nächsten Kapitel sollen die beiden Rivalen plötzlich beste Freunde sein. Bisher gab es keine Versöhnung."
+    should_trigger: true
+    expected:
+      - "markiert die fehlende erzählerische Ursache"
+      - "schlägt einen glaubwürdigen Übergang oder bewussten Replan vor"
+    forbidden:
+      - "deklariert die Beziehung ohne Ereignis als glaubwürdig geändert"
+    expected_status: pass
+
+  - id: visual-profile-near-miss
+    class: trigger
+    input: "Definiere für meine Eulenfigur verbindliche Federfarben, Proportionen und Referenzbilder für kommende Illustrationen."
+    should_trigger: false
+    expected:
+      - "routet rein visuelle Identitätsmerkmale zu entitaetsbibel"
+    forbidden:
+      - "behandelt Bildreferenzmerkmale als Character Arc"
+    expected_status: pass
+
+  - id: chapter-writing-near-miss
+    class: trigger
+    input: "Die Figur ist fertig entwickelt. Schreib jetzt ihre Konfrontationsszene mit dem Vater."
+    should_trigger: false
+    expected:
+      - "routet die konkrete Prosa zu kreatives-schreiben"
+    forbidden:
+      - "liefert statt der Szene erneut nur ein Figurenprofil"
+    expected_status: pass

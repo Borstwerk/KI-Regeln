@@ -27,6 +27,7 @@ Besonderer methodischer Einfluss stammt unter anderem aus Arbeiten und Ökosyste
 - IREB und NASA-System-Engineering-Material für Requirements Engineering;
 - Google Developer Documentation Style Guide, Write the Docs und The Good Docs Project für technische Dokumentation;
 - öffentliche Plattform- und Produktdokumentation für Bild- und Social-Media-Arbeit;
+- `danjdewhurst/story-skills` als methodischer Referenzraum für getrennte Story-Bible-, Figuren-, Worldbuilding-, Plot- und Kontinuitätsarbeit, ohne dessen CLI, Projektstruktur oder Templates als lokale Norm zu übernehmen;
 - Emil Kowalskis öffentliches Motion-Craft-Material, mblodes UI-Animation-Skill und Leonxlnx' Taste-Skill als methodische Referenzräume für Motion-Design, ohne deren konkrete Tabellen, Skalen oder Defaultwerte als lokale Norm zu übernehmen;
 - MDN sowie die offiziellen Dokumentationen von Motion und GSAP als technische Primärquellen für konkrete Web-Motion-APIs und Library-Fähigkeiten;
 - öffentliche Skill-Repositories, die als Vergleichs-, Inspirations- oder – wo separat dokumentiert – Adaptionsquellen dienten.

@@ -14,11 +14,12 @@ Der Skill-Katalog beantwortet zusätzlich:
 
 ## Aktueller Bestand
 
-Der Katalog enthält aktuell 132 zentrale Skills:
+Der Katalog enthält aktuell 137 zentrale Skills:
 
 - Arbeitsweisen: 3;
 - Agentenarbeit: 8;
 - Schreiben: 4;
+- Storyentwicklung und Fiktion: 5;
 - Bildarbeit: 4;
 - Programmieren: 4;
 - Webentwicklung: 11;
@@ -80,7 +81,7 @@ Empfohlene Werte:
 
 Maturity und Eval Coverage sind nicht identisch. Ein Skill kann viel Praxis haben und trotzdem noch unzureichende formale Evals besitzen.
 
-Aktuell besitzt `context-engineering` als bestehender `candidate` `partial` Evalabdeckung. Die ergänzten Context-Skills, alle sieben Wissensmanagement-Skills, alle fünf Schnittstellen-/Contract-Skills, alle sieben Infrastruktur-/DevOps-Skills, alle acht Reliability-/System-Observability-Skills, alle neun Data-Engineering-Skills, alle sieben Software-Architecture-/System-Design-Skills, alle acht Requirements-/Specification-Skills und alle neun Social-Media-/Content-Präsenz-Skills starten beziehungsweise bleiben bewusst `experimental` mit `partial` Evalabdeckung.
+Aktuell besitzt `context-engineering` als bestehender `candidate` `partial` Evalabdeckung. Die ergänzten Context-Skills, alle sieben Wissensmanagement-Skills, alle fünf Schnittstellen-/Contract-Skills, alle sieben Infrastruktur-/DevOps-Skills, alle acht Reliability-/System-Observability-Skills, alle neun Data-Engineering-Skills, alle sieben Software-Architecture-/System-Design-Skills, alle acht Requirements-/Specification-Skills, alle neun Social-Media-/Content-Präsenz-Skills und alle fünf Storyentwicklung-/Fiktion-Skills starten beziehungsweise bleiben bewusst `experimental` mit `partial` Evalabdeckung.
 
 Für Reliability sind sechs Startfälle je Skill definiert, insgesamt 48. Der erste Same-Model-Smoke-Lauf wurde am 2026-08-24 ausgeführt; das ersetzt keinen unabhängigen verblindeten Benchmark und rechtfertigt allein keine Hochstufung.
 
@@ -98,7 +99,11 @@ Der Stand nach Phase 3.5 betrug 131 Skills, davon 103× `partial` und 28× `none
 
 Phase 3.6 ergänzt im Bereich Schreiben genau einen neuen Skill, `adressatengerechte-kommunikation`, als `experimental` mit `partial` Evalabdeckung. `natuerliches-schreiben`, `kreatives-schreiben` und `stilreview` bleiben `candidate`; ihre Maturity wurde nicht angehoben. Für die vier Schreiben-Skills sind 35 neue Startfälle definiert: 12 für `natuerliches-schreiben`, 11 für `adressatengerechte-kommunikation`, 6 für `kreatives-schreiben` und 6 für `stilreview`. Diese 35 Fälle sind **definiert, aber nicht als Behavioral Evals ausgeführt oder bestanden**.
 
-Aktueller Gesamtstand nach Phase 3.6: 132 Skills, davon 107× `partial` und 25× `none`, 0× `core`/`broad`; 107 Skill-Evalpacks mit insgesamt 550 definierten Cases. Die Zahlen ergeben sich aus dem aktuellen maschinenlesbaren Katalog sowie dem dokumentierten Phase-3.5-Stand von 103 Evalpacks/515 Cases plus den vier neuen Schreiben-Packs mit zusammen 35 Cases.
+Der Gesamtstand nach Phase 3.6 betrug 132 Skills, davon 107× `partial` und 25× `none`, 0× `core`/`broad`; 107 Skill-Evalpacks mit insgesamt 550 definierten Cases.
+
+Storyentwicklung und Fiktion ergänzt fünf neue Skills – `story-bible`, `figurenentwicklung`, `plot-und-storystruktur`, `worldbuilding` und `story-kontinuitaet` – jeweils als `experimental` mit `partial` Evalabdeckung. Dafür sind fünf Evalpacks mit jeweils fünf Startfällen definiert, insgesamt 25. Diese Fälle sind **definiert, aber nicht ausgeführt oder bestanden**. `kreatives-schreiben` bleibt `candidate`; seine Maturity wurde nicht angehoben.
+
+Aktueller Gesamtstand: 137 Skills, davon 112× `partial` und 25× `none`, 0× `core`/`broad`; 112 Skill-Evalpacks mit insgesamt 575 definierten Cases. Die fünf Story-Skills erhöhen den Bestand und die definierte Coverage, sind aber noch kein Behavioral-Qualitätsnachweis.
 
 ## Hardening Phase 2 – Eval Coverage
 
@@ -199,6 +204,8 @@ Für Software-Architecture-/System-Design-Skills sollte zusätzlich an realen Sy
 Für Requirements-/Specification-Skills sollte zusätzlich an realen Spezifikationen und Stakeholder-/Source-Evidence geprüft werden, ob Soll-Baselines korrekt rekonstruiert, Inferenz sichtbar bleibt, keine Zielwerte erfunden, Acceptance und Traceability sinnvoll getrennt, Changes mit Downstream-Impact erkannt und Validation/Review nicht mit Product Approval verwechselt werden. Ein ausgefülltes PRD, 100 Prozent Traceability oder definierte Evalcases allein reichen nicht für eine Hochstufung.
 
 Für Social-Media-/Content-Präsenz-Skills sollte zusätzlich an realen Content-Historien, Plattformdaten und Community-Situationen geprüft werden, ob Ziel-/Audience-Fit korrekt erfasst, Plattformfolklore von aktueller Evidence getrennt, Claims und Repurposing sauber behandelt, Performance ohne Scheinkausalität analysiert und Publishing-/Community-Aktionen zuverlässig gegatet werden. Ein gefüllter Content-Kalender, ein viraler Einzelpost oder definierte Evalcases allein reichen nicht für eine Hochstufung.
+
+Für Storyentwicklung-/Fiktion-Skills sollte zusätzlich an realen Erzählprojekten geprüft werden, ob Kanon und Planung getrennt bleiben, Figurenwissen und Zustände über längere Strecken korrekt fortgeführt, Storymodelle nicht mechanisch erzwungen, Worldbuilding-Folgen plausibel berücksichtigt und Kontinuitätsfindings ohne ungefragte Retcons erkannt werden. Eine vollständige Story-Bible oder definierte Evalcases allein reichen nicht für eine Hochstufung.
 
 ## Leitgedanke
 
