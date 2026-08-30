@@ -8,6 +8,17 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Phase 4.2A – Claim-Verification Paired Pilot mit unvollständiger Method Evidence abgeschlossen
+
+- schmale Pair-Orchestrierung `tools/behavioral_harness_pair.py` sowie das sechsfällige Experiment `claim-verification-v1` mit vorab festgelegter Ground Truth, expliziten Fixture-Rollen und counterbalanced Treatment-Reihenfolge ergänzt;
+- konkreten Claude-Code-Runner-Adapter `tools/behavioral_harness_claude.py` ergänzt und real ausgeführt; beobachtet wurden Managed Auth im normalen Host-Kontext, Fresh Context mit allen 25 Checks erfüllt sowie belegte Filesystem-/Package-Grenze;
+- Fresh-Context-Evidence gehärtet: Environment-Allowlist statt pauschaler Vererbung, dokumentierte Memory-/History-Controls, Managed-Policy-Preflight, Auth-Preflight mit sicherer Fehlerklassifikation sowie getrennte Semantik für versuchten, blockierten, erfolgreichen und unaufgeklärten Zugriff außerhalb des Runner-Package;
+- genau einen realen Behavioral-Smoke ausgeführt: `CV-01-supported`, Repetition 1, exakt zwei Responses, kanonisch verpackt und treatment-blind gebündelt; die restlichen 34 geplanten Responses wurden nicht ausgeführt;
+- Fixed-Destination-CONNECT-Guard `tools/runner_egress_guard.py` als eigenständige Runner-Infrastruktur ergänzt und offline getestet; er ist ausdrücklich **nicht** in den kanonischen Adapter integriert;
+- Egress-Isolation empirisch untersucht: Provider über den hostverwalteten Proxy erreichbar, per-UID-nftables-Enforcement real bestanden, ein echter Claude-Child unter dieser Grenze jedoch an der Authentifizierung gescheitert und cgroup-basiertes Matching in dieser Hoststruktur nicht adressierbar; invasive Hoständerungen wurden bewusst unterlassen;
+- Method Evidence bleibt damit korrekt `partial` bei `network_disabled: unknown` und `comparison_eligible: false`; `Evals/Behavioral-Harness/experiments/claim-verification-v1/METHOD-RESULT.md` als kanonischer Abschlussstand ergänzt;
+- kein Semantic Judge, kein Unblinding, kein Behavioral-Vergleich und keine Aussage zur Skill-Wirksamkeit; `claim-verification/SKILL.md` unverändert, keine Maturity oder Eval Coverage verändert und kein Tag oder Release erzeugt.
+
 ### Discovery- und Entry-Path-Polish
 
 - Discovery-only-Registry `Dokumentation/radar-sources.yml` ergänzt, um neue Skills, Methoden, Spezifikationen, Security-Hinweise und relevante KI-Entwicklungen systematisch zu finden, ohne Radarquelle, Upstream oder lokale Übernahme gleichzusetzen;

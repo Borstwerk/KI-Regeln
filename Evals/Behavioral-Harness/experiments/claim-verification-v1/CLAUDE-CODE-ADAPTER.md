@@ -1,4 +1,19 @@
-# Claude Code Runner Adapter – Phase 4.2A-R2/R3-a
+# Claude Code Runner Adapter – Phase 4.2A
+
+## Current status
+
+The adapter has been executed against a real Claude Code runtime. Observed on Claude Code `2.1.251` with model `claude-haiku-4-5-20251001`:
+
+| Fact | Result |
+| --- | --- |
+| Real runtime observation | **pass** — adapter exit 0, all eight artifacts produced |
+| Managed authentication in the normal host context | **pass** (`claude-managed-auth`, `runtime_authenticated: true`) |
+| Fresh context | **pass** — all 25 checks true, `violated: []`, `unproven: []` |
+| Filesystem package boundary | **pass** — `repository_access_disabled: true`, `package_only_access: true` |
+| Outside-package blocked-attempt semantics | **real observed** — a blocked absolute-path read followed by a successful in-package read, correctly classified as `attempted/blocked` without invalidating the boundary |
+| `network_disabled` | **remains `unknown`** |
+
+The sections below keep the earlier R2 description as the historical record of how the contract was built; the table above is the current state.
 
 ## Status
 
@@ -18,7 +33,7 @@ tools/behavioral_harness.py package-run
 ordinary Behavioral-Harness run package
 ```
 
-No real A/B response was executed as part of R2.
+No real A/B response was executed as part of R2. Two real paired responses were executed later; see `METHOD-RESULT.md`.
 
 ## CLI
 
@@ -342,6 +357,23 @@ The adapter still never emits `network_disabled: true`. R3-a adds no OS- or cont
 Consequently a first real smoke pair can now reach `fresh_context: true` when the runtime observations support it, but remains methodologically `partial` overall as long as `network_disabled` stays `unknown`.
 
 `fresh_context: true` also stays a statement about the *runner* context. Provider-internal state such as prompt caching or server-side history remains unobservable and is not claimed.
+
+## Egress-isolation work and why `network_disabled` stays unknown
+
+A separate sequence investigated whether the contract's network fact could be evidenced in the available host environment. It is infrastructure evidence, not behavioral evidence.
+
+| Step | Result | What it established |
+| --- | --- | --- |
+| Feasibility survey | yes, with conditions | root, `CAP_NET_ADMIN` and nftables are available; `bwrap`, `firejail`, `ip`, `slirp4netns` and `socat` are not |
+| Provider through the host proxy | pass | with the provider's `NO_PROXY` bypass dropped, CONNECT and TLS succeed through the host-managed proxy; one tested non-provider host was denied at CONNECT |
+| Fixed-destination guard, offline | pass | `tools/runner_egress_guard.py`: loopback-only, ephemeral port, CONNECT only, exact configured provider host and port 443, fail closed, controlled upstream tunnel, no generic forward proxying, no TLS termination, no payload persistence |
+| Real per-UID nft enforcement | pass | with a temporary UID-scoped policy loaded in the kernel, only the guard socket was reachable; direct provider, direct host proxy, DNS, other loopback and other external TCP were all blocked; other UIDs stayed unaffected; teardown complete |
+| Real Claude child under that boundary | **fail** | the process started and reached `system/init` with the correct model, `tools == ["Read"]`, empty MCP and empty plugins, then failed with `authentication_failed` |
+| cgroup-scoped enforcement as an alternative | **fail** | cgroup v2 exists and a temporary child cgroup is creatable, but nftables cannot address it: the v2 hierarchy is not at the location nftables resolves against, and a workaround would need an invasive host remount |
+
+On the failed run: in the tested environment the managed-auth path did not succeed under the combination of a privilege drop to a foreign UID and an empty probe `HOME`. The exact causality between credential/`HOME` access and a possibly required additional auth network path was **not** resolved further. This is not a general statement that managed auth cannot work under a different UID.
+
+The guard is therefore **implemented and independently tested, but not integrated into the canonical adapter**. The canonical adapter opens no egress boundary of its own, so `network_disabled` stays `unknown` and a pair built from it stays `partial`.
 
 ## Tests
 

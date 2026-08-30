@@ -4,13 +4,27 @@
 
 This directory defines the first controlled paired-skill pilot for `claim-verification`.
 
-It records **method preparation only**. No isolated LLM A/B responses, semantic blind judgments or skill-effect results are created by this repository change.
+The pilot has since been executed in part. `METHOD-RESULT.md` in this directory is the canonical closing record; the summary is:
+
+| | |
+| --- | --- |
+| Experiment prepared | yes |
+| Runner implemented | yes |
+| Real behavioral smoke | exactly 2 responses (CV-01-supported, repetition 1) |
+| Full 36-response execution | not run |
+| Method evidence | `partial` |
+| Comparison eligible | `false` |
+| Semantic judge | not run |
+| Unblinding | not run |
+| Skill effect | unknown |
+
+Two real isolated LLM responses therefore exist, but **no** semantic blind judgment, **no** unblinding, **no** behavioral comparison and **no** skill-effect result. The single unproven method fact is `network_disabled`, which stays `unknown`.
 
 The experiment asks:
 
 > Under the same prompt, same package-local evidence, same model and same sufficiently evidenced runner conditions, does making the `claim-verification` skill instruction available change observable claim-verification behavior?
 
-This is a pilot method check, not a public benchmark and not evidence for a Maturity or Eval Coverage promotion.
+This is a pilot method check, not a public benchmark and not evidence for a Maturity or Eval Coverage promotion. That question is **not** answered by the executed part of the pilot.
 
 ## Controlled variable
 
