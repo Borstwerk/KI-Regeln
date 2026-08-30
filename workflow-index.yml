@@ -24,6 +24,7 @@ workflows:
   - Workflows/Long-Horizon-Agentenarbeit.md
   - Workflows/Neue-Datenquelle-und-Ingestion.md
   - Workflows/Operational-Readiness-Review.md
+  - Workflows/Persoenliche-Finanzplanung.md
   - Workflows/Post-Incident-Learning.md
   - Workflows/Produktionsincident.md
   - Workflows/Reliability-Baseline-und-SLOs.md
@@ -35,6 +36,7 @@ workflows:
   - Workflows/Review-Revise-Loop.md
   - Workflows/Schnittstellenvertrag-Entwerfen-und-Aendern.md
   - Workflows/Software-Feature.md
+  - Workflows/Storyprojekt-von-Idee-bis-Manuskript.md
   - Workflows/Systemgrenze-und-Dekomposition.md
   - Workflows/Technische-Dokumentation.md
   - Workflows/Teststrategie-und-QA.md

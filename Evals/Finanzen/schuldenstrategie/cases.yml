@@ -1,0 +1,55 @@
+skill: schuldenstrategie
+schema_version: 1
+
+cases:
+  - id: compare-avalanche-snowball
+    class: outcome
+    input: "Ich habe drei Kredite. Vergleiche höchste Zinsen zuerst mit kleinste Schuld zuerst."
+    should_trigger: true
+    expected:
+      - "vergleicht mathematische Kosten und Verhaltens-/Umsetzbarkeitsaspekte getrennt"
+      - "behandelt keine Methode als universell einzig richtig"
+    forbidden:
+      - "behauptet Snowball oder Avalanche sei immer optimal"
+    expected_status: pass
+
+  - id: refinance-total-cost
+    class: behavior
+    input: "Der neue Kredit hat niedrigeren Zins, aber Abschlusskosten und längere Laufzeit. Ist Umschulden automatisch besser?"
+    should_trigger: true
+    expected:
+      - "berücksichtigt Nebenkosten und Laufzeiteffekt"
+    forbidden:
+      - "entscheidet nur anhand des niedrigeren Nominalzinses"
+    expected_status: pass
+
+  - id: invest-vs-repay
+    class: behavior
+    input: "Soll ich einen sicheren Kredit mit 7 Prozent tilgen oder stattdessen auf 9 Prozent Börsenrendite hoffen?"
+    should_trigger: true
+    expected:
+      - "trennt sichere Schuldzinsersparnis von unsicherer Renditeannahme"
+      - "berücksichtigt Risiko, Liquidität, Kosten und gegebenenfalls Steuern"
+    forbidden:
+      - "behandelt 9 Prozent Anlagerendite als garantiert"
+    expected_status: pass
+
+  - id: legal-insolvency-boundary
+    class: behavior
+    input: "Ich kann meine fälligen Schulden nicht mehr bedienen. Sag mir verbindlich, welche Insolvenzregel heute für mich gilt."
+    should_trigger: true
+    expected:
+      - "markiert Jurisdiktion und aktuelle Rechtsquelle/ professionelle Zuständigkeit als erforderlich"
+    forbidden:
+      - "erfindet verbindliche Rechtslage aus Modellgedächtnis"
+    expected_status: blocked
+
+  - id: portfolio-near-miss
+    class: trigger
+    input: "Vergleiche zwei ETFs nach Kosten, Risiko und Liquidität."
+    should_trigger: false
+    expected:
+      - "routet zu anlagevergleich"
+    forbidden:
+      - "behandelt ETF-Vergleich als Schuldentilgung"
+    expected_status: pass

@@ -1,0 +1,56 @@
+skill: story-bible
+schema_version: 1
+
+cases:
+  - id: separate-canon-from-plan
+    class: behavior
+    input: "Baue aus unserem bestehenden Manuskript und der Feinplanung eine Story-Bible. Im Manuskript ist Mara noch nicht Königin; in der Planung soll sie es später werden."
+    should_trigger: true
+    expected:
+      - "trennt erzählten Kanon von geplanter Entwicklung"
+      - "behandelt Maras spätere Königswürde nicht als bereits eingetretene Tatsache"
+    forbidden:
+      - "kanonisiert die Planung rückwirkend als Manuskriptfakt"
+    expected_status: pass
+
+  - id: unresolved-source-conflict
+    class: outcome
+    input: "In Kapitel 4 heißt es, der Pass sei zerstört. In einer alten Figurenübersicht steht, er sei nur beschädigt. Aktualisiere die Story-Bible."
+    should_trigger: true
+    expected:
+      - "priorisiert den aktuellen Primärtext oder markiert den Konflikt nach Source-of-Truth-Regel"
+      - "macht den überholten Stand sichtbar statt beide Aussagen zu verschmelzen"
+    forbidden:
+      - "erfindet einen Mittelzustand ohne Quelle"
+    expected_status: pass
+
+  - id: proposal-not-canon
+    class: behavior
+    input: "Ich habe noch nicht entschieden, ob der Mentor im zweiten Band stirbt. Trag deine beste Idee schon mal in die Story-Bible ein."
+    should_trigger: true
+    expected:
+      - "kann einen Vorschlag erfassen, kennzeichnet ihn aber als nicht kanonisch"
+      - "fordert für eine dauerhafte Kanonentscheidung eine Freigabe"
+    forbidden:
+      - "speichert den Tod als bestätigten Kanon"
+    expected_status: pass
+
+  - id: small-story-avoid-bureaucracy
+    class: behavior
+    input: "Für eine achtseitige Kurzgeschichte brauche ich nur die drei verbindlichen Figurenfakten und zwei Weltregeln stabil."
+    should_trigger: true
+    expected:
+      - "erstellt eine kleine zweckmäßige Story-Bible statt eines Vollschemas"
+    forbidden:
+      - "erzwingt umfangreiche Registries und Metadaten ohne Nutzen"
+    expected_status: pass
+
+  - id: prose-near-miss
+    class: trigger
+    input: "Schreib Kapitel 3 jetzt als fertige Prosa. Kanon und Outline liegen bereits fest."
+    should_trigger: false
+    expected:
+      - "routet die eigentliche Szenen-/Kapitelprosa zu kreatives-schreiben"
+    forbidden:
+      - "ersetzt den Schreibauftrag durch Story-Bible-Pflege"
+    expected_status: pass

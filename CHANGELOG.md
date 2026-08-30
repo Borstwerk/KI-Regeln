@@ -8,6 +8,39 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Problem-first Entry Path
+
+- neuen menschlichen Einstieg `START-HIER.md` ergänzt: Nutzer beginnen mit ihrem realen Problem oder Ziel und müssen weder Skill-Namen noch interne Repository-Architektur kennen;
+- Root-README auf problemorientierte Nutzung neu ausgerichtet und technische Detailtiefe aus der öffentlichen Eingangstür zugunsten von Ziel, Nutzung, Beispielen, Grundprinzip, Reifegrenzen und weiterführenden Einstiegen reduziert; Fachdetails bleiben in Bereichs-READMEs, Skill-Katalog und Fachhandbüchern erhalten;
+- `AGENTS.md` als Problem-to-Skill-Router geschärft: Alltagssprache ist gültiger Auftrag, fehlende Skill-Namen sind kein fehlender Input, und der Agent wählt den kleinsten ausreichenden Workflow-/Skill-Satz;
+- `Dokumentation/Skill-Handbuch.md` um Problem-first-Routing, beispielhafte Alltagstrigger, Datenminimierung und die Regel „so wenig Werkzeuge wie möglich, so viele wie nötig“ erweitert;
+- Skill-Auswahl wird als interne Orientierungsleistung behandelt statt als Bedienlast für den Nutzer; lange Skill-Listen sind kein Qualitätsmerkmal und bei einfachen Aufgaben ist auch direkte Bearbeitung ohne Spezialskill zulässig;
+- keine Skills, Workflows, Maturity- oder Eval-Coverage-Werte geändert, keine Behavioral Evals ausgeführt oder als bestanden dargestellt und kein Tag oder Release erzeugt.
+
+### Finanzen
+
+- neuen tool- und jurisdiktionsneutralen Fachbereich `Finanzen/` für persönliche Finanzplanung, Cashflow, Rücklagen, Schulden, Vermögensprojektionen, Portfolioanalyse und sachlichen Anlagevergleich ergänzt;
+- sechs eng geschnittene Skills `finanzstatus-und-cashflow`, `ruecklagenplanung`, `schuldenstrategie`, `vermoegensprojektion`, `portfolioanalyse` und `anlagevergleich` ergänzt; alle sechs starten `experimental` mit `partial` Evalabdeckung, ohne bestehende Maturity hochzustufen;
+- Workflow `Workflows/Persoenliche-Finanzplanung.md` ergänzt und in `workflow-index.yml` registriert; Finanzbaseline, Liquidität, Schulden, Szenarien, Portfolio und Anlagevergleich werden nur soweit kombiniert, wie der konkrete Auftrag sie benötigt;
+- harte Finanzgrenzen verankert: `Projektion ≠ Prognose ≠ Garantie`, historische Rendite ist keine Zukunftsrendite, Diversifikation garantiert keinen Verlustschutz und Analyse/Review autorisiert keine Überweisung, Konto-/Vertragsänderung oder Kauf-/Verkaufsorder;
+- aktuelle Markt-, Produkt-, Steuer- und Regulierungsdaten als zeit- und jurisdiktionsabhängige Evidence behandelt; fehlende aktuelle Werte werden nicht aus Modellgedächtnis oder US-spezifischen Defaults ergänzt;
+- sechs Finance-Evalpacks mit jeweils fünf Startfällen ergänzt, insgesamt 30 definierte Cases; diese Fälle sind **definiert, aber nicht als Behavioral Evals ausgeführt oder bestanden**;
+- SEC/Investor.gov und CFPB als öffentliche methodische Primär-/Behördenreferenzen sowie `anthropics/financial-services` (Apache-2.0) als methodischen Agent-Skill-Referenzraum dokumentiert; 401(k), IRA, Roth, 529, Social Security, Wash-Sale- oder andere US-spezifische Logik wird nicht zur allgemeinen KI-Regeln-Wahrheit;
+- Skill-Katalog und menschliche Katalogdokumentation auf 143 Skills, 118× `partial`, 25× `none`, 0× `core`/`broad`, 118 Skill-Evalpacks und 605 definierte Cases aktualisiert; zusätzliche Coverage ist kein Nachweis für Beratungsgüte, Renditequalität oder Behavioral-Erfolg;
+- keine Broker-/Bank-Automation, kein Buy/Hold/Sell-Automatismus, kein Tag, Release oder automatische externe Synchronisation durch diese Erweiterung.
+
+### Storyentwicklung und Fiktion
+
+- neuen toolneutralen Fachbereich `Storyentwicklung-und-Fiktion/` ergänzt, der narrativen Kanon und Story-Bible, Figuren und Beziehungen, Plot/Arcs, Worldbuilding sowie Langzeitkontinuität getrennt von der konkreten Prosa-Ausarbeitung behandelt;
+- fünf eng geschnittene Skills `story-bible`, `figurenentwicklung`, `plot-und-storystruktur`, `worldbuilding` und `story-kontinuitaet` ergänzt; alle fünf starten `experimental` mit `partial` Evalabdeckung, ohne bestehende Maturity hochzustufen;
+- `kreatives-schreiben` an den neuen Bereich angebunden und fachlich abgegrenzt: Storyentwicklung plant und schützt narrative Wahrheit, `kreatives-schreiben` bleibt für die konkrete Szene oder das Kapitel als Prosa zuständig;
+- Workflow `Workflows/Storyprojekt-von-Idee-bis-Manuskript.md` ergänzt und in `workflow-index.yml` registriert; Review-/Revisionen bleiben an den allgemeinen `Review-Revise-Loop` und erforderliche Human Gates gebunden;
+- fünf Story-Evalpacks mit jeweils fünf Startfällen ergänzt, insgesamt 25 definierte Cases; diese Fälle sind **definiert, aber nicht als Behavioral Evals ausgeführt oder bestanden**;
+- Storystruktur-Modelle wie Drei-Akt, Hero's Journey oder andere Beat-Modelle nur als optionale Linsen behandelt; Planung wird nicht mit bereits erzähltem Kanon gleichgesetzt und Worldbuilding nicht als Lore-Mengenwettbewerb modelliert;
+- methodischen Referenzraum `danjdewhurst/story-skills` (MIT) fachlokal als `reference/inspiration` dokumentiert; keine Story-CLI-, Node/Bun-, Projektstruktur-, Template- oder fremde Skilltext-Abhängigkeit übernommen und keine Redistribution fremden Materials vorausgesetzt;
+- Skill-Katalog und menschliche Katalogdokumentation auf 137 Skills, 112× `partial`, 25× `none`, 0× `core`/`broad`, 112 Skill-Evalpacks und 575 definierte Cases aktualisiert; zusätzliche Coverage ist kein Behavioral-Qualitätsnachweis;
+- kein Tag, Release oder automatische externe Synchronisation durch diese Erweiterung.
+
 ### Phase 4.2A – Claim-Verification Paired Pilot mit unvollständiger Method Evidence abgeschlossen
 
 - schmale Pair-Orchestrierung `tools/behavioral_harness_pair.py` sowie das sechsfällige Experiment `claim-verification-v1` mit vorab festgelegter Ground Truth, expliziten Fixture-Rollen und counterbalanced Treatment-Reihenfolge ergänzt;
@@ -463,7 +496,7 @@ Neuer Meta-Bereich für Entwurf und Pflege von Agent-Skills:
 Neu beziehungsweise erweitert:
 
 - `skill-catalog.yml` als maschinenlesbares Skill-Inventar;
-- expliziter Maturity-Status je Skill;
+- explizider Maturity-Status je Skill;
 - Evalabdeckung `none`, `partial`, `core`, `broad`;
 - Capability- und Related-Hinweise für relevante Skills;
 - `Dokumentation/Skill-Katalog.md` als menschliche Erläuterung;
