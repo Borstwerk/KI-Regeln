@@ -37,7 +37,7 @@ Zum System gehören außerdem Provenance, Routing, Gates und Evidence. Sie sind 
 
 Das bedeutet:
 
-- allgemeine Kommunikations-, Reflexions-, Recherche-, Wissensmanagement-, Schnittstellen-/Contract-, Infrastruktur-/DevOps-, Reliability-/System-Observability-, Data-Engineering-, Software-Architecture-/System-Design-, Requirements-/Specification-Engineering-, Social-Media-/Content-Präsenz-, Dokumentations-, Schreib-, Bild-, Web-, Datenbank-, Testing-, Agenten-, Sicherheits- und Entwicklungsregeln liegen hier;
+- allgemeine Kommunikations-, Reflexions-, Recherche-, Wissensmanagement-, Schnittstellen-/Contract-, Infrastruktur-/DevOps-, Reliability-/System-Observability-, Data-Engineering-, Software-Architecture-/System-Design-, Requirements-/Specification-Engineering-, Social-Media-/Content-Präsenz-, Dokumentations-, Schreib-, Story-/Fiktions-, Bild-, Web-, Datenbank-, Testing-, Agenten-, Sicherheits- und Entwicklungsregeln liegen hier;
 - projektspezifische Anforderungen, Stakeholderentscheidungen, Zielwerte, Architecture Drivers und Constraints, Systemgrenzen, Ownership, konkrete Architekturentscheidungen, Research-Fragen, interne Quellen, Wissensbestände, Fachmodelle, reale Schnittstellen/Consumer, Data-Engineering-Sources-of-Truth und Grains, Infrastrukturtools/Provider/Accounts/Cluster, reales Datenbankschema, konkrete Testumgebung, SLO-Werte, Alert-Schwellen, Severity-/On-Call-Modelle, RTO/RPO, Capacity Limits, Recovery-/Failover-Regeln, Markenregeln, Zielgruppen, Content-Ziele, Plattformaccounts/-rollen, reale Analyticsdefinitionen, Publishing-/Approval-Regeln, visuelle Bibeln und Sonderregeln bleiben im jeweiligen Projekt;
 - persönliche Profile oder unnötige personenbezogene Details gehören nicht in dieses Repository;
 - ein Skill ersetzt niemals die tatsächliche Spezifikation oder Dokumentation eines Projekts.
@@ -89,6 +89,7 @@ KI-Regeln/
 ├── Social-Media-und-Content-Praesenz/
 ├── Dokumentationserstellung/
 ├── Schreiben/
+├── Storyentwicklung-und-Fiktion/
 ├── Bildarbeit/
 ├── Webentwicklung/
 ├── Programmieren/
@@ -426,6 +427,33 @@ Technische und projektbezogene Dokumentation mit Trennung von Leserzustand, Doku
 ## Schreiben
 
 Allgemeine Regeln für natürliche Texte, kreative Prosa und Stilreviews. KI-typische Muster werden als Warnsignale und nicht als mechanische Verbotsliste behandelt.
+
+## Storyentwicklung und Fiktion
+
+Toolneutrale Regeln für fiktionale Erzählprojekte über einzelne Szenen hinaus: narrativer Kanon, Figuren und Beziehungen, Weltregeln, Plot/Arcs, Setup/Payoff sowie Langzeitkontinuität und Story-State.
+
+Operative Skills:
+
+- `story-bible`;
+- `figurenentwicklung`;
+- `plot-und-storystruktur`;
+- `worldbuilding`;
+- `story-kontinuitaet`.
+
+Zentrale Trennungen:
+
+```text
+Kanon ≠ Planung
+Planung ≠ bereits erzählte Tatsache
+Storystruktur ≠ Pflicht-Framework
+Worldbuilding ≠ Lore-Menge
+Kontinuitätscheck ≠ Stilreview
+Review ≠ Änderungsfreigabe
+```
+
+Die fünf Story-Skills starten `experimental` mit `partial` Evalabdeckung. Für sie sind 25 Startfälle definiert; diese Fälle sind **definiert, aber noch nicht als Behavioral Evals ausgeführt oder bestanden**.
+
+> Eine Geschichte ist mehr als gute Prosa. Narrative Wahrheit muss über Zeit, Figuren, Wissen und Konsequenzen nachvollziehbar bleiben.
 
 ## Bildarbeit
 
