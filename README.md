@@ -2,7 +2,7 @@
 
 > **Du bringst die Aufgabe. Der Werkzeugkasten liefert die passende Arbeitsweise.**
 
-KI-Regeln ist ein offener Werkzeugkasten für Menschen, die generative KI für konkrete Aufgaben einsetzen möchten, ohne sich zuerst tief in Prompt Engineering, Agentensysteme oder einzelne KI-Werkzeuge einarbeiten zu müssen.
+KI-Regeln ist ein allgemeiner Werkzeugkasten für Menschen, die generative KI für konkrete Aufgaben einsetzen möchten, ohne sich zuerst tief in Prompt Engineering, Agentensysteme oder einzelne KI-Werkzeuge einarbeiten zu müssen.
 
 Der Ausgangspunkt ist **nicht** ein Skill-Name.
 
@@ -61,9 +61,9 @@ Die allgemeinen Regeln helfen beim **Wie**. Das konkrete Projekt bestimmt weiter
 | Bilder oder konsistente Bildserien entwickeln und prüfen | Bildarbeit |
 | Websites gestalten, umsetzen oder reviewen | Webentwicklung |
 | Code entwickeln oder Fehler diagnostizieren | Programmieren |
-| Datenbanken analysieren, dokumentieren oder ändern | Datenbanken |
+| Datenbanken analysieren oder ändern | Datenbanken |
+| eine Datenbanktabelle oder andere technische Artefakte dokumentieren | Dokumentationserstellung + zuständiger Fachbereich |
 | Anforderungen klären und spezifizieren | Requirements und Spezifikations-Engineering |
-| technische Dokumentation erstellen | Dokumentationserstellung |
 | Wissen langfristig strukturieren und pflegen | Wissensmanagement |
 | Datenpipelines, Architektur, Infrastruktur oder Reliability bearbeiten | jeweiliger technischer Fachbereich |
 
@@ -71,9 +71,9 @@ Diese Tabelle ist Orientierung, keine starre Routingmatrix. Ein reales Problem k
 
 ## Warum gibt es KI-Regeln?
 
-KI-Regeln entstand aus einer einfachen Beobachtung: Viele Menschen können ihre Arbeit und private Projekte mit generativer KI verbessern, möchten aber nicht zuerst selbst zu KI-Spezialisten werden.
+KI-Regeln entstand aus dem Wunsch, Menschen im eigenen Umfeld einen praktikablen Zugang zu KI-gestützter Arbeit zu geben – auch dann, wenn sie sich nicht zuerst selbst tief mit KI-Systemen beschäftigen möchten.
 
-Das Repository soll diese Lücke schließen. Statt für jede denkbare Aufgabe einen fertigen „Superprompt“ anzubieten, werden wiederverwendbare Arbeitsweisen so strukturiert, dass eine KI von einem konkreten Problem zu den passenden Werkzeugen routen kann.
+Aus einzelnen Regeln und Arbeitsweisen entstand deshalb schrittweise ein allgemeiner Werkzeugkasten. Statt für jede denkbare Aufgabe einen fertigen „Superprompt“ anzubieten, werden wiederverwendbare Arbeitsweisen so strukturiert, dass eine KI von einem konkreten Problem zu den passenden Werkzeugen routen kann.
 
 Das Ziel ist:
 
@@ -134,7 +134,7 @@ Dabei gilt ausdrücklich:
 definierter Evalfall
 ≠ ausgeführter Test
 
- ausgeführter Test
+ausgeführter Test
 ≠ automatisch bestanden
 
 Same-Model-Smoke
