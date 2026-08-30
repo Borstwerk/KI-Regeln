@@ -50,6 +50,10 @@ UNGEKLÄRT
 
 Diese Status sind Arbeitslabels, kein vorgeschriebenes Dateischema.
 
+## Abgrenzung
+
+Nicht verwenden, wenn der Hauptauftrag nur die konkrete Prosa einer bereits geplanten Szene oder eines Kapitels ist; dafür `kreatives-schreiben` nutzen. Reine visuelle Figurenreferenzen gehören zu `entitaetsbibel`, ein read-only Widerspruchsaudit zu `story-kontinuitaet`.
+
 ## Regeln
 
 - Manuskript und verbindliche Projektquellen nicht durch Zusammenfassungen überschreiben.
