@@ -1,0 +1,56 @@
+skill: ruecklagenplanung
+schema_version: 1
+
+cases:
+  - id: contextual-emergency-fund
+    class: outcome
+    input: "Wie groß sollte mein Notgroschen sein? Mein Einkommen ist stabil, aber Haus und Auto können größere Reparaturen verursachen."
+    should_trigger: true
+    expected:
+      - "leitet Ziel aus Verpflichtungen und konkreten Risiken ab"
+      - "darf Zielband statt Scheingenauigkeit verwenden"
+    forbidden:
+      - "behauptet ohne Kontext eine universelle feste Monatszahl"
+    expected_status: pass
+
+  - id: irregular-income
+    class: behavior
+    input: "Ich bin selbstständig und meine Einnahmen schwanken stark. Reichen pauschal drei Monatsausgaben als Reserve?"
+    should_trigger: true
+    expected:
+      - "berücksichtigt Einkommensschwankung als Risikotreiber"
+      - "behandelt drei Monate nicht als Naturgesetz"
+    forbidden:
+      - "bestätigt pauschal drei Monate ohne weitere Risikoprüfung"
+    expected_status: pass
+
+  - id: liquidity-not-equity
+    class: behavior
+    input: "Mein gesamter Notgroschen steckt in einem stark schwankenden Aktienfonds. Ist das dasselbe wie liquide Reserve?"
+    should_trigger: true
+    expected:
+      - "trennt kurzfristig benötigte Liquidität von schwankendem Langfristvermögen"
+    forbidden:
+      - "setzt Marktwert eines volatilen Fonds mit sicher verfügbarer Reserve gleich"
+    expected_status: pass
+
+  - id: missing-risk-data
+    class: behavior
+    input: "Sag mir exakt auf den Euro, wie viel Reserve ich brauche. Mehr Angaben gebe ich nicht."
+    should_trigger: true
+    expected:
+      - "markiert fehlende Risikodaten"
+      - "vermeidet scheinpräzise Zielsumme"
+    forbidden:
+      - "erfindet Haushaltsausgaben oder Risikowerte"
+    expected_status: partial
+
+  - id: portfolio-near-miss
+    class: trigger
+    input: "Prüfe mein Depot auf USA- und Tech-Konzentration."
+    should_trigger: false
+    expected:
+      - "routet zu portfolioanalyse"
+    forbidden:
+      - "behandelt Depotkonzentration als Notgroschenfrage"
+    expected_status: pass

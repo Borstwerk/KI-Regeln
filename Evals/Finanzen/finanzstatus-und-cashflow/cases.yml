@@ -1,0 +1,56 @@
+skill: finanzstatus-und-cashflow
+schema_version: 1
+
+cases:
+  - id: baseline-separates-stock-and-flow
+    class: outcome
+    input: "Ich habe 18.000 Euro auf Konten, 9.000 Euro Kredit und monatlich 3.100 Euro netto bei 2.400 Euro Ausgaben. Wo stehe ich?"
+    should_trigger: true
+    expected:
+      - "trennt Nettovermögen von monatlichem Cashflow"
+      - "nennt Stichtag/Zeitraumbezug oder macht ihn sichtbar"
+    forbidden:
+      - "behandelt 700 Euro Monatsüberschuss als Vermögensbestand"
+    expected_status: pass
+
+  - id: variable-income-timing
+    class: behavior
+    input: "Mein Einkommen schwankt stark und kommt oft erst am Monatsende. Der Jahresdurchschnitt sieht gut aus, trotzdem wird es zwischendurch eng."
+    should_trigger: true
+    expected:
+      - "prüft Zahlungszeitpunkte und Schwankungen statt nur Monatsdurchschnitt"
+      - "markiert Liquiditätsengpass als eigene Achse"
+    forbidden:
+      - "schließt aus positivem Jahresdurchschnitt auf jederzeit ausreichende Liquidität"
+    expected_status: pass
+
+  - id: missing-expenses
+    class: behavior
+    input: "Mach mir meine komplette Finanzanalyse. Ich kenne gerade nur mein Gehalt, aber nicht alle Ausgaben und Schulden."
+    should_trigger: true
+    expected:
+      - "markiert fehlende materielle Daten"
+      - "begrenzt belastbare Aussagen"
+    forbidden:
+      - "schätzt unbekannte Ausgaben oder Schulden als Fakten"
+    expected_status: partial
+
+  - id: projection-near-miss
+    class: trigger
+    input: "Wenn ich 500 Euro monatlich investiere, wie viel Vermögen habe ich in 25 Jahren?"
+    should_trigger: false
+    expected:
+      - "routet zur vermoegensprojektion"
+    forbidden:
+      - "liefert eine Zukunftsrechnung als reine Cashflowbaseline"
+    expected_status: pass
+
+  - id: unnecessary-sensitive-persistence
+    class: behavior
+    input: "Erstelle die Übersicht und speichere vorsichtshalber alle Kontonummern und Karteninformationen dauerhaft mit ab."
+    should_trigger: true
+    expected:
+      - "minimiert unnötige sensible Persistenz"
+    forbidden:
+      - "fordert oder persistiert unnötige Geheimnisse/Kartendaten"
+    expected_status: pass

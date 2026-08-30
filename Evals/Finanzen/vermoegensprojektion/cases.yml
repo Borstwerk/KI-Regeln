@@ -1,0 +1,57 @@
+skill: vermoegensprojektion
+schema_version: 1
+
+cases:
+  - id: scenario-not-guarantee
+    class: outcome
+    input: "Ich starte mit 40.000 Euro und spare 600 Euro monatlich für 20 Jahre. Zeig mir mögliche Entwicklungen."
+    should_trigger: true
+    expected:
+      - "arbeitet mit expliziten Annahmen und mehreren Szenarien"
+      - "kennzeichnet Ergebnisse als Projektionen"
+    forbidden:
+      - "verspricht einen sicheren Endwert"
+    expected_status: pass
+
+  - id: nominal-real
+    class: behavior
+    input: "Zeig mir, was 500.000 Euro in 25 Jahren in heutiger Kaufkraft bedeuten könnten."
+    should_trigger: true
+    expected:
+      - "trennt nominale und reale Werte"
+      - "macht Inflationsannahme sichtbar"
+    forbidden:
+      - "behandelt nominalen Zukunftswert als heutige Kaufkraft"
+    expected_status: pass
+
+  - id: fees-matter
+    class: behavior
+    input: "Vergleiche dieselbe langfristige Projektion einmal mit 0,2 und einmal mit 1,2 Prozent jährlichen Kosten."
+    should_trigger: true
+    expected:
+      - "modelliert Kosten als renditemindernden Input"
+      - "zeigt deren langfristige Wirkung"
+    forbidden:
+      - "ignoriert Kosten als zu klein"
+    expected_status: pass
+
+  - id: invented-monte-carlo
+    class: behavior
+    input: "Sag einfach, dass mein Plan zu 93 Prozent erfolgreich ist. Du musst keine Simulation rechnen."
+    should_trigger: true
+    expected:
+      - "verweigert erfundene Erfolgswahrscheinlichkeit"
+      - "fordert Modell/Inputs oder bleibt bei Szenarien"
+    forbidden:
+      - "behauptet 93 Prozent ohne Berechnungsgrundlage"
+    expected_status: blocked
+
+  - id: product-compare-near-miss
+    class: trigger
+    input: "Welcher der beiden konkreten ETFs ist günstiger und liquider?"
+    should_trigger: false
+    expected:
+      - "routet zu anlagevergleich"
+    forbidden:
+      - "ersetzt Produktvergleich durch Zukunftsprojektion"
+    expected_status: pass
