@@ -8,6 +8,15 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Problem-first Entry Path
+
+- neuen menschlichen Einstieg `START-HIER.md` ergänzt: Nutzer beginnen mit ihrem realen Problem oder Ziel und müssen weder Skill-Namen noch interne Repository-Architektur kennen;
+- Root-README auf problemorientierte Nutzung neu ausgerichtet und technische Detailtiefe aus der öffentlichen Eingangstür zugunsten von Ziel, Nutzung, Beispielen, Grundprinzip, Reifegrenzen und weiterführenden Einstiegen reduziert; Fachdetails bleiben in Bereichs-READMEs, Skill-Katalog und Fachhandbüchern erhalten;
+- `AGENTS.md` als Problem-to-Skill-Router geschärft: Alltagssprache ist gültiger Auftrag, fehlende Skill-Namen sind kein fehlender Input, und der Agent wählt den kleinsten ausreichenden Workflow-/Skill-Satz;
+- `Dokumentation/Skill-Handbuch.md` um Problem-first-Routing, beispielhafte Alltagstrigger, Datenminimierung und die Regel „so wenig Werkzeuge wie möglich, so viele wie nötig“ erweitert;
+- Skill-Auswahl wird als interne Orientierungsleistung behandelt statt als Bedienlast für den Nutzer; lange Skill-Listen sind kein Qualitätsmerkmal und bei einfachen Aufgaben ist auch direkte Bearbeitung ohne Spezialskill zulässig;
+- keine Skills, Workflows, Maturity- oder Eval-Coverage-Werte geändert, keine Behavioral Evals ausgeführt oder als bestanden dargestellt und kein Tag oder Release erzeugt.
+
 ### Finanzen
 
 - neuen tool- und jurisdiktionsneutralen Fachbereich `Finanzen/` für persönliche Finanzplanung, Cashflow, Rücklagen, Schulden, Vermögensprojektionen, Portfolioanalyse und sachlichen Anlagevergleich ergänzt;
@@ -476,7 +485,7 @@ Neuer Meta-Bereich für Entwurf und Pflege von Agent-Skills:
 Neu beziehungsweise erweitert:
 
 - `skill-catalog.yml` als maschinenlesbares Skill-Inventar;
-- expliziter Maturity-Status je Skill;
+- explizider Maturity-Status je Skill;
 - Evalabdeckung `none`, `partial`, `core`, `broad`;
 - Capability- und Related-Hinweise für relevante Skills;
 - `Dokumentation/Skill-Katalog.md` als menschliche Erläuterung;
