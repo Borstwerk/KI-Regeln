@@ -144,6 +144,7 @@ def stream_json(
     drop_hooks: bool = False,
     drop_plugin_errors: bool = False,
     drop_mcp_errors: bool = False,
+    extra_reads: list[tuple[str, str | None]] | None = None,
 ) -> str:
     tools = ["Read"] if tools is None else tools
     init = {
@@ -175,8 +176,11 @@ def stream_json(
     events.append(init)
     if extra_init:
         events.append(dict(init))
-    reads = ["sources/01-source.md"] + (["instructions/SKILL.md"] if skill else [])
-    for i, target in enumerate(reads, start=1):
+    reads: list[tuple[str, str | None]] = [(x, "success") for x in
+        ["sources/01-source.md"] + (["instructions/SKILL.md"] if skill else [])]
+    if extra_reads is not None:
+        reads = list(extra_reads)
+    for i, (target, outcome) in enumerate(reads, start=1):
         tid = f"tool-{i}"
         events.append(
             {
@@ -188,11 +192,14 @@ def stream_json(
                 },
             }
         )
+        if outcome is None:
+            continue  # tool_use without a tool_result: the outcome was never observed
         events.append(
             {
                 "type": "user",
                 "session_id": session,
-                "message": {"content": [{"type": "tool_result", "tool_use_id": tid, "content": "ok", "is_error": False}]},
+                "message": {"content": [{"type": "tool_result", "tool_use_id": tid, "content": "ok",
+                                         "is_error": outcome == "error"}]},
             }
         )
     if include_final:
@@ -555,7 +562,7 @@ class AdapterTests(unittest.TestCase):
         runtime = self.load(out, "runtime-configuration-preimage.yml")
         self.assertNotIn("--bare", runtime["cli_argv_normalized"])
         self.assertIn("--safe-mode", runtime["cli_argv_normalized"])
-        self.assertEqual("0.2.0", runtime["adapter_version"])
+        self.assertEqual("0.2.1", runtime["adapter_version"])
 
     def test_27_complete_evidence_yields_fresh_context_true(self):
         out = self.run_one(FakeRunner(), out_name="fresh-true")
@@ -668,11 +675,11 @@ class AdapterTests(unittest.TestCase):
 
     # --- R3-a.1: loaded hooks and transport-configuration parity ----------
 
-    def run_stream(self, out_name, **stream_kwargs):
+    def run_stream(self, out_name, *, prepared=None, **stream_kwargs):
         def actual(argv, cwd, env):
             session = argv[argv.index("--session-id") + 1]
             return adapter.ProcessResult(0, stream_json(session=session, **stream_kwargs), "")
-        return self.run_one(FakeRunner(actual_factory=actual), out_name=out_name)
+        return self.run_one(FakeRunner(actual_factory=actual), prepared=prepared, out_name=out_name)
 
     def assessment(self, out: Path):
         return self.load(out, "evidence.yml")["evidence"][0]["fresh_context_assessment"]
@@ -985,6 +992,78 @@ class AdapterTests(unittest.TestCase):
         method = self.load(out, "method-evidence.yml")
         self.assertTrue(method["fresh_context"])
         self.assertEqual("unknown", method["network_disabled"])
+
+    # --- R3-b0.5: attempt vs. blocked vs. successful outside access -------
+
+    def outside_case(self, out_name, reads):
+        out = self.run_stream(out_name, extra_reads=reads)
+        actions = self.load(out, "actions.yml")
+        method = self.load(out, "method-evidence.yml")
+        return actions["observability"]["outside_package"], method, actions["actions"]
+
+    def test_62_r3b0_4_blocked_absolute_read_keeps_the_file_boundary(self):
+        """Replays the real R3b0.4 action sequence: a blocked absolute read, then a package read."""
+        outside, method, actions = self.outside_case(
+            "outside-r3b04",
+            [("/sources/observation.txt", "error"), ("sources/01-source.md", "success")],
+        )
+        self.assertEqual({"attempted": True, "blocked": True, "executed": False, "unresolved": False}, outside)
+        self.assertFalse(actions[0]["executed"])
+        self.assertEqual("tool-error", actions[0]["result"])
+        self.assertFalse(actions[0]["package_local_target"])
+        self.assertTrue(actions[1]["executed"])
+        self.assertTrue(actions[1]["package_local_target"])
+        self.assertTrue(method["repository_access_disabled"])
+        self.assertTrue(method["package_only_access"])
+        self.assertTrue(method["fresh_context"])
+        self.assertEqual("unknown", method["network_disabled"])
+
+    def test_63_A_successful_outside_read_breaks_package_only_access(self):
+        outside, method, _ = self.outside_case(
+            "outside-executed", [("/etc/passwd", "success"), ("sources/01-source.md", "success")])
+        self.assertEqual({"attempted": True, "blocked": False, "executed": True, "unresolved": False}, outside)
+        self.assertFalse(method["package_only_access"])
+        self.assertIsNot(True, method["repository_access_disabled"])
+        self.assertEqual("unknown", method["repository_access_disabled"])
+
+    def test_64_B_outside_read_without_result_stays_unresolved(self):
+        outside, method, actions = self.outside_case(
+            "outside-unresolved", [("/etc/passwd", None), ("sources/01-source.md", "success")])
+        self.assertEqual({"attempted": True, "blocked": False, "executed": False, "unresolved": True}, outside)
+        self.assertEqual("result-not-observed", actions[0]["result"])
+        self.assertEqual("unknown", method["repository_access_disabled"])
+        self.assertEqual("unknown", method["package_only_access"])
+
+    def test_65_C_package_only_reads_leave_every_outside_fact_false(self):
+        outside, method, _ = self.outside_case("outside-none", [("sources/01-source.md", "success")])
+        self.assertEqual({"attempted": False, "blocked": False, "executed": False, "unresolved": False}, outside)
+        self.assertTrue(method["repository_access_disabled"])
+        self.assertTrue(method["package_only_access"])
+
+    def test_66_D_a_blocked_attempt_alone_is_not_an_isolation_failure(self):
+        outside, method, _ = self.outside_case("outside-blocked-only", [("/etc/passwd", "error")])
+        self.assertEqual({"attempted": True, "blocked": True, "executed": False, "unresolved": False}, outside)
+        self.assertTrue(method["repository_access_disabled"])
+        self.assertTrue(method["package_only_access"])
+
+    def test_67_E_a_successful_outside_access_wins_over_a_blocked_one(self):
+        outside, method, _ = self.outside_case(
+            "outside-mixed", [("/etc/passwd", "error"), ("/etc/shadow", "success"), ("sources/01-source.md", "success")])
+        self.assertEqual({"attempted": True, "blocked": True, "executed": True, "unresolved": False}, outside)
+        self.assertFalse(method["package_only_access"])
+        self.assertEqual("unknown", method["repository_access_disabled"])
+
+    def test_68_outside_diagnostics_stay_out_of_the_runtime_fingerprint(self):
+        """A model's path typo must not break pair parity."""
+        prepared = self.shared_prepared()
+        clean = self.run_stream("parity-clean", prepared=prepared, extra_reads=[("sources/01-source.md", "success")])
+        typo = self.run_stream("parity-typo", prepared=prepared,
+                               extra_reads=[("/sources/01-source.md", "error"), ("sources/01-source.md", "success")])
+        self.assertEqual(self.runtime_fp(clean), self.runtime_fp(typo))
+        self.assertEqual(
+            self.load(clean, "method-evidence.yml")["model_configuration_fingerprint"],
+            self.load(typo, "method-evidence.yml")["model_configuration_fingerprint"],
+        )
 
     def test_61_zero_exit_path_is_unchanged_by_the_diagnosis(self):
         out = self.run_one(FakeRunner(), out_name="diagnosis-no-regression")

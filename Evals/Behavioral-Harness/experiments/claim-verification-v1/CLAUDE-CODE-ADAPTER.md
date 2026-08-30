@@ -167,7 +167,36 @@ An unreadable or unparsable status is recorded as `unknown`. It is never read as
 
 A temporary directory alone is **not** an OS/container sandbox. Without a verified stronger file boundary, it does not prove that the process cannot read other host paths.
 
-When the concrete binary proves `--restricted` is available and the run actually launches with that flag, the adapter may treat the documented working-directory confinement as filesystem-boundary evidence only if the observed tool set is exactly `Read`, observed MCP servers are empty and no outside-package/external access was observed. Without that combination the affected fields remain `unknown` or become `false` on a known violation.
+When the concrete binary proves `--restricted` is available and the run actually launches with that flag, the adapter may treat the documented working-directory confinement as filesystem-boundary evidence only if the observed tool set is exactly `Read`, observed MCP servers are empty and no outside-package access succeeded or stayed unresolved. Without that combination the affected fields remain `unknown` or become `false` on a known violation.
+
+### Attempted, blocked, successful and unresolved outside access
+
+An attempted access outside the runner package, a demonstrably blocked one, a successful one and one whose outcome was never observed are four different facts. The adapter derives them per run from the filesystem-relevant tools (`Read`, `Glob`, `Grep`, `Write`, `Edit`, `NotebookEdit`) and keeps them in `actions.yml`:
+
+```yaml
+observability:
+  actions_complete: true
+  outside_package:
+    attempted: true
+    blocked: true
+    executed: false
+    unresolved: false
+```
+
+| Fact | Set when a filesystem tool call with `package_local_target: false` … |
+| --- | --- |
+| `attempted` | exists at all, whatever its outcome — diagnostic evidence only |
+| `blocked` | reports a tool error and did not execute |
+| `executed` | executed successfully — a hard isolation violation |
+| `unresolved` | has no observed result (`result-not-observed`) |
+
+`executed: false` alone never counts as blocked. Only an observed tool error demonstrates that the access did not happen; a missing result proves nothing and becomes `unresolved`.
+
+An attempted outside-package file access is retained as diagnostic action evidence. A tool error that demonstrably blocked the access does not by itself invalidate the restricted file boundary — it is instead evidence that the restriction took effect for that call. A successfully executed outside-package access makes `package_only_access: false`. An outside-package attempt whose result cannot be observed keeps the boundary unproven.
+
+A blocked attempt proves only that **this observed access did not execute**. It does not prove the sandbox is universally secure. The boundary pass still comes from the combination of `--restricted`, the observed tool surface, empty MCP servers, no successful or unresolved outside access, and no executed external action.
+
+The outside-package facts stay out of both configuration fingerprints on purpose: a model that mistypes a path in one arm of a pair must not create fingerprint inequality between the two responses.
 
 ## Failure diagnosis
 
@@ -304,7 +333,7 @@ repository_access_disabled: unknown
 package_only_access: unknown
 ```
 
-Known violations can become `false`. For example an observed MCP/external data path makes `network_disabled: false`, and an observed successful file access outside the task package makes `package_only_access: false`.
+Known violations can become `false`. For example an observed MCP/external data path makes `network_disabled: false`, and an observed **successful** file access outside the task package makes `package_only_access: false`. A blocked attempt does not; an unresolved one leaves the boundary `unknown` rather than false.
 
 If the concrete Claude Code binary proves and accepts `--restricted`, and runtime observation also shows exactly `Read`, zero MCP servers and no outside-package/external access, `repository_access_disabled` and `package_only_access` may become `true` from that documented file boundary. This does not upgrade `fresh_context` or `network_disabled`.
 
@@ -317,6 +346,8 @@ Consequently a first real smoke pair can now reach `fresh_context: true` when th
 ## Tests
 
 `tests/test_behavioral_harness_claude.py` uses synthetic process/stream fixtures and makes no real Claude calls. It covers the requested success/error/evidence cases, including model/session mismatch, unexpected tools/MCPs, malformed streams, secret handling, launch-policy enforcement, conservative isolation evidence and fingerprint invariance across the treatment package difference.
+
+R3-b0.5 adds coverage for the four outside-package facts: a replay of the real R3-b0.4 sequence (a blocked absolute read followed by a package read) reaching `repository_access_disabled: true` and `package_only_access: true`, a successful outside read forcing `package_only_access: false`, an outside read without a result staying `unresolved` and keeping both fields `unknown`, package-only reads leaving every fact false, a blocked attempt alone not failing isolation, a successful access winning over a blocked one, and the outside facts not moving either fingerprint.
 
 R3-b0.3 adds coverage for the runtime switch: `--safe-mode` present in the argv and `--bare` absent even when the capability exists, a missing `--safe-mode` capability aborting before any model process, the adapter version in the runtime fingerprint, the seven hook cases from the table above (including a unit-level check of the substitute chain), the managed authentication path and its `runtime_authenticated` upgrade, AWS or Google credentials alone still not selecting a provider, the host OAuth channel staying outside the allowlist, and a replay of the observed non-bare stream shape reaching `fresh_context: true` while `network_disabled` stays `unknown`.
 

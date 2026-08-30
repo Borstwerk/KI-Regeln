@@ -20,7 +20,7 @@ from typing import Any, Callable, Mapping
 
 import yaml
 
-VERSION = "0.2.0"
+VERSION = "0.2.1"
 RUNNER_TYPE = "claude-code"
 METHOD_CONTRACT = "behavioral-paired-run-method-evidence/v1"
 UNKNOWN = "unknown"
@@ -524,13 +524,24 @@ def _local_target(target: str, task: Path):
 
 
 def _actions(stream: Mapping[str, Any], task: Path, timestamp: str):
-    rows, reads, outside = [], [], False
+    """Collect tool actions and the outside-package facts, kept strictly apart.
+
+    An attempt, a demonstrably blocked attempt and a successful access are different
+    facts. An attempt whose result was never observed is a fourth one and must not be
+    mistaken for either of the other three.
+    """
+    rows, reads = [], []
+    outside = {"attempted": False, "blocked": False, "executed": False, "unresolved": False}
     for i, (tool_id, item) in enumerate(stream["tool_uses"].items(), 1):
         name, target = str(item["name"]), _target(item.get("input"))
         result = stream["tool_results"].get(tool_id); error = bool(result.get("is_error")) if isinstance(result, dict) else False
         executed = result is not None and not error
         local = _local_target(target, task) if name in {"Read", "Glob", "Grep", "Write", "Edit", "NotebookEdit"} else UNKNOWN
-        outside |= local is False
+        if local is False:
+            outside["attempted"] = True
+            # Only an observed tool error proves the access did not happen. A missing
+            # result proves nothing and stays unresolved.
+            outside["executed" if executed else "blocked" if error else "unresolved"] = True
         classes = ["read-only"] if name in {"Read", "Glob", "Grep"} else ["productive"] if name in {"Write", "Edit", "NotebookEdit"} else ["external"] if name in {"WebSearch", "WebFetch"} or name.startswith("mcp__") else ["unknown"]
         row = {
             "action_id": f"A-{i:03d}", "tool": name, "operation": "tool-call", "target": target,
@@ -548,7 +559,8 @@ def _actions(stream: Mapping[str, Any], task: Path, timestamp: str):
         }
         rows.append(row)
         if name == "Read" and executed and local is True: reads.append(row)
-    return {"schema_version": 1, "observability": {"actions_complete": True}, "actions": rows}, reads, outside
+    observability = {"actions_complete": True, "outside_package": dict(outside)}
+    return {"schema_version": 1, "observability": observability, "actions": rows}, reads, outside
 
 
 def _skill_id(path: Path) -> str:
@@ -757,9 +769,13 @@ def _method(response_id, stream, actions, outside, controls, model_fp, runtime_f
     names = set(tools) if isinstance(tools, list) else set()
     external_action = any(x.get("executed") is True and "external" in set(x.get("action_class") or []) for x in actions["actions"])
     external_path = bool(names & {"WebSearch", "WebFetch"}) or bool(isinstance(mcp, list) and mcp) or external_action
+    # A blocked outside attempt is evidence that the restriction held, so it does not
+    # invalidate the boundary. A successful or unresolved one does.
     restricted_file_boundary = (
         controls.get("restricted_requested") is True
-        and tools == ["Read"] and mcp == [] and not outside and not external_action
+        and tools == ["Read"] and mcp == []
+        and not outside["executed"] and not outside["unresolved"]
+        and not external_action
     )
     return {
         "schema_version": 1, "contract": METHOD_CONTRACT, "response_id": response_id, "runner_type": RUNNER_TYPE,
@@ -769,7 +785,7 @@ def _method(response_id, stream, actions, outside, controls, model_fp, runtime_f
         # enforcement, so a clean tool surface alone never proves the contract's "available".
         "fresh_context": fresh_context, "network_disabled": False if external_path else UNKNOWN,
         "repository_access_disabled": True if restricted_file_boundary else UNKNOWN,
-        "package_only_access": False if (outside or external_action) else True if restricted_file_boundary else UNKNOWN,
+        "package_only_access": False if (outside["executed"] or external_action) else True if restricted_file_boundary else UNKNOWN,
     }
 
 
