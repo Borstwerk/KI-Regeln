@@ -30,6 +30,10 @@ Dieser Skill nutzt `../../Worldbuilding-und-Konsequenzen.md` und bei etablierten
 
 Keine Kategorie ist automatisch Pflicht.
 
+## Abgrenzung
+
+Nicht verwenden, um reale historische, wissenschaftliche oder aktuelle Fakten ohne Quellen zu beantworten; dafür passende Recherche-Skills nutzen. Reine Plotplanung gehört zu `plot-und-storystruktur`, konkrete Szenenprosa zu `kreatives-schreiben`.
+
 ## Regeln
 
 - Storyrelevanz vor Enzyklopädie.
