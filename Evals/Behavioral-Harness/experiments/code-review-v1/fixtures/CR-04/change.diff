@@ -1,0 +1,30 @@
+--- base/session.py
++++ head/session.py
+@@ -1,5 +1,7 @@
+ from dataclasses import dataclass
+ 
++IDLE_TIMEOUT_SECONDS = 30 * 60
++
+ 
+ @dataclass
+ class Token:
+@@ -8,4 +10,4 @@
+ 
+ 
+ def is_expired(token: Token, now: int) -> bool:
+-    return False
++    return (now - token.last_seen) > IDLE_TIMEOUT_SECONDS
+--- base/test_session.py
++++ head/test_session.py
+@@ -0,0 +1,11 @@
++from session import Token, is_expired
++
++
++def test_fresh_token_is_valid():
++    token = Token(created_at=1000, last_seen=1000)
++    assert is_expired(token, now=1060) is False
++
++
++def test_old_token_is_expired():
++    token = Token(created_at=1000, last_seen=1000)
++    assert is_expired(token, now=1000 + 60 * 60) is True

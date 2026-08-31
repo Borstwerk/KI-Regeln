@@ -41,6 +41,15 @@ Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunäch
 - Skill-Katalog und menschliche Katalogdokumentation auf 137 Skills, 112× `partial`, 25× `none`, 0× `core`/`broad`, 112 Skill-Evalpacks und 575 definierte Cases aktualisiert; zusätzliche Coverage ist kein Behavioral-Qualitätsnachweis;
 - kein Tag, Release oder automatische externe Synchronisation durch diese Erweiterung.
 
+### Phase 4.2B – Code-Review-Paired-Eval-Replikation entworfen
+
+- Designstand `Evals/Behavioral-Harness/experiments/code-review-v1/` ergänzt: `DESIGN.md`, `experiment.draft.yml` sowie sechs vollständig synthetische Review-Pakete als Fixtures;
+- die claim-verification-spezifischen Kopplungen des Pair-Harness am realen Code verifiziert: geschlossenes Fixture-Rollen-Vokabular, verpflichtendes fünfwertiges `ground_truth.classification`, fest verdrahtete Domain-/Aufgabenfamilien-Literale, klassifikationsspezifische Judge-Anweisung sowie ein Disclosure-Fehlalarm auf dem Zielskill-Bezeichner `code-review`;
+- kleinste Generalisierung entworfen statt eines zweiten Harness: ein expliziter Diskriminator `ground_truth_model`, dessen Fehlen das heutige Verhalten unverändert reproduziert; Contract-Entscheidung dokumentiert als erforderlich, aber nicht breaking, `behavioral-paired-skill-eval/v1` bleibt;
+- domänenspezifisches Ground-Truth-Modell `code-review-findings/v1` mit vorab festgelegten Findings, Detektionskriterien, verbotenen Findings, Akzeptanzkriterien-Status und Freigabekalibrierung entworfen; ausdrücklich ohne aggregierte Gesamtpunktzahl;
+- kein Harness-Code, kein `code-review/SKILL.md`, kein bestehendes Evalpack, kein Katalog und keine Maturity oder Eval Coverage verändert;
+- reine Designvorbereitung: kein Modellaufruf, keine Behavioral Response, kein Judge, kein Unblinding und keine Aussage zur Wirksamkeit von `code-review`; der Phase-4.2A-Endstand bleibt unverändert `partial` bei `network_disabled: unknown`.
+
 ### Phase 4.2A – Claim-Verification Paired Pilot mit unvollständiger Method Evidence abgeschlossen
 
 - schmale Pair-Orchestrierung `tools/behavioral_harness_pair.py` sowie das sechsfällige Experiment `claim-verification-v1` mit vorab festgelegter Ground Truth, expliziten Fixture-Rollen und counterbalanced Treatment-Reihenfolge ergänzt;

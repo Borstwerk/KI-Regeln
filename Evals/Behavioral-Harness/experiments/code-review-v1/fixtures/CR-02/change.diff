@@ -1,0 +1,9 @@
+--- base/profile.py
++++ head/profile.py
+@@ -7,6 +7,4 @@
+ 
+     Faellt auf 401 zurueck, falls kein Nutzer ermittelt werden konnte.
+     """
+-    if user is None:
+-        return unauthorized()
+     return render("profile.html", {"display_name": user.display_name})
