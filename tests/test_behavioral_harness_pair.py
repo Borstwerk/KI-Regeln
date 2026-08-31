@@ -481,10 +481,6 @@ class ClaimVerificationExperimentContractTests(unittest.TestCase):
         self.assertIn("partial", cv06["accepted_alternatives"])
 
 
-if __name__ == "__main__":
-    unittest.main()
-
-
 def code_review_experiment() -> dict:
     """Minimal but complete code-review-findings/v1 experiment for the synthetic tmp root."""
     return {
@@ -503,11 +499,26 @@ def code_review_experiment() -> dict:
         "unlisted_finding_rule": [
             {"order": 1, "condition": "invents evidence", "outcome": "hard-failure"},
             {"order": 2, "condition": "unsupported but does not invent", "outcome": "false-positive"},
-            {"order": 3, "condition": "supported but unrecorded", "outcome": "ground_truth_incomplete / adjudication_required"},
+            {
+                "order": 3,
+                "condition": "supported but unrecorded",
+                "outcome": "ground_truth_incomplete / adjudication_required",
+                "handling": [
+                    "no spontaneous reward",
+                    "no spontaneous penalty",
+                    "the affected pair comparison must not be closed until the ground-truth gap has been handled independently",
+                ],
+            },
         ],
         "judge_scoring": {
             "per_finding": {"values": ["hit", "miss", "false-positive", "hard-failure", "adjudication-required"]},
             "per_dimension": {"values": ["pass", "partial", "fail", "unverifiable"]},
+            "forbidden": [
+                "aggregate total score",
+                "weighted score",
+                "ranking",
+                "any single number standing in for the review",
+            ],
         },
         "evaluation_dimensions": [{"id": "finding_recall", "question": "found?"}],
         "global_hard_failures": ["fabrication"],
@@ -972,3 +983,263 @@ class CodeReviewExperimentContractTests(unittest.TestCase):
                     self.assertEqual(status["response_count"], 2)
                     self.assertTrue(status["subject_source_parity"])
                     self.assertTrue(status["treatment_mapping_hidden_from_judge_contract"])
+
+
+class CodeReviewEvaluationPolicyTests(unittest.TestCase):
+    """The precommitted judge policy must be frozen before execution, not defaulted."""
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.root = Path(self.tmp.name)
+        (self.root / "skill.md").write_text("# code-review\n", encoding="utf-8")
+        (self.root / "requirements.md").write_text("AC-1: rate is 15 percent.\n", encoding="utf-8")
+        (self.root / "base").mkdir()
+        (self.root / "head").mkdir()
+        (self.root / "base/app.py").write_text("def rate():\n    return 0.15\n", encoding="utf-8")
+        (self.root / "head/app.py").write_text("def rate():\n    return 0.10\n", encoding="utf-8")
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def load(self, experiment):
+        from tools.behavioral_harness_pair import reconstruct_change_diff
+
+        case = experiment["cases"][0]
+        (self.root / "change.diff").write_text(
+            reconstruct_change_diff(case, case["ground_truth"], self.root), encoding="utf-8"
+        )
+        path = self.root / "experiment.yml"
+        path.write_text(yaml.safe_dump(experiment, sort_keys=False), encoding="utf-8")
+        return load_paired_experiment(path)
+
+    def test_A1_missing_policy_blocks_are_rejected(self):
+        for key in ("finding_scope", "unlisted_finding_rule", "judge_scoring"):
+            with self.subTest(missing=key):
+                experiment = code_review_experiment()
+                del experiment[key]
+                with self.assertRaises(HarnessError):
+                    self.load(experiment)
+
+    def test_A2_finding_scope_value_is_frozen(self):
+        experiment = code_review_experiment()
+        experiment["finding_scope"]["intended_ground_truth"] = "some-subset"
+        with self.assertRaisesRegex(HarnessError, "intended_ground_truth must be"):
+            self.load(experiment)
+
+    def test_A3_unlisted_rule_precedence_is_frozen(self):
+        checks = [
+            ("must have outcome 'hard-failure'", lambda r: r[0].update({"outcome": "false-positive"})),
+            ("must have outcome 'false-positive'", lambda r: r[1].update({"outcome": "hard-failure"})),
+            ("exactly 3 rules", lambda r: r.pop()),
+            ("must have outcome", lambda r: (r[0].update({"order": 2}), r[1].update({"order": 1}))),
+        ]
+        for message, mutate in checks:
+            with self.subTest(message=message):
+                experiment = code_review_experiment()
+                mutate(experiment["unlisted_finding_rule"])
+                with self.assertRaisesRegex(HarnessError, message):
+                    self.load(experiment)
+
+    def test_A3b_swapped_orders_are_rejected_even_when_outcomes_move_with_them(self):
+        experiment = code_review_experiment()
+        rules = experiment["unlisted_finding_rule"]
+        rules[0]["order"], rules[1]["order"] = 2, 1
+        with self.assertRaisesRegex(HarnessError, "must have outcome"):
+            self.load(experiment)
+
+    def test_A4_adjudication_handling_is_required(self):
+        experiment = code_review_experiment()
+        del experiment["unlisted_finding_rule"][2]["handling"]
+        with self.assertRaisesRegex(HarnessError, "must carry handling"):
+            self.load(experiment)
+        for dropped in ("reward", "penalty", "closed"):
+            with self.subTest(dropped=dropped):
+                experiment = code_review_experiment()
+                rule = experiment["unlisted_finding_rule"][2]
+                rule["handling"] = [h for h in rule["handling"] if dropped not in h]
+                with self.assertRaisesRegex(HarnessError, "must still record"):
+                    self.load(experiment)
+
+    def test_A5_scoring_vocabularies_are_frozen(self):
+        experiment = code_review_experiment()
+        experiment["judge_scoring"]["per_finding"]["values"] = ["hit", "miss", "false-positive", "hard-failure"]
+        with self.assertRaisesRegex(HarnessError, "per_finding.values must be exactly"):
+            self.load(experiment)
+
+        experiment = code_review_experiment()
+        experiment["judge_scoring"]["per_dimension"]["values"] = ["pass", "fail"]
+        with self.assertRaisesRegex(HarnessError, "per_dimension.values must be exactly"):
+            self.load(experiment)
+
+    def test_A6_forbidden_scoring_concepts_are_required(self):
+        for dropped in ("aggregate", "weighted", "ranking", "single number"):
+            with self.subTest(dropped=dropped):
+                experiment = code_review_experiment()
+                experiment["judge_scoring"]["forbidden"] = [
+                    f for f in experiment["judge_scoring"]["forbidden"] if dropped not in f
+                ]
+                with self.assertRaisesRegex(HarnessError, "must still record"):
+                    self.load(experiment)
+
+    def test_A7_judge_contract_never_falls_back_to_empty_policy(self):
+        from tools.behavioral_harness_pair import _validate_code_review_evaluation_policy
+
+        experiment = code_review_experiment()
+        loaded = self.load(experiment)
+        del loaded["judge_scoring"]
+        with self.assertRaises(HarnessError):
+            _validate_code_review_evaluation_policy(loaded)
+        with self.assertRaises(HarnessError):
+            compile_paired_case(loaded, "CR-T01", self.root, 1, "seed")
+
+    def test_A8_positive_control_real_experiment_still_loads(self):
+        root = Path(__file__).resolve().parents[1]
+        experiment = load_paired_experiment(root / "Evals/Behavioral-Harness/experiments/code-review-v1/experiment.yml")
+        self.assertEqual(experiment["finding_scope"]["intended_ground_truth"], "exhaustive-for-review-significant-findings")
+        self.assertEqual(len(experiment["unlisted_finding_rule"]), 3)
+
+    def test_A9_legacy_experiment_needs_no_policy(self):
+        # classification/v1 must not acquire the new requirement
+        experiment = synthetic_experiment()
+        self.assertNotIn("finding_scope", experiment)
+        path = self.root / "legacy.yml"
+        path.write_text(yaml.safe_dump(experiment, sort_keys=False), encoding="utf-8")
+        (self.root / "source-a.md").write_text("A\n", encoding="utf-8")
+        (self.root / "source-b.md").write_text("B\n", encoding="utf-8")
+        load_paired_experiment(path)
+
+
+class DisclosureOptInBooleanTests(unittest.TestCase):
+    """Truthiness must not be able to enable a blindness relaxation by typo."""
+
+    def test_B1_real_booleans_are_accepted(self):
+        from tools.behavioral_harness_pair import _disclosure_opt_in
+
+        for value in (True, False):
+            with self.subTest(value=value):
+                self.assertEqual(
+                    _disclosure_opt_in({"treatment_disclosure": {"allow_bare_target_skill_id_in_output": value}}),
+                    {"allow_bare_target_skill_id_in_output": value},
+                )
+
+    def test_B2_absent_block_stays_absent(self):
+        from tools.behavioral_harness_pair import _disclosure_opt_in
+
+        self.assertIsNone(_disclosure_opt_in({}))
+
+    def test_B3_present_block_without_the_flag_defaults_to_false(self):
+        from tools.behavioral_harness_pair import _disclosure_opt_in
+
+        self.assertEqual(
+            _disclosure_opt_in({"treatment_disclosure": {"note": "x"}}),
+            {"allow_bare_target_skill_id_in_output": False},
+        )
+
+    def test_B4_non_boolean_values_are_rejected(self):
+        from tools.behavioral_harness_pair import _disclosure_opt_in
+
+        for value in ("false", "true", 0, 1, None, [], {}):
+            with self.subTest(value=value):
+                with self.assertRaisesRegex(HarnessError, "must be a boolean"):
+                    _disclosure_opt_in({"treatment_disclosure": {"allow_bare_target_skill_id_in_output": value}})
+
+    def test_B5_string_false_is_rejected_at_experiment_load(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "source-a.md").write_text("A\n", encoding="utf-8")
+            (root / "source-b.md").write_text("B\n", encoding="utf-8")
+            experiment = synthetic_experiment()
+            experiment["treatment_disclosure"] = {"allow_bare_target_skill_id_in_output": "false"}
+            path = root / "experiment.yml"
+            path.write_text(yaml.safe_dump(experiment, sort_keys=False), encoding="utf-8")
+            with self.assertRaisesRegex(HarnessError, "must be a boolean"):
+                load_paired_experiment(path)
+
+
+class DisclosurePhrasingTests(unittest.TestCase):
+    """Hyphenated and reversed skill-instruction context must stay blocked."""
+
+    SKILL = "code-review"
+
+    BLOCKED = [
+        "Ich habe den Code-Review-Skill verwendet.",
+        "Ich habe die Code-Review-Instruction gelesen.",
+        "This was the code-review-treatment.",
+        "This was the code-review-variant.",
+        "This was the code-review-condition.",
+        "The skill code-review was provided to me.",
+        "The instruction code-review was provided.",
+    ]
+    ALLOWED = [
+        "Dieses Code-Review ist nicht freigegeben.",
+        "The code review found two blockers.",
+        "Beim Code-Review fehlt eine Autorisierungspruefung.",
+    ]
+
+    def test_F1_hyphenated_and_reversed_forms_are_predicate_blocked(self):
+        from tools.behavioral_harness_pair import _treatment_disclosed
+
+        for text in self.BLOCKED:
+            with self.subTest(text=text):
+                self.assertTrue(_treatment_disclosed(text, self.SKILL, allow_bare_target_skill_id=True))
+
+    def test_F2_ordinary_review_prose_is_not_blocked(self):
+        from tools.behavioral_harness_pair import _treatment_disclosed
+
+        for text in self.ALLOWED:
+            with self.subTest(text=text):
+                self.assertFalse(_treatment_disclosed(text, self.SKILL, allow_bare_target_skill_id=True))
+
+    def test_F3_end_to_end_blind_packaging(self):
+        """Blocked forms are refused end to end; ordinary review prose really packages."""
+        experiment = code_review_experiment()
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "skill.md").write_text("# code-review\n", encoding="utf-8")
+            (root / "requirements.md").write_text("AC-1: rate is 15 percent.\n", encoding="utf-8")
+            (root / "base").mkdir()
+            (root / "head").mkdir()
+            (root / "base/app.py").write_text("def rate():\n    return 0.15\n", encoding="utf-8")
+            (root / "head/app.py").write_text("def rate():\n    return 0.10\n", encoding="utf-8")
+            from tools.behavioral_harness_pair import reconstruct_change_diff
+
+            case = experiment["cases"][0]
+            (root / "change.diff").write_text(
+                reconstruct_change_diff(case, case["ground_truth"], root), encoding="utf-8"
+            )
+            path = root / "experiment.yml"
+            path.write_text(yaml.safe_dump(experiment, sort_keys=False), encoding="utf-8")
+            loaded = load_paired_experiment(path)
+
+            pair = compile_paired_case(loaded, "CR-T01", root, 1, "seed")
+            prepared = root / "prepared"
+            write_paired_case(pair, root, prepared)
+            response_ids = sorted(load_yaml(prepared / "control.yml")["response_assignments"])
+
+            for index, text in enumerate(self.BLOCKED + self.ALLOWED):
+                with self.subTest(text=text):
+                    output = root / f"out-{index}.md"
+                    output.write_text(text + "\n", encoding="utf-8")
+                    run_dirs = [
+                        package_run(
+                            prepared / "responses" / response_id,
+                            output if order == 1 else None,
+                            None, None, None,
+                            root / f"runs-{index}", f"run-{index}-{order}",
+                            runner_type="synthetic", runner_model="m",
+                            runner_session_id=f"s-{index}-{order}",
+                            started_at="unknown", finished_at="unknown",
+                        )
+                        for order, response_id in enumerate(response_ids, start=1)
+                    ]
+                    out = root / f"blind-{index}"
+                    if text in self.BLOCKED:
+                        with self.assertRaises(HarnessError):
+                            package_blind_pair(prepared, run_dirs, out)
+                    else:
+                        package_blind_pair(prepared, run_dirs, out)
+                        self.assertTrue((out / "blind-judge-input.yml").is_file())
+
+
+if __name__ == "__main__":
+    unittest.main()

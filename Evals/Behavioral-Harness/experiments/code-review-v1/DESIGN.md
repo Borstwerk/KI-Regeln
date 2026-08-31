@@ -1,8 +1,11 @@
 # Phase 4.2B — Design: paired-eval replication for `code-review`
 
-Revision: **B1**. The design was independently reviewed and approved across B0, B0.1
+Revision: **B1.1**. The design was independently reviewed and approved across B0, B0.1
 (six findings, §16) and B0.2 (one micro-finding on rule precedence). B1 implemented the
-minimal generalisation and promoted the draft to an executable manifest.
+minimal generalisation and promoted the draft to an executable manifest; B1.1 closed the
+three bounded findings of the B1 review — the judge policy is now validated fail-closed,
+the disclosure opt-in requires a real boolean, and hyphenated or reversed
+skill-instruction context is blocked.
 
 Status: **design approved, generalisation implemented, experiment executable —
 behavioral execution NOT RUN.** No model was run, no baseline or skill response was
@@ -23,9 +26,9 @@ Base commit for this work: `1483c0c4afdc46a25ffdc8ab92d8bd221e2e3a51`.
 | `domain` / `task_family` from the experiment | implemented, defaults `Recherche` / `paired claim verification` |
 | `code-review-findings/v1` ground-truth validator | implemented |
 | change-set consistency as a **prepare-time gate** | implemented in the compile path, raises `HarnessError` |
-| evaluation policy reaches the blind judge | implemented (`ground_truth_model` + `evaluation_policy`) |
+| evaluation policy reaches the blind judge | implemented (`ground_truth_model` + `evaluation_policy`); **B1.1: fail-closed** — a code-review experiment without a complete, correctly ordered policy does not load |
 | model-specific judge instruction | implemented; the classification line never appears for code review |
-| `treatment_disclosure` opt-in | implemented, coordinator-only in `control.yml`, default `false` |
+| `treatment_disclosure` opt-in | implemented, coordinator-only in `control.yml`, default `false`; **B1.1: strict boolean** (`"false"` and `0` are rejected, not coerced) and hyphenated/reversed skill-context forms blocked |
 | `experiment.yml` (executable) | promoted from the draft; `shared_user_prompt` inlined per case and removed |
 | legacy invariance | proven: 18/18 claim-verification pairs and all 366 written artifact bytes identical |
 | behavioral run | **NOT RUN**, by design |

@@ -65,6 +65,15 @@ RELEASE_VERDICTS = {'approved', 'approved-with-notes', 'not-approved', 'open-que
 CHANGE_ROLES_FOR_REF = {'diff_ref': {'change-diff'}, 'base_ref': {'base-code', 'tests'}, 'head_ref': {'changed-code', 'tests'}}
 DIFF_CONTEXT_LINES = 3
 NULL_DIFF_LABEL = '/dev/null'
+# Precommitted judge policy for code-review-findings/v1. These are frozen before any
+# execution: an experiment that omits or reshapes them is rejected rather than silently
+# defaulted, because a policy invented after a response is exactly what the phase forbids.
+FINDING_SCOPE_VALUE = 'exhaustive-for-review-significant-findings'
+UNLISTED_RULE_OUTCOMES = {1: 'hard-failure', 2: 'false-positive', 3: 'ground_truth_incomplete / adjudication_required'}
+UNLISTED_RULE_3_HANDLING_CONCEPTS = {'no spontaneous reward': ('reward',), 'no spontaneous penalty': ('penalty',), 'pair comparison must not be closed': ('must not be closed',)}
+PER_FINDING_VALUES = {'hit', 'miss', 'false-positive', 'hard-failure', 'adjudication-required'}
+PER_DIMENSION_VALUES = {'pass', 'partial', 'fail', 'unverifiable'}
+FORBIDDEN_SCORING_CONCEPTS = {'aggregate score': ('aggregate',), 'weighted score': ('weighted',), 'ranking': ('ranking',), 'single-number overall score': ('single number', 'single-number')}
 # Unambiguous experiment-disclosure markers. Deliberately narrow: an output may discuss
 # a skill, a baseline or an instruction in ordinary subject-matter language without
 # revealing that it is one arm of a controlled experiment. Only the pairing of an arm
@@ -86,10 +95,20 @@ TREATMENT_INSTRUCTION_DIR = 'instructions/'
 
 
 def _skill_id_noun_pattern(target_skill: str) -> re.Pattern[str]:
-    """Match the target-skill id followed by an experiment-design or skill noun."""
+    """Match the target-skill id in skill-instruction or experiment-design context.
+
+    Four shapes, all narrow and all anchored on a known disclosure noun:
+    id + noun, id + connector + noun, id + hyphen/compound separator + noun, and the
+    reversed noun + id. The bare id on its own is deliberately not matched here, so an
+    opted-in experiment keeps ordinary domain vocabulary usable.
+    """
+    skill = re.escape(target_skill)
     connectors = '|'.join(re.escape(c) for c in DISCLOSURE_CONNECTORS)
     nouns = '|'.join(re.escape(n) for n in sorted(DISCLOSURE_SKILL_NOUNS, key=len, reverse=True))
-    return re.compile(rf'{re.escape(target_skill)}\s+(?:(?:{connectors})\s+)?(?:{nouns})\b')
+    separator = r'[-\s]+'
+    forward = rf'\b{skill}{separator}(?:(?:{connectors}){separator})?(?:{nouns})\b'
+    reverse = rf'\b(?:{nouns})\s+{skill}\b'
+    return re.compile(f'(?:{forward})|(?:{reverse})')
 
 
 def _treatment_disclosed(text: str, target_skill: str, allow_bare_target_skill_id: bool = False) -> bool:
@@ -425,6 +444,72 @@ def _assert_change_set_materialized(case_id: str, case: dict[str, Any], truth: d
     if actual != expected:
         raise HarnessError(f'{case_id}: change diff does not match the declared change set; the diff is stale or the change_set is wrong')
 
+def _concepts_covered(entries: list[str], concepts: dict[str, tuple[str, ...]], label: str) -> None:
+    """Each required concept must be carried by at least one entry. Structural, not prose-exact."""
+    lowered = [entry.lower() for entry in entries]
+    for name, tokens in concepts.items():
+        if not any(any(token in entry for token in tokens) for entry in lowered):
+            raise HarnessError(f'{label} must still record {name!r}')
+
+def _validate_code_review_evaluation_policy(experiment: dict[str, Any]) -> None:
+    """Fail closed on a missing or reshaped judge policy for code-review-findings/v1.
+
+    The point is to freeze the declared precedence and scoring vocabulary before any
+    execution. A code-review experiment without them must not load, let alone prepare.
+    """
+    scope = experiment.get('finding_scope')
+    _require(scope, ('intended_ground_truth',), 'finding_scope')
+    if scope['intended_ground_truth'] != FINDING_SCOPE_VALUE:
+        raise HarnessError(f'finding_scope.intended_ground_truth must be {FINDING_SCOPE_VALUE!r} for this pilot')
+
+    rules = experiment.get('unlisted_finding_rule')
+    if not isinstance(rules, list) or len(rules) != len(UNLISTED_RULE_OUTCOMES):
+        raise HarnessError(f'unlisted_finding_rule must contain exactly {len(UNLISTED_RULE_OUTCOMES)} rules')
+    by_order: dict[int, dict[str, Any]] = {}
+    for rule in rules:
+        _require(rule, ('order', 'condition', 'outcome'), 'unlisted_finding_rule[]')
+        order = rule['order']
+        if order not in UNLISTED_RULE_OUTCOMES:
+            raise HarnessError(f'unlisted_finding_rule order {order!r} must be one of {sorted(UNLISTED_RULE_OUTCOMES)}')
+        if order in by_order:
+            raise HarnessError(f'duplicate unlisted_finding_rule order {order}')
+        by_order[order] = rule
+    for order, outcome in UNLISTED_RULE_OUTCOMES.items():
+        if by_order[order]['outcome'] != outcome:
+            raise HarnessError(f'unlisted_finding_rule order {order} must have outcome {outcome!r}, not {by_order[order]["outcome"]!r}')
+        if not str(by_order[order]['condition']).strip():
+            raise HarnessError(f'unlisted_finding_rule order {order} must state a condition')
+    handling = by_order[3].get('handling')
+    if not isinstance(handling, list) or not handling:
+        raise HarnessError('unlisted_finding_rule order 3 must carry handling')
+    _concepts_covered(_nonempty_strings(handling, 'unlisted_finding_rule order 3 handling'), UNLISTED_RULE_3_HANDLING_CONCEPTS, 'unlisted_finding_rule order 3 handling')
+
+    scoring = experiment.get('judge_scoring')
+    _require(scoring, ('per_finding', 'per_dimension', 'forbidden'), 'judge_scoring')
+    for key, expected in (('per_finding', PER_FINDING_VALUES), ('per_dimension', PER_DIMENSION_VALUES)):
+        _require(scoring[key], ('values',), f'judge_scoring.{key}')
+        values = scoring[key]['values']
+        if not isinstance(values, list) or set(values) != expected or len(values) != len(expected):
+            raise HarnessError(f'judge_scoring.{key}.values must be exactly {sorted(expected)}')
+    _concepts_covered(_nonempty_strings(scoring['forbidden'], 'judge_scoring.forbidden'), FORBIDDEN_SCORING_CONCEPTS, 'judge_scoring.forbidden')
+
+def _disclosure_opt_in(experiment: dict[str, Any]) -> dict[str, bool] | None:
+    """Resolve the coordinator-only disclosure opt-in, rejecting non-boolean values.
+
+    Truthiness would silently turn the string "false" into an enabled opt-in, which
+    would weaken a blindness guard by typo. Absent means no key at all, so a pre-4.2B
+    experiment produces a byte-identical control document.
+    """
+    disclosure = experiment.get('treatment_disclosure')
+    if disclosure is None:
+        return None
+    if not isinstance(disclosure, dict):
+        raise HarnessError('treatment_disclosure must be a mapping')
+    value = disclosure.get('allow_bare_target_skill_id_in_output', False)
+    if not isinstance(value, bool):
+        raise HarnessError(f'treatment_disclosure.allow_bare_target_skill_id_in_output must be a boolean, got {type(value).__name__}: {value!r}')
+    return {'allow_bare_target_skill_id_in_output': value}
+
 def load_paired_experiment(path: Path) -> dict[str, Any]:
     data = load_yaml(path)
     if not isinstance(data, dict):
@@ -443,6 +528,9 @@ def load_paired_experiment(path: Path) -> dict[str, Any]:
         raise HarnessError('evaluation_dimensions must be a non-empty list')
     model = _ground_truth_model(data)
     roles = _allowed_roles(model)
+    if model == GROUND_TRUTH_CODE_REVIEW:
+        _validate_code_review_evaluation_policy(data)
+    _disclosure_opt_in(data)
     cases = data.get('cases')
     if not isinstance(cases, list) or not cases:
         raise HarnessError('paired experiment cases must be a non-empty list')
@@ -619,20 +707,19 @@ def compile_paired_case(experiment: dict[str, Any], case_id: str, repo_root: Pat
     treatment_order = _treatment_order(str(experiment['experiment_id']), case_id, repetition, blind_seed)
     execution_order = [response_ids[treatment] for treatment in treatment_order]
     control = {'schema_version': 1, 'contract': CONTROL_CONTRACT, 'experiment_id': str(experiment['experiment_id']), 'case_id': case_id, 'repetition': repetition, 'blind_seed': blind_seed, 'blind_seed_hash': hash_object(blind_seed), 'pinned_commit': str(experiment['pinned_commit']), 'target_skill': str(experiment['target_skill']['id']), 'target_skill_path': str(experiment['target_skill']['path']), 'target_skill_hash': hash_file(target_skill_path), 'response_assignments': {response_ids[t]: t for t in TREATMENTS}, 'execution_order': execution_order, 'shared_user_prompt_hash': next(iter(prompt_hashes)), 'shared_subject_source_hashes': common_source_hashes or {}, 'shared_subject_source_roles': common_source_roles or {}, 'shared_runtime_contract_hash': next(iter(runtime_hashes)), 'independent_variable': 'availability of the target skill instruction only'}
-    disclosure = experiment.get('treatment_disclosure')
+    # Coordinator-only. Never copied into the blind judge contract: it would hint at the
+    # treatment mechanism. Absent on an experiment means no key at all, so a pre-4.2B
+    # control document is unchanged.
+    disclosure = _disclosure_opt_in(experiment)
     if disclosure is not None:
-        # Coordinator-only. Never copied into the blind judge contract: it would hint at
-        # the treatment mechanism. Absent on an experiment means no key at all, so a
-        # pre-4.2B control document is unchanged.
-        if not isinstance(disclosure, dict):
-            raise HarnessError('treatment_disclosure must be a mapping')
-        control['treatment_disclosure'] = {'allow_bare_target_skill_id_in_output': bool(disclosure.get('allow_bare_target_skill_id_in_output', False))}
+        control['treatment_disclosure'] = disclosure
     judge_contract = {'schema_version': 1, 'contract': BLIND_JUDGE_CONTRACT, 'experiment_id': str(experiment['experiment_id']), 'case_id': case_id, 'response_ids': sorted(response_ids.values()), 'source_roles': [{'path': _fixture_path(item, case_id, roles), 'role': _fixture_role(item, case_id, roles)} for item in case['fixtures']], 'ground_truth': copy.deepcopy(case['ground_truth']), 'evaluation_dimensions': copy.deepcopy(experiment['evaluation_dimensions']), 'global_hard_failures': copy.deepcopy(experiment.get('global_hard_failures', [])), 'instructions': ['Judge each response independently against the precommitted ground truth before comparing them.', _MODEL_JUDGE_INSTRUCTION[model], 'Do not infer treatment or execution order from style, verbosity or response identifiers.', 'Report dimensions separately; do not collapse them into an opaque total score.', 'Flag any hard failure independently of prose quality.']}
     if model == GROUND_TRUTH_CODE_REVIEW:
         # The precommitted evaluation policy must reach the blind judge, not stay authoring
         # documentation. Legacy contracts gain no new keys.
         judge_contract['ground_truth_model'] = model
-        judge_contract['evaluation_policy'] = {'finding_scope': copy.deepcopy(experiment.get('finding_scope', {})), 'unlisted_finding_rule': copy.deepcopy(experiment.get('unlisted_finding_rule', [])), 'judge_scoring': copy.deepcopy(experiment.get('judge_scoring', {}))}
+        _validate_code_review_evaluation_policy(experiment)
+        judge_contract['evaluation_policy'] = {'finding_scope': copy.deepcopy(experiment['finding_scope']), 'unlisted_finding_rule': copy.deepcopy(experiment['unlisted_finding_rule']), 'judge_scoring': copy.deepcopy(experiment['judge_scoring'])}
     return {'control': control, 'judge_contract': judge_contract, 'compiled': compiled}
 
 def write_paired_case(pair: dict[str, Any], repo_root: Path, out_dir: Path) -> None:
