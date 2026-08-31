@@ -9,7 +9,9 @@ evidence checks and treatment-blind judge packaging.
 from __future__ import annotations
 import argparse
 import copy
+import difflib
 import hashlib
+import re
 import shutil
 from pathlib import Path
 from typing import Any
@@ -40,6 +42,29 @@ TREATMENTS = ('baseline', 'skill')
 CLASSIFICATION_LABELS = {'supported', 'partial', 'conflicting', 'unsupported', 'not-verified'}
 SUBJECT_FIXTURE_ROLES = {'authoritative-source', 'intentionally-incomplete', 'supporting-source', 'distractor', 'policy', 'runner-only'}
 TRI_UNKNOWN = 'unknown'
+# Ground-truth models. The key is optional on an experiment; its absence means
+# GROUND_TRUTH_CLASSIFICATION, which reproduces the pre-4.2B behaviour exactly. An
+# unknown value fails closed. Deliberately a small explicit dispatch, not a registry.
+GROUND_TRUTH_CLASSIFICATION = 'classification/v1'
+GROUND_TRUTH_CODE_REVIEW = 'code-review-findings/v1'
+GROUND_TRUTH_MODELS = (GROUND_TRUTH_CLASSIFICATION, GROUND_TRUTH_CODE_REVIEW)
+CODE_REVIEW_FIXTURE_ROLES = {'requirements', 'base-code', 'changed-code', 'change-diff', 'tests', 'ci-evidence', 'implementation-report', 'policy', 'intentionally-incomplete', 'distractor', 'runner-only'}
+FIXTURE_ROLES_BY_MODEL = {GROUND_TRUTH_CLASSIFICATION: SUBJECT_FIXTURE_ROLES, GROUND_TRUTH_CODE_REVIEW: CODE_REVIEW_FIXTURE_ROLES}
+DEFAULT_DOMAIN = 'Recherche'
+DEFAULT_TASK_FAMILY = 'paired claim verification'
+RUNNER_SOURCE_ROOT = 'sources'
+# code-review-findings/v1 vocabularies
+CHANGE_TYPES = ('modified', 'added', 'deleted')
+FINDING_SEVERITIES = {'blocker', 'should-fix', 'note'}
+FORBIDDEN_FINDING_OUTCOMES = {'false-positive', 'hard-failure'}
+ACCEPTANCE_STATUSES = {'satisfied', 'partial', 'missing', 'not-checkable'}
+RELEASE_VERDICTS = {'approved', 'approved-with-notes', 'not-approved', 'open-questions-remain'}
+# A change set contains changed files; some of them are test files. The role says what
+# kind of artifact it is, the change set says that it changed, so a `tests` fixture is
+# valid on either side of a change-set entry.
+CHANGE_ROLES_FOR_REF = {'diff_ref': {'change-diff'}, 'base_ref': {'base-code', 'tests'}, 'head_ref': {'changed-code', 'tests'}}
+DIFF_CONTEXT_LINES = 3
+NULL_DIFF_LABEL = '/dev/null'
 # Unambiguous experiment-disclosure markers. Deliberately narrow: an output may discuss
 # a skill, a baseline or an instruction in ordinary subject-matter language without
 # revealing that it is one arm of a controlled experiment. Only the pairing of an arm
@@ -47,6 +72,11 @@ TRI_UNKNOWN = 'unknown'
 # itself and the pinned target-skill identifier.
 DISCLOSURE_ARMS = ('skill', 'baseline', 'treatment', 'control')
 DISCLOSURE_NOUNS = ('treatment', 'variant', 'condition', 'arm', 'group', 'instruction', 'instruction file')
+# Nouns that turn a bare target-skill mention into an experimental-context disclosure even
+# when an experiment opts into allowing the bare id. Short connectors are tolerated so
+# that "code-review als Skill" is caught as well as "code-review skill".
+DISCLOSURE_SKILL_NOUNS = DISCLOSURE_NOUNS + ('skill', 'skills', 'anweisung')
+DISCLOSURE_CONNECTORS = ('als', 'as', 'the', 'a', 'an', 'den', 'die', 'das', 'dem', 'ein', 'eine', 'einen')
 DISCLOSURE_PHRASES = (
     'treatment instruction', 'skill instruction', 'instruction artifact',
     'with-vs-without', 'with vs without', 'a/b test', 'ab test',
@@ -55,21 +85,40 @@ DISCLOSURE_PHRASES = (
 TREATMENT_INSTRUCTION_DIR = 'instructions/'
 
 
-def _treatment_disclosed(text: str, target_skill: str) -> bool:
+def _skill_id_noun_pattern(target_skill: str) -> re.Pattern[str]:
+    """Match the target-skill id followed by an experiment-design or skill noun."""
+    connectors = '|'.join(re.escape(c) for c in DISCLOSURE_CONNECTORS)
+    nouns = '|'.join(re.escape(n) for n in sorted(DISCLOSURE_SKILL_NOUNS, key=len, reverse=True))
+    return re.compile(rf'{re.escape(target_skill)}\s+(?:(?:{connectors})\s+)?(?:{nouns})\b')
+
+
+def _treatment_disclosed(text: str, target_skill: str, allow_bare_target_skill_id: bool = False) -> bool:
     """Detect an unambiguous disclosure of the experimental treatment in runner output.
 
     Narrow by design: ordinary use of the word "skill" or "baseline" is not a
     disclosure. An arm name combined with an experiment-design noun is, as are the
     treatment instruction artifact and the pinned target-skill identifier.
+
+    With ``allow_bare_target_skill_id`` an experiment may opt into treating the bare
+    target-skill id as ordinary subject-matter vocabulary, which a domain such as code
+    review needs. The opt-in is narrow: the id in experimental or skill-instruction
+    context still discloses, and every other rule is untouched. Default False, so an
+    experiment that does not configure it behaves exactly as before.
     """
     lower = text.lower()
-    if target_skill and target_skill.lower() in lower:
-        return True
+    skill = (target_skill or '').lower()
+    if skill:
+        if not allow_bare_target_skill_id:
+            if skill in lower:
+                return True
+        elif _skill_id_noun_pattern(skill).search(lower):
+            return True
     if TREATMENT_INSTRUCTION_DIR in lower or 'skill.md' in lower:
         return True
     if any(phrase in lower for phrase in DISCLOSURE_PHRASES):
         return True
     return any(f'{arm} {noun}' in lower for arm in DISCLOSURE_ARMS for noun in DISCLOSURE_NOUNS)
+
 
 def _safe_rel(raw: str, label: str) -> Path:
     path = Path(raw)
@@ -94,7 +143,17 @@ def _known_equal(values: list[str]) -> bool | str:
         return TRI_UNKNOWN
     return len(set(values)) == 1
 
-def _fixture_path(item: Any, case_id: str) -> str:
+def _ground_truth_model(experiment: dict[str, Any]) -> str:
+    """Resolve the experiment's ground-truth model. Absent means the legacy model."""
+    model = experiment.get('ground_truth_model', GROUND_TRUTH_CLASSIFICATION)
+    if model not in GROUND_TRUTH_MODELS:
+        raise HarnessError(f'unsupported ground_truth_model {model!r}; supported: {list(GROUND_TRUTH_MODELS)}')
+    return str(model)
+
+def _allowed_roles(model: str) -> set[str]:
+    return FIXTURE_ROLES_BY_MODEL[model]
+
+def _fixture_path(item: Any, case_id: str, roles: set[str] | None = None) -> str:
     if not isinstance(item, dict):
         raise HarnessError(f'{case_id}: each fixture must be a mapping with path and role')
     raw = item.get('path')
@@ -102,13 +161,49 @@ def _fixture_path(item: Any, case_id: str) -> str:
     if not isinstance(raw, str) or not raw.strip():
         raise HarnessError(f'{case_id}: fixture path must be a non-empty string')
     _safe_rel(raw, f'{case_id}.fixture.path')
-    if role not in SUBJECT_FIXTURE_ROLES:
+    if role not in (SUBJECT_FIXTURE_ROLES if roles is None else roles):
         raise HarnessError(f'{case_id}: fixture role {role!r} is not a supported runner-visible Behavioral-Harness role')
     return raw
 
-def _fixture_role(item: Any, case_id: str) -> str:
-    _fixture_path(item, case_id)
+def _fixture_role(item: Any, case_id: str, roles: set[str] | None = None) -> str:
+    _fixture_path(item, case_id, roles)
     return str(item['role'])
+
+def _runner_path(item: Any, case_id: str) -> str | None:
+    """Validate an optional explicit runner-package path for one fixture.
+
+    Absent means the fixture keeps the numbered `sources/NN-<basename>` materialisation,
+    so every experiment authored before 4.2B is unaffected. A declared path may only
+    expose the natural artifact structure; it must never carry judge-only role
+    information or anything about the treatment.
+    """
+    raw = item.get('runner_path')
+    if raw is None:
+        return None
+    if not isinstance(raw, str) or not raw.strip() or raw != raw.strip():
+        raise HarnessError(f'{case_id}: runner_path must be a non-empty unpadded string')
+    rel = _safe_rel(raw, f'{case_id}.runner_path')
+    parts = rel.parts
+    if parts[0] != RUNNER_SOURCE_ROOT or len(parts) < 2:
+        raise HarnessError(f'{case_id}: runner_path must live under {RUNNER_SOURCE_ROOT}/: {raw!r}')
+    if raw.startswith(TREATMENT_INSTRUCTION_DIR) or TREATMENT_INSTRUCTION_DIR.rstrip('/') in parts:
+        raise HarnessError(f'{case_id}: runner_path must not collide with {TREATMENT_INSTRUCTION_DIR}: {raw!r}')
+    leaked = set(parts) & (SUBJECT_FIXTURE_ROLES | CODE_REVIEW_FIXTURE_ROLES | set(TREATMENTS))
+    if leaked:
+        raise HarnessError(f'{case_id}: runner_path must not encode a judge role or treatment: {sorted(leaked)}')
+    return rel.as_posix()
+
+def _runner_path_map(case: dict[str, Any], case_id: str) -> dict[str, str]:
+    """Map declared fixture path -> runner path, rejecting duplicate runner paths."""
+    mapping: dict[str, str] = {}
+    for item in case['fixtures']:
+        declared = _runner_path(item, case_id)
+        if declared is None:
+            continue
+        if declared in mapping.values():
+            raise HarnessError(f'{case_id}: duplicate runner_path {declared!r}')
+        mapping[str(item['path'])] = declared
+    return mapping
 
 def _validate_classification(case_id: str, truth: dict[str, Any]) -> None:
     if 'expected_classification' in truth:
@@ -144,6 +239,192 @@ def _validate_classification(case_id: str, truth: dict[str, Any]) -> None:
         extra = sorted((accepted | disallowed_set) - CLASSIFICATION_LABELS)
         raise HarnessError(f'{case_id}: classification metadata must partition all known labels; missing={missing}, extra={extra}')
 
+def _require(container: Any, keys: tuple[str, ...], label: str) -> None:
+    if not isinstance(container, dict):
+        raise HarnessError(f'{label} must be a mapping')
+    for key in keys:
+        if key not in container:
+            raise HarnessError(f'{label} missing {key}')
+
+def _nonempty_strings(value: Any, label: str) -> list[str]:
+    if not isinstance(value, list) or not value or not all(isinstance(x, str) and x.strip() for x in value):
+        raise HarnessError(f'{label} must be a non-empty list of non-empty strings')
+    return [str(x) for x in value]
+
+def _validate_change_set(case_id: str, truth: dict[str, Any], fixture_roles: dict[str, str]) -> dict[str, Any]:
+    """Structural validation of the declared change set. Content is checked at prepare time."""
+    change_set = truth.get('change_set')
+    _require(change_set, ('diff_ref', 'files'), f'{case_id}.change_set')
+
+    def _ref(raw: Any, kind: str, where: str) -> str:
+        if not isinstance(raw, str) or not raw.strip():
+            raise HarnessError(f'{where}: {kind} must be a non-empty string')
+        _safe_rel(raw, where)
+        if raw not in fixture_roles:
+            raise HarnessError(f'{where}: {kind} {raw!r} is not a fixture of this case')
+        expected = CHANGE_ROLES_FOR_REF[kind]
+        if fixture_roles[raw] not in expected:
+            raise HarnessError(f'{where}: {kind} {raw!r} has role {fixture_roles[raw]!r}, expected one of {sorted(expected)}')
+        return raw
+
+    _ref(change_set['diff_ref'], 'diff_ref', f'{case_id}.change_set.diff_ref')
+    files = change_set['files']
+    if not isinstance(files, list) or not files:
+        raise HarnessError(f'{case_id}.change_set.files must be a non-empty list')
+    seen: set[str] = set()
+    for entry in files:
+        _require(entry, ('logical_path', 'change_type', 'base_ref', 'head_ref'), f'{case_id}.change_set.files[]')
+        logical = entry['logical_path']
+        if not isinstance(logical, str) or not logical.strip():
+            raise HarnessError(f'{case_id}: logical_path must be a non-empty string')
+        _safe_rel(logical, f'{case_id}.logical_path')
+        if logical in seen:
+            raise HarnessError(f'{case_id}: duplicate logical_path {logical!r}')
+        seen.add(logical)
+        change_type = entry['change_type']
+        if change_type not in CHANGE_TYPES:
+            raise HarnessError(f'{case_id}: change_type {change_type!r} must be one of {list(CHANGE_TYPES)}')
+        where = f'{case_id}.change_set[{logical}]'
+        for kind, required in (('base_ref', change_type in ('modified', 'deleted')), ('head_ref', change_type in ('modified', 'added'))):
+            value = entry[kind]
+            if required:
+                _ref(value, kind, where)
+            elif value is not None:
+                raise HarnessError(f'{where}: {change_type} must not carry {kind}')
+    return change_set
+
+def _validate_findings(case_id: str, truth: dict[str, Any], fixture_paths: set[str]) -> None:
+    ids: set[str] = set()
+
+    def _claim_id(entry: Any, label: str) -> str:
+        _require(entry, ('finding_id',), label)
+        finding_id = entry['finding_id']
+        if not isinstance(finding_id, str) or not finding_id.strip():
+            raise HarnessError(f'{label}: finding_id must be a non-empty string')
+        if finding_id in ids:
+            raise HarnessError(f'{case_id}: duplicate finding id {finding_id!r}')
+        ids.add(finding_id)
+        return finding_id
+
+    expected = truth.get('expected_findings')
+    if not isinstance(expected, list) or not expected:
+        raise HarnessError(f'{case_id}: expected_findings must be a non-empty list')
+    for entry in expected:
+        label = f'{case_id}.expected_findings[]'
+        finding_id = _claim_id(entry, label)
+        _require(entry, ('category', 'severity', 'required', 'locations', 'evidence', 'detection_criteria', 'rationale'), f'{case_id}.{finding_id}')
+        if entry['severity'] not in FINDING_SEVERITIES:
+            raise HarnessError(f'{case_id}.{finding_id}: severity {entry["severity"]!r} must be one of {sorted(FINDING_SEVERITIES)}')
+        if entry['required'] is not True:
+            raise HarnessError(f'{case_id}.{finding_id}: expected findings must be required: true')
+        _nonempty_strings(entry['evidence'], f'{case_id}.{finding_id}.evidence')
+        _nonempty_strings(entry['detection_criteria'], f'{case_id}.{finding_id}.detection_criteria')
+        locations = entry['locations']
+        if not isinstance(locations, list) or not locations:
+            raise HarnessError(f'{case_id}.{finding_id}: locations must be a non-empty list')
+        for location in locations:
+            _require(location, ('fixture',), f'{case_id}.{finding_id}.locations[]')
+            if location['fixture'] not in fixture_paths:
+                raise HarnessError(f'{case_id}.{finding_id}: location {location["fixture"]!r} is not a fixture of this case')
+
+    for entry in truth.get('acceptable_additional_findings') or []:
+        finding_id = _claim_id(entry, f'{case_id}.acceptable_additional_findings[]')
+        _require(entry, ('claim', 'evidence'), f'{case_id}.{finding_id}')
+        _nonempty_strings(entry['evidence'], f'{case_id}.{finding_id}.evidence')
+        band = entry.get('severity_band')
+        if band is not None:
+            for value in _nonempty_strings(band, f'{case_id}.{finding_id}.severity_band'):
+                if value not in FINDING_SEVERITIES:
+                    raise HarnessError(f'{case_id}.{finding_id}: severity_band value {value!r} is not a known severity')
+
+    forbidden = truth.get('forbidden_findings')
+    if not isinstance(forbidden, list) or not forbidden:
+        raise HarnessError(f'{case_id}: forbidden_findings must be a non-empty list')
+    for entry in forbidden:
+        finding_id = _claim_id(entry, f'{case_id}.forbidden_findings[]')
+        _require(entry, ('claim', 'why_wrong', 'severity_if_raised'), f'{case_id}.{finding_id}')
+        if entry['severity_if_raised'] not in FORBIDDEN_FINDING_OUTCOMES:
+            raise HarnessError(f'{case_id}.{finding_id}: severity_if_raised must be one of {sorted(FORBIDDEN_FINDING_OUTCOMES)}')
+
+def _validate_code_review_truth(case_id: str, case: dict[str, Any], truth: dict[str, Any]) -> None:
+    """Ground-truth validation for code-review-findings/v1."""
+    if 'classification' in truth:
+        raise HarnessError(f'{case_id}: classification is not part of code-review-findings/v1 ground truth')
+    for key in ('change_set', 'expected_findings', 'acceptable_additional_findings', 'forbidden_findings', 'acceptance_criteria', 'release_calibration', 'known_traps', 'allowed_uncertainty', 'hard_failures'):
+        if key not in truth:
+            raise HarnessError(f'{case_id}: ground_truth missing {key}')
+    roles = _allowed_roles(GROUND_TRUTH_CODE_REVIEW)
+    fixture_roles = {_fixture_path(item, case_id, roles): _fixture_role(item, case_id, roles) for item in case['fixtures']}
+    _validate_change_set(case_id, truth, fixture_roles)
+    _validate_findings(case_id, truth, set(fixture_roles))
+
+    criteria = truth['acceptance_criteria']
+    if not isinstance(criteria, list) or not criteria:
+        raise HarnessError(f'{case_id}: acceptance_criteria must be a non-empty list')
+    seen: set[str] = set()
+    for entry in criteria:
+        _require(entry, ('criterion_id', 'expected_status', 'evidence'), f'{case_id}.acceptance_criteria[]')
+        criterion_id = str(entry['criterion_id'])
+        if criterion_id in seen:
+            raise HarnessError(f'{case_id}: duplicate acceptance criterion {criterion_id!r}')
+        seen.add(criterion_id)
+        if entry['expected_status'] not in ACCEPTANCE_STATUSES:
+            raise HarnessError(f'{case_id}.{criterion_id}: expected_status {entry["expected_status"]!r} must be one of {sorted(ACCEPTANCE_STATUSES)}')
+        _nonempty_strings(entry['evidence'], f'{case_id}.{criterion_id}.evidence')
+
+    release = truth['release_calibration']
+    _require(release, ('expected_verdict', 'forbidden_verdicts'), f'{case_id}.release_calibration')
+    verdict = release['expected_verdict']
+    if verdict not in RELEASE_VERDICTS:
+        raise HarnessError(f'{case_id}: expected_verdict {verdict!r} must be one of {sorted(RELEASE_VERDICTS)}')
+    forbidden_verdicts = release['forbidden_verdicts']
+    if not isinstance(forbidden_verdicts, list) or len(forbidden_verdicts) != len(set(forbidden_verdicts)):
+        raise HarnessError(f'{case_id}: forbidden_verdicts must be a list of unique verdicts')
+    for value in forbidden_verdicts:
+        if value not in RELEASE_VERDICTS:
+            raise HarnessError(f'{case_id}: forbidden verdict {value!r} is not a known verdict')
+    if verdict in set(forbidden_verdicts):
+        raise HarnessError(f'{case_id}: expected_verdict must not also be forbidden')
+    for key in ('known_traps', 'allowed_uncertainty', 'hard_failures'):
+        if not isinstance(truth[key], list):
+            raise HarnessError(f'{case_id}: {key} must be a list')
+
+def reconstruct_change_diff(case: dict[str, Any], truth: dict[str, Any], repo_root: Path) -> str:
+    """Rebuild the expected unified diff from the declared base/head artifacts.
+
+    Deterministic and stdlib-only: the gate must not depend on an external diff binary.
+    Files are emitted in sorted logical-path order; an added file's base side and a
+    deleted file's head side are `/dev/null`, matching the declared change_type.
+    """
+    chunks: list[str] = []
+    for entry in sorted(truth['change_set']['files'], key=lambda item: str(item['logical_path'])):
+        logical = str(entry['logical_path'])
+        base_ref, head_ref = entry['base_ref'], entry['head_ref']
+        base_lines = (repo_root / _safe_rel(str(base_ref), 'base_ref')).read_text(encoding='utf-8').splitlines(keepends=True) if base_ref else []
+        head_lines = (repo_root / _safe_rel(str(head_ref), 'head_ref')).read_text(encoding='utf-8').splitlines(keepends=True) if head_ref else []
+        from_label = f'base/{logical}' if base_ref else NULL_DIFF_LABEL
+        to_label = f'head/{logical}' if head_ref else NULL_DIFF_LABEL
+        chunks.append(''.join(difflib.unified_diff(base_lines, head_lines, fromfile=from_label, tofile=to_label, n=DIFF_CONTEXT_LINES)))
+    return ''.join(chunks)
+
+def _assert_change_set_materialized(case_id: str, case: dict[str, Any], truth: dict[str, Any], repo_root: Path) -> None:
+    """Prepare-time gate: the committed diff must match the declared change set exactly."""
+    for entry in truth['change_set']['files']:
+        logical, change_type = str(entry['logical_path']), str(entry['change_type'])
+        for kind in ('base_ref', 'head_ref'):
+            ref = entry[kind]
+            if ref is None:
+                continue
+            if not (repo_root / _safe_rel(str(ref), kind)).is_file():
+                raise HarnessError(f'{case_id}: {change_type} {logical}: {kind} {ref} is not a file')
+    diff_path = repo_root / _safe_rel(str(truth['change_set']['diff_ref']), 'diff_ref')
+    if not diff_path.is_file():
+        raise HarnessError(f'{case_id}: diff_ref {diff_path} is not a file')
+    actual = diff_path.read_text(encoding='utf-8')
+    expected = reconstruct_change_diff(case, truth, repo_root)
+    if actual != expected:
+        raise HarnessError(f'{case_id}: change diff does not match the declared change set; the diff is stale or the change_set is wrong')
+
 def load_paired_experiment(path: Path) -> dict[str, Any]:
     data = load_yaml(path)
     if not isinstance(data, dict):
@@ -160,6 +441,8 @@ def load_paired_experiment(path: Path) -> dict[str, Any]:
     dimensions = data.get('evaluation_dimensions')
     if not isinstance(dimensions, list) or not dimensions:
         raise HarnessError('evaluation_dimensions must be a non-empty list')
+    model = _ground_truth_model(data)
+    roles = _allowed_roles(model)
     cases = data.get('cases')
     if not isinstance(cases, list) or not cases:
         raise HarnessError('paired experiment cases must be a non-empty list')
@@ -179,16 +462,20 @@ def load_paired_experiment(path: Path) -> dict[str, Any]:
         fixtures = case.get('fixtures')
         if not isinstance(fixtures, list) or not fixtures:
             raise HarnessError(f'{case_id}: fixtures must be a non-empty list')
-        fixture_paths = [_fixture_path(item, case_id) for item in fixtures]
+        fixture_paths = [_fixture_path(item, case_id, roles) for item in fixtures]
         if len(fixture_paths) != len(set(fixture_paths)):
             raise HarnessError(f'{case_id}: fixture paths must be unique')
+        _runner_path_map(case, case_id)
         truth = case.get('ground_truth')
         if not isinstance(truth, dict):
             raise HarnessError(f'{case_id}: ground_truth must be a mapping')
-        for key in ('classification', 'relevant_evidence', 'decisive_reason', 'known_traps', 'allowed_uncertainty', 'hard_failures'):
-            if key not in truth:
-                raise HarnessError(f'{case_id}: ground_truth missing {key}')
-        _validate_classification(case_id, truth)
+        if model == GROUND_TRUTH_CODE_REVIEW:
+            _validate_code_review_truth(case_id, case, truth)
+        else:
+            for key in ('classification', 'relevant_evidence', 'decisive_reason', 'known_traps', 'allowed_uncertainty', 'hard_failures'):
+                if key not in truth:
+                    raise HarnessError(f'{case_id}: ground_truth missing {key}')
+            _validate_classification(case_id, truth)
     repetitions = int(data.get('recommended_repetitions', 1))
     if repetitions < 2:
         raise HarnessError('recommended_repetitions must be at least 2 for a paired stochastic pilot')
@@ -199,6 +486,11 @@ def _get_case(experiment: dict[str, Any], case_id: str) -> dict[str, Any]:
     if len(matches) != 1:
         raise HarnessError(f'expected exactly one paired case {case_id}, found {len(matches)}')
     return copy.deepcopy(matches[0])
+
+_MODEL_JUDGE_INSTRUCTION = {
+    GROUND_TRUTH_CLASSIFICATION: 'Apply classification alternatives only when their precommitted conditions are explicitly satisfied.',
+    GROUND_TRUTH_CODE_REVIEW: "Apply each precommitted finding's detection criteria and the precommitted unlisted-finding precedence exactly. Do not create new judging rules after seeing a response.",
+}
 
 def _opaque_response_id(experiment_id: str, case_id: str, repetition: int, treatment: str, blind_seed: str) -> str:
     payload = f'{experiment_id}|{case_id}|{repetition}|{treatment}|{blind_seed}'.encode('utf-8')
@@ -217,7 +509,8 @@ def _synthetic_matrix(experiment: dict[str, Any], case: dict[str, Any], response
     target = str(experiment['target_skill']['id'])
     skill_path = str(experiment['target_skill']['path'])
     case_id = str(case['case_id'])
-    fixtures = [_fixture_path(item, case_id) for item in case['fixtures']]
+    roles = _allowed_roles(_ground_truth_model(experiment))
+    fixtures = [_fixture_path(item, case_id, roles) for item in case['fixtures']]
     if treatment == 'skill':
         fixtures.append(skill_path)
         primary = target
@@ -226,14 +519,14 @@ def _synthetic_matrix(experiment: dict[str, Any], case: dict[str, Any], response
         primary = 'none/direct-response'
         forbidden = [target]
     truth = case['ground_truth']
-    return {'schema_version': 1, 'repository': str(experiment['repository']), 'pinned_commit': str(experiment['pinned_commit']), 'tests': [{'test_id': response_id, 'domain': 'Recherche', 'aufgabenfamilie': 'paired claim verification', 'testebenen': ['behavior', 'outcome'], 'schwierigkeit': case.get('difficulty', 'mittel'), 'nutzerprompt': case['user_prompt'], 'fixtures': fixtures, 'erwarteter_primaerskill': primary, 'erlaubte_secondary_skills': [], 'verbotene_skills': forbidden, 'erwarteter_workflow': 'none', 'erwartete_evidence': ['use only package-local source fixtures'], 'erwarteter_status': 'pass', 'output_kriterien': [str(item.get('id', item)) if isinstance(item, dict) else str(item) for item in experiment['evaluation_dimensions']], 'failure_modes': [str(x) for x in truth.get('hard_failures', [])], 'routing_kriterien': ['target skill is available only in the skill treatment' if treatment == 'skill' else 'target skill must remain unavailable in the baseline treatment'], 'bewertungsmethode': 'paired treatment-blind judge against precommitted ground truth', 'blindness_klasse': 'paired-treatment-blind'}]}
+    return {'schema_version': 1, 'repository': str(experiment['repository']), 'pinned_commit': str(experiment['pinned_commit']), 'tests': [{'test_id': response_id, 'domain': str(experiment.get('domain', DEFAULT_DOMAIN)), 'aufgabenfamilie': str(experiment.get('task_family', DEFAULT_TASK_FAMILY)), 'testebenen': ['behavior', 'outcome'], 'schwierigkeit': case.get('difficulty', 'mittel'), 'nutzerprompt': case['user_prompt'], 'fixtures': fixtures, 'erwarteter_primaerskill': primary, 'erlaubte_secondary_skills': [], 'verbotene_skills': forbidden, 'erwarteter_workflow': 'none', 'erwartete_evidence': ['use only package-local source fixtures'], 'erwarteter_status': 'pass', 'output_kriterien': [str(item.get('id', item)) if isinstance(item, dict) else str(item) for item in experiment['evaluation_dimensions']], 'failure_modes': [str(x) for x in truth.get('hard_failures', [])], 'routing_kriterien': ['target skill is available only in the skill treatment' if treatment == 'skill' else 'target skill must remain unavailable in the baseline treatment'], 'bewertungsmethode': 'paired treatment-blind judge against precommitted ground truth', 'blindness_klasse': 'paired-treatment-blind'}]}
 
-def _role_overrides(response_id: str, case: dict[str, Any], skill_path: str, treatment: str) -> dict[str, Any]:
+def _role_overrides(response_id: str, case: dict[str, Any], skill_path: str, treatment: str, roles: set[str] | None = None) -> dict[str, Any]:
     case_id = str(case['case_id'])
     case_roles: dict[str, Any] = {}
     for item in case['fixtures']:
-        path = _fixture_path(item, case_id)
-        case_roles[path] = {'role': _fixture_role(item, case_id), 'intentionally_missing_evidence': []}
+        path = _fixture_path(item, case_id, roles)
+        case_roles[path] = {'role': _fixture_role(item, case_id, roles), 'intentionally_missing_evidence': []}
     if treatment == 'skill':
         case_roles[skill_path] = {'role': 'skill-instruction', 'intentionally_missing_evidence': []}
     return {'cases': {response_id: case_roles}}
@@ -245,8 +538,10 @@ def _recompute_hashes(compiled: dict[str, Any]) -> None:
 def _prepare_compiled_variant(experiment: dict[str, Any], case: dict[str, Any], response_id: str, treatment: str, repo_root: Path) -> dict[str, Any]:
     target = str(experiment['target_skill']['id'])
     skill_path = str(experiment['target_skill']['path'])
+    roles = _allowed_roles(_ground_truth_model(experiment))
+    declared_runner_paths = _runner_path_map(case, str(case['case_id']))
     matrix = _synthetic_matrix(experiment, case, response_id, treatment)
-    compiled = compile_case(matrix, response_id, repo_root, repo_commit=str(experiment['pinned_commit']), role_overrides=_role_overrides(response_id, case, skill_path, treatment))
+    compiled = compile_case(matrix, response_id, repo_root, repo_commit=str(experiment['pinned_commit']), role_overrides=_role_overrides(response_id, case, skill_path, treatment, roles))
     copy_plan: list[dict[str, str]] = []
     common_index = 0
     for exec_rec, judge_rec in zip(compiled['execution_view']['fixtures'], compiled['judge_view']['fixtures']):
@@ -254,6 +549,9 @@ def _prepare_compiled_variant(experiment: dict[str, Any], case: dict[str, Any], 
         if original == skill_path:
             runner_rel = f'instructions/{Path(skill_path).name}'
             kind = 'skill-instruction'
+        elif original in declared_runner_paths:
+            runner_rel = declared_runner_paths[original]
+            kind = 'subject-source'
         else:
             common_index += 1
             runner_rel = f'sources/{common_index:02d}-{Path(original).name}'
@@ -286,7 +584,11 @@ def compile_paired_case(experiment: dict[str, Any], case_id: str, repo_root: Pat
         raise HarnessError('repetition must be >= 1')
     if not blind_seed:
         raise HarnessError('blind_seed must not be empty')
+    model = _ground_truth_model(experiment)
+    roles = _allowed_roles(model)
     case = _get_case(experiment, case_id)
+    if model == GROUND_TRUTH_CODE_REVIEW:
+        _assert_change_set_materialized(case_id, case, case['ground_truth'], repo_root)
     response_ids = {treatment: _opaque_response_id(str(experiment['experiment_id']), case_id, repetition, treatment, blind_seed) for treatment in TREATMENTS}
     if len(set(response_ids.values())) != 2:
         raise HarnessError('opaque response id collision')
@@ -317,7 +619,20 @@ def compile_paired_case(experiment: dict[str, Any], case_id: str, repo_root: Pat
     treatment_order = _treatment_order(str(experiment['experiment_id']), case_id, repetition, blind_seed)
     execution_order = [response_ids[treatment] for treatment in treatment_order]
     control = {'schema_version': 1, 'contract': CONTROL_CONTRACT, 'experiment_id': str(experiment['experiment_id']), 'case_id': case_id, 'repetition': repetition, 'blind_seed': blind_seed, 'blind_seed_hash': hash_object(blind_seed), 'pinned_commit': str(experiment['pinned_commit']), 'target_skill': str(experiment['target_skill']['id']), 'target_skill_path': str(experiment['target_skill']['path']), 'target_skill_hash': hash_file(target_skill_path), 'response_assignments': {response_ids[t]: t for t in TREATMENTS}, 'execution_order': execution_order, 'shared_user_prompt_hash': next(iter(prompt_hashes)), 'shared_subject_source_hashes': common_source_hashes or {}, 'shared_subject_source_roles': common_source_roles or {}, 'shared_runtime_contract_hash': next(iter(runtime_hashes)), 'independent_variable': 'availability of the target skill instruction only'}
-    judge_contract = {'schema_version': 1, 'contract': BLIND_JUDGE_CONTRACT, 'experiment_id': str(experiment['experiment_id']), 'case_id': case_id, 'response_ids': sorted(response_ids.values()), 'source_roles': [{'path': _fixture_path(item, case_id), 'role': _fixture_role(item, case_id)} for item in case['fixtures']], 'ground_truth': copy.deepcopy(case['ground_truth']), 'evaluation_dimensions': copy.deepcopy(experiment['evaluation_dimensions']), 'global_hard_failures': copy.deepcopy(experiment.get('global_hard_failures', [])), 'instructions': ['Judge each response independently against the precommitted ground truth before comparing them.', 'Apply classification alternatives only when their precommitted conditions are explicitly satisfied.', 'Do not infer treatment or execution order from style, verbosity or response identifiers.', 'Report dimensions separately; do not collapse them into an opaque total score.', 'Flag any hard failure independently of prose quality.']}
+    disclosure = experiment.get('treatment_disclosure')
+    if disclosure is not None:
+        # Coordinator-only. Never copied into the blind judge contract: it would hint at
+        # the treatment mechanism. Absent on an experiment means no key at all, so a
+        # pre-4.2B control document is unchanged.
+        if not isinstance(disclosure, dict):
+            raise HarnessError('treatment_disclosure must be a mapping')
+        control['treatment_disclosure'] = {'allow_bare_target_skill_id_in_output': bool(disclosure.get('allow_bare_target_skill_id_in_output', False))}
+    judge_contract = {'schema_version': 1, 'contract': BLIND_JUDGE_CONTRACT, 'experiment_id': str(experiment['experiment_id']), 'case_id': case_id, 'response_ids': sorted(response_ids.values()), 'source_roles': [{'path': _fixture_path(item, case_id, roles), 'role': _fixture_role(item, case_id, roles)} for item in case['fixtures']], 'ground_truth': copy.deepcopy(case['ground_truth']), 'evaluation_dimensions': copy.deepcopy(experiment['evaluation_dimensions']), 'global_hard_failures': copy.deepcopy(experiment.get('global_hard_failures', [])), 'instructions': ['Judge each response independently against the precommitted ground truth before comparing them.', _MODEL_JUDGE_INSTRUCTION[model], 'Do not infer treatment or execution order from style, verbosity or response identifiers.', 'Report dimensions separately; do not collapse them into an opaque total score.', 'Flag any hard failure independently of prose quality.']}
+    if model == GROUND_TRUTH_CODE_REVIEW:
+        # The precommitted evaluation policy must reach the blind judge, not stay authoring
+        # documentation. Legacy contracts gain no new keys.
+        judge_contract['ground_truth_model'] = model
+        judge_contract['evaluation_policy'] = {'finding_scope': copy.deepcopy(experiment.get('finding_scope', {})), 'unlisted_finding_rule': copy.deepcopy(experiment.get('unlisted_finding_rule', [])), 'judge_scoring': copy.deepcopy(experiment.get('judge_scoring', {}))}
     return {'control': control, 'judge_contract': judge_contract, 'compiled': compiled}
 
 def write_paired_case(pair: dict[str, Any], repo_root: Path, out_dir: Path) -> None:
@@ -548,10 +863,11 @@ def package_blind_pair(pair_dir: Path, run_dirs: list[Path], out_dir: Path, meth
     if set(runs) != expected_ids:
         raise HarnessError('blind pair is missing a response run')
     target_skill = str(control.get('target_skill', ''))
+    allow_bare = bool((control.get('treatment_disclosure') or {}).get('allow_bare_target_skill_id_in_output', False))
     disclosure: dict[str, bool] = {}
     for response_id, item in runs.items():
         text = (item['dir'] / 'runner-output.md').read_text(encoding='utf-8')
-        disclosure[response_id] = _treatment_disclosed(text, target_skill)
+        disclosure[response_id] = _treatment_disclosed(text, target_skill, allow_bare)
     if any(disclosure.values()):
         raise HarnessError('treatment disclosure detected in runner output; blind judge packaging refused')
     method_evidence = _load_method_evidence_map(method_evidence_paths, expected_ids)

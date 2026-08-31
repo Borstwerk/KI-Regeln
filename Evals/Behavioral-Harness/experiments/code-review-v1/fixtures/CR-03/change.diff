@@ -17,11 +17,11 @@
 +++ head/report.py
 @@ -1,14 +1,29 @@
  import argparse
- 
++
 +import orjson  # neue externe Abhaengigkeit
 +
 +from formatters import FormatterRegistry
-+
+ 
  
  def format_text(rows):
      return "\n".join(f"{r['name']}: {r['value']}" for r in rows)

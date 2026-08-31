@@ -1,13 +1,12 @@
 --- base/session.py
 +++ head/session.py
-@@ -1,5 +1,7 @@
+@@ -1,4 +1,6 @@
  from dataclasses import dataclass
- 
-+IDLE_TIMEOUT_SECONDS = 30 * 60
 +
++IDLE_TIMEOUT_SECONDS = 30 * 60
+ 
  
  @dataclass
- class Token:
 @@ -8,4 +10,4 @@
  
  

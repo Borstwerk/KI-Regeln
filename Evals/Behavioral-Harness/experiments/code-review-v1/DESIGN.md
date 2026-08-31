@@ -1,14 +1,48 @@
 # Phase 4.2B — Design: paired-eval replication for `code-review`
 
-Revision: **B0.1**, after the independent design review (`REQUEST CHANGES — bounded`).
-All six review findings are closed here; §16 records how. The three decisions §14 left
-open on scoring shape, prompt neutrality and CR-04 severity are closed as well.
+Revision: **B1**. The design was independently reviewed and approved across B0, B0.1
+(six findings, §16) and B0.2 (one micro-finding on rule precedence). B1 implemented the
+minimal generalisation and promoted the draft to an executable manifest.
 
-Status: **design only**. No model was run, no response was produced, no judge was
-invoked, nothing was unblinded. Nothing in this document upgrades any Phase-4.2A
-result.
+Status: **design approved, generalisation implemented, experiment executable —
+behavioral execution NOT RUN.** No model was run, no baseline or skill response was
+produced, no judge was invoked, nothing was unblinded. Preparing 18 pairs yields 36
+prepared response packages and **zero behavioral responses**; those are different
+things. Nothing here says the code-review eval passed or that `code-review` is
+effective — no such statement is possible before a run, a judge and an unblinding.
 
-Base commit for this design round: `1483c0c4afdc46a25ffdc8ab92d8bd221e2e3a51`.
+Base commit for this work: `1483c0c4afdc46a25ffdc8ab92d8bd221e2e3a51`.
+
+## 0. B1 implementation status
+
+| Design element | Status |
+| --- | --- |
+| `ground_truth_model` dispatch, absent ⇒ `classification/v1` | implemented, unknown value fails closed |
+| per-model fixture roles | implemented; `classification/v1` still rejects the code-review roles |
+| optional `runner_path` | implemented with the full rule set of §10a |
+| `domain` / `task_family` from the experiment | implemented, defaults `Recherche` / `paired claim verification` |
+| `code-review-findings/v1` ground-truth validator | implemented |
+| change-set consistency as a **prepare-time gate** | implemented in the compile path, raises `HarnessError` |
+| evaluation policy reaches the blind judge | implemented (`ground_truth_model` + `evaluation_policy`) |
+| model-specific judge instruction | implemented; the classification line never appears for code review |
+| `treatment_disclosure` opt-in | implemented, coordinator-only in `control.yml`, default `false` |
+| `experiment.yml` (executable) | promoted from the draft; `shared_user_prompt` inlined per case and removed |
+| legacy invariance | proven: 18/18 claim-verification pairs and all 366 written artifact bytes identical |
+| behavioral run | **NOT RUN**, by design |
+
+Two things changed that the design had not anticipated, both recorded rather than
+smoothed over:
+
+- **A `tests` fixture may sit inside a change set.** The first validator required a
+  change-set `head_ref` to carry role `changed-code`, which rejected CR-04's added
+  `test_session.py`. The role says what kind of artifact a file is; the change set says
+  that it changed. `base_ref` and `head_ref` therefore accept `tests` as well.
+- **The diff gate reconstructs with `difflib`, not GNU `diff`.** A validation gate must
+  not depend on an external binary, and stdlib `difflib` chooses a different — equally
+  valid — alignment for an inserted block than GNU `diff` does. The six committed
+  `change.diff` fixtures were regenerated from the harness's own
+  `reconstruct_change_diff`, so there is exactly one source of truth. Only the diff
+  alignment moved; no `base/` or `head/` content changed.
 
 ## 1. Goal of Phase 4.2B
 
