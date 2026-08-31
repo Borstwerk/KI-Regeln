@@ -70,10 +70,23 @@ NULL_DIFF_LABEL = '/dev/null'
 # defaulted, because a policy invented after a response is exactly what the phase forbids.
 FINDING_SCOPE_VALUE = 'exhaustive-for-review-significant-findings'
 UNLISTED_RULE_OUTCOMES = {1: 'hard-failure', 2: 'false-positive', 3: 'ground_truth_incomplete / adjudication_required'}
-UNLISTED_RULE_3_HANDLING_CONCEPTS = {'no spontaneous reward': ('reward',), 'no spontaneous penalty': ('penalty',), 'pair comparison must not be closed': ('must not be closed',)}
+# Frozen verbatim for this v1 pilot. Token presence does not prove the committed
+# semantics: "spontaneous reward is allowed" mentions "reward" while asserting the
+# opposite. Compared as a normalized set instead, so casing and inner whitespace may
+# vary but the statement may not.
+UNLISTED_RULE_3_HANDLING = frozenset({
+    'no spontaneous reward',
+    'no spontaneous penalty',
+    'the affected pair comparison must not be closed until the ground-truth gap has been handled independently',
+})
 PER_FINDING_VALUES = {'hit', 'miss', 'false-positive', 'hard-failure', 'adjudication-required'}
 PER_DIMENSION_VALUES = {'pass', 'partial', 'fail', 'unverifiable'}
-FORBIDDEN_SCORING_CONCEPTS = {'aggregate score': ('aggregate',), 'weighted score': ('weighted',), 'ranking': ('ranking',), 'single-number overall score': ('single number', 'single-number')}
+FORBIDDEN_SCORING = frozenset({
+    'aggregate total score',
+    'weighted score',
+    'ranking',
+    'any single number standing in for the review',
+})
 # Unambiguous experiment-disclosure markers. Deliberately narrow: an output may discuss
 # a skill, a baseline or an instruction in ordinary subject-matter language without
 # revealing that it is one arm of a controlled experiment. Only the pairing of an arm
@@ -444,12 +457,17 @@ def _assert_change_set_materialized(case_id: str, case: dict[str, Any], truth: d
     if actual != expected:
         raise HarnessError(f'{case_id}: change diff does not match the declared change set; the diff is stale or the change_set is wrong')
 
-def _concepts_covered(entries: list[str], concepts: dict[str, tuple[str, ...]], label: str) -> None:
-    """Each required concept must be carried by at least one entry. Structural, not prose-exact."""
-    lowered = [entry.lower() for entry in entries]
-    for name, tokens in concepts.items():
-        if not any(any(token in entry for token in tokens) for entry in lowered):
-            raise HarnessError(f'{label} must still record {name!r}')
+def _normalized_statements(entries: list[str]) -> set[str]:
+    """Collapse inner whitespace and case so only the statement itself is compared."""
+    return {' '.join(entry.split()).lower() for entry in entries}
+
+def _frozen_statements(entries: list[str], expected: frozenset[str], label: str) -> None:
+    """The declared statements must be exactly the frozen set, not merely mention its words."""
+    actual = _normalized_statements(entries)
+    if actual != expected:
+        missing = sorted(expected - actual)
+        unexpected = sorted(actual - expected)
+        raise HarnessError(f'{label} must be exactly the frozen statements for this pilot; missing={missing}, unexpected={unexpected}')
 
 def _validate_code_review_evaluation_policy(experiment: dict[str, Any]) -> None:
     """Fail closed on a missing or reshaped judge policy for code-review-findings/v1.
@@ -469,6 +487,8 @@ def _validate_code_review_evaluation_policy(experiment: dict[str, Any]) -> None:
     for rule in rules:
         _require(rule, ('order', 'condition', 'outcome'), 'unlisted_finding_rule[]')
         order = rule['order']
+        if type(order) is not int:  # bool is a subclass of int, so True must not read as order 1
+            raise HarnessError(f'unlisted_finding_rule order must be a plain integer, got {type(order).__name__}: {order!r}')
         if order not in UNLISTED_RULE_OUTCOMES:
             raise HarnessError(f'unlisted_finding_rule order {order!r} must be one of {sorted(UNLISTED_RULE_OUTCOMES)}')
         if order in by_order:
@@ -482,7 +502,7 @@ def _validate_code_review_evaluation_policy(experiment: dict[str, Any]) -> None:
     handling = by_order[3].get('handling')
     if not isinstance(handling, list) or not handling:
         raise HarnessError('unlisted_finding_rule order 3 must carry handling')
-    _concepts_covered(_nonempty_strings(handling, 'unlisted_finding_rule order 3 handling'), UNLISTED_RULE_3_HANDLING_CONCEPTS, 'unlisted_finding_rule order 3 handling')
+    _frozen_statements(_nonempty_strings(handling, 'unlisted_finding_rule order 3 handling'), UNLISTED_RULE_3_HANDLING, 'unlisted_finding_rule order 3 handling')
 
     scoring = experiment.get('judge_scoring')
     _require(scoring, ('per_finding', 'per_dimension', 'forbidden'), 'judge_scoring')
@@ -491,7 +511,7 @@ def _validate_code_review_evaluation_policy(experiment: dict[str, Any]) -> None:
         values = scoring[key]['values']
         if not isinstance(values, list) or set(values) != expected or len(values) != len(expected):
             raise HarnessError(f'judge_scoring.{key}.values must be exactly {sorted(expected)}')
-    _concepts_covered(_nonempty_strings(scoring['forbidden'], 'judge_scoring.forbidden'), FORBIDDEN_SCORING_CONCEPTS, 'judge_scoring.forbidden')
+    _frozen_statements(_nonempty_strings(scoring['forbidden'], 'judge_scoring.forbidden'), FORBIDDEN_SCORING, 'judge_scoring.forbidden')
 
 def _disclosure_opt_in(experiment: dict[str, Any]) -> dict[str, bool] | None:
     """Resolve the coordinator-only disclosure opt-in, rejecting non-boolean values.

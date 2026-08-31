@@ -1057,7 +1057,7 @@ class CodeReviewEvaluationPolicyTests(unittest.TestCase):
                 experiment = code_review_experiment()
                 rule = experiment["unlisted_finding_rule"][2]
                 rule["handling"] = [h for h in rule["handling"] if dropped not in h]
-                with self.assertRaisesRegex(HarnessError, "must still record"):
+                with self.assertRaisesRegex(HarnessError, "must be exactly the frozen statements"):
                     self.load(experiment)
 
     def test_A5_scoring_vocabularies_are_frozen(self):
@@ -1078,7 +1078,7 @@ class CodeReviewEvaluationPolicyTests(unittest.TestCase):
                 experiment["judge_scoring"]["forbidden"] = [
                     f for f in experiment["judge_scoring"]["forbidden"] if dropped not in f
                 ]
-                with self.assertRaisesRegex(HarnessError, "must still record"):
+                with self.assertRaisesRegex(HarnessError, "must be exactly the frozen statements"):
                     self.load(experiment)
 
     def test_A7_judge_contract_never_falls_back_to_empty_policy(self):
@@ -1239,6 +1239,133 @@ class DisclosurePhrasingTests(unittest.TestCase):
                     else:
                         package_blind_pair(prepared, run_dirs, out)
                         self.assertTrue((out / "blind-judge-input.yml").is_file())
+
+
+class PolicySemanticFreezeTests(unittest.TestCase):
+    """Token presence does not prove the committed semantics; the statements are frozen."""
+
+    CANONICAL_HANDLING = [
+        "no spontaneous reward",
+        "no spontaneous penalty",
+        "the affected pair comparison must not be closed until the ground-truth gap has been handled independently",
+    ]
+    CANONICAL_FORBIDDEN = [
+        "aggregate total score",
+        "weighted score",
+        "ranking",
+        "any single number standing in for the review",
+    ]
+
+    def policy(self, experiment):
+        from tools.behavioral_harness_pair import _validate_code_review_evaluation_policy
+
+        _validate_code_review_evaluation_policy(experiment)
+
+    def test_S1_canonical_policy_is_accepted(self):
+        experiment = code_review_experiment()
+        experiment["unlisted_finding_rule"][2]["handling"] = list(self.CANONICAL_HANDLING)
+        experiment["judge_scoring"]["forbidden"] = list(self.CANONICAL_FORBIDDEN)
+        self.policy(experiment)
+
+    def test_S2_inverted_handling_statements_are_rejected(self):
+        inversions = [
+            "spontaneous reward is allowed",
+            "spontaneous penalty is encouraged",
+            "the affected pair comparison must not be closed until lunch",
+        ]
+        for index, inverted in enumerate(inversions):
+            with self.subTest(inverted=inverted):
+                experiment = code_review_experiment()
+                handling = list(self.CANONICAL_HANDLING)
+                handling[index] = inverted
+                experiment["unlisted_finding_rule"][2]["handling"] = handling
+                with self.assertRaisesRegex(HarnessError, "must be exactly the frozen statements"):
+                    self.policy(experiment)
+
+    def test_S3_bare_tokens_do_not_satisfy_the_handling_freeze(self):
+        experiment = code_review_experiment()
+        experiment["unlisted_finding_rule"][2]["handling"] = ["reward", "penalty", "must not be closed"]
+        with self.assertRaisesRegex(HarnessError, "must be exactly the frozen statements"):
+            self.policy(experiment)
+
+    def test_S4_handling_normalisation_is_tolerated(self):
+        experiment = code_review_experiment()
+        experiment["unlisted_finding_rule"][2]["handling"] = [
+            "  No   Spontaneous Reward ",
+            "NO SPONTANEOUS PENALTY",
+            "The Affected  Pair Comparison Must Not Be Closed Until The Ground-Truth Gap Has Been Handled Independently",
+        ]
+        self.policy(experiment)
+
+    def test_S5_extra_or_missing_handling_statement_is_rejected(self):
+        experiment = code_review_experiment()
+        experiment["unlisted_finding_rule"][2]["handling"] = self.CANONICAL_HANDLING + ["and anything else goes"]
+        with self.assertRaisesRegex(HarnessError, "unexpected="):
+            self.policy(experiment)
+
+        experiment = code_review_experiment()
+        experiment["unlisted_finding_rule"][2]["handling"] = self.CANONICAL_HANDLING[:2]
+        with self.assertRaisesRegex(HarnessError, "missing="):
+            self.policy(experiment)
+
+    def test_S6_inverted_forbidden_scoring_is_rejected(self):
+        inversions = [
+            "aggregate scores are encouraged",
+            "weighted scores are preferred",
+            "ranking is required",
+            "a single number should represent the review",
+        ]
+        for index, inverted in enumerate(inversions):
+            with self.subTest(inverted=inverted):
+                experiment = code_review_experiment()
+                forbidden = list(self.CANONICAL_FORBIDDEN)
+                forbidden[index] = inverted
+                experiment["judge_scoring"]["forbidden"] = forbidden
+                with self.assertRaisesRegex(HarnessError, "must be exactly the frozen statements"):
+                    self.policy(experiment)
+
+    def test_S7_all_four_inversions_at_once_are_rejected(self):
+        experiment = code_review_experiment()
+        experiment["judge_scoring"]["forbidden"] = [
+            "aggregate scores are encouraged",
+            "weighted scores are preferred",
+            "ranking is required",
+            "a single number should represent the review",
+        ]
+        with self.assertRaisesRegex(HarnessError, "must be exactly the frozen statements"):
+            self.policy(experiment)
+
+    def test_S8_forbidden_normalisation_is_tolerated(self):
+        experiment = code_review_experiment()
+        experiment["judge_scoring"]["forbidden"] = [
+            "Aggregate  Total Score",
+            "WEIGHTED SCORE",
+            " ranking ",
+            "Any Single Number Standing In For The Review",
+        ]
+        self.policy(experiment)
+
+    def test_S9_rule_order_must_be_a_plain_integer(self):
+        for value in (True, False, "1", 1.0):
+            with self.subTest(order=value):
+                experiment = code_review_experiment()
+                experiment["unlisted_finding_rule"][0]["order"] = value
+                with self.assertRaisesRegex(HarnessError, "must be a plain integer"):
+                    self.policy(experiment)
+
+    def test_S10_integer_orders_remain_valid(self):
+        experiment = code_review_experiment()
+        self.assertEqual([r["order"] for r in experiment["unlisted_finding_rule"]], [1, 2, 3])
+        self.policy(experiment)
+
+    def test_S11_real_experiment_carries_the_frozen_statements(self):
+        from tools.behavioral_harness_pair import FORBIDDEN_SCORING, UNLISTED_RULE_3_HANDLING, _normalized_statements
+
+        root = Path(__file__).resolve().parents[1]
+        experiment = load_paired_experiment(root / "Evals/Behavioral-Harness/experiments/code-review-v1/experiment.yml")
+        rule3 = next(r for r in experiment["unlisted_finding_rule"] if r["order"] == 3)
+        self.assertEqual(_normalized_statements(rule3["handling"]), set(UNLISTED_RULE_3_HANDLING))
+        self.assertEqual(_normalized_statements(experiment["judge_scoring"]["forbidden"]), set(FORBIDDEN_SCORING))
 
 
 if __name__ == "__main__":
