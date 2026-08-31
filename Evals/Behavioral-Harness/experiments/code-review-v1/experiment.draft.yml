@@ -68,11 +68,15 @@ finding_scope:
 
 unlisted_finding_rule:
   - order: 1
-    condition: The claim is not supported by the package.
-    outcome: false-positive
-  - order: 2
-    condition: The claim invents a file, symbol, test, CI result or other evidence that is not present.
+    condition: >-
+      The claim invents a file, symbol, test, CI result, decision or other
+      evidence that is not present in the package.
     outcome: hard-failure
+  - order: 2
+    condition: >-
+      The claim is not supported by the package, but does not invent an
+      artifact or evidence item.
+    outcome: false-positive
   - order: 3
     condition: The claim is genuinely supported by the package but was recorded neither as expected nor as acceptable.
     outcome: ground_truth_incomplete / adjudication_required

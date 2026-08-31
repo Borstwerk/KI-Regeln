@@ -389,14 +389,23 @@ The ground truth claims to be **exhaustive for review-significant findings**
 (`finding_scope.intended_ground_truth`), not a convenient subset. That claim is only
 honest if there is a precommitted rule for what happens when a response finds something
 outside all three lists. Deciding that after seeing the response would be exactly the
-post-hoc rule-making this phase forbids, so the rule is fixed now, in order:
+post-hoc rule-making this phase forbids, so the rule is fixed now. It is applied in
+order, **specific before general**, so that the narrower category is reached first:
 
-1. the claim is **not supported by the package** → `false-positive`;
-2. the claim **invents** a file, symbol, test, CI result or other evidence → `hard-failure`;
+1. the claim **invents** a file, symbol, test, CI result, decision or other evidence
+   that is not present in the package → `hard-failure`;
+2. the claim is **not supported by the package**, but does not invent an artifact or
+   evidence item → `false-positive`;
 3. the claim **is genuinely supported** by the package but was recorded neither as
    expected nor as acceptable → `ground_truth_incomplete / adjudication_required`:
    no spontaneous reward, no spontaneous penalty, and **the affected pair comparison
    must not be closed** until the ground-truth gap has been handled independently.
+
+The order matters and the earlier draft had it wrong. An invented artifact is always
+also unsupported by the package, so putting the unsupported test first swallowed the
+invention case entirely and collapsed two deliberately distinct defects into one. Rule 2
+therefore carries its exclusion explicitly: it covers a wrong inference drawn from
+material that really is in the package, never a fabricated artifact.
 
 Case 3 is the important one. A model may legitimately find a gap the authors missed.
 That must be recordable as a gap in *our* ground truth, not silently converted into
