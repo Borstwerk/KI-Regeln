@@ -8,6 +8,17 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Schreibkorrektur und deutsche Typografie
+
+- zwei klar getrennte Schreiben-Skills ergänzt: `korrekturlektorat` für Rechtschreibung, Grammatik, Syntax, Zeichensetzung sowie Tipp-/Wortfehler und `deutsche-typografie` für Zeichenformen, Abstände und DE-/AT-/CH-Typografiekonventionen; beide starten `experimental` mit `partial` Evalabdeckung;
+- gemeinsame Fachgrundlage `Schreiben/Sprachrichtigkeit-und-Typografie.md` ergänzt und die Grenzen `Korrekturlektorat ≠ Stilreview ≠ Rewrite`, `Zeichensetzung ≠ Typografie` sowie `Toolfund ≠ Sprachregel` verankert;
+- Workflow `Workflows/Text-Endkontrolle.md` ergänzt und in `workflow-index.yml` registriert; mechanische Endkontrolle folgt auf autorisierte inhaltliche beziehungsweise stilistische Revisionen, damit spätere Rewrites nicht wieder neue Sprachfehler einführen;
+- regionale Varianten, Projekt-/Hausstil, Mehrdeutigkeit sowie geschützte technische Inhalte wie Code, URLs, Pfade, Bezeichner, Markdown, HTML/JSX, YAML/Frontmatter und Zitate ausdrücklich vor blinder Normalisierung geschützt;
+- amtliches Regelwerk der deutschen Rechtschreibung und IDS/`grammis` als fachliche Primärquellen dokumentiert; vier tatsächlich verwendete öffentliche Proofreading-/Typografie-Skills mit konkretem beobachtetem Blob-SHA, Lizenzraum und bewussten Abweichungen als punktuelle methodische Referenzen festgehalten; LanguageTool bleibt optionaler technischer Referenzraum ohne Runtime-Abhängigkeit;
+- zwei neue Evalpacks mit jeweils acht Startfällen ergänzt, insgesamt 16 definierte Cases zu Korrektur, Near-Miss-Routing, Mehrdeutigkeit, Schweizer Orthografie, Code-/URL-Schutz, zulässigen Varianten, Hausstil, fehlender DIN-Evidence und Typografie-vs.-Webdesign; diese Fälle sind **definiert, aber nicht als Behavioral Evals ausgeführt oder bestanden**;
+- der parallel ergänzte Langprosa-Signaturfall im bestehenden `stilreview`-Evalpack bleibt erhalten; aktueller Gesamtstand damit 145 Skills, 120× `partial`, 25× `none`, 0× `core`/`broad`, 120 Skill-Evalpacks und 622 definierte Cases;
+- keine bestehende Maturity hochgestuft, keine Behavioral-Eval-Ergebnisse erfunden und kein Tag oder Release erzeugt.
+
 ### Problem-first Entry Path
 
 - neuen menschlichen Einstieg `START-HIER.md` ergänzt: Nutzer beginnen mit ihrem realen Problem oder Ziel und müssen weder Skill-Namen noch interne Repository-Architektur kennen;
@@ -35,7 +46,7 @@ Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunäch
 - fünf eng geschnittene Skills `story-bible`, `figurenentwicklung`, `plot-und-storystruktur`, `worldbuilding` und `story-kontinuitaet` ergänzt; alle fünf starten `experimental` mit `partial` Evalabdeckung, ohne bestehende Maturity hochzustufen;
 - `kreatives-schreiben` an den neuen Bereich angebunden und fachlich abgegrenzt: Storyentwicklung plant und schützt narrative Wahrheit, `kreatives-schreiben` bleibt für die konkrete Szene oder das Kapitel als Prosa zuständig;
 - Workflow `Workflows/Storyprojekt-von-Idee-bis-Manuskript.md` ergänzt und in `workflow-index.yml` registriert; Review-/Revisionen bleiben an den allgemeinen `Review-Revise-Loop` und erforderliche Human Gates gebunden;
-- fünf Story-Evalpacks mit jeweils fünf Startfällen ergänzt, insgesamt 25 definierte Cases; diese Fälle sind **definiert, aber nicht als Behavioral Evals ausgeführt oder bestanden**;
+- fünf Story-Evalpacks mit jeweils fünf Startfällen ergänzt, insgesamt 25 definierte Cases; diese Fälle sind **definiert, aber nicht ausgeführt oder bestanden**;
 - Storystruktur-Modelle wie Drei-Akt, Hero's Journey oder andere Beat-Modelle nur als optionale Linsen behandelt; Planung wird nicht mit bereits erzähltem Kanon gleichgesetzt und Worldbuilding nicht als Lore-Mengenwettbewerb modelliert;
 - methodischen Referenzraum `danjdewhurst/story-skills` (MIT) fachlokal als `reference/inspiration` dokumentiert; keine Story-CLI-, Node/Bun-, Projektstruktur-, Template- oder fremde Skilltext-Abhängigkeit übernommen und keine Redistribution fremden Materials vorausgesetzt;
 - Skill-Katalog und menschliche Katalogdokumentation auf 137 Skills, 112× `partial`, 25× `none`, 0× `core`/`broad`, 112 Skill-Evalpacks und 575 definierte Cases aktualisiert; zusätzliche Coverage ist kein Behavioral-Qualitätsnachweis;
