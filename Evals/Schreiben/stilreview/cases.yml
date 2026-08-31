@@ -66,3 +66,54 @@ cases:
     forbidden:
       - "akzeptiert die neue Kausalität nur weil sie flüssiger klingt"
     expected_status: pass
+
+  - id: long-prose-signature-paired-control
+    class: regression
+    input: |
+      Prüfe beide kurzen Prosaausschnitte unabhängig auf systemische Stilprobleme. Die POV-Figur ist in beiden Fällen aufmerksam, trocken und beobachtet Menschen über konkrete Details. Das ist ein bewusstes Figurenmerkmal. Bitte noch nichts umschreiben und keine Autorschaft ableiten.
+
+      Text A:
+      Jaro bemerkte den sauberen Rand an Nelas Stiefel, obwohl der Weg seit Stunden aus Schlamm bestand. Sie war also nicht über den Hof gekommen. Interessant.
+
+      Nela sagte, sie habe den ganzen Morgen im Lager gearbeitet. Jaro sah auf ihre Hände. Kein Staub unter den Nägeln, dafür ein feiner roter Faden am Ärmel. Nicht Lager. Webstube.
+
+      Der Wächter lachte zu laut über einen schlechten Scherz. Jaro sah, wie dessen Blick zur Seitentür sprang. Menschen schauten selten dorthin, wo nichts war. Der Wächter war keine Ausnahme.
+
+      Eine Kiste stand schief neben der Wand. Das Seil darum war frisch, der Knoten alt. Jaro kannte diese Sorte Sorgfalt: jemand hatte sich Mühe gegeben, nach Eile auszusehen.
+
+      Nela fragte, ob er ihr misstraue. Jaro betrachtete den winzigen Riss in der Tasse zwischen ihren Fingern. Sie hielt sie genau dort fest, wo der Riss nicht zu sehen war. „Nur der Tasse.“
+
+      Später schwieg der Händler eine Sekunde zu lange, bevor er den Preis nannte. Jaro hörte die Pause, sah den Schweiß an der Schläfe und wusste, dass die Zahl gelogen war. Manche Menschen brauchten drei Sätze. Andere eine Stirn.
+
+      Am Tor roch es nach Regen und Pferd. Ein Junge lief vorbei, stolperte und fing sich wieder. Jaro bemerkte den Abdruck eines Siegels an seinem Gürtel. Zufälle hatten selten so saubere Kanten.
+
+      Text B:
+      Jaro stellte die nassen Stiefel vor die Tür und trug die Kiste in die Küche. Sie war schwerer, als sie aussah. Er fluchte leise, weil der Henkel in die Finger schnitt.
+
+      Nela saß am Tisch und aß Brot. „Du bist spät.“
+
+      „Der Wagen steckte fest.“
+
+      Sie nickte. Mehr gab es dazu nicht zu sagen.
+
+      Später bemerkte Jaro einen roten Faden an ihrem Ärmel. Er dachte an die Webstube, verwarf den Gedanken aber wieder. In diesem Haus hing an fast jedem zweiten Kleidungsstück irgendein Faden.
+
+      Der Händler kam vor Sonnenuntergang. Er redete viel, machte zwei schlechte Witze und nannte einen Preis, der Jaro zu hoch vorkam. Vielleicht log er. Vielleicht war er nur Händler.
+
+      Beim Hinausgehen blieb der Mann an der Schwelle hängen und schimpfte über seine Knie. Jaro musste lachen. Nicht alles war ein Zeichen.
+
+      Am Tor fand Jaro einen zerbrochenen Knopf. Er steckte ihn ein, weil er hübsch war. Drei Tage später wusste er immer noch nicht, wem er gehört hatte.
+    should_trigger: true
+    expected:
+      - "erkennt bei Text A die wiederkehrende Kombination aus Detail, treffender Deutung und pointiertem Abschluss als systemischen Verteilungsbefund statt nur einzelne Sätze zu markieren"
+      - "benennt bei Text A die hohe rhetorische Trefferquote und die fast durchgehend erfolgreiche Beobachterlogik als mögliche Quelle von Vorhersagbarkeit"
+      - "erkennt zugleich, dass Beobachtung und trockener Humor zur Figur gehören und nicht grundsätzlich entfernt werden sollen"
+      - "bewertet Text B trotz ähnlicher Figurenstimme nicht als denselben systemischen Fehler, weil Ruheräume, unergiebige Beobachtungen, Unsicherheit und funktionale Prosa vorhanden sind"
+      - "empfiehlt bei Text A eher Variation und Entdichtung als die Beseitigung der Figurenstimme"
+    forbidden:
+      - "wertet kurze Sätze, Gegensätze oder trockene Pointen isoliert als Beweis für KI-Herkunft"
+      - "markiert Text B allein wegen der beobachtenden POV-Stimme ebenfalls als systemisch problematisch"
+      - "fordert die Entfernung von Beobachtung, trockenem Humor oder knappen Urteilen als Figurenmerkmal"
+      - "setzt eine starre Zielquote für Pointen, Metaphern oder Beobachtungen"
+      - "schreibt beide Texte vollständig um"
+    expected_status: pass
