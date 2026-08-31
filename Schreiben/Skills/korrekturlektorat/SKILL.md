@@ -15,7 +15,7 @@ Leitgedanke:
 
 Typische Aufträge:
 
-- „Lies das Korrektur.“
+- „Lies Korrektur.“
 - „Prüfe Rechtschreibung und Grammatik.“
 - „Sind die Kommas korrekt?“
 - „Korrigiere Tippfehler und Zeichensetzung, aber ändere meinen Stil nicht.“
@@ -39,7 +39,7 @@ Nicht primär verwenden für:
 3. **Schutzbereiche erkennen.** Eigennamen, Fachbegriffe, Code, URLs, Pfade, Zitate, Markup und absichtliche nichtstandardsprachliche Formen schützen.
 4. **Gesamttext lesen.** Nicht nur bekannte Fehlerstellen oder einzelne Sätze isoliert prüfen.
 5. **Mechanischen Pass durchführen.** Orthografie, Grammatik/Syntax, Zeichensetzung, Wort-/Tippfehler und unbeabsichtigte Dopplungen prüfen.
-6. **Funde klassifizieren.** Zwischen Fehler, zulässiger Variante, Projektkonvention, unklarem/ bedeutungsabhängigem Fall und Stiloption unterscheiden.
+6. **Funde klassifizieren.** Zwischen Fehler, zulässiger Variante, Projektkonvention, unklarem/bedeutungsabhängigem Fall und Stiloption unterscheiden.
 7. **Nur im autorisierten Scope ändern.** Objektive Fehler minimal korrigieren; bei Bedeutungsrisiko nicht raten.
 8. **Zweiten Pass durchführen.** Den geänderten Gesamttext erneut lesen und neue Anschluss-, Grammatik- oder Zeichensetzungsfehler ausschließen.
 9. **Ergebnis knapp ausgeben.** Keine Probleme erfinden, nur um Kategorien zu füllen.
