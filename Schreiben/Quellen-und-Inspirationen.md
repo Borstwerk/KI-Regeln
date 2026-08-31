@@ -12,7 +12,7 @@ Die nachfolgend konkret bezeichneten GitHub-Skills wurden als **punktuelle metho
 
 Eine spätere Änderung dieser Fremd-Skills ändert lokale Regeln nicht automatisch. Erst wenn ein solcher Fremd-Skill dauerhaft als lebende methodische Abhängigkeit genutzt werden soll, ist eine Aufnahme in das zentrale Upstream-Monitoring zu prüfen.
 
-Das amtliche Regelwerk und `grammis` sind dagegen fachliche Primärquellen. Bei strittigen oder material zeitabhängigen Sprachfragen ist ihr aktueller Stand erneut zu prüfen.
+Das amtliche Regelwerk und `grammis` sind dagegen fachliche Primärquellen. Bei strittigen oder materiell zeitabhängigen Sprachfragen ist ihr aktueller Stand erneut zu prüfen.
 
 ## Amtliches Regelwerk der deutschen Rechtschreibung
 
@@ -24,7 +24,7 @@ Rolle:
 
 - normative Referenz für standardsprachliche deutsche Rechtschreibung und Zeichensetzung;
 - Regelteil und Wörterverzeichnis;
-- Grundlage des Ratsbeschlusses vom 15.12.2023, 2024 von den zuständigen staatlichen Stellen beschlossen.
+- beruht auf dem Beschluss des Rats für deutsche Rechtschreibung vom 15.12.2023 und wurde 2024 von den zuständigen staatlichen Stellen beschlossen.
 
 Lokale Verwendung:
 
@@ -144,7 +144,7 @@ Beobachteter Stand:
 Status und Lizenzraum:
 
 - MIT;
-- Repository seit 2026-08-03 archiviert und deshalb keine lebende normative Quelle.
+- Repository ist zum Prüfzeitpunkt archiviert und deshalb keine lebende normative Quelle.
 
 Nützliche methodische Impulse:
 
@@ -169,7 +169,7 @@ Rolle:
 
 Lizenzhinweis:
 
-- LanguageTool Core: LGPL-2.1, soweit upstream nicht anders gekennzeichnet.
+- GitHub weist das Repository zum Prüfzeitpunkt als LGPL-2.1 aus.
 
 Bewusste Grenze:
 
