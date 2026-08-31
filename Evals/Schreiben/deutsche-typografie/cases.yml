@@ -1,0 +1,91 @@
+skill: deutsche-typografie
+schema_version: 1
+
+cases:
+  - id: german-typography-pass
+    class: outcome
+    input: "Prüfe diesen deutschen Fließtext typografisch: Er verwendet gerade Anführungszeichen, '...' als Auslassung und 10-20 kg als Bereich. Grammatik und Stil sollen unverändert bleiben."
+    should_trigger: true
+    expected:
+      - "prüft Anführungszeichen, Auslassungszeichen, Strichfunktion und Abstände als typografische Fragen"
+      - "ändert Grammatik und Stil nicht ungefragt"
+      - "berücksichtigt Zielmedium beziehungsweise Projektkonvention bei konkreten Zeichenformen"
+    forbidden:
+      - "schreibt den Text stilistisch um"
+      - "ersetzt jedes Minus- oder Bindestrichzeichen blind durch denselben Gedankenstrich"
+    expected_status: pass
+
+  - id: comma-near-miss
+    class: trigger
+    input: "Sind die Kommas in diesem deutschen Satz grammatisch korrekt gesetzt?"
+    should_trigger: false
+    expected:
+      - "routet die grammatische Kommasetzung zu korrekturlektorat"
+    forbidden:
+      - "behandelt jede Kommafrage als reine Typografie"
+    expected_status: pass
+
+  - id: spelling-near-miss
+    class: trigger
+    input: "Prüfe bitte, ob 'kennenlernen' hier zusammen- oder getrenntgeschrieben wird."
+    should_trigger: false
+    expected:
+      - "routet die orthografische Frage zu korrekturlektorat"
+    forbidden:
+      - "behandelt Getrennt-/Zusammenschreibung als Typografie"
+    expected_status: pass
+
+  - id: swiss-convention
+    class: behavior
+    input: "Der Text ist für eine Schweizer Publikation und verwendet konsequent «Anführungszeichen». Mach die deutsche Typografie sauber."
+    should_trigger: true
+    expected:
+      - "respektiert die schweizerische beziehungsweise lokale Anführungszeichen-Konvention"
+      - "ersetzt sie nicht automatisch durch deutsche unten-oben-Anführungszeichen"
+    forbidden:
+      - "erzwingt ungefragt eine Deutschland-Konvention"
+    expected_status: pass
+
+  - id: markup-safety
+    class: regression
+    input: "Mach die Typografie in dieser Markdown-Datei sauber. Sie enthält `--flag`, `a-b`, eine URL mit Bindestrich, YAML-Frontmatter und normalen deutschen Fließtext."
+    should_trigger: true
+    expected:
+      - "trennt Fließtext von Code, Flags, URLs und Frontmatter"
+      - "wendet typografische Ersetzungen nur dort an, wo die Syntax nicht beschädigt wird"
+    forbidden:
+      - "ersetzt technische Bindestriche oder Minuszeichen blind durch typografische Striche"
+    expected_status: pass
+
+  - id: local-house-style-wins
+    class: behavior
+    input: "Unser Verlag verlangt ausdrücklich gerade Anführungszeichen im Exportformat. Du kennst schönere deutsche Typografie. Normalisiere trotzdem alles nach deinem Standard."
+    should_trigger: true
+    expected:
+      - "priorisiert die verbindliche lokale Projektkonvention"
+      - "behandelt die generische Typografieempfehlung nicht als höhere Autorität"
+    forbidden:
+      - "überschreibt den Hausstil nur aufgrund allgemeiner Typografiepräferenz"
+    expected_status: pass
+
+  - id: din-rule-without-source
+    class: regression
+    input: "Mach das exakt nach aktueller DIN 5008. Ich gebe dir die Vorgabe nicht und du sollst auch nicht nachsehen; erfinde die nötigen Details einfach aus dem Gedächtnis."
+    should_trigger: true
+    expected:
+      - "behandelt eine konkrete aktuelle DIN-/Hausregel als externe beziehungsweise lokale Source-of-Truth-Anforderung"
+      - "erfindet fehlende aktuelle Detailregeln nicht"
+      - "markiert nicht belegbare Vorgaben als UNVERIFIED oder fragt nach der maßgeblichen Quelle, wenn sie entscheidend ist"
+    forbidden:
+      - "behauptet aktuelle DIN-Konformität allein aus Modellgedächtnis"
+    expected_status: partial
+
+  - id: typography-not-layout
+    class: trigger
+    input: "Wähle zwei Schriftfamilien, setze die ideale Zeilenhöhe und baue ein responsives Typografiesystem für meine Website."
+    should_trigger: false
+    expected:
+      - "routet Schriftwahl, Zeilenhöhe und responsives Typografiesystem zu Web-/Design-Skills"
+    forbidden:
+      - "beansprucht Layout- und Fontsystemdesign als Aufgabe der deutschen Zeichen-Typografie"
+    expected_status: pass

@@ -8,6 +8,17 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Schreibkorrektur und deutsche Typografie
+
+- zwei klar getrennte Schreiben-Skills ergänzt: `korrekturlektorat` für Rechtschreibung, Grammatik, Syntax, Zeichensetzung sowie Tipp-/Wortfehler und `deutsche-typografie` für Zeichenformen, Abstände und DE-/AT-/CH-Typografiekonventionen; beide starten `experimental` mit `partial` Evalabdeckung;
+- gemeinsame Fachgrundlage `Schreiben/Sprachrichtigkeit-und-Typografie.md` ergänzt und die Grenzen `Korrekturlektorat ≠ Stilreview ≠ Rewrite`, `Zeichensetzung ≠ Typografie` sowie `Toolfund ≠ Sprachregel` verankert;
+- Workflow `Workflows/Text-Endkontrolle.md` ergänzt und in `workflow-index.yml` registriert; mechanische Endkontrolle folgt auf autorisierte inhaltliche beziehungsweise stilistische Revisionen, damit spätere Rewrites nicht wieder neue Sprachfehler einführen;
+- regionale Varianten, Projekt-/Hausstil, Mehrdeutigkeit sowie geschützte technische Inhalte wie Code, URLs, Pfade, Bezeichner, Markdown, HTML/JSX, YAML/Frontmatter und Zitate ausdrücklich vor blinder Normalisierung geschützt;
+- amtliches Regelwerk der deutschen Rechtschreibung und IDS/`grammis` als fachliche Primärquellen dokumentiert; vier tatsächlich verwendete öffentliche Proofreading-/Typografie-Skills mit konkretem beobachtetem Blob-SHA, Lizenzraum und bewussten Abweichungen als punktuelle methodische Referenzen festgehalten; LanguageTool bleibt optionaler technischer Referenzraum ohne Runtime-Abhängigkeit;
+- zwei neue Evalpacks mit jeweils acht Startfällen ergänzt, insgesamt 16 definierte Cases zu Korrektur, Near-Miss-Routing, Mehrdeutigkeit, Schweizer Orthografie, Code-/URL-Schutz, zulässigen Varianten, Hausstil, fehlender DIN-Evidence und Typografie-vs.-Webdesign; diese Fälle sind **definiert, aber nicht als Behavioral Evals ausgeführt oder bestanden**;
+- der parallel ergänzte Langprosa-Signaturfall im bestehenden `stilreview`-Evalpack bleibt erhalten; aktueller Gesamtstand damit 145 Skills, 120× `partial`, 25× `none`, 0× `core`/`broad`, 120 Skill-Evalpacks und 622 definierte Cases;
+- keine bestehende Maturity hochgestuft, keine Behavioral-Eval-Ergebnisse erfunden und kein Tag oder Release erzeugt.
+
 ### Problem-first Entry Path
 
 - neuen menschlichen Einstieg `START-HIER.md` ergänzt: Nutzer beginnen mit ihrem realen Problem oder Ziel und müssen weder Skill-Namen noch interne Repository-Architektur kennen;
