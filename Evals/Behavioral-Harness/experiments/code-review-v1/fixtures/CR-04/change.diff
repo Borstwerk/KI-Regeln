@@ -14,7 +14,7 @@
  def is_expired(token: Token, now: int) -> bool:
 -    return False
 +    return (now - token.last_seen) > IDLE_TIMEOUT_SECONDS
---- base/test_session.py
+--- /dev/null
 +++ head/test_session.py
 @@ -0,0 +1,11 @@
 +from session import Token, is_expired

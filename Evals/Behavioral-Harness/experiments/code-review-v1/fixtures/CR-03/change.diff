@@ -1,4 +1,4 @@
---- base/formatters.py
+--- /dev/null
 +++ head/formatters.py
 @@ -0,0 +1,12 @@
 +"""Neu eingefuehrte Formatter-Registry (im Auftrag nicht vorgesehen)."""

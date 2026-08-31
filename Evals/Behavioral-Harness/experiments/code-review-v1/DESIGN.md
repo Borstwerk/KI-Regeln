@@ -1,4 +1,8 @@
-# Phase 4.2B / B0 — Design: paired-eval replication for `code-review`
+# Phase 4.2B — Design: paired-eval replication for `code-review`
+
+Revision: **B0.1**, after the independent design review (`REQUEST CHANGES — bounded`).
+All six review findings are closed here; §16 records how. The three decisions §14 left
+open on scoring shape, prompt neutrality and CR-04 severity are closed as well.
 
 Status: **design only**. No model was run, no response was produced, no judge was
 invoked, nothing was unblinded. Nothing in this document upgrades any Phase-4.2A
@@ -60,7 +64,7 @@ observe:
 
 | # | Skill requirement | Where the design exercises it |
 | --- | --- | --- |
-| 1 | Pin base / merge-base and head before reviewing | every case ships `base/` and `head/`; `ground_truth.base_ref`/`head_ref` name them |
+| 1 | Pin base / merge-base and head before reviewing | every case ships `base/` and `head/`; `ground_truth.change_set` names them per file (§9a) |
 | 2 | Read the actual diff, not the report or the test count | `change.diff` is a real fixture; CR-04 supplies a contradicting report |
 | 3 | Review requirement and repository standards on two separate axes | CR-02, CR-03, CR-05 each supply a `policy` fixture that changes the verdict |
 | 4 | Assign each acceptance criterion a concrete piece of evidence | `ground_truth.acceptance_criteria` with `expected_status` + `evidence` |
@@ -183,6 +187,44 @@ Not a coupling, checked and cleared: `evaluation_dimensions`, `global_hard_failu
 `runner_controls`, `blind_evaluation`, `recommended_repetitions >= 2`, the method
 evidence contract, the runner adapter, and all hashing.
 
+## 6a. Closing C5 — the disclosure false positive
+
+The B0 draft proposed a general per-experiment list of domain terms exempt from
+disclosure detection. The review rejected that as too broad, and it is right: a term
+list is an open-ended hole in a blindness guard, and its size grows with every domain.
+
+The decision instead is a single, narrow, **fail-closed opt-in** on the experiment:
+
+```yaml
+treatment_disclosure:
+  allow_bare_target_skill_id_in_output: true
+```
+
+Absent field means `false`. Every existing Phase-4.2A experiment therefore keeps
+today's strict behaviour with no edit, and the relaxation exists only where an
+experiment explicitly asks for it.
+
+What the opt-in permits: the **bare** target-skill id in ordinary subject-matter prose,
+so `Dieses Code-Review ist nicht freigegeben.` no longer refuses blind packaging.
+
+What stays a disclosure even with the opt-in — this is the part that matters, and B1
+must cover each form with a test:
+
+| Form | Example |
+| --- | --- |
+| skill id + skill/instruction noun | `Ich habe den code-review Skill verwendet.` |
+| skill id applied-as-skill phrasing | `Ich habe code-review als Skill angewendet.` |
+| being given an instruction | `Mir wurde code-review als Instruction gegeben.` |
+| reading the instruction | `Ich habe die code-review Instruction gelesen.` |
+| skill id + design noun | `code-review treatment`, `code-review variant`, `code-review condition` |
+| instruction artifact path | `instructions/SKILL.md`, any `instructions/…` |
+| pinned skill path | `Programmieren/Skills/code-review/SKILL.md` |
+| the existing rules | arm-plus-design-noun, the disclosure phrase list, `skill.md` — all unchanged |
+
+The principle: **a bare domain term may be allowed; experimental or treatment context
+around it stays blocked; any reference to the skill-instruction artifact stays blocked.**
+No global loosening of the detector. Implementation and its tests are B1 work.
+
 ## 7. Generalisation principle and the minimal cut
 
 **No second harness.** The couplings above are five small ones, not an architecture
@@ -214,15 +256,18 @@ on it. Everything else keeps its current code path.
    roles; `code-review-findings/v1` adds `requirements`, `base-code`, `changed-code`,
    `change-diff`, `tests`, `ci-evidence`, `implementation-report` and reuses `policy`,
    `intentionally-incomplete`, `distractor`, `runner-only`.
+2a. An **optional `runner_path`** per fixture, because a judge-role vocabulary alone
+   does not fix the runner's view — see §10a. Absent, a fixture keeps today's numbered
+   `sources/NN-<name>` materialisation exactly.
 3. `_validate_classification` runs only for `classification/v1`; a new validator for
    the finding-set model (see §8) runs instead.
 4. `_synthetic_matrix` reads `domain` and `task_family` from the experiment, defaulting
    to `Recherche` / `paired claim verification` so claim-verification-v1 compiles to an
    identical hash.
 5. The classification-specific judge instruction becomes model-conditional.
-6. C5 must be resolved before any code-review run — see the open decisions.
-7. A prepare-time check that `change.diff` really is the diff of `base_ref` and
-   `head_ref`, so the review package cannot become internally inconsistent.
+6. The narrow `treatment_disclosure.allow_bare_target_skill_id_in_output` opt-in that
+   closes C5 — see §6a. Absent, detection stays exactly as strict as today.
+7. Prepare-time verification of the change set — see §9a.
 
 ### Explicitly *not* necessary
 
@@ -250,14 +295,25 @@ contract_change:
     migration for a strictly backward-compatible extension.
 ```
 
-Two caveats stated rather than smoothed over:
+This verdict is conditional. It holds **only** under all of the following hard
+compatibility requirements, each of which B1 must actually satisfy:
 
-- This holds **only** if the discriminator defaults to `classification/v1`. If B1
-  instead makes `ground_truth_model` mandatory, the change *is* breaking and a v2 is
-  required. That is an implementation constraint, not a free choice.
-- The C5 fix is the one change that alters behaviour for *existing* experiments
-  (it relaxes a blindness guard). It is deliberately excluded from the
-  "non-breaking" claim above and left as an open decision below.
+| New input | Must be | Absent means |
+| --- | --- | --- |
+| `ground_truth_model` | optional | `classification/v1` |
+| `runner_path` | optional | today's numbered `sources/NN-<name>` materialisation |
+| `domain` | optional | `Recherche` |
+| `task_family` | optional | `paired claim verification` |
+| `treatment_disclosure` | optional | today's strict target-skill-id detection |
+
+Plus: `classification/v1` behaviour stays byte-identical, and the contracts and
+prepared hashes that `claim-verification-v1` produces must not be changed by the B1
+generalisation, intentionally or otherwise. B1 owes a regression proof of exactly that.
+
+**If any of these new inputs turns out to require being mandatory, the breaking-change
+question is reopened rather than answered by asserting `v1` anyway.** That is a real
+possibility, not a formality: the C5 opt-in is the one change that touches behaviour of
+an existing guard, and it is only non-breaking because its default is `false` (§6a).
 
 ## 9. Ground-truth model for code review
 
@@ -266,8 +322,11 @@ is written out in full in `experiment.draft.yml`. Shape:
 
 ```yaml
 ground_truth:
-  base_ref: <fixture>            # makes "pin base and head" checkable
-  head_ref: <fixture>
+  change_set:                    # makes "pin base and head" checkable, per file
+    diff_ref: <fixture>
+    files:
+      - {logical_path: ..., change_type: modified|added|deleted,
+         base_ref: <fixture|null>, head_ref: <fixture|null>}
   expected_findings:             # what a competent review must report
     - finding_id: CR-01-F01
       category: requirement-violation | scope-creep | test-inadequacy |
@@ -278,7 +337,11 @@ ground_truth:
       evidence: [...]            # the package facts that make it provable
       detection_criteria: [...]  # the precommitted bar for "found it"
       rationale: ...
-  acceptable_additional_findings: [...]   # true, not required, never penalised
+  acceptable_additional_findings:         # true, not required, never penalised
+    - finding_id: CR-01-A01
+      claim: ...
+      evidence: [...]
+      severity_band: [note, should-fix]   # optional
   forbidden_findings:                     # asserting these is wrong
     - finding_id: CR-01-X01
       claim: ...
@@ -294,7 +357,7 @@ ground_truth:
   hard_failures: [...]
 ```
 
-Five deliberate departures from the sketch in the order, each with a reason:
+Six deliberate departures from the sketch in the order, each with a reason:
 
 1. **`detection_criteria` per finding.** Without a precommitted bar, "did the response
    find CR-01-F01?" is decided by the judge at judging time, which is exactly the
@@ -310,17 +373,77 @@ Five deliberate departures from the sketch in the order, each with a reason:
    finding list. CR-06 exists mainly to test it.
 5. **`acceptance_criteria` gains `not-checkable`.** Required for the honest-boundary
    case; `missing` would wrongly imply the author failed to deliver something.
+6. **`change_set` replaces the flat `base_ref`/`head_ref` pair** (review finding 3).
+   A single ref pair cannot describe CR-03 or CR-04, both of which touch two files, one
+   of them added. Every case now uses the same structure, including single-file cases,
+   so `code-review-findings/v1` has exactly one change representation rather than two
+   competing ones.
 
 `relevant_evidence` / `decisive_reason` from the v1 ground truth are dropped for this
 model: per-finding `evidence` and `rationale` carry the same information at the right
 granularity. `known_traps`, `allowed_uncertainty` and `hard_failures` are kept as-is.
 
-**No aggregate score.** Ten dimensions are reported separately (`finding_recall`,
-`false_positives`, `severity_calibration`, `evidence_location_accuracy`,
-`spec_coverage`, `scope_creep_detection`, `test_critique`, `unsupported_findings`,
-`release_calibration`, plus `overhead` as diagnostic-only). A review that finds every
-blocker *and* raises three false positives must remain visibly both; collapsing that
-into `7.4/10` destroys the one thing this domain adds.
+### Findings the ground truth did not anticipate
+
+The ground truth claims to be **exhaustive for review-significant findings**
+(`finding_scope.intended_ground_truth`), not a convenient subset. That claim is only
+honest if there is a precommitted rule for what happens when a response finds something
+outside all three lists. Deciding that after seeing the response would be exactly the
+post-hoc rule-making this phase forbids, so the rule is fixed now, in order:
+
+1. the claim is **not supported by the package** → `false-positive`;
+2. the claim **invents** a file, symbol, test, CI result or other evidence → `hard-failure`;
+3. the claim **is genuinely supported** by the package but was recorded neither as
+   expected nor as acceptable → `ground_truth_incomplete / adjudication_required`:
+   no spontaneous reward, no spontaneous penalty, and **the affected pair comparison
+   must not be closed** until the ground-truth gap has been handled independently.
+
+Case 3 is the important one. A model may legitimately find a gap the authors missed.
+That must be recordable as a gap in *our* ground truth, not silently converted into
+credit or into a penalty.
+
+`acceptable_additional_findings` are consequently structured (`finding_id`, `claim`,
+`evidence`, optional `severity_band`) rather than free prose, so that "is this claim
+one of the anticipated acceptable ones?" is decidable rather than a judgment call.
+They earn no required-recall credit and cost nothing when absent.
+
+### Scoring shape (decision, was open in B0)
+
+```text
+per finding:     hit | miss | false-positive | hard-failure | adjudication-required
+per dimension:   pass | partial | fail | unverifiable
+```
+
+A `hit` requires that finding's own `detection_criteria` to be satisfied. The ten
+dimensions (`finding_recall`, `false_positives`, `severity_calibration`,
+`evidence_location_accuracy`, `spec_coverage`, `scope_creep_detection`,
+`test_critique`, `unsupported_findings`, `release_calibration`, plus `overhead` as
+diagnostic-only) are summarised separately.
+
+**No aggregate score, no weighted score, no ranking, no `8/10`.** A review that finds
+every blocker *and* raises three false positives must remain visibly both; collapsing
+that into one number destroys the one thing this domain adds.
+
+## 9a. Change set and prepare-time verification
+
+Every case declares its change as one `change_set`, with `change_type` restricted for
+this pilot to `modified`, `added`, `deleted`. `base_ref` is `null` for `added`,
+`head_ref` is `null` for `deleted`. No git-repository simulation is needed or wanted.
+
+B1 must verify at prepare time that:
+
+- every `change_set` file exists in the way its `change_type` claims;
+- all referenced base/head artifacts belong to this case;
+- `diff_ref` is present;
+- the unified diff represents **exactly** the declared change-set file set.
+
+B0.1 already ran these checks by hand against the committed fixtures, and the last one
+caught a real defect: the generated diffs labelled an added file's base side
+`--- base/formatters.py`, a path that does not exist, contradicting
+`change_type: added`. All six diffs were regenerated so added files carry
+`--- /dev/null`, and each committed diff was re-derived from its `base/` and `head/`
+files and compared byte-for-byte. This is the concrete argument for making the check
+mandatory rather than advisory: hand-maintained review packages drift silently.
 
 ## 10. Fixture and artifact model
 
@@ -338,6 +461,42 @@ fixtures/CR-0n/
   implementation-report.md   role: implementation-report(CR-04 only)
   export-contract-pointer.md role: intentionally-incomplete (CR-06 only)
 ```
+
+## 10a. What the runner actually sees — `runner_path`
+
+Extending the *judge* role vocabulary does not by itself fix the *runner's* view. The
+pair harness materialises every non-skill fixture as `sources/NN-<basename>`
+(`_prepare_compiled_variant`), so a code-review package would reach the runner as a
+flat, numbered list in which `base/pricing.py` and `head/pricing.py` collapse to two
+adjacent numbered files whose relationship is invisible. A review task whose whole
+point is "read the diff between base and head" cannot be presented that way.
+
+B1 therefore adds an **optional** per-fixture `runner_path`:
+
+```yaml
+fixtures:
+  - {path: fixtures/CR-01/requirements.md,  role: requirements,  runner_path: sources/requirements.md}
+  - {path: fixtures/CR-01/base/pricing.py,  role: base-code,     runner_path: sources/base/pricing.py}
+  - {path: fixtures/CR-01/head/pricing.py,  role: changed-code,  runner_path: sources/head/pricing.py}
+  - {path: fixtures/CR-01/change.diff,      role: change-diff,   runner_path: sources/change.diff}
+```
+
+Rules B1 must enforce:
+
+- `runner_path` is **optional**; a fixture without it keeps today's numbered
+  materialisation, so every existing experiment is untouched;
+- safe relative paths only: no absolute path, no `..` segment;
+- must live under `sources/`;
+- unique within one runner package;
+- must not collide with `instructions/`;
+- must not encode the judge role, the treatment, or any judge-only information.
+
+The last rule is why the paths show only the natural artifact structure —
+`requirements`, `base`, `head`, the diff, tests, CI, report. In particular
+`sources/intentionally-incomplete/…` is **forbidden**: that would hand the runner the
+judge's own assessment of the fixture. CR-06's deliberately absent contract is mounted
+as `sources/export-contract-pointer.md`; the file's *content* says it is absent, which
+is the honest signal, while the *path* says nothing. Judge roles stay judge metadata.
 
 ### Why base + head *and* a derived diff
 
@@ -408,12 +567,27 @@ skill arm receives exactly one additional file, the pinned skill, mounted as
 `instructions/SKILL.md`. No helper skill is added on one side only. Treatment mapping
 and execution order stay coordinator-only; the judge sees opaque response IDs.
 
-The shared prompt (in the draft) deliberately paraphrases the *task*, never the
-method: it asks for base/head, two axes, evidence per criterion, prioritised findings
-and an explicit verdict, because that is what a reviewer is asked for in practice. It
-does not name the skill or its section structure — if it did, the baseline arm would
-be handed the skill's content in the prompt and the experiment would measure nothing.
-This is a real risk in this domain and should be a focus of the independent review.
+### The shared prompt (decision, was open in B0)
+
+The review found the B0 prompt guilty of exactly the risk B0 flagged: by asking for
+base/head pinning, two separate axes, a per-criterion evidence matrix and a
+blocker/should-fix/note structure, it handed the baseline arm a large part of the
+skill's own method and shrank the very contrast the experiment measures. Finding 1 is
+accepted. The prompt is now:
+
+> Reviewe die vorliegende Änderung ausschließlich anhand der Dateien in diesem Paket.
+> Nenne konkrete Funde mit den entscheidenden Belegen und sage abschließend, ob die
+> Änderung aus fachlich-technischer Sicht freigegeben werden kann oder welche Punkte
+> offen bleiben. Ändere den Code nicht.
+
+It still fixes the four things that define the *task* rather than the *method*:
+package-only, review instead of implementation, concrete evidence, and a closing
+release judgment. It no longer prescribes pinning base and head, separating the spec
+and standards axes, building a criterion matrix, using the three-band finding
+structure, judging tests in any particular way, or looking for scope creep. Each of
+those is now free to appear — or not — as an observable effect of the skill.
+
+This closes the open prompt decision.
 
 ## 13. Known methodological limit, inherited
 
@@ -429,37 +603,38 @@ best `method_evidence_status: partial` and `comparison_eligible: false`, exactly
 4.2A did. B0 deliberately opens **no** new nftables, cgroup, proxy, credential,
 namespace or firewall investigation, and performs no run at all.
 
-## 14. Open design decisions
+## 14. Decisions closed in B0.1, and what is still open
 
-These are genuinely open and are the agenda for the independent design review. None is
-decided here.
+**Closed by the review round:**
 
-1. **C5 — how to fix the disclosure false positive.** Options: (a) an explicit
-   per-experiment list of domain terms that are not disclosure; (b) require the
-   skill-id match to sit next to an experiment-design noun, as the arm/noun rule
-   already does; (c) leave it strict and accept that German code-review outputs are
-   refused. (c) blocks the phase; (a) is the most explicit and stays fail-closed by
-   default; (b) is the least configuration but weakens the guard for every experiment.
-   **Recommendation: (a).** This is the one change that touches a blindness guarantee,
-   so it should be decided by review, not by the implementer.
-2. **How much prompt to give.** See §12. A prompt too close to the skill's structure
-   destroys the contrast; one too vague makes the baseline fail for reasons unrelated
-   to the skill. The draft's wording is a proposal, not a decision.
-3. **Judge dimension scoring shape.** Per-dimension ordinal, per-dimension pass/partial/fail,
-   or per-finding hit/miss plus per-dimension summary. Only the "no single total" rule
-   is settled.
-4. **How to count `acceptable_additional_findings`.** Currently defined as never
-   penalised, but also never rewarded. Whether recall credit should exist for them is
-   open.
-5. **Whether CR-04's severity for F01 is right.** Called a blocker because AC-3 is an
-   explicit acceptance criterion; a reviewer could defensibly call it should-fix. The
-   `severity_calibration` dimension is only fair if that band is agreed in advance.
-6. **Repetition count.** `recommended_repetitions: 3` copied from 4.2A without
+1. **C5 disclosure fix** — the broad domain-term list is rejected; a narrow fail-closed
+   opt-in is adopted instead (§6a).
+2. **Prompt neutrality** — the prompt is neutralised (§12).
+3. **Scoring shape** — per-finding `hit | miss | false-positive | hard-failure |
+   adjudication-required`, plus a separate per-dimension `pass | partial | fail |
+   unverifiable`. No total, no weighting, no ranking (§9).
+4. **`acceptable_additional_findings`** — structured, never rewarded with recall credit,
+   never penalised when absent, and complemented by the unlisted-finding rule so the
+   ground truth's exhaustiveness claim is honest (§9).
+5. **CR-04-F01 severity** — stays `blocker`. AC-3 explicitly requires the decisive
+   property to be protected by an automatic test, and the supplied tests cannot
+   distinguish `last_seen` from `created_at`, so a stated acceptance criterion is unmet.
+   That is a requirement gap, not a style preference. Recorded as `severity_rationale`
+   on the finding itself so `severity_calibration` is judged against a stated band.
+
+**Still open, for the re-review:**
+
+6. **Repetition count.** `recommended_repetitions: 3` is still copied from 4.2A without
    independent justification for this domain.
-7. **Whether the diff-vs-base/head consistency check (§7.7) belongs in the pair
-   harness or in a fixture lint.**
+7. **Where the change-set verification lives** — inside the pair harness prepare step or
+   in a separate fixture lint. §9a argues it must be mandatory somewhere; which of the
+   two is a B1 implementation choice.
+8. **Whether the neutralised prompt is now too thin.** Finding 1 is accepted and
+   implemented, but the opposite failure mode — a baseline that underperforms for
+   reasons unrelated to the skill, simply because the task statement is vague — is not
+   something this round can settle by inspection. It is worth a look in the re-review.
 
-## 15. What B0 did not do
+## 15. What B0 and B0.1 did not do
 
 No model run. No baseline response, no skill response, no behavioral response of any
 kind. No semantic judge, no blind judge, no unblinding, no comparison, no skill-effect
@@ -473,3 +648,29 @@ executable experiment.
 Ground truth in this draft is a **proposal**. Per the phase rule, it must be
 independently reviewed and frozen before any model is run, and it must never be
 adjusted afterwards to fit an observed response.
+
+## 16. Review findings and how each was closed
+
+Independent design review verdict on B0: `REQUEST CHANGES — bounded`. Six findings.
+
+| # | Finding | Resolution | Where |
+| --- | --- | --- | --- |
+| 1 | The shared prompt already prescribed much of the skill's own method and shrank the baseline/skill contrast | Prompt neutralised to package-only, review-not-implement, concrete evidence, closing release judgment. Base/head pinning, axis separation, criterion matrix, three-band structure, test-critique style and scope-creep search removed — all now observable as skill effects | §12, `shared_user_prompt` |
+| 2 | A judge-role vocabulary alone does not fix the runner's view of review artifacts | Optional `runner_path` designed, with its safety, uniqueness and no-role-leak rules; all six cases annotated. `sources/intentionally-incomplete/…` explicitly forbidden | §10a, `runner_path_rules`, all cases |
+| 3 | Flat `base_ref`/`head_ref` cannot express a multi-file diff | Replaced by one `change_set` model (`diff_ref` + per-file `logical_path`/`change_type`/`base_ref`/`head_ref`), used by every case including single-file ones. Prepare-time verification specified | §9, §9a, all cases |
+| 4a | CR-01 AC-2 wrongly `partial` — the requirement is behavioural and the behaviour holds | Set to `satisfied`; the absent cap demoted to an optional robustness note (`CR-01-A02`), and asserting an AC-2 violation added as a forbidden finding (`CR-01-X03`) | CR-01 |
+| 4b | CR-06 `_utc` only appended `Z` and did not convert, so `AC-1: satisfied` was not defensible | Head fixture corrected to `value.astimezone(timezone.utc)`; `change.diff` fully re-derived from base and corrected head, not patched; ground truth re-checked. CR-06 remains AC-1 satisfied, AC-2 satisfied, COLUMN-ORDER not-checkable, verdict `open-questions-remain`, with both confident answers still forbidden. `CR-06-X04` added so the now-fixed UTC bug cannot be claimed | CR-06 |
+| 4c | CR-05 rationale "validation happens after use" was inaccurate — there is no range validation at all | Rationale corrected: `limit` is converted and used without validating the required 1..1000 range, and a failing conversion is unhandled. No new ground truth added | CR-05-F02 |
+| 5 | The proposed general domain-term whitelist is too broad | Replaced by the narrow fail-closed opt-in `allow_bare_target_skill_id_in_output`, default `false`, with the list of forms that stay disclosures even under the opt-in | §6a, `treatment_disclosure` |
+| 6 | Ground truth left everything unlisted to the judge | `finding_scope: exhaustive-for-review-significant-findings`; `acceptable_additional_findings` structured; and a precommitted three-step `unlisted_finding_rule` including `ground_truth_incomplete / adjudication_required`, which blocks closing the affected pair rather than improvising a score | §9, `finding_scope`, `unlisted_finding_rule` |
+
+Additionally decided in this round, on the reviewer's instruction: scoring shape (§9),
+CR-04-F01 stays `blocker` with a recorded `severity_rationale` (CR-04), and the
+contract verdict is restated with its hard compatibility conditions (§8).
+
+One defect was found by B0.1's own verification rather than by the review: the
+generated diffs labelled an added file's base side `--- base/<file>`, a path that does
+not exist, contradicting `change_type: added`. All six diffs were regenerated with
+`--- /dev/null` for added files and each was re-derived from `base/`+`head/` and
+compared byte-for-byte. This is recorded as the concrete reason the change-set check in
+§9a must be mandatory rather than advisory.

@@ -1,5 +1,8 @@
+from datetime import timezone
+
+
 def _utc(value):
-    return value.strftime("%Y-%m-%dT%H:%M:%SZ")
+    return value.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
 def _blank(value):
