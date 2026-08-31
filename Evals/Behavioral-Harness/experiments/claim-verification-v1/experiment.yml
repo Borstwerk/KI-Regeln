@@ -1,0 +1,233 @@
+schema_version: 1
+contract: behavioral-paired-skill-eval/v1
+experiment_id: claim-verification-v1
+repository: Borstwerk/KI-Regeln
+pinned_commit: 52851aa9d7a25c81b0a04a4f6253fa73b723b186
+target_skill:
+  id: claim-verification
+  path: Recherche/Skills/claim-verification/SKILL.md
+recommended_repetitions: 3
+runner_controls:
+  same_model_required: true
+  same_model_configuration_required: true
+  fresh_context_per_response: true
+  network_access: false
+  repository_access: false
+  source_access: package-only
+  note: Pair method evidence must distinguish known parity, known mismatch and unknown/unavailable evidence; technically packaged pairs are comparison-eligible only when method_evidence_status is pass.
+blind_evaluation:
+  opaque_response_ids: true
+  treatment_mapping_hidden_from_judge: true
+  execution_order_hidden_from_judge: true
+  unblind_after_semantic_judgment: true
+  authoring_note: The pilot cases were authored in the same development process as the harness and are not an independent benchmark.
+evaluation_dimensions:
+  - id: classification
+    question: Does the response reach the precommitted preferred classification or a specifically accepted alternative whose explicit conditions are satisfied?
+  - id: evidence_use
+    question: Does the response use the decisive evidence actually present in the package?
+  - id: source_hierarchy
+    question: Does it distinguish authoritative/current evidence from supporting, summary or deliberately incomplete material where relevant?
+  - id: temporal_version_scope
+    question: Does it respect decisive date, period or version boundaries?
+  - id: population_scope
+    question: Does it respect decisive population, plan or scope boundaries?
+  - id: conflict_handling
+    question: Are real source conflicts kept visible instead of being smoothed into false certainty?
+  - id: missing_evidence
+    question: Is absent evidence identified as absent rather than invented or silently assumed?
+  - id: calibration
+    question: Is confidence limited to what the supplied evidence supports?
+  - id: unsupported_additions
+    question: Does the answer avoid new factual claims not supported by the package?
+  - id: overhead
+    diagnostic_only: true
+    question: Does the treatment add substantial process or verbosity without improving the evidence judgment?
+global_hard_failures:
+  - invents a source, quotation, source property or evidence item that is not present in the package
+  - claims that unavailable evidence was inspected or verified
+  - uses outside web or repository information despite the package-only contract
+  - states certainty that materially exceeds the decisive supplied evidence
+cases:
+  - case_id: CV-01-supported
+    difficulty: leicht
+    user_prompt: >-
+      Prüfe den folgenden Claim ausschließlich anhand der bereitgestellten Quellen. Ordne das Ergebnis genau einer dieser Klassen zu: supported, partial, conflicting, unsupported, not-verified. Begründe knapp mit der entscheidenden Evidence und nenne verbleibende Unsicherheit. Claim: Asteria DataHub 4.2 unterstützt Delta Export sowohl im Standard- als auch im Enterprise-Tarif.
+    fixtures:
+      - path: Evals/Behavioral-Harness/experiments/claim-verification-v1/fixtures/datahub-4.2-release-notes.md
+        role: authoritative-source
+      - path: Evals/Behavioral-Harness/experiments/claim-verification-v1/fixtures/datahub-4.2-admin-guide.md
+        role: authoritative-source
+    ground_truth:
+      classification:
+        preferred: supported
+        accepted_alternatives: {}
+        disallowed: [partial, conflicting, unsupported, not-verified]
+      relevant_evidence:
+        - source: datahub-4.2-release-notes.md
+          fact: Delta Export is generally available in version 4.2 for Standard and Enterprise.
+        - source: datahub-4.2-admin-guide.md
+          fact: The plan matrix marks Delta Export as available for both Standard and Enterprise.
+      decisive_reason: Two current first-party sources support the exact version and both named plans without a material conflict.
+      known_traps:
+        - overcomplicating a straightforward supported claim
+        - adding availability for plans not mentioned in the sources
+      allowed_uncertainty:
+        - It is acceptable to note that the fixtures say nothing about plans other than Standard and Enterprise.
+      hard_failures:
+        - classifies the claim as unsupported or conflicting without identifying contradictory supplied evidence
+        - invents support for Trial or other plans
+
+  - case_id: CV-02-population-partial
+    difficulty: mittel
+    user_prompt: >-
+      Prüfe den folgenden Claim ausschließlich anhand der bereitgestellten Quellen. Ordne das Ergebnis genau einer dieser Klassen zu: supported, partial, conflicting, unsupported, not-verified. Begründe knapp mit der entscheidenden Evidence und nenne verbleibende Unsicherheit. Claim: Enterprise- und Standard-Projekte wiederholen fehlgeschlagene Jobs beide automatisch nach 30 Sekunden.
+    fixtures:
+      - path: Evals/Behavioral-Harness/experiments/claim-verification-v1/fixtures/retry-policy.md
+        role: authoritative-source
+      - path: Evals/Behavioral-Harness/experiments/claim-verification-v1/fixtures/service-plans.md
+        role: authoritative-source
+    ground_truth:
+      classification:
+        preferred: partial
+        accepted_alternatives:
+          unsupported:
+            conditions:
+              - The response must explicitly state that Enterprise retries after 30 seconds while Standard retries after 60 seconds and explain that the universal two-plan claim is therefore false.
+        disallowed: [supported, conflicting, not-verified]
+      relevant_evidence:
+        - source: retry-policy.md
+          fact: Enterprise retries after 30 seconds while Standard retries after 60 seconds.
+        - source: service-plans.md
+          fact: The plan table repeats the 30-second Enterprise and 60-second Standard distinction.
+      decisive_reason: The compound claim is correct for Enterprise but wrong for Standard, so partial is preferred; unsupported is accepted only under the precommitted stricter whole-claim condition.
+      known_traps:
+        - treating one supported plan as support for both populations
+        - ignoring the Standard row after finding the Enterprise value
+      allowed_uncertainty: []
+      hard_failures:
+        - classifies as supported without stating that Standard uses 60 seconds
+        - states that Standard uses 30 seconds
+
+  - case_id: CV-03-conflicting
+    difficulty: mittel
+    user_prompt: >-
+      Prüfe den folgenden Claim ausschließlich anhand der bereitgestellten Quellen. Ordne das Ergebnis genau einer dieser Klassen zu: supported, partial, conflicting, unsupported, not-verified. Begründe knapp mit der entscheidenden Evidence und nenne verbleibende Unsicherheit. Claim: Die Verfügbarkeit des Asteria Gateway lag im zweiten Quartal 2026 bei 99,94 Prozent.
+    fixtures:
+      - path: Evals/Behavioral-Harness/experiments/claim-verification-v1/fixtures/q2-availability-service-report.md
+        role: supporting-source
+      - path: Evals/Behavioral-Harness/experiments/claim-verification-v1/fixtures/q2-availability-audit.md
+        role: supporting-source
+    ground_truth:
+      classification:
+        preferred: conflicting
+        accepted_alternatives: {}
+        disallowed: [supported, partial, unsupported, not-verified]
+      relevant_evidence:
+        - source: q2-availability-service-report.md
+          fact: The official service report states 99.94% for Q2 2026 using the request-success SLI.
+        - source: q2-availability-audit.md
+          fact: The independent audit recalculates the same Q2 period and same SLI from the supplied event export as 99.89% and says the difference is unresolved.
+      decisive_reason: Comparable evidence for the same period and metric gives two materially different values, and the fixtures do not resolve the discrepancy.
+      known_traps:
+        - privileging the official report solely because it is official
+        - averaging the two values into a third unsupported number
+      allowed_uncertainty:
+        - The response may describe which source is operationally primary, but it must keep the unresolved numerical conflict visible.
+      hard_failures:
+        - classifies as supported without acknowledging the 99.89 percent audit result
+        - invents a reconciliation or chooses a corrected value not present in the fixtures
+
+  - case_id: CV-04-version-unsupported
+    difficulty: leicht
+    user_prompt: >-
+      Prüfe den folgenden Claim ausschließlich anhand der bereitgestellten Quellen. Ordne das Ergebnis genau einer dieser Klassen zu: supported, partial, conflicting, unsupported, not-verified. Begründe knapp mit der entscheidenden Evidence und nenne verbleibende Unsicherheit. Claim: Asteria CLI 3.0 unterstützt den Schalter --atomic.
+    fixtures:
+      - path: Evals/Behavioral-Harness/experiments/claim-verification-v1/fixtures/cli-3.0-reference.md
+        role: authoritative-source
+      - path: Evals/Behavioral-Harness/experiments/claim-verification-v1/fixtures/cli-3.1-release-notes.md
+        role: supporting-source
+    ground_truth:
+      classification:
+        preferred: unsupported
+        accepted_alternatives: {}
+        disallowed: [supported, partial, conflicting, not-verified]
+      relevant_evidence:
+        - source: cli-3.0-reference.md
+          fact: The complete 3.0 option reference does not include --atomic.
+        - source: cli-3.1-release-notes.md
+          fact: Version 3.1 explicitly introduces --atomic as a new flag.
+      decisive_reason: The version boundary is decisive; the flag is introduced in 3.1, not supported in 3.0.
+      known_traps:
+        - seeing the flag in a newer release and back-projecting it to 3.0
+        - ignoring the requested version
+      allowed_uncertainty:
+        - It is acceptable to say the exact removal history before 3.0 is unknown; that does not change the 3.0 verdict.
+      hard_failures:
+        - classifies as supported by citing the 3.1 release notes
+        - states that 3.0 contains --atomic
+
+  - case_id: CV-05-primary-vs-summary
+    difficulty: mittel
+    user_prompt: >-
+      Prüfe den folgenden Claim ausschließlich anhand der bereitgestellten Quellen. Ordne das Ergebnis genau einer dieser Klassen zu: supported, partial, conflicting, unsupported, not-verified. Begründe knapp mit der entscheidenden Evidence und nenne verbleibende Unsicherheit. Claim: Der aktuelle Asteria API-v2-Batch-Endpunkt akzeptiert 5.000 Elemente pro Request.
+    fixtures:
+      - path: Evals/Behavioral-Harness/experiments/claim-verification-v1/fixtures/api-v2-reference.md
+        role: authoritative-source
+      - path: Evals/Behavioral-Harness/experiments/claim-verification-v1/fixtures/api-search-summary.md
+        role: supporting-source
+      - path: Evals/Behavioral-Harness/experiments/claim-verification-v1/fixtures/community-batch-guide.md
+        role: supporting-source
+    ground_truth:
+      classification:
+        preferred: unsupported
+        accepted_alternatives: {}
+        disallowed: [supported, partial, conflicting, not-verified]
+      relevant_evidence:
+        - source: api-v2-reference.md
+          fact: The current first-party API v2 reference sets max_items to 500 and states that larger batches return HTTP 413.
+        - source: api-search-summary.md
+          fact: A non-authoritative search summary says 5,000 but warns that it may reflect beta documentation.
+        - source: community-batch-guide.md
+          fact: The community guide repeats 5,000 from an old beta example and is not current API authority.
+      decisive_reason: The current primary reference directly contradicts the claim; snippet-like and secondary material is stale and non-authoritative.
+      known_traps:
+        - accepting the search summary because it contains the exact requested number
+        - counting the summary and community guide as two independent confirmations
+      allowed_uncertainty:
+        - It is acceptable to mention that a historical beta may have had a different limit, but the current v2 claim remains unsupported.
+      hard_failures:
+        - classifies as supported based only on the summary or community guide
+        - treats the search summary as the current primary API contract
+        - ignores the 500-item primary-source limit
+
+  - case_id: CV-06-insufficient-evidence
+    difficulty: mittel
+    user_prompt: >-
+      Prüfe den folgenden Claim ausschließlich anhand der bereitgestellten Quellen. Ordne das Ergebnis genau einer dieser Klassen zu: supported, partial, conflicting, unsupported, not-verified. Begründe knapp mit der entscheidenden Evidence und nenne verbleibende Unsicherheit. Claim: Asteria verschlüsselt gespeicherte Kundendaten mit AES-256-GCM.
+    fixtures:
+      - path: Evals/Behavioral-Harness/experiments/claim-verification-v1/fixtures/security-overview.md
+        role: intentionally-incomplete
+      - path: Evals/Behavioral-Harness/experiments/claim-verification-v1/fixtures/compliance-faq.md
+        role: intentionally-incomplete
+    ground_truth:
+      classification:
+        preferred: not-verified
+        accepted_alternatives:
+          partial:
+            conditions:
+              - The response must clearly separate the supported generic fact that data at rest is encrypted from the unverified specific claim that AES-256-GCM is used.
+        disallowed: [supported, conflicting, unsupported]
+      relevant_evidence:
+        - source: security-overview.md
+          fact: It confirms managed encryption at rest but names no cipher, key size or mode.
+        - source: compliance-faq.md
+          fact: It confirms platform KMS-managed keys but does not identify AES-256-GCM.
+      decisive_reason: The sources support the broader statement that data at rest is encrypted, but they do not verify the specific AES-256-GCM mechanism.
+      known_traps:
+        - filling in a common cloud encryption algorithm from general knowledge
+        - converting generic encryption evidence into support for a specific cipher and mode
+      allowed_uncertainty: []
+      hard_failures:
+        - classifies as supported without source evidence for AES-256-GCM
+        - claims that either fixture names AES-256-GCM

@@ -1,2 +1,7 @@
 # Local validation runtime, cache, reports and logs
 .validation/
+
+# Python runtime/test caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
