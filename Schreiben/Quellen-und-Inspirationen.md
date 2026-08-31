@@ -6,6 +6,14 @@ Diese Datei dokumentiert externe Beobachtungs-, Norm- und Inspirationsquellen f�
 
 Externe Quellen werden nicht automatisch übernommen. Normative Quellen, methodische Referenzen und bloße Musterkataloge haben unterschiedliche Rollen.
 
+## Monitoring- und Provenance-Entscheidung
+
+Die nachfolgend konkret bezeichneten GitHub-Skills wurden als **punktuelle methodische Referenzen** gelesen. Ihre beobachteten Blob-SHAs halten den tatsächlich geprüften Stand fest. Sie werden dadurch nicht zu Runtime-Abhängigkeiten oder automatisch synchronisierten Upstreams.
+
+Eine spätere Änderung dieser Fremd-Skills ändert lokale Regeln nicht automatisch. Erst wenn ein solcher Fremd-Skill dauerhaft als lebende methodische Abhängigkeit genutzt werden soll, ist eine Aufnahme in das zentrale Upstream-Monitoring zu prüfen.
+
+Das amtliche Regelwerk und `grammis` sind dagegen fachliche Primärquellen. Bei strittigen oder material zeitabhängigen Sprachfragen ist ihr aktueller Stand erneut zu prüfen.
+
 ## Amtliches Regelwerk der deutschen Rechtschreibung
 
 Quelle:
@@ -53,6 +61,11 @@ Quelle:
 
 `https://github.com/Olshansk/agent-skills/blob/main/skills/cmd-write-proofread/SKILL.md`
 
+Beobachteter Stand:
+
+- Blob-SHA: `3954f0b51ee19f26c17d566f10249c6c7b173e86`;
+- geprüft am: 2026-08-31.
+
 Lizenzraum:
 
 - Repository: MIT.
@@ -72,7 +85,12 @@ KI-Regeln übernimmt nicht den breiten Publishing-/Link-/Argumentations-Scope di
 
 Quelle:
 
-`https://github.com/brendanbank/fix-my-text-skill`
+`https://github.com/brendanbank/fix-my-text-skill/blob/master/fix-my-text/SKILL.md`
+
+Beobachteter Stand:
+
+- Blob-SHA: `62ede84c7c081a31f7e33a474b7767e85325d40e`;
+- geprüft am: 2026-08-31.
 
 Lizenzraum:
 
@@ -93,7 +111,12 @@ Keine source-spezifischen Stilverbote wie ein pauschales Verbot bestimmter Gedan
 
 Quelle:
 
-`https://github.com/justinneuman-coder/red-pencil-editor-skills`
+`https://github.com/justinneuman-coder/red-pencil-editor-skills/blob/main/editor-mode/SKILL.md`
+
+Beobachteter Stand:
+
+- Blob-SHA: `53f039850b9b5218ca9e69116781462fb7ffa95a`;
+- geprüft am: 2026-08-31.
 
 Lizenzraum:
 
@@ -111,7 +134,12 @@ KI-Regeln erzwingt kein grundsätzliches „nur markieren, nie korrigieren“. R
 
 Quelle:
 
-`https://github.com/sebastian-software/effective-german-typography-skill`
+`https://github.com/sebastian-software/effective-german-typography-skill/blob/main/SKILL.md`
+
+Beobachteter Stand:
+
+- Blob-SHA: `e9df1689067aca595c5de9eb3cc93213b98ff3b5`;
+- geprüft am: 2026-08-31.
 
 Status und Lizenzraum:
 
