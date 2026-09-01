@@ -8,6 +8,16 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Eval-Guardrails und Monatsradar-Evidence
+
+- Agent-Evals um Harness-/Guard-Integrität gehärtet: kritische Guards sollen ihre Schutzwirkung nach Möglichkeit durch eine kontrollierte relevante Brechprobe belegen; ein vorhandener grüner Check gilt nicht allein wegen seiner Existenz als belastbare Evidence;
+- Baselines, Positiv-/Negativkontrollen sowie Kalibrierungs- und Held-out-Evidence klarer getrennt; zur Judge-/Rubrik-/Schwellenwert-Kalibrierung verwendete Fälle werden nicht zugleich als unabhängige Vergleichsevidence ausgegeben;
+- `verification-loop`, `ci-pipeline-design` und `test-suite-review` gegen stilles Absenken des Quality Floors geschärft: Änderungen an Assertions, Filtern, Gate-Severity oder Schwellenwerten sind eigenständige relevante Änderungen mit eigener Begründung, Evidence und gegebenenfalls Autorisierung; ein grüner Lauf unter verändertem Maßstab ist nicht automatisch mit der vorherigen Baseline gleichwertig;
+- bestehende Evalfälle für `agent-eval` und `verification-loop` entsprechend geschärft, ohne neue Evalfälle anzulegen und ohne Maturity oder Eval Coverage zu verändern;
+- `Dokumentation/radar-sources.yml` um maschinenlesbare Mindestfelder für monatliche Source-Evidence ergänzt; nicht verifizierbare Zustände bleiben `UNVERIFIED` statt plausibel als unverändert klassifiziert zu werden;
+- den methodisch verwendeten `github/awesome-copilot`-Agenten `research-harness-engineer.agent.md` mit beobachtetem Blob-SHA, exaktem Repository-Commit und MIT-Evidence als `reference/inspiration` in Upstream-Register und Provenance aufgenommen; keine Redistribution fremder Ausdrucksform vorausgesetzt;
+- keine Behavioral Evals als ausgeführt oder bestanden dargestellt, kein Tag oder Release erzeugt.
+
 ### Schreibkorrektur und deutsche Typografie
 
 - zwei klar getrennte Schreiben-Skills ergänzt: `korrekturlektorat` für Rechtschreibung, Grammatik, Syntax, Zeichensetzung sowie Tipp-/Wortfehler und `deutsche-typografie` für Zeichenformen, Abstände und DE-/AT-/CH-Typografiekonventionen; beide starten `experimental` mit `partial` Evalabdeckung;
