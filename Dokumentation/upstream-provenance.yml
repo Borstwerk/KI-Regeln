@@ -1670,7 +1670,7 @@ sources:
   license_source: same-state root LICENSE
   license_source_commit_or_ref: d23d7f88a2e21c9e4b1418c7abe420f5c1052ba7
   license_path: LICENSE
-  license_blob_sha: 57b46f1fd11dc623c72d077f8aab56b31d7dc371cbb
+  license_blob_sha: 57b46f1fd11dc62351ea548104a88aa3f659c11b
   path_specific_license_notes:
   - No conflicting path-specific license file was found for skills/animate in the reviewed tree.
   license_status_at_observation: MIT evidence recorded; redistribution permission not relied on for reference-only use
@@ -1680,7 +1680,7 @@ sources:
     artifact_declarations: []
     same_state_files:
     - path: LICENSE
-      blob_sha: 57b46f1fd11dc623c72d077f8aab56b31d7dc371cbb
+      blob_sha: 57b46f1fd11dc62351ea548104a88aa3f659c11b
       spdx: MIT
     notes:
     - Same-state MIT evidence is provenance evidence only; the local material is independently worded reference use.
