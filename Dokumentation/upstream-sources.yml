@@ -744,7 +744,7 @@ sources:
     cadence: monthly
     last_checked: 2026-08-23
     local_impact:
-      - Bildarbeit/Charaktere-Objekte-und-Orte.md
+      - Bildarbeit/Stil-und-Referenzsysteme.md
       - Bildarbeit/Szenenplanung-und-Komposition.md
 
   - id: midjourney-character-reference
@@ -1865,7 +1865,7 @@ sources:
     ref: main
     monitor_mode: exact-sha
     cadence: monthly
-    observed_sha: 03e0d2398cb513ee19d24dfe58ed701a3
+    observed_sha: 03e0d2398cb513ee19dd80f19d24dfe58ed701a3
     last_checked: 2026-08-25
     local_impact:
       - Social-Media-und-Content-Praesenz/Repurposing-Originalitaet-und-Provenance.md
