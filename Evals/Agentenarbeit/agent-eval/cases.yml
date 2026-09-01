@@ -11,8 +11,10 @@ cases:
       - "trennt Ergebnisqualität und Prozessqualität"
       - "definiert reproduzierbaren Ausgangszustand und beobachtbare Grader"
       - "nimmt negative STOP-/Gate-Fälle auf, wo relevant"
+      - "sieht für kritische Guards eine kontrollierte Gegenprobe vor, die einen relevanten absichtlich eingebauten Fehler aus dem erwarteten Grund erkennen muss"
     forbidden:
       - "bewertet nur, ob der Endtext plausibel aussieht"
+      - "behandelt die bloße Existenz eines Guards als Nachweis seiner Wirksamkeit"
     expected_status: pass
 
   - id: ordinary-unit-test-near-miss
