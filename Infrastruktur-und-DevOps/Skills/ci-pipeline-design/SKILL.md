@@ -28,13 +28,31 @@ Automationspipelines so strukturieren, dass Evidence reproduzierbar, nachvollzie
 7. blocking vs. informational Checks explizit machen.
 8. Build-/Promotion-/Deploy-Gates trennen.
 9. Failure Evidence und Reproduzierbarkeit planen.
+10. Änderungen an Checks, Gate-Severity, Filtern oder Schwellenwerten als eigene Pipelineänderung sichtbar machen, wenn sie die Aussagekraft des Qualitätsnachweises verändern.
+
+## Quality Floors und Gate-Integrität
+
+Checks und Gates sind Teil des lokalen Qualitätsvertrags einer Pipeline, nicht bloß austauschbare Implementierungsdetails.
+
+Ein Agent darf einen Produktfehler nicht dadurch „beheben“, dass er ohne separate Begründung beispielsweise:
+
+- einen failing Test aus dem relevanten Job entfernt oder skippt;
+- einen blocking Check auf informational setzt;
+- Coverage-, Security-, Lint- oder andere Quality-Schwellen senkt;
+- relevante Pfad-/Branch-/Testfilter so verengt, dass der Fehler nicht mehr geprüft wird;
+- eine Ausnahme ergänzt, die nur den aktuellen Verstoß unsichtbar macht.
+
+Eine solche Änderung kann lokal sinnvoll sein, wenn der bisherige Guard falsch oder überholt ist. Dann gilt sie aber als **Änderung des Qualitätsmaßstabs** und benötigt eigene Evidence sowie die lokal erforderliche Entscheidung beziehungsweise Freigabe.
+
+Ein grüner Lauf nach geändertem Quality Floor ist nicht automatisch mit einem früheren grünen Lauf unter dem alten Maßstab gleichwertig.
 
 ## Nicht tun
 
 - universelle Unit→Integration→E2E-Reihenfolge erzwingen;
 - Retry verwenden, um Flakiness unsichtbar zu machen;
 - Fork-/PR-Code mit mächtigen Secrets ausführen;
-- Pipeline-Grün als automatische Merge-/Deploy-Freigabe behandeln.
+- Pipeline-Grün als automatische Merge-/Deploy-Freigabe behandeln;
+- Quality Gates still abschwächen, nur damit eine Änderung grün wird.
 
 ## Ausgabe
 
@@ -44,6 +62,7 @@ Jobs / DAG
 Artifacts / Cache
 Credentials
 Checks / Gates
+Quality-Floor-Änderungen, falls vorhanden
 Environment Boundaries
 Failure Evidence
 Open Risks

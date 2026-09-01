@@ -1,5 +1,5 @@
 schema_version: 2
-last_updated: '2026-08-26'
+last_updated: '2026-09-01'
 
 # Mutable external sources whose changes may affect local rules or skills.
 # A changed upstream is a review signal, never an automatic sync instruction.
@@ -135,6 +135,20 @@ sources:
       - Agentenarbeit/Long-Horizon-Handoffs.md
       - Agentenarbeit/Working-Memory-und-Persistenzgrenzen.md
       - Agentenarbeit/Skills/session-handoff/SKILL.md
+
+  - id: github-awesome-copilot-research-harness-engineer
+    area: Agentenarbeit
+    kind: github-file
+    repository: github/awesome-copilot
+    path: agents/research-harness-engineer.agent.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: fbf37744cc70fedcfa3328a97b4d1f014c9fc52f
+    last_checked: '2026-09-01'
+    local_impact:
+      - Agentenarbeit/Agent-Evals.md
+      - Agentenarbeit/Skills/agent-eval/SKILL.md
 
   # ---------------------------------------------------------------------------
   # Wissensmanagement / Knowledge Bases

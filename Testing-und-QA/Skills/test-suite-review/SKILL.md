@@ -36,9 +36,16 @@ Die Qualität des Testsignals und die Eignung des Testportfolios unabhängig bew
 6. **Flakiness und Diagnosefähigkeit**
 7. **Laufzeit / CI-Fit**
 8. **Coverage-/Mutation-Signale**, sofern vorhanden.
-9. **Release-Evidence**
+9. **Guardrail-Drift**
+   - wurden Assertions, Tests oder relevante Pfade entfernt beziehungsweise abgeschwächt?
+   - wurden Tests geskippt, quarantäniert oder durch Filter aus dem tragenden Lauf entfernt?
+   - wurden Coverage-, Quality-, Security- oder andere Schwellen gesenkt?
+   - wurde ein blocking Signal zu informational umklassifiziert?
+   - wurden Ausnahmen ergänzt, die eine bekannte Regression nur unsichtbar machen?
+10. **Release-Evidence**
    - was kann die Suite tatsächlich belegen?
    - welche Unsicherheit bleibt?
+   - ist der aktuelle Qualitätsmaßstab mit der referenzierten Baseline noch vergleichbar?
 
 ## Ausgabe
 
@@ -58,6 +65,8 @@ Evidence
 empfohlene kleinste Änderung
 ```
 
+Wenn der Qualitätsmaßstab selbst verändert wurde, diese Änderung separat vom Produktfix ausweisen. Ein neuer grüner Lauf ist nicht automatisch mit einer früheren Baseline vergleichbar, wenn Tests, Filter, Assertions oder Schwellen verändert wurden.
+
 ## Regeln
 
 - Review ≠ Rewrite;
@@ -65,6 +74,7 @@ empfohlene kleinste Änderung
 - Coverage-Prozent nicht als alleinige Qualitätsmetrik verwenden;
 - vorhandene starke Tests schützen;
 - keine Tests lockern, nur um Laufzeit oder Grünstatus zu verbessern;
+- begründete Guard-Änderung ≠ verbotene Guard-Änderung, aber sie benötigt eigene Evidence und darf nicht als unsichtbarer Teil eines Produktfixes durchrutschen;
 - Releaseentscheidung nicht selbst erteilen.
 
 ## Related

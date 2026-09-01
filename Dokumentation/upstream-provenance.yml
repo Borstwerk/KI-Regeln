@@ -1,6 +1,6 @@
 schema_version: 2
 source_registry: Dokumentation/upstream-sources.yml
-last_reviewed: '2026-08-26'
+last_reviewed: '2026-09-01'
 sources:
 - source_id: addyosmani-observability-instrumentation-skill
   reviewed_at: &id001 2026-08-25
@@ -1869,3 +1869,39 @@ sources:
     source_path: skills/email-drafter/SKILL.md
     observed_ref: main
     observed_blob_sha: c88c0d7c38138adac8b15cae0bcfc216717c2e67
+- source_id: github-awesome-copilot-research-harness-engineer
+  reviewed_at: '2026-09-01'
+  repository_commit: 32f32c9809efca35d54c9c5b37210e307aa8645f
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence:
+  - The upstream agent contributed the general method that a critical eval guard should prove its protection by failing on a deliberately broken relevant case, rather than receiving credit merely for existing.
+  - The local hardening independently narrows this into a controlled good-case / relevant-broken-case countercheck for critical guards and adds local safety, scope and evidence rules instead of copying the upstream agent workflow or prose.
+  - Source-specific manual comparison found no distinctive long-line or structural-expression reuse; the source is used as a method reference, not redistributed expression.
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: MIT
+  license_source: same-state root LICENSE
+  license_source_commit_or_ref: 32f32c9809efca35d54c9c5b37210e307aa8645f
+  license_path: LICENSE
+  license_blob_sha: 89bc5e962c9944cdb050887062afdaaf89be504a
+  path_specific_license_notes:
+  - Same-state root MIT LICENSE was verified; no separate path-specific license assessment was required for this reference-only use and redistribution permission is not relied on.
+  license_status_at_observation: MIT root license verified at the exact repository commit containing the observed artifact; redistribution permission is not relied on for reference-only use
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence:
+    artifact_declarations: []
+    same_state_files:
+    - path: LICENSE
+      blob_sha: 89bc5e962c9944cdb050887062afdaaf89be504a
+      spdx: MIT
+    notes:
+    - The observed agent blob fbf37744cc70fedcfa3328a97b4d1f014c9fc52f is present at repository commit 32f32c9809efca35d54c9c5b37210e307aa8645f.
+    - Same-state MIT evidence is provenance evidence only; local use is independently worded concepts/methods reference.
+  source_snapshot:
+    repository: github/awesome-copilot
+    source_path: agents/research-harness-engineer.agent.md
+    observed_ref: main
+    observed_blob_sha: fbf37744cc70fedcfa3328a97b4d1f014c9fc52f
