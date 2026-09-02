@@ -7,12 +7,24 @@ three bounded findings of the B1 review — the judge policy is now validated fa
 the disclosure opt-in requires a real boolean, and hyphenated or reversed
 skill-instruction context is blocked.
 
-Status: **design approved, generalisation implemented, experiment executable —
-behavioral execution NOT RUN.** No model was run, no baseline or skill response was
-produced, no judge was invoked, nothing was unblinded. Preparing 18 pairs yields 36
-prepared response packages and **zero behavioral responses**; those are different
-things. Nothing here says the code-review eval passed or that `code-review` is
-effective — no such statement is possible before a run, a judge and an unblinding.
+Status: **one paired smoke executed (B2).** `CR-01`, repetition 1, exactly two
+behavioral responses under Claude Code `2.1.258`, adapter `0.2.1`, model
+`claude-haiku-4-5-20251001`. Both run packages verified, blind packaging successful, no
+treatment disclosure.
+
+```yaml
+method_evidence_status: partial
+comparison_eligible: false
+semantic_judge: not_run
+unblinding: not_run
+behavioral_comparison: not_performed
+skill_effect: unknown
+```
+
+The full 36-response experiment is **not run**: 34 planned responses remain outstanding.
+Neither runner output was read or compared, so nothing here says the code-review eval
+passed or that `code-review` is effective — no such statement is possible before a
+semantic judge and an unblinding. The record of the smoke is `METHOD-RESULT.md`.
 
 Base commit for this work: `1483c0c4afdc46a25ffdc8ab92d8bd221e2e3a51`.
 
@@ -31,7 +43,7 @@ Base commit for this work: `1483c0c4afdc46a25ffdc8ab92d8bd221e2e3a51`.
 | `treatment_disclosure` opt-in | implemented, coordinator-only in `control.yml`, default `false`; **B1.1: strict boolean** (`"false"` and `0` are rejected, not coerced) and hyphenated/reversed skill-context forms blocked |
 | `experiment.yml` (executable) | promoted from the draft; `shared_user_prompt` inlined per case and removed |
 | legacy invariance | proven: 18/18 claim-verification pairs and all 366 written artifact bytes identical |
-| behavioral run | **NOT RUN**, by design |
+| behavioral run | B2: one paired smoke, `CR-01` rep 1, 2 responses; `partial` / not comparison-eligible. Full experiment still not run |
 
 Two things changed that the design had not anticipated, both recorded rather than
 smoothed over:
