@@ -1,6 +1,6 @@
 ---
 name: deutsche-typografie
-description: Deutsche Typografie in fertigen oder weit fortgeschrittenen Texten prüfen oder anwenden: Anführungszeichen, Apostroph, Gedanken-/Bis-Strich, Auslassungszeichen, Abstände bei Zahlen/Einheiten, geschützte Leerzeichen und regionale DE-/AT-/CH-Konventionen, ohne Grammatik, Stil oder Inhalt umzuschreiben. Verwenden bei Typografieprüfung, deutschen Anführungszeichen, Gedankenstrichen, Zeichenformen oder typografischer Endpolitur. Nicht für Kommaregeln, allgemeine Rechtschreibung, Stilreview oder Layoutdesign.
+description: "Deutsche Typografie in fertigen oder weit fortgeschrittenen Texten prüfen oder anwenden: Anführungszeichen, Apostroph, Gedanken-/Bis-Strich, Auslassungszeichen, Abstände bei Zahlen/Einheiten, geschützte Leerzeichen und regionale DE-/AT-/CH-Konventionen, ohne Grammatik, Stil oder Inhalt umzuschreiben. Verwenden bei Typografieprüfung, deutschen Anführungszeichen, Gedankenstrichen, Zeichenformen oder typografischer Endpolitur. Nicht für Kommaregeln, allgemeine Rechtschreibung, Stilreview oder Layoutdesign."
 ---
 
 # Deutsche Typografie

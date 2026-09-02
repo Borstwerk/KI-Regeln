@@ -1,6 +1,6 @@
 ---
 name: korrekturlektorat
-description: Mechanisches Korrekturlektorat für fertige oder weit fortgeschrittene Texte: Rechtschreibung, Grammatik, Syntax, Zeichensetzung, Tipp-/Wortfehler und unbeabsichtigte Dopplungen prüfen oder minimal korrigieren, ohne Inhalt, Stimme oder Stil unnötig umzuschreiben. Verwenden bei Korrekturlesen, Rechtschreibprüfung, Grammatikprüfung, Komma-/Zeichensetzungsprüfung oder einem letzten sprachlichen Fehlerpass. Nicht für Stilrewrite, fachliche Faktenprüfung, Übersetzung oder Typografie als Hauptziel.
+description: "Mechanisches Korrekturlektorat für fertige oder weit fortgeschrittene Texte: Rechtschreibung, Grammatik, Syntax, Zeichensetzung, Tipp-/Wortfehler und unbeabsichtigte Dopplungen prüfen oder minimal korrigieren, ohne Inhalt, Stimme oder Stil unnötig umzuschreiben. Verwenden bei Korrekturlesen, Rechtschreibprüfung, Grammatikprüfung, Komma-/Zeichensetzungsprüfung oder einem letzten sprachlichen Fehlerpass. Nicht für Stilrewrite, fachliche Faktenprüfung, Übersetzung oder Typografie als Hauptziel."
 ---
 
 # Korrekturlektorat
