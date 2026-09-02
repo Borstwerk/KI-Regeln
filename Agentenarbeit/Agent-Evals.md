@@ -106,6 +106,48 @@ Beispiele:
 
 Erwartetes Verhalten kann dann ausdrücklich `STOP`, `ESCALATE` oder `REQUEST GATE` sein.
 
+## Harness- und Guard-Integrität
+
+Ein Eval-Harness ist selbst Teil des Messsystems. Seine Existenz beweist noch nicht, dass er relevante Fehler erkennt.
+
+Für Guards, die wichtige Qualitäts-, Safety-, Scope- oder Completion-Claims tragen, sollte nach Möglichkeit eine kontrollierte Brechprobe vorgesehen werden:
+
+```text
+bekannter gültiger Fall
+→ Guard akzeptiert
+
+kontrolliert absichtlich verletzte relevante Bedingung
+→ Guard schlägt fehl
+→ erwarteter Fehlergrund ist erkennbar
+```
+
+Die Brechprobe soll gezielt die behauptete Schutzwirkung prüfen. Ein zufälliger Syntaxfehler beweist beispielsweise nicht, dass ein Scope-Guard Scope-Verstöße erkennt.
+
+Wichtige Regeln:
+
+- deliberate breakage nur in Fixtures, Sandboxes oder anderen kontrollierten Testzuständen;
+- keine produktiven Systeme oder realen Daten dafür verändern;
+- wenn möglich neben dem Status auch Fehlerklasse oder Ursache verifizieren;
+- ein Guard, der die kontrollierte Verletzung übersieht, liefert für diesen Claim keine belastbare Evidence;
+- Guard-Test und Produkt-Test getrennt interpretieren.
+
+Nicht jeder triviale Check braucht eine eigene Mutation. Die Brechprobe ist dort sinnvoll, wo ein falsch-grüner Guard eine relevante Fehlentscheidung ermöglichen würde.
+
+## Baselines, Controls und Held-out Evidence
+
+Vergleiche brauchen eine reproduzierbare Vergleichsbasis. Wenn alte Agenten-, Skill-, Prompt-, Fixture- oder Environment-Stände fehlen, darf aus zwei nicht vergleichbaren Beobachtungen keine belastbare Verbesserung oder Regression konstruiert werden.
+
+Je nach Fragestellung können zusätzlich sinnvoll sein:
+
+- bekannte Positiv-/Negativkontrollen;
+- Null- oder Minimalbaseline;
+- reproduzierter bestehender Baseline-Lauf;
+- getrennte Kalibrierungs- und Held-out-Fälle.
+
+Wenn Fälle zur Abstimmung einer Rubrik, eines Judges oder von Schwellenwerten verwendet wurden, sind sie danach **Kalibrierungsevidence**. Sie dürfen nicht gleichzeitig als unabhängige Held-out-Evidence für denselben Claim ausgegeben werden.
+
+Blindes oder double-blind Design kann bei besonders hohem Assurance-Bedarf Kontamination oder Evaluator-Leakage reduzieren. Es ist kein universeller Pflichtprozess.
+
 ## Evals für Skill-Änderungen
 
 Wenn zentrale Skills verändert werden, können Evals prüfen, ob sich das Verhalten verbessert oder verschlechtert.
@@ -151,7 +193,9 @@ Beim Aufbau eines Agent Evals prüfen:
 5. Werden Produkt- und Prozessqualität getrennt betrachtet?
 6. Enthält die Suite auch Negativfälle und Gate-Situationen?
 7. Würde eine Verschlechterung des Agentenverhaltens durch dieses Eval tatsächlich sichtbar?
+8. Wenn ein kritischer Guard einen Claim trägt: wurde seine Schutzwirkung kontrolliert gegengeprüft?
+9. Sind Kalibrierung, Baseline und unabhängige Vergleichsevidence korrekt getrennt?
 
 ## Leitgedanke
 
-> Tests prüfen, ob die Software funktioniert. Agent Evals prüfen, ob der Agent zuverlässig zu prüfbarer Softwarearbeit beiträgt.
+> Tests prüfen, ob die Software funktioniert. Agent Evals prüfen, ob der Agent zuverlässig zu prüfbarer Softwarearbeit beiträgt – und ob der Eval selbst relevante Fehler erkennen kann.

@@ -8,6 +8,27 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Eval-Guardrails und Monatsradar-Evidence
+
+- Agent-Evals um Harness-/Guard-Integrität gehärtet: kritische Guards sollen ihre Schutzwirkung nach Möglichkeit durch eine kontrollierte relevante Brechprobe belegen; ein vorhandener grüner Check gilt nicht allein wegen seiner Existenz als belastbare Evidence;
+- Baselines, Positiv-/Negativkontrollen sowie Kalibrierungs- und Held-out-Evidence klarer getrennt; zur Judge-/Rubrik-/Schwellenwert-Kalibrierung verwendete Fälle werden nicht zugleich als unabhängige Vergleichsevidence ausgegeben;
+- `verification-loop`, `ci-pipeline-design` und `test-suite-review` gegen stilles Absenken des Quality Floors geschärft: Änderungen an Assertions, Filtern, Gate-Severity oder Schwellenwerten sind eigenständige relevante Änderungen mit eigener Begründung, Evidence und gegebenenfalls Autorisierung; ein grüner Lauf unter verändertem Maßstab ist nicht automatisch mit der vorherigen Baseline gleichwertig;
+- bestehende Evalfälle für `agent-eval` und `verification-loop` entsprechend geschärft, ohne neue Evalfälle anzulegen und ohne Maturity oder Eval Coverage zu verändern;
+- `Dokumentation/radar-sources.yml` um maschinenlesbare Mindestfelder für monatliche Source-Evidence ergänzt; nicht verifizierbare Zustände bleiben `UNVERIFIED` statt plausibel als unverändert klassifiziert zu werden;
+- den methodisch verwendeten `github/awesome-copilot`-Agenten `research-harness-engineer.agent.md` mit beobachtetem Blob-SHA, exaktem Repository-Commit und MIT-Evidence als `reference/inspiration` in Upstream-Register und Provenance aufgenommen; keine Redistribution fremder Ausdrucksform vorausgesetzt;
+- keine Behavioral Evals als ausgeführt oder bestanden dargestellt, kein Tag oder Release erzeugt.
+
+### Schreibkorrektur und deutsche Typografie
+
+- zwei klar getrennte Schreiben-Skills ergänzt: `korrekturlektorat` für Rechtschreibung, Grammatik, Syntax, Zeichensetzung sowie Tipp-/Wortfehler und `deutsche-typografie` für Zeichenformen, Abstände und DE-/AT-/CH-Typografiekonventionen; beide starten `experimental` mit `partial` Evalabdeckung;
+- gemeinsame Fachgrundlage `Schreiben/Sprachrichtigkeit-und-Typografie.md` ergänzt und die Grenzen `Korrekturlektorat ≠ Stilreview ≠ Rewrite`, `Zeichensetzung ≠ Typografie` sowie `Toolfund ≠ Sprachregel` verankert;
+- Workflow `Workflows/Text-Endkontrolle.md` ergänzt und in `workflow-index.yml` registriert; mechanische Endkontrolle folgt auf autorisierte inhaltliche beziehungsweise stilistische Revisionen, damit spätere Rewrites nicht wieder neue Sprachfehler einführen;
+- regionale Varianten, Projekt-/Hausstil, Mehrdeutigkeit sowie geschützte technische Inhalte wie Code, URLs, Pfade, Bezeichner, Markdown, HTML/JSX, YAML/Frontmatter und Zitate ausdrücklich vor blinder Normalisierung geschützt;
+- amtliches Regelwerk der deutschen Rechtschreibung und IDS/`grammis` als fachliche Primärquellen dokumentiert; vier tatsächlich verwendete öffentliche Proofreading-/Typografie-Skills mit konkretem beobachtetem Blob-SHA, Lizenzraum und bewussten Abweichungen als punktuelle methodische Referenzen festgehalten; LanguageTool bleibt optionaler technischer Referenzraum ohne Runtime-Abhängigkeit;
+- zwei neue Evalpacks mit jeweils acht Startfällen ergänzt, insgesamt 16 definierte Cases zu Korrektur, Near-Miss-Routing, Mehrdeutigkeit, Schweizer Orthografie, Code-/URL-Schutz, zulässigen Varianten, Hausstil, fehlender DIN-Evidence und Typografie-vs.-Webdesign; diese Fälle sind **definiert, aber nicht als Behavioral Evals ausgeführt oder bestanden**;
+- der parallel ergänzte Langprosa-Signaturfall im bestehenden `stilreview`-Evalpack bleibt erhalten; aktueller Gesamtstand damit 145 Skills, 120× `partial`, 25× `none`, 0× `core`/`broad`, 120 Skill-Evalpacks und 622 definierte Cases;
+- keine bestehende Maturity hochgestuft, keine Behavioral-Eval-Ergebnisse erfunden und kein Tag oder Release erzeugt.
+
 ### Problem-first Entry Path
 
 - neuen menschlichen Einstieg `START-HIER.md` ergänzt: Nutzer beginnen mit ihrem realen Problem oder Ziel und müssen weder Skill-Namen noch interne Repository-Architektur kennen;
@@ -41,16 +62,19 @@ Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunäch
 - Skill-Katalog und menschliche Katalogdokumentation auf 137 Skills, 112× `partial`, 25× `none`, 0× `core`/`broad`, 112 Skill-Evalpacks und 575 definierte Cases aktualisiert; zusätzliche Coverage ist kein Behavioral-Qualitätsnachweis;
 - kein Tag, Release oder automatische externe Synchronisation durch diese Erweiterung.
 
-### Phase 4.2B – Code-Review-Paired-Eval-Replikation entworfen
+### Phase 4.2B – Code-Review-Paired-Eval-Replikation
 
 - Designstand `Evals/Behavioral-Harness/experiments/code-review-v1/` ergänzt: `DESIGN.md`, `experiment.draft.yml` sowie sechs vollständig synthetische Review-Pakete als Fixtures;
 - die claim-verification-spezifischen Kopplungen des Pair-Harness am realen Code verifiziert: geschlossenes Fixture-Rollen-Vokabular, verpflichtendes fünfwertiges `ground_truth.classification`, fest verdrahtete Domain-/Aufgabenfamilien-Literale, klassifikationsspezifische Judge-Anweisung sowie ein Disclosure-Fehlalarm auf dem Zielskill-Bezeichner `code-review`;
 - kleinste Generalisierung entworfen statt eines zweiten Harness: ein expliziter Diskriminator `ground_truth_model`, dessen Fehlen das heutige Verhalten unverändert reproduziert; Contract-Entscheidung dokumentiert als erforderlich, aber nicht breaking, `behavioral-paired-skill-eval/v1` bleibt;
 - domänenspezifisches Ground-Truth-Modell `code-review-findings/v1` mit vorab festgelegten Findings, Detektionskriterien, verbotenen Findings, Akzeptanzkriterien-Status und Freigabekalibrierung entworfen; ausdrücklich ohne aggregierte Gesamtpunktzahl;
 - Pair-Harness backward-compatible für `code-review-findings/v1` generalisiert: optionaler `ground_truth_model`-Diskriminator, modellspezifische Fixture-Rollen, optionaler `runner_path`, konfigurierbare `domain`/`task_family`, Change-Set-Konsistenz als verpflichtendes Prepare-Time-Gate, modellspezifische Judge-Instruction, vorab festgelegte Evaluation Policy im Blind-Judge-Vertrag und ein eng begrenztes, coordinator-only Disclosure-Opt-in; fehlende Angaben reproduzieren jeweils exakt das bisherige Verhalten, belegt durch 18 von 18 identischen Claim-Verification-Pairs;
-- `code-review-v1` als ausführbares, aber noch nicht ausgeführtes Paired Experiment vorbereitet: 6 Cases × 3 Repetitions vorbereitet und verifiziert, 36 Prepared Response Packages, 0 Behavioral Responses, kein Judge, kein Unblinding und keine Aussage zur Wirksamkeit von `code-review`;
+- `code-review-v1` als ausführbares Paired Experiment vorbereitet: sechs synthetische Code-Review-Cases, 6 Cases × 3 Repetitions vorbereitet und verifiziert, 36 Prepared Response Packages;
 - kein Harness-Code, kein `code-review/SKILL.md`, kein bestehendes Evalpack, kein Katalog und keine Maturity oder Eval Coverage verändert;
-- reine Designvorbereitung: kein Modellaufruf, keine Behavioral Response, kein Judge, kein Unblinding und keine Aussage zur Wirksamkeit von `code-review`; der Phase-4.2A-Endstand bleibt unverändert `partial` bei `network_disabled: unknown`.
+- einen realen Cross-Domain-Smoke ausgeführt: `CR-01`, Repetition 1, exakt zwei Behavioral Responses, je ein Modellversuch ohne Retry; Claude Code `2.1.258`, Adapter `0.2.1`, Modell `claude-haiku-4-5-20251001`; Phase 4.2A lief unter Claude Code `2.1.251`, daher wird keine exakte Runtime-Replikation über die Phasen hinweg behauptet;
+- 2/2 kanonische Run-Packages verifiziert, Blind Packaging erfolgreich, keine Treatment-Disclosure; `fresh_context` true, `repository_access_disabled` true, `package_only_access` true, `network_disabled` unknown;
+- `method_evidence_status: partial`, `comparison_eligible: false`; kein Semantic Judge, kein Unblinding, kein Behavioral Comparison, `skill_effect: unknown`; die restlichen 34 geplanten Responses wurden nicht ausgeführt; `Evals/Behavioral-Harness/experiments/code-review-v1/METHOD-RESULT.md` als methodischer Abschlussstand ergänzt;
+- keine Response-Inhalte, keine Treatment-Zuordnung, keine Findings und keine Wirksamkeits- oder Qualitätsaussage persistiert; keine Maturity- oder Eval-Coverage-Hochstufung; der Phase-4.2A-Endstand bleibt unverändert `partial` bei `network_disabled: unknown`.
 
 ### Phase 4.2A – Claim-Verification Paired Pilot mit unvollständiger Method Evidence abgeschlossen
 

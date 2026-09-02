@@ -1,5 +1,5 @@
 schema_version: 1
-last_updated: '2026-08-28'
+last_updated: '2026-09-01'
 
 # Discovery-only sources and recurring search topics.
 #
@@ -23,6 +23,27 @@ policy:
     Promote only after a concrete source has been reviewed, is materially
     relevant to a local rule or skill, and its provenance/use class has been
     deliberately assessed.
+
+monthly_report_evidence:
+  required: true
+  unknown_value: UNVERIFIED
+  principle: Evidence before summary; missing observation must not be replaced by a plausible state.
+  fields:
+    - source_id
+    - source_class
+    - observed_at
+    - registered_state
+    - observed_state
+    - change_detected
+    - classification
+    - evidence
+    - local_impact
+  notes:
+    - For discovery-only radar sources, registered_state may be NOT_APPLICABLE.
+    - For exact-sha upstreams, registered_state and observed_state should contain the registered and freshly observed blob SHA.
+    - For semantic-review upstreams, use a concise state/version/date summary instead of inventing a synthetic SHA.
+    - If the current source state cannot be verified, use UNVERIFIED and do not classify it as unchanged.
+    - A prose summary may aggregate findings, but it does not replace the per-source evidence record.
 
 sources:
   - id: agent-skills-specification

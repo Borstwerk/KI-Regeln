@@ -1,0 +1,91 @@
+skill: korrekturlektorat
+schema_version: 1
+
+cases:
+  - id: mechanical-correction
+    class: outcome
+    input: "Korrigiere bitte nur Rechtschreibung, Grammatik und Zeichensetzung: 'Die Mitarbeiterin haben gesagt das sie morgen kommt, aber keiner weis wann.' Meinen Stil bitte nicht umschreiben."
+    should_trigger: true
+    expected:
+      - "korrigiert Kongruenz, dass/das, weiß/weiss passend zur Sprachvariante und notwendige Zeichensetzung"
+      - "verändert keine Wortwahl oder Tonalität ohne mechanische Notwendigkeit"
+      - "behandelt die Aufgabe als Korrekturlektorat statt als Stilrewrite"
+    forbidden:
+      - "formuliert den Satz zu einer deutlich anderen oder formelleren Aussage um"
+      - "erfindet zusätzlichen Inhalt"
+    expected_status: pass
+
+  - id: review-only-no-rewrite
+    class: behavior
+    input: "Prüfe diesen Absatz auf Rechtschreibung und Grammatik und sag mir nur die Fehler. Bitte noch nichts ändern."
+    should_trigger: true
+    expected:
+      - "bleibt im Review-only-Modus"
+      - "nennt konkrete mechanische Funde ohne vollständige Neufassung"
+    forbidden:
+      - "überschreibt oder rewritet den Text ungefragt"
+    expected_status: pass
+
+  - id: style-near-miss
+    class: trigger
+    input: "Der Text ist grammatisch korrekt, klingt aber überall gleich glatt und hat ständig dieselben Dreiergruppen. Gib mir ein Stilurteil, aber ändere noch nichts."
+    should_trigger: false
+    expected:
+      - "routet den Auftrag zu stilreview"
+    forbidden:
+      - "behandelt rhetorische Gleichförmigkeit als Rechtschreib- oder Grammatikfehler"
+    expected_status: pass
+
+  - id: rewrite-near-miss
+    class: trigger
+    input: "Schreib diesen korrekten, aber steifen Text komplett natürlicher und lockerer um."
+    should_trigger: false
+    expected:
+      - "routet den ausdrücklich gewünschten Rewrite zu natuerliches-schreiben"
+    forbidden:
+      - "reduziert den Auftrag auf Tippfehler- oder Kommaprüfung"
+    expected_status: pass
+
+  - id: ambiguous-meaning-do-not-guess
+    class: behavior
+    input: "Im Satz 'Sie sagte der Schwester, die Ärztin komme später' ist unklar, wer mit 'sie' gemeint ist. Korrigiere das einfach irgendwie eindeutig."
+    should_trigger: true
+    expected:
+      - "erkennt, dass eine eindeutige Korrektur ohne Kontext Bedeutung erfinden würde"
+      - "markiert den Bezug als unklar beziehungsweise fragt nur bei notwendiger Bedeutungsentscheidung nach"
+    forbidden:
+      - "entscheidet willkürlich, auf welche Person sich das Pronomen bezieht"
+    expected_status: partial
+
+  - id: swiss-variant-preservation
+    class: regression
+    input: "Der Text ist für die Schweiz und schreibt konsequent 'dass', 'muss' und 'weiss'. Korrigiere bitte die Rechtschreibung."
+    should_trigger: true
+    expected:
+      - "respektiert die schweizerische ss-Schreibung und ersetzt 'weiss' nicht automatisch durch 'weiß'"
+      - "prüft andere Fehler unabhängig von der Regionalvariante"
+    forbidden:
+      - "germanisiert die schweizerische Orthografie ungefragt"
+    expected_status: pass
+
+  - id: protected-tokens
+    class: regression
+    input: "Prüfe diesen technischen Absatz sprachlich. Darin stehen `SELECT * FROM Patient_Fall`, der Pfad `C:\\Temp\\Export`, die URL https://example.org/a-b und das Produkt 'MKIS_Performance'."
+    should_trigger: true
+    expected:
+      - "schützt Code, Pfad, URL und etablierte technische Bezeichner vor mechanischer Sprachkorrektur"
+      - "prüft den umgebenden Fließtext normal"
+    forbidden:
+      - "ändert technische Tokens, weil sie nicht wie normales Deutsch aussehen"
+    expected_status: pass
+
+  - id: valid-variant-not-error
+    class: regression
+    input: "Markiere jede zulässige Schreib- oder Komma-Variante als Fehler und vereinheitliche alles nach deinem persönlichen Sprachgefühl."
+    should_trigger: true
+    expected:
+      - "lehnt die Gleichsetzung zulässiger Varianten mit Fehlern ab"
+      - "unterscheidet Fehler, Variante, Projektkonvention und Stiloption"
+    forbidden:
+      - "verkauft persönliche Präferenz als normative Pflicht"
+    expected_status: pass
