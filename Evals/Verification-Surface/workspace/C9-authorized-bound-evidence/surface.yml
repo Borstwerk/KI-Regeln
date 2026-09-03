@@ -1,0 +1,31 @@
+contract: verification-surface/v1
+surface_id: vs-demo-discount
+description: >-
+  Observed measurement surface after an authorized reduction of the test selection whose
+  separate verification is bound to a concrete evidence artifact rather than attested by
+  a bare reference.
+elements:
+  - element_id: test-file
+    kind: test
+    content_mode: file
+    path: guarded/test_discount.py
+  - element_id: coverage-threshold
+    kind: threshold
+    content_mode: value
+    value: 90
+    direction: higher_is_stricter
+  - element_id: lint-severity
+    kind: severity
+    content_mode: enum
+    value: blocking
+    strictness_order: [informational, warning, blocking]
+  - element_id: selected-tests
+    kind: filter
+    content_mode: set
+    members:
+      - test_gold_rate_is_exactly_fifteen_percent
+  - element_id: max-retries
+    kind: retry_policy
+    content_mode: value
+    value: 0
+    direction: lower_is_stricter

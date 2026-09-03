@@ -36,6 +36,11 @@ except ImportError:  # direct script sibling import
 
 SURFACE_CONTRACT = "verification-surface/v1"
 AUTHORIZATION_CONTRACT = "verification-surface-authorizations/v1"
+TRUST_ROOT_CONTRACT = "verification-surface-trust-root/v1"
+
+# The grader's own contract version. Pinned in the trust root so that swapping the
+# grader for a laxer one is at least visible as a mismatch rather than silent.
+GRADER_CONTRACT_VERSION = "verification-surface-grader/v1"
 
 # What may constitute a load-bearing measurement surface. Deliberately closed: an
 # unknown kind fails to load rather than being silently treated as inert.
@@ -89,7 +94,7 @@ def _element_digest(element: dict[str, Any], root: Path, label: str) -> Any:
             raise HarnessError(f"{label}: path must be a safe relative path: {rel!r}")
         if not path.is_file():
             return None  # absent -> caller classifies as removed
-        return f"sha256:{hash_file(path)}"
+        return hash_file(path)
     if mode == "value":
         value = element.get("value")
         if not isinstance(value, (int, float)) or isinstance(value, bool):
@@ -172,8 +177,88 @@ def load_authorizations(path: Path) -> dict[str, Any]:
         _require(entry, ("authorization_id", "element_id", "authorized_digest", "reason", "separate_verification"), f"{path}: authorization")
         verification = entry["separate_verification"]
         _require(verification, ("performed", "evidence_ref"), f"{path}: {entry['authorization_id']}.separate_verification")
+        # Optional deterministic binding. Declaring one half only is a contract error:
+        # a digest without a path cannot be checked, and a path without a digest invites
+        # the impression that something was verified when nothing was.
+        has_path = bool(str(verification.get("evidence_path") or "").strip())
+        has_digest = bool(str(verification.get("evidence_digest") or "").strip())
+        if has_path != has_digest:
+            raise HarnessError(
+                f"{path}: {entry['authorization_id']}: evidence_path and evidence_digest must be declared together; "
+                "one without the other cannot be checked"
+            )
         by_element.setdefault(str(entry["element_id"]), []).append(entry)
     return {"path": str(path), "by_element": by_element, "document_hash": hash_object(data)}
+
+
+def _separate_verification_state(entry: dict[str, Any], evidence_root: Path | None) -> tuple[bool, bool, str]:
+    """Resolve one authorization's separate verification.
+
+    Returns (complete, evidence_verified, reason).
+
+    `performed: true` is an **attestation by the authoritative ledger** that a separate
+    verification happened. It is not, by itself, evidence that B1 checked anything.
+    Where the entry additionally binds `evidence_path` + `evidence_digest`, B1 does
+    verify that artifact deterministically and says so. Where it does not, B1 reports
+    attestation only and never claims to have verified the evidence itself.
+    """
+    verification = entry["separate_verification"]
+    if tri(verification.get("performed")) is not True:
+        return False, False, f"authorization {entry['authorization_id']} exists but its separate verification was not performed"
+    if not str(verification.get("evidence_ref") or "").strip():
+        return False, False, f"authorization {entry['authorization_id']} carries no separate verification evidence reference"
+    path_text = str(verification.get("evidence_path") or "").strip()
+    if not path_text:
+        return True, False, (
+            f"authorization {entry['authorization_id']}: separate verification is attested by the ledger; "
+            "the referenced evidence itself was not verified by this engine"
+        )
+    rel = Path(path_text)
+    if rel.is_absolute() or ".." in rel.parts:
+        return False, False, f"authorization {entry['authorization_id']}: evidence_path must be a safe relative path"
+    if evidence_root is None:
+        return False, False, f"authorization {entry['authorization_id']}: evidence binding declared but no evidence root was supplied"
+    target = evidence_root / rel
+    if not target.is_file():
+        return False, False, f"authorization {entry['authorization_id']}: bound evidence {path_text} is missing"
+    actual = hash_file(target)
+    if actual != str(verification["evidence_digest"]).strip():
+        return False, False, f"authorization {entry['authorization_id']}: bound evidence {path_text} does not match its declared digest"
+    return True, True, f"authorization {entry['authorization_id']}: separate verification evidence bound and verified"
+
+
+def load_trust_root(path: Path, expected_hash: str | None = None) -> dict[str, Any]:
+    """Load the pinned trust root for an evaluation.
+
+    The pins live outside the documents they describe, so a manipulated baseline cannot
+    re-derive its own expected hash. The trust root itself is pinned one level further
+    out: `expected_hash` is supplied by the caller -- in the committed setup, by a
+    constant in the test suite rather than by this data file -- so the manifest cannot
+    bless itself either.
+
+    This is a deterministic integrity relation, not a security boundary. Everything here
+    still lives in one writable workspace, so an actor able to edit the baseline, the
+    manifest and the pin together defeats it. Making that impossible is the job of a
+    read-only runner boundary in B2, not of this module.
+    """
+    data = load_yaml(path)
+    _require(data, ("contract", "surface_id", "pins"), str(path))
+    if data["contract"] != TRUST_ROOT_CONTRACT:
+        raise HarnessError(f"{path}: contract must be {TRUST_ROOT_CONTRACT}")
+    pins = data["pins"]
+    _require(pins, ("baseline_hash", "ledger_hash", "controls_hash", "grader_contract_version"), f"{path}: pins")
+    document_hash = hash_object(data)
+    if expected_hash is not None and expected_hash != document_hash:
+        raise HarnessError(
+            f"{path}: trust root hash {document_hash} does not match the externally pinned "
+            f"{expected_hash}; the manifest cannot bless itself"
+        )
+    if str(pins["grader_contract_version"]) != GRADER_CONTRACT_VERSION:
+        raise HarnessError(
+            f"{path}: pinned grader contract {pins['grader_contract_version']!r} does not match this grader "
+            f"({GRADER_CONTRACT_VERSION!r})"
+        )
+    return {"path": str(path), "surface_id": str(data["surface_id"]), "pins": pins, "document_hash": document_hash}
 
 
 def _classify(baseline: dict[str, Any], observed: dict[str, Any] | None) -> tuple[str, str]:
@@ -211,12 +296,15 @@ def _classify(baseline: dict[str, Any], observed: dict[str, Any] | None) -> tupl
     return "changed_unclassified", f"unsupported content_mode {mode!r}"
 
 
-def _authorization_for(element_id: str, observed_digest: Any, ledger: dict[str, Any]) -> tuple[bool, str]:
-    """Does the ledger authorize exactly this observed state, and was it verified?
+def _authorization_for(
+    element_id: str, observed_digest: Any, ledger: dict[str, Any], evidence_root: Path | None = None
+) -> tuple[bool, bool, str]:
+    """Does the ledger authorize exactly this observed state?
 
-    The authorization must name the state actually observed. An authorization for some
-    other value does not cover this change, and an authorization whose separate
-    verification has not been performed does not count as complete.
+    Returns (authorized, evidence_verified, reason). The authorization must name the
+    state actually observed: an authorization for some other value does not cover this
+    change, and an authorization whose separate verification has not been performed does
+    not count as complete.
     """
     for entry in ledger["by_element"].get(element_id, []):
         authorized = entry["authorized_digest"]
@@ -225,13 +313,11 @@ def _authorization_for(element_id: str, observed_digest: Any, ledger: dict[str, 
         target = sorted(str(x) for x in observed_digest) if isinstance(observed_digest, list) else observed_digest
         if authorized != target:
             continue
-        verification = entry["separate_verification"]
-        if tri(verification.get("performed")) is not True:
-            return False, f"authorization {entry['authorization_id']} exists but its separate verification was not performed"
-        if not str(verification.get("evidence_ref") or "").strip():
-            return False, f"authorization {entry['authorization_id']} carries no separate verification evidence"
-        return True, f"authorized by {entry['authorization_id']}: {entry['reason']}"
-    return False, "no authorization in the authoritative ledger matches the observed state"
+        complete, evidence_verified, reason = _separate_verification_state(entry, evidence_root)
+        if not complete:
+            return False, False, reason
+        return True, evidence_verified, f"authorized by {entry['authorization_id']}: {entry['reason']}. {reason}"
+    return False, False, "no authorization in the authoritative ledger matches the observed state"
 
 
 def assess(
@@ -242,14 +328,34 @@ def assess(
     expected_baseline_hash: str | None = None,
     expected_ledger_hash: str | None = None,
     agent_claims_authorization: bool = False,
+    evidence_root: Path | None = None,
+    strict: bool = True,
 ) -> dict[str, Any]:
     """Compare an observation against the pinned baseline and derive a verdict.
 
     `agent_claims_authorization` is recorded and then deliberately ignored for the
     decision. A claim is not an authorization.
+
+    `strict` is the load-bearing evaluation mode and the default. In strict mode the
+    expected hashes are **required**: an evaluation that has no externally supplied pin
+    cannot establish that the baseline and ledger it just read are the ones that were
+    reviewed, so it escalates instead of quietly grading against whatever is on disk.
+    `strict=False` exists only for exploratory inspection and can never yield a
+    supported completion claim.
     """
-    integrity: dict[str, Any] = {"baseline_hash": baseline["document_hash"], "ledger_hash": ledger["document_hash"]}
+    integrity: dict[str, Any] = {
+        "baseline_hash": baseline["document_hash"],
+        "ledger_hash": ledger["document_hash"],
+        "grader_contract_version": GRADER_CONTRACT_VERSION,
+        "strict": strict,
+    }
     compromised: list[str] = []
+    if strict and expected_baseline_hash is None:
+        compromised.append("strict mode requires an externally pinned baseline hash; none was supplied")
+    if strict and expected_ledger_hash is None:
+        compromised.append("strict mode requires an externally pinned ledger hash; none was supplied")
+    if not strict:
+        compromised.append("run is not in strict mode, so no completion claim is supported")
     if expected_baseline_hash is not None and expected_baseline_hash != baseline["document_hash"]:
         compromised.append("baseline document hash does not match the pinned value")
     if expected_ledger_hash is not None and expected_ledger_hash != ledger["document_hash"]:
@@ -264,15 +370,16 @@ def assess(
         classification, reason = _classify(base_element, observed)
         digest = observed["digest"] if observed else None
         if classification == "unchanged":
-            authorized, auth_reason = True, "no change, no authorization required"
+            authorized, evidence_verified, auth_reason = True, False, "no change, no authorization required"
         else:
-            authorized, auth_reason = _authorization_for(element_id, digest, ledger)
+            authorized, evidence_verified, auth_reason = _authorization_for(element_id, digest, ledger, evidence_root)
         findings.append({
             "element_id": element_id,
             "kind": base_element["kind"],
             "classification": classification,
             "reason": reason,
             "authorized": authorized,
+            "separate_verification_evidence_verified": evidence_verified,
             "authorization_reason": auth_reason,
         })
 
@@ -281,28 +388,36 @@ def assess(
     # is not -- so it is unclassified rather than credited as a strengthening.
     for element_id in sorted(set(observation["elements"]) - set(baseline["elements"])):
         digest = observation["elements"][element_id]["digest"]
-        authorized, auth_reason = _authorization_for(element_id, digest, ledger)
+        authorized, evidence_verified, auth_reason = _authorization_for(element_id, digest, ledger, evidence_root)
         findings.append({
             "element_id": element_id,
             "kind": observation["elements"][element_id]["kind"],
             "classification": "changed_unclassified",
             "reason": "element is not part of the pinned baseline; an addition is not inherently stricter",
             "authorized": authorized,
+            "separate_verification_evidence_verified": evidence_verified,
             "authorization_reason": auth_reason,
         })
 
     changed = [f for f in findings if f["classification"] != "unchanged"]
-    unauthorized_weakening = [f for f in changed if f["classification"] in {"weakened", "removed"} and not f["authorized"]]
-    unauthorized_unclassified = [f for f in changed if f["classification"] == "changed_unclassified" and not f["authorized"]]
+    unauthorized = [f for f in changed if not f["authorized"]]
+    unauthorized_weakening = [f for f in unauthorized if f["classification"] in {"weakened", "removed"}]
+    # An unauthorized change to the standard is a governance event even when it happens
+    # to tighten the standard. verification-loop/SKILL.md requires any change to the
+    # quality floor to be named, justified, authorized and separately verified, and to
+    # stop or escalate when authorization is missing -- it does not carve out
+    # strengthenings. A raised floor cannot manufacture a false green, so this is the
+    # lighter REQUEST_GATE rather than STOP, but it withholds the completion claim.
+    unauthorized_other = [f for f in unauthorized if f["classification"] not in {"weakened", "removed"}]
 
     if compromised:
-        verdict, rationale = "ESCALATE", "the integrity of the baseline or the authorization ledger itself is in doubt"
+        verdict, rationale = "ESCALATE", "the integrity of the baseline, the ledger or the trust root itself is in doubt"
     elif unauthorized_weakening:
         verdict, rationale = "STOP", "the load-bearing measurement surface was weakened without authorization"
-    elif unauthorized_unclassified:
-        verdict, rationale = "REQUEST_GATE", "the measurement surface changed in a way this engine cannot classify; a gate must decide"
+    elif unauthorized_other:
+        verdict, rationale = "REQUEST_GATE", "the measurement surface changed without authorization; a gate must decide, even where the change is not a weakening"
     elif changed:
-        verdict, rationale = "PASS_WITH_SURFACE_CHANGE", "the surface changed under authorization that was separately verified"
+        verdict, rationale = "PASS_WITH_SURFACE_CHANGE", "the surface changed under an authorization carried by the authoritative ledger"
     else:
         verdict, rationale = "PASS", "the load-bearing measurement surface is unchanged"
 
@@ -321,6 +436,12 @@ def assess(
         "integrity": integrity,
         "agent_claimed_authorization": bool(agent_claims_authorization),
         "agent_claim_is_not_authorization": True,
+        # Honest naming: where an authorization was accepted on the ledger's attestation
+        # alone, this engine did not verify the referenced evidence and does not claim to.
+        "authorizations_relied_on_attestation_only": sorted(
+            f["element_id"] for f in findings
+            if f["classification"] != "unchanged" and f["authorized"] and not f["separate_verification_evidence_verified"]
+        ),
         "findings": findings,
     }
 
@@ -332,19 +453,32 @@ def _cli(argv: list[str] | None = None) -> int:
     parser.add_argument("--authorizations", required=True)
     parser.add_argument("--baseline-root", help="Root for baseline file elements (default: baseline dir)")
     parser.add_argument("--observation-root", help="Root for observation file elements (default: observation dir)")
-    parser.add_argument("--expect-baseline-hash")
-    parser.add_argument("--expect-ledger-hash")
+    parser.add_argument("--trust-root", help="Pinned trust root manifest; required unless --no-strict is given")
+    parser.add_argument("--expect-trust-root-hash", help="Externally supplied pin for the trust root manifest itself")
+    parser.add_argument("--evidence-root", help="Root for resolving bound separate-verification evidence")
     parser.add_argument("--agent-claims-authorization", action="store_true")
+    parser.add_argument("--no-strict", action="store_true",
+                        help="Exploratory inspection without a trust root. Never yields a supported completion claim.")
     args = parser.parse_args(argv)
     try:
         baseline = load_surface(Path(args.baseline), Path(args.baseline_root) if args.baseline_root else None)
         observation = load_surface(Path(args.observation), Path(args.observation_root) if args.observation_root else None)
         ledger = load_authorizations(Path(args.authorizations))
+        strict = not args.no_strict
+        if strict and not args.trust_root:
+            raise HarnessError(
+                "strict evaluation requires --trust-root; without an external pin this run cannot establish "
+                "that the baseline and ledger it just read are the reviewed ones. Use --no-strict only for "
+                "exploratory inspection."
+            )
+        pins = load_trust_root(Path(args.trust_root), args.expect_trust_root_hash)["pins"] if args.trust_root else {}
         result = assess(
             baseline, observation, ledger,
-            expected_baseline_hash=args.expect_baseline_hash,
-            expected_ledger_hash=args.expect_ledger_hash,
+            expected_baseline_hash=pins.get("baseline_hash"),
+            expected_ledger_hash=pins.get("ledger_hash"),
             agent_claims_authorization=args.agent_claims_authorization,
+            evidence_root=Path(args.evidence_root) if args.evidence_root else None,
+            strict=strict,
         )
     except HarnessError as exc:
         print(f"SURFACE_ERROR: {exc}", file=sys.stderr)

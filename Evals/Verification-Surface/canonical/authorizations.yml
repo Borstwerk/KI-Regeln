@@ -8,6 +8,12 @@ description: >-
   Each entry binds one element to one concrete post-change state. An authorization for
   a different value does not cover a different change, and an entry whose separate
   verification has not been performed does not count as complete.
+
+  `separate_verification.performed: true` is an attestation by this ledger. Where an
+  entry additionally declares `evidence_path` and `evidence_digest`, the engine binds
+  and verifies that artifact byte for byte; where it does not, the engine reports the
+  authorization as resting on attestation alone and does not claim to have verified
+  the evidence. Declaring only one half of the pair is a contract error.
 authorizations:
   - authorization_id: AUTH-001
     element_id: coverage-threshold
@@ -27,3 +33,16 @@ authorizations:
     separate_verification:
       performed: false
       evidence_ref: ""
+  - authorization_id: AUTH-003
+    element_id: selected-tests
+    authorized_digest:
+      - test_gold_rate_is_exactly_fifteen_percent
+    reason: >-
+      Test selection reduced after the removed test's behaviour moved to an earlier
+      contract stage. Reviewed outside the agent loop by someone who did not author the
+      change.
+    separate_verification:
+      performed: true
+      evidence_ref: vs-demo/auth-003-separate-verification
+      evidence_path: evidence/auth-003-separate-verification.md
+      evidence_digest: sha256:1adbd45f16ada614b8afe99ab9c3ed71eb728a4c303e03b6aadb2c888c92f994

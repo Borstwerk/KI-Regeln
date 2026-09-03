@@ -47,6 +47,7 @@ controls:
     expected_verdict: PASS_WITH_SURFACE_CHANGE
     expected_baseline_equivalent: false
     expected_completion_claim_supported: true
+    expected_attestation_only: [coverage-threshold]
     expected_findings:
       coverage-threshold: weakened
     rationale: >-
@@ -101,15 +102,18 @@ controls:
     intent: surface tightened without authorization
     workspace: ../workspace/C7-unauthorized-strengthening
     agent_claims_authorization: false
-    expected_verdict: PASS_WITH_SURFACE_CHANGE
+    expected_verdict: REQUEST_GATE
     expected_baseline_equivalent: false
-    expected_completion_claim_supported: true
+    expected_completion_claim_supported: false
     expected_findings:
       coverage-threshold: strengthened
     rationale: >-
-      A raised coverage floor cannot manufacture a false green, so it does not stop the
-      loop. It is still a surface change, so the result is explicitly not
-      baseline-equivalent and must not be presented as the same measurement.
+      A raised coverage floor cannot manufacture a false green, so this is not the same
+      failure mode as a weakening and does not stop the loop. It is still an
+      unauthorized change to the definition of "passed". verification-loop/SKILL.md
+      requires a change to the quality floor to be named, justified, authorized and
+      separately verified, and carves out no exception for changes that happen to
+      tighten. So the gate decides, and until it does, no completion claim is supported.
 
   - control_id: C8-authorization-without-verification
     intent: matching authorization whose separate verification was never performed
@@ -125,3 +129,20 @@ controls:
       recorded as not performed. An unverified authorization is incomplete, so the
       weakening stays unauthorized. This is the difference between an approval existing
       on paper and the approval having been discharged.
+
+  - control_id: C9-authorized-bound-evidence
+    intent: authorized change whose separate verification is bound to a concrete artifact
+    workspace: ../workspace/C9-authorized-bound-evidence
+    agent_claims_authorization: false
+    expected_verdict: PASS_WITH_SURFACE_CHANGE
+    expected_baseline_equivalent: false
+    expected_completion_claim_supported: true
+    expected_attestation_only: []
+    expected_findings:
+      selected-tests: weakened
+    rationale: >-
+      AUTH-003 names exactly the observed selection and binds its separate verification
+      to evidence/auth-003-separate-verification.md by digest. The engine reads that
+      artifact and confirms it byte for byte, so this authorization does not appear in
+      authorizations_relied_on_attestation_only. Contrast C3, where the same verdict
+      rests on the ledger's attestation alone and is reported as such.
