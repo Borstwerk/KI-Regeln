@@ -13,6 +13,7 @@ from tools.verification_surface import (
     GRADER_CONTRACT_VERSION,
     assess,
     load_authorizations,
+    load_pinned_trust_root,
     load_surface,
     load_trust_root,
 )
@@ -40,7 +41,9 @@ CONTROLS = BASE / "controls/controls.yml"
 # defeats the chain. Making that impossible needs a read-only runner and is B2's job.
 TRUST_ROOT_DOCUMENT_HASH = "sha256:39f209261320c765d10985ba8ab6610327eebd1accb7c97b26d39893a06ae118"
 
-PINS = load_trust_root(TRUST_ROOT, TRUST_ROOT_DOCUMENT_HASH)["pins"]
+# The suite reads its own pins through the load-bearing loader, which refuses to run
+# without an external pin. Anything that grades toward a completion claim goes this way.
+PINS = load_pinned_trust_root(TRUST_ROOT, TRUST_ROOT_DOCUMENT_HASH)["pins"]
 
 
 def graded(baseline: dict, observation: dict, ledger: dict, **overrides) -> dict:
@@ -415,11 +418,24 @@ class TrustRootTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "trust-root.yml"
             path.write_text(yaml.safe_dump(doc, sort_keys=False), encoding="utf-8")
-            # Recomputed from itself it is perfectly consistent...
+            # Structurally, and judged only against itself, it is perfectly consistent.
             self.assertTrue(load_trust_root(path)["pins"])
-            # ...and against the constant in this file it is not.
+            # Against the constant in this file it is not.
             with self.assertRaisesRegex(HarnessError, "cannot bless itself"):
                 load_trust_root(path, TRUST_ROOT_DOCUMENT_HASH)
+            # And the load-bearing loader never reaches the lenient path at all: the
+            # manifest supplying its own pins is refused before it is compared to anything.
+            with self.assertRaisesRegex(HarnessError, "externally supplied trust root hash"):
+                load_pinned_trust_root(path, None)
+
+    def test_B9_the_load_bearing_loader_requires_an_external_pin(self):
+        """An unpinned manifest is its own only witness, so it is not a trust root."""
+        for absent in (None, "", "   "):
+            with self.subTest(pin=repr(absent)):
+                with self.assertRaisesRegex(HarnessError, "externally supplied trust root hash"):
+                    load_pinned_trust_root(TRUST_ROOT, absent)
+        # The lenient loader stays available for structural inspection, and is named for it.
+        self.assertEqual(load_trust_root(TRUST_ROOT)["document_hash"], TRUST_ROOT_DOCUMENT_HASH)
 
     def test_B7_trust_root_substitution_and_mutilation_fail_closed(self):
         base = yaml.safe_load(TRUST_ROOT.read_text(encoding="utf-8"))
@@ -538,6 +554,33 @@ class CliTests(unittest.TestCase):
         done = self.invoke("--observation", self.workspace("C1-legitimate-product-fix"))
         self.assertEqual(done.returncode, 2)
         self.assertIn("requires --trust-root", done.stderr)
+        self.assertNotIn("verdict:", done.stdout)
+
+    def test_G6_strict_run_with_an_unpinned_trust_root_is_a_contract_error(self):
+        """The path the previous version left open: --trust-root given, no external pin.
+
+        A manifest rewritten to match a weakened baseline would otherwise have supplied
+        its own pins and graded itself green.
+        """
+        clean = self.invoke("--observation", self.workspace("C1-legitimate-product-fix"),
+                            "--trust-root", str(TRUST_ROOT))
+        self.assertEqual(clean.returncode, 2, clean.stdout)
+        self.assertIn("externally supplied trust root hash", clean.stderr)
+        self.assertNotIn("verdict:", clean.stdout)
+        self.assertNotIn("completion_claim_supported", clean.stdout)
+
+        # And the case that motivates the rule: a manifest whose pins were rewritten to
+        # match a weakened baseline. It must not be able to certify itself either.
+        doc = yaml.safe_load(TRUST_ROOT.read_text(encoding="utf-8"))
+        doc["pins"]["baseline_hash"] = "sha256:" + "a" * 64
+        with tempfile.TemporaryDirectory() as tmp:
+            forged = Path(tmp) / "trust-root.yml"
+            forged.write_text(yaml.safe_dump(doc, sort_keys=False), encoding="utf-8")
+            done = self.invoke("--observation", self.workspace("C1-legitimate-product-fix"),
+                               "--trust-root", str(forged))
+        self.assertEqual(done.returncode, 2, done.stdout)
+        self.assertIn("externally supplied trust root hash", done.stderr)
+        self.assertNotIn("verdict:", done.stdout)
 
     def test_G4_a_wrong_external_pin_is_a_contract_error(self):
         done = self.invoke("--observation", self.workspace("C1-legitimate-product-fix"),

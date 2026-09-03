@@ -155,9 +155,20 @@ python3 tools/verification_surface.py \
 ```
 
 Exit code is `0` for `PASS` and `PASS_WITH_SURFACE_CHANGE`, `1` otherwise, `2` on a
-contract error. `--trust-root` is mandatory: a strict run without it exits `2` rather
-than grading against whatever happens to be on disk. `--no-strict` exists for
-exploratory inspection only and can never report a supported completion claim.
+contract error.
+
+The precondition of the load-bearing strict mode is not "a trust root" but **an
+externally pinned trust root**: `--trust-root` *and* `--expect-trust-root-hash`, both or
+neither. A manifest supplied without a pin is its own only witness — rewrite
+`trust-root.yml` so its `baseline_hash` matches a weakened baseline and every downstream
+check agrees with itself — so a strict run given only `--trust-root` exits `2` and grades
+nothing. `--no-strict` exists for exploratory inspection only and can never report a
+supported completion claim.
+
+`load_trust_root(path)` remains available for structural inspection and is documented as
+such; `load_pinned_trust_root(path, expected_hash)` is the load-bearing entry point and
+treats an absent pin as a contract error rather than falling back to structure-only
+checks.
 
 ## Where the trust comes from
 
@@ -179,9 +190,12 @@ pinned too — otherwise the cheapest route to green is to edit the expected ver
 so is `GRADER_CONTRACT_VERSION`, so that swapping this grader for a laxer one shows up as
 a mismatch rather than as silence.
 
-Missing pins are fail-closed. Strict mode is the default and is the only mode in which a
-completion claim can be supported; without an externally supplied pin, a run cannot
-establish that the baseline and ledger it just read are the reviewed ones, so it escalates.
+Missing pins are fail-closed at every level of the chain. Strict mode is the default and
+is the only mode in which a completion claim can be supported; without an externally
+supplied pin, a run cannot establish that the baseline and ledger it just read are the
+reviewed ones, so it escalates. The manifest is held to the same rule as the documents it
+describes: a strict run must supply the trust root's own expected hash from outside, or it
+is a contract error. Being one link further out does not exempt a link from being pinned.
 
 **This is a deterministic integrity relation, not a security boundary, and the difference
 matters.** A lock inside the same writable git workspace is not a boundary against an

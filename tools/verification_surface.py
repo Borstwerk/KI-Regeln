@@ -228,7 +228,14 @@ def _separate_verification_state(entry: dict[str, Any], evidence_root: Path | No
 
 
 def load_trust_root(path: Path, expected_hash: str | None = None) -> dict[str, Any]:
-    """Load the pinned trust root for an evaluation.
+    """Structurally load a trust root manifest. **Not** the load-bearing entry point.
+
+    With `expected_hash` omitted this checks shape, required pins and grader contract
+    only, and therefore cannot tell a manipulated manifest from the reviewed one: a
+    manifest whose pins were rewritten to match a weakened baseline still loads here.
+    That is acceptable for inspection and tooling, and is exactly why an evaluation that
+    may support a completion claim must not use this function. Use
+    `load_pinned_trust_root`, which makes the external pin non-optional.
 
     The pins live outside the documents they describe, so a manipulated baseline cannot
     re-derive its own expected hash. The trust root itself is pinned one level further
@@ -259,6 +266,24 @@ def load_trust_root(path: Path, expected_hash: str | None = None) -> dict[str, A
             f"({GRADER_CONTRACT_VERSION!r})"
         )
     return {"path": str(path), "surface_id": str(data["surface_id"]), "pins": pins, "document_hash": document_hash}
+
+
+def load_pinned_trust_root(path: Path, expected_hash: str | None) -> dict[str, Any]:
+    """Load a trust root for a load-bearing evaluation. The external pin is required.
+
+    Without it the manifest is its own only witness: rewrite `trust-root.yml` so its
+    `baseline_hash` matches a weakened baseline and every downstream check agrees with
+    itself. Requiring the pin here is what keeps the chain ending in something the run
+    cannot rewrite on its way past. An absent pin is a contract error, never a
+    structural-check-only fallback.
+    """
+    if not str(expected_hash or "").strip():
+        raise HarnessError(
+            f"{path}: a load-bearing evaluation requires an externally supplied trust root hash; "
+            "without one the manifest is its own only witness and a rewritten trust root would "
+            "supply its own pins"
+        )
+    return load_trust_root(path, expected_hash)
 
 
 def _classify(baseline: dict[str, Any], observed: dict[str, Any] | None) -> tuple[str, str]:
@@ -453,8 +478,13 @@ def _cli(argv: list[str] | None = None) -> int:
     parser.add_argument("--authorizations", required=True)
     parser.add_argument("--baseline-root", help="Root for baseline file elements (default: baseline dir)")
     parser.add_argument("--observation-root", help="Root for observation file elements (default: observation dir)")
-    parser.add_argument("--trust-root", help="Pinned trust root manifest; required unless --no-strict is given")
-    parser.add_argument("--expect-trust-root-hash", help="Externally supplied pin for the trust root manifest itself")
+    parser.add_argument("--trust-root",
+                        help="Trust root manifest. Required in strict mode, together with "
+                             "--expect-trust-root-hash.")
+    parser.add_argument("--expect-trust-root-hash",
+                        help="Externally supplied pin for the trust root manifest itself. Required in "
+                             "strict mode: an unpinned manifest supplies its own pins and is therefore "
+                             "not a trust root.")
     parser.add_argument("--evidence-root", help="Root for resolving bound separate-verification evidence")
     parser.add_argument("--agent-claims-authorization", action="store_true")
     parser.add_argument("--no-strict", action="store_true",
@@ -467,11 +497,17 @@ def _cli(argv: list[str] | None = None) -> int:
         strict = not args.no_strict
         if strict and not args.trust_root:
             raise HarnessError(
-                "strict evaluation requires --trust-root; without an external pin this run cannot establish "
-                "that the baseline and ledger it just read are the reviewed ones. Use --no-strict only for "
+                "strict evaluation requires --trust-root; without it this run cannot establish that the "
+                "baseline and ledger it just read are the reviewed ones. Use --no-strict only for "
                 "exploratory inspection."
             )
-        pins = load_trust_root(Path(args.trust_root), args.expect_trust_root_hash)["pins"] if args.trust_root else {}
+        if strict:
+            # Both, or neither. A trust root that supplies its own pins is not a trust root.
+            pins = load_pinned_trust_root(Path(args.trust_root), args.expect_trust_root_hash)["pins"]
+        elif args.trust_root:
+            pins = load_trust_root(Path(args.trust_root), args.expect_trust_root_hash)["pins"]
+        else:
+            pins = {}
         result = assess(
             baseline, observation, ledger,
             expected_baseline_hash=pins.get("baseline_hash"),
