@@ -1,0 +1,23 @@
+--- base/csv_export.py
++++ head/csv_export.py
+@@ -1,7 +1,18 @@
++from datetime import timezone
++
++
++def _utc(value):
++    return value.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
++
++
++def _blank(value):
++    return "" if value is None else value
++
++
+ def to_row(record):
+     return [
+         record["id"],
+-        record["created_at"],
+         record["owner"],
+-        record["amount"],
++        _utc(record["created_at"]),
++        _blank(record["amount"]),
+     ]

@@ -62,6 +62,20 @@ Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunäch
 - Skill-Katalog und menschliche Katalogdokumentation auf 137 Skills, 112× `partial`, 25× `none`, 0× `core`/`broad`, 112 Skill-Evalpacks und 575 definierte Cases aktualisiert; zusätzliche Coverage ist kein Behavioral-Qualitätsnachweis;
 - kein Tag, Release oder automatische externe Synchronisation durch diese Erweiterung.
 
+### Phase 4.2B – Code-Review-Paired-Eval-Replikation
+
+- Designstand `Evals/Behavioral-Harness/experiments/code-review-v1/` ergänzt: `DESIGN.md`, `experiment.draft.yml` sowie sechs vollständig synthetische Review-Pakete als Fixtures;
+- die claim-verification-spezifischen Kopplungen des Pair-Harness am realen Code verifiziert: geschlossenes Fixture-Rollen-Vokabular, verpflichtendes fünfwertiges `ground_truth.classification`, fest verdrahtete Domain-/Aufgabenfamilien-Literale, klassifikationsspezifische Judge-Anweisung sowie ein Disclosure-Fehlalarm auf dem Zielskill-Bezeichner `code-review`;
+- kleinste Generalisierung entworfen statt eines zweiten Harness: ein expliziter Diskriminator `ground_truth_model`, dessen Fehlen das heutige Verhalten unverändert reproduziert; Contract-Entscheidung dokumentiert als erforderlich, aber nicht breaking, `behavioral-paired-skill-eval/v1` bleibt;
+- domänenspezifisches Ground-Truth-Modell `code-review-findings/v1` mit vorab festgelegten Findings, Detektionskriterien, verbotenen Findings, Akzeptanzkriterien-Status und Freigabekalibrierung entworfen; ausdrücklich ohne aggregierte Gesamtpunktzahl;
+- Pair-Harness backward-compatible für `code-review-findings/v1` generalisiert: optionaler `ground_truth_model`-Diskriminator, modellspezifische Fixture-Rollen, optionaler `runner_path`, konfigurierbare `domain`/`task_family`, Change-Set-Konsistenz als verpflichtendes Prepare-Time-Gate, modellspezifische Judge-Instruction, vorab festgelegte Evaluation Policy im Blind-Judge-Vertrag und ein eng begrenztes, coordinator-only Disclosure-Opt-in; fehlende Angaben reproduzieren jeweils exakt das bisherige Verhalten, belegt durch 18 von 18 identischen Claim-Verification-Pairs;
+- `code-review-v1` als ausführbares Paired Experiment vorbereitet: sechs synthetische Code-Review-Cases, 6 Cases × 3 Repetitions vorbereitet und verifiziert, 36 Prepared Response Packages;
+- `code-review/SKILL.md`, das bestehende Evalpack, der Katalog sowie Maturity und Eval Coverage wurden nicht verändert;
+- einen realen Cross-Domain-Smoke ausgeführt: `CR-01`, Repetition 1, exakt zwei Behavioral Responses, je ein Modellversuch ohne Retry; Claude Code `2.1.258`, Adapter `0.2.1`, Modell `claude-haiku-4-5-20251001`; Phase 4.2A lief unter Claude Code `2.1.251`, daher wird keine exakte Runtime-Replikation über die Phasen hinweg behauptet;
+- 2/2 kanonische Run-Packages verifiziert, Blind Packaging erfolgreich, keine Treatment-Disclosure; `fresh_context` true, `repository_access_disabled` true, `package_only_access` true, `network_disabled` unknown;
+- `method_evidence_status: partial`, `comparison_eligible: false`; kein Semantic Judge, kein Unblinding, kein Behavioral Comparison, `skill_effect: unknown`; die restlichen 34 geplanten Responses wurden nicht ausgeführt; `Evals/Behavioral-Harness/experiments/code-review-v1/METHOD-RESULT.md` als methodischer Abschlussstand ergänzt;
+- keine Response-Inhalte, keine Treatment-Zuordnung, keine Findings und keine Wirksamkeits- oder Qualitätsaussage persistiert; keine Maturity- oder Eval-Coverage-Hochstufung; der Phase-4.2A-Endstand bleibt unverändert `partial` bei `network_disabled: unknown`.
+
 ### Phase 4.2A – Claim-Verification Paired Pilot mit unvollständiger Method Evidence abgeschlossen
 
 - schmale Pair-Orchestrierung `tools/behavioral_harness_pair.py` sowie das sechsfällige Experiment `claim-verification-v1` mit vorab festgelegter Ground Truth, expliziten Fixture-Rollen und counterbalanced Treatment-Reihenfolge ergänzt;

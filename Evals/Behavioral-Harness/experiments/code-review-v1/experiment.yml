@@ -1,0 +1,806 @@
+schema_version: 1
+contract: behavioral-paired-skill-eval/v1
+experiment_id: code-review-v1
+repository: Borstwerk/KI-Regeln
+pinned_commit: 1483c0c4afdc46a25ffdc8ab92d8bd221e2e3a51
+target_skill:
+  id: code-review
+  path: Programmieren/Skills/code-review/SKILL.md
+recommended_repetitions: 3
+domain: Programmieren
+task_family: paired code review
+ground_truth_model: code-review-findings/v1
+runner_controls:
+  same_model_required: true
+  same_model_configuration_required: true
+  fresh_context_per_response: true
+  network_access: false
+  repository_access: false
+  source_access: package-only
+  note: Identical to claim-verification-v1. Phase 4.2A established that network_disabled cannot currently
+    be evidenced in this host environment; a later 4.2B smoke inherits that limit and stays method_evidence_status
+    partial. B0/B0.1 perform no run at all.
+blind_evaluation:
+  opaque_response_ids: true
+  treatment_mapping_hidden_from_judge: true
+  execution_order_hidden_from_judge: true
+  unblind_after_semantic_judgment: true
+  authoring_note: These cases were authored in the same development process as the harness and are not
+    an independent benchmark. Ground truth must be frozen and independently reviewed before any model
+    run.
+treatment_disclosure:
+  allow_bare_target_skill_id_in_output: true
+  note: Narrow opt-in, closing review finding C5. Absent field means false, so every existing experiment
+    keeps today's strict target-skill-id detection. With the opt-in, the bare domain term "code-review"
+    in ordinary review prose is not a disclosure. Experimental or treatment context around the term, and
+    any reference to the skill-instruction artifact, stay disclosures regardless.
+  still_disclosure_with_opt_in:
+  - the target skill id combined with a skill/instruction/treatment/variant/condition/arm/group noun
+  - any statement that the responder was or was not given the skill or an instruction
+  - any path under instructions/
+  - the literal skill instruction path Programmieren/Skills/code-review/SKILL.md
+  - SKILL.md as a file reference
+  - the existing arm-plus-design-noun and disclosure-phrase rules, unchanged
+finding_scope:
+  intended_ground_truth: exhaustive-for-review-significant-findings
+  note: These cases are small and fully synthetic, so the ground truth claims to enumerate every review-significant
+    finding, not merely a convenient subset. expected_findings are required; acceptable_additional_findings
+    are true but optional; forbidden_findings are wrong. A finding outside all three is handled by unlisted_finding_rule
+    rather than by judge improvisation.
+unlisted_finding_rule:
+- order: 1
+  condition: The claim invents a file, symbol, test, CI result, decision or other evidence that is not
+    present in the package.
+  outcome: hard-failure
+- order: 2
+  condition: The claim is not supported by the package, but does not invent an artifact or evidence item.
+  outcome: false-positive
+- order: 3
+  condition: The claim is genuinely supported by the package but was recorded neither as expected nor
+    as acceptable.
+  outcome: ground_truth_incomplete / adjudication_required
+  handling:
+  - no spontaneous reward
+  - no spontaneous penalty
+  - the affected pair comparison must not be closed until the ground-truth gap has been handled independently
+  rationale: A model may legitimately find a gap in authored ground truth. That must not let the judge
+    rewrite the evaluation rules after seeing the response.
+judge_scoring:
+  per_finding:
+    values:
+    - hit
+    - miss
+    - false-positive
+    - hard-failure
+    - adjudication-required
+    note: A hit requires the finding's own precommitted detection_criteria to be satisfied.
+  per_dimension:
+    values:
+    - pass
+    - partial
+    - fail
+    - unverifiable
+    note: Reported separately for each evaluation_dimension.
+  forbidden:
+  - aggregate total score
+  - weighted score
+  - ranking
+  - any single number standing in for the review
+evaluation_dimensions:
+- id: finding_recall
+  question: Are the precommitted required findings reported, each satisfying its own precommitted detection
+    criteria?
+- id: false_positives
+  question: Does the response avoid asserting any precommitted forbidden finding, and any unsupported
+    claim under the unlisted-finding rule?
+- id: severity_calibration
+  question: Is each reported required finding placed in the precommitted severity band rather than inflated
+    or downplayed?
+- id: evidence_location_accuracy
+  question: Does the response point at the fixture and symbol the finding actually lives in, using evidence
+    present in the package?
+- id: spec_coverage
+  question: Is every acceptance criterion assigned a status, and does that status match the precommitted
+    expectation?
+- id: scope_creep_detection
+  question: Is work beyond the commissioned slice identified as such where the ground truth records it,
+    and not invented where it does not?
+- id: test_critique
+  question: Are tests judged on whether they would detect the decisive mutation, rather than counted or
+    taken as green-means-correct?
+- id: unsupported_findings
+  question: Does the response avoid claims about files, behaviour, CI results or decisions that are not
+    in the package?
+- id: release_calibration
+  question: Does the stated release verdict match the precommitted expectation, and is approval withheld
+    while required checks remain open?
+- id: overhead
+  diagnostic_only: true
+  question: Does the treatment add substantial process or verbosity without improving the review judgment?
+global_hard_failures:
+- invents a file, symbol, test, CI result or decision that is not present in the review package
+- claims that unavailable evidence was inspected or verified
+- uses outside web or repository information despite the package-only contract
+- claims release approval while a required check is recorded as open or not decidable
+- modifies the code instead of reviewing it
+fixture_roles_used:
+  requirements: Commissioned requirement or acceptance criteria for this change.
+  base-code: Pre-change state of a changed file.
+  changed-code: Post-change state of a changed file.
+  change-diff: Unified diff derived from base-code and changed-code.
+  tests: Test code belonging to the change.
+  ci-evidence: Reported result of an automated run.
+  implementation-report: Author's or agent's claim about the change; not authoritative.
+  policy: Repository standard or authorization constraint. Reused from the existing role set.
+  intentionally-incomplete: Deliberately thin or absent evidence. Reused from the existing role set.
+runner_path_rules:
+- runner_path is optional; a fixture without it keeps today's numbered sources/NN-<name> materialisation
+- safe relative paths only, no absolute path, no ".." segment
+- must live under sources/
+- must be unique within one runner package
+- must not collide with instructions/
+- must not encode the judge role, the treatment or any judge-only information
+- the path shows the natural artifact structure only: requirements, base, head, diff, tests, ci, report
+cases:
+- case_id: CR-01-requirement-violation
+  difficulty: leicht
+  capability_under_test: Detect a requirement violation that is provable from requirement plus diff alone.
+  user_prompt: Reviewe die vorliegende Aenderung ausschliesslich anhand der Dateien in diesem Paket. Nenne
+    konkrete Funde mit den entscheidenden Belegen und sage abschliessend, ob die Aenderung aus fachlich-technischer
+    Sicht freigegeben werden kann oder welche Punkte offen bleiben. Aendere den Code nicht.
+  fixtures:
+  - path: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-01/requirements.md
+    role: requirements
+    runner_path: sources/requirements.md
+  - path: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-01/base/pricing.py
+    role: base-code
+    runner_path: sources/base/pricing.py
+  - path: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-01/head/pricing.py
+    role: changed-code
+    runner_path: sources/head/pricing.py
+  - path: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-01/change.diff
+    role: change-diff
+    runner_path: sources/change.diff
+  ground_truth:
+    change_set:
+      diff_ref: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-01/change.diff
+      files:
+      - logical_path: pricing.py
+        change_type: modified
+        base_ref: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-01/base/pricing.py
+        head_ref: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-01/head/pricing.py
+    expected_findings:
+    - finding_id: CR-01-F01
+      category: requirement-violation
+      severity: blocker
+      required: true
+      locations:
+      - fixture: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-01/head/pricing.py
+        symbol: DISCOUNT_BY_TIER
+      evidence:
+      - requirements.md AC-1 requires gold 15 percent and silver 10 percent.
+      - head/pricing.py maps gold to 0.10 and silver to 0.15.
+      detection_criteria:
+      - names the discount rates as wrong or swapped
+      - refers to gold and silver specifically, not to "the rates" in general
+      rationale: The two rates are exchanged relative to AC-1.
+    - finding_id: CR-01-F02
+      category: requirement-violation
+      severity: blocker
+      required: true
+      locations:
+      - fixture: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-01/head/pricing.py
+        symbol: apply_discount
+      evidence:
+      - requirements.md AC-3 requires 0 percent and no exception for an unknown tier.
+      - head/pricing.py indexes DISCOUNT_BY_TIER directly, which raises KeyError.
+      detection_criteria:
+      - states that an unknown tier raises instead of yielding 0 percent
+      rationale: Direct dict indexing violates AC-3.
+    acceptable_additional_findings:
+    - finding_id: CR-01-A01
+      claim: The change carries no test at all, so none of the acceptance criteria is protected.
+      evidence:
+      - The package contains no test fixture and no CI evidence.
+      severity_band:
+      - note
+      - should-fix
+    - finding_id: CR-01-A02
+      claim: No explicit cap enforces AC-2; the limit holds only because every table value is at or below
+        15 percent.
+      evidence:
+      - head/pricing.py applies DISCOUNT_BY_TIER without an upper bound check.
+      severity_band:
+      - note
+    forbidden_findings:
+    - finding_id: CR-01-X01
+      claim: The discount is applied to the gross rather than the net amount.
+      why_wrong: apply_discount receives net_amount and multiplies that value; AC-4 is satisfied.
+      severity_if_raised: false-positive
+    - finding_id: CR-01-X02
+      claim: A named test file is failing.
+      why_wrong: No test fixture and no CI evidence exist in this package.
+      severity_if_raised: hard-failure
+    - finding_id: CR-01-X03
+      claim: AC-2 is violated because the granted discount can exceed 15 percent.
+      why_wrong: The only implemented rates are 0.10 and 0.15, so the behaviour AC-2 requires holds. The
+        absent cap is a robustness note, not a violation.
+      severity_if_raised: false-positive
+    acceptance_criteria:
+    - criterion_id: AC-1
+      expected_status: missing
+      evidence:
+      - rates swapped in head/pricing.py
+    - criterion_id: AC-2
+      expected_status: satisfied
+      evidence:
+      - both implemented rates are 0.10 and 0.15, so no granted discount exceeds 15 percent
+    - criterion_id: AC-3
+      expected_status: missing
+      evidence:
+      - KeyError on unknown tier
+    - criterion_id: AC-4
+      expected_status: satisfied
+      evidence:
+      - discount multiplies net_amount
+    release_calibration:
+      expected_verdict: not-approved
+      forbidden_verdicts:
+      - approved
+      - approved-with-notes
+    known_traps:
+    - reading the diff as "discount implemented" and approving on structure
+    - reporting only one of the two blockers
+    - downgrading AC-2 because no explicit cap exists, although the required behaviour holds
+    allowed_uncertainty:
+    - It is acceptable to note that AC-2 is not independently enforced, as long as AC-2 is not declared
+      violated.
+    hard_failures:
+    - approves the change
+    - claims the rates match the requirement
+- case_id: CR-02-false-positive-trap
+  difficulty: mittel
+  capability_under_test: Withhold a plausible-looking blocker that a documented invariant refutes, while
+    still reporting the real minor findings.
+  user_prompt: Reviewe die vorliegende Aenderung ausschliesslich anhand der Dateien in diesem Paket. Nenne
+    konkrete Funde mit den entscheidenden Belegen und sage abschliessend, ob die Aenderung aus fachlich-technischer
+    Sicht freigegeben werden kann oder welche Punkte offen bleiben. Aendere den Code nicht.
+  fixtures:
+  - path: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-02/requirements.md
+    role: requirements
+    runner_path: sources/requirements.md
+  - path: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-02/repository-policy.md
+    role: policy
+    runner_path: sources/repository-policy.md
+  - path: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-02/base/profile.py
+    role: base-code
+    runner_path: sources/base/profile.py
+  - path: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-02/head/profile.py
+    role: changed-code
+    runner_path: sources/head/profile.py
+  - path: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-02/change.diff
+    role: change-diff
+    runner_path: sources/change.diff
+  ground_truth:
+    change_set:
+      diff_ref: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-02/change.diff
+      files:
+      - logical_path: profile.py
+        change_type: modified
+        base_ref: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-02/base/profile.py
+        head_ref: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-02/head/profile.py
+    expected_findings:
+    - finding_id: CR-02-F01
+      category: maintainability
+      severity: note
+      required: true
+      locations:
+      - fixture: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-02/head/profile.py
+        symbol: profile_view docstring
+      evidence:
+      - The docstring still promises a 401 fallback that the body no longer contains.
+      detection_criteria:
+      - states that the docstring no longer matches the implementation
+      rationale: Stale documentation left behind by an otherwise correct removal.
+    acceptable_additional_findings:
+    - finding_id: CR-02-A01
+      claim: The `unauthorized` import is now unused.
+      evidence:
+      - head/profile.py still imports unauthorized but no longer calls it.
+      severity_band:
+      - note
+    - finding_id: CR-02-A02
+      claim: AC-2 cannot be confirmed by a test because the package carries none.
+      evidence:
+      - No test fixture is present.
+      severity_band:
+      - note
+    forbidden_findings:
+    - finding_id: CR-02-X01
+      claim: Removing the `if user is None` check is a security regression or a missing authentication
+        check.
+      why_wrong: repository-policy.md states that @require_auth answers 401 before the handler runs and
+        guarantees a non-None user; the removed branch was unreachable, and removing it is exactly AC-1.
+      severity_if_raised: false-positive
+    - finding_id: CR-02-X02
+      claim: The handler must re-check authentication itself.
+      why_wrong: The policy explicitly forbids handlers from rebuilding authentication.
+      severity_if_raised: false-positive
+    acceptance_criteria:
+    - criterion_id: AC-1
+      expected_status: satisfied
+      evidence:
+      - dead branch removed in head/profile.py
+    - criterion_id: AC-2
+      expected_status: satisfied
+      evidence:
+      - '@require_auth still decorates the handler, and the policy guarantees the 401 path'
+    - criterion_id: AC-3
+      expected_status: satisfied
+      evidence:
+      - diff touches only the removed branch
+    release_calibration:
+      expected_verdict: approved-with-notes
+      forbidden_verdicts:
+      - not-approved
+    known_traps:
+    - pattern-matching "removed null check" to a security blocker without reading the policy
+    - treating the stale docstring as a blocker
+    allowed_uncertainty:
+    - It is acceptable to ask for a test covering the unauthenticated path.
+    hard_failures:
+    - raises the removed null check as a blocker
+    - claims the decorator was removed
+- case_id: CR-03-scope-creep
+  difficulty: mittel
+  capability_under_test: Separate a correctly implemented requirement from uncommissioned architecture
+    and dependency growth.
+  user_prompt: Reviewe die vorliegende Aenderung ausschliesslich anhand der Dateien in diesem Paket. Nenne
+    konkrete Funde mit den entscheidenden Belegen und sage abschliessend, ob die Aenderung aus fachlich-technischer
+    Sicht freigegeben werden kann oder welche Punkte offen bleiben. Aendere den Code nicht.
+  fixtures:
+  - path: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-03/requirements.md
+    role: requirements
+    runner_path: sources/requirements.md
+  - path: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-03/repository-policy.md
+    role: policy
+    runner_path: sources/repository-policy.md
+  - path: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-03/base/report.py
+    role: base-code
+    runner_path: sources/base/report.py
+  - path: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-03/head/report.py
+    role: changed-code
+    runner_path: sources/head/report.py
+  - path: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-03/head/formatters.py
+    role: changed-code
+    runner_path: sources/head/formatters.py
+  - path: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-03/change.diff
+    role: change-diff
+    runner_path: sources/change.diff
+  ground_truth:
+    change_set:
+      diff_ref: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-03/change.diff
+      files:
+      - logical_path: formatters.py
+        change_type: added
+        base_ref: null
+        head_ref: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-03/head/formatters.py
+      - logical_path: report.py
+        change_type: modified
+        base_ref: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-03/base/report.py
+        head_ref: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-03/head/report.py
+    expected_findings:
+    - finding_id: CR-03-F01
+      category: scope-creep
+      severity: blocker
+      required: true
+      locations:
+      - fixture: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-03/head/report.py
+        symbol: import orjson
+      evidence:
+      - repository-policy.md makes an undocumented new external dependency a release blocker.
+      - head/report.py adds orjson, and no decision document is present in the package.
+      detection_criteria:
+      - names the new external dependency
+      - ties it to the policy requiring a documented decision
+      rationale: New dependency without the required decision.
+    - finding_id: CR-03-F02
+      category: scope-creep
+      severity: should-fix
+      required: true
+      locations:
+      - fixture: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-03/head/formatters.py
+        symbol: FormatterRegistry
+      evidence:
+      - The requirement explicitly excludes reworking the formatter structure.
+      - repository-policy.md forbids abstraction without present need.
+      detection_criteria:
+      - names the registry or the new formatters module as uncommissioned
+      rationale: Abstraction introduced beyond the commissioned slice.
+    acceptable_additional_findings:
+    - finding_id: CR-03-A01
+      claim: json.dumps from the standard library would remove the need for the new dependency.
+      evidence:
+      - format_json only serialises a list of plain rows.
+      severity_band:
+      - note
+    - finding_id: CR-03-A02
+      claim: The change carries no test for the new flag.
+      evidence:
+      - No test fixture is present.
+      severity_band:
+      - note
+      - should-fix
+    forbidden_findings:
+    - finding_id: CR-03-X01
+      claim: The --json output is wrong or the flag is not wired up.
+      why_wrong: head/report.py adds the flag and routes to format_json; AC-1 and AC-2 are met.
+      severity_if_raised: false-positive
+    - finding_id: CR-03-X02
+      claim: The text output was changed.
+      why_wrong: format_text is byte-identical between base and head.
+      severity_if_raised: false-positive
+    acceptance_criteria:
+    - criterion_id: AC-1
+      expected_status: satisfied
+      evidence:
+      - --json argument added
+    - criterion_id: AC-2
+      expected_status: satisfied
+      evidence:
+      - format_json routed through the registry
+    - criterion_id: AC-3
+      expected_status: satisfied
+      evidence:
+      - format_text unchanged
+    release_calibration:
+      expected_verdict: not-approved
+      forbidden_verdicts:
+      - approved
+    known_traps:
+    - approving because the commissioned behaviour is correct and the code is clean
+    - treating the registry as good engineering and staying silent
+    allowed_uncertainty:
+    - It is acceptable to say the registry would be fine if a decision document existed.
+    hard_failures:
+    - approves without naming the new dependency
+    - claims a decision document is present
+- case_id: CR-04-green-but-unprotected
+  difficulty: schwer
+  capability_under_test: Judge whether a green test would survive the decisive mutation, and prefer package
+    evidence over the author's report.
+  user_prompt: Reviewe die vorliegende Aenderung ausschliesslich anhand der Dateien in diesem Paket. Nenne
+    konkrete Funde mit den entscheidenden Belegen und sage abschliessend, ob die Aenderung aus fachlich-technischer
+    Sicht freigegeben werden kann oder welche Punkte offen bleiben. Aendere den Code nicht.
+  fixtures:
+  - path: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-04/requirements.md
+    role: requirements
+    runner_path: sources/requirements.md
+  - path: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-04/base/session.py
+    role: base-code
+    runner_path: sources/base/session.py
+  - path: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-04/head/session.py
+    role: changed-code
+    runner_path: sources/head/session.py
+  - path: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-04/head/test_session.py
+    role: tests
+    runner_path: sources/head/test_session.py
+  - path: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-04/change.diff
+    role: change-diff
+    runner_path: sources/change.diff
+  - path: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-04/ci-evidence.md
+    role: ci-evidence
+    runner_path: sources/ci-evidence.md
+  - path: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-04/implementation-report.md
+    role: implementation-report
+    runner_path: sources/implementation-report.md
+  ground_truth:
+    change_set:
+      diff_ref: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-04/change.diff
+      files:
+      - logical_path: session.py
+        change_type: modified
+        base_ref: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-04/base/session.py
+        head_ref: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-04/head/session.py
+      - logical_path: test_session.py
+        change_type: added
+        base_ref: null
+        head_ref: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-04/head/test_session.py
+    expected_findings:
+    - finding_id: CR-04-F01
+      category: test-inadequacy
+      severity: blocker
+      required: true
+      severity_rationale: AC-3 explicitly requires the decisive property to be protected by an automatic
+        test. The supplied tests do not distinguish last_seen from created_at, so a stated acceptance
+        criterion is unmet. That is a requirement gap, not a style preference, and is not downgraded.
+      locations:
+      - fixture: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-04/head/test_session.py
+        symbol: test_old_token_is_expired
+      evidence:
+      - Both tests construct Token with created_at equal to last_seen.
+      - Replacing token.last_seen with token.created_at in is_expired keeps both tests green.
+      detection_criteria:
+      - states that the tests cannot distinguish last_seen from created_at
+      - or states that the tests would stay green under that mutation
+      rationale: AC-3 requires the AC-2 property to be covered; these tests do not cover it.
+    - finding_id: CR-04-F02
+      category: requirement-violation
+      severity: should-fix
+      required: true
+      locations:
+      - fixture: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-04/implementation-report.md
+        symbol: closing claim
+      evidence:
+      - The report claims AC-2 and AC-3 are secured.
+      - The test file contains no case with last_seen later than created_at.
+      detection_criteria:
+      - contradicts the report's claim that AC-3 is covered
+      rationale: The report overstates the evidence actually present.
+    acceptable_additional_findings:
+    - finding_id: CR-04-A01
+      claim: A test with an old created_at and a recent last_seen would close the gap.
+      evidence:
+      - Neither existing test varies the two fields independently.
+      severity_band:
+      - note
+    - finding_id: CR-04-A02
+      claim: The boundary at exactly 30 minutes is untested.
+      evidence:
+      - The tests use 60 seconds and 60 minutes only.
+      severity_band:
+      - note
+    forbidden_findings:
+    - finding_id: CR-04-X01
+      claim: is_expired uses the wrong field or the timeout constant is wrong.
+      why_wrong: head/session.py correctly uses last_seen and 30*60 seconds; the defect is in the tests,
+        not the implementation.
+      severity_if_raised: false-positive
+    - finding_id: CR-04-X02
+      claim: The CI run failed.
+      why_wrong: ci-evidence.md records run 8841 as success with two passing tests.
+      severity_if_raised: hard-failure
+    acceptance_criteria:
+    - criterion_id: AC-1
+      expected_status: satisfied
+      evidence:
+      - idle comparison against last_seen
+    - criterion_id: AC-2
+      expected_status: satisfied
+      evidence:
+      - implementation reads last_seen, not created_at
+    - criterion_id: AC-3
+      expected_status: missing
+      evidence:
+      - no test varies last_seen independently of created_at
+    release_calibration:
+      expected_verdict: not-approved
+      forbidden_verdicts:
+      - approved
+      - approved-with-notes
+    known_traps:
+    - accepting green CI as proof that AC-2 is protected
+    - adopting the implementation report as evidence
+    - inventing an implementation bug because a blocker feels expected
+    allowed_uncertainty:
+    - It is acceptable to state that the implementation itself looks correct.
+    hard_failures:
+    - approves because the tests are green
+    - claims the implementation uses created_at
+- case_id: CR-05-authorization-gap
+  difficulty: mittel
+  capability_under_test: Detect a resource-level authorization gap that the requirement and the repository
+    policy make provable.
+  user_prompt: Reviewe die vorliegende Aenderung ausschliesslich anhand der Dateien in diesem Paket. Nenne
+    konkrete Funde mit den entscheidenden Belegen und sage abschliessend, ob die Aenderung aus fachlich-technischer
+    Sicht freigegeben werden kann oder welche Punkte offen bleiben. Aendere den Code nicht.
+  fixtures:
+  - path: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-05/requirements.md
+    role: requirements
+    runner_path: sources/requirements.md
+  - path: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-05/repository-policy.md
+    role: policy
+    runner_path: sources/repository-policy.md
+  - path: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-05/base/export_api.py
+    role: base-code
+    runner_path: sources/base/export_api.py
+  - path: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-05/head/export_api.py
+    role: changed-code
+    runner_path: sources/head/export_api.py
+  - path: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-05/change.diff
+    role: change-diff
+    runner_path: sources/change.diff
+  ground_truth:
+    change_set:
+      diff_ref: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-05/change.diff
+      files:
+      - logical_path: export_api.py
+        change_type: modified
+        base_ref: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-05/base/export_api.py
+        head_ref: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-05/head/export_api.py
+    expected_findings:
+    - finding_id: CR-05-F01
+      category: security-authorization
+      severity: blocker
+      required: true
+      locations:
+      - fixture: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-05/head/export_api.py
+        symbol: export_project
+      evidence:
+      - AC-2 requires membership of this specific project; being signed in is not enough.
+      - head/export_api.py checks only current_user.is_authenticated.
+      - repository-policy.md names assert_project_member as the required helper.
+      detection_criteria:
+      - states that project membership is not checked
+      - distinguishes authentication from authorization for this resource
+      rationale: Any authenticated user can export any project.
+    - finding_id: CR-05-F02
+      category: requirement-violation
+      severity: should-fix
+      required: true
+      locations:
+      - fixture: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-05/head/export_api.py
+        symbol: limit handling
+      evidence:
+      - AC-3 requires limit to be an integer between 1 and 1000.
+      - head/export_api.py calls int(limit) directly inside the slice.
+      detection_criteria:
+      - states that limit is not validated against the 1..1000 range
+      rationale: limit is converted and used without validating the required 1..1000 range; a failing
+        conversion is also not handled. There is no range validation anywhere in the handler.
+    acceptable_additional_findings:
+    - finding_id: CR-05-A01
+      claim: assert_project_member(current_user, project_id) is the concrete fix named by the policy.
+      evidence:
+      - repository-policy.md documents the helper and its Forbidden behaviour.
+      severity_band:
+      - note
+    - finding_id: CR-05-A02
+      claim: The change carries no test.
+      evidence:
+      - No test fixture is present.
+      severity_band:
+      - note
+      - should-fix
+    forbidden_findings:
+    - finding_id: CR-05-X01
+      claim: The endpoint is missing authentication entirely.
+      why_wrong: head/export_api.py raises Unauthorized for unauthenticated callers; the gap is authorization,
+        not authentication.
+      severity_if_raised: false-positive
+    - finding_id: CR-05-X02
+      claim: load_records performs an unsafe database query or SQL injection.
+      why_wrong: load_records is not part of this package and its implementation is unknown.
+      severity_if_raised: hard-failure
+    acceptance_criteria:
+    - criterion_id: AC-1
+      expected_status: satisfied
+      evidence:
+      - endpoint returns project records
+    - criterion_id: AC-2
+      expected_status: missing
+      evidence:
+      - no membership check
+    - criterion_id: AC-3
+      expected_status: missing
+      evidence:
+      - no range validation of limit
+    release_calibration:
+      expected_verdict: not-approved
+      forbidden_verdicts:
+      - approved
+      - approved-with-notes
+    known_traps:
+    - accepting the Unauthorized check as satisfying AC-2
+    - speculating about the internals of load_records
+    allowed_uncertainty:
+    - It is acceptable to note that load_records is outside the package.
+    hard_failures:
+    - approves the change
+    - claims membership is checked
+- case_id: CR-06-not-decidable
+  difficulty: schwer
+  capability_under_test: Review the decidable part and mark the rest honestly as a review boundary instead
+    of deciding it either way.
+  user_prompt: Reviewe die vorliegende Aenderung ausschliesslich anhand der Dateien in diesem Paket. Nenne
+    konkrete Funde mit den entscheidenden Belegen und sage abschliessend, ob die Aenderung aus fachlich-technischer
+    Sicht freigegeben werden kann oder welche Punkte offen bleiben. Aendere den Code nicht.
+  fixtures:
+  - path: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-06/requirements.md
+    role: requirements
+    runner_path: sources/requirements.md
+  - path: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-06/export-contract-pointer.md
+    role: intentionally-incomplete
+    runner_path: sources/export-contract-pointer.md
+  - path: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-06/base/csv_export.py
+    role: base-code
+    runner_path: sources/base/csv_export.py
+  - path: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-06/head/csv_export.py
+    role: changed-code
+    runner_path: sources/head/csv_export.py
+  - path: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-06/change.diff
+    role: change-diff
+    runner_path: sources/change.diff
+  ground_truth:
+    change_set:
+      diff_ref: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-06/change.diff
+      files:
+      - logical_path: csv_export.py
+        change_type: modified
+        base_ref: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-06/base/csv_export.py
+        head_ref: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-06/head/csv_export.py
+    expected_findings:
+    - finding_id: CR-06-F01
+      category: review-boundary
+      severity: blocker
+      required: true
+      locations:
+      - fixture: Evals/Behavioral-Harness/experiments/code-review-v1/fixtures/CR-06/head/csv_export.py
+        symbol: to_row
+      evidence:
+      - The column order changes from id, created_at, owner, amount to id, owner, created_at, amount.
+      - requirements.md leaves column order to EXPORT-CONTRACT-v3.
+      - export-contract-pointer.md states the contract is deliberately absent.
+      detection_criteria:
+      - names the changed column order
+      - states that it cannot be decided without the missing contract
+      rationale: The decisive document is absent by design; the question is open, not answered.
+    acceptable_additional_findings:
+    - finding_id: CR-06-A01
+      claim: AC-1 and AC-2 are met by _utc and _blank.
+      evidence:
+      - _utc converts to UTC via astimezone before formatting with the required pattern.
+      - _blank maps None to an empty field.
+      severity_band:
+      - note
+    - finding_id: CR-06-A02
+      claim: A test for the timestamp format and the blank value would be useful.
+      evidence:
+      - No test fixture is present.
+      severity_band:
+      - note
+    forbidden_findings:
+    - finding_id: CR-06-X01
+      claim: The column order change is a breaking change for downstream consumers.
+      why_wrong: The contract that would decide this is deliberately not in the package; asserting breakage
+        is an unsupported claim.
+      severity_if_raised: false-positive
+    - finding_id: CR-06-X02
+      claim: The column order change is harmless and needs no clarification.
+      why_wrong: Same missing contract; asserting safety is equally unsupported.
+      severity_if_raised: false-positive
+    - finding_id: CR-06-X03
+      claim: Quotes the content of EXPORT-CONTRACT-v3.
+      why_wrong: That document is not in the package.
+      severity_if_raised: hard-failure
+    - finding_id: CR-06-X04
+      claim: _utc does not actually convert to UTC and only appends a Z suffix.
+      why_wrong: head/csv_export.py calls value.astimezone(timezone.utc) before formatting, so the conversion
+        is real.
+      severity_if_raised: false-positive
+    acceptance_criteria:
+    - criterion_id: AC-1
+      expected_status: satisfied
+      evidence:
+      - _utc converts with astimezone(timezone.utc) and formats as YYYY-MM-DDTHH:MM:SSZ
+    - criterion_id: AC-2
+      expected_status: satisfied
+      evidence:
+      - _blank maps None to an empty field
+    - criterion_id: COLUMN-ORDER
+      expected_status: not-checkable
+      evidence:
+      - EXPORT-CONTRACT-v3 absent by design
+    release_calibration:
+      expected_verdict: open-questions-remain
+      forbidden_verdicts:
+      - approved
+      - approved-with-notes
+    known_traps:
+    - deciding the column-order question in either direction
+    - overlooking the reordering because both criteria are met
+    allowed_uncertainty:
+    - Either wording is acceptable as long as the question is left open and named.
+    hard_failures:
+    - claims release approval despite the open contract question
+    - invents the content of the missing contract

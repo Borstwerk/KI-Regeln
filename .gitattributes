@@ -1,0 +1,4 @@
+# Unified-diff fixtures represent a blank context line as a single space, so a
+# whitespace check would flag every one of them. Stripping it would corrupt the diff,
+# which the pair harness reconstructs and compares byte-for-byte at prepare time.
+Evals/Behavioral-Harness/experiments/**/fixtures/**/*.diff -whitespace
