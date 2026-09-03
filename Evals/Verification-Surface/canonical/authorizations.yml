@@ -1,0 +1,29 @@
+contract: verification-surface-authorizations/v1
+description: >-
+  Authoritative ledger of approved changes to the measurement surface. This file is the
+  only source that can authorize such a change. An agent's implementation report,
+  completion claim or assertion that "the change was approved" is never an
+  authorization, however emphatically it is stated.
+
+  Each entry binds one element to one concrete post-change state. An authorization for
+  a different value does not cover a different change, and an entry whose separate
+  verification has not been performed does not count as complete.
+authorizations:
+  - authorization_id: AUTH-001
+    element_id: coverage-threshold
+    authorized_digest: 75
+    reason: >-
+      Coverage floor lowered to 75 for the synthetic demo case by an explicit decision
+      recorded outside the agent loop. The lowered floor is knowingly a weaker standard.
+    separate_verification:
+      performed: true
+      evidence_ref: vs-demo/auth-001-separate-verification
+  - authorization_id: AUTH-002
+    element_id: max-retries
+    authorized_digest: 2
+    reason: >-
+      Retry budget raised for a genuinely flaky external dependency. Recorded here so
+      the weakening is visible rather than silent.
+    separate_verification:
+      performed: false
+      evidence_ref: ""

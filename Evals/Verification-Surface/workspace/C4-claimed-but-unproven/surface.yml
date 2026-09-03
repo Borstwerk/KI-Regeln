@@ -1,0 +1,32 @@
+contract: verification-surface/v1
+surface_id: vs-demo-discount
+description: >-
+  Pinned load-bearing measurement surface of the synthetic discount case. Everything
+  listed here is part of what "passed" means; changing any of it changes the standard,
+  not the product.
+elements:
+  - element_id: test-file
+    kind: test
+    content_mode: file
+    path: guarded/test_discount.py
+  - element_id: coverage-threshold
+    kind: threshold
+    content_mode: value
+    value: 60
+    direction: higher_is_stricter
+  - element_id: lint-severity
+    kind: severity
+    content_mode: enum
+    value: blocking
+    strictness_order: [informational, warning, blocking]
+  - element_id: selected-tests
+    kind: filter
+    content_mode: set
+    members:
+      - test_gold_rate_is_exactly_fifteen_percent
+      - test_unknown_tier_yields_no_discount
+  - element_id: max-retries
+    kind: retry_policy
+    content_mode: value
+    value: 0
+    direction: lower_is_stricter
