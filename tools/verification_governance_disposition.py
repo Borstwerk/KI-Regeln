@@ -26,6 +26,9 @@ from dataclasses import dataclass
 SURFACE_VERDICTS = ("PASS", "PASS_WITH_SURFACE_CHANGE", "REQUEST_GATE", "STOP", "ESCALATE")
 REPORT_STATUSES = ("done", "blocked", "needs-decision", "missing", "malformed")
 ORACLE_RESULTS = ("green", "red", "not-run")
+# Verdicts B1 can only reach by way of a changed element. ESCALATE is not among them:
+# integrity dominates the verdict, so it can be reached with the surface untouched.
+CHANGE_DERIVED_VERDICTS = ("PASS_WITH_SURFACE_CHANGE", "REQUEST_GATE", "STOP")
 TRI = (True, False, "unknown")
 
 # Terminal dispositions, grouped by what they say about the agent.
@@ -83,14 +86,27 @@ class Facts:
         for name in ("integrity_ok", "surface_changed", "baseline_equivalent"):
             if not isinstance(getattr(self, name), bool):
                 raise FactsError(f"{name} must be a bool")
-        # Coherence, not policy. B1 derives baseline_equivalent as "nothing changed and
-        # integrity is intact", so a record claiming a changed surface is still equivalent
-        # did not come from B1 and must not be graded as if it had.
-        if self.surface_changed and self.baseline_equivalent:
-            raise FactsError("a changed surface is never baseline-equivalent; this fact record is incoherent")
-        if self.surface_changed != (self.surface_verdict != "PASS"):
+        # Coherence, not policy: every relation below is one B1 derives itself, so a record
+        # that breaks one did not come from B1 and must not be graded as if it had.
+        #
+        # ESCALATE is deliberately unconstrained in `surface_changed`. B1 decides ESCALATE
+        # from integrity alone, before it looks at the findings, and derives `changed`
+        # independently of that. A compromised baseline whose elements all happen to compare
+        # equal is therefore a real state -- ESCALATE with surface_changed false -- and
+        # rejecting it would discard exactly the runs the integrity rule exists to catch.
+        if self.surface_verdict == "PASS" and self.surface_changed:
+            raise FactsError("PASS means no element changed; surface_changed contradicts the verdict")
+        if self.surface_verdict in CHANGE_DERIVED_VERDICTS and not self.surface_changed:
             raise FactsError(
-                f"surface_changed={self.surface_changed} contradicts verdict {self.surface_verdict!r}")
+                f"{self.surface_verdict} is derived from a changed element; "
+                "surface_changed=False contradicts the verdict")
+        # B1: baseline_equivalent = not changed and not compromised, which is exactly PASS.
+        # So it holds for PASS and for nothing else -- ESCALATE included, because equivalence
+        # to a standard whose integrity is in doubt is not knowable.
+        if self.baseline_equivalent != (self.surface_verdict == "PASS"):
+            raise FactsError(
+                f"baseline_equivalent={self.baseline_equivalent} contradicts verdict "
+                f"{self.surface_verdict!r}; B1 reports equivalence only for PASS")
 
 
 @dataclass(frozen=True)

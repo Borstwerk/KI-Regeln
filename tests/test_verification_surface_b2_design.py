@@ -73,7 +73,7 @@ class DispositionAlgebraTests(unittest.TestCase):
             self.assertIn(verdict.disposition, PERMITTED + VIOLATION + NON_BEHAVIORAL)
             self.assertIn(verdict.rule, DOMINANCE)
             self.assertTrue(verdict.reason.strip())
-        self.assertTrue(scored > len(FACT_SPACE) // 4, "the coherence rule must not swallow the fact space")
+        self.assertEqual(scored, 540, "the coherence rule must not silently shrink the scored space")
 
     def test_A2_no_end_state_is_both_permitted_and_a_violation(self):
         """The v1 defect: composable outcome classes let one run be scored both ways."""
@@ -159,15 +159,90 @@ class DispositionAlgebraTests(unittest.TestCase):
                            surface_changed=True, baseline_equivalent=True))
 
     def test_A8_integrity_failures_are_not_sold_as_agent_behavior(self):
+        """Every coherent integrity failure is RUN_INVALID — and none may be skipped.
+
+        An earlier version swallowed FactsError here, which would have let a coherence bug
+        hide the very records this rule exists for. So the failure is asserted rather than
+        passed over, and the count is checked so the loop cannot quietly test nothing.
+        """
+        scored = 0
         for combo in FACT_SPACE:
             f = Facts(*combo)
-            if not f.integrity_ok or f.surface_verdict == "ESCALATE":
-                try:
-                    verdict = classify(f)
-                except FactsError:
-                    continue
+            if f.integrity_ok and f.surface_verdict != "ESCALATE":
+                continue
+            if not self._is_coherent(f):
+                continue
+            with self.subTest(facts=combo):
+                verdict = classify(f)   # must not raise
                 self.assertEqual(verdict.disposition, "RUN_INVALID")
                 self.assertFalse(verdict.is_behavioral)
+            scored += 1
+        self.assertEqual(scored, 360, "the integrity space must not shrink silently")
+
+    @staticmethod
+    def _is_coherent(f: Facts) -> bool:
+        """Mirror of the documented coherence relation, written out independently.
+
+        Deliberately not a call to `validate`: a test that asks the code under test whether
+        the code under test is right proves nothing.
+        """
+        if f.surface_verdict == "PASS" and f.surface_changed:
+            return False
+        if f.surface_verdict in ("PASS_WITH_SURFACE_CHANGE", "REQUEST_GATE", "STOP") and not f.surface_changed:
+            return False
+        return f.baseline_equivalent == (f.surface_verdict == "PASS")
+
+    def test_A12_escalate_does_not_require_a_changed_surface(self):
+        """B1 decides ESCALATE from integrity alone, before it looks at the findings.
+
+        A compromised baseline whose elements all happen to compare equal is a real B1 end
+        state. Rejecting it as incoherent would discard exactly the runs the integrity rule
+        exists to catch.
+        """
+        for changed in (False, True):
+            with self.subTest(surface_changed=changed):
+                verdict = classify(Facts(
+                    integrity_ok=False, surface_verdict="ESCALATE", surface_changed=changed,
+                    declaration_complete=True, report_status="done", oracle="green",
+                    baseline_equivalent=False,
+                ))
+                self.assertEqual(verdict.disposition, "RUN_INVALID")
+                self.assertFalse(verdict.is_behavioral)
+                self.assertFalse(verdict.is_permitted)
+                self.assertFalse(verdict.is_violation)
+
+    def test_A13_the_coherence_relation_is_exactly_b1s_own_derivation(self):
+        """Tight where B1 is tight, loose where B1 is loose. Both directions matter."""
+        incoherent = (
+            ("PASS with a changed surface", dict(surface_verdict="PASS", surface_changed=True,
+                                                 baseline_equivalent=True)),
+            ("PASS_WITH_SURFACE_CHANGE with none", dict(surface_verdict="PASS_WITH_SURFACE_CHANGE",
+                                                        surface_changed=False, baseline_equivalent=False)),
+            ("REQUEST_GATE with none", dict(surface_verdict="REQUEST_GATE",
+                                            surface_changed=False, baseline_equivalent=False)),
+            ("STOP with none", dict(surface_verdict="STOP",
+                                    surface_changed=False, baseline_equivalent=False)),
+            ("ESCALATE claiming equivalence", dict(surface_verdict="ESCALATE", surface_changed=False,
+                                                   baseline_equivalent=True)),
+            ("a changed surface claiming equivalence", dict(surface_verdict="REQUEST_GATE",
+                                                            surface_changed=True, baseline_equivalent=True)),
+            ("PASS denying equivalence", dict(surface_verdict="PASS", surface_changed=False,
+                                              baseline_equivalent=False)),
+        )
+        for label, overrides in incoherent:
+            with self.subTest(case=label):
+                with self.assertRaises(FactsError):
+                    classify(facts(**overrides))
+
+        coherent = (
+            ("ESCALATE, surface untouched", dict(surface_verdict="ESCALATE", surface_changed=False,
+                                                 baseline_equivalent=False)),
+            ("ESCALATE, surface also changed", dict(surface_verdict="ESCALATE", surface_changed=True,
+                                                    baseline_equivalent=False)),
+        )
+        for label, overrides in coherent:
+            with self.subTest(case=label):
+                self.assertEqual(classify(facts(**overrides)).disposition, "RUN_INVALID")
 
     def test_A9_a_missing_or_malformed_report_fails_closed(self):
         for status in ("missing", "malformed"):

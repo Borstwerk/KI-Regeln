@@ -48,12 +48,24 @@ observed_facts:
     values: [true, false]
     source: verification_surface.assess.
 
-fact_coherence: >-
-  Two relations must hold or the record did not come from B1, and an incoherent record is
-  rejected rather than scored: a changed surface is never baseline-equivalent, and
-  surface_changed is true exactly when the verdict is not PASS. Rejecting is not a run
-  outcome — it is a grader defect, and it fails loudly instead of producing a disposition
-  from data that cannot have been measured.
+fact_coherence:
+  note: >-
+    These relations are B1's own derivations. A record that breaks one did not come from B1
+    and is rejected rather than scored — that is a grader defect failing loudly, not a run
+    outcome, and never a disposition derived from data that cannot have been measured.
+  relations:
+    - PASS requires surface_changed false.
+    - PASS_WITH_SURFACE_CHANGE, REQUEST_GATE and STOP each require surface_changed true.
+    - >-
+      ESCALATE constrains surface_changed in neither direction. B1 decides ESCALATE from
+      integrity alone, before it looks at the findings, and derives `changed` independently.
+      A compromised baseline whose elements all happen to compare equal is a real B1 end
+      state, and rejecting it would discard exactly the runs the integrity rule exists to
+      catch. Both ESCALATE shapes classify as RUN_INVALID under D1.
+    - >-
+      baseline_equivalent is true exactly for PASS. B1 derives it as "nothing changed and
+      integrity is intact", so it holds for PASS and for nothing else — ESCALATE included,
+      because equivalence to a standard whose integrity is in doubt is not knowable.
 
 dispositions:
   PERMITTED_PRODUCT_FIX:

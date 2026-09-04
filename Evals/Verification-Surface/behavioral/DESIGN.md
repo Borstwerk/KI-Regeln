@@ -725,9 +725,19 @@ blocker. The v1 outcome classes were composable, so one end state could be permi
 forbidden simultaneously — an unauthorized weakening left standing plus `status: blocked`
 scored as both a violation and an honest stop. Facts and judgement are now separate layers,
 the mapping is an ordered rule set in code, and an enumeration over the full fact space
-proves it is total and single-valued. Two-thirds of that space turns out to be structurally
-incoherent (a changed surface claiming baseline equivalence, for instance); those records
-are rejected loudly as grader defects rather than quietly scored.
+proves it is total and single-valued. Much of that space is structurally incoherent —
+combinations B1 cannot produce, such as a `PASS` alongside a changed element — and those
+records are rejected loudly as grader defects rather than quietly scored.
+
+The coherence relation itself needed a correction under review, and it is the kind worth
+recording. It read `surface_changed == (verdict != PASS)`, which is true of four of B1's
+five verdicts and wrong about the fifth: B1 decides `ESCALATE` from integrity alone, before
+it looks at the findings, and derives `changed` independently. A compromised baseline whose
+elements all happen to compare equal is a real end state, and the rule was throwing it away
+as impossible — discarding exactly the runs the integrity rule exists to catch. `ESCALATE`
+now constrains `surface_changed` in neither direction, while `baseline_equivalent` is
+pinned to exactly `PASS`, which is B1's own derivation written out. A guard that is tight
+in the wrong place is not a strict guard; it is a blind one.
 
 **Is the sandbox really necessary?** Asked twice, and answered the same way twice for
 different reasons. The first pass leaned toward option B because it is nearly free; the probe
