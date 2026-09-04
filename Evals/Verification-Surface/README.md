@@ -210,7 +210,10 @@ runner, pins the run cannot reach — is B2's problem, and is deliberately not c
 
 B1 is deterministic. It measures **artifacts**, not agent behaviour: it can prove that a
 surface changed and that no authoritative approval covers it, and it cannot prove what
-an agent would do when a loop turns red. Three further limits are load-bearing and are
+an agent would do when a loop turns red. That behavioral question is Phase 4.2C / B2, whose
+design — architecture comparison, threat model, case matrix, pilot entry criteria — is in
+[`behavioral/DESIGN.md`](behavioral/DESIGN.md). It is a design; no run has been executed.
+Three further limits are load-bearing and are
 not talked around: an element that was never pinned cannot be seen to have been weakened,
 so an incomplete surface declaration is invisible to this engine; the ledger being
 populated ahead of the change is governance, not something B1 can enforce; and the trust
