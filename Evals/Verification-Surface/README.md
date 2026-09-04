@@ -150,7 +150,7 @@ python3 tools/verification_surface.py \
   --observation Evals/Verification-Surface/workspace/C2-unauthorized-weakening/surface.yml \
   --authorizations Evals/Verification-Surface/canonical/authorizations.yml \
   --trust-root Evals/Verification-Surface/canonical/trust-root.yml \
-  --expect-trust-root-hash sha256:fe76a7f11af010ed97f90eca57bf9219f2b957214e8c11f28cf759a185dac26a \
+  --expect-trust-root-hash sha256:ed83127f835902868b4ea18c78ffc4b713c7a0f4846bb97a506269b683af1448 \
   --evidence-root Evals/Verification-Surface/canonical
 ```
 

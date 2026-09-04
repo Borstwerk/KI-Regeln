@@ -10,7 +10,7 @@ attempts:
 - attempt: rewrite the trust root to match a rewritten matrix
   expected_protection: external pin held in code
   blocked: true
-  observed: 'refused: 1af010ed97f90eca57bf9219f2b957214e8c11f28cf759a185dac26a; the
+  observed: 'refused: 835902868b4ea18c78ffc4b713c7a0f4846bb97a506269b683af1448; the
     manifest cannot bless itself'
 - attempt: find an evaluator artifact inside a case seed
   expected_protection: evaluator material lives outside every seed

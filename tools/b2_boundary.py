@@ -55,16 +55,35 @@ VIEW_ENV = {
 
 
 class BoundaryError(RuntimeError):
-    """The boundary could not be established, or was asked to do something unsafe."""
+    """The boundary could not be established, or was asked to do something unsafe.
+
+    Never raised because a payload exited non-zero. A red check is a result; a boundary that
+    did not come up is an instrumentation failure, and the two are kept apart on purpose --
+    conflating them lets a broken sandbox look like a broken product.
+    """
+
+
+def _covers(parent: str, child: str) -> bool:
+    """Is `child` inside `parent`? Path-segment comparison, so /devices is not /dev."""
+    return child == parent or child.startswith(parent.rstrip("/") + "/")
+
+
+# Written to a host-side descriptor opened before `pivot_root` and closed by `exec`.
+# Its presence proves the view was fully assembled and the payload was reached; its absence
+# means setup failed, which is an instrumentation fact and never a payload result.
+SETUP_MARKER = "b2-boundary-payload-started"
 
 
 @dataclass(frozen=True)
 class BoundaryResult:
+    """A payload that actually ran. Setup failures never take this shape -- they raise."""
+
     returncode: int
     stdout: str
     stderr: str
     provider: str = PROVIDER
     network_namespace_unshared: bool = True
+    payload_started: bool = True
 
 
 @dataclass(frozen=True)
@@ -87,12 +106,25 @@ class ViewSpec:
             raise BoundaryError(f"view workspace is not a directory: {self.workspace}")
         if not self.argv:
             raise BoundaryError("view requires an argv")
+        seen: set[str] = set()
         for mount, source in self.extra_ro:
-            if not mount.startswith("/") or ".." in Path(mount).parts:
+            if not mount.startswith("/") or ".." in Path(mount).parts or mount.endswith("/"):
                 raise BoundaryError(f"extra mount point must be a safe absolute path: {mount!r}")
-            if mount in {WORKSPACE_MOUNT, SCRATCH_MOUNT} or mount.startswith(tuple(RUNTIME_BINDS)):
-                raise BoundaryError(f"extra mount {mount!r} would shadow a reserved path")
-            if not Path(source).exists():
+            normalized = Path(mount).as_posix()
+            if normalized in seen:
+                raise BoundaryError(f"extra mount {mount!r} is declared twice")
+            seen.add(normalized)
+            # Shadowing is checked in both directions and against every reserved path, not
+            # against a handful of examples: a mount at, above or below any of them can hide
+            # or replace part of the view the boundary depends on.
+            reserved = (WORKSPACE_MOUNT, SCRATCH_MOUNT, "/proc", "/dev", "/oldroot", *RUNTIME_BINDS)
+            if normalized == "/":
+                raise BoundaryError("extra mount / would replace the whole view")
+            for other in reserved:
+                if normalized == other or _covers(normalized, other) or _covers(other, normalized):
+                    raise BoundaryError(f"extra mount {mount!r} would shadow the reserved path {other!r}")
+            resolved = Path(source).resolve()
+            if not resolved.exists():
                 raise BoundaryError(f"extra mount source is missing: {source}")
 
 
@@ -100,6 +132,9 @@ def _script(spec: ViewSpec) -> str:
     """The shell program that assembles the view and then becomes the payload."""
     lines = [
         "set -eu",
+        # Opened while the host is still reachable; the descriptor survives pivot_root, so
+        # the marker can be written from inside the assembled view.
+        'exec 3>"$B2_MARKER"',
         "mount --make-rprivate /",
         'R="$B2_ROOT"',
         # Every mount point is created before the root is sealed, because a read-only root
@@ -148,6 +183,11 @@ def _script(spec: ViewSpec) -> str:
         # permissions: after this line it is not reachable from inside the view at all.
         "umount -l /oldroot",
         f"cd {shlex.quote(spec.workdir)}",
+        # Setup is complete and the payload is about to replace this shell. Anything that
+        # goes wrong before this line leaves the marker empty, and `set -eu` guarantees the
+        # line is not reached after a failed mount.
+        f'printf %s {shlex.quote(SETUP_MARKER)} >&3',
+        "exec 3>&-",
         # `env -i` plus an explicit assignment list: the view gets a fixed, minimal
         # environment and inherits nothing from the caller. Without the assignments this
         # ran with an empty environment, which silently turned bytecode caching back on and
@@ -201,8 +241,11 @@ def run_in_view(spec: ViewSpec) -> BoundaryResult:
     with tempfile.TemporaryDirectory(prefix="b2-view-") as tmp:
         root = Path(tmp) / "root"
         root.mkdir()
+        marker = Path(tmp) / "payload-started"
+        marker.touch()
         env = {
             "B2_ROOT": str(root), "B2_WORKSPACE": str(spec.workspace.resolve()),
+            "B2_MARKER": str(marker),
             "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
         }
         for i, (_, source) in enumerate(spec.extra_ro):
@@ -220,8 +263,15 @@ def run_in_view(spec: ViewSpec) -> BoundaryResult:
             raise BoundaryError(f"view exceeded its {spec.timeout}s budget") from exc
         except OSError as exc:
             raise BoundaryError(f"cannot start the boundary: {exc}") from exc
-    if done.returncode != 0 and "pivot_root" in done.stderr:
-        raise BoundaryError(f"boundary could not be established: {done.stderr.strip()[:300]}")
+        started = marker.read_text(encoding="utf-8", errors="replace").strip() == SETUP_MARKER
+    if not started:
+        # `set -eu` aborts the assembly on any failure, so the marker is written only when
+        # every mount succeeded and `exec` was reached. Without it the payload never ran,
+        # whatever the exit code happens to say.
+        raise BoundaryError(
+            "the execution boundary was not fully established, so the payload never ran "
+            f"(exit {done.returncode}): {(done.stderr or done.stdout).strip()[-300:]}"
+        )
     return BoundaryResult(done.returncode, done.stdout, done.stderr)
 
 

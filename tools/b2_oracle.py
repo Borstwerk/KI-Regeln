@@ -32,6 +32,12 @@ except ImportError:  # direct script sibling import
 
 ORACLE_CONTRACT = "verification-governance-oracle/v1"
 DRIVER_MOUNT = "/oracle-driver"
+# The only file that may exist in the driver mount. `expectations.yml` lives beside
+# `driver.py` in the repository, so mounting that directory put the held-out expected values
+# straight into the agent-controlled product view -- exactly what the black-box contract
+# forbids. The driver is staged into a directory of its own instead, and this list is what
+# the structural test checks against.
+DRIVER_VIEW_ALLOWED = ("driver.py",)
 # Only these enter the oracle view from the workspace. The agent's checks are not among them.
 PRODUCT_PATHS = ("product", "vendor")
 RESULTS = ("green", "red", "not-run")
@@ -51,7 +57,28 @@ def load_expectations(path: Path) -> dict[str, Any]:
     ids = [str(item["id"]) for item in inputs]
     if len(ids) != len(set(ids)):
         raise OracleError(f"{path}: duplicate input ids")
+    if not str(data.get("leak_canary", "")).strip():
+        raise OracleError(f"{path}: expectations need a leak_canary so a leak can be proven, not guessed")
     return data
+
+
+def stage_driver(driver_path: Path, destination: Path) -> Path:
+    """Stage exactly the driver, and nothing that shares its directory.
+
+    Mounting the driver's own directory was the leak: `expectations.yml` sits next to it, so
+    the product view could read `/oracle-driver/expectations.yml`. Copying one named file
+    into an empty directory makes the mount carry what it is supposed to carry and nothing
+    else -- a property a test can check, rather than a property of how the repository
+    happens to be laid out.
+    """
+    destination.mkdir(parents=True, exist_ok=True)
+    if driver_path.name not in DRIVER_VIEW_ALLOWED:
+        raise OracleError(f"only {list(DRIVER_VIEW_ALLOWED)} may enter the driver view, not {driver_path.name!r}")
+    shutil.copyfile(driver_path, destination / driver_path.name)
+    staged = sorted(p.name for p in destination.rglob("*"))
+    if staged != sorted(DRIVER_VIEW_ALLOWED):
+        raise OracleError(f"driver staging carries unexpected files: {staged}")
+    return destination
 
 
 def _product_view(workspace: Path, destination: Path) -> Path:
@@ -75,6 +102,7 @@ def run_oracle(workspace: Path, expectations_path: Path, driver_path: Path, scra
     expectations = load_expectations(expectations_path)
     tolerance = float(expectations.get("tolerance", 0.0))
     view = _product_view(workspace, scratch / "oracle-product")
+    driver_view = stage_driver(driver_path, scratch / "oracle-driver-view")
     payload = "".join(
         json.dumps({"id": item["id"], "tier": item["tier"], "units": item["units"]}) + "\n"
         for item in expectations["inputs"]
@@ -83,14 +111,17 @@ def run_oracle(workspace: Path, expectations_path: Path, driver_path: Path, scra
         result = run_in_view(ViewSpec(
             workspace=view,
             argv=("/usr/bin/env", "python3", f"{DRIVER_MOUNT}/driver.py"),
-            extra_ro=((DRIVER_MOUNT, driver_path.parent),),
+            extra_ro=((DRIVER_MOUNT, driver_view),),
             timeout=timeout,
             stdin_text=payload,
         ))
     except BoundaryError as exc:
-        # No boundary, no measurement. Reporting green here would be the worst possible lie.
+        # The boundary did not come up, so the product was never measured. Reporting red here
+        # would let an instrumentation failure masquerade as a defect; reporting green would
+        # be worse. `not-run` is the only honest answer, and the grader turns it into
+        # RUN_INVALID rather than into anything about an agent.
         return {"result": "not-run", "reason": f"execution boundary unavailable: {exc}",
-                "mismatches": [], "observed": {}}
+                "instrumentation_failure": True, "mismatches": [], "observed": {}}
 
     observed: dict[str, Any] = {}
     for line in result.stdout.splitlines():

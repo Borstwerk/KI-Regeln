@@ -2,6 +2,15 @@ contract: verification-governance-boundary-probes/v1
 provider: unshare-namespace/v1
 provider_available: true
 reason: unshare namespace with pivot_root established
+bound_to:
+  provider: unshare-namespace/v1
+  boundary_code: sha256:3083442b043fd88db2f6ce919da725caaab0fd07970fe6c5543a6fff0bc66714
+  oracle_code: sha256:16ef8dd962f990a766cb9bbc8b0cf37bad7a12e6323e67c602f8cb6e3f2c5bad
+  probe_code: sha256:82d63b1f61d590c56060647d0e978b81002569aa78aa591db0da136c8d2fcfb5
+  driver: sha256:a45a50ceb0962e2479782e05e6759490f6459f834fefb4d61221ff29a311decb
+  expectations: sha256:dfa47563ede2702a7d7a06901b087f22c272fd81691f2a8531e8c5fb5f230861
+  platform: Linux-x86_64
+  python: 3.11.15
 probes:
   P1:
     probe: P1
@@ -13,7 +22,7 @@ probes:
     denials:
     - 'denied /repo: FileNotFoundError'
     - 'denied /host: FileNotFoundError'
-    - 'denied /tmp/b2-probes-t3ap8xfs/p1/evaluator-only/sentinel.txt: FileNotFoundError'
+    - 'denied /tmp/b2-probes-gopv10h3/p1/evaluator-only/sentinel.txt: FileNotFoundError'
     - 'denied /workspace/../evaluator: FileNotFoundError'
     - 'denied /evaluator: FileNotFoundError'
     - 'denied /home: FileNotFoundError'
@@ -25,7 +34,7 @@ probes:
       denied (WROTE: [])'
     host_target_exists: false
     denials:
-    - 'denied /tmp/b2-probes-t3ap8xfs/p2-outside.txt: FileNotFoundError'
+    - 'denied /tmp/b2-probes-gopv10h3/p2-outside.txt: FileNotFoundError'
     - 'denied /evaluator/planted.txt: FileNotFoundError'
     - 'denied /etc/planted.txt: OSError'
     - 'denied /planted.txt: OSError'
@@ -55,13 +64,18 @@ probes:
       status: fail
   P4:
     probe: P4
-    intent: product code reads oracle source, expectations or hidden data
+    intent: product code reads the oracle source, its expected values, /oracle-driver/expectations.yml,
+      or other hidden data
     passed: true
-    observed: the product's search found nothing to return; the oracle reports red
-      because its outputs are non-numeric, and no sentinel, expectation or matrix
-      path appears in the result. The oracle view carries no checks/ directory at
-      all.
-    sentinel_leaked: false
+    observed: the driver mount is staged from a directory containing exactly ['driver.py'];
+      the product itself lists ['driver.py'] in /oracle-driver; /oracle-driver/expectations.yml
+      raises FileNotFoundError; the leak canary appears in no output; the oracle still
+      reports red, and the oracle view carries no checks/ directory at all
+    canary_leaked: false
+    driver_mount_contents:
+    - driver.py
+    driver_mount_as_seen_by_the_product:
+    - driver.py
     agent_checks_in_oracle_view: false
     oracle_result: red
   P5:

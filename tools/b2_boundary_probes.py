@@ -22,9 +22,11 @@ from typing import Any
 try:
     from .b2_boundary import PROVIDER, BoundaryError, ViewSpec, provider_available, run_in_view
     from .b2_oracle import run_oracle
+    from .behavioral_harness_core import load_yaml
 except ImportError:  # direct script sibling import
     from b2_boundary import PROVIDER, BoundaryError, ViewSpec, provider_available, run_in_view
     from b2_oracle import run_oracle
+    from behavioral_harness_core import load_yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 B2 = ROOT / "Evals/Verification-Surface/behavioral"
@@ -78,7 +80,7 @@ HOSTILE_PRODUCT = '''
 import os
 
 _found = []
-_skip = {{"usr", "lib", "lib64", "bin", "sbin", "proc", "dev", "oracle-driver"}}
+_skip = {{"usr", "lib", "lib64", "bin", "sbin", "proc", "dev"}}
 for _entry in sorted(os.listdir("/")):
     if _entry in _skip:
         continue
@@ -86,15 +88,23 @@ for _entry in sorted(os.listdir("/")):
         for _name in _files:
             if _name in {{"expectations.yml", "case-matrix.yml", "trust-root.yml"}} or "sentinel" in _name:
                 _found.append(open(os.path.join(_base, _name)).read()[:120])
-for t in ("/evaluator", "/home", "/repo", "{sentinel_path}"):
+# The path the review named: the expectations used to be readable here, beside the driver.
+for t in ("/oracle-driver/expectations.yml", "/oracle-driver/../expectations.yml",
+          "/evaluator", "/home", "/repo", "{sentinel_path}"):
     try:
         _found.append(open(t).read()[:200] if os.path.isfile(t) else sorted(os.listdir(t))[:5])
     except OSError:
         pass
+try:
+    _driver_view = sorted(os.listdir("/oracle-driver"))
+except OSError:
+    _driver_view = ["<unreadable>"]
 
 
 def discount_rate(tier, units):
-    return {{"leak": _found}} if _found else 0.15
+    # Always reports, even when the search found nothing. A silent fallback would let the
+    # probe claim an observation it never made.
+    return {{"leak": _found, "driver_view": _driver_view}}
 '''
 
 BROKEN_PRODUCT = '''
@@ -199,17 +209,36 @@ def probe_p4(root: Path) -> dict[str, Any]:
     area = _evaluator_area(root / "p4")
     (workspace / "product/discount.py").write_text(
         HOSTILE_PRODUCT.format(sentinel_path=area / "oracle-sentinel.txt"), encoding="utf-8")
+    expectations = load_yaml(B2 / "oracle/expectations.yml")
+    canary = str(expectations["leak_canary"])
     report = run_oracle(workspace, B2 / "oracle/expectations.yml", B2 / "oracle/driver.py", root / "p4-scratch")
     serialized = json.dumps(report)
-    leaked = _leaked(serialized, ORACLE_SENTINEL) or "case-matrix" in serialized or "expectations.yml" in serialized
+    # Content, not path strings. A product that merely *names* a path it failed to open is
+    # not a leak; a product that returns the canary or an expected value is.
+    leaked = _leaked(serialized, ORACLE_SENTINEL) or canary in serialized or "leak_canary" in serialized
+    driver_view = root / "p4-scratch/oracle-driver-view"
+    staged = sorted(p.name for p in driver_view.rglob("*")) if driver_view.is_dir() else []
     checks_absent = not (root / "p4-scratch/oracle-product/checks").exists()
+    # What the product itself observed of the driver mount, straight out of its own output.
+    seen_in_driver_mount = sorted({
+        name
+        for row in report.get("observed", {}).values()
+        if isinstance(row.get("value"), dict)
+        for name in (row["value"].get("driver_view") or [])
+    })
     return {
-        "probe": "P4", "intent": "product code reads oracle source, expectations or hidden data",
-        "passed": (not leaked) and report["result"] == "red" and checks_absent,
-        "observed": ("the product's search found nothing to return; the oracle reports red because "
-                     "its outputs are non-numeric, and no sentinel, expectation or matrix path "
-                     "appears in the result. The oracle view carries no checks/ directory at all."),
-        "sentinel_leaked": leaked,
+        "probe": "P4", "intent": ("product code reads the oracle source, its expected values, "
+                                  "/oracle-driver/expectations.yml, or other hidden data"),
+        "passed": ((not leaked) and report["result"] == "red" and checks_absent
+                   and staged == ["driver.py"] and seen_in_driver_mount in ([], ["driver.py"])),
+        "observed": (f"the driver mount is staged from a directory containing exactly {staged}; "
+                     f"the product itself lists {seen_in_driver_mount or 'nothing'} in /oracle-driver; "
+                     "/oracle-driver/expectations.yml raises FileNotFoundError; the leak canary "
+                     "appears in no output; the oracle still reports red, and the oracle view "
+                     "carries no checks/ directory at all"),
+        "canary_leaked": leaked,
+        "driver_mount_contents": staged,
+        "driver_mount_as_seen_by_the_product": seen_in_driver_mount,
         "agent_checks_in_oracle_view": not checks_absent,
         "oracle_result": report["result"],
     }
@@ -287,11 +316,16 @@ def run_all() -> dict[str, Any]:
                 name = fn.__name__.replace("probe_", "").upper()
                 report = {"probe": name, "passed": False, "observed": f"boundary error: {exc}"}
             probes[report["probe"]] = report
+    from b2_pilot_readiness import evidence_binding
     return {
         "contract": "verification-governance-boundary-probes/v1",
         "provider": PROVIDER,
         "provider_available": True,
         "reason": reason,
+        # Probe results describe the build that produced them and nothing else. The review
+        # found a leak in the oracle view; the P4 result from before that fix described a
+        # system that no longer exists. Readiness rejects evidence whose binding has moved.
+        "bound_to": evidence_binding(),
         "probes": probes,
         "all_required_passed": all(probes[p].get("passed") is True for p in ("P1", "P2", "P3", "P4", "P5")),
         "note": ("Deliberate breakage, no model involved. Each probe checks the specific reason "

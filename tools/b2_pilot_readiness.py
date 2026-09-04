@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import platform
 import sys
 from pathlib import Path
 from typing import Any, Callable
@@ -42,7 +43,7 @@ TRUST_ROOT = ROOT / "Evals/Verification-Surface/canonical/trust-root.yml"
 BOUNDARY_EVIDENCE = B2 / "evidence/boundary-probes.yml"
 # The outermost link of the chain: code, not data. Mirrored in tests/test_verification_surface.py
 # so that a change to either without the other is a failing test rather than a quiet update.
-TRUST_ROOT_DOCUMENT_HASH = "sha256:fe76a7f11af010ed97f90eca57bf9219f2b957214e8c11f28cf759a185dac26a"
+TRUST_ROOT_DOCUMENT_HASH = "sha256:ed83127f835902868b4ea18c78ffc4b713c7a0f4846bb97a506269b683af1448"
 SEMANTIC_PROJECTION_HASH = "sha256:2367afcb9d16a3c30455e3aa2bd47d3d1ffd2072dadaa77a9b5a5ee67d515d20"
 # Probes that must have passed. P6 is network observation: evidence, never a gate.
 REQUIRED_PROBES = ("P1", "P2", "P3", "P4", "P5")
@@ -79,14 +80,40 @@ def _pins() -> dict[str, Any]:
     return load_pinned_trust_root(TRUST_ROOT, TRUST_ROOT_DOCUMENT_HASH)["pins"]
 
 
+def evidence_binding() -> dict[str, str]:
+    """What the probe evidence is only valid for.
+
+    Probe results age the moment the code they exercised changes. After the review found a
+    leak in the oracle view, the old P4 result described a system that no longer exists — so
+    evidence now carries the hashes of the components it was produced against, and is
+    rejected when any of them moves.
+    """
+    return {
+        "provider": PROVIDER,
+        "boundary_code": hash_file(ROOT / "tools/b2_boundary.py"),
+        "oracle_code": hash_file(ROOT / "tools/b2_oracle.py"),
+        "probe_code": hash_file(ROOT / "tools/b2_boundary_probes.py"),
+        "driver": hash_file(B2 / "oracle/driver.py"),
+        "expectations": hash_file(B2 / "oracle/expectations.yml"),
+        "platform": f"{platform.system()}-{platform.machine()}",
+        "python": platform.python_version(),
+    }
+
+
 def _boundary_probe_report() -> dict[str, Any] | None:
+    """The probe evidence, or None when it is absent, unreadable or stale."""
     if not BOUNDARY_EVIDENCE.is_file():
         return None
     try:
         data = load_yaml(BOUNDARY_EVIDENCE)
     except Exception:  # noqa: BLE001
         return None
-    return data if isinstance(data, dict) else None
+    if not isinstance(data, dict):
+        return None
+    recorded = data.get("bound_to")
+    if recorded != evidence_binding():
+        return None
+    return data
 
 
 # --- criteria -------------------------------------------------------------------------
@@ -127,18 +154,30 @@ def _c03_evaluator_data_separated() -> dict[str, Any]:
 def _c04_expected_verdicts_unreadable() -> dict[str, Any]:
     report = _boundary_probe_report()
     if report is None:
-        return _tri(None, "boundary probe evidence is absent", str(BOUNDARY_EVIDENCE))
+        return _tri(None, "boundary probe evidence is absent or no longer binds to this build",
+                    str(BOUNDARY_EVIDENCE))
     probe = (report.get("probes") or {}).get("P1")
     ok = bool(probe and probe.get("passed") is True)
     return _tri(ok, "P1 shows hidden evaluator data unreadable from the check view" if ok
                 else "P1 did not pass", "evidence/boundary-probes.yml:P1")
 
 
+def _functional(name: str):
+    """Import a checker lazily; a failing import is `unknown`, never a quiet pass."""
+    from importlib import import_module
+    try:
+        module = import_module("tools.b2_readiness_checks")
+    except ImportError:
+        module = import_module("b2_readiness_checks")
+    return getattr(module, name)
+
+
 def _c05_b1_in_the_eval_path() -> dict[str, Any]:
-    source = (ROOT / "tools/b2_grader.py").read_text(encoding="utf-8")
-    ok = "assess(" in source and "strict=True" in source
-    return _tri(ok, "the grader calls B1 assess in strict mode" if ok
-                else "the grader does not use B1 in strict mode", "tools/b2_grader.py")
+    """Run a real strict B1 assessment through the grader. Grepping for `assess(` proved
+    that the string exists, which is not the same property."""
+    ok, reason = _functional("b1_strict_control")()
+    return _tri(ok, reason, "b2_readiness_checks.b1_strict_control")
+
 
 
 def _c06_controls_present() -> dict[str, Any]:
@@ -153,7 +192,8 @@ def _c06_controls_present() -> dict[str, Any]:
 def _c07_deliberate_breakage() -> dict[str, Any]:
     report = _boundary_probe_report()
     if report is None:
-        return _tri(None, "boundary probe evidence is absent", str(BOUNDARY_EVIDENCE))
+        return _tri(None, "boundary probe evidence is absent or no longer binds to this build",
+                    str(BOUNDARY_EVIDENCE))
     probes = report.get("probes") or {}
     missing = [p for p in REQUIRED_PROBES if not (probes.get(p) or {}).get("passed") is True]
     reasons = all(str((probes.get(p) or {}).get("observed", "")).strip() for p in REQUIRED_PROBES)
@@ -176,38 +216,46 @@ def _c08_gaming_routes_reviewed() -> dict[str, Any]:
 
 
 def _c09_telemetry_sufficient() -> dict[str, Any]:
-    source = (ROOT / "tools/behavioral_harness_claude.py").read_text(encoding="utf-8")
-    ok = "def export_workspace" in source and "tree_hash" in source
-    return _tri(ok, "the adapter exports and hashes the post-run workspace" if ok
-                else "no hashed workspace export in the adapter", "tools/behavioral_harness_claude.py")
+    """Export a real workspace and confirm the hashes are produced and complete."""
+    ok, reason = _functional("workspace_export_control")()
+    return _tri(ok, reason, "b2_readiness_checks.workspace_export_control")
 
 
 def _c10_run_artifacts_versioned() -> dict[str, Any]:
-    source = (ROOT / "tools/behavioral_harness.py").read_text(encoding="utf-8")
-    ok = "workspace_export" in source and "behavioral-workspace-export/v1" in source
-    return _tri(ok, "package-run and verify-run cover the workspace export" if ok
-                else "the run package does not cover the workspace export", "tools/behavioral_harness.py")
+    """Build a real run package with an export, verify it, then tamper and verify again."""
+    ok, reason = _functional("package_verify_control")()
+    return _tri(ok, reason, "b2_readiness_checks.package_verify_control")
 
 
 def _c11_judge_schema() -> dict[str, Any]:
-    source = (ROOT / "tools/b2_grader.py").read_text(encoding="utf-8")
-    ok = "judge" not in source.lower().split("no semantic judge")[0].split("\n\n")[-1] or True
-    # No judge is planned, and none is on the grading path. That is the criterion.
-    ok = "classify(" in source and "judge" not in source.replace("No semantic judge anywhere on that path.", "")
-    return _tri(ok, "no judge is on the grading path, so no judge schema is required" if ok
-                else "a judge appears on the grading path without a fixed schema", "tools/b2_grader.py")
+    """Not applicable, and modelled as such rather than dressed up as a measurement.
+
+    No judge exists on the grading path, so there is no schema to fix. What *is* measured is
+    the antecedent: that the grading module imports and calls no judge.
+    """
+    ok, reason = _functional("no_judge_on_the_path")()
+    return {"met": ok if ok else "unknown", "applicable": False,
+            "reason": (f"not applicable: {reason}" if ok else reason),
+            "evidence": "b2_readiness_checks.no_judge_on_the_path"}
 
 
 def _c12_unblinding_process() -> dict[str, Any]:
-    return _tri(True, "one condition, so unblinding does not arise; defined before the comparison phase",
-                "DESIGN.md section 9")
+    """Also not applicable at one condition, and said so plainly.
+
+    There is nothing here a deterministic check can measure, and inventing one would be
+    exactly the manufactured `true` this contract forbids. What is checked is that the
+    evaluation really does run a single condition.
+    """
+    ok, reason = _functional("single_condition")()
+    return {"met": ok if ok else "unknown", "applicable": False,
+            "reason": (f"not applicable: {reason}" if ok else reason),
+            "evidence": "b2_readiness_checks.single_condition"}
 
 
 def _c13_no_self_attestation() -> dict[str, Any]:
-    source = (ROOT / "tools/b2_grader.py").read_text(encoding="utf-8")
-    ok = "report.yml` is never ground truth" in source or "never ground truth" in source
-    return _tri(ok, "the report supplies claims that are checked against measured facts" if ok
-                else "the grader does not state the report is not ground truth", "tools/b2_grader.py")
+    """Feed the grader a report that lies, and prove the measured facts win."""
+    ok, reason = _functional("report_is_not_ground_truth_control")()
+    return _tri(ok, reason, "b2_readiness_checks.report_is_not_ground_truth_control")
 
 
 def _c14_boundary_present() -> dict[str, Any]:
@@ -222,12 +270,15 @@ def _c15_probes_executed() -> dict[str, Any]:
 def _c16_oracle_separated() -> dict[str, Any]:
     report = _boundary_probe_report()
     if report is None:
-        return _tri(None, "boundary probe evidence is absent", str(BOUNDARY_EVIDENCE))
-    probe = (report.get("probes") or {}).get("P4")
+        return _tri(None, "boundary probe evidence is absent or no longer binds to this build",
+                    str(BOUNDARY_EVIDENCE))
+    probe = (report.get("probes") or {}).get("P4") or {}
     seeds_clean = _c03_evaluator_data_separated()["met"] is True
-    ok = bool(probe and probe.get("passed") is True) and seeds_clean
-    return _tri(ok, "P4 shows oracle source and expectations unreadable from the product view" if ok
-                else "oracle separation is not demonstrated", "evidence/boundary-probes.yml:P4")
+    staged_ok, staged_reason = _functional("oracle_driver_view_control")()
+    ok = probe.get("passed") is True and seeds_clean and staged_ok
+    return _tri(ok, f"P4 shows oracle source and expectations unreadable from the product view; {staged_reason}"
+                if ok else f"oracle separation is not demonstrated ({staged_reason})",
+                "evidence/boundary-probes.yml:P4")
 
 
 def _c17_network_reported() -> dict[str, Any]:
@@ -243,10 +294,9 @@ def _c17_network_reported() -> dict[str, Any]:
 
 
 def _c18_disposition_total() -> dict[str, Any]:
-    ok = (len(DOMINANCE) == 10 and len(set(PERMITTED + VIOLATION + NON_BEHAVIORAL)) == 7)
-    return _tri(ok, "the disposition algebra is present with its enumeration test" if ok
-                else "the disposition algebra does not have its expected shape",
-                "tests/test_verification_surface_b2_design.py")
+    """Enumerate the whole fact space here, rather than counting list lengths."""
+    ok, reason = _functional("disposition_totality")()
+    return _tri(ok, reason, "b2_readiness_checks.disposition_totality")
 
 
 def _c19_semantics_change_visible() -> dict[str, Any]:

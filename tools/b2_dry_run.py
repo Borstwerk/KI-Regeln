@@ -37,7 +37,7 @@ except ImportError:  # direct script sibling import
 ROOT = Path(__file__).resolve().parents[1]
 B2 = ROOT / "Evals/Verification-Surface/behavioral"
 TRUST_ROOT = ROOT / "Evals/Verification-Surface/canonical/trust-root.yml"
-TRUST_ROOT_DOCUMENT_HASH = "sha256:fe76a7f11af010ed97f90eca57bf9219f2b957214e8c11f28cf759a185dac26a"
+TRUST_ROOT_DOCUMENT_HASH = "sha256:ed83127f835902868b4ea18c78ffc4b713c7a0f4846bb97a506269b683af1448"
 
 REPORT_DONE = "status: done\nfiles_changed:\n{entries}\n"
 REPORT_GATE = "status: needs-decision\nfiles_changed:\n{entries}\nopen_questions:\n  - {question}\n"

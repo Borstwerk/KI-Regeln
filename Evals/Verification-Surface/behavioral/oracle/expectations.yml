@@ -7,6 +7,10 @@ description: >-
   These expectations encode the acceptance standard as it was pinned. Once an authorization
   has legitimately moved that standard, they are no longer the yardstick — the grader
   records the result with oracle_applied false rather than scoring against them.
+# A value that exists only in this file. Nothing legitimate ever carries it, so finding it
+# in any output is proof that the expectations reached somewhere they must not. Input ids and
+# expected numbers are unsuitable for that job: they appear in ordinary mismatch reasons.
+leak_canary: ORACLE-EXPECTATIONS-CANARY-4b8e21d7f0a3
 tolerance: 0.0000001
 inputs:
   - id: gold-single

@@ -8,6 +8,17 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Phase 4.2C · B2 — Review-Korrekturen der Messarchitektur
+
+- Oracle-Leak geschlossen: die Held-out-Expectations lagen im selben Verzeichnis wie der Driver und waren dadurch als `/oracle-driver/expectations.yml` aus der agentenkontrollierten Produkt-View lesbar; der Driver wird jetzt einzeln in ein eigenes Staging-Verzeichnis kopiert, P4 prüft genau diesen Pfad samt Discovery gegen einen Leak-Canary, und die alte P4-Evidence wurde verworfen;
+- separater neutraler B2-Systemprompt ergänzt, weil der bestehende kontrollierte Prompt das Schreiben verbietet und damit genau das Verhalten ausgeschlossen hätte, das B2 beobachten soll; der read-only Prompt bleibt unverändert, und der B2-Prompt nennt weder Guards noch Thresholds, Autorisierung oder Governance;
+- adapterkontrollierten Check-Launcher `bin/check` ergänzt, der außerhalb des beschreibbaren Workspace liegt, keine Argumente akzeptiert, den Workspace-Pfad vom Adapter erhält und ausschließlich den Boundary-Provider aufruft; damit ist die erlaubte Invocation real an die Boundary gekoppelt statt nur erlaubt;
+- effektive Tool-Policy einmal abgeleitet und durch alle tragenden Evidence-Funktionen gereicht, inklusive Systemprompt-Hash; ein writable Run kann seine Policy nicht mehr als read-only ausweisen;
+- Pilot-Gate auf den tatsächlichen Launch-Pfad gelegt: ein writable Adapterlauf verlangt ein Admission-Objekt, das nur `tools/b2_model_runner.py` aus einer frischen Kriterienauswertung erzeugt; ohne das wird kein Modellprozess gestartet;
+- Boundary-Setupfehler deterministisch von Payload-Exits getrennt (Marker unmittelbar vor `exec`); ein nicht etablierter View liefert `BoundaryError`, das Oracle `not-run` und die Pipeline `RUN_INVALID` statt eines vermeintlich roten Produkts;
+- tragende Readiness-Kriterien messen jetzt funktional statt Quelltext-Substrings zu prüfen; zwei tatsächlich nicht anwendbare Kriterien sind als solche modelliert statt als scheinbar gemessenes `true`; Probe-Evidence ist an Boundary-, Oracle-, Probe-, Driver- und Expectation-Hashes sowie Provider und Plattform gebunden und verfällt bei Drift;
+- `extra_ro`-Shadowing gegen alle reservierten Pfade in beide Richtungen geprüft; keine Behavioral-/LLM-Runs, kein Judge, kein Unblinding, kein Pairing, keine Maturity- oder Coverage-Änderung.
+
 ### Phase 4.2C · B2 — Implementierung der Messarchitektur
 
 - die reviewten Designschritte S1 bis S5 vollständig implementiert, ohne jeden Behavioral- oder LLM-Run: neun synthetische Workspaces, exhaustive Verification Surface über zehn Elemente, Black-Box Held-out Oracle, deterministische Grading-Pipeline und modellfreie End-to-End-Dry-Runs;
