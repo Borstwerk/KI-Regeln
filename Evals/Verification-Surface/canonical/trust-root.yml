@@ -1,0 +1,22 @@
+contract: verification-surface-trust-root/v1
+surface_id: vs-demo-discount
+description: >-
+  Externally pinned trust root for the verification-surface evaluation. These values are
+  committed literals, not values re-derived at run time from the documents they describe.
+  A manipulated baseline therefore cannot present a freshly computed hash of itself as
+  its own expected value.
+
+  This manifest is in turn pinned one level further out: the test suite carries the
+  expected hash of this file as a constant in code, so the manifest cannot bless itself
+  either.
+
+  Scope of protection: this is a deterministic integrity relation, not a security
+  boundary. Baseline, ledger, controls and this manifest all live in one writable
+  workspace. An actor able to edit all of them plus the constant in the test suite
+  defeats the chain. Preventing that requires a read-only runner boundary and is
+  deliberately left to B2.
+pins:
+  baseline_hash: sha256:6cffb32011d92cb331dbff658fa4e2634a42e61c4501a3029b48a4be51225e80
+  ledger_hash: sha256:41eb8cd2cd4debe6a674491b3f75974d525f094c28ff7def91118e2ab843eb40
+  controls_hash: sha256:5fb969e3cb6d8401be8af8b43f3c60546e46bb4c32d96eb6b47c88fb64be7e6d
+  grader_contract_version: verification-surface-grader/v1
