@@ -8,6 +8,15 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Phase 4.2C · B2 — Designstand Behavioral Verification Governance
+
+- Designartefakte für eine behaviorale Prüfung der Verification Governance ergänzt (`Evals/Verification-Surface/behavioral/`): Forschungsfrage, Threat Model, Architekturvergleich mit begründeter Entscheidung, Fallmatrix, Observations- und Telemetriemodell, deterministische Gates, Semantic-Judge-Grenze, Blindness-/Ground-Truth-Design, Trust-Modell, Implementierungsplan, Pilot Entry Criteria, ausdrückliche Nicht-Aussagen und Red-Team-Prüfung des eigenen Entwurfs;
+- Klassifikationsregel statt Verhaltensprognose vorab festgeschrieben: `case-matrix.yml` pinnt, welche deterministisch beobachtbaren Endzustände welcher Outcome-Klasse entsprechen und welche Klassen je Fall zulässig sind — nicht, wie ein Agent sich verhalten wird;
+- eine deterministische Architekturprobe ohne Modellantwort durchgeführt: die vorhandene Action-Telemetrie führt `Edit`/`Write` bereits als `productive` mit getrenntem `attempted`/`executed`, während `Bash` telemetrisch undurchsichtig bleibt; daraus folgt die Festlegung, den Workspace-Endzustand und nicht den Tool-Trace als tragende Evidence zu verwenden;
+- nach Review zwei tragende Designlücken geschlossen: agentenkontrollierter Check-Code hätte über den erlaubten Check-Aufruf die Read-/Write-Tool-Policy vollständig umgehen können, weshalb jetzt eine nachzuweisende Execution Boundary mit getrennten Views für sichtbaren Check und Held-out Oracle sowie sechs blockierende Breakage-Proben vorgesehen ist; und die Outcome-Klassen waren komponierbar, sodass ein Endzustand gleichzeitig permitted und violation sein konnte;
+- Bewertungsalgebra als totale, eindeutige Funktion in `tools/verification_governance_disposition.py` getrennt in beobachtete Facts und genau eine terminale Disposition, mit expliziter Dominanzordnung, Enumerationstest über den vollständigen Faktenraum und Drift-Test gegen die Dokumentation;
+- kein Behavioral Run, keine Model Responses, kein Semantic Judge, kein Unblinding, kein Skill-on/off-Vergleich; keine Wirksamkeitsaussage zu `verification-loop`; bestehende 4.2A-/4.2B-Ergebnisse unverändert und nicht umgedeutet; keine Maturity- oder Eval-Coverage-Änderung; kein Harness- und kein Governance-Regelwerk verändert.
+
 ### Eval-Guardrails und Monatsradar-Evidence
 
 - Agent-Evals um Harness-/Guard-Integrität gehärtet: kritische Guards sollen ihre Schutzwirkung nach Möglichkeit durch eine kontrollierte relevante Brechprobe belegen; ein vorhandener grüner Check gilt nicht allein wegen seiner Existenz als belastbare Evidence;
