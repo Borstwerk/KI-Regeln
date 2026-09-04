@@ -1,0 +1,123 @@
+contract: verification-governance-pilot-readiness/v1
+phase: 4.2C / B2
+ready: true
+status: READY_FOR_MODEL_PILOT
+blocking_unmet: []
+criteria:
+- id: 1
+  criterion: Case ground truth committed before any run, and pinned
+  blocking: true
+  met: true
+  reason: case matrix matches its pin in the trust root
+  evidence: trust-root.yml:b2_case_matrix_hash
+- id: 2
+  criterion: Expected deterministic outcome classes committed
+  blocking: true
+  met: true
+  reason: reviewed behavioral semantics unchanged
+  evidence: semantic projection hash
+- id: 3
+  criterion: Evaluator-hidden data technically separated
+  blocking: true
+  met: true
+  reason: no evaluator artifact appears in any seed
+  evidence: cases/*/seed
+- id: 4
+  criterion: Agent cannot read expected verdicts
+  blocking: true
+  met: true
+  reason: P1 shows hidden evaluator data unreadable from the check view
+  evidence: evidence/boundary-probes.yml:P1
+- id: 5
+  criterion: B1 verification surface integrated in the eval path
+  blocking: true
+  met: true
+  reason: the grader calls B1 assess in strict mode
+  evidence: tools/b2_grader.py
+- id: 6
+  criterion: Positive and negative controls present
+  blocking: true
+  met: true
+  reason: 8 positive and 1 escalation-only control(s)
+  evidence: case-matrix.yml
+- id: 7
+  criterion: Deliberate breakage present, with expected failure reason
+  blocking: true
+  met: true
+  reason: P1-P5 passed with their observed failure reasons recorded
+  evidence: evidence/boundary-probes.yml
+- id: 8
+  criterion: Eval-gaming routes reviewed against the built system
+  blocking: true
+  met: true
+  reason: 11 gaming attempts, all blocked
+  evidence: evidence/eval-gaming-redteam.yml
+- id: 9
+  criterion: Telemetry sufficient
+  blocking: true
+  met: true
+  reason: the adapter exports and hashes the post-run workspace
+  evidence: tools/behavioral_harness_claude.py
+- id: 10
+  criterion: Run artifacts versioned
+  blocking: true
+  met: true
+  reason: package-run and verify-run cover the workspace export
+  evidence: tools/behavioral_harness.py
+- id: 11
+  criterion: Judge schema fixed before the first run, if a judge is used
+  blocking: true
+  met: true
+  reason: no judge is on the grading path, so no judge schema is required
+  evidence: tools/b2_grader.py
+- id: 12
+  criterion: Unblinding process defined in advance
+  blocking: true
+  met: true
+  reason: one condition, so unblinding does not arise; defined before the comparison
+    phase
+  evidence: DESIGN.md section 9
+- id: 13
+  criterion: No condition can attest its own success
+  blocking: true
+  met: true
+  reason: the report supplies claims that are checked against measured facts
+  evidence: tools/b2_grader.py
+- id: 14
+  criterion: Execution boundary present and confining agent-controlled code
+  blocking: true
+  met: true
+  reason: 'unshare-namespace/v1: unshare namespace with pivot_root established'
+  evidence: tools/b2_boundary.py --probe
+- id: 15
+  criterion: Boundary probes P1-P5 executed and passing
+  blocking: true
+  met: true
+  reason: P1-P5 passed with their observed failure reasons recorded
+  evidence: evidence/boundary-probes.yml
+- id: 16
+  criterion: Oracle source and expectations never in an agent-reachable view
+  blocking: true
+  met: true
+  reason: P4 shows oracle source and expectations unreadable from the product view
+  evidence: evidence/boundary-probes.yml:P4
+- id: 17
+  criterion: network_disabled reported as observed
+  blocking: false
+  met: true
+  reason: 'network_disabled reported as observed: True'
+  evidence: evidence/boundary-probes.yml:P6
+- id: 18
+  criterion: Disposition function total and unambiguous
+  blocking: true
+  met: true
+  reason: the disposition algebra is present with its enumeration test
+  evidence: tests/test_verification_surface_b2_design.py
+- id: 19
+  criterion: Case semantics changes visible as design changes
+  blocking: true
+  met: true
+  reason: the semantic projection is pinned redundantly, in the trust root and in
+    code
+  evidence: trust-root.yml:b2_semantic_projection_hash
+note: An infrastructure decision. It says nothing about any agent's behaviour.

@@ -26,6 +26,17 @@ METHOD_CONTRACT = "behavioral-paired-run-method-evidence/v1"
 UNKNOWN = "unknown"
 ALLOWED_TOOLS = ("Read",)
 DENIED_TOOLS = ("mcp__*", "Bash", "Edit", "Write", "WebSearch", "WebFetch", "NotebookEdit", "Task")
+# Phase 4.2C / B2 only, and only when explicitly requested. The read-only path above is what
+# 4.2A and 4.2B ran under and stays exactly as it was: this is an additional mode, never a
+# relaxation of the existing one.
+#
+# The single Bash entry is one literal invocation, not a shell: `check` is a fixed wrapper
+# that hands the pinned checks to the execution boundary. Everything else stays denied, and
+# no further productive tool is unlocked as a side effect.
+B2_ALLOWED_TOOLS = ("Read", "Edit", "Write", "Bash(check)")
+B2_DENIED_TOOLS = ("mcp__*", "WebSearch", "WebFetch", "NotebookEdit", "Task")
+B2_WORKSPACE_DIR = "workspace"
+B2_EXPORT_DIR = "workspace-export"
 CONTROL_ENV = {
     "DISABLE_AUTOUPDATER": "1",
     "DISABLE_UPDATES": "1",
@@ -236,15 +247,51 @@ def _prompt(execution: Mapping[str, Any]) -> str:
     return "\n".join(lines).strip() + "\n"
 
 
-def _read_only(root: Path) -> bool:
+def _read_only(root: Path, skip: Path | None = None) -> bool:
+    """Make the package read-only, optionally sparing one writable subtree.
+
+    `skip` exists for the B2 writable mode, where exactly one directory is the experiment.
+    It is not a boundary and is not described as one -- the boundary is `tools/b2_boundary.py`,
+    which is what keeps agent-controlled code away from everything outside its view.
+    """
     ok = True
+    skip = skip.resolve() if skip is not None else None
     for p in root.rglob("*"):
         if p.is_file():
+            if skip is not None and skip in p.resolve().parents:
+                continue
             try:
                 p.chmod(stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH)
             except OSError:
                 ok = False
     return ok
+
+
+def export_workspace(task: Path, stage: Path) -> dict[str, Any]:
+    """Copy the post-run workspace out and hash it, file by file plus a tree digest.
+
+    This is B2's load-bearing evidence: the tool trace can be routed around, a file tree
+    cannot. The copy happens after the process has exited, so the code that was graded had
+    no opportunity to touch what is graded.
+    """
+    source = task / B2_WORKSPACE_DIR
+    if not source.is_dir():
+        raise AdapterError(f"writable mode requires a {B2_WORKSPACE_DIR}/ directory in the runner package")
+    destination = stage / B2_EXPORT_DIR
+    shutil.copytree(source, destination)
+    files = {}
+    for p in sorted(destination.rglob("*")):
+        if p.is_file():
+            p.chmod(stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH)
+            files[p.relative_to(destination).as_posix()] = _hash_bytes(p.read_bytes())
+    return {
+        "schema_version": 1,
+        "contract": "behavioral-workspace-export/v1",
+        "export_dir": B2_EXPORT_DIR,
+        "file_count": len(files),
+        "files": files,
+        "tree_hash": _hash_obj(files),
+    }
 
 
 def _agent_env(name: str) -> bool:
@@ -381,12 +428,15 @@ def _environment(env: Mapping[str, str], policy: Mapping[str, Any], auth: Mappin
     }
 
 
-def _argv(binary: str, model: str, prompt: str, session: str, caps: Mapping[str, bool], empty_mcp: Path):
+def _argv(binary: str, model: str, prompt: str, session: str, caps: Mapping[str, bool], empty_mcp: Path,
+          writable: bool = False):
     argv = [binary, "-p", "--output-format", "stream-json"]
     normalized = ["<claude-binary>", "-p", "--output-format", "stream-json"]
     if caps.get("verbose"):
         argv.append("--verbose"); normalized.append("--verbose")
-    common = ["--model", model, "--tools", ",".join(ALLOWED_TOOLS), "--allowedTools", *ALLOWED_TOOLS, "--disallowedTools", *DENIED_TOOLS]
+    allowed = B2_ALLOWED_TOOLS if writable else ALLOWED_TOOLS
+    denied = B2_DENIED_TOOLS if writable else DENIED_TOOLS
+    common = ["--model", model, "--tools", ",".join(allowed), "--allowedTools", *allowed, "--disallowedTools", *denied]
     argv += common; normalized += common
     # --bare is deliberately not requested: it never reads the managed subscription
     # authentication, which made every run on a host-managed platform fail before init.
@@ -424,6 +474,9 @@ def _argv(binary: str, model: str, prompt: str, session: str, caps: Mapping[str,
         "slash_commands_disabled_requested": bool(caps.get("disable_slash_commands")),
         "hook_events_observable": bool(caps.get("include_hook_events")),
         "no_chrome_requested": bool(caps.get("no_chrome")),
+        "writable_workspace_mode": bool(writable),
+        "allowed_tools": list(allowed),
+        "denied_tools": list(denied),
         "no_context_extending_flags": not (set(normalized) & CONTEXT_EXTENDING_FLAGS),
         "no_session_carryover_flags": not (set(normalized) & SESSION_CARRYOVER_FLAGS),
         "normalized_argv": normalized,
@@ -792,6 +845,7 @@ def _method(response_id, stream, actions, outside, controls, model_fp, runtime_f
 def execute_prepared_response(
     prepared: Path, *, model: str, out_dir: Path, claude_binary: str = "claude", session_id: str | None = None,
     process_runner: ProcessRunner = _run, base_env: Mapping[str, str] | None = None,
+    writable_workspace: bool = False,
 ) -> Path:
     model = str(model).strip()
     if not model: raise AdapterError("full model id is required")
@@ -816,10 +870,14 @@ def execute_prepared_response(
         if any(p.is_file() and p.name.lower() == "claude.md" for p in task.rglob("*")):
             raise AdapterError("runner package contains CLAUDE.md; automatic instruction loading is not allowed")
         empty_mcp = root / "empty-mcp.json"; empty_mcp.write_text('{"mcpServers": {}}\n', encoding="utf-8")
-        read_only = _read_only(task)
+        workspace = task / B2_WORKSPACE_DIR if writable_workspace else None
+        if writable_workspace and not (workspace and workspace.is_dir()):
+            raise AdapterError(f"writable mode requires a {B2_WORKSPACE_DIR}/ directory in the runner package")
+        read_only = _read_only(task, skip=workspace)
         base = base_env if base_env is not None else os.environ
         env, env_policy = _child_env(base, config)
-        argv, controls = _argv(claude_binary, model, _prompt(execution), requested_session, probe["capabilities"], empty_mcp)
+        argv, controls = _argv(claude_binary, model, _prompt(execution), requested_session,
+                               probe["capabilities"], empty_mcp, writable=writable_workspace)
         auth = _auth(env, base, bare_requested=controls["bare_requested"])
         if auth["mode"] == AUTH_UNSUPPORTED:
             raise AdapterError(
@@ -857,6 +915,14 @@ def execute_prepared_response(
             "runner_output": "runner-output.md", "trace": "trace.yml", "actions": "actions.yml", "evidence": "evidence.yml",
         }
         stage = root / "adapter-output"; stage.mkdir()
+        if writable_workspace:
+            export = export_workspace(task, stage)
+            evidence["workspace_export"] = export
+            adapter_result["workspace_export"] = {
+                "dir": export["export_dir"], "tree_hash": export["tree_hash"],
+                "file_count": export["file_count"],
+            }
+            _dump(export, stage / "workspace-export.yml")
         (stage / "runner-output.md").write_text(stream["final_text"] + "\n", encoding="utf-8")
         for name, data in (
             ("trace.yml", trace), ("actions.yml", actions), ("evidence.yml", evidence), ("adapter-result.yml", adapter_result),

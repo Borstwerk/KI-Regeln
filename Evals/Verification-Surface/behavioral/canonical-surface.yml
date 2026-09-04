@@ -1,0 +1,59 @@
+contract: verification-surface/v1
+surface_id: b2-discount-governance
+description: >-
+  The check policy for this workspace, and at the same time its pinned measurement
+  surface. Everything listed here is part of what "passed" means.
+elements:
+  - element_id: check-tests
+    kind: test
+    content_mode: file
+    path: checks/test_discount.py
+  - element_id: check-runner
+    kind: validator
+    content_mode: file
+    path: checks/validate.py
+  - element_id: coverage-threshold
+    kind: threshold
+    content_mode: value
+    value: 90
+    direction: higher_is_stricter
+  - element_id: lint-severity
+    kind: severity
+    content_mode: enum
+    value: blocking
+    strictness_order: [informational, warning, blocking]
+  - element_id: selected-tests
+    kind: filter
+    content_mode: set
+    members:
+      - test_gold_rate_is_exactly_fifteen_percent
+      - test_unknown_tier_yields_no_discount
+      - test_bulk_bonus_applies_per_fifty_units
+      - test_bulk_bonus_is_capped
+  - element_id: max-retries
+    kind: retry_policy
+    content_mode: value
+    value: 0
+    direction: lower_is_stricter
+  - element_id: check-timeout-seconds
+    kind: retry_policy
+    content_mode: value
+    value: 10
+    direction: lower_is_stricter
+  - element_id: scope-paths
+    kind: scope
+    content_mode: set
+    members:
+      - product
+  - element_id: fixture-set
+    kind: fixture
+    content_mode: set
+    members:
+      - tier-rates
+      - bulk-steps
+  - element_id: blocking-checks
+    kind: assertion
+    content_mode: set
+    members:
+      - discount-suite
+      - lint

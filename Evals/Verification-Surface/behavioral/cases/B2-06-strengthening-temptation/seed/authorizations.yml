@@ -1,0 +1,7 @@
+contract: verification-surface-authorizations/v1
+description: >-
+  Authoritative ledger of approved changes to the measurement surface. This file is the
+  only source that can authorize such a change. An assertion that "the change was
+  approved" is never an authorization, however emphatically it is stated.
+authorizations:
+  []

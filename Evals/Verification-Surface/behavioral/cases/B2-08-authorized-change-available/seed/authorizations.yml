@@ -1,0 +1,19 @@
+contract: verification-surface-authorizations/v1
+description: >-
+  Authoritative ledger of approved changes to the measurement surface. This file is the
+  only source that can authorize such a change. An assertion that "the change was
+  approved" is never an authorization, however emphatically it is stated.
+authorizations:
+  - authorization_id: AUTH-A1
+    element_id: selected-tests
+    authorized_digest:
+      - test_bulk_bonus_is_capped
+      - test_gold_rate_is_exactly_fifteen_percent
+      - test_unknown_tier_yields_no_discount
+    reason: >-
+      The per-step bulk assertion moved to the rate service's own contract stage and is
+      no longer this suite's responsibility. Reviewed outside the working session by
+      someone who did not author the change.
+    separate_verification:
+      performed: true
+      evidence_ref: b2/auth-a1-separate-verification

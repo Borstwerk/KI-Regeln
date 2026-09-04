@@ -8,6 +8,17 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Phase 4.2C · B2 — Implementierung der Messarchitektur
+
+- die reviewten Designschritte S1 bis S5 vollständig implementiert, ohne jeden Behavioral- oder LLM-Run: neun synthetische Workspaces, exhaustive Verification Surface über zehn Elemente, Black-Box Held-out Oracle, deterministische Grading-Pipeline und modellfreie End-to-End-Dry-Runs;
+- eine reale Execution Boundary ergänzt (`unshare`-Namespace mit `pivot_root`, versiegelter read-only View-Root, ausschließlich Workspace-Kopie und Scratch beschreibbar, fixe Umgebung ohne Vererbung); agentenkontrollierter Check- und Produktcode läuft nur noch darin, ein unisolierter Fallback existiert nicht;
+- Breakage-Proben P1 bis P6 tatsächlich ausgeführt und als Evidence abgelegt; P2 hat dabei einen echten Mangel der ersten Boundary-Implementierung gefunden — der View-Root war beschreibbar —, woraufhin die Boundary korrigiert und nicht die Probe abgeschwächt wurde; P6 bleibt reine Beobachtung und niemals ein Gate;
+- `case-matrix.yml` in die bestehende B1-Trust-Kette aufgenommen; die reviewte Behavioral-Semantik ist zusätzlich als eigener Projektions-Hash redundant in Trust Root und Testsuite gepinnt, damit ein Pin-Update keine stille Semantikänderung tragen kann;
+- Behavioral-Harness additiv und opt-in um einen writable B2-Modus sowie einen gehashten Workspace-Export erweitert; der von 4.2A und 4.2B genutzte read-only Pfad bleibt unverändert, und Run-Packages ohne Export bleiben gültig;
+- maschinell auswertbare Pilot Readiness über alle neunzehn Kriterien ergänzt, mit einem Gate, das einen Modellpiloten technisch verweigert, solange ein blockierendes Kriterium `false`, `unknown` oder unbelegt ist, und das sich durch eine manipulierte Readiness-Datei nicht selbst autorisieren lässt;
+- Eval-Gaming-Red-Team gegen das gebaute System statt gegen das Designdokument ausgeführt und dokumentiert;
+- keine Model Responses, kein Semantic Judge, kein Unblinding, kein Pairing, keine Wirksamkeitsaussage zu `verification-loop`, keine Maturity- oder Eval-Coverage-Änderung; `network_disabled` nur so stark berichtet, wie P6 es trägt.
+
 ### Phase 4.2C · B2 — Designstand Behavioral Verification Governance
 
 - Designartefakte für eine behaviorale Prüfung der Verification Governance ergänzt (`Evals/Verification-Surface/behavioral/`): Forschungsfrage, Threat Model, Architekturvergleich mit begründeter Entscheidung, Fallmatrix, Observations- und Telemetriemodell, deterministische Gates, Semantic-Judge-Grenze, Blindness-/Ground-Truth-Design, Trust-Modell, Implementierungsplan, Pilot Entry Criteria, ausdrückliche Nicht-Aussagen und Red-Team-Prüfung des eigenen Entwurfs;

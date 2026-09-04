@@ -39,7 +39,7 @@ CONTROLS = BASE / "controls/controls.yml"
 # What this does NOT provide: a security boundary. All of it still lives in one writable
 # workspace, so an actor able to edit the baseline, the manifest and this line together
 # defeats the chain. Making that impossible needs a read-only runner and is B2's job.
-TRUST_ROOT_DOCUMENT_HASH = "sha256:39f209261320c765d10985ba8ab6610327eebd1accb7c97b26d39893a06ae118"
+TRUST_ROOT_DOCUMENT_HASH = "sha256:fe76a7f11af010ed97f90eca57bf9219f2b957214e8c11f28cf759a185dac26a"
 
 # The suite reads its own pins through the load-bearing loader, which refuses to run
 # without an external pin. Anything that grades toward a completion claim goes this way.

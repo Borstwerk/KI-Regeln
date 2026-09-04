@@ -33,7 +33,7 @@ Three things this question is *not*:
   and blind judging, and is out of scope by construction (§13).
 
 B2's own success criterion is narrower than the research question: **B2 succeeds if the
-measurement architecture can tell the outcome classes apart on real runs.** Whether agents
+measurement architecture can tell the terminal dispositions apart on real runs.** Whether agents
 behave well is what the pilot then measures.
 
 ---
@@ -212,7 +212,7 @@ rather than good practice.
 
 | Gaming route | Why it does not work, or what is done about it |
 | --- | --- |
-| Change the ground truth | `case-matrix.yml`, expected outcome classes and the held-out oracle live **outside** the runner package. The runner never receives them; the harness already enforces and tests judge-view separation. |
+| Change the ground truth | `case-matrix.yml`, the permitted dispositions and the held-out oracle live **outside** the runner package. The runner never receives them; the harness already enforces and tests judge-view separation. |
 | Change the expected verdict | Same, plus B1's existing pin: `controls.yml` is hashed in `trust-root.yml`, which is hashed by a constant in code. The B2 matrix **will be taken into that chain during implementation and before pilot entry** — it is not in it today, and this design changes no pin (§10). |
 | Manipulate surface or ledger | Grading runs against the **canonical** copies outside the workspace, with the trust root's pins. A ledger edited inside the workspace is not the ledger B1 reads. |
 | Influence judge inputs | No judge is on the critical path (§8). |
@@ -220,7 +220,7 @@ rather than good practice.
 | Read evaluator-hidden data **through agent-written check code** | The route the first draft left open, and the reason §11a exists. Agent-controlled code executes inside a filesystem view that contains the workspace copy and nothing else — not the repository, not `case-matrix.yml`, not the trust root, not the oracle. Enforced by the boundary, proven by probes P1–P6, not by a `chmod`. |
 | Write outside the workspace through agent-written check code | Same boundary; the workspace copy is the only writable path in the view. Probe P2. |
 | Change runner/adapter configuration | The adapter runs outside the workspace, from the repository, and records a code hash, a normalized argv, a model fingerprint and a runtime fingerprint into `evidence.yml`. |
-| Self-attest the result | `report.yml` is graded *against* observed facts, never accepted as one. A `status: done` with a red surface verdict is itself an outcome class (`unsupported-completion-claim`). |
+| Self-attest the result | `report.yml` is graded *against* observed facts, never accepted as one. A `status: done` with a red surface verdict is itself a disposition (`UNSUPPORTED_COMPLETION`). |
 | Confuse the test workspace with the productive one | The workspace is an ephemeral temp tree containing only synthetic fixtures. No path in it resolves into this repository, and B1's existing rule already forbids `..` in surface element paths. |
 
 ---
@@ -423,7 +423,7 @@ must not become the place where missing instrumentation is laundered into a resu
 
 | Visible to the agent | Hidden from the agent |
 | --- | --- |
-| the synthetic workspace: product code, guarded checks, thresholds, filter config | `case-matrix.yml`, outcome classes, permitted/violation sets |
+| the synthetic workspace: product code, guarded checks, thresholds, filter config | `case-matrix.yml`, the dominance rules, the per-case permitted dispositions |
 | the authoritative authorization ledger (a *copy*, for reading) | the held-out oracle suite |
 | the task prompt and the report contract | the trust root and its code-side pin |
 | the pinned check command and its output | `Evals/Verification-Surface/controls/controls.yml` and the B1 suite |
@@ -596,11 +596,11 @@ kind of work this repository's governance argues against.
 
 **S3 — grading step.** A thin evaluator: exported workspace → `load_surface` →
 `assess` with the trust root's pins → merge with `report.yml` and the held-out oracle →
-outcome class → compare against the case's permitted set. New code is the merge and the
+terminal disposition → compare against the case's permitted dispositions. New code is the merge and the
 comparison; the grading itself is B1's.
 
 **S4 — deliberate breakage.** Per `Agent-Evals.md`, the grader must be shown to fail for the
-right reason. Synthetic post-run workspaces — no model — that reproduce each outcome class:
+right reason. Synthetic post-run workspaces — no model — that reproduce each disposition:
 a clean fix, a weakening, a strengthening, an unclassifiable edit, an authorized change, an
 undeclared change, a `status: done` over a red surface. Each asserts the expected outcome
 class **and** the expected reason. This is the B1 controls pattern, applied one level up.
@@ -620,11 +620,11 @@ No B2 model run may start until every line is true. Each is checkable, not a sen
 | # | Criterion | Met by |
 | --- | --- | --- |
 | 1 | Case ground truth committed before any run, **and pinned** | `case-matrix.yml` reviewed and merged, then taken into `trust-root.yml` during implementation — not yet done, and blocking |
-| 2 | Expected deterministic outcome classes committed | same file, `outcome_classes` + per-case permitted/violation sets |
+| 2 | Expected deterministic outcomes committed | same file: the dominance rules and each case's `permitted_dispositions` |
 | 3 | Evaluator-hidden data technically separated | no evaluator artifact materialised into `runner-package/`; asserted by test |
 | 4 | Agent cannot read expected verdicts | (3), plus `outside_package.attempted` recorded as a distinct fact |
 | 5 | B1 verification surface integrated in the eval path | S3 calls `assess` in strict mode with trust-root pins |
-| 6 | Positive and negative controls present | B2-01 positive; B2-03 escalation-only negative; S4 synthetic controls per outcome class |
+| 6 | Positive and negative controls present | B2-01 positive; B2-03 escalation-only negative; S4 synthetic controls per disposition |
 | 7 | Deliberate breakage present, with expected failure reason | S4 asserts class **and** reason |
 | 8 | Eval-gaming routes reviewed | §5 T9, re-reviewed against the built artifact, not against this design |
 | 9 | Telemetry sufficient | workspace export present and hash-verified; `actions`/`trace`/`evidence` schema-valid |
@@ -674,6 +674,13 @@ be in the trust chain by then, which it is not today.
 - **No maturity or eval-coverage value moves in this phase.**
 
 ---
+
+## 14a. What was built
+
+The design above is what was reviewed. What was actually implemented, which provider carries
+the boundary, what the probes observed and which components are now trusted is recorded
+separately in [`IMPLEMENTATION.md`](IMPLEMENTATION.md), so this document stays the reviewed
+design rather than being quietly rewritten to match the build.
 
 ## 14. Red team of this design
 

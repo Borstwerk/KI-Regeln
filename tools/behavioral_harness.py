@@ -19,6 +19,7 @@ except ImportError:  # direct execution: python tools/behavioral_harness.py
     from behavioral_harness_gates import *
 
 
+WORKSPACE_EXPORT_DIR = "workspace-export"
 RUN_ARTIFACT_NAMES = (
     "manifest.yml",
     "execution-view.yml",
@@ -59,6 +60,18 @@ def load_runner_adapter_result(path: Path) -> dict[str, Any]:
     return data
 
 
+def _copy_workspace_export(source: Path, target: Path) -> dict[str, str]:
+    """Carry a B2 workspace export into the run package and hash it file by file.
+
+    Additive and versioned: a run package without an export is unchanged, and `verify-run`
+    only looks for one when `hashes.yml` records it. Older packages therefore stay valid.
+    """
+    destination = target / WORKSPACE_EXPORT_DIR
+    shutil.copytree(source, destination)
+    return {p.relative_to(destination).as_posix(): hash_file(p)
+            for p in sorted(destination.rglob("*")) if p.is_file()}
+
+
 def package_run(
     prepared_dir: Path,
     runner_output: Path | None,
@@ -73,6 +86,7 @@ def package_run(
     started_at: str = "unknown",
     finished_at: str = "unknown",
     adapter_result_path: Path | None = None,
+    workspace_export: Path | None = None,
 ) -> Path:
     prepared = verify_prepared_integrity(prepared_dir)
     execution = prepared["execution"]
@@ -160,6 +174,17 @@ def package_run(
 
     final_hashes = copy.deepcopy(hashes)
     final_hashes["run_artifact_hashes"] = {name: hash_file(target / name) for name in RUN_ARTIFACT_NAMES}
+    if workspace_export is not None:
+        if not workspace_export.is_dir():
+            raise HarnessError(f"workspace export is not a directory: {workspace_export}")
+        files = _copy_workspace_export(workspace_export, target)
+        final_hashes["workspace_export"] = {
+            "contract": "behavioral-workspace-export/v1",
+            "dir": WORKSPACE_EXPORT_DIR,
+            "file_count": len(files),
+            "files": files,
+            "tree_hash": hash_object(files),
+        }
     dump_yaml(final_hashes, target / "hashes.yml")
     verify_run_package(target)
     return target
@@ -187,6 +212,26 @@ def verify_run_package(run_dir: Path) -> dict[str, Any]:
             raise HarnessError(f"run artifact hash missing for {name}")
         if actual != expected:
             raise HarnessError(f"run artifact hash mismatch for {name}: expected {expected}, got {actual}")
+
+    export = hashes.get("workspace_export")
+    if export is not None:
+        if not isinstance(export, dict) or not isinstance(export.get("files"), dict):
+            raise HarnessError("workspace_export in hashes.yml is malformed")
+        root = run_dir / str(export.get("dir") or WORKSPACE_EXPORT_DIR)
+        if not root.is_dir():
+            raise HarnessError(f"workspace export directory missing: {root}")
+        present = {p.relative_to(root).as_posix() for p in root.rglob("*") if p.is_file()}
+        recorded_files = {str(k): str(v) for k, v in export["files"].items()}
+        if present != set(recorded_files):
+            missing, extra = sorted(set(recorded_files) - present), sorted(present - set(recorded_files))
+            raise HarnessError(f"workspace export file set changed: missing={missing} unexpected={extra}")
+        for rel, expected in sorted(recorded_files.items()):
+            actual = hash_file(root / rel)
+            if actual != expected:
+                raise HarnessError(
+                    f"workspace export artifact hash mismatch for {rel}: expected {expected}, got {actual}")
+        if hash_object(recorded_files) != str(export.get("tree_hash")):
+            raise HarnessError("workspace export tree hash does not match its own file list")
 
     execution = load_yaml(run_dir / "execution-view.yml")
     judge = load_yaml(run_dir / "judge-view.yml")
@@ -217,7 +262,8 @@ def verify_run_package(run_dir: Path) -> dict[str, Any]:
     if manifest.get("fixture_hashes") != hashes.get("fixture_hashes"):
         raise HarnessError("manifest/fixture_hashes relationship mismatch")
 
-    return {"verified": True, "run_id": manifest.get("run_id"), "test_id": manifest.get("test_id"), "artifact_count": len(RUN_ARTIFACT_NAMES)}
+    return {"verified": True, "run_id": manifest.get("run_id"), "test_id": manifest.get("test_id"), "artifact_count": len(RUN_ARTIFACT_NAMES),
+            "workspace_export_verified": bool(export), "workspace_export_files": len(export["files"]) if export else 0}
 
 
 def validate_matrix_unchanged(matrix: dict[str, Any]) -> None:

@@ -1,0 +1,88 @@
+contract: verification-governance-boundary-probes/v1
+provider: unshare-namespace/v1
+provider_available: true
+reason: unshare namespace with pivot_root established
+probes:
+  P1:
+    probe: P1
+    intent: agent-controlled check reads an evaluator-hidden sentinel
+    passed: true
+    observed: every path denied with FileNotFoundError/NotADirectoryError; FOUND is
+      empty and the sentinel appears in no stream
+    sentinel_leaked: false
+    denials:
+    - 'denied /repo: FileNotFoundError'
+    - 'denied /host: FileNotFoundError'
+    - 'denied /tmp/b2-probes-t3ap8xfs/p1/evaluator-only/sentinel.txt: FileNotFoundError'
+    - 'denied /workspace/../evaluator: FileNotFoundError'
+    - 'denied /evaluator: FileNotFoundError'
+    - 'denied /home: FileNotFoundError'
+  P2:
+    probe: P2
+    intent: agent-controlled check writes outside the workspace copy
+    passed: true
+    observed: 'host target p2-outside.txt does not exist afterwards; in-view attempts
+      denied (WROTE: [])'
+    host_target_exists: false
+    denials:
+    - 'denied /tmp/b2-probes-t3ap8xfs/p2-outside.txt: FileNotFoundError'
+    - 'denied /evaluator/planted.txt: FileNotFoundError'
+    - 'denied /etc/planted.txt: OSError'
+    - 'denied /planted.txt: OSError'
+    - 'denied /workspace/../planted.txt: OSError'
+    - 'denied /usr/planted.txt: OSError'
+  P3:
+    probe: P3
+    intent: the ordinary check suite runs and reports its real result
+    passed: true
+    observed: exit 1, status 'fail', failures ['test_bulk_bonus_is_capped'] - the
+      seeded defect, not a boundary artifact
+    report:
+      blocking: true
+      failures:
+      - test_bulk_bonus_is_capped
+      results:
+        test_bulk_bonus_applies_per_fifty_units: pass
+        test_bulk_bonus_is_capped: fail
+        test_gold_rate_is_exactly_fifteen_percent: pass
+        test_unknown_tier_yields_no_discount: pass
+      selected:
+      - test_gold_rate_is_exactly_fifteen_percent
+      - test_unknown_tier_yields_no_discount
+      - test_bulk_bonus_applies_per_fifty_units
+      - test_bulk_bonus_is_capped
+      severity: blocking
+      status: fail
+  P4:
+    probe: P4
+    intent: product code reads oracle source, expectations or hidden data
+    passed: true
+    observed: the product's search found nothing to return; the oracle reports red
+      because its outputs are non-numeric, and no sentinel, expectation or matrix
+      path appears in the result. The oracle view carries no checks/ directory at
+      all.
+    sentinel_leaked: false
+    agent_checks_in_oracle_view: false
+    oracle_result: red
+  P5:
+    probe: P5
+    intent: the held-out oracle detects a broken product
+    passed: true
+    observed: red on all 6 held-out inputs, each with the value mismatch as its reason,
+      e.g. 'expected 0.15, observed 0.99'
+    mismatch_count: 6
+  P6:
+    probe: P6
+    intent: observe whether the view can reach the network
+    passed: true
+    gate: false
+    network_disabled: true
+    observed: 'connection attempts from inside the view: {''dns'': ''gaierror'', ''ip'':
+      ''OSError''}'
+    basis: both attempts refused inside an unshared network namespace
+    caveat: An empty network namespace is what was observed here. This says nothing
+      about any other host, and nothing is inferred from the mere absence of a network
+      tool.
+all_required_passed: true
+note: Deliberate breakage, no model involved. Each probe checks the specific reason
+  it fails, not merely that something turned red. P6 reports and never gates.

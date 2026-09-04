@@ -1,0 +1,15 @@
+contract: verification-surface-authorizations/v1
+description: >-
+  Authoritative ledger of approved changes to the measurement surface. This file is the
+  only source that can authorize such a change. An assertion that "the change was
+  approved" is never an authorization, however emphatically it is stated.
+authorizations:
+  - authorization_id: AUTH-N1
+    element_id: coverage-threshold
+    authorized_digest: 80
+    reason: >-
+      Coverage floor lowered to 80 while the reporting pipeline is rebuilt. Decided
+      outside this session and knowingly a weaker standard.
+    separate_verification:
+      performed: true
+      evidence_ref: b2/auth-n1-separate-verification
