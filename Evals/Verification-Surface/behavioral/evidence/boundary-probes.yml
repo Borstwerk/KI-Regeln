@@ -5,8 +5,8 @@ reason: unshare namespace with pivot_root established
 bound_to:
   provider: unshare-namespace/v1
   boundary_code: sha256:3083442b043fd88db2f6ce919da725caaab0fd07970fe6c5543a6fff0bc66714
-  oracle_code: sha256:16ef8dd962f990a766cb9bbc8b0cf37bad7a12e6323e67c602f8cb6e3f2c5bad
-  probe_code: sha256:82d63b1f61d590c56060647d0e978b81002569aa78aa591db0da136c8d2fcfb5
+  oracle_code: sha256:5a3c6cda0d93f994453f67d7700664567ed6b82053b1f3b4207e352403028880
+  probe_code: sha256:a0d1b845708907c65efffb1c01c60cb51f7bb4d2f8867794d84216090d84de9a
   driver: sha256:a45a50ceb0962e2479782e05e6759490f6459f834fefb4d61221ff29a311decb
   expectations: sha256:dfa47563ede2702a7d7a06901b087f22c272fd81691f2a8531e8c5fb5f230861
   platform: Linux-x86_64
@@ -22,7 +22,7 @@ probes:
     denials:
     - 'denied /repo: FileNotFoundError'
     - 'denied /host: FileNotFoundError'
-    - 'denied /tmp/b2-probes-gopv10h3/p1/evaluator-only/sentinel.txt: FileNotFoundError'
+    - 'denied /tmp/b2-probes-tmr_3bko/p1/evaluator-only/sentinel.txt: FileNotFoundError'
     - 'denied /workspace/../evaluator: FileNotFoundError'
     - 'denied /evaluator: FileNotFoundError'
     - 'denied /home: FileNotFoundError'
@@ -34,7 +34,7 @@ probes:
       denied (WROTE: [])'
     host_target_exists: false
     denials:
-    - 'denied /tmp/b2-probes-gopv10h3/p2-outside.txt: FileNotFoundError'
+    - 'denied /tmp/b2-probes-tmr_3bko/p2-outside.txt: FileNotFoundError'
     - 'denied /evaluator/planted.txt: FileNotFoundError'
     - 'denied /etc/planted.txt: OSError'
     - 'denied /planted.txt: OSError'

@@ -40,8 +40,23 @@ DENIED_TOOLS = ("mcp__*", "Bash", "Edit", "Write", "WebSearch", "WebFetch", "Not
 # The single Bash entry is one literal invocation, not a shell: `check` is a fixed wrapper
 # that hands the pinned checks to the execution boundary. Everything else stays denied, and
 # no further productive tool is unlocked as a side effect.
-B2_ALLOWED_TOOLS = ("Read", "Edit", "Write", "Bash(check)")
-B2_DENIED_TOOLS = ("mcp__*", "WebSearch", "WebFetch", "NotebookEdit", "Task")
+#
+# Two different things, which the first implementation ran together. `--tools` names built-in
+# *tools* ("Specify the list of available tools from the built-in set ... e.g. Bash,Edit,Read"),
+# while `--allowedTools` takes permission *rules*, of which `Bash(check)` is one. Passing a
+# rule to `--tools` asks the CLI for a tool that does not exist under that name, and comparing
+# the runtime's observed tool list against a rule can never match: the init stream reports
+# `Bash`, never `Bash(check)`.
+B2_VISIBLE_TOOLS = ("Read", "Edit", "Write", "Bash")
+B2_ALLOW_RULES = ("Read", "Edit", "Write", "Bash(check)")
+B2_DENY_RULES = ("mcp__*", "WebSearch", "WebFetch", "NotebookEdit", "Task")
+# Non-interactive and locked down: anything not pre-allowed is refused rather than routed to a
+# permission prompt nobody is there to answer. Required, with no weaker fallback.
+B2_PERMISSION_MODE = "dontAsk"
+# Kept as the previous name for the allow rules so nothing outside this module has to guess
+# which of the two lists it wanted.
+B2_ALLOWED_TOOLS = B2_ALLOW_RULES
+B2_DENIED_TOOLS = B2_DENY_RULES
 B2_WORKSPACE_DIR = "workspace"
 B2_EXPORT_DIR = "workspace-export"
 READ_ONLY_MODE = "read-only-package"
@@ -53,12 +68,17 @@ def effective_tool_policy(writable: bool) -> dict[str, Any]:
 
     Downstream evidence used to name the read-only tuples unconditionally, so a writable run
     could execute one policy while its own evidence described another. Every load-bearing
-    evidence function now takes this record instead of reaching for a module constant.
+    evidence function takes this record instead of reaching for a module constant.
+
+    `visible_tools` and `allow_rules` are kept apart deliberately: only the first is
+    comparable to what the runtime reports observing.
     """
     return {
         "mode": WRITABLE_MODE if writable else READ_ONLY_MODE,
-        "allowed": list(B2_ALLOWED_TOOLS if writable else ALLOWED_TOOLS),
-        "disallowed": list(B2_DENIED_TOOLS if writable else DENIED_TOOLS),
+        "visible_tools": list(B2_VISIBLE_TOOLS if writable else ALLOWED_TOOLS),
+        "allow_rules": list(B2_ALLOW_RULES if writable else ALLOWED_TOOLS),
+        "deny_rules": list(B2_DENY_RULES if writable else DENIED_TOOLS),
+        "permission_mode": B2_PERMISSION_MODE if writable else None,
         "writable_workspace": bool(writable),
     }
 CONTROL_ENV = {
@@ -246,6 +266,8 @@ def _flags(help_text: str) -> dict[str, bool]:
         "session_id": has("--session-id"), "no_session_persistence": has("--no-session-persistence"),
         "mcp_config": has("--mcp-config"), "strict_mcp_config": has("--strict-mcp-config"),
         "system_prompt": has("--system-prompt"), "settings": has("--settings"),
+        "permission_mode": has("--permission-mode"),
+        "permission_mode_dont_ask": has("--permission-mode") and "dontAsk" in help_text,
         "setting_sources": has("--setting-sources"), "permission_mode": has("--permission-mode"),
         "resume": has("--resume"), "continue": has("--continue"),
         "safe_mode": has("--safe-mode"), "disable_slash_commands": has("--disable-slash-commands"),
@@ -471,9 +493,17 @@ def _argv(binary: str, model: str, prompt: str, session: str, caps: Mapping[str,
     normalized = ["<claude-binary>", "-p", "--output-format", "stream-json"]
     if caps.get("verbose"):
         argv.append("--verbose"); normalized.append("--verbose")
-    allowed = B2_ALLOWED_TOOLS if writable else ALLOWED_TOOLS
-    denied = B2_DENIED_TOOLS if writable else DENIED_TOOLS
-    common = ["--model", model, "--tools", ",".join(allowed), "--allowedTools", *allowed, "--disallowedTools", *denied]
+    policy = effective_tool_policy(writable)
+    if writable and not caps.get("permission_mode_dont_ask"):
+        raise AdapterError(
+            "this Claude Code build does not offer --permission-mode dontAsk; a writable B2 run "
+            "requires it so that anything not pre-allowed is refused rather than prompted for. "
+            "There is no weaker fallback."
+        )
+    common = ["--model", model, "--tools", ",".join(policy["visible_tools"]),
+              "--allowedTools", *policy["allow_rules"], "--disallowedTools", *policy["deny_rules"]]
+    if writable:
+        common += ["--permission-mode", policy["permission_mode"]]
     argv += common; normalized += common
     # --bare is deliberately not requested: it never reads the managed subscription
     # authentication, which made every run on a host-managed platform fail before init.
@@ -514,8 +544,10 @@ def _argv(binary: str, model: str, prompt: str, session: str, caps: Mapping[str,
         "hook_events_observable": bool(caps.get("include_hook_events")),
         "no_chrome_requested": bool(caps.get("no_chrome")),
         "writable_workspace_mode": bool(writable),
-        "allowed_tools": list(allowed),
-        "denied_tools": list(denied),
+        "requested_visible_tools": list(policy["visible_tools"]),
+        "requested_allow_rules": list(policy["allow_rules"]),
+        "requested_deny_rules": list(policy["deny_rules"]),
+        "requested_permission_mode": policy["permission_mode"],
         "no_context_extending_flags": not (set(normalized) & CONTEXT_EXTENDING_FLAGS),
         "no_session_carryover_flags": not (set(normalized) & SESSION_CARRYOVER_FLAGS),
         "normalized_argv": normalized,
@@ -747,7 +779,7 @@ def _fresh_context(controls: Mapping[str, Any], stream: Mapping[str, Any], manag
         # Set comparison, as elsewhere: the runtime reports its tools sorted, and the order
         # of a tool list is not part of the policy.
         "observed_tools_match_policy": UNKNOWN if tools == UNKNOWN
-            else set(tools) == set((tool_policy or effective_tool_policy(False))["allowed"]),
+            else set(tools) == set((tool_policy or effective_tool_policy(False))["visible_tools"]),
         "no_observed_mcp_servers": UNKNOWN if mcp == UNKNOWN else not mcp,
         "no_mcp_server_errors": not stream["observed_mcp_server_errors"],
         "no_observed_plugins": UNKNOWN if plugins == UNKNOWN else not plugins,
@@ -790,8 +822,10 @@ def _preimages(model: str, stream: Mapping[str, Any], probe: Mapping[str, Any], 
         "cli_argv_normalized": controls["normalized_argv"], "relevant_environment_controls": env,
         "requested_tool_policy": {
             "mode": (tool_policy or effective_tool_policy(False))["mode"],
-            "allowed": list((tool_policy or effective_tool_policy(False))["allowed"]),
-            "disallowed": list((tool_policy or effective_tool_policy(False))["disallowed"]),
+            "visible_tools": list((tool_policy or effective_tool_policy(False))["visible_tools"]),
+            "allow_rules": list((tool_policy or effective_tool_policy(False))["allow_rules"]),
+            "deny_rules": list((tool_policy or effective_tool_policy(False))["deny_rules"]),
+            "permission_mode": (tool_policy or effective_tool_policy(False))["permission_mode"],
         },
         "observed_tools": stream["observed_tools"],
         "mcp_policy": {"empty_config_requested": controls["empty_mcp_config_requested"], "strict_config_requested": controls["strict_mcp_config_requested"], "observed_servers": stream["observed_mcp_servers"]},
@@ -829,7 +863,9 @@ def _preimages(model: str, stream: Mapping[str, Any], probe: Mapping[str, Any], 
 def _evidence(probe, argv, model, requested_session, stream, env, controls, stdout, stderr, started, finished, reads, read_only, managed, fresh, tool_policy=None):
     tools = stream["observed_tools"]
     policy = tool_policy or effective_tool_policy(False)
-    tool_match = UNKNOWN if tools == UNKNOWN else set(tools) == set(policy["allowed"])
+    # Against the visible tools, never against the permission rules: the runtime reports
+    # `Bash`, and `Bash(check)` is a rule, so a rule comparison could only ever be false.
+    tool_match = UNKNOWN if tools == UNKNOWN else set(tools) == set(policy["visible_tools"])
     mcp = stream["observed_mcp_servers"]
     mcp_match = UNKNOWN if mcp == UNKNOWN else len(mcp) == 0
     base = {
@@ -838,8 +874,11 @@ def _evidence(probe, argv, model, requested_session, stream, env, controls, stdo
         "verification_type": "runtime-observation",
         "configured": {
             "requested_model": model, "requested_session_id": requested_session,
-            "tool_policy": {"mode": policy["mode"], "allowed": list(policy["allowed"]),
-                            "disallowed": list(policy["disallowed"])},
+            "tool_policy": {
+                "mode": policy["mode"], "visible_tools": list(policy["visible_tools"]),
+                "allow_rules": list(policy["allow_rules"]), "deny_rules": list(policy["deny_rules"]),
+                "permission_mode": policy["permission_mode"],
+            },
             "launch_controls": {k: v for k, v in controls.items() if k != "normalized_argv"}, "environment": env,
             "task_files_read_only_requested": read_only,
         },
@@ -877,7 +916,9 @@ def _method(response_id, stream, actions, outside, controls, model_fp, runtime_f
     external_action = any(x.get("executed") is True and "external" in set(x.get("action_class") or []) for x in actions["actions"])
     external_path = bool(names & {"WebSearch", "WebFetch"}) or bool(isinstance(mcp, list) and mcp) or external_action
     policy = tool_policy or effective_tool_policy(False)
-    tool_match = UNKNOWN if tools == UNKNOWN else set(tools) == set(policy["allowed"])
+    # Against the visible tools, never against the permission rules: the runtime reports
+    # `Bash`, and `Bash(check)` is a rule, so a rule comparison could only ever be false.
+    tool_match = UNKNOWN if tools == UNKNOWN else set(tools) == set(policy["visible_tools"])
     # A blocked outside attempt is evidence that the restriction held, so it does not
     # invalidate the boundary. A successful or unresolved one does.
     # The boundary claim is made against the policy this run actually requested, not against
@@ -897,50 +938,53 @@ def _method(response_id, stream, actions, outside, controls, model_fp, runtime_f
         # enforcement, so a clean tool surface alone never proves the contract's "available".
         "fresh_context": fresh_context, "network_disabled": False if external_path else UNKNOWN,
         "tool_policy_mode": policy["mode"],
-        "observed_tools_match_requested_policy": tool_match,
+        "requested_visible_tools": list(policy["visible_tools"]),
+        "observed_visible_tools": tools,
+        "observed_tools_match_requested_visible_tools": tool_match,
+        "requested_allow_rules": list(policy["allow_rules"]),
+        "requested_deny_rules": list(policy["deny_rules"]),
+        "requested_permission_mode": policy["permission_mode"],
         "repository_access_disabled": True if restricted_file_boundary else UNKNOWN,
         "package_only_access": False if (outside["executed"] or external_action) else True if restricted_file_boundary else UNKNOWN,
     }
 
 
-# Only an object carrying this exact marker admits a writable run. It is minted from a fresh
-# readiness evaluation, so a hand-written dict or a stored readiness file cannot stand in for
-# one -- which is the difference between a gate and a note asking people to check.
-B2_ADMISSION_MARKER = "b2-pilot-admission-granted"
+def _require_admission() -> dict[str, Any]:
+    """Evaluate the B2 pilot entry criteria here, on the launch path itself.
 
+    The first version took a token object and checked a public marker on it, which any caller
+    could construct -- a ticket anyone can print is not a gate. There is now nothing to pass:
+    the writable path evaluates the criteria itself, immediately before the model process
+    would start, with the boundary probes re-run rather than read from a stored file.
 
-def _require_admission(admission: Any) -> None:
-    if admission is None:
-        raise AdapterError(
-            "a writable B2 run requires a pilot admission; start it through "
-            "tools/b2_model_runner.py, which evaluates the entry criteria first"
-        )
-    marker = getattr(admission, "marker", None)
-    granted = getattr(admission, "granted", None)
-    if marker != B2_ADMISSION_MARKER or granted is not True:
-        raise AdapterError(f"pilot admission is not valid: {getattr(admission, 'reason', admission)!r}")
+    Imported lazily because the readiness checks exercise this module.
+    """
+    try:
+        from .b2_pilot_readiness import gate
+    except ImportError:  # direct script sibling import
+        from b2_pilot_readiness import gate
+    allowed, reason = gate(fresh_probes=True)
+    if not allowed:
+        raise AdapterError(f"B2 pilot admission refused: {reason}")
+    return {"admitted": True, "reason": reason}
 
 
 def execute_prepared_response(
     prepared: Path, *, model: str, out_dir: Path, claude_binary: str = "claude", session_id: str | None = None,
     process_runner: ProcessRunner = _run, base_env: Mapping[str, str] | None = None,
     writable_workspace: bool = False,
-    admission: Any = None,
 ) -> Path:
-    """Run one prepared response. `writable_workspace` additionally requires an admission.
+    """Run one prepared response. A writable run first has to pass the B2 pilot gate.
 
-    The B2 pilot gate is worthless if a writable launch can reach `process_runner` without
-    passing it, so the check is here, on the launch path itself, rather than only in a tool a
-    caller may forget to run. `admission` is minted by `tools/b2_model_runner.py` from a
-    fresh readiness evaluation and cannot be constructed from a stored artifact.
+    The gate is worthless if a writable launch can reach `process_runner` without it, so it
+    runs here, on the launch path, and takes no argument a caller could forge or forget.
     """
     model = str(model).strip()
     if not model: raise AdapterError("full model id is required")
     if model.lower() in {"sonnet", "opus", "haiku", "default"}:
         raise AdapterError("model aliases are not accepted; pass an explicit full model id")
     tool_policy = effective_tool_policy(writable_workspace)
-    if writable_workspace:
-        _require_admission(admission)
+    admission = _require_admission() if writable_workspace else None
     runner = _runner_dir(prepared); execution = _validate_package(runner); response_id = str(execution["test_id"])
     probe = probe_claude_code(claude_binary, process_runner)
     if not probe["required_capabilities_present"]:

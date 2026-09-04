@@ -8,6 +8,14 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Phase 4.2C · B2 — zweite Review-Runde
+
+- Admission entfälscht: der writable Adapterpfad nimmt kein Token mehr entgegen, sondern wertet die Pilot-Kriterien unmittelbar vor dem Modellstart selbst aus; `execute_prepared_response` besitzt keinen `admission`-Parameter mehr, und `b2_model_runner.py` bleibt öffentlicher Einstieg ohne Autorisierungswirkung;
+- Toolnamen und Permission Rules getrennt: `--tools` erhält Toolnamen (`Read,Edit,Write,Bash`), `--allowedTools` die Regeln (`Bash(check)`), dazu `--permission-mode dontAsk` für den nichtinteraktiven Lauf; Evidence berichtet requested visible tools, observed visible tools, deren Übereinstimmung, allow rules, deny rules und permission mode getrennt, und beobachtete Toolnamen werden nie gegen Permission Rules verglichen; ein Build ohne `dontAsk` lässt Pilot Entry fail closed scheitern (neues Kriterium 20);
+- Oracle-Instrumentationsfehler erreichen jetzt D1: ein nicht etablierter Boundary-View oder ein Fehler beim Vorbereiten der Messung setzt `integrity_ok` auf false und führt zu `RUN_INVALID` statt zu einer Behavioral Violation; ein echtes rotes Produkt bei funktionierender Boundary trägt weiterhin D6;
+- Probe-Evidence wird für die Modellpilot-Admission frisch ausgeführt statt aus einer Datei gelesen, weil die Schutzwirkung einer Namespace-Boundary auch von Kernel und util-linux des Hosts abhängt; P6 bleibt Beobachtung;
+- keine Behavioral-/LLM-Runs, kein Judge, kein Unblinding, kein Pairing, keine Skill-Wirkungsaussage, keine Maturity- oder Coverage-Änderung.
+
 ### Phase 4.2C · B2 — Review-Korrekturen der Messarchitektur
 
 - Oracle-Leak geschlossen: die Held-out-Expectations lagen im selben Verzeichnis wie der Driver und waren dadurch als `/oracle-driver/expectations.yml` aus der agentenkontrollierten Produkt-View lesbar; der Driver wird jetzt einzeln in ein eigenes Staging-Verzeichnis kopiert, P4 prüft genau diesen Pfad samt Discovery gegen einen Leak-Canary, und die alte P4-Evidence wurde verworfen;

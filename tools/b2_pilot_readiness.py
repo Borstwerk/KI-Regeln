@@ -100,8 +100,26 @@ def evidence_binding() -> dict[str, str]:
     }
 
 
+# Set only for the duration of one `evaluate(fresh_probes=True)`. A namespace boundary's
+# protection depends on the host kernel and util-linux as much as on this repository's code,
+# and a stored result cannot speak for a machine it never ran on -- so the pilot admission
+# re-runs P1-P5 instead of trusting a file.
+_FRESH_PROBES: dict[str, Any] | None = None
+
+
+def run_fresh_probes() -> dict[str, Any]:
+    """Execute P1-P6 now, in this process, on this host."""
+    try:
+        from .b2_boundary_probes import run_all
+    except ImportError:  # direct script sibling import
+        from b2_boundary_probes import run_all
+    return run_all()
+
+
 def _boundary_probe_report() -> dict[str, Any] | None:
     """The probe evidence, or None when it is absent, unreadable or stale."""
+    if _FRESH_PROBES is not None:
+        return _FRESH_PROBES
     if not BOUNDARY_EVIDENCE.is_file():
         return None
     try:
@@ -299,6 +317,17 @@ def _c18_disposition_total() -> dict[str, Any]:
     return _tri(ok, reason, "b2_readiness_checks.disposition_totality")
 
 
+def _c20_runtime_supports_locked_down_permissions() -> dict[str, Any]:
+    """A writable run needs `--permission-mode dontAsk`, and there is no weaker fallback.
+
+    Added by this correction: `--tools` names built-in tools while `--allowedTools` takes
+    permission rules, and a non-interactive run must refuse anything not pre-allowed rather
+    than route it to a prompt nobody will answer. A build without that mode cannot run B2.
+    """
+    ok, reason = _functional("runtime_permission_mode")()
+    return _tri(ok, reason, "b2_readiness_checks.runtime_permission_mode")
+
+
 def _c19_semantics_change_visible() -> dict[str, Any]:
     pins = None
     try:
@@ -331,22 +360,36 @@ CRITERIA: tuple[tuple[int, str, bool, Callable[[], dict[str, Any]]], ...] = (
     (17, "network_disabled reported as observed", False, _c17_network_reported),
     (18, "Disposition function total and unambiguous", True, _c18_disposition_total),
     (19, "Case semantics changes visible as design changes", True, _c19_semantics_change_visible),
+    (20, "Runtime offers the locked-down permission mode a writable run needs", True,
+     _c20_runtime_supports_locked_down_permissions),
 )
 
 
-def evaluate() -> dict[str, Any]:
-    """Evaluate every criterion now. Nothing is read back from a stored verdict."""
+def evaluate(fresh_probes: bool = False) -> dict[str, Any]:
+    """Evaluate every criterion now. Nothing is read back from a stored verdict.
+
+    With `fresh_probes`, P1-P6 are executed in this process rather than read from the stored
+    evidence file. That is the mode the model-pilot admission uses: probe results describe the
+    host they ran on, and a stored result from another machine is not evidence about this one.
+    """
+    global _FRESH_PROBES
+    probes = run_fresh_probes() if fresh_probes else None
     rows = []
-    for number, title, blocking, check in CRITERIA:
-        try:
-            outcome = check()
-        except Exception as exc:  # noqa: BLE001 - a failing check is `unknown`, never `met`
-            outcome = _tri(None, f"check raised {type(exc).__name__}: {exc}", "check error")
-        rows.append({"id": number, "criterion": title, "blocking": blocking, **outcome})
+    previous, _FRESH_PROBES = _FRESH_PROBES, probes
+    try:
+        for number, title, blocking, check in CRITERIA:
+            try:
+                outcome = check()
+            except Exception as exc:  # noqa: BLE001 - a failing check is `unknown`, never `met`
+                outcome = _tri(None, f"check raised {type(exc).__name__}: {exc}", "check error")
+            rows.append({"id": number, "criterion": title, "blocking": blocking, **outcome})
+    finally:
+        _FRESH_PROBES = previous
     blockers = [r for r in rows if r["blocking"] and r["met"] is not True]
     return {
         "contract": READINESS_CONTRACT,
         "phase": "4.2C / B2",
+        "probe_evidence": "executed in this process" if fresh_probes else "read from the stored file",
         "ready": not blockers,
         "status": "READY_FOR_MODEL_PILOT" if not blockers else "NOT_READY_FOR_MODEL_PILOT",
         "blocking_unmet": [r["id"] for r in blockers],
@@ -355,13 +398,16 @@ def evaluate() -> dict[str, Any]:
     }
 
 
-def gate(stored: Path | None = None) -> tuple[bool, str]:
+def gate(stored: Path | None = None, fresh_probes: bool = False) -> tuple[bool, str]:
     """May a model pilot start? Answered by re-evaluating, never by reading a claim.
 
     A stored artifact is compared against the fresh evaluation, so a hand-edited file that
     claims readiness is not merely ignored: the disagreement is itself a refusal.
+
+    `fresh_probes` additionally re-runs P1-P5 here rather than trusting the stored evidence.
+    The writable launch path uses it; nothing else has to.
     """
-    fresh = evaluate()
+    fresh = evaluate(fresh_probes=fresh_probes)
     if stored is not None and stored.is_file():
         try:
             claimed = load_yaml(stored)

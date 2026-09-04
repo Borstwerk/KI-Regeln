@@ -15,48 +15,39 @@ from __future__ import annotations
 import argparse
 import json
 import sys
-from dataclasses import dataclass
 from pathlib import Path
 
 try:
-    from .behavioral_harness_claude import B2_ADMISSION_MARKER, AdapterError, execute_prepared_response
+    from .behavioral_harness_claude import AdapterError, execute_prepared_response
     from .b2_pilot_readiness import evaluate, gate
 except ImportError:  # direct script sibling import
-    from behavioral_harness_claude import B2_ADMISSION_MARKER, AdapterError, execute_prepared_response
+    from behavioral_harness_claude import AdapterError, execute_prepared_response
     from b2_pilot_readiness import evaluate, gate
 
 
-@dataclass(frozen=True)
-class Admission:
-    """Proof that a fresh evaluation of the entry criteria allowed this run.
+def admit(stored: Path | None = None, fresh_probes: bool = True) -> dict:
+    """Evaluate the entry criteria and report the outcome. Not an authorisation token.
 
-    Frozen and marker-carrying on purpose: it is minted by `admit()` and by nothing else.
+    Nothing this returns admits anything. The writable adapter path evaluates the criteria
+    again for itself immediately before launching, so a caller cannot skip the gate by
+    skipping this function, and cannot pass it by constructing a value.
     """
-
-    granted: bool
-    reason: str
-    status: str
-    marker: str = B2_ADMISSION_MARKER
-
-
-def admit(stored: Path | None = None) -> Admission:
-    """Evaluate the entry criteria now and mint an admission only if they pass."""
-    report = evaluate()
-    allowed, reason = gate(stored)
+    report = evaluate(fresh_probes=fresh_probes)
+    allowed, reason = gate(stored, fresh_probes=fresh_probes)
     if not allowed:
         raise AdapterError(f"B2 pilot admission refused: {reason}")
-    return Admission(granted=True, reason=reason, status=report["status"])
+    return {"status": report["status"], "reason": reason}
 
 
 def run(prepared: Path, *, model: str, out_dir: Path, stored_readiness: Path | None = None,
         preflight_only: bool = False, **kwargs):
-    """Admit first, then launch. In that order, with nothing between them."""
-    admission = admit(stored_readiness)
+    """Report the admission, then launch. The launch re-checks it regardless."""
+    outcome = admit(stored_readiness)
     if preflight_only:
-        return {"admitted": True, "status": admission.status, "reason": admission.reason,
+        return {"admitted": True, "status": outcome["status"], "reason": outcome["reason"],
                 "stopped_before": "model process launch", "model_started": False}
     return execute_prepared_response(prepared, model=model, out_dir=out_dir,
-                                     writable_workspace=True, admission=admission, **kwargs)
+                                     writable_workspace=True, **kwargs)
 
 
 def _cli(argv: list[str] | None = None) -> int:

@@ -1,5 +1,6 @@
 contract: verification-governance-pilot-readiness/v1
 phase: 4.2C / B2
+probe_evidence: read from the stored file
 ready: true
 status: READY_FOR_MODEL_PILOT
 blocking_unmet: []
@@ -131,4 +132,12 @@ criteria:
   reason: the semantic projection is pinned redundantly, in the trust root and in
     code
   evidence: trust-root.yml:b2_semantic_projection_hash
+- id: 20
+  criterion: Runtime offers the locked-down permission mode a writable run needs
+  blocking: true
+  met: true
+  reason: Claude Code 2.1.261 (Claude Code) offers --permission-mode dontAsk; the
+    writable argv requests --tools Read,Edit,Write,Bash with allow rules ['Read',
+    'Edit', 'Write', 'Bash(check)']
+  evidence: b2_readiness_checks.runtime_permission_mode
 note: An infrastructure decision. It says nothing about any agent's behaviour.

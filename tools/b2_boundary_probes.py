@@ -316,7 +316,10 @@ def run_all() -> dict[str, Any]:
                 name = fn.__name__.replace("probe_", "").upper()
                 report = {"probe": name, "passed": False, "observed": f"boundary error: {exc}"}
             probes[report["probe"]] = report
-    from b2_pilot_readiness import evidence_binding
+    try:
+        from .b2_pilot_readiness import evidence_binding
+    except ImportError:  # direct script sibling import
+        from b2_pilot_readiness import evidence_binding
     return {
         "contract": "verification-governance-boundary-probes/v1",
         "provider": PROVIDER,

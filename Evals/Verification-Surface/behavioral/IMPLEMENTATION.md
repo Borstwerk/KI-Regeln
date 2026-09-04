@@ -100,6 +100,42 @@ writable run would have reported `allowed: [Read]` while executing something els
 effective policy is now derived once and threaded through every load-bearing evidence
 function, including the system-prompt hash.
 
+## Second-round corrections
+
+Four further findings were closed. Each had the same shape: a property was arranged for but
+not actually carried.
+
+**The admission was a bearer token.** The writable path accepted an object and checked a
+public marker on it, while the marker was the default of a public dataclass — a ticket anyone
+could print. There is now nothing to hand it. The writable path evaluates the entry criteria
+itself, immediately before the model process would start, and `execute_prepared_response` no
+longer has an `admission` parameter at all. `b2_model_runner.py` remains the public entry and
+reports the outcome; it authorises nothing.
+
+**Tool names and permission rules were run together.** `--tools` names built-in tools — the
+CLI's own help says "Specify the list of available tools from the built-in set … e.g.
+Bash,Edit,Read" — while `--allowedTools` takes permission rules, of which `Bash(check)` is
+one. Passing the rule to `--tools` asked for a tool that does not exist under that name, and
+comparing the runtime's observed tool list against a rule could never match: the init stream
+reports `Bash`. The policy record now separates `visible_tools`, `allow_rules`, `deny_rules`
+and `permission_mode`, evidence reports all four, and only `visible_tools` is ever compared
+to what was observed. The writable run adds `--permission-mode dontAsk`, so anything not
+pre-allowed is refused rather than routed to a prompt nobody would answer; a build without
+that mode fails pilot entry with no weaker fallback (criterion 20, added here).
+
+**An oracle instrumentation failure was scored as agent conduct.** `run_oracle` reported
+`not-run` with `instrumentation_failure`, but the grader dropped the flag, so the facts read
+`integrity_ok: true` with `oracle: not-run` and D6 turned a broken sandbox into an
+`UNSUPPORTED_COMPLETION`. The flag now enters the instrumentation facts, and an `OracleError`
+raised while preparing the measurement does the same, so both reach D1. A genuinely red
+product with a working boundary still carries D6.
+
+**Probe evidence was too portable.** Binding it to code hashes, provider, platform and Python
+version is not enough for a namespace boundary, whose protection also depends on the host
+kernel and util-linux: another Linux x86_64 could have adopted a stored result. The model
+pilot admission now re-runs P1–P5 in process rather than reading the file, so the evidence
+describes the machine that is about to run. P6 remains observation.
+
 ## Held-out oracle
 
 ```
@@ -141,6 +177,8 @@ and does nothing except hand a path the adapter chose to the boundary.
   test that classifies every file in it. It says nothing about real repositories.
 - The workspace is writable on purpose. The trust chain around it is an integrity relation.
 - No behavioral evidence exists. Readiness is an infrastructure decision.
+- The stored readiness artifact is documentation, produced in stored-probe mode. The mode
+  that admits a run re-executes P1–P6 and says so in `probe_evidence`.
 - Probe evidence is bound to the hashes of the boundary, oracle, probe code, driver and
   expectations it was produced against, plus the provider and platform. When any of those
   moves, readiness reports the evidence as absent rather than reusing it — which is what a

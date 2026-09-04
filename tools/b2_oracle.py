@@ -99,6 +99,8 @@ def _product_view(workspace: Path, destination: Path) -> Path:
 def run_oracle(workspace: Path, expectations_path: Path, driver_path: Path, scratch: Path,
                timeout: int = 60) -> dict[str, Any]:
     """Measure the product in isolation and compare outside the view."""
+    # Preparing the measurement is the evaluator's job, so a failure here is an
+    # instrumentation fact and is raised as one rather than becoming a red product.
     expectations = load_expectations(expectations_path)
     tolerance = float(expectations.get("tolerance", 0.0))
     view = _product_view(workspace, scratch / "oracle-product")

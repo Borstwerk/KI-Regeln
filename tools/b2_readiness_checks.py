@@ -225,3 +225,34 @@ def oracle_driver_view_control() -> tuple[bool, str]:
     beside = sorted(p.name for p in (B2 / "oracle").iterdir() if p.is_file())
     return True, (f"the staged driver view carries exactly {names}, while the driver's own "
                   f"directory holds {beside} — which is why it is staged rather than mounted")
+
+
+def runtime_permission_mode() -> tuple[bool, str]:
+    """Ask the installed Claude Code build whether it offers what a writable run needs.
+
+    `--tools` names built-in tools; `--allowedTools` takes permission rules. A locked-down
+    non-interactive run additionally needs `--permission-mode dontAsk`, so that anything not
+    pre-allowed is refused instead of prompted for. Without it, B2 pilot entry fails closed.
+    """
+    adapter = _tools("behavioral_harness_claude")
+    try:
+        probe = adapter.probe_claude_code("claude")
+    except adapter.AdapterError as exc:
+        return False, f"the Claude Code binary could not be probed: {exc}"
+    caps = probe["capabilities"]
+    if not caps.get("permission_mode_dont_ask"):
+        return False, ("this Claude Code build does not offer --permission-mode dontAsk; "
+                       "a writable B2 run has no weaker fallback")
+    # And the argv the adapter would actually build has to be accepted by that binary.
+    from pathlib import Path
+    argv, controls = adapter._argv("claude", "claude-haiku-4-5-20251001", "prompt", "session",
+                                   caps, Path("/dev/null"), writable=True)
+    visible = argv[argv.index("--tools") + 1]
+    rules = argv[argv.index("--allowedTools") + 1:argv.index("--disallowedTools")]
+    mode = argv[argv.index("--permission-mode") + 1]
+    if visible != ",".join(adapter.B2_VISIBLE_TOOLS) or rules != list(adapter.B2_ALLOW_RULES):
+        return False, f"the writable argv does not separate tools from rules: {visible!r} / {rules}"
+    if mode != adapter.B2_PERMISSION_MODE:
+        return False, f"the writable argv requests permission mode {mode!r}"
+    return True, (f"Claude Code {probe['version']} offers --permission-mode {mode}; the writable "
+                  f"argv requests --tools {visible} with allow rules {rules}")
