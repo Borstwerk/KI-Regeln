@@ -65,6 +65,39 @@ Einordnung:
 
 Die aktuellen GenAI Semantic Conventions zeigen, dass Modellaufrufe, Toolcalls, Tokenmetriken und optional auch Inhaltsdaten strukturiert beobachtbar gemacht werden können. Für dieses Repository ist besonders die Trennung zwischen nützlicher Telemetrie und optionaler, potenziell sensibler Inhaltsaufzeichnung relevant.
 
+## guillaumemeyer/watermarks-remover
+
+Quelle:
+
+https://github.com/guillaumemeyer/watermarks-remover
+
+Geprüfter Repository-Stand:
+
+`d9e9590d94e19b39eb2794266292324bfec8249a`
+
+Lizenz am geprüften Stand: MIT.
+
+Methodisch relevant sind insbesondere:
+
+- Inspect-first statt blindem Entfernen;
+- Trennung von Unicode-Artefakten, C2PA/Content Credentials, EXIF/XMP, Dokumentmetadaten und anderen Markerklassen;
+- Capability Detection: nur behaupten, was das vorhandene Tool tatsächlich prüfen kann;
+- Before/After-Evidence und Re-Inspection;
+- Confidence-, False-Positive- und Residual-Risk-Denken;
+- klare Trennung zwischen verifizierbaren technischen Entfernungen und best-effort Aussagen.
+
+Bewusst **nicht** als lokale Produktlogik übernommen werden:
+
+- Detector-Evasion oder „human score“-Optimierung;
+- statistische Rewrite-Rezepte zur Schwächung von Text-Watermarks;
+- Watermark-Stealing oder Secret-Key-Rekonstruktion;
+- destructive Pixel-/Audio-/Video-Purification als allgemeine Standardfähigkeit;
+- Entfernen verpflichtender Provenienz-, Attribution- oder Disclosure-Signale;
+- die Annahme, fehlende oder entfernte Marker bewiesen menschliche Urheberschaft;
+- die konkrete Claude-Plugin-, HTTP-Service-, Docker-, Modell- oder Backend-Architektur des Upstreams.
+
+Der Upstream dient als methodischer Referenzraum. KI-Regeln übernimmt weder dessen Runtime noch dessen Skilltext oder automatische Synchronisation.
+
 ## Eigene Synthese
 
 Der Sicherheitsbereich verbindet diese Quellen mit den bereits vorhandenen Regeln zu Human Gates, Context Engineering, Upstream-Monitoring und Agenten-Observability.
@@ -79,6 +112,17 @@ untrusted Input
 + Gate
 + Evidence
 + nachvollziehbarer Upstream
+```
+
+Für Inhaltsprovenienz kommt hinzu:
+
+```text
+inspect
+→ Evidence klassifizieren
+→ Erhaltungspflichten
+→ optional begrenztes Change Set
+→ re-inspect
+→ Residual Risk
 ```
 
 ## Leitgedanke
