@@ -41,5 +41,6 @@ workflows:
   - Workflows/Technische-Dokumentation.md
   - Workflows/Teststrategie-und-QA.md
   - Workflows/Text-Endkontrolle.md
+  - Workflows/Unternehmens-und-Investmentanalyse.md
   - Workflows/Website-Neuentwicklung.md
   - Workflows/Wissensbasis-Aufbauen-und-Pflegen.md
