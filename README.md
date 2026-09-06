@@ -57,7 +57,7 @@ Die allgemeinen Regeln helfen beim **Wie**. Das konkrete Projekt bestimmt weiter
 | recherchieren, Quellen bewerten, Behauptungen prüfen | Recherche |
 | Texte schreiben, überarbeiten oder adressatengerecht formulieren | Schreiben |
 | Figuren, Plot, Welt oder Kontinuität einer Geschichte entwickeln | Storyentwicklung und Fiktion |
-| Cashflow, Rücklagen, Schulden, Vermögensszenarien oder Anlagen analysieren | Finanzen |
+| Cashflow, Rücklagen, Schulden, Vermögensszenarien, Portfolios, Unternehmen oder Anlagen analysieren | Finanzen |
 | Bilder oder konsistente Bildserien entwickeln und prüfen | Bildarbeit |
 | Websites gestalten, umsetzen oder reviewen | Webentwicklung |
 | Code entwickeln oder Fehler diagnostizieren | Programmieren |

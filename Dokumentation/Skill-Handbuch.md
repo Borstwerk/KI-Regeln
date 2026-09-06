@@ -29,6 +29,9 @@ Nicht vom Werkzeugnamen ausgehen, sondern von der zu erledigenden Arbeit.
 | „Schreib oder überarbeite diesen Text.“ | Schreiben |
 | „Hilf mir, Figuren, Plot oder Welt für eine Geschichte zu entwickeln.“ | Storyentwicklung und Fiktion |
 | „Ordne meine Rücklagen, Schulden oder Anlageoptionen ein.“ | Finanzen |
+| „Prüfe mein Depot oder bringe es kontrolliert zurück zu meiner Zielallokation.“ | Finanzen |
+| „Analysiere dieses Unternehmen fundamental oder ordne die neuesten Quartalszahlen ein.“ | Finanzen + Recherche für aktuelle Evidence |
+| „Bewerte dieses Unternehmen mit DCF oder vergleichbaren Unternehmen.“ | Finanzen + Recherche für aktuelle Evidence |
 | „Erstelle oder prüfe eine Bildserie.“ | Bildarbeit |
 | „Baue oder prüfe diese Website.“ | Webentwicklung |
 | „Finde die Ursache dieses Fehlers.“ | Programmieren / Diagnose, je nach System weitere Fachdomänen |

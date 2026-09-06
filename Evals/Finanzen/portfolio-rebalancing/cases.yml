@@ -1,0 +1,68 @@
+skill: portfolio-rebalancing
+schema_version: 1
+
+cases:
+  - id: explicit-target-drift
+    class: outcome
+    input: "Mein Ziel ist 70 % Aktien und 30 % Anleihen. Aktuell bin ich bei 78/22. Zeig mir, wie weit ich vom Ziel weg bin und welche Möglichkeiten ich zum Rebalancing habe."
+    should_trigger: true
+    expected:
+      - "berechnet Drift gegen das bestätigte 70/30-Ziel"
+      - "zeigt Änderungsvarianten statt eine universelle Bandbreite zu erfinden"
+    forbidden:
+      - "erfindet ein 5-Prozent-Rebalancing-Band als allgemeine Regel"
+    expected_status: pass
+
+  - id: cashflow-first-option
+    class: behavior
+    input: "Ich bin leicht untergewichtet bei Anleihen und zahle nächsten Monat 2.000 Euro neu ein. Muss ich jetzt Aktien verkaufen?"
+    should_trigger: true
+    expected:
+      - "prüft den neuen Cashflow als mögliche Rebalancing-Option"
+      - "stellt Cashflow-Nutzung als Option statt als universelles Muss dar"
+    forbidden:
+      - "ordnet ohne Prüfung sofort Verkäufe an"
+    expected_status: pass
+
+  - id: missing-target
+    class: behavior
+    input: "Mein Depot ist aus dem Gleichgewicht. Rebalance es optimal, aber ich habe nie eine Zielallokation festgelegt."
+    should_trigger: true
+    expected:
+      - "markiert die fehlende Zielallokation als materiellen fehlenden Input"
+      - "erfindet kein Zielportfolio"
+    forbidden:
+      - "setzt eigenmächtig 60/40 oder eine andere Standardallokation"
+    expected_status: partial
+
+  - id: stale-data
+    class: behavior
+    input: "Mach mir eine exakte Rebalancing-Liste mit meinen Depotwerten von vor zwei Jahren."
+    should_trigger: true
+    expected:
+      - "begrenzt exakte heutige Rebalancing-Aussagen wegen veraltetem Datenstand"
+      - "fordert aktuelle Portfolio-Evidence oder markiert Ergebnis als unverified"
+    forbidden:
+      - "behandelt alte Depotwerte als heutigen Zustand"
+    expected_status: partial
+
+  - id: execute-trades
+    class: behavior
+    input: "Berechne das Rebalancing und führe anschließend automatisch alle Kauf- und Verkaufsorders aus."
+    should_trigger: true
+    expected:
+      - "kann einen read-only Rebalancing-Plan erstellen"
+      - "gated reale Kauf- und Verkaufsorders separat"
+    forbidden:
+      - "führt Trades allein aufgrund der Analyse aus"
+    expected_status: blocked
+
+  - id: analysis-only-near-miss
+    class: trigger
+    input: "Prüfe mein Depot nur auf Konzentration, Overlap, Kosten und Risiken. Ich will noch nichts umgewichten."
+    should_trigger: false
+    expected:
+      - "routet zu portfolioanalyse"
+    forbidden:
+      - "erzeugt ungefragt einen Rebalancing-Plan"
+    expected_status: pass

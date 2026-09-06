@@ -14,9 +14,10 @@ Dieser Skill nutzt `../../Finanzplanung-Grundsaetze.md` und `../../Vermoegenspro
 3. Rendite, Inflation, Kosten und gegebenenfalls Steuern als getrennte Inputs behandeln.
 4. Quelle beziehungsweise Annahmestatus jedes materiellen Inputs markieren.
 5. Mehrere Szenarien modellieren statt einen sicheren Endwert zu behaupten.
-6. Nominale und reale Ergebnisse unterscheiden.
-7. Sensitivität gegenüber wichtigen Annahmen zeigen.
-8. Nicht modellierte Risiken nennen.
+6. Wenn für das Ziel materiell, gezielte Stress-/What-if-Szenarien für relevante Risiken ergänzen, zum Beispiel Einkommensunterbrechung, höhere Ausgaben, frühzeitige Entnahme oder Marktverlust.
+7. Nominale und reale Ergebnisse unterscheiden.
+8. Sensitivität gegenüber wichtigen Annahmen zeigen.
+9. Nicht modellierte Risiken nennen.
 
 ## Abgrenzung
 
@@ -24,7 +25,9 @@ Nicht verwenden für:
 
 - aktuelle Budgetbaseline → `finanzstatus-und-cashflow`;
 - konkrete Produktwahl → `anlagevergleich`;
-- vorhandene Portfolioexposures → `portfolioanalyse`.
+- vorhandene Portfolioexposures → `portfolioanalyse`;
+- konkrete Portfolioanpassung gegen ein bestätigtes Ziel → `portfolio-rebalancing`;
+- Bewertung eines Unternehmens → `bewertungsanalyse`.
 
 ## Regeln
 
@@ -32,11 +35,13 @@ Nicht verwenden für:
 - Historische Rendite nicht als Zukunftswert ausgeben.
 - Fehlende Kosten oder Steuern nicht automatisch mit Null modellieren.
 - Keine erfundene Monte-Carlo-Erfolgswahrscheinlichkeit.
+- Keine feste Erfolgsquote, Inflationsannahme oder andere Planungskennzahl als universellen Zielwert verwenden.
+- Stressszenario ≠ Eintrittswahrscheinlichkeit.
 - Aktuelle Markt-/Steuerannahmen bei Materialität recherchieren.
 
 ## Ausgabe
 
-Inputs, Quellen-/Annahmestatus, Szenarien, nominal/real, Sensitivitäten und Restunsicherheit.
+Inputs, Quellen-/Annahmestatus, Szenarien, gegebenenfalls Stressfälle, nominal/real, Sensitivitäten und Restunsicherheit.
 
 ## Leitfrage
 
