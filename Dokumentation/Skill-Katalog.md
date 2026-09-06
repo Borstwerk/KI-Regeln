@@ -14,13 +14,13 @@ Der Skill-Katalog beantwortet zusätzlich:
 
 ## Aktueller Bestand
 
-Der Katalog enthält aktuell 145 zentrale Skills:
+Der Katalog enthält aktuell 148 zentrale Skills:
 
 - Arbeitsweisen: 3;
 - Agentenarbeit: 8;
 - Schreiben: 6;
 - Storyentwicklung und Fiktion: 5;
-- Finanzen: 6;
+- Finanzen: 9;
 - Bildarbeit: 4;
 - Programmieren: 4;
 - Webentwicklung: 11;
@@ -82,7 +82,7 @@ Empfohlene Werte:
 
 Maturity und Eval Coverage sind nicht identisch. Ein Skill kann viel Praxis haben und trotzdem noch unzureichende formale Evals besitzen.
 
-Aktuell besitzt `context-engineering` als bestehender `candidate` `partial` Evalabdeckung. Die ergänzten Context-Skills, alle sieben Wissensmanagement-Skills, alle fünf Schnittstellen-/Contract-Skills, alle sieben Infrastruktur-/DevOps-Skills, alle acht Reliability-/System-Observability-Skills, alle neun Data-Engineering-Skills, alle sieben Software-Architecture-/System-Design-Skills, alle acht Requirements-/Specification-Skills, alle neun Social-Media-/Content-Präsenz-Skills, alle fünf Storyentwicklung-/Fiktion-Skills, alle sechs Finanz-Skills sowie `korrekturlektorat` und `deutsche-typografie` starten beziehungsweise bleiben bewusst `experimental` mit `partial` Evalabdeckung.
+Aktuell besitzt `context-engineering` als bestehender `candidate` `partial` Evalabdeckung. Die ergänzten Context-Skills, alle sieben Wissensmanagement-Skills, alle fünf Schnittstellen-/Contract-Skills, alle sieben Infrastruktur-/DevOps-Skills, alle acht Reliability-/System-Observability-Skills, alle neun Data-Engineering-Skills, alle sieben Software-Architecture-/System-Design-Skills, alle acht Requirements-/Specification-Skills, alle neun Social-Media-/Content-Präsenz-Skills, alle fünf Storyentwicklung-/Fiktion-Skills, alle neun Finanz-Skills sowie `korrekturlektorat` und `deutsche-typografie` starten beziehungsweise bleiben bewusst `experimental` mit `partial` Evalabdeckung.
 
 Für Reliability sind sechs Startfälle je Skill definiert, insgesamt 48. Der erste Same-Model-Smoke-Lauf wurde am 2026-08-24 ausgeführt; das ersetzt keinen unabhängigen verblindeten Benchmark und rechtfertigt allein keine Hochstufung.
 
@@ -112,7 +112,9 @@ Der danach ergänzte Langprosa-Signaturfall erweitert den bestehenden `stilrevie
 
 Schreibkorrektur ergänzt zwei neue Skills – `korrekturlektorat` und `deutsche-typografie` – jeweils als `experimental` mit `partial` Evalabdeckung. Dafür sind zwei Evalpacks mit jeweils acht Startfällen definiert, insgesamt 16. Diese Fälle sind **definiert, aber nicht als Behavioral Evals ausgeführt oder bestanden**. Korrekturlektorat, Stilreview, Rewrite und Typografie bleiben bewusst getrennte Qualitätsachsen.
 
-Aktueller Gesamtstand: 145 Skills, davon 120× `partial` und 25× `none`, 0× `core`/`broad`; 120 Skill-Evalpacks mit insgesamt 622 definierten Cases.
+Der vertiefte Anthropic-Finance-Upstream-Audit ergänzt drei weitere Finance-Skills – `portfolio-rebalancing`, `unternehmensanalyse` und `bewertungsanalyse` – jeweils als `experimental` mit `partial` Evalabdeckung. Dafür sind drei Evalpacks mit jeweils sechs Startfällen definiert, insgesamt 18. Diese Fälle sind **definiert, aber nicht als Behavioral Evals ausgeführt oder bestanden**. `investmentthese` wird bewusst nicht als eigener Skill ergänzt; Falsifizierbarkeit und disconfirming Evidence bleiben zunächst Modus der `unternehmensanalyse`, bis persistentes Thesis-Tracking als eigenständiger wiederkehrender Job belegt ist.
+
+Aktueller Gesamtstand: 148 Skills, davon 123× `partial` und 25× `none`, 0× `core`/`broad`; 123 Skill-Evalpacks mit insgesamt 640 definierten Cases.
 
 ## Hardening Phase 2 – Eval Coverage
 
@@ -218,7 +220,7 @@ Für Social-Media-/Content-Präsenz-Skills sollte zusätzlich an realen Content-
 
 Für Storyentwicklung-/Fiktion-Skills sollte zusätzlich an realen Erzählprojekten geprüft werden, ob Kanon und Planung getrennt bleiben, Figurenwissen und Zustände über längere Strecken korrekt fortgeführt, Storymodelle nicht mechanisch erzwungen, Worldbuilding-Folgen plausibel berücksichtigt und Kontinuitätsfindings ohne ungefragte Retcons erkannt werden. Eine vollständige Story-Bible oder definierte Evalcases allein reichen nicht für eine Hochstufung.
 
-Für Finanz-Skills sollte zusätzlich an realen, kontrollierten Finanzplanungs- und Analysefällen geprüft werden, ob fehlende Daten nicht erfunden, Renditeannahmen als Annahmen markiert, aktuelle Produkt-/Steuerdaten frisch belegt, Risiko/Kosten/Liquidität gemeinsam berücksichtigt und externe Finanzaktionen zuverlässig gegatet werden. Ein plausibles Rechenbeispiel, ein vollständiger Plan oder definierte Evalcases allein reichen nicht für eine Hochstufung.
+Für Finanz-Skills sollte zusätzlich an realen, kontrollierten Finanzplanungs- und Analysefällen geprüft werden, ob fehlende Daten nicht erfunden, Rendite-/Bewertungsannahmen als Annahmen markiert, aktuelle Produkt-/Unternehmens-/Steuerdaten frisch belegt, Risiko/Kosten/Liquidität gemeinsam berücksichtigt, Rebalancing nur gegen bestätigte Ziele erfolgt, Peer-Auswahl und Bewertungs-Sensitivitäten nachvollziehbar bleiben und externe Finanzaktionen zuverlässig gegatet werden. Ein plausibles Rechenbeispiel, ein vollständiger Plan, eine präzise Fair-Value-Zahl oder definierte Evalcases allein reichen nicht für eine Hochstufung.
 
 Für `korrekturlektorat` und `deutsche-typografie` sollte zusätzlich an realen Texten verschiedener Register und Formate geprüft werden, ob echte Fehler zuverlässig von zulässigen Varianten und Stilpräferenzen getrennt, DE-/AT-/CH-Konventionen respektiert, geschützte technische Tokens erhalten und typografische Änderungen markup-sicher durchgeführt werden. Ein grüner Checker-Lauf oder definierte Evalcases allein reichen nicht für eine Hochstufung.
 
