@@ -9,6 +9,17 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
 
+### Inhaltsprovenienz und Metadatenhygiene
+
+- Sicherheit um zwei klar getrennte Skills ergänzt: `inhaltsprovenienz-review` prüft Dateien und Inhalte read-only auf belegbare Provenienz-, Metadaten- und Unicode-Signale; `metadaten-hygiene` bereinigt ausschließlich eigene oder ausdrücklich autorisierte Artefakte innerhalb eines konkreten Remove-/Keep-Scopes;
+- gemeinsame Fachgrundlage `Sicherheit/Inhaltsprovenienz-und-Metadatenhygiene.md` und Workflow `Workflows/Inhaltsprovenienz-und-Metadatenhygiene.md` ergänzt; Grundmuster ist Inspect → Evidence/Confidence → Erhaltungspflichten → optionales Change Set → Gate → Clean → Re-Inspection → Residual Risk;
+- `guillaumemeyer/watermarks-remover` am Repository-Commit `d9e9590d94e19b39eb2794266292324bfec8249a` mit MIT-Lizenz als aktiv beobachtete methodische Referenz aufgenommen; konkrete `remove-ai-marks`- und Ethics-Artefakte sind per Blob-SHA in Upstream-Registry und Provenance dokumentiert, ohne Runtime-, Plugin-, Service- oder Sync-Abhängigkeit;
+- bewusst nicht übernommen: Detector-Evasion und „human score“-Optimierung, statistische Rewrite-Rezepte zur Watermark-Reduktion, Watermark-Stealing, Secret-Key-Rekonstruktion, destructive Pixel-/Audio-/Video-Purification als allgemeine Fähigkeit sowie das Entfernen verpflichtender Attribution-, Provenienz- oder Disclosure-Signale;
+- Unicode-Hygiene gegen False Positives geschärft: ungewöhnliche Spaces, Bidi-, Zero-width- oder andere Unicode-Zeichen sind nicht automatisch Watermarks; aggressive Normalisierung benötigt konkreten Zweck und Nebenwirkungsprüfung;
+- zwei neue Evalpacks mit jeweils sechs Startfällen ergänzt, insgesamt 12 definierte Cases zu read-only Provenienzprüfung, unsupported Markerklassen, Unicode-False-Positives, GPS-/Privacy-Hygiene, verpflichtender Attribution, sichtbaren Watermark-Near-Misses, Detector-Evasion und Residual Risk; diese Fälle sind **definiert, aber nicht als Behavioral Evals ausgeführt oder bestanden**;
+- aktueller Gesamtstand damit 150 Skills, 125× `partial`, 25× `none`, 0× `core`/`broad`, 125 Skill-Evalpacks und 652 definierte Cases; keine Maturity hochgestuft, keine Behavioral-Eval-Ergebnisse erfunden und kein Tag oder Release erzeugt.
+
+
 ### Vertiefter Anthropic-Finance-Upstream-Audit
 
 - `anthropics/financial-services` am 2026-09-06 bis zum geprüften Commit `69cbc81467a5dced793eee03dec4658aa24ef856` vertieft als Apache-2.0-lizenzierter methodischer Referenzraum auditiert; Anthropic dient als Methodenquelle, nicht als Copy/Paste-, Runtime- oder automatische Sync-Abhängigkeit;
