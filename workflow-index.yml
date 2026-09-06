@@ -21,6 +21,7 @@ workflows:
   - Workflows/Editorialplan-und-Content-Produktion.md
   - Workflows/Evolutionaere-Architekturaenderung.md
   - Workflows/Infrastruktur-Aenderung.md
+  - Workflows/Inhaltsprovenienz-und-Metadatenhygiene.md
   - Workflows/Long-Horizon-Agentenarbeit.md
   - Workflows/Neue-Datenquelle-und-Ingestion.md
   - Workflows/Operational-Readiness-Review.md

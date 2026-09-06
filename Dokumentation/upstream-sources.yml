@@ -1,5 +1,5 @@
 schema_version: 2
-last_updated: '2026-09-01'
+last_updated: '2026-09-06'
 
 # Mutable external sources whose changes may affect local rules or skills.
 # A changed upstream is a review signal, never an automatic sync instruction.
@@ -13,6 +13,41 @@ last_updated: '2026-09-01'
 #   quarterly       -> check when a quarterly review is due
 
 sources:
+  # ---------------------------------------------------------------------------
+  # Sicherheit / Inhaltsprovenienz und Metadatenhygiene
+  # ---------------------------------------------------------------------------
+  - id: guillaumemeyer-watermarks-remover-remove-ai-marks
+    area: Sicherheit
+    kind: github-file
+    repository: guillaumemeyer/watermarks-remover
+    path: skills/remove-ai-marks/SKILL.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: 41193a86405589e542205bbfaa76414569e4dbae
+    last_checked: 2026-09-06
+    local_impact:
+      - Sicherheit/Inhaltsprovenienz-und-Metadatenhygiene.md
+      - Sicherheit/Skills/inhaltsprovenienz-review/SKILL.md
+      - Sicherheit/Skills/metadaten-hygiene/SKILL.md
+      - Workflows/Inhaltsprovenienz-und-Metadatenhygiene.md
+
+  - id: guillaumemeyer-watermarks-remover-ethics
+    area: Sicherheit
+    kind: github-file
+    repository: guillaumemeyer/watermarks-remover
+    path: skills/remove-ai-marks/references/ethics.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: 7506562f2d37748fc5129ea89760dfe2c7c27cc4
+    last_checked: 2026-09-06
+    local_impact:
+      - Sicherheit/Inhaltsprovenienz-und-Metadatenhygiene.md
+      - Sicherheit/Skills/inhaltsprovenienz-review/SKILL.md
+      - Sicherheit/Skills/metadaten-hygiene/SKILL.md
+      - Sicherheit/Quellen-und-Inspirationen.md
+
   # ---------------------------------------------------------------------------
   # Grundlagen / Mensch-KI
   # ---------------------------------------------------------------------------

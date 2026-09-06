@@ -65,6 +65,7 @@ Die allgemeinen Regeln helfen beim **Wie**. Das konkrete Projekt bestimmt weiter
 | eine Datenbanktabelle oder andere technische Artefakte dokumentieren | Dokumentationserstellung + zuständiger Fachbereich |
 | Anforderungen klären und spezifizieren | Requirements und Spezifikations-Engineering |
 | Wissen langfristig strukturieren und pflegen | Wissensmanagement |
+| Datei auf Provenienz-/Metadatensignale prüfen oder eigene Sharing-Kopie gezielt von sensiblen Metadaten bereinigen | Sicherheit |
 | Datenpipelines, Architektur, Infrastruktur oder Reliability bearbeiten | jeweiliger technischer Fachbereich |
 
 Diese Tabelle ist Orientierung, keine starre Routingmatrix. Ein reales Problem kann mehrere Bereiche berühren, und manchmal ist gar kein spezieller Skill nötig.

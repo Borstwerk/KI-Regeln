@@ -14,7 +14,7 @@ Der Skill-Katalog beantwortet zusätzlich:
 
 ## Aktueller Bestand
 
-Der Katalog enthält aktuell 148 zentrale Skills:
+Der Katalog enthält aktuell 150 zentrale Skills:
 
 - Arbeitsweisen: 3;
 - Agentenarbeit: 8;
@@ -35,7 +35,7 @@ Der Katalog enthält aktuell 148 zentrale Skills:
 - Social Media und Content-Präsenz: 9;
 - Dokumentationserstellung: 10;
 - Skill Engineering: 2;
-- Sicherheit: 3;
+- Sicherheit: 5;
 - Datenbanken: 7;
 - Testing und QA: 9.
 
@@ -82,7 +82,7 @@ Empfohlene Werte:
 
 Maturity und Eval Coverage sind nicht identisch. Ein Skill kann viel Praxis haben und trotzdem noch unzureichende formale Evals besitzen.
 
-Aktuell besitzt `context-engineering` als bestehender `candidate` `partial` Evalabdeckung. Die ergänzten Context-Skills, alle sieben Wissensmanagement-Skills, alle fünf Schnittstellen-/Contract-Skills, alle sieben Infrastruktur-/DevOps-Skills, alle acht Reliability-/System-Observability-Skills, alle neun Data-Engineering-Skills, alle sieben Software-Architecture-/System-Design-Skills, alle acht Requirements-/Specification-Skills, alle neun Social-Media-/Content-Präsenz-Skills, alle fünf Storyentwicklung-/Fiktion-Skills, alle neun Finanz-Skills sowie `korrekturlektorat` und `deutsche-typografie` starten beziehungsweise bleiben bewusst `experimental` mit `partial` Evalabdeckung.
+Aktuell besitzt `context-engineering` als bestehender `candidate` `partial` Evalabdeckung. Die ergänzten Context-Skills, alle sieben Wissensmanagement-Skills, alle fünf Schnittstellen-/Contract-Skills, alle sieben Infrastruktur-/DevOps-Skills, alle acht Reliability-/System-Observability-Skills, alle neun Data-Engineering-Skills, alle sieben Software-Architecture-/System-Design-Skills, alle acht Requirements-/Specification-Skills, alle neun Social-Media-/Content-Präsenz-Skills, alle fünf Storyentwicklung-/Fiktion-Skills, alle neun Finanz-Skills, die beiden neuen Security-Skills sowie `korrekturlektorat` und `deutsche-typografie` starten beziehungsweise bleiben bewusst `experimental` mit `partial` Evalabdeckung.
 
 Für Reliability sind sechs Startfälle je Skill definiert, insgesamt 48. Der erste Same-Model-Smoke-Lauf wurde am 2026-08-24 ausgeführt; das ersetzt keinen unabhängigen verblindeten Benchmark und rechtfertigt allein keine Hochstufung.
 
@@ -114,7 +114,9 @@ Schreibkorrektur ergänzt zwei neue Skills – `korrekturlektorat` und `deutsche
 
 Der vertiefte Anthropic-Finance-Upstream-Audit ergänzt drei weitere Finance-Skills – `portfolio-rebalancing`, `unternehmensanalyse` und `bewertungsanalyse` – jeweils als `experimental` mit `partial` Evalabdeckung. Dafür sind drei Evalpacks mit jeweils sechs Startfällen definiert, insgesamt 18. Diese Fälle sind **definiert, aber nicht als Behavioral Evals ausgeführt oder bestanden**. `investmentthese` wird bewusst nicht als eigener Skill ergänzt; Falsifizierbarkeit und disconfirming Evidence bleiben zunächst Modus der `unternehmensanalyse`, bis persistentes Thesis-Tracking als eigenständiger wiederkehrender Job belegt ist.
 
-Aktueller Gesamtstand: 148 Skills, davon 123× `partial` und 25× `none`, 0× `core`/`broad`; 123 Skill-Evalpacks mit insgesamt 640 definierten Cases.
+Der Inhaltsprovenienz-/Metadatenhygiene-Hardening-Lauf ergänzt im Bereich Sicherheit zwei neue Skills – `inhaltsprovenienz-review` und `metadaten-hygiene` – jeweils als `experimental` mit `partial` Evalabdeckung. Dafür sind zwei Evalpacks mit jeweils sechs Startfällen definiert, insgesamt 12. Diese Fälle sind **definiert, aber nicht als Behavioral Evals ausgeführt oder bestanden**. Detector-Evasion, Watermark-Stealing und die Verschleierung verpflichtender Provenienz oder Disclosure bleiben ausdrücklich außerhalb des lokalen Produktziels.
+
+Aktueller Gesamtstand: 150 Skills, davon 125× `partial` und 25× `none`, 0× `core`/`broad`; 125 Skill-Evalpacks mit insgesamt 652 definierten Cases.
 
 ## Hardening Phase 2 – Eval Coverage
 

@@ -38,6 +38,8 @@ Nicht vom Werkzeugnamen ausgehen, sondern von der zu erledigenden Arbeit.
 | „Dokumentiere diese Datenbanktabelle.“ | Dokumentationserstellung + Datenbanken |
 | „Kläre, was dieses Feature eigentlich können soll.“ | Requirements und Spezifikations-Engineering |
 | „Baue eine langfristig nutzbare Wissensbasis.“ | Wissensmanagement |
+| „Welche Provenienz-, Geräte- oder Bearbeitungshinweise stecken in dieser Datei?“ | Sicherheit → `inhaltsprovenienz-review` |
+| „Erstelle aus meiner Datei eine Sharing-Kopie ohne GPS- oder unnötige Autor-Metadaten.“ | Sicherheit → `metadaten-hygiene`, bei Bedarf vorher `inhaltsprovenienz-review` |
 
 Die Tabelle ist keine vollständige Routingmatrix. Ein Auftrag kann mehrere Domänen berühren; trotzdem gilt: **so wenig Werkzeuge wie möglich, so viele wie nötig**.
 

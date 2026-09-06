@@ -22,6 +22,7 @@ Besonderer methodischer Einfluss stammt unter anderem aus Arbeiten und Ökosyste
 - PostgreSQL sowie veröffentlichte Datenbank- und Migrationsdokumentation;
 - ISTQB, Playwright, Pact und Testcontainers für Test- und QA-Perspektiven;
 - OWASP für Security- und Agentic-Risk-Modelle;
+- `guillaumemeyer/watermarks-remover` als methodischen Referenzraum für Inspect-first, Provenienzklassen, Metadaten-/Unicode-Hygiene, Capability Detection und Before/After-Evidence; Detector-Evasion, Watermark-Stealing, destructive Purification und das Verschleiern verpflichtender Provenienz/Disclosure werden nicht als lokale Produktlogik übernommen;
 - Apache Airflow, Beam und Kafka, OpenLineage sowie Data-Contract-Arbeiten für Data Engineering;
 - C4, arc42 und ATAM für Architektur- und Trade-off-Perspektiven;
 - IREB und NASA-System-Engineering-Material für Requirements Engineering;
