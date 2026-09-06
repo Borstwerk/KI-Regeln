@@ -1,0 +1,37 @@
+name: Provenance hygiene final validation
+
+on:
+  push:
+    branches:
+      - hardening/content-provenance-watermarks-upstream
+
+permissions:
+  contents: write
+
+jobs:
+  validate:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          ref: hardening/content-provenance-watermarks-upstream
+          fetch-depth: 0
+
+      - name: Remove one-shot workflow from final tree
+        run: rm -f .github/workflows/provenance-hygiene-final-validation.yml
+
+      - name: Install validator dependencies
+        run: python -m pip install --disable-pip-version-check PyYAML==6.0.2 jsonschema==4.25.1
+
+      - name: Validate final repository tree
+        run: python tools/repo_validator.py
+
+      - name: Commit validated final tree
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Validate provenance hygiene final tree"
+          git push origin HEAD:hardening/content-provenance-watermarks-upstream
