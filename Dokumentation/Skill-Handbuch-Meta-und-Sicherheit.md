@@ -52,13 +52,33 @@ Diese Ergänzung erklärt die Meta- und Security-Skills in verständlicher Form.
 
 **Typisches Ergebnis:** Capability-Matrix mit Purpose, minimalen Rechten, Fallback und Gate.
 
+## `inhaltsprovenienz-review`
+
+**Kurz gesagt:** Prüft eine konkrete Datei oder einen Inhalt read-only auf belegbare Provenienz- und Metadatensignale.
+
+**Sinnvoll bei:** C2PA/Content Credentials, EXIF/XMP, Dokumenteigenschaften, Generator-/Softwarefeldern, ungewöhnlichen Unicode-Artefakten oder der Frage, welche Herkunftshinweise tatsächlich im Artefakt stecken.
+
+**Nicht dafür:** Marker zu entfernen, menschliche Urheberschaft zu beweisen oder Detector-Scores zu optimieren.
+
+**Typisches Ergebnis:** Befunde nach Evidence-Klasse, Confidence, False-Positive-Grenzen, nicht prüfbare Klassen und Residual Risk.
+
+## `metadaten-hygiene`
+
+**Kurz gesagt:** Bereinigt eigene oder ausdrücklich autorisierte Dateien gezielt von unnötigen oder sensiblen Metadaten.
+
+**Sinnvoll bei:** GPS-/Geräteinformationen, unbeabsichtigten Autor-/Softwarefeldern oder anderen konkreten Privacy-/Sharing-Metadaten, nachdem Remove-/Keep-Scope und Erhaltungspflichten klar sind.
+
+**Nicht dafür:** sichtbare Fremd-Watermarks, Detector-Evasion, statistische Text-Watermark-Zerstörung oder das Entfernen verpflichtender Attribution/Disclosure.
+
+**Typisches Ergebnis:** begrenztes Change Set, bereinigte Kopie soweit möglich, Re-Inspection und Residual-Risk-Bericht.
+
 ## Auswahlhilfe
 
 ```text
 Neuen Skill bauen
 → skill-authoring
 
-Bestehenden Skill fachlich/metodisch prüfen
+Bestehenden Skill fachlich/methodisch prüfen
 → skill-review
 
 Skill auf Sicherheitsrisiken prüfen
@@ -69,7 +89,16 @@ Verdächtige externe Instruktion analysieren
 
 Tool-/Berechtigungsmodell prüfen
 → tool-permission-review
+
+Welche Provenienz-/Metadatensignale stecken in dieser Datei?
+→ inhaltsprovenienz-review
+
+Eigene/autorisierte Datei gezielt für Privacy/Sharing bereinigen
+→ erst bei Bedarf inhaltsprovenienz-review
+→ metadaten-hygiene
 ```
+
+Bei kombiniertem Review + Clean ist `Workflows/Inhaltsprovenienz-und-Metadatenhygiene.md` der bevorzugte Ablauf.
 
 ## Zusammenspiel
 
@@ -82,3 +111,15 @@ skill-authoring
 → bei relevanten Capabilities skill-security-review
 → Maturity-Entscheidung
 ```
+
+Für Datei-Provenienz gilt zusätzlich:
+
+```text
+inhaltsprovenienz-review
+→ Evidence + Grenzen
+→ autorisiertes Remove/Keep-Set
+→ metadaten-hygiene
+→ re-inspect
+```
+
+Review erweitert keine Änderungsautorisierung. Fehlende oder entfernte Metadaten sind kein Beweis für menschliche Urheberschaft oder vollständige Provenienzfreiheit.
