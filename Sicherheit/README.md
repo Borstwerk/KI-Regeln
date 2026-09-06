@@ -1,6 +1,6 @@
 # Sicherheit
 
-Dieser Bereich bündelt allgemeine Sicherheitsregeln für KI-Agenten, Skills, externe Inhalte, Tools und agentische Workflows.
+Dieser Bereich bündelt allgemeine Sicherheitsregeln für KI-Agenten, Skills, externe Inhalte, Tools, Dateien und agentische Workflows.
 
 ## Grundsatz
 
@@ -16,6 +16,7 @@ Dieser Bereich bündelt allgemeine Sicherheitsregeln für KI-Agenten, Skills, ex
 - `Sandbox-und-Isolation.md` – Schadensradius begrenzen;
 - `Externe-Aktionen-und-Bestaetigung.md` – Writes, Sends, Deploys und andere Wirkungen;
 - `Logging-Datenschutz-und-Telemetrie.md` – Beobachtbarkeit ohne unnötige Datensammlung;
+- `Inhaltsprovenienz-und-Metadatenhygiene.md` – Provenienzsignale read-only prüfen und autorisierte Metadatenbereinigung von Detector-Evasion trennen;
 - `Security-Review-fuer-Skills.md` – Sicherheitsprüfung von Skills;
 - `Quellen-und-Inspirationen.md` – externe Sicherheitsgrundlagen.
 
@@ -24,6 +25,8 @@ Dieser Bereich bündelt allgemeine Sicherheitsregeln für KI-Agenten, Skills, ex
 - `skill-security-review`
 - `prompt-injection-review`
 - `tool-permission-review`
+- `inhaltsprovenienz-review`
+- `metadaten-hygiene`
 
 ## Sicherheitsmodell
 
@@ -39,6 +42,20 @@ Auftrag
 → nachvollziehbarer Abschluss
 ```
 
+Für Datei- und Inhaltsprovenienz gilt zusätzlich:
+
+```text
+Artefakt
+→ inspect
+→ Evidence + Grenzen
+→ optional autorisiertes Remove/Keep-Set
+→ Änderung
+→ re-inspect
+→ Residual Risk
+```
+
+Review autorisiert keine Entfernung. Entfernte Metadaten beweisen keine vollständige Herkunftslosigkeit.
+
 ## Kein Sicherheits-Theater
 
 Sicherheit bedeutet nicht, jeden Workflow durch maximale Restriktion unbrauchbar zu machen.
@@ -50,6 +67,8 @@ Ziel ist:
 - begrenzter Schadensradius;
 - nachvollziehbare Freigaben;
 - ehrliche Fallbacks.
+
+Privacy- und Datei-Hygiene sind legitime Ziele. Sie werden aber nicht zu einem allgemeinen Auftrag, verpflichtende Provenienz, Attribution oder Disclosure zu entfernen oder Detector-Evasion als Qualitätsziel zu behandeln.
 
 ## Leitgedanke
 
