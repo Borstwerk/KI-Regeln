@@ -7,7 +7,7 @@ description: Wählt für einen Agentenlauf den kleinsten ausreichenden, aktuelle
 
 Nutze `../../Context-Engineering.md`.
 
-Wenn der Kontext aus einer großen persistenten Wissensbasis stammt, zusätzlich `../../Wissensmanagement/Workflow-Grosse-Wissensbasen.md` verwenden.
+Wenn der Kontext aus einer großen persistenten Wissensbasis stammt, zusätzlich `../../../Wissensmanagement/Workflow-Grosse-Wissensbasen.md` verwenden.
 
 ## Verwenden wenn
 
