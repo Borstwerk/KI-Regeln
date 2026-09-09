@@ -48,6 +48,21 @@ Quelle / Erfahrung
 → archivieren oder ersetzen
 ```
 
+## Große Wissensbasen und aktiver Kontext
+
+Die Größe der persistenten Wissensbasis soll nicht automatisch die Größe des aktiven Agentenkontexts bestimmen.
+
+Für große Basen gilt deshalb der Workflow aus `Workflow-Grosse-Wissensbasen.md`:
+
+```text
+Index / MOC / Metadaten / Summary
+→ relevante Wissenseinheiten
+→ kleinstes ausreichendes Kontextpaket
+→ Detail / Raw Source nur just-in-time
+```
+
+Der Workflow verbindet insbesondere `knowledge-query` mit `context-engineering` und nutzt bei Bedarf `knowledge-distill`, `context-audit` und `context-compaction`.
+
 ## Qualitätsachsen
 
 Eine Wissensbasis wird unter anderem geprüft auf:
@@ -74,6 +89,7 @@ Eine Wissensbasis wird unter anderem geprüft auf:
 - `Widersprueche-Unsicherheit-und-Confidence.md`
 - `Aktualitaet-Staleness-und-Lifecycle.md`
 - `Retrieval-Findability-und-Wissensabfrage.md`
+- `Workflow-Grosse-Wissensbasen.md`
 - `Qualitaet-Dubletten-Orphans-und-Drift.md`
 - `Datenschutz-und-sensitives-Wissen.md`
 - `Quellen-und-Inspirationen.md`
