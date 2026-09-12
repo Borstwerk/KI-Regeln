@@ -37,6 +37,30 @@ Was gehört ausdrücklich zum Auftrag und was nicht?
 - ausgeschlossene Bereiche;
 - unveränderliche Verträge oder Invarianten.
 
+### Instruktionen klar und operational formulieren
+
+Instruktionen sollen bevorzugt beschreiben, **was konkret getan werden soll**, welcher Scope gilt und woran das Ergebnis erkennbar ist.
+
+Bevorzugt:
+
+> Bearbeite ausschließlich `src/import/` und die zugehörigen Tests. Erhalte den bestehenden Dateivertrag. Liefere einen grünen Import-Test und den Diff der geänderten Dateien.
+
+Weniger robust:
+
+> Ändere nichts Falsches, fasse keine anderen Sachen an, mache es nicht zu groß und vergiss die Tests nicht.
+
+Regeln dafür:
+
+- positive, konkrete Handlungsanweisungen bevorzugen;
+- Scope möglichst direkt durch erlaubte Bereiche beschreiben;
+- beobachtbare Ziele und Akzeptanzbedingungen nennen;
+- echte Verbote und Nicht-Scope weiterhin ausdrücklich benennen, wenn ihr Weglassen ein relevantes Risiko erzeugt;
+- lange Verbotslisten vermeiden, wenn dieselbe Grenze kürzer durch einen positiven Scope ausdrückbar ist;
+- Verstärkungswörter wie `CRITICAL`, `MUST` oder wiederholte Warnungen nicht als Ersatz für Präzision verwenden;
+- eine Rolle oder Persona kann Kontext geben, ersetzt aber niemals Ziel, Scope, Sources of Truth und Akzeptanzbedingungen.
+
+Positive Formulierung ist kein Dogma. Sicherheitsgrenzen, irreversible Aktionen, Datenschutzgrenzen oder ausdrücklich ausgeschlossene Bereiche dürfen und sollen klar als Verbot formuliert werden.
+
 ### Quellen der Wahrheit
 
 Welche Dokumente, Anforderungen, Entscheidungen, Tests oder Schnittstellen sind verbindlich?
@@ -54,6 +78,8 @@ Beispiele:
 - Tests ausführen;
 - neue Abhängigkeiten nur nach Freigabe;
 - kein Push, Merge, Release oder Produktionszugriff.
+
+Wenn eine Grenze nur als Promptregel existiert, obwohl ein Verstoß kritisch wäre, prüfen, ob der Harness sie durch Verification oder Enforcement absichern kann. Siehe `Harness-Engineering.md`.
 
 ### Erwartetes Ergebnis
 
@@ -161,12 +187,14 @@ Der nächste Knoten soll nicht die komplette Denkgeschichte des vorherigen Agent
 Vor einer Delegation prüfen:
 
 1. Ist das Ziel beobachtbar statt nur allgemein formuliert?
-2. Sind Scope und Nicht-Scope erkennbar?
-3. Sind Quellen der Wahrheit genannt?
-4. Sind Rechte und verbotene Aktionen klar?
-5. Ist definiert, welcher Nachweis zurückkommen soll?
-6. Gibt es Stop- und Eskalationsbedingungen?
-7. Ist klar, wer oder was das Ergebnis anschließend abnimmt?
+2. Ist der Auftrag möglichst positiv, konkret und operational formuliert?
+3. Sind Scope und Nicht-Scope erkennbar, ohne unnötigen Verbotsfriedhof?
+4. Sind Quellen der Wahrheit genannt?
+5. Sind Rechte und verbotene Aktionen klar?
+6. Liegen kritische Grenzen nur als Textregel vor, obwohl Verification oder Enforcement möglich wären?
+7. Ist definiert, welcher Nachweis zurückkommen soll?
+8. Gibt es Stop- und Eskalationsbedingungen?
+9. Ist klar, wer oder was das Ergebnis anschließend abnimmt?
 
 Nach der Delegation prüfen:
 
