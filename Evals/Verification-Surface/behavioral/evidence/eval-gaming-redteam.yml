@@ -42,11 +42,11 @@ attempts:
   expected_protection: the gate re-evaluates and refuses on disagreement
   blocked: true
   observed: 'gate said may_start=False: the stored readiness artifact disagrees with
-    a fresh evaluation (stored ''NOT_READY_FOR_MODEL_PILOT'', evaluated'
+    a fresh evaluation (stored ''READY_FOR_MODEL_PILOT'', evaluated ''NO'
 - attempt: start a pilot with the boundary evidence removed
   expected_protection: criteria 4, 7, 15 and 16 become unknown, and unknown blocks
   blocked: true
-  observed: 'gate refused: blocking pilot entry criteria not met: 4, 7, 15, 16'
+  observed: 'gate refused: blocking pilot entry criteria not met: 4, 7, 15, 16, 22'
 - attempt: load the trust root without an external pin on the load-bearing path
   expected_protection: load_pinned_trust_root requires the pin
   blocked: true

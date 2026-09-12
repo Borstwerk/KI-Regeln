@@ -21,9 +21,13 @@ from typing import Any, Callable, Mapping
 import yaml
 
 try:
-    from .b2_model_confinement import confined_model_invocation
+    from .b2_model_confinement import (
+        VIEW_MCP_CONFIG, confined_model_invocation, confinement_facts, invocation_evidence,
+    )
 except ImportError:  # direct script sibling import
-    from b2_model_confinement import confined_model_invocation
+    from b2_model_confinement import (
+        VIEW_MCP_CONFIG, confined_model_invocation, confinement_facts, invocation_evidence,
+    )
 
 VERSION = "0.2.1"
 RUNNER_TYPE = "claude-code"
@@ -528,9 +532,24 @@ def _argv(binary: str, model: str, prompt: str, session: str, caps: Mapping[str,
     if caps.get("no_session_persistence"):
         argv.append("--no-session-persistence"); normalized.append("--no-session-persistence")
     if caps.get("mcp_config"):
-        argv += ["--mcp-config", str(empty_mcp)]; normalized += ["--mcp-config", "<ephemeral-empty-mcp-config>"]
+        # A writable run executes inside a namespace view that deliberately carries no host
+        # temp tree, so a host path here would name a file the started process cannot open.
+        # The empty configuration therefore gets a read-only view of its own and is passed by
+        # its in-view path. The inline-JSON form the help text offers was not taken: no
+        # model-free invocation of the installed CLI parses `--mcp-config`, so accepting a
+        # string would have rested on the documentation rather than on a measurement, while a
+        # file path in the view is directly observable.
+        mcp_value = VIEW_MCP_CONFIG if writable else str(empty_mcp)
+        argv += ["--mcp-config", mcp_value]
+        normalized += ["--mcp-config",
+                       "<view-local-empty-mcp-config>" if writable else "<ephemeral-empty-mcp-config>"]
         if caps.get("strict_mcp_config"):
             argv.append("--strict-mcp-config"); normalized.append("--strict-mcp-config")
+        elif writable:
+            raise AdapterError(
+                "this Claude Code build does not offer --strict-mcp-config; a writable B2 run "
+                "requires it so that no MCP server outside the empty inline configuration loads"
+            )
     if caps.get("system_prompt"):
         prompt_text = B2_SYSTEM_PROMPT if writable else SYSTEM_PROMPT
         argv += ["--system-prompt", prompt_text]
@@ -540,6 +559,7 @@ def _argv(binary: str, model: str, prompt: str, session: str, caps: Mapping[str,
         "explicit_session_id": bool(caps.get("session_id")),
         "session_persistence_disabled_by_flag": bool(caps.get("no_session_persistence")),
         "empty_mcp_config_requested": bool(caps.get("mcp_config")),
+        "empty_mcp_config_view_local": bool(caps.get("mcp_config") and writable),
         "strict_mcp_config_requested": bool(caps.get("mcp_config") and caps.get("strict_mcp_config")),
         "controlled_system_prompt_requested": bool(caps.get("system_prompt")),
         "bare_requested": False, "bare_capability_available": bool(caps.get("bare")),
@@ -804,7 +824,7 @@ def _fresh_context(controls: Mapping[str, Any], stream: Mapping[str, Any], manag
     return result, report
 
 
-def _preimages(model: str, stream: Mapping[str, Any], probe: Mapping[str, Any], controls: Mapping[str, Any], env: Mapping[str, Any], read_only: bool, managed: Mapping[str, Any], fresh: Mapping[str, Any], tool_policy: Mapping[str, Any] | None = None):
+def _preimages(model: str, stream: Mapping[str, Any], probe: Mapping[str, Any], controls: Mapping[str, Any], env: Mapping[str, Any], read_only: bool, managed: Mapping[str, Any], fresh: Mapping[str, Any], tool_policy: Mapping[str, Any] | None = None, confinement: Mapping[str, Any] | None = None):
     model_pre = {
         "schema_version": 1, "provider": env["provider"], "requested_model": model, "observed_model": stream["observed_model"],
         "effort_or_thinking_mode": _generation(env["policy"], "CLAUDE_EFFORT"),
@@ -852,7 +872,15 @@ def _preimages(model: str, stream: Mapping[str, Any], probe: Mapping[str, Any], 
             "hook_events_observable": controls["hook_events_observable"],
         },
         "fresh_context_assessment": dict(fresh),
-        "filesystem_isolation": {"ephemeral_package_copy": True, "task_files_read_only_requested": read_only, "restricted_mode_requested": controls["restricted_requested"], "os_or_container_sandbox": False},
+        # `os_or_container_sandbox` answers a question about this run, so it is derived from
+        # the measured confinement rather than from a constant. A writable run that reached
+        # the artifacts did establish an OS namespace view; a read-only run did not, and the
+        # field stays false there -- which keeps the read-only fingerprint unchanged.
+        "filesystem_isolation": {
+            "ephemeral_package_copy": True, "task_files_read_only_requested": read_only,
+            "restricted_mode_requested": controls["restricted_requested"],
+            "os_or_container_sandbox": bool(confinement and confinement.get("established")),
+        },
         "network_policy": {
             "task_external_network_disabled_intended": True, "provider_transport_required": True,
             "os_level_egress_enforcement": False,
@@ -862,10 +890,14 @@ def _preimages(model: str, stream: Mapping[str, Any], probe: Mapping[str, Any], 
         },
         "treatment_package_difference_excluded": True,
     }
+    if confinement is not None:
+        # Present only for a confined run, so a run without the outer view cannot produce
+        # this fingerprint -- and a read-only run's fingerprint is untouched by the addition.
+        runtime_pre["model_process_confinement"] = dict(confinement)
     return model_pre, runtime_pre
 
 
-def _evidence(probe, argv, model, requested_session, stream, env, controls, stdout, stderr, started, finished, reads, read_only, managed, fresh, tool_policy=None):
+def _evidence(probe, argv, model, requested_session, stream, env, controls, stdout, stderr, started, finished, reads, read_only, managed, fresh, tool_policy=None, confinement=None, outer_invocation=None):
     tools = stream["observed_tools"]
     policy = tool_policy or effective_tool_policy(False)
     # Against the visible tools, never against the permission rules: the runtime reports
@@ -899,12 +931,21 @@ def _evidence(probe, argv, model, requested_session, stream, env, controls, stdo
         },
         "fresh_context_assessment": dict(fresh),
         "process": {
+            # `argv` is the inner Claude command. For a confined run that is not the process
+            # that was started, so the outer invocation is bound alongside it -- normalized,
+            # with the assembly script hashed and the launcher environment reduced to names,
+            # so nothing about the confinement is persisted as a credential or a host path.
             "argv": argv, "started_at": started, "finished_at": finished, "stdout_sha256": _hash_text(stdout),
             "stderr_sha256": _hash_text(stderr), "stdout_line_count": len(stdout.splitlines()), "stderr_line_count": len(stderr.splitlines()),
             "raw_stdout_persisted": False, "raw_stderr_persisted": False,
         },
         "capability_probe": probe,
     }
+    if confinement is not None:
+        base["process"]["layer"] = "confined-outer-process"
+        base["process"]["model_process_confinement"] = dict(confinement)
+        base["process"]["outer_invocation"] = dict(outer_invocation or {})
+        base["configured"]["model_process_confinement"] = dict(confinement)
     items = [base]
     for i, row in enumerate(reads, 1):
         items.append({
@@ -915,7 +956,7 @@ def _evidence(probe, argv, model, requested_session, stream, env, controls, stdo
     return {"schema_version": 1, "observability": {"evidence_complete": True, "claims_complete": True}, "evidence": items, "claims": []}
 
 
-def _method(response_id, stream, actions, outside, controls, model_fp, runtime_fp, fresh_context, tool_policy=None):
+def _method(response_id, stream, actions, outside, controls, model_fp, runtime_fp, fresh_context, tool_policy=None, confinement=None):
     tools, mcp = stream["observed_tools"], stream["observed_mcp_servers"]
     names = set(tools) if isinstance(tools, list) else set()
     external_action = any(x.get("executed") is True and "external" in set(x.get("action_class") or []) for x in actions["actions"])
@@ -951,6 +992,7 @@ def _method(response_id, stream, actions, outside, controls, model_fp, runtime_f
         "requested_permission_mode": policy["permission_mode"],
         "repository_access_disabled": True if restricted_file_boundary else UNKNOWN,
         "package_only_access": False if (outside["executed"] or external_action) else True if restricted_file_boundary else UNKNOWN,
+        **({"model_process_confinement": dict(confinement)} if confinement is not None else {}),
     }
 
 
@@ -1030,24 +1072,23 @@ def execute_prepared_response(
             )
         managed = _managed_policy(claude_binary, env, task, process_runner)
         confinement: dict[str, Any] | None = None
+        outer_invocation: dict[str, Any] | None = None
         if writable_workspace:
             # The model process runs inside the boundary too. A tool policy cannot carry this:
             # Claude Code executes a class of read-only shell commands without a prompt even
             # under `dontAsk`, so `Bash(check)` was never the only reachable Bash action.
             with confined_model_invocation(argv, task_root=task, workspace=workspace, env=env,
                                            claude_binary=claude_binary) as confined:
-                confinement = {
-                    "provider": confined.provider, "confined": True,
-                    "workspace_mount": "/workspace", "launcher_mount": "/b2-bin",
-                    "trusted_runtime_mount": "/b2-runtime",
-                    "network_namespace_unshared": False,
-                    "note": ("filesystem confinement only; the model process keeps network "
-                             "access because it must reach its API"),
-                }
                 started = _now()
                 result = process_runner(confined.argv, cwd="/", env=confined.env, input_text=None)
                 finished = _now()
-                if not confined.payload_started():
+                # Read from the boundary's own setup marker, not from the fact that a context
+                # manager was entered. A run that never established the view raises below and
+                # therefore never reaches the artifacts at all; what is recorded here is the
+                # measurement, so a later reader is not taking the adapter's word for it.
+                confinement = confinement_facts(confined, payload_started=confined.payload_started())
+                outer_invocation = invocation_evidence(confined, controls["normalized_argv"])
+                if not confinement["established"]:
                     raise AdapterError(
                         "the model-process confinement was not established, so the run never "
                         f"started (exit {result.returncode}): {(result.stderr or '').strip()[-300:]}"
@@ -1074,11 +1115,11 @@ def execute_prepared_response(
         trace = _trace(execution, reads, task, mutating, finished)
         fresh_context, fresh_report = _fresh_context(controls, stream, managed, env_policy, tool_policy)
         model_pre, runtime_pre = _preimages(model, stream, probe, controls, env_evidence, read_only, managed,
-                                            fresh_report, tool_policy)
+                                            fresh_report, tool_policy, confinement)
         model_fp, runtime_fp = _hash_obj(model_pre), _hash_obj(runtime_pre)
-        evidence = _evidence(probe, argv, model, requested_session, stream, env_evidence, controls, result.stdout, result.stderr, started, finished, reads, read_only, managed, fresh_report, tool_policy)
+        evidence = _evidence(probe, argv, model, requested_session, stream, env_evidence, controls, result.stdout, result.stderr, started, finished, reads, read_only, managed, fresh_report, tool_policy, confinement, outer_invocation)
         method = _method(response_id, stream, actions, outside, controls, model_fp, runtime_fp,
-                         fresh_context, tool_policy)
+                         fresh_context, tool_policy, confinement)
         adapter_result = {
             "schema_version": 1, "runner_type": RUNNER_TYPE, "runner_model": stream["observed_model"],
             "runner_session_id": stream["observed_session_id"], "started_at": started, "finished_at": finished,

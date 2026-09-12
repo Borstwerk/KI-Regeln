@@ -1,9 +1,10 @@
 contract: verification-governance-pilot-readiness/v1
 phase: 4.2C / B2
 probe_evidence: read from the stored file
-ready: true
-status: READY_FOR_MODEL_PILOT
-blocking_unmet: []
+ready: false
+status: NOT_READY_FOR_MODEL_PILOT
+blocking_unmet:
+- 22
 criteria:
 - id: 1
   criterion: Case ground truth committed before any run, and pinned
@@ -150,4 +151,11 @@ criteria:
     every write outside /workspace is refused while /workspace is writable; the launcher
     names only in-view paths and the staged runtime carries ['b2_boundary.py', 'b2_check_launcher.py']
   evidence: b2_readiness_checks.model_process_workspace_confinement
+- id: 22
+  criterion: 'The confined model runtime is launchable: view-local argv, executable
+    runtime, working auth in the view''s own environment'
+  blocking: true
+  met: false
+  reason: authenticated_in_view failed
+  evidence: b2_readiness_checks.confined_model_runtime_launchable
 note: An infrastructure decision. It says nothing about any agent's behaviour.

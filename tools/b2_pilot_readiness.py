@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Pilot readiness evaluation and the gate that actually blocks a Phase 4.2C / B2 model run.
 
-The nineteen entry criteria in the B2 design are not a checklist someone ticks. Each one is
+The entry criteria in the B2 design are not a checklist someone ticks. Each one is
 evaluated here, most of them by running the check rather than by asserting the answer, and
 the result decides whether a model pilot may start at all.
 
@@ -95,6 +95,7 @@ def evidence_binding() -> dict[str, str]:
         "launcher_code": hash_file(ROOT / "tools/b2_check_launcher.py"),
         "oracle_code": hash_file(ROOT / "tools/b2_oracle.py"),
         "probe_code": hash_file(ROOT / "tools/b2_boundary_probes.py"),
+        "preflight_code": hash_file(ROOT / "tools/b2_launch_preflight.py"),
         "driver": hash_file(B2 / "oracle/driver.py"),
         "expectations": hash_file(B2 / "oracle/expectations.yml"),
         "platform": f"{platform.system()}-{platform.machine()}",
@@ -342,6 +343,19 @@ def _c21_model_process_workspace_confinement() -> dict[str, Any]:
     return _tri(ok, reason, "b2_readiness_checks.model_process_workspace_confinement")
 
 
+def _c22_confined_model_runtime_launchable() -> dict[str, Any]:
+    """Added by this correction, because confinement created the precondition.
+
+    Before the outer view existed, "the CLI is installed and authenticated" was a property of
+    the host and nothing more. Now the launch happens somewhere else: a different filesystem,
+    a different PATH, a fresh config directory and no host home. Measured by building the real
+    writable argv and exercising it -- paths, startup, parser, auth -- inside exactly that
+    view, with no model request.
+    """
+    ok, reason = _functional("confined_model_runtime_launchable")()
+    return _tri(ok, reason, "b2_readiness_checks.confined_model_runtime_launchable")
+
+
 def _c19_semantics_change_visible() -> dict[str, Any]:
     pins = None
     try:
@@ -378,6 +392,9 @@ CRITERIA: tuple[tuple[int, str, bool, Callable[[], dict[str, Any]]], ...] = (
      _c20_runtime_supports_locked_down_permissions),
     (21, "Model process confined to the workspace, filesystem-wise", True,
      _c21_model_process_workspace_confinement),
+    (22, "The confined model runtime is launchable: view-local argv, executable runtime, "
+     "working auth in the view's own environment", True,
+     _c22_confined_model_runtime_launchable),
 )
 
 

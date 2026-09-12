@@ -164,8 +164,12 @@ unshare(mount, pid, uts, ipc) + pivot_root        <- the model process
         `-- check -> unshare(... --net) + pivot_root   <- the agent's own check code
 ```
 
-The confinement is built into the argv the adapter hands to its own process runner, so it is
-part of what gets recorded rather than a side channel around it. The launcher now embeds
+The confinement is built into the argv the adapter hands to its own process runner, so the
+process that starts is the confined one rather than a process wrapped by a side channel. That
+by itself put nothing into the run's artifacts, and for one round it did not: the artifacts
+still described the inner Claude call, and the runtime preimage still said
+`os_or_container_sandbox: false`. What the artifacts carry is covered under
+[Confinement in the run evidence](#confinement-in-the-run-evidence). The launcher now embeds
 `/workspace` and `/b2-runtime` — in-view paths — and the trusted runtime is staged as exactly
 two files, so reading `bin/check` yields nothing about the host.
 
@@ -195,6 +199,75 @@ view, against a sentinel planted outside it:
 Criterion 21 runs exactly this probe. It is a functional measurement: nothing about it reads
 the allowlist, because the allowlist was never what decided.
 
+## Fourth-round corrections: the record, and the launch
+
+Two findings, both about the gap between doing something and being able to show
+afterwards that it was done.
+
+### Confinement in the run evidence
+
+The first version of the confinement ran the right process and then described the wrong one.
+`evidence.process.argv` held the inner Claude command, and the runtime preimage still carried
+`os_or_container_sandbox: false` — a field that was a constant, and so kept saying "no
+sandbox" about a run that had one. A reader of those artifacts could not have told a confined
+run from an unconfined one, which is the only reason the field exists.
+
+Three things now carry the measurement into the artifacts a run leaves behind:
+
+| Artifact | Field | Source |
+| --- | --- | --- |
+| `runtime-configuration-preimage.yml` | `model_process_confinement` | `confinement_facts()` |
+| `runtime-configuration-preimage.yml` | `filesystem_isolation.os_or_container_sandbox` | derived, not constant |
+| `evidence.yml` | `process.outer_invocation` | `invocation_evidence()` |
+| `method-evidence.yml` | `model_process_confinement` | `confinement_facts()` |
+
+`established` and `payload_started` both come from the boundary's own setup marker, written
+to a host descriptor immediately before `exec`. They report what happened, not that a context
+manager was entered.
+
+The outer invocation is bound as a **normalized preimage**, never verbatim. Its argv carries
+the boundary assembly script, and its launcher environment carries host temporary paths and
+may carry credentials. So the record keeps the argv *shape*, the provider, the mount contract
+and the normalized inner argv; the assembly script enters as a SHA-256; the launcher
+environment enters as variable names with no values. Nothing replayable is persisted.
+
+Because the confinement enters the runtime preimage, it enters the runtime fingerprint, and
+the fingerprint enters the method evidence. An unconfined run therefore cannot produce the
+same method evidence as a confined one — not by policy, but because the inputs differ.
+
+### The confined runtime has to be launchable
+
+Confinement created a precondition that did not exist while the process ran on the host: the
+launch has to work from *inside* the view. Three separate things were false there, and none
+of them is visible in the source or the allowlist.
+
+**Every argv path has to exist in the view.** The empty MCP configuration was written into
+the adapter's host temporary directory and passed to `--mcp-config` by host path — a path the
+confined process cannot open, because the view deliberately carries no host temp tree. It now
+has a read-only view of its own, `/b2-config/empty-mcp.json`, staged with exactly one file.
+
+The help text offers an inline-JSON form for `--mcp-config`, which would have avoided the
+mount. It was not taken: no model-free invocation of the installed CLI parses that option —
+`claude mcp list` ignores it, and everything that does parse it makes a model request — so
+accepting a string would have rested on documentation rather than on a measurement. A file
+path in the view is directly observable, and `tests` check for its presence rather than for
+its spelling.
+
+**The runtime has to be on the view's PATH.** `PATH` listed `/b2-bin` and the standard
+directories; the Claude Code runtime lives outside them and is mounted at its own host path.
+The confined launch therefore died with `env: 'claude': No such file or directory` — the
+preflight's first real finding. `view_path()` now derives the entry from the resolved binary.
+
+**Authentication has to work in the view's own environment.** The view carries no host home
+and a fresh `CLAUDE_CONFIG_DIR` under `/scratch`, so "the CLI is logged in" is a statement
+about the host, not about the launch context. `evidence/launch-preflight.yml` records
+`claude auth status` executed inside exactly that view.
+
+Criterion 22 is these three together, and one criterion rather than three on purpose: it
+expresses a single precondition — the confined runtime is launchable — and splitting it would
+let two thirds of a launch read as progress toward a pilot that still cannot start.
+
+
 ## Held-out oracle
 
 ```
@@ -215,6 +288,8 @@ input shape and nothing else. P4 confirms the separation by trying.
 | --- | --- | --- | --- |
 | execution boundary | evaluator artifacts from agent-controlled code | let a rewritten check read ground truth or write outside | P1, P2, P5, `BoundaryAdversarialTests`, `BoundaryLifecycleTests` |
 | model-process confinement | evaluator artifacts from the agent's own process | let read-only shell commands reach the repository, the matrix or the oracle | the probe above, criterion 21, `ModelProcessConfinementTests` (12 tests) |
+| confinement evidence | telling a confined run from an unconfined one, afterwards | let the artifacts describe a run that did not happen | `ConfinementInTheRunEvidenceTests`: a real outer boundary, a synthetic payload, no model |
+| launch preflight | the confined runtime's launchability | let a pilot be admitted that cannot start, or start against a host path | criterion 22, `ViewLocalLaunchArgvTests`, `ConfinedLaunchPreflightTests` |
 | boundary lifecycle marker | telling a failed sandbox from a failing payload | let an instrumentation failure read as a red product | setup broken on purpose before `exec`: `BoundaryError`, payload never ran, oracle `not-run` |
 | check launcher (`bin/check`) | the one allowed Bash invocation | let `check` reach something other than the boundary | `CheckLauncherTests`: real PATH, real cwd, arguments refused, impostor not shadowing |
 | B2 model runner admission | the pilot gate | let a writable run start without passing the criteria | five refusal tests with a runner that fails if invoked |
@@ -247,3 +322,11 @@ and does nothing except hand a path the adapter chose to the boundary.
 - Two entry criteria are genuinely not applicable: there is no judge to fix a schema for, and
   nothing to unblind at one condition. They are labelled `applicable: false` with their
   antecedent measured, rather than dressed up as measurements that passed.
+- **Criterion 22 is currently unmet, and the pilot is therefore blocked.** The Claude Code
+  runtime authenticates from a credential under a host home directory. The outer view does
+  not carry that directory, and mounting it back would undo the boundary this phase exists to
+  establish, so `claude auth status` inside the view reports `loggedIn: false`. Everything
+  else — argv locality, runtime startup, flag parsing, the confinement itself — is measured
+  and met. A pilot needs an authentication path that works inside the view, named as the
+  pilot's auth path and confirmed model-free before it is used. There is no such path on this
+  host today, and the readiness artifact says `NOT_READY_FOR_MODEL_PILOT`.

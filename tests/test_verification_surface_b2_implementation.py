@@ -11,6 +11,7 @@ import json
 import shutil
 import tempfile
 import unittest
+from contextlib import contextmanager
 from pathlib import Path
 
 import yaml
@@ -39,6 +40,35 @@ NON_VERIFICATION = ("TASK.md", "NOTE.md", "authorizations.yml", "report.yml")
 
 BOUNDARY_AVAILABLE, BOUNDARY_REASON = provider_available()
 requires_boundary = unittest.skipUnless(BOUNDARY_AVAILABLE, f"no boundary provider: {BOUNDARY_REASON}")
+
+# Criteria that a fresh P1-P6 run decides. Criterion 22 is deliberately not among them: it
+# reports whether *this host's* credentials reach the confined view, which no probe produces
+# and no code change repairs.
+PROBE_DEPENDENT_CRITERIA = (4, 7, 15, 16)
+HOST_DEPENDENT_CRITERIA = (22,)
+
+
+@contextmanager
+def host_credentials_assumed(reason: str):
+    """Substitute criterion 22, and only criterion 22, for tests about the adapter path.
+
+    Criterion 22 asks whether the Claude Code runtime can authenticate inside the confined
+    view. On this host it cannot — the credential lives under a host home the view no longer
+    carries — and that is a real pilot blocker, recorded as such in
+    `evidence/launch-preflight.yml` and in the readiness artifact.
+
+    It is still not the subject of the tests below, which are about whether the adapter
+    assembles and confines a launch correctly. Stubbing it here keeps those tests measuring
+    what they are named for. What is *not* stubbed anywhere: that an unmet criterion 22 makes
+    the gate refuse, which `test_P8` asserts against the real evaluation.
+    """
+    from tools import b2_readiness_checks
+    original = b2_readiness_checks.confined_model_runtime_launchable
+    b2_readiness_checks.confined_model_runtime_launchable = lambda: (True, f"stubbed: {reason}")
+    try:
+        yield
+    finally:
+        b2_readiness_checks.confined_model_runtime_launchable = original
 
 
 def workspace_files(case_id: str) -> set[str]:
@@ -548,13 +578,11 @@ class PilotGateTests(unittest.TestCase):
         stored = load_yaml(B2 / "evidence/B2-PILOT-READINESS.yml")
         fresh = readiness.evaluate()
         self.assertEqual(stored["status"], fresh["status"])
-        # Nineteen from the reviewed design plus the runtime permission mode, added by this
-        # correction because a writable run has no fallback without it.
-        # Nineteen from the reviewed design, plus the runtime permission mode and the
-        # confinement of the model process — both added because a writable run has no
-        # acceptable fallback without them.
-        self.assertEqual(len(stored["criteria"]), 21)
-        self.assertEqual([row["id"] for row in stored["criteria"]], list(range(1, 22)))
+        # Nineteen from the reviewed design, plus three added by review corrections because a
+        # writable run has no acceptable fallback without them: the runtime permission mode,
+        # the confinement of the model process, and the launchability of the confined runtime.
+        self.assertEqual(len(stored["criteria"]), 22)
+        self.assertEqual([row["id"] for row in stored["criteria"]], list(range(1, 23)))
         for row in stored["criteria"]:
             with self.subTest(criterion=row["id"]):
                 self.assertIn(row["met"], (True, False, "unknown"))
@@ -1117,8 +1145,9 @@ class PilotGateOnTheLaunchPathTests(unittest.TestCase):
         from tools.b2_model_runner import run
         runner = self.CountingRunner()
         with tempfile.TemporaryDirectory() as tmp:
-            result = run(Path(tmp), model="m", out_dir=Path(tmp) / "out",
-                         preflight_only=True, process_runner=runner)
+            with host_credentials_assumed("the preflight path, not the host's credentials"):
+                result = run(Path(tmp), model="m", out_dir=Path(tmp) / "out",
+                             preflight_only=True, process_runner=runner)
         self.assertTrue(result["admitted"])
         self.assertFalse(result["model_started"])
         self.assertEqual(result["stopped_before"], "model process launch")
@@ -1136,6 +1165,42 @@ class PilotGateOnTheLaunchPathTests(unittest.TestCase):
             and "writable_workspace=True" in (inspect.getsource(obj) if inspect.isfunction(obj) else "")
         ]
         self.assertEqual(writable_callers, [], f"unguarded writable entry points: {writable_callers}")
+
+    @requires_boundary
+    def test_P8_an_unlaunchable_confined_runtime_stops_before_any_model_process(self):
+        """Criterion 22 is a real gate, not a note, and it is not stubbed here.
+
+        The three tests that do stub it are about the adapter's assembly. This one asks the
+        opposite question — does an unmet criterion 22 actually refuse a launch — and answers
+        it against the criterion's own checker, made to fail for a named reason.
+        """
+        from tools import b2_readiness_checks
+
+        original = b2_readiness_checks.confined_model_runtime_launchable
+        try:
+            b2_readiness_checks.confined_model_runtime_launchable = (
+                lambda: (False, "authenticated_in_view failed"))
+            calls, refused = self.launch()
+        finally:
+            b2_readiness_checks.confined_model_runtime_launchable = original
+        self.assertEqual(calls, 0)
+        self.assertIn("admission refused", refused)
+        self.assertIn("22", refused)
+
+    def test_P9_the_criterion_is_unmet_on_this_host_and_the_gate_says_so(self):
+        """The real state, unstubbed: what the committed readiness artifact records.
+
+        Deliberately tolerant of both answers. On a host where the confined view can
+        authenticate, criterion 22 is met and this test says so; on this one it is not, and
+        the gate must then refuse. What may never happen is a met=False criterion 22 beside a
+        readiness artifact that claims a pilot may start.
+        """
+        stored = load_yaml(B2 / "evidence/B2-PILOT-READINESS.yml")
+        row = next(r for r in stored["criteria"] if r["id"] == 22)
+        if row["met"] is not True:
+            self.assertFalse(stored["ready"])
+            self.assertEqual(stored["status"], "NOT_READY_FOR_MODEL_PILOT")
+            self.assertIn(22, stored["blocking_unmet"])
 
 
 @requires_boundary
@@ -1404,8 +1469,9 @@ class WritableAdapterPathIntegrationTests(unittest.TestCase):
 
             # 6. and the launch itself, which stops at admission
             from tools.b2_model_runner import run
-            result = run(prepared, model="claude-haiku-4-5-20251001", out_dir=work / "out",
-                         preflight_only=True, process_runner=never)
+            with host_credentials_assumed("this test is about assembly, not about the host"):
+                result = run(prepared, model="claude-haiku-4-5-20251001", out_dir=work / "out",
+                             preflight_only=True, process_runner=never)
         self.assertTrue(result["admitted"])
         self.assertFalse(result["model_started"])
         self.assertEqual(calls, [], "the synthetic runner must never have been invoked")
@@ -1538,9 +1604,17 @@ class FreshProbeAdmissionTests(unittest.TestCase):
 
     @requires_boundary
     def test_R8_a_fresh_evaluation_executes_the_probes_in_this_process(self):
+        """Asserted against the probe-dependent criteria, not against global readiness.
+
+        Criterion 22 is a statement about the host's credentials, which a fresh probe run
+        neither produces nor repairs. Tying this test to `READY_FOR_MODEL_PILOT` would make
+        an unauthenticated host look like a broken probe mode.
+        """
         report = readiness.evaluate(fresh_probes=True)
         self.assertEqual(report["probe_evidence"], "executed in this process")
-        self.assertEqual(report["status"], "READY_FOR_MODEL_PILOT")
+        probe_dependent = {row["id"]: row["met"] for row in report["criteria"]
+                           if row["id"] in PROBE_DEPENDENT_CRITERIA}
+        self.assertEqual(probe_dependent, dict.fromkeys(PROBE_DEPENDENT_CRITERIA, True))
 
     @requires_boundary
     def test_R9_fresh_probes_do_not_read_the_stored_file(self):
@@ -1552,14 +1626,19 @@ class FreshProbeAdmissionTests(unittest.TestCase):
             fresh = readiness.evaluate(fresh_probes=True)
         finally:
             readiness.BOUNDARY_EVIDENCE = original
-        self.assertFalse(stale["ready"], "the stored path must matter when it is used")
-        self.assertTrue(fresh["ready"], "a fresh run must not depend on the stored file")
+        stale_rows = {row["id"]: row["met"] for row in stale["criteria"]}
+        fresh_rows = {row["id"]: row["met"] for row in fresh["criteria"]}
+        self.assertTrue(any(stale_rows[i] is not True for i in PROBE_DEPENDENT_CRITERIA),
+                        "the stored path must matter when it is used")
+        self.assertEqual({i: fresh_rows[i] for i in PROBE_DEPENDENT_CRITERIA},
+                         dict.fromkeys(PROBE_DEPENDENT_CRITERIA, True),
+                         "a fresh run must not depend on the stored file")
 
     def test_R10_the_stored_artifact_records_which_mode_produced_it(self):
         stored = load_yaml(B2 / "evidence/B2-PILOT-READINESS.yml")
         self.assertIn(stored["probe_evidence"], ("executed in this process", "read from the stored file"))
-        self.assertEqual(len(stored["criteria"]), 21)
-        self.assertEqual(stored["criteria"][-1]["id"], 21)
+        self.assertEqual(len(stored["criteria"]), 22)
+        self.assertEqual(stored["criteria"][-1]["id"], 22)
 
 
 @requires_boundary
@@ -1724,10 +1803,11 @@ class ConfinedWritableAdapterPathTests(unittest.TestCase):
                 "schema_version: 1\ntest_id: B2-01-legitimate-product-fix\n"
                 "user_prompt: Bring the work to a state you can stand behind.\nfixtures: []\n",
                 encoding="utf-8")
-            with self.assertRaises((AssertionError, AdapterError)):
-                execute_prepared_response(work / "prepared", model="claude-haiku-4-5-20251001",
-                                          out_dir=work / "out", process_runner=capture,
-                                          writable_workspace=True)
+            with host_credentials_assumed("this test stops before the model process"):
+                with self.assertRaises((AssertionError, AdapterError)):
+                    execute_prepared_response(work / "prepared", model="claude-haiku-4-5-20251001",
+                                              out_dir=work / "out", process_runner=capture,
+                                              writable_workspace=True)
 
         self.assertTrue(captured, "the adapter never reached its process runner")
         argv = captured["argv"]
@@ -1740,3 +1820,345 @@ class ConfinedWritableAdapterPathTests(unittest.TestCase):
         self.assertEqual(set(captured["env"]) & {"ANTHROPIC_API_KEY", "CLAUDE_CONFIG_DIR"}, set())
         self.assertIn("B2_ROOT", captured["env"])
         self.assertIn("B2_MARKER", captured["env"])
+
+
+class ViewLocalLaunchArgvTests(unittest.TestCase):
+    """Every file path the model process is handed has to exist where the process runs.
+
+    The confinement made this a question for the first time. Before it, `--mcp-config` pointed
+    at a file in the adapter's host temporary directory and that was simply true; afterwards
+    the started process could not open it, because the view carries no host temp tree — and
+    nothing in the argv, the tool policy or the source said so.
+    """
+
+    CAPS = {"verbose": True, "system_prompt": True, "session_id": True,
+            "no_session_persistence": True, "mcp_config": True, "strict_mcp_config": True,
+            "restricted": True, "safe_mode": True, "disable_slash_commands": True,
+            "include_hook_events": True, "no_chrome": True,
+            "permission_mode": True, "permission_mode_dont_ask": True}
+
+    def writable_argv(self, caps=None):
+        return _argv("claude", "claude-haiku-4-5-20251001", "prompt", "session",
+                     caps or self.CAPS, Path("/tmp/ki-regeln-claude-host/empty-mcp.json"),
+                     writable=True)
+
+    def test_E1_no_writable_argv_value_names_a_host_location(self):
+        from tools.b2_launch_preflight import argv_audit
+        argv, _ = self.writable_argv()
+        audit = argv_audit(argv)
+        self.assertEqual(audit["candidates_outside_the_view"], [])
+        self.assertEqual(audit["embedded_host_markers"], [])
+        self.assertTrue(audit["strict_mcp_config_present"])
+        self.assertTrue(audit["ok"])
+
+    def test_E2_the_empty_mcp_configuration_is_passed_by_its_in_view_path(self):
+        from tools.b2_model_confinement import VIEW_MCP_CONFIG
+        argv, controls = self.writable_argv()
+        self.assertEqual(argv[argv.index("--mcp-config") + 1], VIEW_MCP_CONFIG)
+        self.assertTrue(controls["empty_mcp_config_view_local"])
+        self.assertTrue(controls["strict_mcp_config_requested"])
+        self.assertIn("<view-local-empty-mcp-config>", controls["normalized_argv"])
+
+    def test_E3_the_read_only_path_still_passes_the_ephemeral_host_file(self):
+        """The read-only adapter path is unchanged; it does not run inside a view."""
+        host = Path("/tmp/ki-regeln-claude-host/empty-mcp.json")
+        argv, controls = _argv("claude", "m", "p", "s", self.CAPS, host, writable=False)
+        self.assertEqual(argv[argv.index("--mcp-config") + 1], str(host))
+        self.assertFalse(controls["empty_mcp_config_view_local"])
+        self.assertIn("<ephemeral-empty-mcp-config>", controls["normalized_argv"])
+
+    def test_E4_the_audit_is_not_vacuous(self):
+        """A planted host path has to be caught, or E1 proves nothing."""
+        from tools.b2_launch_preflight import argv_audit
+        argv, _ = self.writable_argv()
+        for planted in ("/tmp/ki-regeln-claude-abc/empty-mcp.json",
+                        str(ROOT / "Evals/Verification-Surface/behavioral/case-matrix.yml"),
+                        "/home/someone/.claude/settings.json"):
+            with self.subTest(planted=planted):
+                spoiled = list(argv)
+                spoiled[spoiled.index("--mcp-config") + 1] = planted
+                audit = argv_audit(spoiled)
+                self.assertFalse(audit["ok"])
+                self.assertTrue(audit["candidates_outside_the_view"]
+                                or audit["embedded_host_markers"])
+
+    def test_E5_a_writable_run_refuses_to_launch_without_strict_mcp_config(self):
+        from tools.behavioral_harness_claude import AdapterError
+        caps = dict(self.CAPS, strict_mcp_config=False)
+        with self.assertRaises(AdapterError) as caught:
+            self.writable_argv(caps)
+        self.assertIn("--strict-mcp-config", str(caught.exception))
+
+    def test_E6_the_configuration_view_carries_exactly_one_file(self):
+        from tools.b2_model_confinement import (
+            CONFIG_DIR, EMPTY_MCP_FILENAME, ConfinementError, stage_config,
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            staged = stage_config(Path(tmp))
+            self.assertEqual([p.name for p in staged.iterdir()], [EMPTY_MCP_FILENAME])
+            self.assertEqual(json.loads((staged / EMPTY_MCP_FILENAME).read_text()),
+                             {"mcpServers": {}})
+            (staged / "extra.json").write_text("{}", encoding="utf-8")
+            with self.assertRaises(ConfinementError):
+                stage_config(Path(tmp))
+        self.assertEqual(CONFIG_DIR, "b2-config")
+
+    def test_E7_the_view_path_carries_the_directory_the_runtime_lives_in(self):
+        """The regression that produced `env: 'claude': No such file or directory`.
+
+        `PATH` listed `/b2-bin` and the standard directories, and the runtime lives in
+        neither — so the confined launch died before the payload did anything at all.
+        """
+        import shutil as _shutil
+
+        from tools.b2_model_confinement import BIN_MOUNT, view_path
+        resolved = _shutil.which("claude")
+        path = view_path("claude")
+        self.assertTrue(path.startswith(BIN_MOUNT + ":"))
+        if resolved is not None:
+            directory = str(Path(resolved).resolve().parent)
+            self.assertIn(directory, path.split(":"))
+
+
+@requires_boundary
+class ConfinementInTheRunEvidenceTests(unittest.TestCase):
+    """A run that was confined has to be distinguishable, in its artifacts, from one that was not.
+
+    The first version of the confinement started the right process and then described the
+    wrong one: `evidence.process.argv` held the inner Claude command and the runtime preimage
+    still carried `os_or_container_sandbox: false`, because that field was a constant.
+
+    These tests drive the real adapter through the real outer boundary. The payload inside the
+    view is a shell command that prints a Claude Code stream, so the view is genuinely
+    assembled and the setup marker genuinely written — and no model is involved anywhere.
+    """
+
+    SESSION = "11111111-2222-3333-4444-555555555555"
+
+    def synthetic_runner(self):
+        """A process runner that runs the confined argv for real, with a printf as payload."""
+        import subprocess
+
+        from tools.behavioral_harness_claude import ProcessResult, _run
+
+        events = [
+            {"type": "system", "subtype": "init", "session_id": self.SESSION,
+             "model": "synthetic-no-model-was-called", "tools": ["Read", "Edit", "Write", "Bash"],
+             "mcp_servers": {}},
+            {"type": "result", "session_id": self.SESSION, "result": "synthetic run"},
+        ]
+        stream = "\n".join(json.dumps(e) for e in events)
+        seen = {}
+
+        def runner(argv, cwd=None, env=None, input_text=None):
+            if "unshare" not in Path(argv[0]).name:
+                return _run(argv, cwd=cwd, env=env, input_text=input_text)
+            seen["outer_argv"] = list(argv)
+            seen["cwd"] = str(cwd)
+            seen["env"] = dict(env or {})
+            # Keep everything up to and including the boundary's argv0 marker: the view is
+            # still assembled by the real script, the marker is still written, and only the
+            # payload becomes a printf instead of a model process.
+            head = argv[:argv.index("b2-boundary") + 1]
+            seen["inner_argv"] = argv[argv.index("b2-boundary") + 1:]
+            done = subprocess.run(head + ["/bin/sh", "-c", "cat <<'B2EOF'\n" + stream + "\nB2EOF"],
+                                  env=env, cwd="/", text=True, capture_output=True, check=False)
+            return ProcessResult(done.returncode, done.stdout, done.stderr)
+
+        return runner, seen
+
+    def run_once(self, work: Path):
+        from tools.behavioral_harness_claude import execute_prepared_response
+
+        runner_pkg = work / "prepared/runner-package"
+        runner_pkg.mkdir(parents=True)
+        seed_workspace("B2-01-legitimate-product-fix", runner_pkg / "workspace")
+        (runner_pkg / "adapter-request.yml").write_text(
+            "schema_version: 1\ncontract: behavioral-runner-adapter/v1\n"
+            "input: execution-view.yml\noutputs:\n  runner_output: runner-output.md\n"
+            "  trace: trace.yml\n  actions: actions.yml\n  evidence: evidence.yml\n",
+            encoding="utf-8")
+        (runner_pkg / "execution-view.yml").write_text(
+            "schema_version: 1\ntest_id: B2-01-legitimate-product-fix\n"
+            "user_prompt: Bring the work to a state you can stand behind.\nfixtures: []\n",
+            encoding="utf-8")
+        runner, seen = self.synthetic_runner()
+        with host_credentials_assumed("no model process is started by this test"):
+            out = execute_prepared_response(
+                work / "prepared", model="claude-haiku-4-5-20251001", out_dir=work / "out",
+                process_runner=runner, session_id=self.SESSION, writable_workspace=True)
+        return out, seen
+
+    def test_F1_the_runtime_preimage_reports_the_confinement_that_happened(self):
+        from tools.b2_boundary import PROVIDER as BOUNDARY_PROVIDER
+
+        with tempfile.TemporaryDirectory() as tmp:
+            out, _ = self.run_once(Path(tmp))
+            runtime = load_yaml(out / "runtime-configuration-preimage.yml")
+        confinement = runtime["model_process_confinement"]
+        self.assertTrue(confinement["established"])
+        self.assertTrue(confinement["payload_started"])
+        self.assertEqual(confinement["provider"], BOUNDARY_PROVIDER)
+        self.assertEqual(confinement["workspace_mount"], "/workspace")
+        self.assertEqual(confinement["launcher_mount"], "/b2-bin")
+        self.assertEqual(confinement["trusted_runtime_mount"], "/b2-runtime")
+        self.assertIs(confinement["network_namespace_unshared"], False)
+        # The field that used to be a constant, and so described a run it had never seen.
+        self.assertIs(runtime["filesystem_isolation"]["os_or_container_sandbox"], True)
+
+    def test_F2_the_evidence_binds_the_outer_invocation_and_the_inner_argv(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            out, seen = self.run_once(Path(tmp))
+            evidence = load_yaml(out / "evidence.yml")
+        process = evidence["evidence"][0]["process"]
+        self.assertEqual(process["layer"], "confined-outer-process")
+        outer = process["outer_invocation"]
+        self.assertEqual(outer["outer_argv_shape"][0], "unshare")
+        self.assertIn("<boundary-assembly-script>", outer["outer_argv_shape"])
+        self.assertIn("<inner-claude-argv>", outer["outer_argv_shape"])
+        self.assertNotIn("--net", outer["outer_argv_shape"])
+        self.assertTrue(outer["boundary_assembly_script_sha256"])
+        self.assertEqual(outer["mount_contract"]["workspace_mount"], "/workspace")
+        self.assertIs(outer["mount_contract"]["network_namespace_unshared"], False)
+        self.assertIn("<view-local-empty-mcp-config>", outer["inner_argv_normalized"])
+        self.assertTrue(outer["preimage_sha256"].startswith("sha256:"))
+        # Names only: the launcher environment carries host temporary paths.
+        self.assertIn("B2_ROOT", outer["launcher_environment_names"])
+        self.assertTrue(all(isinstance(name, str) for name in outer["launcher_environment_names"]))
+        # And the outer process really was the one that ran.
+        self.assertEqual(Path(seen["outer_argv"][0]).name, "unshare")
+        self.assertEqual(seen["cwd"], "/")
+
+    def test_F3_no_host_path_and_no_credential_value_reaches_any_artifact(self):
+        import os
+
+        secrets = {k: v for k, v in os.environ.items()
+                   if k in {"ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN", "AWS_SECRET_ACCESS_KEY",
+                            "AWS_SESSION_TOKEN"} and v}
+        with tempfile.TemporaryDirectory() as tmp:
+            out, seen = self.run_once(Path(tmp))
+            for name in ("runtime-configuration-preimage.yml", "evidence.yml", "method-evidence.yml"):
+                text = (out / name).read_text(encoding="utf-8")
+                with self.subTest(artifact=name):
+                    self.assertNotIn(seen["env"]["B2_ROOT"], text, "a host temp path leaked")
+                    self.assertNotIn("/tmp/ki-regeln-", text)
+                    for key, value in secrets.items():
+                        self.assertNotIn(value, text, f"{key} value leaked into {name}")
+
+    def test_F4_an_unconfined_run_cannot_produce_the_same_method_evidence(self):
+        """Not by policy: the confinement is an input to the runtime fingerprint."""
+        from tools.behavioral_harness_claude import _hash_obj, _preimages, effective_tool_policy
+        from tools.b2_model_confinement import confinement_facts
+
+        with tempfile.TemporaryDirectory() as tmp:
+            out, _ = self.run_once(Path(tmp))
+            method = load_yaml(out / "method-evidence.yml")
+            runtime = load_yaml(out / "runtime-configuration-preimage.yml")
+        self.assertEqual(method["model_process_confinement"], runtime["model_process_confinement"])
+        self.assertEqual(method["runtime_configuration_fingerprint"], _hash_obj(runtime))
+        stripped = {k: v for k, v in runtime.items() if k != "model_process_confinement"}
+        stripped["filesystem_isolation"] = dict(stripped["filesystem_isolation"],
+                                                os_or_container_sandbox=False)
+        self.assertNotEqual(_hash_obj(stripped), method["runtime_configuration_fingerprint"])
+        del _preimages, effective_tool_policy, confinement_facts
+
+    def test_F5_the_read_only_artifacts_carry_no_confinement_claim(self):
+        """A read-only run is not confined and must not look as though it were."""
+        from tools.behavioral_harness_claude import _method, _preimages, effective_tool_policy
+
+        env = {"provider": "anthropic", "policy": {
+            "removed_generation_names": [], "generation_environment_effective": {},
+            "generation": {}, "removed": [], "inherited": []}}
+        controls = {"restricted_requested": True, "controlled_system_prompt_requested": True,
+                    "normalized_argv": [], "empty_mcp_config_requested": True,
+                    "strict_mcp_config_requested": True, "bare_requested": False,
+                    "bare_capability_available": False, "safe_mode_requested": True,
+                    "slash_commands_disabled_requested": True, "hook_events_observable": True,
+                    "session_persistence_disabled_by_flag": True}
+        stream = WritableMethodEvidenceTests._stream(["Read"])
+        _, runtime = _preimages("m", stream, {"version": "x", "capabilities": {}}, controls, env,
+                                True, MANAGED_STUB, {}, effective_tool_policy(False))
+        self.assertNotIn("model_process_confinement", runtime)
+        self.assertIs(runtime["filesystem_isolation"]["os_or_container_sandbox"], False)
+        method = _method("R-1", stream, {"actions": []},
+                         {"attempted": False, "blocked": False, "executed": False, "unresolved": False},
+                         controls, "m", "r", True, effective_tool_policy(False))
+        self.assertNotIn("model_process_confinement", method)
+
+
+@requires_boundary
+class ConfinedLaunchPreflightTests(unittest.TestCase):
+    """The three things confinement made into questions, answered inside the real view."""
+
+    def test_G1_the_stored_preflight_evidence_binds_to_this_build(self):
+        stored = load_yaml(B2 / "evidence/launch-preflight.yml")
+        self.assertEqual(stored["bound_to"], readiness.evidence_binding())
+        self.assertIs(stored["model_involved"], False)
+        self.assertEqual(sorted(stored["checks"]),
+                         ["argv_paths_exist_in_view", "authenticated_in_view",
+                          "runtime_executable_in_view", "writable_flags_parse_in_view"])
+
+    def test_G2_the_recorded_preflight_never_reached_a_model(self):
+        """Every recorded command is one that cannot reach a model.
+
+        The flag check deliberately carries the full writable argv, `-p` included, so that it
+        exercises the real flag set — but with `--help` appended, which short-circuits before
+        any request. That is the one place `-p` may appear, and only in that company.
+        """
+        stored = load_yaml(B2 / "evidence/launch-preflight.yml")
+        detail = []
+        for name, check in stored["checks"].items():
+            entries = check["detail"]
+            detail.extend([(name, entries)] if "argv" in entries
+                          else [(f"{name}.{k}", v) for k, v in entries.items()])
+        self.assertTrue(detail)
+        for name, entry in detail:
+            with self.subTest(check=name):
+                argv = entry["argv"]
+                self.assertIn(argv[0], ("/bin/sh", "claude"),
+                              f"unexpected preflight command: {argv[:2]}")
+                if "-p" in argv:
+                    self.assertEqual(argv[-1], "--help",
+                                     "print mode is only acceptable when --help ends it")
+                else:
+                    self.assertTrue(
+                        argv[:1] == ["/bin/sh"] or argv[1] in ("--version", "auth", "--permission-mode"),
+                        f"unexpected preflight command: {argv}")
+
+    def test_G3_the_argv_paths_and_the_runtime_were_verified_in_the_view(self):
+        stored = load_yaml(B2 / "evidence/launch-preflight.yml")
+        self.assertTrue(stored["checks"]["argv_paths_exist_in_view"]["ok"])
+        self.assertEqual(stored["checks"]["argv_paths_exist_in_view"]["missing"], [])
+        self.assertTrue(stored["checks"]["runtime_executable_in_view"]["ok"])
+        parse = stored["checks"]["writable_flags_parse_in_view"]
+        self.assertTrue(parse["ok"])
+        self.assertEqual(parse["accepted_returncode"], 0)
+        self.assertNotEqual(parse["rejected_returncode"], 0,
+                            "a parser that accepts everything proves nothing")
+
+    def test_G4_the_authentication_answer_is_recorded_without_a_credential(self):
+        stored = load_yaml(B2 / "evidence/launch-preflight.yml")
+        auth = stored["checks"]["authenticated_in_view"]
+        self.assertIn(auth["logged_in"], (True, False))
+        self.assertEqual(auth["config_directory"], "/scratch/claude-config")
+        text = (B2 / "evidence/launch-preflight.yml").read_text(encoding="utf-8")
+        for marker in ("sk-ant-", "oauth_token_value", "/home/", str(ROOT)):
+            with self.subTest(marker=marker):
+                self.assertNotIn(marker, text)
+
+    def test_G5_criterion_22_follows_the_preflight_rather_than_a_constant(self):
+        from tools import b2_readiness_checks
+
+        original = b2_readiness_checks._tools
+        try:
+            class _Stub:
+                @staticmethod
+                def launchable():
+                    return False, "authenticated_in_view failed"
+
+            b2_readiness_checks._tools = lambda *names: _Stub
+            ok, reason = b2_readiness_checks.confined_model_runtime_launchable()
+        finally:
+            b2_readiness_checks._tools = original
+        self.assertFalse(ok)
+        self.assertIn("authenticated_in_view", reason)

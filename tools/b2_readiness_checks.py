@@ -313,6 +313,8 @@ def model_process_workspace_confinement() -> tuple[bool, str]:
         failures.append(f"writes landed outside the workspace: {report['writes_outside_workspace']}")
     if report["launcher_contains_host_path"]:
         failures.append("the check launcher discloses a host path")
+    if list(report.get("config_view_listing") or []) != [confinement.EMPTY_MCP_FILENAME]:
+        failures.append(f"the configuration view carries {report.get('config_view_listing')}")
     if list(report["staged_runtime"]) != sorted(confinement.TRUSTED_RUNTIME_FILES):
         failures.append(f"the staged trusted runtime carries {report['staged_runtime']}")
     if "/workspace/allowed.txt" not in report["wrote"]:
@@ -326,3 +328,20 @@ def model_process_workspace_confinement() -> tuple[bool, str]:
         "writable; the launcher names only in-view paths and the staged runtime carries "
         f"{report['staged_runtime']}"
     )
+
+
+def confined_model_runtime_launchable() -> tuple[bool, str]:
+    """Can the model process actually start inside the view it is confined to?
+
+    Confinement created a precondition that did not exist before: the launch has to work from
+    *inside* the view, with view-local argv paths, the runtime executable on the view's PATH,
+    and an authentication path that does not depend on a host home the view no longer carries.
+    All three were false at some point in this correction, and none of them is observable from
+    the allowlist or the source — so the check runs the real writable argv's preflight.
+
+    Deliberately one criterion, not three: it expresses one precondition, "the confined
+    runtime is launchable", and splitting it would let two thirds of a launch count as
+    progress toward a pilot that still cannot start.
+    """
+    preflight = _tools("b2_launch_preflight")
+    return preflight.launchable()
