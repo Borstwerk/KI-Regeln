@@ -254,5 +254,75 @@ def runtime_permission_mode() -> tuple[bool, str]:
         return False, f"the writable argv does not separate tools from rules: {visible!r} / {rules}"
     if mode != adapter.B2_PERMISSION_MODE:
         return False, f"the writable argv requests permission mode {mode!r}"
-    return True, (f"Claude Code {probe['version']} offers --permission-mode {mode}; the writable "
-                  f"argv requests --tools {visible} with allow rules {rules}")
+
+    # A real parser check, not an assertion about one. `<flags> --help` runs the CLI's own
+    # option parsing and exits at the help screen, before any session or model work, so the
+    # value validation is genuinely the installed binary's. It validates option *values*;
+    # unknown flags are tolerated by the parser, so this says nothing about flag existence.
+    import subprocess
+    flags = [a for a in argv[1:] if a != "<per-response-task-prompt>"][:-1]
+    accepted = subprocess.run(["claude", *flags, "--help"], capture_output=True, text=True,
+                              timeout=120, check=False)
+    rejected = subprocess.run(["claude", "--permission-mode", "notAMode", "--help"],
+                              capture_output=True, text=True, timeout=120, check=False)
+    if accepted.returncode != 0:
+        return False, f"the installed CLI rejected the writable flag form: {accepted.stderr.strip()[:160]}"
+    if rejected.returncode == 0:
+        return False, "the parser check is vacuous: an invalid permission mode was also accepted"
+    return True, (f"Claude Code {probe['version']} parses the writable flag form and exits at "
+                  f"--help (rc 0), and rejects an invalid --permission-mode (rc "
+                  f"{rejected.returncode}); the argv requests --tools {visible}, allow rules "
+                  f"{rules} and --permission-mode {mode}")
+
+
+def model_process_workspace_confinement() -> tuple[bool, str]:
+    """Run the adversarial command set a model process could run, and inspect the result.
+
+    Not a check that these commands are absent from `allowedTools`. Claude Code executes a
+    class of read-only shell commands — `cat`, `ls`, `find`, `grep`, `head`, `stat` — without
+    a permission prompt even under `dontAsk`, so the allowlist was never the thing that
+    decided. What decides is the filesystem the process can see, and that is what is measured
+    here: the same commands, run for real inside the confinement view, with an evaluator
+    sentinel planted outside it.
+    """
+    import tempfile
+
+    confinement = _tools("b2_model_confinement")
+    sentinel_value = "B2-CONFINEMENT-SENTINEL-7c4a"
+    with tempfile.TemporaryDirectory(prefix="b2-c21-") as tmp:
+        sentinel = Path(tmp) / "case-matrix.yml"
+        sentinel.write_text(sentinel_value + "\n", encoding="utf-8")
+        try:
+            report = confinement.probe_confinement(sentinel, sentinel_value)
+        except Exception as exc:  # noqa: BLE001 - a probe that cannot run proves nothing
+            return False, f"the confinement probe could not run: {type(exc).__name__}: {exc}"
+
+    failures = []
+    if report["sentinel_leaked"]:
+        failures.append("an evaluator sentinel outside the view was readable")
+    if report["repository_readable"]:
+        failures.append("a repository file was readable")
+    if report["discovery_hits"]:
+        failures.append(f"discovery found {report['discovery_hits']}")
+    if report["host_dirs_in_view"]:
+        failures.append(f"host directories present in the view: {report['host_dirs_in_view']}")
+    if report["unexpected_under_runtime_parent"]:
+        failures.append(f"unexpected host content beside the runtime: "
+                        f"{report['unexpected_under_runtime_parent']}")
+    if report["writes_outside_workspace"]:
+        failures.append(f"writes landed outside the workspace: {report['writes_outside_workspace']}")
+    if report["launcher_contains_host_path"]:
+        failures.append("the check launcher discloses a host path")
+    if list(report["staged_runtime"]) != sorted(confinement.TRUSTED_RUNTIME_FILES):
+        failures.append(f"the staged trusted runtime carries {report['staged_runtime']}")
+    if "/workspace/allowed.txt" not in report["wrote"]:
+        failures.append("the workspace was not writable, so the probe measured nothing")
+    if failures:
+        return False, "; ".join(failures)
+    return True, (
+        "cat of an evaluator sentinel and of a repository file both fail with "
+        "FileNotFoundError; find and grep across the view return nothing; /home, /root and "
+        "/tmp are absent; every write outside /workspace is refused while /workspace is "
+        "writable; the launcher names only in-view paths and the staged runtime carries "
+        f"{report['staged_runtime']}"
+    )

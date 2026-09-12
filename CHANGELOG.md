@@ -8,6 +8,15 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Phase 4.2C · B2 — Confinement des Modellprozesses
+
+- der Claude-Code-Prozess selbst läuft jetzt im Namespace-Provider: die bisherige Annahme, `--permission-mode dontAsk` zusammen mit `Bash(check)` mache `check` zur einzigen ausführbaren Shell-Aktion, war falsch, weil eine Klasse read-only Kommandos ohne Freigabe läuft; zusammen mit einem Launcher, der den absoluten Pfad des Evaluator-`tools/`-Verzeichnisses einbettete, war das ein konkreter Weg zu Case Matrix, Trust Root und Oracle-Expectations;
+- die äußere View trägt Workspace (beschreibbar, zugleich Arbeitsverzeichnis), Scratch, einen minimal gestageten Trusted Runtime aus zwei Dateien und den Check-Launcher; Repository, `/home`, `/root` und `/tmp` existieren darin nicht, und der Launcher nennt nur noch View-Pfade;
+- Netzwerk bleibt in der äußeren View bewusst erreichbar, weil der Modellprozess seine API braucht; das ist die einzige Isolation, die diese Schicht nicht leistet, und wird als solche benannt statt impliziert;
+- neues Pilot-Kriterium `model_process_workspace_confinement`, funktional gemessen durch reale Ausführung genau jener read-only Kommandos gegen einen außerhalb platzierten Sentinel, nicht durch Prüfung der Allowlist; Pilot Entry bleibt ohne diesen Nachweis blockiert;
+- `runtime_permission_mode()` nutzt jetzt einen echten modellfreien Parser-Test der installierten CLI und behauptet nur noch das tatsächlich Gemessene; veralteter Kopfkommentar in `b2_model_runner.py` korrigiert;
+- keine Model Responses, keine Behavioral Runs, kein Judge, kein Unblinding, kein Pairing, keine Skill-Wirkungsaussage, keine Maturity- oder Coverage-Änderung.
+
 ### Phase 4.2C · B2 — zweite Review-Runde
 
 - Admission entfälscht: der writable Adapterpfad nimmt kein Token mehr entgegen, sondern wertet die Pilot-Kriterien unmittelbar vor dem Modellstart selbst aus; `execute_prepared_response` besitzt keinen `admission`-Parameter mehr, und `b2_model_runner.py` bleibt öffentlicher Einstieg ohne Autorisierungswirkung;

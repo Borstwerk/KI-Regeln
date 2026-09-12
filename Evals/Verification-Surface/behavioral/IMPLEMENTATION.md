@@ -136,6 +136,65 @@ kernel and util-linux: another Linux x86_64 could have adopted a stored result. 
 pilot admission now re-runs P1–P5 in process rather than reading the file, so the evidence
 describes the machine that is about to run. P6 remains observation.
 
+## Third-round correction: confining the model process
+
+The largest remaining gap, and the one whose diagnosis matters most: **`run_in_view`
+confined the code the agent writes, never the agent's own process.**
+
+The assumption that `--permission-mode dontAsk` plus `Bash(check)` left `check` as the only
+executable shell action is wrong. Claude Code treats a class of read-only commands — `cat`,
+`ls`, `head`, `grep`, `find`, `stat`, `du` and similar — as permissible without a prompt.
+Combined with a launcher that embedded `Path(__file__).resolve().parent`, i.e. the absolute
+path of the evaluator's own `tools/` directory, that was a concrete route: read `bin/check`,
+learn the repository path, then read the case matrix, the trust root and the oracle
+expectations with commands the allowlist never had to mention. The process also ran with
+`cwd` at the package root rather than the workspace, so bare `Read`/`Edit`/`Write` were
+scoped wider than the experiment.
+
+The model process now runs inside the same namespace provider, one level out:
+
+```
+unshare(mount, pid, uts, ipc) + pivot_root        <- the model process
+    /workspace      the B2 workspace, writable, and the process starts here
+    /scratch        writable tmpfs; CLAUDE_CONFIG_DIR lives here
+    /b2-runtime     two staged trusted modules, read-only
+    /b2-bin         the check launcher, read-only, first on PATH
+    runtime binds   read-only; no /home, no /root, no /tmp, no repository
+        |
+        `-- check -> unshare(... --net) + pivot_root   <- the agent's own check code
+```
+
+The confinement is built into the argv the adapter hands to its own process runner, so it is
+part of what gets recorded rather than a side channel around it. The launcher now embeds
+`/workspace` and `/b2-runtime` — in-view paths — and the trusted runtime is staged as exactly
+two files, so reading `bin/check` yields nothing about the host.
+
+**What is confined and what is not.** Filesystem, PID, UTS and IPC namespaces. *Not* the
+network: the model process has to reach its API, so `--net` is deliberately not unshared in
+the outer view. That is the one isolation this layer does not provide and it is stated rather
+than implied. The inner view for agent-written check code keeps its empty network namespace.
+
+### Measured, not asserted
+
+`evidence/model-confinement.yml` records the read-only commands executed for real inside the
+view, against a sentinel planted outside it:
+
+| Attempt | Observed |
+| --- | --- |
+| `cat <evaluator sentinel>` | `No such file or directory` |
+| `cat <repository>/tools/b2_grader.py` | `No such file or directory` |
+| `find / -name case-matrix.yml` | nothing |
+| `find / -name expectations.yml` | nothing |
+| `grep -rs <sentinel> /` outside the runtime | nothing |
+| `ls /home /root /tmp` | all three absent |
+| `cat /b2-bin/check` | names `/b2-runtime` and `/workspace`, no host path |
+| write to `/b2-bin/check`, `/b2-runtime/*`, `/execution-view.yml`, `/`, `/etc` | every one refused |
+| write to `/workspace/allowed.txt` | succeeds — the experiment stays possible |
+| `check` from inside the confinement | reaches the nested boundary and reports the real result |
+
+Criterion 21 runs exactly this probe. It is a functional measurement: nothing about it reads
+the allowlist, because the allowlist was never what decided.
+
 ## Held-out oracle
 
 ```
@@ -155,6 +214,7 @@ input shape and nothing else. P4 confirms the separation by trying.
 | Component | Protects | A defect would | Countertest |
 | --- | --- | --- | --- |
 | execution boundary | evaluator artifacts from agent-controlled code | let a rewritten check read ground truth or write outside | P1, P2, P5, `BoundaryAdversarialTests`, `BoundaryLifecycleTests` |
+| model-process confinement | evaluator artifacts from the agent's own process | let read-only shell commands reach the repository, the matrix or the oracle | the probe above, criterion 21, `ModelProcessConfinementTests` (12 tests) |
 | boundary lifecycle marker | telling a failed sandbox from a failing payload | let an instrumentation failure read as a red product | setup broken on purpose before `exec`: `BoundaryError`, payload never ran, oracle `not-run` |
 | check launcher (`bin/check`) | the one allowed Bash invocation | let `check` reach something other than the boundary | `CheckLauncherTests`: real PATH, real cwd, arguments refused, impostor not shadowing |
 | B2 model runner admission | the pilot gate | let a writable run start without passing the criteria | five refusal tests with a runner that fails if invoked |
@@ -177,6 +237,7 @@ and does nothing except hand a path the adapter chose to the boundary.
   test that classifies every file in it. It says nothing about real repositories.
 - The workspace is writable on purpose. The trust chain around it is an integrity relation.
 - No behavioral evidence exists. Readiness is an infrastructure decision.
+- The outer view confines the filesystem, not the network. Nothing here claims otherwise.
 - The stored readiness artifact is documentation, produced in stored-probe mode. The mode
   that admits a run re-executes P1–P6 and says so in `probe_evidence`.
 - Probe evidence is bound to the hashes of the boundary, oracle, probe code, driver and

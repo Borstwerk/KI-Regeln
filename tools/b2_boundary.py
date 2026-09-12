@@ -32,6 +32,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+from contextlib import contextmanager
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -90,8 +91,14 @@ class BoundaryResult:
 class ViewSpec:
     """One isolated execution view.
 
-    `workspace` is the only writable path the code can reach, and it is always a copy: the
-    graded artifact is never handed to the thing being graded.
+    `workspace` is the only writable path the code can reach beyond the scratch tmpfs, and
+    for graded work it is always a copy: the graded artifact is never handed to the thing
+    being graded.
+
+    Two knobs exist for the outer view that confines the model process itself, which needs
+    the provider's filesystem isolation but not its network isolation, and needs a runtime
+    the graded checks do not: `unshare_net` and `runtime_binds`. Everything else is shared,
+    so there is one boundary implementation rather than two that can drift apart.
     """
 
     workspace: Path
@@ -100,6 +107,9 @@ class ViewSpec:
     timeout: int = DEFAULT_TIMEOUT
     stdin_text: str | None = None
     workdir: str = WORKSPACE_MOUNT
+    unshare_net: bool = True
+    runtime_binds: tuple[str, ...] = RUNTIME_BINDS
+    env: Mapping[str, str] | None = None
 
     def validate(self) -> None:
         if not self.workspace.is_dir():
@@ -117,7 +127,7 @@ class ViewSpec:
             # Shadowing is checked in both directions and against every reserved path, not
             # against a handful of examples: a mount at, above or below any of them can hide
             # or replace part of the view the boundary depends on.
-            reserved = (WORKSPACE_MOUNT, SCRATCH_MOUNT, "/proc", "/dev", "/oldroot", *RUNTIME_BINDS)
+            reserved = (WORKSPACE_MOUNT, SCRATCH_MOUNT, "/proc", "/dev", "/oldroot", *self.runtime_binds)
             if normalized == "/":
                 raise BoundaryError("extra mount / would replace the whole view")
             for other in reserved:
@@ -142,7 +152,7 @@ def _script(spec: ViewSpec) -> str:
         'mkdir -p "$R"/proc "$R"/dev "$R"/oldroot',
         f'mkdir -p "$R"{WORKSPACE_MOUNT} "$R"{SCRATCH_MOUNT}',
     ]
-    for path in RUNTIME_BINDS:
+    for path in spec.runtime_binds:
         lines.append(f'if [ -e {shlex.quote(path)} ]; then mkdir -p "$R"{shlex.quote(path)}; fi')
     for mount, _ in spec.extra_ro:
         lines.append(f'mkdir -p "$R"{shlex.quote(mount)}')
@@ -154,7 +164,7 @@ def _script(spec: ViewSpec) -> str:
         'mount --bind "$R" "$R"',
         'mount -o remount,bind,ro "$R"',
     ]
-    for path in RUNTIME_BINDS:
+    for path in spec.runtime_binds:
         lines += [
             f'if [ -e {shlex.quote(path)} ]; then',
             f'  mount --bind {shlex.quote(path)} "$R"{shlex.quote(path)}',
@@ -192,7 +202,7 @@ def _script(spec: ViewSpec) -> str:
         # environment and inherits nothing from the caller. Without the assignments this
         # ran with an empty environment, which silently turned bytecode caching back on and
         # let the runtime write `__pycache__` into the graded workspace.
-        "exec env -i " + " ".join(f"{k}={shlex.quote(v)}" for k, v in sorted(VIEW_ENV.items())) + ' "$@"',
+        "exec env -i " + " ".join(f"{k}={shlex.quote(v)}" for k, v in sorted((spec.env or VIEW_ENV).items())) + ' "$@"',
     ]
     return "\n".join(lines)
 
@@ -233,8 +243,30 @@ def provider_available() -> tuple[bool, str]:
     return True, "unshare namespace with pivot_root established"
 
 
-def run_in_view(spec: ViewSpec) -> BoundaryResult:
-    """Run one argv inside an isolated view. Never falls back to an unisolated run."""
+@dataclass(frozen=True)
+class ConfinedInvocation:
+    """A ready-to-run confined command: the argv, its launcher environment, and the marker.
+
+    Exposed so a caller that must run the process itself -- the adapter, which routes every
+    launch through its own `process_runner` -- gets the same boundary as `run_in_view`
+    rather than a second implementation of it.
+    """
+
+    argv: list[str]
+    env: dict[str, str]
+    marker: Path
+    provider: str = PROVIDER
+
+    def payload_started(self) -> bool:
+        try:
+            return self.marker.read_text(encoding="utf-8", errors="replace").strip() == SETUP_MARKER
+        except OSError:
+            return False
+
+
+@contextmanager
+def confined_invocation(spec: ViewSpec):
+    """Build the confined argv for one view; the temporary root lives for the block."""
     spec.validate()
     if shutil.which("unshare") is None:
         raise BoundaryError("no boundary provider: unshare is not available, and there is no fallback")
@@ -250,10 +282,17 @@ def run_in_view(spec: ViewSpec) -> BoundaryResult:
         }
         for i, (_, source) in enumerate(spec.extra_ro):
             env[f"B2_RO_{i}"] = str(Path(source).resolve())
-        argv = [
-            "unshare", "--mount", "--pid", "--net", "--uts", "--ipc", "--fork",
-            "/bin/sh", "-c", _script(spec), "b2-boundary", *spec.argv,
-        ]
+        argv = ["unshare", "--mount", "--pid", "--uts", "--ipc", "--fork"]
+        if spec.unshare_net:
+            argv.insert(3, "--net")
+        argv += ["/bin/sh", "-c", _script(spec), "b2-boundary", *spec.argv]
+        yield ConfinedInvocation(argv=argv, env=env, marker=marker)
+
+
+def run_in_view(spec: ViewSpec) -> BoundaryResult:
+    """Run one argv inside an isolated view. Never falls back to an unisolated run."""
+    with confined_invocation(spec) as invocation:
+        argv, env, marker = invocation.argv, invocation.env, invocation.marker
         try:
             done = subprocess.run(
                 argv, input=spec.stdin_text, text=True, capture_output=True,
@@ -263,7 +302,7 @@ def run_in_view(spec: ViewSpec) -> BoundaryResult:
             raise BoundaryError(f"view exceeded its {spec.timeout}s budget") from exc
         except OSError as exc:
             raise BoundaryError(f"cannot start the boundary: {exc}") from exc
-        started = marker.read_text(encoding="utf-8", errors="replace").strip() == SETUP_MARKER
+        started = invocation.payload_started()
     if not started:
         # `set -eu` aborts the assembly on any failure, so the marker is written only when
         # every mount succeeded and `exec` was reached. Without it the payload never ran,
@@ -272,7 +311,8 @@ def run_in_view(spec: ViewSpec) -> BoundaryResult:
             "the execution boundary was not fully established, so the payload never ran "
             f"(exit {done.returncode}): {(done.stderr or done.stdout).strip()[-300:]}"
         )
-    return BoundaryResult(done.returncode, done.stdout, done.stderr)
+    return BoundaryResult(done.returncode, done.stdout, done.stderr,
+                          network_namespace_unshared=spec.unshare_net)
 
 
 def copy_workspace(source: Path, destination: Path) -> Path:

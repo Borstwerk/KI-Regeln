@@ -91,6 +91,8 @@ def evidence_binding() -> dict[str, str]:
     return {
         "provider": PROVIDER,
         "boundary_code": hash_file(ROOT / "tools/b2_boundary.py"),
+        "confinement_code": hash_file(ROOT / "tools/b2_model_confinement.py"),
+        "launcher_code": hash_file(ROOT / "tools/b2_check_launcher.py"),
         "oracle_code": hash_file(ROOT / "tools/b2_oracle.py"),
         "probe_code": hash_file(ROOT / "tools/b2_boundary_probes.py"),
         "driver": hash_file(B2 / "oracle/driver.py"),
@@ -328,6 +330,18 @@ def _c20_runtime_supports_locked_down_permissions() -> dict[str, Any]:
     return _tri(ok, reason, "b2_readiness_checks.runtime_permission_mode")
 
 
+def _c21_model_process_workspace_confinement() -> dict[str, Any]:
+    """The model process itself, not only the code it writes.
+
+    Added by this correction. `run_in_view` confines agent-written check and product code;
+    it never confined the Claude Code process, and a tool policy cannot: read-only shell
+    commands execute without a prompt even under `dontAsk`. Measured by running those
+    commands for real against a planted sentinel, never by reading the allowlist.
+    """
+    ok, reason = _functional("model_process_workspace_confinement")()
+    return _tri(ok, reason, "b2_readiness_checks.model_process_workspace_confinement")
+
+
 def _c19_semantics_change_visible() -> dict[str, Any]:
     pins = None
     try:
@@ -362,6 +376,8 @@ CRITERIA: tuple[tuple[int, str, bool, Callable[[], dict[str, Any]]], ...] = (
     (19, "Case semantics changes visible as design changes", True, _c19_semantics_change_visible),
     (20, "Runtime offers the locked-down permission mode a writable run needs", True,
      _c20_runtime_supports_locked_down_permissions),
+    (21, "Model process confined to the workspace, filesystem-wise", True,
+     _c21_model_process_workspace_confinement),
 )
 
 

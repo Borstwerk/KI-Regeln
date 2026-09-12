@@ -136,8 +136,18 @@ criteria:
   criterion: Runtime offers the locked-down permission mode a writable run needs
   blocking: true
   met: true
-  reason: Claude Code 2.1.261 (Claude Code) offers --permission-mode dontAsk; the
-    writable argv requests --tools Read,Edit,Write,Bash with allow rules ['Read',
-    'Edit', 'Write', 'Bash(check)']
+  reason: Claude Code 2.1.269 (Claude Code) parses the writable flag form and exits
+    at --help (rc 0), and rejects an invalid --permission-mode (rc 1); the argv requests
+    --tools Read,Edit,Write,Bash, allow rules ['Read', 'Edit', 'Write', 'Bash(check)']
+    and --permission-mode dontAsk
   evidence: b2_readiness_checks.runtime_permission_mode
+- id: 21
+  criterion: Model process confined to the workspace, filesystem-wise
+  blocking: true
+  met: true
+  reason: cat of an evaluator sentinel and of a repository file both fail with FileNotFoundError;
+    find and grep across the view return nothing; /home, /root and /tmp are absent;
+    every write outside /workspace is refused while /workspace is writable; the launcher
+    names only in-view paths and the staged runtime carries ['b2_boundary.py', 'b2_check_launcher.py']
+  evidence: b2_readiness_checks.model_process_workspace_confinement
 note: An infrastructure decision. It says nothing about any agent's behaviour.

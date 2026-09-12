@@ -21,11 +21,9 @@ from typing import Any, Callable, Mapping
 import yaml
 
 try:
-    from .b2_check_launcher import materialize as materialize_check_launcher
-    from .b2_check_launcher import path_with_launcher as check_launcher_path
+    from .b2_model_confinement import confined_model_invocation
 except ImportError:  # direct script sibling import
-    from b2_check_launcher import materialize as materialize_check_launcher
-    from b2_check_launcher import path_with_launcher as check_launcher_path
+    from b2_model_confinement import confined_model_invocation
 
 VERSION = "0.2.1"
 RUNNER_TYPE = "claude-code"
@@ -306,18 +304,25 @@ def _prompt(execution: Mapping[str, Any]) -> str:
     return "\n".join(lines).strip() + "\n"
 
 
-def _read_only(root: Path, skip: Path | None = None) -> bool:
-    """Make the package read-only, optionally sparing one writable subtree.
+def _read_only(root: Path, skip: tuple[Path, ...] | Path | None = None) -> bool:
+    """Make the package read-only, sparing the subtrees a writable run needs intact.
 
-    `skip` exists for the B2 writable mode, where exactly one directory is the experiment.
-    It is not a boundary and is not described as one -- the boundary is `tools/b2_boundary.py`,
-    which is what keeps agent-controlled code away from everything outside its view.
+    Spared are the workspace (which is the experiment) and the adapter-owned launcher and
+    trusted runtime (which must stay executable). None of this is a boundary and none of it
+    is described as one: the boundaries are `b2_boundary.py` for agent-written check code and
+    `b2_model_confinement.py` for the model process itself.
     """
     ok = True
-    skip = skip.resolve() if skip is not None else None
+    if skip is None:
+        spared: tuple[Path, ...] = ()
+    elif isinstance(skip, Path):
+        spared = (skip.resolve(),)
+    else:
+        spared = tuple(s.resolve() for s in skip)
     for p in root.rglob("*"):
         if p.is_file():
-            if skip is not None and skip in p.resolve().parents:
+            resolved = p.resolve()
+            if any(s == resolved or s in resolved.parents for s in spared):
                 continue
             try:
                 p.chmod(stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH)
@@ -1007,18 +1012,14 @@ def execute_prepared_response(
         workspace = task / B2_WORKSPACE_DIR if writable_workspace else None
         if writable_workspace and not (workspace and workspace.is_dir()):
             raise AdapterError(f"writable mode requires a {B2_WORKSPACE_DIR}/ directory in the runner package")
-        launcher = None
+        spared: tuple[Path, ...] = ()
         if writable_workspace:
-            # `bin/check` lives outside the writable subtree and is made read-only with the
-            # rest of the package below, so the one allowed Bash invocation reaches a
-            # launcher the agent cannot replace.
-            launcher = materialize_check_launcher(task, workspace)
-        read_only = _read_only(task, skip=workspace)
+            # The launcher and its staged runtime are mounted read-only inside the view, so
+            # they are spared here only to stay executable -- the protection is the mount.
+            spared = (workspace, task / "bin", task / "b2-runtime")
+        read_only = _read_only(task, skip=spared or None)
         base = base_env if base_env is not None else os.environ
         env, env_policy = _child_env(base, config)
-        if writable_workspace:
-            env["PATH"] = check_launcher_path(task, env.get("PATH"))
-            env_policy["b2_check_launcher"] = str(launcher)
         argv, controls = _argv(claude_binary, model, _prompt(execution), requested_session,
                                probe["capabilities"], empty_mcp, writable=writable_workspace)
         auth = _auth(env, base, bare_requested=controls["bare_requested"])
@@ -1028,7 +1029,31 @@ def execute_prepared_response(
                 "expected ANTHROPIC_API_KEY, or explicit CLAUDE_CODE_USE_BEDROCK=1 / CLAUDE_CODE_USE_VERTEX=1"
             )
         managed = _managed_policy(claude_binary, env, task, process_runner)
-        started = _now(); result = process_runner(argv, cwd=task, env=env, input_text=None); finished = _now()
+        confinement: dict[str, Any] | None = None
+        if writable_workspace:
+            # The model process runs inside the boundary too. A tool policy cannot carry this:
+            # Claude Code executes a class of read-only shell commands without a prompt even
+            # under `dontAsk`, so `Bash(check)` was never the only reachable Bash action.
+            with confined_model_invocation(argv, task_root=task, workspace=workspace, env=env,
+                                           claude_binary=claude_binary) as confined:
+                confinement = {
+                    "provider": confined.provider, "confined": True,
+                    "workspace_mount": "/workspace", "launcher_mount": "/b2-bin",
+                    "trusted_runtime_mount": "/b2-runtime",
+                    "network_namespace_unshared": False,
+                    "note": ("filesystem confinement only; the model process keeps network "
+                             "access because it must reach its API"),
+                }
+                started = _now()
+                result = process_runner(confined.argv, cwd="/", env=confined.env, input_text=None)
+                finished = _now()
+                if not confined.payload_started():
+                    raise AdapterError(
+                        "the model-process confinement was not established, so the run never "
+                        f"started (exit {result.returncode}): {(result.stderr or '').strip()[-300:]}"
+                    )
+        else:
+            started = _now(); result = process_runner(argv, cwd=task, env=env, input_text=None); finished = _now()
         if result.returncode != 0:
             diagnosis = _classify_failure(result.stdout)
             raise AdapterError(

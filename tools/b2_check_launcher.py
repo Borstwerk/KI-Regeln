@@ -23,6 +23,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import shutil
 import stat
 import sys
 from pathlib import Path
@@ -34,6 +35,11 @@ except ImportError:  # direct script sibling import
 
 LAUNCHER_NAME = "check"
 BIN_DIR = "bin"
+# The only modules the launcher needs. Staged into a directory of its own so the view never
+# carries the repository, and so an agent that reads `bin/check` learns two in-view paths and
+# no host path. The earlier version embedded `Path(__file__).resolve().parent`, which handed
+# out the absolute path of the evaluator's own tools directory.
+TRUSTED_RUNTIME_FILES = ("b2_boundary.py", "b2_check_launcher.py")
 CHECK_ENTRY = "checks/validate.py"
 CHECK_TIMEOUT = 60
 # Exit codes the launcher owns. 0 and 1 belong to the check itself.
@@ -76,18 +82,34 @@ def launch(workspace: str, argv: list[str]) -> int:
     return result.returncode
 
 
-def materialize(task_root: Path, workspace: Path, tools_dir: Path | None = None) -> Path:
+def stage_trusted_runtime(destination: Path, source: Path | None = None) -> Path:
+    """Copy exactly the modules the launcher imports, and nothing that sits beside them."""
+    source = source or Path(__file__).resolve().parent
+    destination.mkdir(parents=True, exist_ok=True)
+    for name in TRUSTED_RUNTIME_FILES:
+        shutil.copyfile(source / name, destination / name)
+    staged = sorted(p.name for p in destination.rglob("*") if p.is_file())
+    if staged != sorted(TRUSTED_RUNTIME_FILES):
+        raise RuntimeError(f"the staged runtime carries unexpected files: {staged}")
+    return destination
+
+
+def materialize(task_root: Path, workspace: Path, tools_dir: Path | None = None,
+                staging: Path | None = None) -> Path:
     """Write `bin/check` into the runner package, outside the writable workspace.
 
-    Read-only and owned by the adapter. The agent's tool policy allows no write outside the
-    workspace subtree anyway, and the boundary allows none at all; this is the third
-    independent reason the launcher cannot be replaced.
+    `workspace` and `tools_dir` are embedded verbatim, so the caller decides whether the
+    launcher names host paths or in-view ones. The confined adapter path passes `/workspace`
+    and `/b2-runtime`; nothing about the evaluator's filesystem is written into the file.
+    When `staging` is given, the trusted runtime is copied there first.
     """
-    tools = str((tools_dir or Path(__file__).resolve().parent).resolve())
+    if staging is not None:
+        stage_trusted_runtime(staging)
+    tools = str(tools_dir) if tools_dir is not None else str(Path(__file__).resolve().parent)
     bin_dir = task_root / BIN_DIR
     bin_dir.mkdir(parents=True, exist_ok=True)
     launcher = bin_dir / LAUNCHER_NAME
-    launcher.write_text(TEMPLATE.format(tools=tools, workspace=str(workspace.resolve())), encoding="utf-8")
+    launcher.write_text(TEMPLATE.format(tools=tools, workspace=str(workspace)), encoding="utf-8")
     launcher.chmod(stat.S_IRUSR | stat.S_IXUSR | stat.S_IRGRP | stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH)
     return launcher
 

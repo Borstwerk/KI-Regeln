@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""The only entry point for a Phase 4.2C / B2 writable run, and the place the gate sits.
+"""The public entry point for a Phase 4.2C / B2 writable run.
 
-A readiness file that nobody consults is documentation. So the admission is minted here, from
-a *fresh* evaluation of the entry criteria, and the writable adapter path refuses to start a
-model process without one. There is no second public way in: `execute_prepared_response`
-raises on `writable_workspace=True` without an admission object carrying the marker, and that
-object cannot be built from a stored artifact.
+It reports whether the pilot entry criteria are met and then hands over to the adapter. It
+does not authorise anything: an earlier version minted an admission object the adapter
+checked for a marker, which any caller could construct, so the authority now lives on the
+launch path itself. `execute_prepared_response` evaluates the criteria again immediately
+before starting the model process, with the boundary probes re-run rather than read from a
+file, and takes no argument that could stand in for that.
 
 `--preflight-only` walks the whole admission path and stops immediately before the model
 process would be launched.
