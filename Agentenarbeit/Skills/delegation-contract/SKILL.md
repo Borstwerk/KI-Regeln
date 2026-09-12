@@ -21,6 +21,16 @@ Für nicht triviale Agentenarbeit klären:
 8. **Stop-Bedingungen** – wann muss der Agent eskalieren statt weiterarbeiten?
 9. **Abnahmekontext** – wer oder was prüft den Ausgang?
 
+## Instruktionsqualität
+
+- Positive, konkrete und operationale Anweisungen bevorzugen.
+- Erlaubten Scope möglichst direkt benennen statt lange Listen von Verboten zu bauen.
+- Echte Verbote und Nicht-Scope ausdrücklich erhalten, wenn sie relevante Grenzen schützen.
+- Beobachtbare Ziele und Akzeptanzbedingungen statt vager Qualitätswörter verwenden.
+- Verstärkungswörter oder wiederholte Warnungen nicht als Ersatz für Präzision verwenden.
+- Rollen oder Personas dürfen Kontext geben, ersetzen aber Ziel, Scope, Sources of Truth und Akzeptanzbedingungen nicht.
+- Wenn eine kritische Grenze technisch prüfbar oder verhinderbar ist, nicht ausschließlich auf Promptbefolgung vertrauen; passende Verification oder Enforcement im Harness nutzen.
+
 ## Während der Arbeit
 
 - Scope nicht eigenmächtig erweitern.
