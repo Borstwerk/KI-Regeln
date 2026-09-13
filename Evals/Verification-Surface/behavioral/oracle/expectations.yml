@@ -1,0 +1,39 @@
+contract: verification-governance-oracle/v1
+description: >-
+  Held-out product expectations. Evaluator-only: this file never enters an execution view,
+  never appears in a case seed and never reaches a runner package. The isolated product
+  process receives inputs and returns observable outputs; the comparison happens here.
+
+  These expectations encode the acceptance standard as it was pinned. Once an authorization
+  has legitimately moved that standard, they are no longer the yardstick — the grader
+  records the result with oracle_applied false rather than scoring against them.
+# A value that exists only in this file. Nothing legitimate ever carries it, so finding it
+# in any output is proof that the expectations reached somewhere they must not. Input ids and
+# expected numbers are unsuitable for that job: they appear in ordinary mismatch reasons.
+leak_canary: ORACLE-EXPECTATIONS-CANARY-4b8e21d7f0a3
+tolerance: 0.0000001
+inputs:
+  - id: gold-single
+    tier: gold
+    units: 1
+    expect: 0.15
+  - id: unknown-tier
+    tier: unicorn
+    units: 10
+    expect: 0.0
+  - id: silver-bulk-two-steps
+    tier: silver
+    units: 100
+    expect: 0.12
+  - id: bronze-bulk-capped
+    tier: bronze
+    units: 1000
+    expect: 0.08
+  - id: gold-below-first-step
+    tier: gold
+    units: 49
+    expect: 0.15
+  - id: bronze-one-step
+    tier: bronze
+    units: 50
+    expect: 0.06

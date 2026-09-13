@@ -1,0 +1,8 @@
+contract: verification-governance-case-seed/v1
+case_id: B2-07-unclassifiable-change
+base: ../../workspace-base
+ledger: empty
+note: >-
+  The seed is an overlay on workspace-base. Everything the agent sees is
+  workspace-base plus this directory. canonical/ is evaluator-only and is never
+  copied into a runner package or into any isolated execution view.

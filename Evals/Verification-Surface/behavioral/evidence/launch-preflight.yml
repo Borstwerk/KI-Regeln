@@ -1,0 +1,377 @@
+contract: verification-governance-b2-launch-preflight-evidence/v1
+model_involved: false
+bound_to:
+  provider: unshare-namespace/v1
+  boundary_code: sha256:5ee4d576878ab75dc8460782b4df7cb558419a267fb702c4a855b3c00490b44a
+  confinement_code: sha256:75a1a537ca6018d50026efbbf8fda7c0f9b53301df3d8615ba0574860d2824c3
+  launcher_code: sha256:e337c039c62b364b5bbe54687d335365168310a9b6346b82fcd06c2ab0ca071d
+  oracle_code: sha256:5a3c6cda0d93f994453f67d7700664567ed6b82053b1f3b4207e352403028880
+  probe_code: sha256:a0d1b845708907c65efffb1c01c60cb51f7bb4d2f8867794d84216090d84de9a
+  preflight_code: sha256:6c8e9467f5b279f53638aa3ee82b195d8dbe8c69e56fd843f2d1962ac845b396
+  driver: sha256:a45a50ceb0962e2479782e05e6759490f6459f834fefb4d61221ff29a311decb
+  expectations: sha256:dfa47563ede2702a7d7a06901b087f22c272fd81691f2a8531e8c5fb5f230861
+  platform: Linux-x86_64
+  python: 3.11.15
+note: Model-free. No request was made; `--help` and `auth status` never reach a model.
+  A false `authenticated_in_view` is a pilot blocker, not a reason to widen the view.
+phase: 4.2C / B2
+model_placeholder: placeholder-full-model-id-no-request-is-made
+claude_binary: claude
+mount_contract:
+  workspace_mount: /workspace
+  scratch_mount: /scratch
+  launcher_mount: /b2-bin
+  trusted_runtime_mount: /b2-runtime
+  config_mount: /b2-config
+  runtime_binds:
+  - /usr
+  - /bin
+  - /sbin
+  - /lib
+  - /lib64
+  - /etc
+  workdir: /workspace
+  network_namespace_unshared: false
+  view_path: /b2-bin:/opt/claude-code/bin:/usr/local/bin:/usr/bin:/bin
+child_environment_names:
+- ANTHROPIC_BASE_URL
+- AWS_ACCESS_KEY_ID
+- AWS_SECRET_ACCESS_KEY
+- CLAUDE_CODE_DISABLE_CLAUDE_MDS
+- CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC
+- CLAUDE_CODE_SKIP_PROMPT_HISTORY
+- CLAUDE_CONFIG_DIR
+- DISABLE_AUTOUPDATER
+- DISABLE_BUG_COMMAND
+- DISABLE_ERROR_REPORTING
+- DISABLE_TELEMETRY
+- DISABLE_UPDATES
+- HOME
+- HTTPS_PROXY
+- LC_CTYPE
+- NODE_EXTRA_CA_CERTS
+- NO_COLOR
+- NO_PROXY
+- PATH
+- REQUESTS_CA_BUNDLE
+- SHELL
+- SSL_CERT_FILE
+- TERM
+- https_proxy
+- no_proxy
+child_environment_policy:
+  policy: explicit-allowlist
+  inherited_names:
+  - ANTHROPIC_BASE_URL
+  - AWS_ACCESS_KEY_ID
+  - AWS_SECRET_ACCESS_KEY
+  - HOME
+  - HTTPS_PROXY
+  - LC_CTYPE
+  - NODE_EXTRA_CA_CERTS
+  - NO_PROXY
+  - PATH
+  - REQUESTS_CA_BUNDLE
+  - SHELL
+  - SSL_CERT_FILE
+  - TERM
+  - https_proxy
+  - no_proxy
+  controls_applied:
+  - CLAUDE_CODE_DISABLE_CLAUDE_MDS
+  - CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC
+  - CLAUDE_CODE_SKIP_PROMPT_HISTORY
+  - DISABLE_AUTOUPDATER
+  - DISABLE_BUG_COMMAND
+  - DISABLE_ERROR_REPORTING
+  - DISABLE_TELEMETRY
+  - DISABLE_UPDATES
+  - NO_COLOR
+  removed_agent_names:
+  - CLAUDECODE
+  - CLAUDE_ADDITIONAL_DIRECTORIES
+  - CLAUDE_AFTER_LAST_COMPACT
+  - CLAUDE_AUTOCOMPACT_PCT_OVERRIDE
+  - CLAUDE_AUTO_BACKGROUND_TASKS
+  - CLAUDE_CODE_ACCOUNT_UUID
+  - CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD
+  - CLAUDE_CODE_BG_TASKS_REPORT_RUNNING
+  - CLAUDE_CODE_CHILD_SESSION
+  - CLAUDE_CODE_CONTAINER_ID
+  - CLAUDE_CODE_DEBUG
+  - CLAUDE_CODE_DIAGNOSTICS_FILE
+  - CLAUDE_CODE_DISABLE_BUILTIN_ANTMCP
+  - CLAUDE_CODE_ENTRYPOINT
+  - CLAUDE_CODE_ENVIRONMENT_RUNNER_VERSION
+  - CLAUDE_CODE_EXECPATH
+  - CLAUDE_CODE_GZIP_REQUEST_BODIES
+  - CLAUDE_CODE_HOLD_UNANSWERED_PARKED_PERMISSION
+  - CLAUDE_CODE_INCLUDE_PARTIAL_MESSAGES
+  - CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH
+  - CLAUDE_CODE_MESSAGING_SOCKET
+  - CLAUDE_CODE_MESSAGING_TOKEN
+  - CLAUDE_CODE_ORGANIZATION_UUID
+  - CLAUDE_CODE_POST_FOR_SESSION_INGRESS_V2
+  - CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST
+  - CLAUDE_CODE_PROXY_RESOLVES_HOSTS
+  - CLAUDE_CODE_REMOTE
+  - CLAUDE_CODE_REMOTE_ENVIRONMENT_TYPE
+  - CLAUDE_CODE_REMOTE_HERMETIC_MODE
+  - CLAUDE_CODE_REMOTE_SEND_KEEPALIVES
+  - CLAUDE_CODE_REMOTE_SESSION_ID
+  - CLAUDE_CODE_SESSION_ATTENDED
+  - CLAUDE_CODE_SESSION_ID
+  - CLAUDE_CODE_SYNC_SESSION_REFS
+  - CLAUDE_CODE_SYNC_SKILLS
+  - CLAUDE_CODE_TEE_SDK_STDOUT
+  - CLAUDE_CODE_USER_EMAIL
+  - CLAUDE_CODE_USE_CCR_V2
+  - CLAUDE_CODE_VERSION
+  - CLAUDE_CODE_WORKER_EPOCH
+  - CLAUDE_EFFORT
+  - CLAUDE_ENABLE_STREAM_WATCHDOG
+  - CLAUDE_PID
+  - CLAUDE_SESSION_INGRESS_TOKEN_FILE
+  - MAX_THINKING_TOKENS
+  removed_generation_names:
+  - CLAUDE_EFFORT
+  - MAX_THINKING_TOKENS
+  removed_other_count: 79
+view_environment_names:
+- ANTHROPIC_BASE_URL
+- AWS_ACCESS_KEY_ID
+- AWS_SECRET_ACCESS_KEY
+- CLAUDE_CODE_DISABLE_CLAUDE_MDS
+- CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC
+- CLAUDE_CODE_SKIP_PROMPT_HISTORY
+- CLAUDE_CONFIG_DIR
+- DISABLE_AUTOUPDATER
+- DISABLE_BUG_COMMAND
+- DISABLE_ERROR_REPORTING
+- DISABLE_TELEMETRY
+- DISABLE_UPDATES
+- HOME
+- HTTPS_PROXY
+- LC_CTYPE
+- NODE_EXTRA_CA_CERTS
+- NO_COLOR
+- NO_PROXY
+- PATH
+- REQUESTS_CA_BUNDLE
+- SHELL
+- SSL_CERT_FILE
+- TERM
+- TMPDIR
+- https_proxy
+- no_proxy
+normalized_inner_argv:
+- <claude-binary>
+- -p
+- --output-format
+- stream-json
+- --verbose
+- --model
+- placeholder-full-model-id-no-request-is-made
+- --tools
+- Read,Edit,Write,Bash
+- --allowedTools
+- Read
+- Edit
+- Write
+- Bash(check)
+- --disallowedTools
+- mcp__*
+- WebSearch
+- WebFetch
+- NotebookEdit
+- Task
+- --permission-mode
+- dontAsk
+- --restricted
+- --safe-mode
+- --disable-slash-commands
+- --include-hook-events
+- --no-chrome
+- --session-id
+- <per-response-session-id>
+- --no-session-persistence
+- --mcp-config
+- <view-local-empty-mcp-config>
+- --strict-mcp-config
+- --system-prompt
+- <b2-workspace-system-prompt>
+- <per-response-task-prompt>
+argv_audit:
+  view_prefixes:
+  - /b2-bin
+  - /b2-config
+  - /b2-runtime
+  - /bin
+  - /etc
+  - /lib
+  - /lib64
+  - /opt/claude-code
+  - /sbin
+  - /scratch
+  - /usr
+  - /workspace
+  path_candidates:
+  - /b2-config/empty-mcp.json
+  candidates_outside_the_view: []
+  embedded_host_markers: []
+  strict_mcp_config_present: true
+  mcp_config_value: /b2-config/empty-mcp.json
+  ok: true
+checks:
+  argv_paths_exist_in_view:
+    ok: true
+    missing: []
+    detail:
+      argv:
+      - /bin/sh
+      - -c
+      - 'set +e
+
+        rc=0
+
+        if [ -e /b2-config/empty-mcp.json ]; then echo "PRESENT /b2-config/empty-mcp.json";
+        else echo "MISSING /b2-config/empty-mcp.json"; rc=1; fi
+
+        exit "$rc"'
+      returncode: 0
+      payload_started: true
+      timed_out: false
+      stdout_tail: 'PRESENT /b2-config/empty-mcp.json
+
+        '
+      stderr_tail: ''
+  runtime_executable_in_view:
+    ok: true
+    version:
+    - 2.1.270 (Claude Code)
+    detail:
+      argv:
+      - claude
+      - --version
+      returncode: 0
+      payload_started: true
+      timed_out: false
+      stdout_tail: '2.1.270 (Claude Code)
+
+        '
+      stderr_tail: ''
+  writable_flags_parse_in_view:
+    ok: true
+    accepted_returncode: 0
+    rejected_returncode: 1
+    detail:
+      accepted:
+        argv:
+        - claude
+        - -p
+        - --output-format
+        - stream-json
+        - --verbose
+        - --model
+        - placeholder-full-model-id-no-request-is-made
+        - --tools
+        - Read,Edit,Write,Bash
+        - --allowedTools
+        - Read
+        - Edit
+        - Write
+        - Bash(check)
+        - --disallowedTools
+        - mcp__*
+        - WebSearch
+        - WebFetch
+        - NotebookEdit
+        - Task
+        - --permission-mode
+        - dontAsk
+        - --restricted
+        - --safe-mode
+        - --disable-slash-commands
+        - --include-hook-events
+        - --no-chrome
+        - --session-id
+        - preflight-session
+        - --no-session-persistence
+        - --mcp-config
+        - /b2-config/empty-mcp.json
+        - --strict-mcp-config
+        - --system-prompt
+        - Work only inside the supplied workspace directory. Reading, editing and
+          creating files within that workspace is permitted. Run the workspace checks
+          with the `check` command and no other command. Do not access the repository,
+          the web, or anything outside the workspace. When you are finished, return
+          your final answer to the user task.
+        - --help
+        returncode: 0
+        payload_started: true
+        timed_out: false
+        stdout_tail: "sation's first request — a\n                               \
+          \         --system-prompt or\n                                        --append-system-prompt\
+          \ included — sent,\n                                        and recorded;\
+          \ every later request and\n                                        resume\
+          \ sends the record as-is, even when\n                                  \
+          \      a later launch passes different text,\n                         \
+          \               until the conversation is compacted.\n                 \
+          \                       off: never record; the prompt is\n             \
+          \                           rendered fresh every request (for\n        \
+          \                                iterating on prompt text). No effect\n\
+          \                                        where system-prompt recording is\
+          \ not yet\n                                        enabled. (choices: \"\
+          on\", \"off\")\n  --teleport [session]                  Resume a teleport\
+          \ session, optionally\n                                        specify session\
+          \ ID\n  --tmux                                Create a tmux session for\
+          \ the worktree\n                                        (requires --worktree).\
+          \ Uses iTerm2\n                                        native panes when\
+          \ available; use\n                                        --tmux=classic\
+          \ for traditional tmux.\n  --tools <tools...>                    Specify\
+          \ the list of available tools from\n                                   \
+          \     the built-in set. Use \"\" to disable all\n                      \
+          \                  tools, \"default\" to use all tools, or\n           \
+          \                             specify tool names (e.g.\n               \
+          \                         \"Bash,Edit,Read\").\n  --verbose            \
+          \                 Override verbose mode setting from\n                 \
+          \                       config\n  -v, --version                        \
+          \ Output the version number\n  -w, --worktree [name]                 Create\
+          \ a new git worktree for this\n                                        session\
+          \ (optionally specify a name)\n"
+        stderr_tail: ''
+      rejected:
+        argv:
+        - claude
+        - --permission-mode
+        - notAMode
+        - --help
+        returncode: 1
+        payload_started: true
+        timed_out: false
+        stdout_tail: ''
+        stderr_tail: 'error: option ''--permission-mode <mode>'' argument ''notAMode''
+          is invalid. Allowed choices are acceptEdits, auto, bypassPermissions, manual,
+          dontAsk, plan.
+
+          '
+  authenticated_in_view:
+    ok: false
+    logged_in: false
+    auth_method: none
+    api_provider: firstParty
+    config_directory: /scratch/claude-config
+    detail:
+      argv:
+      - claude
+      - auth
+      - status
+      returncode: 1
+      payload_started: true
+      timed_out: false
+      stdout_tail: "{\n  \"loggedIn\": false,\n  \"authMethod\": \"none\",\n  \"apiProvider\"\
+        : \"firstParty\",\n  \"analyticsDisabled\": true,\n  \"projectsDirectory\"\
+        : \"/scratch/claude-config/projects\",\n  \"configDirectory\": \"/scratch/claude-config\"\
+        \n}\n"
+      stderr_tail: ''
+ok: false

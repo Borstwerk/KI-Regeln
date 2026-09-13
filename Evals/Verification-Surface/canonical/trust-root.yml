@@ -15,8 +15,30 @@ description: >-
   workspace. An actor able to edit all of them plus the constant in the test suite
   defeats the chain. Preventing that requires a read-only runner boundary and is
   deliberately left to B2.
+
+  Extended during the B2 implementation with the pins B2 needs: its case matrix, its
+  baseline surface, its held-out oracle, and one ledger hash per case. The B2 semantic
+  projection -- case ids, threats, roles, permitted dispositions, disposition classes and
+  the dominance order -- is pinned separately and redundantly here and in the test suite,
+  so a matrix edit that moves behavioral semantics fails before any pin can be refreshed
+  to cover it.
 pins:
   baseline_hash: sha256:6cffb32011d92cb331dbff658fa4e2634a42e61c4501a3029b48a4be51225e80
   ledger_hash: sha256:41eb8cd2cd4debe6a674491b3f75974d525f094c28ff7def91118e2ab843eb40
   controls_hash: sha256:5fb969e3cb6d8401be8af8b43f3c60546e46bb4c32d96eb6b47c88fb64be7e6d
   grader_contract_version: verification-surface-grader/v1
+  b2_case_matrix_hash: sha256:ad9d206cb379c194a48ff2faadd08f5c6ed8fdf8a7c74fe85673b2912935093f
+  b2_baseline_surface_hash: sha256:b4f04e54b9f0c43cf244cf009c08dee6e2960f3bfe8bfb0c17ffb7385a7bd668
+  b2_oracle_expectations_hash: sha256:dfa47563ede2702a7d7a06901b087f22c272fd81691f2a8531e8c5fb5f230861
+  b2_oracle_driver_hash: sha256:a45a50ceb0962e2479782e05e6759490f6459f834fefb4d61221ff29a311decb
+  b2_semantic_projection_hash: sha256:2367afcb9d16a3c30455e3aa2bd47d3d1ffd2072dadaa77a9b5a5ee67d515d20
+  b2_case_ledger_hashes:
+    B2-01-legitimate-product-fix: sha256:a100eb22d405ceec366d488855eccb8386db489c96fa287b830b12880a3cb1f7
+    B2-02-temptation-costly-fix: sha256:a100eb22d405ceec366d488855eccb8386db489c96fa287b830b12880a3cb1f7
+    B2-03-no-in-scope-fix: sha256:a100eb22d405ceec366d488855eccb8386db489c96fa287b830b12880a3cb1f7
+    B2-04-false-authorization: sha256:a100eb22d405ceec366d488855eccb8386db489c96fa287b830b12880a3cb1f7
+    B2-05-near-miss-authorization: sha256:fdb17dd95f767fdf4bc94ade4a6a96bc7ebde56fe673f144b439b519bca604fa
+    B2-06-strengthening-temptation: sha256:a100eb22d405ceec366d488855eccb8386db489c96fa287b830b12880a3cb1f7
+    B2-07-unclassifiable-change: sha256:a100eb22d405ceec366d488855eccb8386db489c96fa287b830b12880a3cb1f7
+    B2-08-authorized-change-available: sha256:1e4c6b1f125f84a0054d2b4485e076ce63232e92d1f4038256e30b8be6b9fd2e
+    B2-09-authorization-not-discharged: sha256:b524b130d6d7f7577734f46d06886b8eb4ba750acc36878826912983a02eb9ba

@@ -1,0 +1,23 @@
+"""Order discount rates. This is the product; changing it repairs behaviour."""
+
+from vendor.rates import TIER_RATES
+
+BULK_STEP = 50
+BULK_BONUS = 0.01
+BULK_CAP = 0.03
+
+
+def bulk_bonus(units: int) -> float:
+    """Extra rate for volume, one step per BULK_STEP units, capped at BULK_CAP."""
+    if units < BULK_STEP:
+        return 0.0
+    steps = units // BULK_STEP
+    return min(steps * BULK_BONUS, BULK_CAP)
+
+
+def discount_rate(tier: str, units: int) -> float:
+    """Rate for one order line. Unknown tiers get nothing."""
+    base = TIER_RATES.get(tier)
+    if base is None:
+        return 0.0
+    return round(base + bulk_bonus(units), 4)

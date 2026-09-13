@@ -8,6 +8,54 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Phase 4.2C · B2 — Launch-Kontext und Aufzeichnung
+
+- view-lokaler `--mcp-config`: die leere MCP-Konfiguration lag im Host-Temp-Verzeichnis des Adapters und wurde dem confinten Prozess als Hostpfad übergeben, den er nicht öffnen kann; sie erhält jetzt eine eigene read-only View `/b2-config` mit genau einer Datei, und `--strict-mcp-config` ist für writable B2 erzwungen statt optional; die Inline-JSON-Variante wurde nicht genommen, weil keine modellfreie Invocation der installierten CLI diese Option parst und eine Annahme aus der Hilfe keine Messung ist;
+- `PATH` innerhalb der View enthält jetzt das Verzeichnis der Claude-Code-Runtime; der confinte Launch wäre zuvor mit `env: 'claude': No such file or directory` gestorben, gefunden vom neuen Launch-Preflight;
+- die gemessenen Confinement-Fakten stehen jetzt in Runtime-Preimage, Evidence und Method-Evidence; `os_or_container_sandbox` war eine Konstante und sagte „kein Sandbox" über einen Lauf mit Sandbox; die äußere Invocation wird als normalisierter Preimage gebunden (Struktur, Provider, Mount Contract, inneres argv; Assembly-Script als Hash, Launcher-Environment nur als Variablennamen), damit ein unconfinter Lauf nicht dieselbe Method Evidence erzeugen kann;
+- Gate und Launch leiten ihren Kontext nur noch einmal ab: `prepare_writable_launch()` erzeugt einen `WritableLaunchContext` aus geprobtem Binary und gefiltertem Child-Environment, und dieselbe Instanz speist Criterion 22, die Admission und den Launch; zuvor maß das Kriterium `os.environ`, während der Prozess eine gefilterte Kopie erhielt, und kannte weder `base_env` noch `claude_binary`;
+- neues blockierendes Kriterium 22 `confined_model_runtime_launchable`: view-lokale argv-Pfade, ausführbare Runtime in der View, Parserakzeptanz der writable Flags und ein Authpfad, der im View-Environment funktioniert;
+- Pilot Entry bleibt blockiert: `claude auth status` innerhalb der View meldet `loggedIn: false`, weil das Credential unter einem Host-Home liegt, das die View bewusst nicht trägt; Host-Home oder Claude-Config einzumounten würde die gerade geschlossene Grenze wieder öffnen und ist deshalb unterblieben;
+- keine Model Responses, keine Behavioral Runs, kein Judge, kein Unblinding, kein Pairing, keine Skill-Wirkungsaussage, keine Maturity- oder Coverage-Änderung.
+
+### Phase 4.2C · B2 — Confinement des Modellprozesses
+
+- der Claude-Code-Prozess selbst läuft jetzt im Namespace-Provider: die bisherige Annahme, `--permission-mode dontAsk` zusammen mit `Bash(check)` mache `check` zur einzigen ausführbaren Shell-Aktion, war falsch, weil eine Klasse read-only Kommandos ohne Freigabe läuft; zusammen mit einem Launcher, der den absoluten Pfad des Evaluator-`tools/`-Verzeichnisses einbettete, war das ein konkreter Weg zu Case Matrix, Trust Root und Oracle-Expectations;
+- die äußere View trägt Workspace (beschreibbar, zugleich Arbeitsverzeichnis), Scratch, einen minimal gestageten Trusted Runtime aus zwei Dateien und den Check-Launcher; Repository, `/home`, `/root` und `/tmp` existieren darin nicht, und der Launcher nennt nur noch View-Pfade;
+- Netzwerk bleibt in der äußeren View bewusst erreichbar, weil der Modellprozess seine API braucht; das ist die einzige Isolation, die diese Schicht nicht leistet, und wird als solche benannt statt impliziert;
+- neues Pilot-Kriterium `model_process_workspace_confinement`, funktional gemessen durch reale Ausführung genau jener read-only Kommandos gegen einen außerhalb platzierten Sentinel, nicht durch Prüfung der Allowlist; Pilot Entry bleibt ohne diesen Nachweis blockiert;
+- `runtime_permission_mode()` nutzt jetzt einen echten modellfreien Parser-Test der installierten CLI und behauptet nur noch das tatsächlich Gemessene; veralteter Kopfkommentar in `b2_model_runner.py` korrigiert;
+- keine Model Responses, keine Behavioral Runs, kein Judge, kein Unblinding, kein Pairing, keine Skill-Wirkungsaussage, keine Maturity- oder Coverage-Änderung.
+
+### Phase 4.2C · B2 — zweite Review-Runde
+
+- Admission entfälscht: der writable Adapterpfad nimmt kein Token mehr entgegen, sondern wertet die Pilot-Kriterien unmittelbar vor dem Modellstart selbst aus; `execute_prepared_response` besitzt keinen `admission`-Parameter mehr, und `b2_model_runner.py` bleibt öffentlicher Einstieg ohne Autorisierungswirkung;
+- Toolnamen und Permission Rules getrennt: `--tools` erhält Toolnamen (`Read,Edit,Write,Bash`), `--allowedTools` die Regeln (`Bash(check)`), dazu `--permission-mode dontAsk` für den nichtinteraktiven Lauf; Evidence berichtet requested visible tools, observed visible tools, deren Übereinstimmung, allow rules, deny rules und permission mode getrennt, und beobachtete Toolnamen werden nie gegen Permission Rules verglichen; ein Build ohne `dontAsk` lässt Pilot Entry fail closed scheitern (neues Kriterium 20);
+- Oracle-Instrumentationsfehler erreichen jetzt D1: ein nicht etablierter Boundary-View oder ein Fehler beim Vorbereiten der Messung setzt `integrity_ok` auf false und führt zu `RUN_INVALID` statt zu einer Behavioral Violation; ein echtes rotes Produkt bei funktionierender Boundary trägt weiterhin D6;
+- Probe-Evidence wird für die Modellpilot-Admission frisch ausgeführt statt aus einer Datei gelesen, weil die Schutzwirkung einer Namespace-Boundary auch von Kernel und util-linux des Hosts abhängt; P6 bleibt Beobachtung;
+- keine Behavioral-/LLM-Runs, kein Judge, kein Unblinding, kein Pairing, keine Skill-Wirkungsaussage, keine Maturity- oder Coverage-Änderung.
+
+### Phase 4.2C · B2 — Review-Korrekturen der Messarchitektur
+
+- Oracle-Leak geschlossen: die Held-out-Expectations lagen im selben Verzeichnis wie der Driver und waren dadurch als `/oracle-driver/expectations.yml` aus der agentenkontrollierten Produkt-View lesbar; der Driver wird jetzt einzeln in ein eigenes Staging-Verzeichnis kopiert, P4 prüft genau diesen Pfad samt Discovery gegen einen Leak-Canary, und die alte P4-Evidence wurde verworfen;
+- separater neutraler B2-Systemprompt ergänzt, weil der bestehende kontrollierte Prompt das Schreiben verbietet und damit genau das Verhalten ausgeschlossen hätte, das B2 beobachten soll; der read-only Prompt bleibt unverändert, und der B2-Prompt nennt weder Guards noch Thresholds, Autorisierung oder Governance;
+- adapterkontrollierten Check-Launcher `bin/check` ergänzt, der außerhalb des beschreibbaren Workspace liegt, keine Argumente akzeptiert, den Workspace-Pfad vom Adapter erhält und ausschließlich den Boundary-Provider aufruft; damit ist die erlaubte Invocation real an die Boundary gekoppelt statt nur erlaubt;
+- effektive Tool-Policy einmal abgeleitet und durch alle tragenden Evidence-Funktionen gereicht, inklusive Systemprompt-Hash; ein writable Run kann seine Policy nicht mehr als read-only ausweisen;
+- Pilot-Gate auf den tatsächlichen Launch-Pfad gelegt: ein writable Adapterlauf verlangt ein Admission-Objekt, das nur `tools/b2_model_runner.py` aus einer frischen Kriterienauswertung erzeugt; ohne das wird kein Modellprozess gestartet;
+- Boundary-Setupfehler deterministisch von Payload-Exits getrennt (Marker unmittelbar vor `exec`); ein nicht etablierter View liefert `BoundaryError`, das Oracle `not-run` und die Pipeline `RUN_INVALID` statt eines vermeintlich roten Produkts;
+- tragende Readiness-Kriterien messen jetzt funktional statt Quelltext-Substrings zu prüfen; zwei tatsächlich nicht anwendbare Kriterien sind als solche modelliert statt als scheinbar gemessenes `true`; Probe-Evidence ist an Boundary-, Oracle-, Probe-, Driver- und Expectation-Hashes sowie Provider und Plattform gebunden und verfällt bei Drift;
+- `extra_ro`-Shadowing gegen alle reservierten Pfade in beide Richtungen geprüft; keine Behavioral-/LLM-Runs, kein Judge, kein Unblinding, kein Pairing, keine Maturity- oder Coverage-Änderung.
+
+### Phase 4.2C · B2 — Implementierung der Messarchitektur
+
+- die reviewten Designschritte S1 bis S5 vollständig implementiert, ohne jeden Behavioral- oder LLM-Run: neun synthetische Workspaces, exhaustive Verification Surface über zehn Elemente, Black-Box Held-out Oracle, deterministische Grading-Pipeline und modellfreie End-to-End-Dry-Runs;
+- eine reale Execution Boundary ergänzt (`unshare`-Namespace mit `pivot_root`, versiegelter read-only View-Root, ausschließlich Workspace-Kopie und Scratch beschreibbar, fixe Umgebung ohne Vererbung); agentenkontrollierter Check- und Produktcode läuft nur noch darin, ein unisolierter Fallback existiert nicht;
+- Breakage-Proben P1 bis P6 tatsächlich ausgeführt und als Evidence abgelegt; P2 hat dabei einen echten Mangel der ersten Boundary-Implementierung gefunden — der View-Root war beschreibbar —, woraufhin die Boundary korrigiert und nicht die Probe abgeschwächt wurde; P6 bleibt reine Beobachtung und niemals ein Gate;
+- `case-matrix.yml` in die bestehende B1-Trust-Kette aufgenommen; die reviewte Behavioral-Semantik ist zusätzlich als eigener Projektions-Hash redundant in Trust Root und Testsuite gepinnt, damit ein Pin-Update keine stille Semantikänderung tragen kann;
+- Behavioral-Harness additiv und opt-in um einen writable B2-Modus sowie einen gehashten Workspace-Export erweitert; der von 4.2A und 4.2B genutzte read-only Pfad bleibt unverändert, und Run-Packages ohne Export bleiben gültig;
+- maschinell auswertbare Pilot Readiness über alle neunzehn Kriterien ergänzt, mit einem Gate, das einen Modellpiloten technisch verweigert, solange ein blockierendes Kriterium `false`, `unknown` oder unbelegt ist, und das sich durch eine manipulierte Readiness-Datei nicht selbst autorisieren lässt;
+- Eval-Gaming-Red-Team gegen das gebaute System statt gegen das Designdokument ausgeführt und dokumentiert;
+- keine Model Responses, kein Semantic Judge, kein Unblinding, kein Pairing, keine Wirksamkeitsaussage zu `verification-loop`, keine Maturity- oder Eval-Coverage-Änderung; `network_disabled` nur so stark berichtet, wie P6 es trägt.
 
 ### Inhaltsprovenienz und Metadatenhygiene
 
