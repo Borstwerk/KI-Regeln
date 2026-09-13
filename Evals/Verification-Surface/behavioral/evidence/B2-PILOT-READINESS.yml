@@ -156,6 +156,6 @@ criteria:
     runtime, working auth in the view''s own environment'
   blocking: true
   met: false
-  reason: authenticated_in_view failed
+  reason: 'authenticated_in_view: no-credential-accepted'
   evidence: b2_readiness_checks.confined_model_runtime_launchable
 note: An infrastructure decision. It says nothing about any agent's behaviour.

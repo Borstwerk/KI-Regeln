@@ -316,6 +316,82 @@ launch. The adapter now passes its probe in, and the preparation refuses a probe
 describes a *different* binary — reuse is an optimisation, never a way to vouch for something
 else. `require_capabilities()` holds the two capability preconditions in one place.
 
+## An authentication path for the confined runtime
+
+The confined view carries no host home, so the runtime cannot read a credential from a file —
+which is why criterion 22 has been red. `CLAUDE_CODE_OAUTH_TOKEN`, produced by
+`claude setup-token` and documented for non-interactive use, is the one channel that can reach
+the process without reopening the filesystem boundary: it is a value in the environment the
+launch already builds, not a path back into the host.
+
+**The reclassification is narrow.** The variable sat in `HOST_ONLY_AUTH_ENV`, which was
+conservative rather than correct. `CLAUDE_CODE_OAUTH_TOKEN_FILE_DESCRIPTOR` and
+`CLAUDE_CODE_OAUTH_TOKEN_FILE` stay there: a descriptor inherited from the parent and a path
+to a file the view does not carry are both bridges to the host. The token itself moves into
+`SECRET_ENV`, which is the allowlist *and* the secret handling — presence and name are
+recorded, the value never is, and no hash of it either, because a hash of a credential is
+still a durable identifier for it. `CLAUDE_CODE_*` as a class stays closed; exactly one
+variable moved, and a test pins the resulting allowlist exactly.
+
+**The credential scrub is mandatory, and it is not free.** A writable run that can carry a
+credential sets `CLAUDE_CODE_SUBPROCESS_ENV_SCRUB=1`; `prepare_writable_launch` refuses the
+launch if it is missing or disabled, with no best-effort form. It applies to writable B2 only
+— the read-only path 4.2A and 4.2B use is untouched — and it goes through `_child_env` as an
+extra control rather than being set beside it, so the environment contract still has one
+implementation and the policy report still names it.
+
+Measured on this host: **this build refuses to start at all with the control set unless
+bubblewrap is available to it** (`bubblewrap is required for subprocess env scrubbing and
+isolation`, exit 1, even for `claude auth status`). That makes bwrap a real precondition of
+the confined launch. It is installed here and reaches the view through the read-only `/usr`
+bind; on a host without it, the preflight's runtime check fails and names it, rather than the
+run silently proceeding without the scrub.
+
+Three levels, kept apart:
+
+| | What |
+| --- | --- |
+| Vendor contract | The parent keeps its provider credentials; Bash tool subprocesses, hooks and stdio MCP processes do not inherit them; on Linux those subprocesses run in their own PID namespace and cannot read the parent's environment through `/proc`. |
+| Measured here | The control is in the child environment, and the runtime starts inside the view with it in force. |
+| Not measured here | That a subprocess actually fails to see the credential. That needs a running model process. |
+
+**The Read tool is not a subprocess.** The scrub protects what the agent *spawns*; the
+built-in Read tool runs inside the parent, which is the process holding the token. So
+`Read(//proc/**)` joins the writable deny rules. The double slash is the runtime's own
+filesystem-absolute form — a single leading slash is workspace-rooted, as its settings
+examples show (`Edit(//etc/*)`), and both that literal and `(//proc/**)` are present in the
+installed binary, which `rule_syntax_evidence()` checks rather than recalls. `/proc` is the
+only pseudo-filesystem in the view that carries process environments; `/dev` is present and
+carries none, so it gets no rule. What is asserted is that the rule is in the deny list the
+launch requests. That the runtime refuses the Read is vendor contract: nothing model-free on
+this runtime evaluates a permission rule, and demonstrating the block needs a model process.
+
+### `auth status` reports presence, not validity
+
+The intended acceptance rule for criterion 22 was: run `claude auth status` inside the view,
+and let the auth sub-check go green when it reports `loggedIn: true`. Measured inside that
+very view, a deliberately invalid `CLAUDE_CODE_OAUTH_TOKEN` produces exactly that:
+
+```
+{ "loggedIn": true, "authMethod": "oauth_token", "apiProvider": "firstParty",
+  "configDirectory": "/scratch/claude-config" }      exit 0
+```
+
+The command does not contact the service. So `loggedIn: true` is credential *presence and
+shape*, and accepting it as the criterion's evidence would mean a junk token turns the pilot
+gate green — the green-by-construction shape this whole phase exists to catch, arriving
+through the acceptance rule itself.
+
+The sub-check therefore reports three things instead of one: `credential_accepted_by_cli`,
+`credential_validity_observed`, and a `state`. It is green only when both are true, and
+nothing model-free on this runtime sets the second. Its `validity_gap` field says so in the
+artifact rather than in a comment.
+
+Consequence, stated plainly: **criterion 22 cannot be turned green by supplying a real token
+alone.** Closing it needs one observation that only a valid credential can produce, and the
+cheapest such observation is a request — which this phase does not make. That decision belongs
+to the next order, not to this one.
+
 
 ## Held-out oracle
 
@@ -340,6 +416,7 @@ input shape and nothing else. P4 confirms the separation by trying.
 | confinement evidence | telling a confined run from an unconfined one, afterwards | let the artifacts describe a run that did not happen | `ConfinementInTheRunEvidenceTests`: a real outer boundary, a synthetic payload, no model |
 | launch preflight | the confined runtime's launchability | let a pilot be admitted that cannot start, or start against a host path | criterion 22, `ViewLocalLaunchArgvTests`, `ConfinedLaunchPreflightTests` |
 | shared launch preparation | that the gate and the launch mean the same run | let the criterion pass on an environment or a binary the process never gets | `SharedLaunchPreparationTests`: host-only auth channel, allowed credential, binary identity |
+| subscription OAuth path | the one credential a confined run may carry | leak the token value, or let its mere presence count as authentication | `SubscriptionOAuthAuthPathTests`: canary token in no artifact, mandatory scrub, fail-closed launch, presence never green |
 | boundary lifecycle marker | telling a failed sandbox from a failing payload | let an instrumentation failure read as a red product | setup broken on purpose before `exec`: `BoundaryError`, payload never ran, oracle `not-run` |
 | check launcher (`bin/check`) | the one allowed Bash invocation | let `check` reach something other than the boundary | `CheckLauncherTests`: real PATH, real cwd, arguments refused, impostor not shadowing |
 | B2 model runner admission | the pilot gate | let a writable run start without passing the criteria | five refusal tests with a runner that fails if invoked |
@@ -372,11 +449,17 @@ and does nothing except hand a path the adapter chose to the boundary.
 - Two entry criteria are genuinely not applicable: there is no judge to fix a schema for, and
   nothing to unblind at one condition. They are labelled `applicable: false` with their
   antecedent measured, rather than dressed up as measurements that passed.
-- **Criterion 22 is currently unmet, and the pilot is therefore blocked.** The Claude Code
-  runtime authenticates from a credential under a host home directory. The outer view does
-  not carry that directory, and mounting it back would undo the boundary this phase exists to
-  establish, so `claude auth status` inside the view reports `loggedIn: false`. Everything
-  else — argv locality, runtime startup, flag parsing, the confinement itself — is measured
-  and met. A pilot needs an authentication path that works inside the view, named as the
-  pilot's auth path and confirmed model-free before it is used. There is no such path on this
-  host today, and the readiness artifact says `NOT_READY_FOR_MODEL_PILOT`.
+- **Criterion 22 is currently unmet, and the pilot is therefore blocked.** There is now a
+  credential channel that works without reopening the boundary — an explicitly supplied
+  `CLAUDE_CODE_OAUTH_TOKEN` — and it is wired through the environment contract, the auth
+  classification and the preflight. Two things still stand between that and a green criterion.
+  First, no such token is supplied on this host, so `claude auth status` inside the view
+  reports `loggedIn: false`. Second, and more importantly, supplying one would not be enough:
+  that command does not validate the credential, so its `loggedIn: true` cannot carry the
+  criterion. Everything else — argv locality, runtime startup with the mandatory credential
+  scrub, flag parsing, the confinement itself — is measured and met.
+- **The credential scrub's isolation property is a vendor contract here, not a measurement.**
+  What is measured is that the control is set and that the runtime starts with it. Whether a
+  subprocess is actually denied the credential needs a running model process.
+- **The `Read(//proc/**)` deny rule is configuration, not a demonstrated block.** The syntax
+  is verified against the installed runtime; the refusal is not, for the same reason.

@@ -881,8 +881,12 @@ class AdapterTests(unittest.TestCase):
         base = {"PATH": "/usr/bin", "CLAUDE_CODE_OAUTH_TOKEN_FILE_DESCRIPTOR": "17"}
         env, _ = adapter._child_env(base, Path("/tmp/cfg"))
         self.assertNotIn("CLAUDE_CODE_OAUTH_TOKEN_FILE_DESCRIPTOR", env)
-        for name in ("CLAUDE_CODE_OAUTH_TOKEN_FILE_DESCRIPTOR", "CLAUDE_CODE_OAUTH_TOKEN", "CLAUDE_CODE_OAUTH_TOKEN_FILE"):
+        # The descriptor and the file path reach back into the host and stay out. The token
+        # variable itself is now a documented, explicitly supplied credential for the confined
+        # B2 path and is classified separately; it is deliberately not in this list.
+        for name in ("CLAUDE_CODE_OAUTH_TOKEN_FILE_DESCRIPTOR", "CLAUDE_CODE_OAUTH_TOKEN_FILE"):
             self.assertNotIn(name, adapter.ENV_ALLOWLIST)
+        self.assertIn("CLAUDE_CODE_OAUTH_TOKEN", adapter.ENV_ALLOWLIST)
         auth = adapter._auth(env, base, bare_requested=False)
         self.assertEqual(adapter.AUTH_CLAUDE_MANAGED, auth["mode"])
         self.assertEqual(["CLAUDE_CODE_OAUTH_TOKEN_FILE_DESCRIPTOR"], auth["host_only_channels_ignored"])

@@ -7,13 +7,14 @@ bound_to:
   launcher_code: sha256:e337c039c62b364b5bbe54687d335365168310a9b6346b82fcd06c2ab0ca071d
   oracle_code: sha256:5a3c6cda0d93f994453f67d7700664567ed6b82053b1f3b4207e352403028880
   probe_code: sha256:a0d1b845708907c65efffb1c01c60cb51f7bb4d2f8867794d84216090d84de9a
-  preflight_code: sha256:6c8e9467f5b279f53638aa3ee82b195d8dbe8c69e56fd843f2d1962ac845b396
+  preflight_code: sha256:776044ae55ae53f7933cf7fa70007ce387d3355aea982f69378dbf932888e43a
   driver: sha256:a45a50ceb0962e2479782e05e6759490f6459f834fefb4d61221ff29a311decb
   expectations: sha256:dfa47563ede2702a7d7a06901b087f22c272fd81691f2a8531e8c5fb5f230861
   platform: Linux-x86_64
   python: 3.11.15
-note: Model-free. No request was made; `--help` and `auth status` never reach a model.
-  A false `authenticated_in_view` is a pilot blocker, not a reason to widen the view.
+note: Model-free. No request was made; `--version`, `--help` and `auth status` never
+  reach a model. A false `authenticated_in_view` is a pilot blocker, not a reason
+  to widen the view.
 phase: 4.2C / B2
 model_placeholder: placeholder-full-model-id-no-request-is-made
 claude_binary: claude
@@ -40,6 +41,7 @@ child_environment_names:
 - CLAUDE_CODE_DISABLE_CLAUDE_MDS
 - CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC
 - CLAUDE_CODE_SKIP_PROMPT_HISTORY
+- CLAUDE_CODE_SUBPROCESS_ENV_SCRUB
 - CLAUDE_CONFIG_DIR
 - DISABLE_AUTOUPDATER
 - DISABLE_BUG_COMMAND
@@ -81,6 +83,7 @@ child_environment_policy:
   - CLAUDE_CODE_DISABLE_CLAUDE_MDS
   - CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC
   - CLAUDE_CODE_SKIP_PROMPT_HISTORY
+  - CLAUDE_CODE_SUBPROCESS_ENV_SCRUB
   - DISABLE_AUTOUPDATER
   - DISABLE_BUG_COMMAND
   - DISABLE_ERROR_REPORTING
@@ -144,6 +147,7 @@ view_environment_names:
 - CLAUDE_CODE_DISABLE_CLAUDE_MDS
 - CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC
 - CLAUDE_CODE_SKIP_PROMPT_HISTORY
+- CLAUDE_CODE_SUBPROCESS_ENV_SCRUB
 - CLAUDE_CONFIG_DIR
 - DISABLE_AUTOUPDATER
 - DISABLE_BUG_COMMAND
@@ -164,6 +168,30 @@ view_environment_names:
 - TMPDIR
 - https_proxy
 - no_proxy
+permission_rule_syntax:
+  binary: /opt/claude-code/bin/claude
+  literals_present:
+    (//proc/**): true
+    Edit(//etc/*): true
+    Read(~/**): true
+  error: null
+  supports: the `//`-prefixed filesystem-absolute rule form used by 'Read(//proc/**)'
+  does_not_support: that the rule blocks a Read; that is a vendor contract until a
+    model process demonstrates it
+process_environment_read_rule:
+  rule: Read(//proc/**)
+  in_requested_deny_rules: true
+  why: the credential-scrub control protects Bash subprocesses, hooks and stdio MCP
+    processes; the built-in Read tool is none of those and runs inside the parent,
+    which is the process holding the token
+  pseudo_filesystems_in_the_view:
+  - /proc
+  - /dev
+  not_restricted:
+    /dev: carries no process environments; no threat path, so no rule
+  measured_here: that the rule is in the deny list the launch requests
+  not_measured_here: that the runtime refuses the Read; demonstrating that needs a
+    model process
 normalized_inner_argv:
 - <claude-binary>
 - -p
@@ -185,6 +213,7 @@ normalized_inner_argv:
 - WebFetch
 - NotebookEdit
 - Task
+- Read(//proc/**)
 - --permission-mode
 - dontAsk
 - --restricted
@@ -249,6 +278,8 @@ checks:
     ok: true
     version:
     - 2.1.270 (Claude Code)
+    subprocess_credential_scrub_requested: true
+    bubblewrap_missing: false
     detail:
       argv:
       - claude
@@ -287,6 +318,7 @@ checks:
         - WebFetch
         - NotebookEdit
         - Task
+        - Read(//proc/**)
         - --permission-mode
         - dontAsk
         - --restricted
@@ -357,10 +389,18 @@ checks:
           '
   authenticated_in_view:
     ok: false
+    state: no-credential-accepted
+    credential_accepted_by_cli: false
     logged_in: false
+    credential_validity_observed: false
+    validity_gap: '`claude auth status` does not contact the service: an invalid token
+      yields loggedIn true and exit 0. No model-free command on this runtime distinguishes
+      a valid credential from a malformed one, so this sub-check cannot be satisfied
+      without a request, which this phase does not make.'
     auth_method: none
     api_provider: firstParty
     config_directory: /scratch/claude-config
+    subscription_token_supplied: false
     detail:
       argv:
       - claude
@@ -375,3 +415,14 @@ checks:
         \n}\n"
       stderr_tail: ''
 ok: false
+subprocess_credential_scrub:
+  variable: CLAUDE_CODE_SUBPROCESS_ENV_SCRUB
+  requested: true
+  vendor_contract: the Claude Code parent keeps its provider credentials while Bash
+    tool subprocesses, hooks and stdio MCP processes do not inherit them; on Linux
+    those subprocesses additionally run in their own PID namespace and cannot read
+    the parent's environment through /proc
+  measured_here: that the control is in the child environment, and that the runtime
+    starts inside the view with it in force
+  not_measured_here: that a subprocess actually fails to see the credential; that
+    requires a running model process and is out of scope

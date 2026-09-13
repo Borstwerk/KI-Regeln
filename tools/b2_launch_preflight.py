@@ -35,7 +35,8 @@ try:
     )
     from .b2_boundary import SCRATCH_MOUNT, WORKSPACE_MOUNT, BoundaryError
     from .behavioral_harness_claude import (
-        AdapterError, WritableLaunchContext, _argv, prepare_writable_launch,
+        SUBPROCESS_SCRUB_ENV, SUBSCRIPTION_OAUTH_ENV, AdapterError, WritableLaunchContext,
+        _argv, prepare_writable_launch,
     )
 except ImportError:  # direct script sibling import
     from b2_model_confinement import (
@@ -44,10 +45,12 @@ except ImportError:  # direct script sibling import
     )
     from b2_boundary import SCRATCH_MOUNT, WORKSPACE_MOUNT, BoundaryError
     from behavioral_harness_claude import (
-        AdapterError, WritableLaunchContext, _argv, prepare_writable_launch,
+        SUBPROCESS_SCRUB_ENV, SUBSCRIPTION_OAUTH_ENV, AdapterError, WritableLaunchContext,
+        _argv, prepare_writable_launch,
     )
 
 PREFLIGHT_CONTRACT = "verification-governance-b2-launch-preflight/v1"
+DENY_PROC_RULE = "Read(//proc/**)"
 ROOT = Path(__file__).resolve().parents[1]
 # The model id does not influence any of the three questions -- no request is made -- but a
 # placeholder is still recorded, so nobody reads the report as covering a particular model.
@@ -57,6 +60,41 @@ PATH_VALUE_FLAGS = (
     "--mcp-config", "--settings", "--add-dir", "--plugin-dir", "--agents",
     "--append-system-prompt-file", "--system-prompt-file", "--ide",
 )
+
+
+# Literal permission-rule forms the installed runtime carries in its own material. Finding
+# them is evidence about the *syntax* -- that `//` addresses the filesystem while a single
+# leading slash is workspace-rooted -- and nothing more. Whether a deny rule actually stops a
+# Read is a vendor contract: no model-free command on this runtime evaluates permission rules,
+# and demonstrating the block needs a running model process, which this phase does not start.
+RULE_SYNTAX_LITERALS = ("(//proc/**)", "Edit(//etc/*)", "Read(~/**)")
+
+
+def rule_syntax_evidence(claude_binary: str = "claude") -> dict[str, Any]:
+    """Which absolute-path rule forms appear in the installed runtime. Measured, not recalled."""
+    import shutil as _shutil
+    import subprocess
+
+    resolved = _shutil.which(claude_binary) or claude_binary
+    real = str(Path(resolved).resolve())
+    found, error = {}, None
+    for literal in RULE_SYNTAX_LITERALS:
+        try:
+            done = subprocess.run(["grep", "-a", "-m1", "-F", "-q", literal, real],
+                                  capture_output=True, timeout=120, check=False)
+            found[literal] = done.returncode == 0
+        except (OSError, subprocess.SubprocessError) as exc:  # noqa: PERF203
+            error = f"{type(exc).__name__}: {exc}"
+            found[literal] = None
+    return {
+        "binary": real,
+        "literals_present": found,
+        "error": error,
+        "supports": ("the `//`-prefixed filesystem-absolute rule form used by "
+                     f"{DENY_PROC_RULE!r}"),
+        "does_not_support": ("that the rule blocks a Read; that is a vendor contract until a "
+                             "model process demonstrates it"),
+    }
 
 
 def _view_prefixes(claude_binary: str = "claude") -> tuple[str, ...]:
@@ -185,11 +223,17 @@ def _preflight(context: Any, model: str) -> dict[str, Any]:
             "missing": missing, "detail": present,
         }
 
-        # 2a. The runtime is executable in the view at all.
+        # 2a. The runtime is executable in the view at all -- with the credential-scrub
+        # control in force, which is not free: this build refuses to start with the control
+        # set unless bubblewrap is available to it, so this is also where a missing bwrap in
+        # the view surfaces, as a startup failure rather than as a silent downgrade.
         version = _run_in_view(run, [claude_binary, "--version"], timeout=180)
+        stderr = (version["stderr_tail"] or "")
         checks["runtime_executable_in_view"] = {
             "ok": version["returncode"] == 0,
             "version": (version["stdout_tail"] or "").strip().splitlines()[:1],
+            "subprocess_credential_scrub_requested": env.get(SUBPROCESS_SCRUB_ENV) == "1",
+            "bubblewrap_missing": "bubblewrap is required" in stderr,
             "detail": version,
         }
 
@@ -215,13 +259,35 @@ def _preflight(context: Any, model: str) -> dict[str, Any]:
         except (ValueError, TypeError):
             parsed = None
         logged_in = bool(isinstance(parsed, dict) and parsed.get("loggedIn") is True)
+        accepted = auth["returncode"] == 0 and logged_in
+        # `auth status` on this runtime reports that a credential is present and well formed.
+        # It does not contact the service: measured here, a deliberately invalid
+        # CLAUDE_CODE_OAUTH_TOKEN produces `loggedIn: true` and exit 0 inside this very view.
+        # So "logged in" is a necessary condition for a launchable runtime and not a
+        # sufficient one, and nothing model-free on this runtime closes the gap. The check is
+        # therefore never green on presence alone -- that is exactly the shape of failure this
+        # phase exists to avoid.
+        validity_observed = False
+        if not accepted:
+            state = "no-credential-accepted"
+        else:
+            state = "credential-accepted-validity-unverified"
         checks["authenticated_in_view"] = {
-            "ok": auth["returncode"] == 0 and logged_in,
+            "ok": accepted and validity_observed,
+            "state": state,
+            "credential_accepted_by_cli": accepted,
             "logged_in": logged_in,
-            # Method and provider only. No token, no value, nothing that could be replayed.
+            "credential_validity_observed": validity_observed,
+            "validity_gap": ("`claude auth status` does not contact the service: an invalid "
+                             "token yields loggedIn true and exit 0. No model-free command on "
+                             "this runtime distinguishes a valid credential from a malformed "
+                             "one, so this sub-check cannot be satisfied without a request, "
+                             "which this phase does not make."),
+            # Names and classifications only. No token, no value, no hash of a value.
             "auth_method": (parsed or {}).get("authMethod") if isinstance(parsed, dict) else None,
             "api_provider": (parsed or {}).get("apiProvider") if isinstance(parsed, dict) else None,
             "config_directory": (parsed or {}).get("configDirectory") if isinstance(parsed, dict) else None,
+            "subscription_token_supplied": SUBSCRIPTION_OAUTH_ENV in env,
             "detail": auth,
         }
 
@@ -243,13 +309,39 @@ def _preflight(context: Any, model: str) -> dict[str, Any]:
             "removed_other_count": context.env_policy.get("removed_other_count"),
         },
         "view_environment_names": sorted(view_environment(env, claude_binary)),
+        "permission_rule_syntax": rule_syntax_evidence(claude_binary),
+        "process_environment_read_rule": {
+            "rule": DENY_PROC_RULE,
+            "in_requested_deny_rules": DENY_PROC_RULE in list(controls["requested_deny_rules"]),
+            "why": ("the credential-scrub control protects Bash subprocesses, hooks and stdio "
+                    "MCP processes; the built-in Read tool is none of those and runs inside "
+                    "the parent, which is the process holding the token"),
+            "pseudo_filesystems_in_the_view": ["/proc", "/dev"],
+            "not_restricted": {"/dev": "carries no process environments; no threat path, so no rule"},
+            "measured_here": "that the rule is in the deny list the launch requests",
+            "not_measured_here": ("that the runtime refuses the Read; demonstrating that needs "
+                                  "a model process"),
+        },
         "normalized_inner_argv": list(controls["normalized_argv"]),
         "argv_audit": audit,
         "checks": checks,
         "ok": ok,
-        "note": ("Model-free. No request was made; `--help` and `auth status` never reach a "
-                 "model. A false `authenticated_in_view` is a pilot blocker, not a reason to "
-                 "widen the view."),
+        "note": ("Model-free. No request was made; `--version`, `--help` and `auth status` "
+                 "never reach a model. A false `authenticated_in_view` is a pilot blocker, not "
+                 "a reason to widen the view."),
+        "subprocess_credential_scrub": {
+            "variable": SUBPROCESS_SCRUB_ENV,
+            "requested": env.get(SUBPROCESS_SCRUB_ENV) == "1",
+            "vendor_contract": ("the Claude Code parent keeps its provider credentials while "
+                                "Bash tool subprocesses, hooks and stdio MCP processes do not "
+                                "inherit them; on Linux those subprocesses additionally run in "
+                                "their own PID namespace and cannot read the parent's "
+                                "environment through /proc"),
+            "measured_here": ("that the control is in the child environment, and that the "
+                              "runtime starts inside the view with it in force"),
+            "not_measured_here": ("that a subprocess actually fails to see the credential; "
+                                  "that requires a running model process and is out of scope"),
+        },
     }
 
 
@@ -269,7 +361,14 @@ def launchable(context: Any = None) -> tuple[bool, str]:
         failures.append("--strict-mcp-config is not requested")
     for name, check in report["checks"].items():
         if not check["ok"]:
-            failures.append(f"{name} failed")
+            if name == "authenticated_in_view":
+                failures.append(f"authenticated_in_view: {check['state']}")
+            elif name == "runtime_executable_in_view" and check.get("bubblewrap_missing"):
+                failures.append("runtime_executable_in_view: the runtime refuses to start with "
+                                "the mandatory credential scrub because bubblewrap is not in "
+                                "the view")
+            else:
+                failures.append(f"{name} failed")
     if failures:
         return False, "; ".join(failures)
     return True, ("the writable argv is view-local, the runtime starts and parses the writable "

@@ -2203,8 +2203,11 @@ class SharedLaunchPreparationTests(unittest.TestCase):
     process would never inherit.
     """
 
-    HOST_ONLY = "CLAUDE_CODE_OAUTH_TOKEN"
-    HOST_ONLY_VALUE = "b2-test-host-only-auth-channel-value"
+    # A credential bridge that still reaches back into the host: a path to a file the
+    # confined view does not carry. The token variable itself was the canary here until it
+    # became a supported, explicitly supplied credential; this one has not moved.
+    HOST_ONLY = "CLAUDE_CODE_OAUTH_TOKEN_FILE"
+    HOST_ONLY_VALUE = "/nonexistent/host/only/.oauth_token"
     ALLOWED_KEY = "ANTHROPIC_API_KEY"
     ALLOWED_VALUE = "b2-test-allowed-transport-credential-value"
 
@@ -2453,3 +2456,337 @@ class SharedLaunchPreparationTests(unittest.TestCase):
                 prepare_writable_launch(claude_binary="/some/other/claude", base_env={},
                                         config_dir=Path(tmp) / "cfg", probe=probe)
         self.assertIn("not the binary this launch would start", str(caught.exception))
+
+
+class SubscriptionOAuthAuthPathTests(unittest.TestCase):
+    """The one credential channel a confined B2 run may carry, and its guard rails.
+
+    The confined view has no host home, so the runtime cannot read a credential from a file.
+    `CLAUDE_CODE_OAUTH_TOKEN` — produced by `claude setup-token` and documented for
+    non-interactive use — is therefore the only way a confined run can be authenticated at
+    all. It used to sit in `HOST_ONLY_AUTH_ENV`, which was conservative rather than correct:
+    the file and descriptor bridges reach back into the host, an explicitly supplied
+    environment variable does not.
+
+    Every value below is a canary. No real token is read, written, printed or asserted on.
+    """
+
+    FAKE_TOKEN = "sk-ant-oat01-B2-CANARY-NOT-A-REAL-TOKEN-0000"
+    FAKE_TOKEN_FILE = "/nonexistent/host/only/.oauth_token"
+
+    def raw_env(self, **overrides):
+        from tools.behavioral_harness_claude import SUBSCRIPTION_OAUTH_ENV
+        env = {
+            "PATH": os.environ.get("PATH", "/usr/bin:/bin"), "HOME": "/nonexistent-host-home",
+            "TERM": "dumb",
+            SUBSCRIPTION_OAUTH_ENV: self.FAKE_TOKEN,
+            "CLAUDE_CODE_OAUTH_TOKEN_FILE": self.FAKE_TOKEN_FILE,
+            "CLAUDE_CODE_OAUTH_TOKEN_FILE_DESCRIPTOR": "7",
+        }
+        env.update(overrides)
+        return env
+
+    def context(self, env=None, claude_binary="claude"):
+        from tools.behavioral_harness_claude import prepare_writable_launch
+        with tempfile.TemporaryDirectory() as tmp:
+            return prepare_writable_launch(claude_binary=claude_binary,
+                                           base_env=env if env is not None else self.raw_env(),
+                                           config_dir=Path(tmp) / "claude-config")
+
+    # 1 / 2 -- what the environment contract lets through and what it removes
+    def test_A1_the_subscription_oauth_token_reaches_the_child_environment(self):
+        from tools.behavioral_harness_claude import SUBSCRIPTION_OAUTH_ENV
+        context = self.context()
+        self.assertIn(SUBSCRIPTION_OAUTH_ENV, context.child_env)
+        self.assertEqual(context.child_env[SUBSCRIPTION_OAUTH_ENV], self.FAKE_TOKEN)
+
+    def test_A2_the_host_only_token_bridges_are_still_removed(self):
+        from tools.behavioral_harness_claude import HOST_ONLY_AUTH_ENV, SUBSCRIPTION_OAUTH_ENV
+        self.assertNotIn(SUBSCRIPTION_OAUTH_ENV, HOST_ONLY_AUTH_ENV,
+                         "the explicitly supplied token is no longer a host-only channel")
+        self.assertEqual(sorted(HOST_ONLY_AUTH_ENV),
+                         ["CLAUDE_CODE_OAUTH_TOKEN_FILE", "CLAUDE_CODE_OAUTH_TOKEN_FILE_DESCRIPTOR"])
+        context = self.context()
+        for name in HOST_ONLY_AUTH_ENV:
+            with self.subTest(channel=name):
+                self.assertNotIn(name, context.child_env)
+
+    def test_A3_the_reclassification_did_not_open_the_claude_prefix(self):
+        """Only this one variable moved. `CLAUDE_CODE_*` as a class is still dropped."""
+        from tools.behavioral_harness_claude import ENV_ALLOWLIST
+        opened = sorted(n for n in ENV_ALLOWLIST if n.startswith("CLAUDE_CODE_"))
+        # The two transport switches were already allowlisted and carry no credential; the
+        # token is the only addition this change makes.
+        self.assertEqual(opened, ["CLAUDE_CODE_OAUTH_TOKEN", "CLAUDE_CODE_USE_BEDROCK",
+                                  "CLAUDE_CODE_USE_VERTEX"])
+        context = self.context(self.raw_env(CLAUDE_CODE_MESSAGING_TOKEN="canary",
+                                            CLAUDE_CODE_ACCOUNT_UUID="canary"))
+        self.assertNotIn("CLAUDE_CODE_MESSAGING_TOKEN", context.child_env)
+        self.assertNotIn("CLAUDE_CODE_ACCOUNT_UUID", context.child_env)
+
+    # 4 / 5 -- the mandatory credential scrub
+    def test_A4_the_subprocess_credential_scrub_is_in_the_parent_environment(self):
+        from tools.behavioral_harness_claude import SUBPROCESS_SCRUB_ENV
+        context = self.context()
+        self.assertEqual(context.child_env[SUBPROCESS_SCRUB_ENV], "1")
+        self.assertIn(SUBPROCESS_SCRUB_ENV, context.env_policy["controls_applied"])
+        self.assertIn(SUBPROCESS_SCRUB_ENV, context.env_policy["extra_controls_applied"])
+
+    def test_A5_the_read_only_path_does_not_carry_the_b2_control(self):
+        """It is a writable-B2 requirement, not a global one: 4.2A/4.2B are untouched."""
+        from tools.behavioral_harness_claude import CONTROL_ENV, SUBPROCESS_SCRUB_ENV, _child_env
+        self.assertNotIn(SUBPROCESS_SCRUB_ENV, CONTROL_ENV)
+        with tempfile.TemporaryDirectory() as tmp:
+            env, policy = _child_env(self.raw_env(), Path(tmp))
+        self.assertNotIn(SUBPROCESS_SCRUB_ENV, env)
+        self.assertEqual(policy["extra_controls_applied"], [])
+
+    def test_A6_a_writable_launch_without_the_scrub_fails_closed(self):
+        """No best-effort fallback: the preparation refuses rather than downgrading."""
+        from tools import behavioral_harness_claude as adapter
+
+        original = adapter.B2_CONTROL_ENV
+        for disabled in ({}, {adapter.SUBPROCESS_SCRUB_ENV: "0"}):
+            with self.subTest(control=disabled or "removed"):
+                try:
+                    adapter.B2_CONTROL_ENV = disabled
+                    with self.assertRaises(adapter.AdapterError) as caught:
+                        self.context()
+                finally:
+                    adapter.B2_CONTROL_ENV = original
+                self.assertIn(adapter.SUBPROCESS_SCRUB_ENV, str(caught.exception))
+                self.assertIn("no best-effort fallback", str(caught.exception).lower())
+
+    def test_A7_a_launch_whose_scrub_is_disabled_never_reaches_the_process_runner(self):
+        from tools import behavioral_harness_claude as adapter
+
+        calls = []
+
+        def never(argv, **kwargs):
+            from tools.behavioral_harness_claude import _run
+            if len(argv) == 2 and argv[1] in ("--version", "--help"):
+                return _run(argv, **kwargs)
+            calls.append(argv)
+            raise AssertionError("no model process may be started")
+
+        original = adapter.B2_CONTROL_ENV
+        try:
+            adapter.B2_CONTROL_ENV = {}
+            with tempfile.TemporaryDirectory() as tmp:
+                prepared = prepared_b2_package(Path(tmp))
+                with self.assertRaises(adapter.AdapterError) as caught:
+                    adapter.execute_prepared_response(
+                        prepared, model="claude-haiku-4-5-20251001", out_dir=Path(tmp) / "out",
+                        base_env=self.raw_env(), process_runner=never, writable_workspace=True)
+        finally:
+            adapter.B2_CONTROL_ENV = original
+        self.assertIn(adapter.SUBPROCESS_SCRUB_ENV, str(caught.exception))
+        self.assertEqual(calls, [])
+
+    # 6 / 7 / 8 -- the process-environment read rule
+    def test_A8_the_proc_read_rule_is_requested_in_the_writable_deny_list(self):
+        """Configuration, named as such.
+
+        The runtime offers no model-free way to evaluate a permission rule, and demonstrating
+        that a Read is refused needs a running model process. So what this asserts is that the
+        rule is in the deny list the launch actually requests — not that the block happened.
+        """
+        from tools.behavioral_harness_claude import B2_DENY_RULES, effective_tool_policy
+        from tools.b2_launch_preflight import DENY_PROC_RULE
+
+        self.assertIn(DENY_PROC_RULE, B2_DENY_RULES)
+        argv, controls = _argv("claude", "m", "p", "s", ViewLocalLaunchArgvTests.CAPS,
+                               Path("/tmp/e.json"), writable=True)
+        denied = argv[argv.index("--disallowedTools") + 1:]
+        self.assertIn(DENY_PROC_RULE, denied)
+        self.assertIn(DENY_PROC_RULE, controls["requested_deny_rules"])
+        self.assertIn(DENY_PROC_RULE, effective_tool_policy(True)["deny_rules"])
+
+    def test_A9_the_rule_uses_the_absolute_form_the_installed_runtime_carries(self):
+        """Measured against the installed binary rather than recalled from documentation."""
+        from tools.b2_launch_preflight import DENY_PROC_RULE, rule_syntax_evidence
+
+        self.assertTrue(DENY_PROC_RULE.startswith("Read(//"),
+                        "a single leading slash is workspace-rooted in this runtime")
+        evidence = rule_syntax_evidence()
+        self.assertIsNone(evidence["error"])
+        # `Edit(//etc/*)` is the runtime's own settings example for a filesystem-absolute rule.
+        self.assertIs(evidence["literals_present"]["Edit(//etc/*)"], True)
+        self.assertIs(evidence["literals_present"]["(//proc/**)"], True)
+
+    def test_A10_both_named_process_environment_paths_fall_under_the_rule(self):
+        """The glob has to cover what it is there for, and not the workspace."""
+        import fnmatch
+
+        from tools.b2_launch_preflight import DENY_PROC_RULE
+
+        pattern = DENY_PROC_RULE[len("Read("):-1].lstrip("/")
+        for path in ("proc/self/environ", "proc/1/environ", "proc/42/cmdline"):
+            with self.subTest(path=path):
+                self.assertTrue(fnmatch.fnmatch(path, pattern))
+        for path in ("workspace/product/discount.py", "workspace/checks/validate.py",
+                     "workspace/report.yml"):
+            with self.subTest(path=path):
+                self.assertFalse(fnmatch.fnmatch(path, pattern))
+
+    def test_A11_the_workspace_stays_readable_and_writable(self):
+        """The hardening must not cost the experiment its own surface."""
+        from tools.behavioral_harness_claude import (
+            B2_ALLOW_RULES, B2_DENY_RULES, B2_VISIBLE_TOOLS,
+        )
+        self.assertIn("Read", B2_VISIBLE_TOOLS)
+        self.assertIn("Read", B2_ALLOW_RULES)
+        self.assertIn("Edit", B2_ALLOW_RULES)
+        self.assertIn("Write", B2_ALLOW_RULES)
+        self.assertEqual([r for r in B2_DENY_RULES if r.startswith("Read(")],
+                         ["Read(//proc/**)"],
+                         "only the process-environment path is denied to Read")
+
+    # 9 / 10 -- classification and what presence does not prove
+    def test_A12_the_oauth_token_is_classified_as_its_own_auth_mode(self):
+        from tools.behavioral_harness_claude import (
+            AUTH_CLAUDE_MANAGED, AUTH_SUBSCRIPTION_OAUTH, SUBSCRIPTION_OAUTH_ENV, _auth,
+        )
+        raw = self.raw_env()
+        context = self.context(raw)
+        auth = _auth(context.child_env, raw, bare_requested=False)
+        self.assertEqual(auth["mode"], AUTH_SUBSCRIPTION_OAUTH)
+        self.assertNotEqual(auth["mode"], AUTH_CLAUDE_MANAGED)
+        self.assertIs(auth["credential_present"], True)
+        self.assertTrue(auth["subprocess_credential_scrub_requested"])
+        self.assertEqual(auth["host_only_channels_ignored"],
+                         ["CLAUDE_CODE_OAUTH_TOKEN_FILE", "CLAUDE_CODE_OAUTH_TOKEN_FILE_DESCRIPTOR"])
+        # And the other modes stay distinguishable from it.
+        without = {k: v for k, v in context.child_env.items() if k != SUBSCRIPTION_OAUTH_ENV}
+        self.assertEqual(_auth(without, raw, bare_requested=False)["mode"], AUTH_CLAUDE_MANAGED)
+        self.assertEqual(
+            _auth(dict(without, ANTHROPIC_API_KEY="x"), raw, bare_requested=False)["mode"],
+            "anthropic-api-key")
+
+    def test_A13_a_present_token_never_means_an_authenticated_runtime(self):
+        from tools.behavioral_harness_claude import _auth
+        raw = self.raw_env()
+        auth = _auth(self.context(raw).child_env, raw, bare_requested=False)
+        self.assertEqual(auth["runtime_authenticated"], "unknown")
+        self.assertIsNot(auth["runtime_authenticated"], True)
+
+    # 3 -- the value never travels
+    def test_A14_the_token_value_reaches_no_artifact_the_adapter_produces(self):
+        """Presence and name may be recorded. The value may not, and neither may a hash of it."""
+        from tools.behavioral_harness_claude import (
+            SUBSCRIPTION_OAUTH_ENV, _auth, _environment, _hash_text,
+        )
+        raw = self.raw_env()
+        context = self.context(raw)
+        auth = _auth(context.child_env, raw, bare_requested=False)
+        evidence = _environment(context.child_env, context.env_policy, auth)
+        blob = json.dumps({"auth": auth, "environment": evidence, "policy": context.env_policy},
+                          default=str)
+        self.assertNotIn(self.FAKE_TOKEN, blob)
+        self.assertNotIn(_hash_text(self.FAKE_TOKEN), blob,
+                         "a hash of a credential is still a durable identifier for it")
+        # Presence is what the artifact carries.
+        self.assertEqual(evidence["auth_presence"][SUBSCRIPTION_OAUTH_ENV], {"present": True})
+
+    def test_A15_the_preflight_report_carries_the_name_and_not_the_value(self):
+        from tools.behavioral_harness_claude import SUBSCRIPTION_OAUTH_ENV
+        from tools import b2_launch_preflight as preflight_module
+
+        report, seen = SharedLaunchPreparationTests.captured_preflight(
+            SharedLaunchPreparationTests(), self.context())
+        self.assertIn(SUBSCRIPTION_OAUTH_ENV, seen["env"], "the view must receive the token")
+        self.assertIn(SUBSCRIPTION_OAUTH_ENV, report["child_environment_names"])
+        self.assertIn(SUBSCRIPTION_OAUTH_ENV, report["view_environment_names"])
+        self.assertNotIn(self.FAKE_TOKEN, json.dumps(report, default=str))
+        self.assertTrue(report["subprocess_credential_scrub"]["requested"])
+        self.assertIs(report["process_environment_read_rule"]["in_requested_deny_rules"], True)
+        del preflight_module
+
+    # 11 -- what a fake or missing token does to criterion 22
+    def test_A16_a_present_credential_alone_never_turns_the_auth_check_green(self):
+        """The finding that shaped this: `auth status` does not validate.
+
+        Measured inside the real view, a deliberately invalid token yields `loggedIn: true`
+        and exit 0. Accepting that as the criterion's evidence would be exactly the
+        green-by-construction shape this phase exists to catch, so the sub-check requires a
+        validity observation that no model-free command on this runtime provides.
+        """
+        from tools import b2_launch_preflight as preflight_module
+
+        for logged_in in (True, False):
+            with self.subTest(logged_in=logged_in):
+                report = self._preflight_with_auth(preflight_module, logged_in)
+                check = report["checks"]["authenticated_in_view"]
+                self.assertFalse(check["ok"])
+                self.assertIs(check["credential_validity_observed"], False)
+                self.assertEqual(check["credential_accepted_by_cli"], logged_in)
+                self.assertEqual(
+                    check["state"],
+                    "credential-accepted-validity-unverified" if logged_in
+                    else "no-credential-accepted")
+
+    def test_A17_criterion_22_stays_red_with_a_fake_or_missing_token(self):
+        from tools import b2_launch_preflight as preflight_module
+
+        for logged_in in (True, False):
+            with self.subTest(logged_in=logged_in):
+                report = self._preflight_with_auth(preflight_module, logged_in)
+                original = preflight_module.preflight
+                try:
+                    preflight_module.preflight = lambda context=None, **kw: report
+                    ok, reason = preflight_module.launchable(None)
+                finally:
+                    preflight_module.preflight = original
+                self.assertFalse(ok)
+                self.assertIn("authenticated_in_view", reason)
+
+    def _preflight_with_auth(self, preflight_module, logged_in: bool):
+        """Run the real preflight with the view's four commands answered from a script."""
+        from contextlib import contextmanager as _cm
+
+        payload = json.dumps({
+            "loggedIn": logged_in, "authMethod": "oauth_token" if logged_in else "none",
+            "apiProvider": "firstParty", "configDirectory": "/scratch/claude-config",
+        })
+
+        @_cm
+        def fake_view(claude_binary="claude", env=None, timeout=300):
+            def run(argv, view_timeout=None):
+                if argv[1:3] == ["auth", "status"]:
+                    return {"returncode": 0 if logged_in else 1, "stdout": payload,
+                            "stderr": "", "payload_started": True, "timed_out": False}
+                if argv[1:2] == ["--permission-mode"]:
+                    return {"returncode": 1, "stdout": "", "stderr": "",
+                            "payload_started": True, "timed_out": False}
+                return {"returncode": 0, "stdout": "2.1.270 (Claude Code)", "stderr": "",
+                        "payload_started": True, "timed_out": False}
+            yield run
+
+        original = preflight_module.model_view
+        try:
+            preflight_module.model_view = fake_view
+            return preflight_module.preflight(self.context())
+        finally:
+            preflight_module.model_view = original
+
+    # 12 -- the real-token stage, only when the operator supplied one
+    def test_A18_a_real_token_is_exercised_only_when_the_operator_supplied_one(self):
+        """Stage B. Skipped unless a real token is in this host's environment.
+
+        When it is, the only thing run is `claude auth status` inside the real confined view.
+        No prompt, no `-p`, no model request, and the value is never read into an assertion.
+        """
+        from tools.behavioral_harness_claude import SUBSCRIPTION_OAUTH_ENV
+        from tools.b2_launch_preflight import preflight
+
+        if not os.environ.get(SUBSCRIPTION_OAUTH_ENV):
+            self.skipTest(f"no {SUBSCRIPTION_OAUTH_ENV} supplied on this host")
+        if not BOUNDARY_AVAILABLE:
+            self.skipTest(f"no boundary provider: {BOUNDARY_REASON}")
+        report = preflight()
+        check = report["checks"]["authenticated_in_view"]
+        self.assertTrue(check["credential_accepted_by_cli"],
+                        "a supplied token must at least be accepted inside the view")
+        self.assertEqual(check["auth_method"], "oauth_token")
+        self.assertEqual(check["config_directory"], "/scratch/claude-config")
+        self.assertNotIn(os.environ[SUBSCRIPTION_OAUTH_ENV], json.dumps(report, default=str))

@@ -8,6 +8,16 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Phase 4.2C · B2 — Authentifizierungspfad für den confinierten Modellprozess
+
+- `CLAUDE_CODE_OAUTH_TOKEN` von „host-only" zu einem ausdrücklich zulässigen B2-Auth-Kanal umklassifiziert: die confinierte View trägt kein Host-Home, ein per Environment übergebener Subscription-Token ist deshalb der einzige Weg, den Modellprozess zu authentifizieren, ohne die Filesystem-Grenze wieder zu öffnen; Token-Dateipfad und Token-Filedeskriptor bleiben host-only und werden weiter entfernt, und `CLAUDE_CODE_*` bleibt als Klasse geschlossen;
+- der Token ist als Secret modelliert: Presence und Name dürfen in Artefakte, der Wert nie — und auch kein Hash des Werts, weil ein Credential-Hash ein persistenter Identifier bleibt;
+- `CLAUDE_CODE_SUBPROCESS_ENV_SCRUB=1` ist für writable B2 zwingend, ohne schwächere Form; er gilt nur für writable B2, der read-only Adapterpfad von 4.2A/4.2B bleibt unverändert; **gemessen**: dieser Build startet mit gesetztem Control überhaupt nicht, wenn bubblewrap fehlt, womit bwrap eine reale Voraussetzung des confinierten Launches ist; **Hersteller-Contract, nicht gemessen**: dass ein Subprozess das Credential tatsächlich nicht sieht;
+- `Read(//proc/**)` als Deny-Regel ergänzt, weil das eingebaute Read-Tool kein Bash-Subprozess ist und im Parent läuft, der den Token hält; die doppelte Schrägstrich-Form ist gegen die installierte Runtime verifiziert (`Edit(//etc/*)` und `(//proc/**)` sind darin enthalten); dass die Regel den Read verweigert, ist Hersteller-Contract und wurde nicht demonstriert;
+- neuer Auth-Modus `claude-subscription-oauth-token`, getrennt von `claude-managed-auth`, API Key, Bedrock, Vertex und unsupported;
+- **Befund, der die Abnahmeregel ändert**: `claude auth status` kontaktiert den Dienst nicht — ein absichtlich ungültiger Token liefert innerhalb genau dieser View `loggedIn: true` und rc 0. Presence allein darf Criterion 22 deshalb nicht grün machen; der Auth-Teilcheck berichtet jetzt `credential_accepted_by_cli` und `credential_validity_observed` getrennt und ist nur grün, wenn beides zutrifft. Modellfrei setzt nichts auf dieser Runtime das zweite;
+- Pilot bleibt blockiert: kein Token bereitgestellt, und ein bereitgestellter allein würde nicht genügen; kein Behavioral Pilot, kein Model Request, keine Maturity- oder Coverage-Änderung.
+
 ### Phase 4.2C · B2 — Launch-Kontext und Aufzeichnung
 
 - view-lokaler `--mcp-config`: die leere MCP-Konfiguration lag im Host-Temp-Verzeichnis des Adapters und wurde dem confinten Prozess als Hostpfad übergeben, den er nicht öffnen kann; sie erhält jetzt eine eigene read-only View `/b2-config` mit genau einer Datei, und `--strict-mcp-config` ist für writable B2 erzwungen statt optional; die Inline-JSON-Variante wurde nicht genommen, weil keine modellfreie Invocation der installierten CLI diese Option parst und eine Annahme aus der Hilfe keine Messung ist;
