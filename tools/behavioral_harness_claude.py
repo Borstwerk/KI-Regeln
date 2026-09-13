@@ -514,10 +514,13 @@ def _auth(env: Mapping[str, str], base: Mapping[str, str], *, bare_requested: bo
     elif env.get("CLAUDE_CODE_USE_VERTEX") == "1":
         mode = "vertex"
         present = True if env.get("GOOGLE_APPLICATION_CREDENTIALS") else UNKNOWN
+    elif env.get("ANTHROPIC_AUTH_TOKEN"):
+        # Ahead of the API key, and measured rather than taken from the ordering these two
+        # branches happened to have: with both set, the runtime reports `oauth_token`, which
+        # is the auth-token path, not `api_key`.
+        mode, present = AUTH_ANTHROPIC_AUTH_TOKEN, True
     elif env.get("ANTHROPIC_API_KEY"):
         mode, present = "anthropic-api-key", True
-    elif env.get("ANTHROPIC_AUTH_TOKEN"):
-        mode, present = AUTH_ANTHROPIC_AUTH_TOKEN, True
     elif env.get(SUBSCRIPTION_OAUTH_ENV):
         # Presence, and only presence. Whether the token authenticates is a separate
         # observation that no model-free command on this runtime provides.

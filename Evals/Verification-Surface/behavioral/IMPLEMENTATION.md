@@ -451,7 +451,32 @@ cloud-provider selection, `ANTHROPIC_AUTH_TOKEN`, or `ANTHROPIC_API_KEY` — the
 closed with `oauth-path-shadowed-by-higher-priority-credential`. Channel *names* only; no
 value of any channel is read, logged or persisted. `ANTHROPIC_AUTH_TOKEN` also gained its own
 mode, `anthropic-auth-token`: it was allowlisted as a secret but never classified, so a run
-carrying it reported as managed auth, which says something else entirely.
+carrying it reported as managed auth, which says something else entirely. Its rank was wrong
+too — it sat behind `ANTHROPIC_API_KEY`; measured with both set, the runtime reports the
+auth-token path, and the order now matches.
+
+**The environment is only half of it.** Managed settings can supply a credential through
+`apiKeyHelper`, `awsAuthRefresh`, `awsCredentialExport`, `forceLoginMethod` or an `env` block,
+and they sit ahead of the OAuth token. They also reach the confined process: `/etc` is
+bind-mounted read-only into the view, `--restricted` loads managed settings, and `--safe-mode`
+closes user customization without lifting managed policy. So "the variable is set" is not yet
+"OAuth is the path this launch takes".
+
+The check reads both sources from inside the view, where the launch reads them: the managed
+settings files the view carries, and what `claude doctor` says about a remote managed source.
+Only one combination clears the path — no credential-provider key anywhere, and a remote
+source *known* to be absent. A provider key, a document that does not parse, a drop-in
+directory with content, or a remote source that could not be checked all refuse. An unknown
+credential policy is not an absent one.
+
+Measured here: no managed settings files exist in the view, and `doctor` reports
+`Managed settings (remote): not fetched — no usable credentials for the settings fetch`. That
+is honestly undetermined rather than absent, so the check is red — and it resolves by itself
+once a credential is supplied, because the runtime can then fetch and answer. Key names travel
+into the evidence; no document content, no helper command and no value does.
+
+The negative control is gated by the same verdict: a managed `apiKeyHelper` could answer for
+the canary exactly as a second environment channel could.
 
 ### Path-valued transport variables
 
@@ -506,6 +531,7 @@ input shape and nothing else. P4 confirms the separation by trying.
 | subscription OAuth path | the one credential a confined run may carry | leak the token value, or let its mere presence count as authentication | `SubscriptionOAuthAuthPathTests`: canary token in no artifact, mandatory scrub, fail-closed launch, presence never green |
 | invalid-credential control | that "logged in" means something locally | let a runtime that accepts any value satisfy the criterion | a real `auth status` run in the real view with a synthetic invalid token, plus the four-combination rule test |
 | credential-path refusal | that the pilot exercises the OAuth path | let a second credential channel answer for it | `A22`–`A25`: shadowed mode, fail-closed launch, channel names without values |
+| managed credential policy | that no managed provider outranks the token | let an `apiKeyHelper` decide the path unnoticed | `ManagedCredentialPolicyTests`: provider keys, unreadable policy, empty drop-in, both halves of the check |
 | transport path plan | that the launch's transport is the intended one | pass a host path the confined process cannot open | `TransportPathEnvironmentTests`: keep / stage / drop / reject, plus the in-view resolution check |
 | boundary lifecycle marker | telling a failed sandbox from a failing payload | let an instrumentation failure read as a red product | setup broken on purpose before `exec`: `BoundaryError`, payload never ran, oracle `not-run` |
 | check launcher (`bin/check`) | the one allowed Bash invocation | let `check` reach something other than the boundary | `CheckLauncherTests`: real PATH, real cwd, arguments refused, impostor not shadowing |

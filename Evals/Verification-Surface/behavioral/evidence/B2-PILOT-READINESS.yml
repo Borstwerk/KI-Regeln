@@ -157,6 +157,8 @@ criteria:
   blocking: true
   met: false
   reason: 'authenticated_in_view: server credential validity not yet observed (local
-    state: no-credential-accepted; auth_status_discriminates_invalid_control=False)'
+    state: no-credential-accepted; auth_status_discriminates_invalid_control=False);
+    oauth_path_is_the_effective_credential_path: environment mode claude-managed-auth,
+    managed policy managed-credential-provider-undetermined'
   evidence: b2_readiness_checks.confined_model_runtime_launchable
 note: An infrastructure decision. It says nothing about any agent's behaviour.

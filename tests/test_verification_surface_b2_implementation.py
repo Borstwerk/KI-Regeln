@@ -2126,6 +2126,7 @@ class ConfinedLaunchPreflightTests(unittest.TestCase):
         self.assertIs(stored["model_involved"], False)
         self.assertEqual(sorted(stored["checks"]),
                          ["argv_paths_exist_in_view", "authenticated_in_view",
+                          "oauth_path_is_the_effective_credential_path",
                           "runtime_executable_in_view", "transport_paths_resolve_in_view",
                           "writable_flags_parse_in_view"])
 
@@ -2137,11 +2138,20 @@ class ConfinedLaunchPreflightTests(unittest.TestCase):
         any request. That is the one place `-p` may appear, and only in that company.
         """
         stored = load_yaml(B2 / "evidence/launch-preflight.yml")
-        detail = []
-        for name, check in stored["checks"].items():
-            entries = check["detail"]
-            detail.extend([(name, entries)] if "argv" in entries
-                          else [(f"{name}.{k}", v) for k, v in entries.items()])
+
+        def commands(node, path):
+            """Every recorded invocation, wherever in the report it sits."""
+            if isinstance(node, dict):
+                if isinstance(node.get("argv"), list):
+                    yield path, node
+                    return
+                for key, value in node.items():
+                    yield from commands(value, f"{path}.{key}")
+            elif isinstance(node, list):
+                for i, value in enumerate(node):
+                    yield from commands(value, f"{path}[{i}]")
+
+        detail = list(commands(stored, "report"))
         self.assertTrue(detail)
         for name, entry in detail:
             with self.subTest(check=name):
@@ -2153,7 +2163,8 @@ class ConfinedLaunchPreflightTests(unittest.TestCase):
                                      "print mode is only acceptable when --help ends it")
                 else:
                     self.assertTrue(
-                        argv[:1] == ["/bin/sh"] or argv[1] in ("--version", "auth", "--permission-mode"),
+                        argv[:1] == ["/bin/sh"]
+                        or argv[1] in ("--version", "auth", "--permission-mode", "doctor"),
                         f"unexpected preflight command: {argv}")
 
     def test_G3_the_argv_paths_and_the_runtime_were_verified_in_the_view(self):
@@ -2798,7 +2809,8 @@ class SubscriptionOAuthAuthPathTests(unittest.TestCase):
             False, "a refusal that another channel could explain is not discrimination")
 
     def _preflight_with_auth(self, preflight_module, actual: bool, invalid_control: bool,
-                             extra_env: dict | None = None):
+                             extra_env: dict | None = None, context=None,
+                             managed_verdict: str | None = None):
         """The real preflight, with both views' commands answered from a script.
 
         The two views are told apart the way they actually differ: the control view is the one
@@ -2831,7 +2843,7 @@ class SubscriptionOAuthAuthPathTests(unittest.TestCase):
                         "payload_started": True, "timed_out": False}
             yield run
 
-        context = self.context()
+        context = context if context is not None else self.context()
         if extra_env:
             # A second channel is added *after* the context was prepared: preparing one with
             # it would be refused outright, which is a different test (A23).
@@ -2841,11 +2853,21 @@ class SubscriptionOAuthAuthPathTests(unittest.TestCase):
                 env_policy=context.env_policy, capabilities=context.capabilities,
                 probe=context.probe)
         original = preflight_module.model_view
+        original_managed = preflight_module.managed_credential_provider
+        verdict = managed_verdict or preflight_module.MANAGED_VERDICT_CLEAR
         try:
             preflight_module.model_view = fake_view
+            # The managed-policy reading needs a real view to mean anything; these tests are
+            # about the auth rule, so it is supplied as a stated premise instead.
+            preflight_module.managed_credential_provider = lambda run, binary: {
+                "verdict": verdict, "files": {}, "credential_provider_keys": [],
+                "undetermined_sources": [], "remote_managed_settings": "absent",
+                "remote_status_line": "", "measured_in": "stubbed for this test", "note": "",
+            }
             return preflight_module.preflight(context)
         finally:
             preflight_module.model_view = original
+            preflight_module.managed_credential_provider = original_managed
 
     def test_A19_the_canary_is_synthetic_fresh_and_never_persisted(self):
         from tools.b2_launch_preflight import invalid_credential_canary
@@ -2876,16 +2898,50 @@ class SubscriptionOAuthAuthPathTests(unittest.TestCase):
             self.skipTest(f"no {SUBSCRIPTION_OAUTH_ENV} supplied on this host")
         if not BOUNDARY_AVAILABLE:
             self.skipTest(f"no boundary provider: {BOUNDARY_REASON}")
-        report = preflight()
+        self.assert_supplied_token_report(preflight(), os.environ[SUBSCRIPTION_OAUTH_ENV])
+
+    def assert_supplied_token_report(self, report, token_value: str | None):
+        """What a run with a real token must show — and what it still must not claim."""
+        from tools.behavioral_harness_claude import AUTH_SUBSCRIPTION_OAUTH
+
         check = report["checks"]["authenticated_in_view"]
-        self.assertTrue(check["credential_accepted_by_cli"],
-                        "a supplied token must at least be accepted inside the view")
+        self.assertIs(check["credential_accepted_by_cli"], True,
+                      "a supplied token must at least be accepted inside the view")
         self.assertEqual(check["auth_method"], "oauth_token")
+        self.assertEqual(check["effective_auth_mode"], AUTH_SUBSCRIPTION_OAUTH)
         self.assertEqual(check["config_directory"], "/scratch/claude-config")
-        self.assertNotIn(os.environ[SUBSCRIPTION_OAUTH_ENV], json.dumps(report, default=str))
-        # And the sub-check still follows the measured semantics, not the token's presence.
-        self.assertIs(check["credential_validity_observed"],
-                      not report["invalid_credential_control"]["credential_accepted_by_cli"])
+        # Server validity is never inferred from a real token any more than from a fake one.
+        self.assertEqual(check["server_credential_validity_observed"], "unknown")
+        self.assertFalse(check["ok"])
+        # Discrimination follows the control that actually ran, whichever way it went.
+        control = report["invalid_credential_control"]
+        self.assertIs(check["invalid_control_accepted_by_cli"],
+                      control["credential_accepted_by_cli"])
+        self.assertIs(check["auth_status_discriminates_invalid_control"],
+                      bool(control["answerable_by_the_canary_alone"]
+                           and not control["credential_accepted_by_cli"]))
+        blob = json.dumps(report, default=str)
+        if token_value:
+            from tools.behavioral_harness_claude import _hash_text
+            self.assertNotIn(token_value, blob)
+            self.assertNotIn(_hash_text(token_value), blob,
+                             "a hash of a credential is still a durable identifier for it")
+
+    def test_A20b_the_supplied_token_path_is_exercised_without_a_real_token(self):
+        """The non-skipping shape of A20, driven through a local seam.
+
+        A20 skips on a host with no credential, which is every host so far — so the assertions
+        it would make have never run. Here they do, against the real preflight with the view's
+        commands scripted and a canary standing in for the supplied token.
+        """
+        from tools import b2_launch_preflight as preflight_module
+        from tools.behavioral_harness_claude import SUBSCRIPTION_OAUTH_ENV
+
+        supplied = "sk-ant-oat01-B2-SUPPLIED-TOKEN-SEAM-0000"
+        report = self._preflight_with_auth(
+            preflight_module, True, True,
+            context=self.context(self.raw_env(**{SUBSCRIPTION_OAUTH_ENV: supplied})))
+        self.assert_supplied_token_report(report, supplied)
 
     # 2 -- the OAuth path has to be the path this launch would actually take
     def test_A22_a_lone_oauth_token_is_the_effective_credential_path(self):
@@ -3058,3 +3114,155 @@ class TransportPathEnvironmentTests(unittest.TestCase):
                 stderr = stored["checks"][name]["detail"]["stderr_tail"] or ""
                 self.assertNotIn("load failed", stderr)
                 self.assertNotIn("No such file or directory", stderr)
+
+
+class ManagedCredentialPolicyTests(unittest.TestCase):
+    """Managed settings sit ahead of the OAuth token in the runtime's credential order.
+
+    `--safe-mode` closes user customization but does not lift managed policy, `--restricted`
+    loads it, and `/etc` is bind-mounted read-only into the view — so a managed `apiKeyHelper`
+    would reach the confined process and decide the credential path instead of the token the
+    pilot is meant to exercise. "The variable is set" is therefore not the same claim as
+    "OAuth is the path this launch takes".
+    """
+
+    def read_with(self, documents, remote_line, claude_binary="claude"):
+        """Run the real reader against a scripted view. Nothing here is a reimplementation."""
+        from tools.b2_launch_preflight import MANAGED_SETTINGS_PATHS, managed_credential_provider
+
+        def run(argv, view_timeout=None):
+            if argv[0] == "/bin/sh":
+                out = []
+                for path in MANAGED_SETTINGS_PATHS:
+                    out.append(f"=== {path}")
+                    out.append(documents.get(path, "@ABSENT"))
+                out.append("=== end")
+                return {"returncode": 0, "stdout": "\n".join(out) + "\n", "stderr": "",
+                        "payload_started": True, "timed_out": False}
+            return {"returncode": 0, "stdout": f"Claude Code doctor\n{remote_line}\n",
+                    "stderr": "", "payload_started": True, "timed_out": False}
+
+        return managed_credential_provider(run, claude_binary)
+
+    NONE = "Managed settings (remote): none configured for this organization"
+    UNFETCHED = ("Managed settings (remote): not fetched — no usable credentials for the "
+                 "settings fetch")
+
+    def test_P1_no_managed_policy_and_a_known_absent_remote_source_clears_the_path(self):
+        from tools.b2_launch_preflight import MANAGED_VERDICT_CLEAR
+        report = self.read_with({}, self.NONE)
+        self.assertEqual(report["verdict"], MANAGED_VERDICT_CLEAR)
+        self.assertEqual(report["remote_managed_settings"], "absent")
+        self.assertEqual(report["credential_provider_keys"], [])
+
+    def test_P2_a_managed_api_key_helper_fails_the_path_closed(self):
+        from tools.b2_launch_preflight import MANAGED_VERDICT_PROVIDER
+        for document, expected in (
+            ('{"apiKeyHelper": "/opt/org/get-key.sh"}', ["apiKeyHelper"]),
+            ('{"awsAuthRefresh": "aws sso login"}', ["awsAuthRefresh"]),
+            ('{"awsCredentialExport": "/opt/org/export.sh"}', ["awsCredentialExport"]),
+            ('{"forceLoginMethod": "console"}', ["forceLoginMethod"]),
+            ('{"env": {"ANTHROPIC_API_KEY": "sk-ant-canary"}}', ["env.ANTHROPIC_API_KEY"]),
+            ('{"env": {"ANTHROPIC_AUTH_TOKEN": "canary"}}', ["env.ANTHROPIC_AUTH_TOKEN"]),
+        ):
+            with self.subTest(document=document[:40]):
+                report = self.read_with(
+                    {"/etc/claude-code/managed-settings.json": document}, self.NONE)
+                self.assertEqual(report["verdict"], MANAGED_VERDICT_PROVIDER)
+                self.assertEqual(report["credential_provider_keys"], expected)
+                # Key names travel; values and helper commands do not.
+                blob = json.dumps(report, default=str)
+                for secret in ("/opt/org/get-key.sh", "sk-ant-canary", "aws sso login",
+                               "/opt/org/export.sh"):
+                    self.assertNotIn(secret, blob)
+
+    def test_P3_a_managed_policy_without_a_credential_provider_does_not_block(self):
+        """Managed settings are common. Only a credential provider is the problem."""
+        from tools.b2_launch_preflight import MANAGED_VERDICT_CLEAR
+        document = '{"permissions": {"deny": ["Bash(curl *)"]}, "env": {"NO_COLOR": "1"}}'
+        report = self.read_with({"/etc/claude-code/managed-settings.json": document}, self.NONE)
+        self.assertEqual(report["verdict"], MANAGED_VERDICT_CLEAR)
+        self.assertEqual(report["credential_provider_keys"], [])
+        self.assertIs(report["files"]["/etc/claude-code/managed-settings.json"]["parsed"], True)
+
+    def test_P4_an_unreadable_or_ambiguous_policy_fails_closed(self):
+        """An unknown credential policy is not an absent one."""
+        from tools.b2_launch_preflight import MANAGED_VERDICT_UNKNOWN
+        cases = {
+            "unparsable": ({"/etc/claude-code/managed-settings.json": "{not json"}, self.NONE),
+            "unreadable": ({"/etc/claude-code/managed-settings.json": "@UNREADABLE"}, self.NONE),
+            "drop-in directory with content": (
+                {"/etc/claude-code/managed-settings.d": "@DIR\n10-org.json\n"}, self.NONE),
+            "remote source not fetched": ({}, self.UNFETCHED),
+            "no remote line at all": ({}, ""),
+        }
+        for label, (documents, remote) in cases.items():
+            with self.subTest(case=label):
+                report = self.read_with(documents, remote)
+                self.assertEqual(report["verdict"], MANAGED_VERDICT_UNKNOWN)
+
+    def test_P5_an_empty_drop_in_directory_is_not_treated_as_a_policy(self):
+        from tools.b2_launch_preflight import MANAGED_VERDICT_CLEAR
+        report = self.read_with({"/etc/claude-code/managed-settings.d": "@DIR\n"}, self.NONE)
+        self.assertEqual(report["verdict"], MANAGED_VERDICT_CLEAR)
+
+    def test_P6_the_preflight_check_follows_both_halves(self):
+        """Environment mode and managed verdict both have to be right, or it is red."""
+        from tools import b2_launch_preflight as preflight_module
+        from tools.behavioral_harness_claude import SUBSCRIPTION_OAUTH_ENV
+
+        auth_tests = SubscriptionOAuthAuthPathTests()
+        supplied = self.id()  # any non-empty synthetic value; never read as a credential
+        with_token = auth_tests.context(auth_tests.raw_env(**{SUBSCRIPTION_OAUTH_ENV: supplied}))
+        for verdict, expected in ((preflight_module.MANAGED_VERDICT_CLEAR, True),
+                                  (preflight_module.MANAGED_VERDICT_PROVIDER, False),
+                                  (preflight_module.MANAGED_VERDICT_UNKNOWN, False)):
+            with self.subTest(managed=verdict):
+                report = auth_tests._preflight_with_auth(
+                    preflight_module, True, False, context=with_token, managed_verdict=verdict)
+                check = report["checks"]["oauth_path_is_the_effective_credential_path"]
+                self.assertIs(check["ok"], expected)
+                self.assertEqual(check["managed_policy_verdict"], verdict)
+                # And the negative control is gated by the same verdict.
+                answerable = report["invalid_credential_control"]["answerable_by_the_canary_alone"]
+                self.assertIs(answerable, expected)
+
+    def test_P7_without_a_token_the_check_is_red_for_the_environment_half(self):
+        from tools import b2_launch_preflight as preflight_module
+        from tools.behavioral_harness_claude import AUTH_CLAUDE_MANAGED
+
+        auth_tests = SubscriptionOAuthAuthPathTests()
+        raw = {k: v for k, v in auth_tests.raw_env().items()
+               if k != "CLAUDE_CODE_OAUTH_TOKEN"}
+        report = auth_tests._preflight_with_auth(
+            preflight_module, False, True, context=auth_tests.context(raw))
+        check = report["checks"]["oauth_path_is_the_effective_credential_path"]
+        self.assertFalse(check["ok"])
+        self.assertEqual(check["environment_auth_mode"], AUTH_CLAUDE_MANAGED)
+
+    @requires_boundary
+    def test_P8_the_recorded_preflight_read_the_policy_inside_the_view(self):
+        stored = load_yaml(B2 / "evidence/launch-preflight.yml")
+        managed = stored["managed_credential_policy"]
+        self.assertIn(managed["verdict"],
+                      ["no-managed-credential-provider", "managed-credential-provider-present",
+                       "managed-credential-provider-undetermined"])
+        self.assertIn("confined view", managed["measured_in"])
+        for path, entry in managed["files"].items():
+            with self.subTest(path=path):
+                self.assertIn("present", entry)
+                self.assertNotIn("content", entry)
+        blob = json.dumps(managed, default=str)
+        for marker in ("sk-ant-", "/root/", "BEGIN "):
+            with self.subTest(marker=marker):
+                self.assertNotIn(marker, blob)
+
+    def test_P9_the_auth_token_channel_outranks_the_api_key(self):
+        """Corrected after measuring: with both set the runtime reports the auth-token path."""
+        from tools.behavioral_harness_claude import (
+            AUTH_ANTHROPIC_AUTH_TOKEN, effective_auth_mode,
+        )
+        self.assertEqual(
+            effective_auth_mode({"ANTHROPIC_API_KEY": "canary", "ANTHROPIC_AUTH_TOKEN": "canary"}),
+            AUTH_ANTHROPIC_AUTH_TOKEN)
+        self.assertEqual(effective_auth_mode({"ANTHROPIC_API_KEY": "canary"}), "anthropic-api-key")

@@ -58,6 +58,143 @@ DENY_PROC_RULE = "Read(//proc/**)"
 # Tri-state, matching the harness convention elsewhere: an observation nobody has made is not
 # a negative result. It blocks exactly like `false`, and says something different.
 UNKNOWN_OBSERVATION = "unknown"
+# Managed settings reach the confined process: `/etc` is bind-mounted read-only into the view,
+# `--restricted` loads managed settings, and `--safe-mode` closes user customization without
+# lifting managed policy. These are the Linux paths the runtime reads.
+MANAGED_SETTINGS_PATHS = ("/etc/claude-code/managed-settings.json",
+                          "/etc/claude-code/managed-settings.d",
+                          "/etc/claude-code/managed-mcp.json")
+# Settings keys through which managed policy can supply or redirect a credential. Names taken
+# from the installed runtime's own strings, not from memory.
+MANAGED_CREDENTIAL_KEYS = ("apiKeyHelper", "awsAuthRefresh", "awsCredentialExport",
+                           "forceLoginMethod")
+# Environment names a managed `env` block could set to hand the runtime a credential.
+MANAGED_CREDENTIAL_ENV_KEYS = ("ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN",
+                               "CLAUDE_CODE_USE_BEDROCK", "CLAUDE_CODE_USE_VERTEX")
+REMOTE_MANAGED_PREFIX = "Managed settings (remote):"
+REMOTE_MANAGED_NONE = "none configured"
+MANAGED_VERDICT_CLEAR = "no-managed-credential-provider"
+MANAGED_VERDICT_PROVIDER = "managed-credential-provider-present"
+MANAGED_VERDICT_UNKNOWN = "managed-credential-provider-undetermined"
+
+
+def _managed_credential_keys(text: str) -> list[str]:
+    """Which credential-provider keys a managed settings document carries. Names only.
+
+    A document that does not parse yields `None`, which the caller turns into a refusal: an
+    unreadable credential policy is not an absent one.
+    """
+    document = json.loads(text)
+    if not isinstance(document, dict):
+        raise ValueError("managed settings document is not an object")
+    found = [k for k in MANAGED_CREDENTIAL_KEYS if k in document]
+    block = document.get("env")
+    if isinstance(block, dict):
+        found += [f"env.{k}" for k in MANAGED_CREDENTIAL_ENV_KEYS if k in block]
+    return sorted(found)
+
+
+def managed_credential_provider(run, claude_binary: str) -> dict[str, Any]:
+    """Could managed policy supply a credential ahead of the OAuth token? Measured in the view.
+
+    Two sources, both read from inside the confinement rather than from the host: the managed
+    settings files the view actually carries, and what `claude doctor` says about a remote
+    managed settings source. Only "no provider, and the remote source is known to be absent"
+    clears the path; everything else -- a provider key, a document that does not parse, a
+    remote source that could not be checked -- is a refusal. An unknown credential policy is
+    not an absent one.
+
+    No value, no helper output and no document content is returned; key names only.
+    """
+    reads = "\n".join([
+        "set +e",
+        *[f'echo "=== {path}"; if [ -d {shlex.quote(path)} ]; then echo "@DIR"; '
+          f'ls -1 {shlex.quote(path)} 2>/dev/null; elif [ -e {shlex.quote(path)} ]; then '
+          f'cat {shlex.quote(path)} 2>/dev/null || echo "@UNREADABLE"; else echo "@ABSENT"; fi'
+          for path in MANAGED_SETTINGS_PATHS],
+        'echo "=== end"',
+    ])
+    listing = _run_in_view(run, ["/bin/sh", "-c", reads], timeout=120)
+    sections: dict[str, str] = {}
+    current = None
+    for line in (listing["stdout_tail"] or "").splitlines():
+        if line.startswith("=== "):
+            current = line[4:].strip()
+            if current != "end":
+                sections[current] = ""
+            continue
+        if current and current in sections:
+            sections[current] += line + "\n"
+
+    files: dict[str, Any] = {}
+    provider_keys: list[str] = []
+    unreadable: list[str] = []
+    for path in MANAGED_SETTINGS_PATHS:
+        body = sections.get(path, "").strip()
+        if not body or body == "@ABSENT":
+            files[path] = {"present": False}
+            continue
+        if body.startswith("@DIR"):
+            entries = [e for e in body.splitlines()[1:] if e.strip()]
+            files[path] = {"present": True, "kind": "directory", "entry_count": len(entries)}
+            if entries:
+                # A drop-in directory with content is a policy this check cannot read in one
+                # pass. Refuse rather than assume its contents are harmless.
+                unreadable.append(path)
+            continue
+        if body == "@UNREADABLE":
+            files[path] = {"present": True, "readable": False}
+            unreadable.append(path)
+            continue
+        try:
+            keys = _managed_credential_keys(body)
+        except (ValueError, TypeError):
+            files[path] = {"present": True, "readable": True, "parsed": False}
+            unreadable.append(path)
+            continue
+        files[path] = {"present": True, "readable": True, "parsed": True,
+                       "credential_provider_keys": keys}
+        provider_keys += keys
+
+    doctor = _run_in_view(run, [claude_binary, "doctor"], timeout=180)
+    remote_line = ""
+    for raw in ((doctor["stdout_tail"] or "") + "\n" + (doctor["stderr_tail"] or "")).splitlines():
+        if raw.strip().startswith(REMOTE_MANAGED_PREFIX):
+            remote_line = raw.strip()
+            break
+    remainder = remote_line[len(REMOTE_MANAGED_PREFIX):].strip().lower()
+    if remote_line and remainder.startswith(REMOTE_MANAGED_NONE):
+        remote = "absent"
+    elif remote_line:
+        # "not fetched -- no usable credentials for the settings fetch" lands here, which is
+        # the honest answer: without a credential the runtime cannot tell us, so neither can we.
+        remote = "undetermined"
+    else:
+        remote = "undetermined"
+
+    if provider_keys:
+        verdict = MANAGED_VERDICT_PROVIDER
+    elif unreadable or remote != "absent":
+        verdict = MANAGED_VERDICT_UNKNOWN
+    else:
+        verdict = MANAGED_VERDICT_CLEAR
+    return {
+        "verdict": verdict,
+        "files": files,
+        "credential_provider_keys": sorted(set(provider_keys)),
+        "undetermined_sources": sorted(set(unreadable)),
+        "remote_managed_settings": remote,
+        "remote_status_line": remote_line,
+        "measured_in": "the confined view, where /etc is bound read-only and managed policy applies",
+        # What was executed to get here, so a reader can see it reaches no model. The file
+        # listing's stdout is deliberately not kept: it is managed policy content.
+        "commands": [
+            {k: v for k, v in listing.items() if k != "stdout_tail"},
+            {k: v for k, v in doctor.items() if k != "stdout_tail"},
+        ],
+        "note": ("--safe-mode closes user customization but does not lift managed settings "
+                 "policy, and --restricted loads it, so this is read where the launch reads it"),
+    }
 ROOT = Path(__file__).resolve().parents[1]
 # The model id does not influence any of the three questions -- no request is made -- but a
 # placeholder is still recorded, so nobody reads the report as covering a particular model.
@@ -322,6 +459,11 @@ def _preflight(context: Any, model: str) -> dict[str, Any]:
             "detail": present_transport,
         }
 
+        # 2d. Which credential path this launch would actually take. The environment half is
+        # settled before any view exists; the managed-policy half can only be read where the
+        # launch reads it, so it is read here.
+        managed = managed_credential_provider(run, claude_binary)
+
         # 3. The authentication path, in exactly this view and this environment.
         actual = _auth_probe(run, claude_binary)
 
@@ -337,7 +479,10 @@ def _preflight(context: Any, model: str) -> dict[str, Any]:
     # offers another credential channel, an acceptance could be that channel's doing, and the
     # control would silently measure the wrong thing.
     control_mode = effective_auth_mode(control_env)
-    control_answerable = control_mode == AUTH_SUBSCRIPTION_OAUTH
+    # And a managed credential provider could answer for the canary just as easily as a second
+    # environment channel could, so the same verdict gates the control.
+    control_answerable = (control_mode == AUTH_SUBSCRIPTION_OAUTH
+                          and managed["verdict"] == MANAGED_VERDICT_CLEAR)
     with model_view(claude_binary=claude_binary, env=control_env) as control_run:
         control = _auth_probe(control_run, claude_binary)
     # What the control actually answers: does `auth status` on this runtime tell the supplied
@@ -387,6 +532,21 @@ def _preflight(context: Any, model: str) -> dict[str, Any]:
         "credential_channels_active": sorted(n for n, on in credential_channels(env).items() if on),
         "detail": actual["result"],
     }
+    env_mode = effective_auth_mode(env)
+    checks["oauth_path_is_the_effective_credential_path"] = {
+        # Only meaningful once a token is supplied, and stated that way rather than passing
+        # silently: without one the environment path is managed auth, which is not the path
+        # this pilot is for.
+        "ok": (env_mode == AUTH_SUBSCRIPTION_OAUTH
+               and managed["verdict"] == MANAGED_VERDICT_CLEAR),
+        "environment_auth_mode": env_mode,
+        "managed_policy_verdict": managed["verdict"],
+        "why": ("`apiKeyHelper` and the other managed credential keys are ahead of "
+                f"{SUBSCRIPTION_OAUTH_ENV} in the runtime's credential order, and managed "
+                "settings survive --safe-mode, so a B2 subscription-OAuth pilot may only be "
+                "prepared when no managed credential provider can be in effect"),
+        "detail": managed,
+    }
     invalid_credential_control = {
         "executed": True,
         "model_involved": False,
@@ -428,6 +588,7 @@ def _preflight(context: Any, model: str) -> dict[str, Any]:
         },
         "view_environment_names": sorted(view_environment(env, claude_binary)),
         "transport_path_environment": transport,
+        "managed_credential_policy": managed,
         "invalid_credential_control": invalid_credential_control,
         "permission_rule_syntax": rule_syntax_evidence(claude_binary),
         "process_environment_read_rule": {
@@ -491,6 +652,11 @@ def launchable(context: Any = None) -> tuple[bool, str]:
                         f"control={check['auth_status_discriminates_invalid_control']})")
                 else:
                     failures.append(f"authenticated_in_view: {check['state']}")
+            elif name == "oauth_path_is_the_effective_credential_path":
+                failures.append(
+                    "oauth_path_is_the_effective_credential_path: environment mode "
+                    f"{check['environment_auth_mode']}, managed policy "
+                    f"{check['managed_policy_verdict']}")
             elif name == "transport_paths_resolve_in_view":
                 failures.append(
                     "transport_paths_resolve_in_view: "
