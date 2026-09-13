@@ -29,12 +29,17 @@ Nicht vom Werkzeugnamen ausgehen, sondern von der zu erledigenden Arbeit.
 | „Schreib oder überarbeite diesen Text.“ | Schreiben |
 | „Hilf mir, Figuren, Plot oder Welt für eine Geschichte zu entwickeln.“ | Storyentwicklung und Fiktion |
 | „Ordne meine Rücklagen, Schulden oder Anlageoptionen ein.“ | Finanzen |
+| „Prüfe mein Depot oder bringe es kontrolliert zurück zu meiner Zielallokation.“ | Finanzen |
+| „Analysiere dieses Unternehmen fundamental oder ordne die neuesten Quartalszahlen ein.“ | Finanzen + Recherche für aktuelle Evidence |
+| „Bewerte dieses Unternehmen mit DCF oder vergleichbaren Unternehmen.“ | Finanzen + Recherche für aktuelle Evidence |
 | „Erstelle oder prüfe eine Bildserie.“ | Bildarbeit |
 | „Baue oder prüfe diese Website.“ | Webentwicklung |
 | „Finde die Ursache dieses Fehlers.“ | Programmieren / Diagnose, je nach System weitere Fachdomänen |
 | „Dokumentiere diese Datenbanktabelle.“ | Dokumentationserstellung + Datenbanken |
 | „Kläre, was dieses Feature eigentlich können soll.“ | Requirements und Spezifikations-Engineering |
 | „Baue eine langfristig nutzbare Wissensbasis.“ | Wissensmanagement |
+| „Welche Provenienz-, Geräte- oder Bearbeitungshinweise stecken in dieser Datei?“ | Sicherheit → `inhaltsprovenienz-review` |
+| „Erstelle aus meiner Datei eine Sharing-Kopie ohne GPS- oder unnötige Autor-Metadaten.“ | Sicherheit → `metadaten-hygiene`, bei Bedarf vorher `inhaltsprovenienz-review` |
 
 Die Tabelle ist keine vollständige Routingmatrix. Ein Auftrag kann mehrere Domänen berühren; trotzdem gilt: **so wenig Werkzeuge wie möglich, so viele wie nötig**.
 

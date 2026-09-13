@@ -8,6 +8,16 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Phase 4.2C · B2 — Launch-Kontext und Aufzeichnung
+
+- view-lokaler `--mcp-config`: die leere MCP-Konfiguration lag im Host-Temp-Verzeichnis des Adapters und wurde dem confinten Prozess als Hostpfad übergeben, den er nicht öffnen kann; sie erhält jetzt eine eigene read-only View `/b2-config` mit genau einer Datei, und `--strict-mcp-config` ist für writable B2 erzwungen statt optional; die Inline-JSON-Variante wurde nicht genommen, weil keine modellfreie Invocation der installierten CLI diese Option parst und eine Annahme aus der Hilfe keine Messung ist;
+- `PATH` innerhalb der View enthält jetzt das Verzeichnis der Claude-Code-Runtime; der confinte Launch wäre zuvor mit `env: 'claude': No such file or directory` gestorben, gefunden vom neuen Launch-Preflight;
+- die gemessenen Confinement-Fakten stehen jetzt in Runtime-Preimage, Evidence und Method-Evidence; `os_or_container_sandbox` war eine Konstante und sagte „kein Sandbox" über einen Lauf mit Sandbox; die äußere Invocation wird als normalisierter Preimage gebunden (Struktur, Provider, Mount Contract, inneres argv; Assembly-Script als Hash, Launcher-Environment nur als Variablennamen), damit ein unconfinter Lauf nicht dieselbe Method Evidence erzeugen kann;
+- Gate und Launch leiten ihren Kontext nur noch einmal ab: `prepare_writable_launch()` erzeugt einen `WritableLaunchContext` aus geprobtem Binary und gefiltertem Child-Environment, und dieselbe Instanz speist Criterion 22, die Admission und den Launch; zuvor maß das Kriterium `os.environ`, während der Prozess eine gefilterte Kopie erhielt, und kannte weder `base_env` noch `claude_binary`;
+- neues blockierendes Kriterium 22 `confined_model_runtime_launchable`: view-lokale argv-Pfade, ausführbare Runtime in der View, Parserakzeptanz der writable Flags und ein Authpfad, der im View-Environment funktioniert;
+- Pilot Entry bleibt blockiert: `claude auth status` innerhalb der View meldet `loggedIn: false`, weil das Credential unter einem Host-Home liegt, das die View bewusst nicht trägt; Host-Home oder Claude-Config einzumounten würde die gerade geschlossene Grenze wieder öffnen und ist deshalb unterblieben;
+- keine Model Responses, keine Behavioral Runs, kein Judge, kein Unblinding, kein Pairing, keine Skill-Wirkungsaussage, keine Maturity- oder Coverage-Änderung.
+
 ### Phase 4.2C · B2 — Confinement des Modellprozesses
 
 - der Claude-Code-Prozess selbst läuft jetzt im Namespace-Provider: die bisherige Annahme, `--permission-mode dontAsk` zusammen mit `Bash(check)` mache `check` zur einzigen ausführbaren Shell-Aktion, war falsch, weil eine Klasse read-only Kommandos ohne Freigabe läuft; zusammen mit einem Launcher, der den absoluten Pfad des Evaluator-`tools/`-Verzeichnisses einbettete, war das ein konkreter Weg zu Case Matrix, Trust Root und Oracle-Expectations;
@@ -46,6 +56,29 @@ Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunäch
 - maschinell auswertbare Pilot Readiness über alle neunzehn Kriterien ergänzt, mit einem Gate, das einen Modellpiloten technisch verweigert, solange ein blockierendes Kriterium `false`, `unknown` oder unbelegt ist, und das sich durch eine manipulierte Readiness-Datei nicht selbst autorisieren lässt;
 - Eval-Gaming-Red-Team gegen das gebaute System statt gegen das Designdokument ausgeführt und dokumentiert;
 - keine Model Responses, kein Semantic Judge, kein Unblinding, kein Pairing, keine Wirksamkeitsaussage zu `verification-loop`, keine Maturity- oder Eval-Coverage-Änderung; `network_disabled` nur so stark berichtet, wie P6 es trägt.
+
+### Inhaltsprovenienz und Metadatenhygiene
+
+- Sicherheit um zwei klar getrennte Skills ergänzt: `inhaltsprovenienz-review` prüft Dateien und Inhalte read-only auf belegbare Provenienz-, Metadaten- und Unicode-Signale; `metadaten-hygiene` bereinigt ausschließlich eigene oder ausdrücklich autorisierte Artefakte innerhalb eines konkreten Remove-/Keep-Scopes;
+- gemeinsame Fachgrundlage `Sicherheit/Inhaltsprovenienz-und-Metadatenhygiene.md` und Workflow `Workflows/Inhaltsprovenienz-und-Metadatenhygiene.md` ergänzt; Grundmuster ist Inspect → Evidence/Confidence → Erhaltungspflichten → optionales Change Set → Gate → Clean → Re-Inspection → Residual Risk;
+- `guillaumemeyer/watermarks-remover` am Repository-Commit `d9e9590d94e19b39eb2794266292324bfec8249a` mit MIT-Lizenz als aktiv beobachtete methodische Referenz aufgenommen; konkrete `remove-ai-marks`- und Ethics-Artefakte sind per Blob-SHA in Upstream-Registry und Provenance dokumentiert, ohne Runtime-, Plugin-, Service- oder Sync-Abhängigkeit;
+- bewusst nicht übernommen: Detector-Evasion und „human score“-Optimierung, statistische Rewrite-Rezepte zur Watermark-Reduktion, Watermark-Stealing, Secret-Key-Rekonstruktion, destructive Pixel-/Audio-/Video-Purification als allgemeine Fähigkeit sowie das Entfernen verpflichtender Attribution-, Provenienz- oder Disclosure-Signale;
+- Unicode-Hygiene gegen False Positives geschärft: ungewöhnliche Spaces, Bidi-, Zero-width- oder andere Unicode-Zeichen sind nicht automatisch Watermarks; aggressive Normalisierung benötigt konkreten Zweck und Nebenwirkungsprüfung;
+- zwei neue Evalpacks mit jeweils sechs Startfällen ergänzt, insgesamt 12 definierte Cases zu read-only Provenienzprüfung, unsupported Markerklassen, Unicode-False-Positives, GPS-/Privacy-Hygiene, verpflichtender Attribution, sichtbaren Watermark-Near-Misses, Detector-Evasion und Residual Risk; diese Fälle sind **definiert, aber nicht als Behavioral Evals ausgeführt oder bestanden**;
+- aktueller Gesamtstand damit 150 Skills, 125× `partial`, 25× `none`, 0× `core`/`broad`, 125 Skill-Evalpacks und 652 definierte Cases; keine Maturity hochgestuft, keine Behavioral-Eval-Ergebnisse erfunden und kein Tag oder Release erzeugt.
+
+
+### Vertiefter Anthropic-Finance-Upstream-Audit
+
+- `anthropics/financial-services` am 2026-09-06 bis zum geprüften Commit `69cbc81467a5dced793eee03dec4658aa24ef856` vertieft als Apache-2.0-lizenzierter methodischer Referenzraum auditiert; Anthropic dient als Methodenquelle, nicht als Copy/Paste-, Runtime- oder automatische Sync-Abhängigkeit;
+- bestehende Skills `vermoegensprojektion`, `portfolioanalyse` und `anlagevergleich` gegen unbelegte Universaldefaults, veraltete Finanz-/Produktdaten, vermischte Analyseebenen und implizite Aktionsautorisierung gehärtet;
+- drei klar getrennte Finance-Skills `portfolio-rebalancing`, `unternehmensanalyse` und `bewertungsanalyse` ergänzt; alle drei starten `experimental` mit `partial` Evalabdeckung, ohne bestehende Maturity hochzustufen;
+- `investmentthese` bewusst nicht als separaten Skill angelegt: falsifizierbare These, Gegenargumente, disconfirming Evidence und Invalidation Conditions bleiben zunächst Modus der `unternehmensanalyse`, bis persistentes Thesis-Tracking als eigenständiger wiederkehrender Job belegt ist;
+- Workflow `Workflows/Unternehmens-und-Investmentanalyse.md` ergänzt und in `workflow-index.yml` registriert: Unternehmen verstehen → These/Gegen-Evidence → optional Bewertung → optional Anlagevergleich → optional Portfolio-Kontext → Human Gate;
+- drei neue Finance-Evalpacks mit jeweils sechs Startfällen ergänzt, insgesamt 18 definierte Cases zu fehlender Zielallokation, veralteten Depot-/Unternehmens-/Marktdaten, automatischen Trades, aktueller Earnings-Evidence, unfalsifizierbaren Thesen, Peer-Cherry-Picking, erfundenen WACC-/Terminal-Growth-Defaults und DCF-zu-Order-Kurzschlüssen; diese Fälle sind **definiert, aber nicht als Behavioral Evals ausgeführt oder bestanden**;
+- bewusst nicht übernommen: 401(k), IRA, Roth, 529, RMD, Wash-Sale- und andere US-spezifische Konto-/Steuerlogik als allgemeine Wahrheit, feste Rebalancing-Bänder, feste WACC-/Terminal-Growth-/Multiple-Defaults, automatische Trade-Listen oder Buy/Hold/Sell-Automatismen sowie Anthropic-spezifische MCP-/Office-/Python-/Connector-/Subagent-Struktur;
+- aktueller Gesamtstand: 148 Skills, 123× `partial`, 25× `none`, 0× `core`/`broad`; 123 Skill-Evalpacks mit insgesamt 640 definierten Cases;
+- keine Broker-/Bank-/Trade-Aktion autorisiert, keine Maturity hochgestuft, keine Behavioral-Eval-Ergebnisse erfunden und kein Tag, Release oder automatischer Upstream-Sync erzeugt.
 
 ### Phase 4.2C · B2 — Designstand Behavioral Verification Governance
 

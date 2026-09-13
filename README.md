@@ -57,7 +57,7 @@ Die allgemeinen Regeln helfen beim **Wie**. Das konkrete Projekt bestimmt weiter
 | recherchieren, Quellen bewerten, Behauptungen prüfen | Recherche |
 | Texte schreiben, überarbeiten oder adressatengerecht formulieren | Schreiben |
 | Figuren, Plot, Welt oder Kontinuität einer Geschichte entwickeln | Storyentwicklung und Fiktion |
-| Cashflow, Rücklagen, Schulden, Vermögensszenarien oder Anlagen analysieren | Finanzen |
+| Cashflow, Rücklagen, Schulden, Vermögensszenarien, Portfolios, Unternehmen oder Anlagen analysieren | Finanzen |
 | Bilder oder konsistente Bildserien entwickeln und prüfen | Bildarbeit |
 | Websites gestalten, umsetzen oder reviewen | Webentwicklung |
 | Code entwickeln oder Fehler diagnostizieren | Programmieren |
@@ -65,6 +65,7 @@ Die allgemeinen Regeln helfen beim **Wie**. Das konkrete Projekt bestimmt weiter
 | eine Datenbanktabelle oder andere technische Artefakte dokumentieren | Dokumentationserstellung + zuständiger Fachbereich |
 | Anforderungen klären und spezifizieren | Requirements und Spezifikations-Engineering |
 | Wissen langfristig strukturieren und pflegen | Wissensmanagement |
+| Datei auf Provenienz-/Metadatensignale prüfen oder eigene Sharing-Kopie gezielt von sensiblen Metadaten bereinigen | Sicherheit |
 | Datenpipelines, Architektur, Infrastruktur oder Reliability bearbeiten | jeweiliger technischer Fachbereich |
 
 Diese Tabelle ist Orientierung, keine starre Routingmatrix. Ein reales Problem kann mehrere Bereiche berühren, und manchmal ist gar kein spezieller Skill nötig.

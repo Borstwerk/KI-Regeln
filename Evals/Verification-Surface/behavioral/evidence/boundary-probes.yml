@@ -25,7 +25,7 @@ probes:
     denials:
     - 'denied /repo: FileNotFoundError'
     - 'denied /host: FileNotFoundError'
-    - 'denied /tmp/b2-probes-wk31px5s/p1/evaluator-only/sentinel.txt: FileNotFoundError'
+    - 'denied /tmp/b2-probes-6h9kja5m/p1/evaluator-only/sentinel.txt: FileNotFoundError'
     - 'denied /workspace/../evaluator: FileNotFoundError'
     - 'denied /evaluator: FileNotFoundError'
     - 'denied /home: FileNotFoundError'
@@ -37,7 +37,7 @@ probes:
       denied (WROTE: [])'
     host_target_exists: false
     denials:
-    - 'denied /tmp/b2-probes-wk31px5s/p2-outside.txt: FileNotFoundError'
+    - 'denied /tmp/b2-probes-6h9kja5m/p2-outside.txt: FileNotFoundError'
     - 'denied /evaluator/planted.txt: FileNotFoundError'
     - 'denied /etc/planted.txt: OSError'
     - 'denied /planted.txt: OSError'

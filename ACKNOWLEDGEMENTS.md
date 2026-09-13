@@ -22,12 +22,13 @@ Besonderer methodischer Einfluss stammt unter anderem aus Arbeiten und Ökosyste
 - PostgreSQL sowie veröffentlichte Datenbank- und Migrationsdokumentation;
 - ISTQB, Playwright, Pact und Testcontainers für Test- und QA-Perspektiven;
 - OWASP für Security- und Agentic-Risk-Modelle;
+- `guillaumemeyer/watermarks-remover` als methodischen Referenzraum für Inspect-first, Provenienzklassen, Metadaten-/Unicode-Hygiene, Capability Detection und Before/After-Evidence; Detector-Evasion, Watermark-Stealing, destructive Purification und das Verschleiern verpflichtender Provenienz/Disclosure werden nicht als lokale Produktlogik übernommen;
 - Apache Airflow, Beam und Kafka, OpenLineage sowie Data-Contract-Arbeiten für Data Engineering;
 - C4, arc42 und ATAM für Architektur- und Trade-off-Perspektiven;
 - IREB und NASA-System-Engineering-Material für Requirements Engineering;
 - Google Developer Documentation Style Guide, Write the Docs und The Good Docs Project für technische Dokumentation;
 - öffentliche Plattform- und Produktdokumentation für Bild- und Social-Media-Arbeit;
-- SEC/Investor.gov und CFPB für grundlegende Finanzplanungs-, Risiko-, Kosten-, Diversifikations-, Liquiditäts- und Rücklagenperspektiven sowie `anthropics/financial-services` als methodischen Agent-Skill-Referenzraum, ohne US-spezifische Konten-, Steuer-, Renten- oder Trade-Logik als allgemeine KI-Regeln-Wahrheit zu übernehmen;
+- SEC/Investor.gov und CFPB für grundlegende Finanzplanungs-, Risiko-, Kosten-, Diversifikations-, Liquiditäts- und Rücklagenperspektiven sowie `anthropics/financial-services` als methodischen Referenzraum für Finanzplanung, Portfolio-Rebalancing, Unternehmensanalyse, Equity-Research- und Bewertungsmethoden, ohne US-spezifische Konten-, Steuer-, Renten-, Bewertungsdefault- oder Trade-Logik als allgemeine KI-Regeln-Wahrheit zu übernehmen;
 - `danjdewhurst/story-skills` als methodischer Referenzraum für getrennte Story-Bible-, Figuren-, Worldbuilding-, Plot- und Kontinuitätsarbeit, ohne dessen CLI, Projektstruktur oder Templates als lokale Norm zu übernehmen;
 - Emil Kowalskis öffentliches Motion-Craft-Material, mblodes UI-Animation-Skill und Leonxlnx' Taste-Skill als methodische Referenzräume für Motion-Design, ohne deren konkrete Tabellen, Skalen oder Defaultwerte als lokale Norm zu übernehmen;
 - MDN sowie die offiziellen Dokumentationen von Motion und GSAP als technische Primärquellen für konkrete Web-Motion-APIs und Library-Fähigkeiten;

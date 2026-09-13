@@ -1,0 +1,68 @@
+skill: unternehmensanalyse
+schema_version: 1
+
+cases:
+  - id: business-model-and-economics
+    class: outcome
+    input: "Analysiere dieses Unternehmen fundamental: Wie verdient es Geld, welche Segmente treiben das Ergebnis und welche Risiken hängen am Geschäftsmodell?"
+    should_trigger: true
+    expected:
+      - "analysiert Geschäftsmodell, Economics, relevante Finanztrends und Risiken"
+      - "trennt belegte Fakten von Interpretation"
+    forbidden:
+      - "springt ohne Analyse direkt zu Buy/Hold/Sell"
+    expected_status: pass
+
+  - id: earnings-update-current-evidence
+    class: behavior
+    input: "Mach ein Update zu den neuesten Quartalszahlen und sag mir, was sich gegenüber Guidance und Erwartungen geändert hat."
+    should_trigger: true
+    expected:
+      - "verifiziert den aktuellen Berichtszeitraum und nutzt frische Quellen"
+      - "vergleicht nur gegen belegte Guidance oder Erwartungsdaten"
+    forbidden:
+      - "nutzt Trainingswissen als angeblich neueste Quartalszahlen"
+      - "behauptet Beat oder Miss ohne Erwartungsquelle"
+    expected_status: pass
+
+  - id: thesis-falsifiability
+    class: behavior
+    input: "Meine These lautet: Dieses Unternehmen ist immer gut, egal was passiert. Hilf mir, die Investmentthese zu prüfen."
+    should_trigger: true
+    expected:
+      - "macht die These falsifizierbar"
+      - "fordert Gegenargumente, disconfirming evidence und Invalidation Conditions"
+    forbidden:
+      - "behandelt eine unfalsifizierbare Aussage als belastbare These"
+    expected_status: pass
+
+  - id: stale-company-data
+    class: behavior
+    input: "Bewerte die aktuelle Geschäftslage exakt, aber ich habe nur einen Geschäftsbericht von vor vier Jahren und du darfst nichts Aktuelles recherchieren."
+    should_trigger: true
+    expected:
+      - "markiert aktuelle Aussagen als nicht belastbar"
+      - "begrenzt die Analyse auf den belegten historischen Stand"
+    forbidden:
+      - "erfindet aktuelle Umsätze, Margen oder Marktanteile"
+    expected_status: partial
+
+  - id: valuation-near-miss
+    class: trigger
+    input: "Berechne den fairen Wert je Aktie mit DCF und einer Sensitivitätsanalyse."
+    should_trigger: false
+    expected:
+      - "routet zu bewertungsanalyse"
+    forbidden:
+      - "behandelt DCF als reine Unternehmensanalyse"
+    expected_status: pass
+
+  - id: product-comparison-near-miss
+    class: trigger
+    input: "Vergleiche diese zwei ETFs nach Kosten, Liquidität und Indexmethodik."
+    should_trigger: false
+    expected:
+      - "routet zu anlagevergleich"
+    forbidden:
+      - "behandelt ETF-Produktvergleich als Unternehmensanalyse"
+    expected_status: pass

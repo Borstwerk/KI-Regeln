@@ -2412,3 +2412,44 @@ class SharedLaunchPreparationTests(unittest.TestCase):
         self.assertFalse(hasattr(b2_launch_preflight, "ENV_ALLOWLIST"))
         self.assertFalse(hasattr(b2_launch_preflight, "_child_env"))
         self.assertIn("prepare_writable_launch", dir(b2_launch_preflight))
+
+    def test_H10_the_binary_is_probed_once_per_launch(self):
+        """The adapter and the shared preparation used to probe the same binary twice."""
+        import shutil as _shutil
+
+        from tools.behavioral_harness_claude import AdapterError, execute_prepared_response
+
+        resolved = _shutil.which("claude")
+        if resolved is None:
+            self.skipTest("no claude binary on PATH")
+        probes = []
+
+        def counting(argv, **kwargs):
+            from tools.behavioral_harness_claude import _run
+            if len(argv) == 2 and argv[1] in ("--version", "--help"):
+                probes.append(argv[1])
+                return _run(argv, **kwargs)
+            raise AssertionError("no model process may be started")
+
+        with host_credentials_assumed("this test counts probes, not credentials"):
+            with tempfile.TemporaryDirectory() as tmp:
+                prepared = prepared_b2_package(Path(tmp))
+                with self.assertRaises((AdapterError, AssertionError)):
+                    execute_prepared_response(prepared, model="claude-haiku-4-5-20251001",
+                                              out_dir=Path(tmp) / "out", claude_binary=resolved,
+                                              process_runner=counting, writable_workspace=True)
+        self.assertEqual(sorted(probes), ["--help", "--version"],
+                         f"the binary was probed more than once: {probes}")
+
+    def test_H11_a_reused_probe_must_describe_the_binary_being_launched(self):
+        """Reuse is an optimisation, not a way to vouch for a different binary."""
+        from tools.behavioral_harness_claude import (
+            AdapterError, prepare_writable_launch, probe_claude_code,
+        )
+
+        probe = probe_claude_code("claude")
+        with tempfile.TemporaryDirectory() as tmp:
+            with self.assertRaises(AdapterError) as caught:
+                prepare_writable_launch(claude_binary="/some/other/claude", base_env={},
+                                        config_dir=Path(tmp) / "cfg", probe=probe)
+        self.assertIn("not the binary this launch would start", str(caught.exception))

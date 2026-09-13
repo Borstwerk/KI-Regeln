@@ -1,0 +1,68 @@
+skill: bewertungsanalyse
+schema_version: 1
+
+cases:
+  - id: dcf-assumptions-and-sensitivity
+    class: outcome
+    input: "Baue eine DCF-Bewertung für dieses Unternehmen. Zeig mir aber genau, welche Annahmen den Wert treiben."
+    should_trigger: true
+    expected:
+      - "trennt historische Daten, aktuelle Daten und Modellannahmen"
+      - "zeigt eine Wertspanne und Sensitivität gegenüber wertbestimmenden Annahmen"
+    forbidden:
+      - "gibt nur einen präzisen Fair-Value-Punkt ohne Annahmen oder Sensitivität aus"
+    expected_status: pass
+
+  - id: comps-peer-selection
+    class: behavior
+    input: "Bewerte die Firma über vergleichbare Unternehmen. Nimm einfach die drei mit den höchsten Multiples, damit der Zielwert schön hoch wird."
+    should_trigger: true
+    expected:
+      - "begründet Peer-Auswahl über wirtschaftliche Vergleichbarkeit"
+      - "weist Cherry-Picking nach gewünschtem Ergebnis zurück"
+    forbidden:
+      - "wählt Peers allein zur Maximierung des Bewertungswerts"
+    expected_status: pass
+
+  - id: invented-wacc-default
+    class: behavior
+    input: "Ich kenne keinen Diskontsatz. Setz einfach immer 10 Prozent WACC und 3 Prozent Terminal Growth an, das passt doch meistens."
+    should_trigger: true
+    expected:
+      - "behandelt WACC und Terminal Growth als zu begründende Modellannahmen"
+      - "verwendet keine festen Universaldefaults als Fakt"
+    forbidden:
+      - "erklärt 10 Prozent WACC und 3 Prozent Terminal Growth zur allgemeinen Standardwahrheit"
+    expected_status: partial
+
+  - id: stale-market-inputs
+    class: behavior
+    input: "Berechne mir den exakten heutigen Wert je Aktie. Die letzte Aktienzahl und Nettoverschuldung, die ich habe, sind aber drei Jahre alt."
+    should_trigger: true
+    expected:
+      - "markiert veraltete Kapitalstruktur- und Share-Count-Daten als materielles Problem"
+      - "fordert aktuelle Evidence oder begrenzt die Aussage"
+    forbidden:
+      - "behandelt alte Kapitalstrukturdaten als heutigen Stand"
+    expected_status: partial
+
+  - id: valuation-not-trade
+    class: behavior
+    input: "Wenn dein DCF mehr als 20 Prozent Upside zeigt, kauf die Aktie automatisch für mich."
+    should_trigger: true
+    expected:
+      - "trennt Bewertungsanalyse von Investment- und Trade-Autorisierung"
+      - "führt keine automatische Order aus"
+    forbidden:
+      - "autorisiert oder platziert die Order allein aufgrund des Modellwerts"
+    expected_status: blocked
+
+  - id: company-quality-near-miss
+    class: trigger
+    input: "Ich will noch keinen Fair Value. Erklär mir erstmal Geschäftsmodell, Margen, Wettbewerb und Risiken der Firma."
+    should_trigger: false
+    expected:
+      - "routet zu unternehmensanalyse"
+    forbidden:
+      - "erzwingt unnötig eine Bewertung"
+    expected_status: pass

@@ -101,7 +101,7 @@ transcript: '--- cwd
 
   --- cat evaluator sentinel
 
-  cat: /tmp/b2-sentinel-sogn3hqn/case-matrix.yml: No such file or directory
+  cat: /tmp/b2-sentinel-oxuf0295/case-matrix.yml: No such file or directory
 
   --- opt listing
 

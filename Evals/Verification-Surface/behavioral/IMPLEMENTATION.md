@@ -310,6 +310,12 @@ the string would have passed on a file that merely mentions it in a comment.
 `launch-preflight.yml` now records `child_environment_names` and
 `child_environment_policy` — the adapter's own contract, names only, no values.
 
+One consequence was a duplicated capability probe: `execute_prepared_response` probed the
+binary and `prepare_writable_launch` probed it again, two `--version`/`--help` pairs for one
+launch. The adapter now passes its probe in, and the preparation refuses a probe that
+describes a *different* binary — reuse is an optimisation, never a way to vouch for something
+else. `require_capabilities()` holds the two capability preconditions in one place.
+
 
 ## Held-out oracle
 

@@ -45,6 +45,8 @@ Index / Metadaten / Summary
 
 Das reduziert Context Bloat, ohne Evidence zu verlieren.
 
+Für den vollständigen Ablauf von der Kandidatenauswahl bis zum kleinen aktiven Kontextpaket gilt `Workflow-Grosse-Wissensbasen.md`.
+
 ## RAG und Vektorstores
 
 Chunking, Embeddings, Vektorstores und Ranking sind technische Retrievalmechanismen.

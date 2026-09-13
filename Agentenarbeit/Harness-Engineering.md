@@ -12,6 +12,82 @@ Ein guter Harness macht korrektes Verhalten leichter und riskantes Verhalten sch
 
 Textregeln bleiben wichtig. Sie sind aber schwächer als eine technische Grenze, die einen Verstoß zuverlässig erkennt oder verhindert.
 
+## Instruction, Verification und Enforcement
+
+Für wichtige Regeln drei Ebenen unterscheiden:
+
+```text
+Instruction
+→ beschreibt gewünschtes oder erlaubtes Verhalten
+
+Verification
+→ prüft beobachtbar, ob die Regel eingehalten wurde
+
+Enforcement
+→ verhindert oder begrenzt technisch, dass ein unzulässiger Zustand überhaupt entsteht
+```
+
+### Instruction
+
+Instruktionen steuern Verhalten flexibel und sind für Ziele, Vorgehen, Stil, Scope und fachliche Leitplanken geeignet.
+
+Beispiel:
+
+> Bearbeite ausschließlich die Dateien unter `src/import/`.
+
+Eine Instruktion ist jedoch keine technische Garantie. Wenn ein Verstoß relevant gefährlich wäre, reicht eine Textregel allein nicht aus.
+
+### Verification
+
+Verification erkennt Verstöße oder bestätigt einen erwarteten Zustand.
+
+Beispiele:
+
+- Test oder Linter;
+- Schema- oder Contract-Check;
+- Diff-Prüfung;
+- Validator;
+- kontrollierter manueller Prüfschritt;
+- Review- oder Completion-Gate.
+
+Verification kann einen Verstoß sichtbar machen und einen Completion Claim blockieren, verhindert den Verstoß aber nicht zwingend im Voraus.
+
+### Enforcement
+
+Enforcement begrenzt den technisch möglichen Handlungsraum.
+
+Beispiele:
+
+- Read-only-Zugriff;
+- eingeschränkte Dateirechte;
+- Sandbox oder isolierter Workspace;
+- API-Berechtigungen mit Least Privilege;
+- Branch- oder Release-Protection;
+- geblockte Netzwerk- oder Produktionszugriffe.
+
+Wenn eine Aktion **nicht passieren darf**, ist technische Begrenzung robuster als eine immer stärker formulierte Warnung im Prompt.
+
+### Auswahl der Ebene
+
+Nicht jede Präferenz braucht Enforcement.
+
+Als Faustregel:
+
+```text
+gewünschtes Verhalten
+→ Instruction
+
+prüfbare Qualitäts- oder Prozessanforderung
+→ Verification
+
+kritische Invariante / unzulässige Aktion
+→ Enforcement, soweit technisch sinnvoll möglich
+```
+
+Die Ebenen können kombiniert werden. Eine kritische Grenze darf zusätzlich als Instruktion erklärt und durch Verification kontrolliert werden.
+
+Provider- oder Runtime-Mechanismen wie Hooks können Verification oder Enforcement unterstützen. Sie sind Implementierungsdetails und keine universelle Voraussetzung dieses Modells.
+
 ## Von weich nach hart
 
 Mögliche Formen einer Regel:
@@ -169,14 +245,15 @@ Das reduziert Mikromanagement, ohne Kontrolle aufzugeben.
 Bei einer wiederkehrenden Agentenaufgabe prüfen:
 
 1. Welche Regeln existieren nur als Text, obwohl sie automatisch prüfbar wären?
-2. Welche Fehler könnten technisch früh erkannt werden?
-3. Sieht der Agent die Ergebnisse seiner Prüfungen?
-4. Sind Schreib-, Push-, Release- und Produktionsrechte passend begrenzt?
-5. Ist der Blast Radius eines fehlerhaften Agentenlaufs begrenzt?
-6. Sind parallele Agenten durch Workspaces, Branches oder andere Grenzen ausreichend isoliert?
-7. Sind externe Seiteneffekte ausdrücklich freigegeben statt beiläufig möglich?
-8. Kann eine fehlgeschlagene Prüfung versehentlich als Erfolg interpretiert werden?
-9. Erzwingt der Harness die wichtigen Invarianten, ohne unnötig konkrete Implementierungen vorzuschreiben?
+2. Welche Regeln sind bloße Instruktionen, obwohl ein Verstoß technisch verhindert werden sollte?
+3. Welche Fehler könnten technisch früh erkannt werden?
+4. Sieht der Agent die Ergebnisse seiner Prüfungen?
+5. Sind Schreib-, Push-, Release- und Produktionsrechte passend begrenzt?
+6. Ist der Blast Radius eines fehlerhaften Agentenlaufs begrenzt?
+7. Sind parallele Agenten durch Workspaces, Branches oder andere Grenzen ausreichend isoliert?
+8. Sind externe Seiteneffekte ausdrücklich freigegeben statt beiläufig möglich?
+9. Kann eine fehlgeschlagene Prüfung versehentlich als Erfolg interpretiert werden?
+10. Erzwingt der Harness die wichtigen Invarianten, ohne unnötig konkrete Implementierungen vorzuschreiben?
 
 ## Leitgedanke
 

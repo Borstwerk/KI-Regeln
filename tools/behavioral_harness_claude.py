@@ -1017,16 +1017,8 @@ class WritableLaunchContext:
     probe: Mapping[str, Any]
 
 
-def prepare_writable_launch(*, claude_binary: str, base_env: Mapping[str, str] | None,
-                            config_dir: Path, process_runner: ProcessRunner = _run,
-                            ) -> WritableLaunchContext:
-    """Probe the binary, apply the adapter's environment contract, and stop there.
-
-    Nothing here starts anything. It is the shared prefix of the gate and the launch, so that
-    "the context the criterion measured" and "the context the process gets" are the same
-    object rather than two things that resemble each other.
-    """
-    probe = probe_claude_code(claude_binary, process_runner)
+def require_capabilities(probe: Mapping[str, Any]) -> Mapping[str, Any]:
+    """The two capability preconditions for any launch, asserted in one place."""
     if not probe["required_capabilities_present"]:
         raise AdapterError("Claude Code binary lacks required adapter capabilities: "
                            + ", ".join(probe["missing_required_capabilities"]))
@@ -1035,6 +1027,29 @@ def prepare_writable_launch(*, claude_binary: str, base_env: Mapping[str, str] |
             "Claude Code binary does not support --safe-mode; the adapter does not fall back to --bare, "
             "which never reads managed authentication and closes fewer customization sources"
         )
+    return probe
+
+
+def prepare_writable_launch(*, claude_binary: str, base_env: Mapping[str, str] | None,
+                            config_dir: Path, process_runner: ProcessRunner = _run,
+                            probe: Mapping[str, Any] | None = None) -> WritableLaunchContext:
+    """Probe the binary, apply the adapter's environment contract, and stop there.
+
+    Nothing here starts anything. It is the shared prefix of the gate and the launch, so that
+    "the context the criterion measured" and "the context the process gets" are the same
+    object rather than two things that resemble each other.
+
+    A caller that has already probed the binary passes the result rather than paying for a
+    second `--version` and `--help`; it has to be a probe of *this* binary, which is checked,
+    so reuse cannot quietly become a probe of something else.
+    """
+    if probe is None:
+        probe = probe_claude_code(claude_binary, process_runner)
+    elif probe.get("binary") != claude_binary:
+        raise AdapterError(
+            f"the supplied capability probe describes {probe.get('binary')!r}, "
+            f"not the binary this launch would start ({claude_binary!r})")
+    require_capabilities(probe)
     base = base_env if base_env is not None else os.environ
     config_dir.mkdir(parents=True, exist_ok=True)
     env, env_policy = _child_env(base, config_dir)
@@ -1080,14 +1095,7 @@ def execute_prepared_response(
         raise AdapterError("model aliases are not accepted; pass an explicit full model id")
     tool_policy = effective_tool_policy(writable_workspace)
     runner = _runner_dir(prepared); execution = _validate_package(runner); response_id = str(execution["test_id"])
-    probe = probe_claude_code(claude_binary, process_runner)
-    if not probe["required_capabilities_present"]:
-        raise AdapterError("Claude Code binary lacks required adapter capabilities: " + ", ".join(probe["missing_required_capabilities"]))
-    if not probe["capabilities"].get("safe_mode"):
-        raise AdapterError(
-            "Claude Code binary does not support --safe-mode; the adapter does not fall back to --bare, "
-            "which never reads managed authentication and closes fewer customization sources"
-        )
+    probe = require_capabilities(probe_claude_code(claude_binary, process_runner))
     out_dir = out_dir.resolve()
     if out_dir.exists(): raise AdapterError(f"output directory already exists: {out_dir}")
     requested_session = session_id or str(uuid.uuid4())
@@ -1113,7 +1121,8 @@ def execute_prepared_response(
             # against this exact binary and this exact filtered environment, and the process
             # started below gets the same object -- not a reconstruction of it.
             context = prepare_writable_launch(claude_binary=claude_binary, base_env=base,
-                                              config_dir=config, process_runner=process_runner)
+                                              config_dir=config, process_runner=process_runner,
+                                              probe=probe)
             env, env_policy = dict(context.child_env), dict(context.env_policy)
             admission = _require_admission(context)
         else:
