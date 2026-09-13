@@ -31,26 +31,33 @@ from typing import Any, Mapping
 try:
     from .b2_model_confinement import (
         BIN_MOUNT, CONFIG_MOUNT, MODEL_RUNTIME_BINDS, RUNTIME_MOUNT, VIEW_MCP_CONFIG,
-        ConfinementError, _node_runtime, model_view, mount_contract, view_environment,
+        ConfinementError, _node_runtime, model_view, mount_contract, transport_path_plan,
+        view_environment,
     )
     from .b2_boundary import SCRATCH_MOUNT, WORKSPACE_MOUNT, BoundaryError
     from .behavioral_harness_claude import (
-        SUBPROCESS_SCRUB_ENV, SUBSCRIPTION_OAUTH_ENV, AdapterError, WritableLaunchContext,
-        _argv, prepare_writable_launch,
+        AUTH_SUBSCRIPTION_OAUTH, SUBPROCESS_SCRUB_ENV, SUBSCRIPTION_OAUTH_ENV, AdapterError,
+        WritableLaunchContext, _argv, credential_channels, effective_auth_mode,
+        prepare_writable_launch,
     )
 except ImportError:  # direct script sibling import
     from b2_model_confinement import (
         BIN_MOUNT, CONFIG_MOUNT, MODEL_RUNTIME_BINDS, RUNTIME_MOUNT, VIEW_MCP_CONFIG,
-        ConfinementError, _node_runtime, model_view, mount_contract, view_environment,
+        ConfinementError, _node_runtime, model_view, mount_contract, transport_path_plan,
+        view_environment,
     )
     from b2_boundary import SCRATCH_MOUNT, WORKSPACE_MOUNT, BoundaryError
     from behavioral_harness_claude import (
-        SUBPROCESS_SCRUB_ENV, SUBSCRIPTION_OAUTH_ENV, AdapterError, WritableLaunchContext,
-        _argv, prepare_writable_launch,
+        AUTH_SUBSCRIPTION_OAUTH, SUBPROCESS_SCRUB_ENV, SUBSCRIPTION_OAUTH_ENV, AdapterError,
+        WritableLaunchContext, _argv, credential_channels, effective_auth_mode,
+        prepare_writable_launch,
     )
 
 PREFLIGHT_CONTRACT = "verification-governance-b2-launch-preflight/v1"
 DENY_PROC_RULE = "Read(//proc/**)"
+# Tri-state, matching the harness convention elsewhere: an observation nobody has made is not
+# a negative result. It blocks exactly like `false`, and says something different.
+UNKNOWN_OBSERVATION = "unknown"
 ROOT = Path(__file__).resolve().parents[1]
 # The model id does not influence any of the three questions -- no request is made -- but a
 # placeholder is still recorded, so nobody reads the report as covering a particular model.
@@ -281,6 +288,40 @@ def _preflight(context: Any, model: str) -> dict[str, Any]:
             "detail": {"accepted": accepted, "rejected": rejected},
         }
 
+        # 2c. Path-valued transport variables. A value that names nothing inside the view is
+        # not a boundary leak, but it is a real transport mismatch: the runtime logs a load
+        # failure and carries on with a trust store the launch did not intend. Each one is
+        # planned, then the plan's result is tested for real inside the view.
+        view_env = view_environment(env, claude_binary)
+        transport = transport_path_plan(env)
+        expected = {}
+        for name, entry in transport.items():
+            if entry["action"] == "keep":
+                expected[name] = env[name].strip()
+            elif entry["action"] == "stage":
+                expected[name] = entry["view_path"]
+        script = "\n".join([
+            "set +e", "rc=0",
+            *[f'if [ -e {shlex.quote(path)} ]; then echo "PRESENT {name}"; '
+              f'else echo "MISSING {name}"; rc=1; fi' for name, path in expected.items()],
+            'exit "$rc"',
+        ])
+        present_transport = _run_in_view(run, ["/bin/sh", "-c", script], timeout=120)
+        unreachable = [l.split(" ", 1)[1] for l in present_transport["stdout_tail"].splitlines()
+                       if l.startswith("MISSING ")]
+        rejected = sorted(n for n, e in transport.items() if e["action"] == "reject")
+        # A dropped or rejected variable must be gone from the view environment, not merely
+        # planned away.
+        still_present = sorted(n for n, e in transport.items()
+                               if e["action"] in ("drop", "reject") and n in view_env)
+        checks["transport_paths_resolve_in_view"] = {
+            "ok": not unreachable and not rejected and not still_present,
+            "unreachable_in_view": unreachable,
+            "rejected": rejected,
+            "removed_but_still_in_view_environment": still_present,
+            "detail": present_transport,
+        }
+
         # 3. The authentication path, in exactly this view and this environment.
         actual = _auth_probe(run, claude_binary)
 
@@ -292,12 +333,23 @@ def _preflight(context: Any, model: str) -> dict[str, Any]:
     # validating is recognised instead of being locked out by a constant.
     control_env = dict(env)
     control_env[SUBSCRIPTION_OAUTH_ENV] = invalid_credential_canary()
+    # The control has to be answered by the canary and by nothing else. If the environment
+    # offers another credential channel, an acceptance could be that channel's doing, and the
+    # control would silently measure the wrong thing.
+    control_mode = effective_auth_mode(control_env)
+    control_answerable = control_mode == AUTH_SUBSCRIPTION_OAUTH
     with model_view(claude_binary=claude_binary, env=control_env) as control_run:
         control = _auth_probe(control_run, claude_binary)
-    # Discriminating power, not presence: the credential path counts as observed only when the
-    # runtime accepts the real one *and* refuses a deliberately invalid one. A runtime that
-    # accepts both has told us that acceptance means "a value is set", which is not evidence.
-    validity_observed = actual["accepted"] and not control["accepted"]
+    # What the control actually answers: does `auth status` on this runtime tell the supplied
+    # credential apart from a synthetic invalid one? That is discrimination, and it is a
+    # property of the local CLI -- a refusal could come from syntax, length, character set,
+    # internal token structure, a checksum or any other local parser rule, and nothing proves
+    # the canary is parser-equivalent to a real `claude setup-token` credential.
+    discriminates = (control_answerable and actual["accepted"] and not control["accepted"])
+    # What the control does NOT answer: whether the real credential is valid at the service.
+    # Only an operation that actually authenticates server-side can show that, and this phase
+    # performs none. Never derived from `auth status`, in either direction.
+    server_validity: Any = UNKNOWN_OBSERVATION
     if not actual["accepted"]:
         state = "no-credential-accepted"
     elif control["accepted"]:
@@ -306,19 +358,33 @@ def _preflight(context: Any, model: str) -> dict[str, Any]:
         state = "credential-accepted-and-invalid-control-refused"
     parsed = actual["parsed"]
     checks["authenticated_in_view"] = {
-        "ok": actual["accepted"] and validity_observed,
+        # Green needs both: the intended credential path recognised locally, and a server-side
+        # authenticated operation that used it. The second is out of scope for this phase, so
+        # this sub-check is red by construction here -- and for a reason that names the gap
+        # rather than the host's missing token.
+        "ok": actual["accepted"] and server_validity is True,
         "state": state,
         "credential_accepted_by_cli": actual["accepted"],
         "logged_in": actual["logged_in"],
-        "credential_validity_observed": validity_observed,
         "invalid_control_accepted_by_cli": control["accepted"],
-        "validity_rule": ("credential_validity_observed = credential_accepted_by_cli AND NOT "
-                          "invalid_control_accepted_by_cli"),
+        "auth_status_discriminates_invalid_control": discriminates,
+        "server_credential_validity_observed": server_validity,
+        "discrimination_rule": ("auth_status_discriminates_invalid_control = "
+                                "credential_accepted_by_cli AND NOT "
+                                "invalid_control_accepted_by_cli"),
+        "server_validity_rule": ("server_credential_validity_observed is set only by an "
+                                 "operation that authenticates against the service. It is "
+                                 "never derived from `auth status`: a local acceptance or "
+                                 "refusal can rest on syntax, length, character set, token "
+                                 "structure or a checksum, and the canary is not demonstrably "
+                                 "parser-equivalent to a real setup-token credential."),
         # Names and classifications only. No token, no canary, no value, no hash of a value.
         "auth_method": parsed.get("authMethod"),
         "api_provider": parsed.get("apiProvider"),
         "config_directory": parsed.get("configDirectory"),
         "subscription_token_supplied": SUBSCRIPTION_OAUTH_ENV in env,
+        "effective_auth_mode": effective_auth_mode(env),
+        "credential_channels_active": sorted(n for n, on in credential_channels(env).items() if on),
         "detail": actual["result"],
     }
     invalid_credential_control = {
@@ -327,12 +393,16 @@ def _preflight(context: Any, model: str) -> dict[str, Any]:
         "credential_accepted_by_cli": control["accepted"],
         "logged_in": control["logged_in"],
         "returncode": control["result"]["returncode"],
+        "answerable_by_the_canary_alone": control_answerable,
+        "control_effective_auth_mode": control_mode,
         "auth_method": control["parsed"].get("authMethod"),
         "variable": SUBSCRIPTION_OAUTH_ENV,
         "canary_persisted": False,
-        "what_it_decides": ("whether `auth status` discriminates a valid credential from an "
-                            "invalid one on this runtime; when it does not, no supplied token "
-                            "can satisfy the criterion"),
+        "what_it_decides": ("whether `auth status` on this runtime discriminates the supplied "
+                            "credential from a synthetic invalid one at all"),
+        "what_it_does_not_decide": ("whether a real credential is valid at the service: a "
+                                    "local refusal could be about syntax or structure, so "
+                                    "server validity needs its own observation"),
         "same_as_the_measured_launch": ["claude_binary", "confinement provider", "mount contract",
                                         "filtered child environment", "controls including "
                                         + SUBPROCESS_SCRUB_ENV],
@@ -357,6 +427,7 @@ def _preflight(context: Any, model: str) -> dict[str, Any]:
             "removed_other_count": context.env_policy.get("removed_other_count"),
         },
         "view_environment_names": sorted(view_environment(env, claude_binary)),
+        "transport_path_environment": transport,
         "invalid_credential_control": invalid_credential_control,
         "permission_rule_syntax": rule_syntax_evidence(claude_binary),
         "process_environment_read_rule": {
@@ -411,7 +482,25 @@ def launchable(context: Any = None) -> tuple[bool, str]:
     for name, check in report["checks"].items():
         if not check["ok"]:
             if name == "authenticated_in_view":
-                failures.append(f"authenticated_in_view: {check['state']}")
+                # The server-validity gap is what stands even on a host that supplies a
+                # perfectly good token, so it is named first and the local state follows it.
+                if check["server_credential_validity_observed"] is not True:
+                    failures.append(
+                        "authenticated_in_view: server credential validity not yet observed "
+                        f"(local state: {check['state']}; auth_status_discriminates_invalid_"
+                        f"control={check['auth_status_discriminates_invalid_control']})")
+                else:
+                    failures.append(f"authenticated_in_view: {check['state']}")
+            elif name == "transport_paths_resolve_in_view":
+                failures.append(
+                    "transport_paths_resolve_in_view: "
+                    + "; ".join(filter(None, [
+                        f"unreachable in the view: {check['unreachable_in_view']}"
+                        if check["unreachable_in_view"] else "",
+                        f"needs a decision: {check['rejected']}" if check["rejected"] else "",
+                        f"removed but still passed on: "
+                        f"{check['removed_but_still_in_view_environment']}"
+                        if check["removed_but_still_in_view_environment"] else ""])))
             elif name == "runtime_executable_in_view" and check.get("bubblewrap_missing"):
                 failures.append("runtime_executable_in_view: the runtime refuses to start with "
                                 "the mandatory credential scrub because bubblewrap is not in "
@@ -421,10 +510,9 @@ def launchable(context: Any = None) -> tuple[bool, str]:
     if failures:
         return False, "; ".join(failures)
     return True, ("the writable argv is view-local, the runtime starts and parses the writable "
-                  "flags inside the view, and the credential path was observed with "
-                  "discriminating power: the real credential was accepted inside the view "
-                  "while a synthetic invalid one, measured under the same contract, was "
-                  "refused")
+                  "flags inside the view, the intended credential path is the one this launch "
+                  "would select, and the credential was used in a server-side authenticated "
+                  "operation rather than merely recognised locally")
 
 
 EVIDENCE_CONTRACT = "verification-governance-b2-launch-preflight-evidence/v1"

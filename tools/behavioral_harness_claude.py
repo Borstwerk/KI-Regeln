@@ -145,6 +145,16 @@ AUTH_CLAUDE_MANAGED = "claude-managed-auth"
 # answer different questions afterwards -- "the host was logged in somewhere" versus "this run
 # was handed a credential". The name asserts nothing about the token's validity.
 AUTH_SUBSCRIPTION_OAUTH = "claude-subscription-oauth-token"
+# A bearer token for the Anthropic API, distinct from the subscription OAuth token and from an
+# API key. It was allowlisted as a secret but never classified, so a run carrying it was
+# reported as managed auth -- a mode that says something else entirely.
+AUTH_ANTHROPIC_AUTH_TOKEN = "anthropic-auth-token"
+# A B2 pilot is meant to exercise the subscription OAuth path specifically. If another
+# credential channel is active alongside it, which channel the runtime would pick is not this
+# repository's to guess, and `auth status` cannot always answer it either: measured on 2.1.270,
+# both CLAUDE_CODE_OAUTH_TOKEN and ANTHROPIC_AUTH_TOKEN are reported as `oauth_token`, so the
+# observation does not discriminate. The launch refuses rather than testing an unknown path.
+AUTH_OAUTH_SHADOWED = "oauth-path-shadowed-by-higher-priority-credential"
 # Credential bridges that reach back into the host: a descriptor inherited from the parent,
 # or a path to a file the confined view does not carry. Both were grouped with
 # CLAUDE_CODE_OAUTH_TOKEN when that grouping was deliberately conservative. The token itself
@@ -456,6 +466,31 @@ def _managed_policy(binary: str, env: Mapping[str, str], cwd: Path, runner: Proc
     }
 
 
+# Every credential channel the child environment can carry, as names. Cloud-provider
+# selection counts as a channel of its own: it redirects the whole transport, so it decides
+# the credential path whatever else is set.
+CREDENTIAL_CHANNEL_NAMES = (
+    "CLAUDE_CODE_USE_BEDROCK", "CLAUDE_CODE_USE_VERTEX", "ANTHROPIC_AUTH_TOKEN",
+    "ANTHROPIC_API_KEY", SUBSCRIPTION_OAUTH_ENV,
+)
+
+
+def credential_channels(env: Mapping[str, str]) -> dict[str, bool]:
+    """Which credential channels this environment offers. Presence only, never a value."""
+    return {
+        "CLAUDE_CODE_USE_BEDROCK": env.get("CLAUDE_CODE_USE_BEDROCK") == "1",
+        "CLAUDE_CODE_USE_VERTEX": env.get("CLAUDE_CODE_USE_VERTEX") == "1",
+        "ANTHROPIC_AUTH_TOKEN": bool(env.get("ANTHROPIC_AUTH_TOKEN")),
+        "ANTHROPIC_API_KEY": bool(env.get("ANTHROPIC_API_KEY")),
+        SUBSCRIPTION_OAUTH_ENV: bool(env.get(SUBSCRIPTION_OAUTH_ENV)),
+    }
+
+
+def effective_auth_mode(env: Mapping[str, str]) -> str:
+    """The credential path this launch would take, or the refusal when it is ambiguous."""
+    return _auth(env, env, bare_requested=False)["mode"]
+
+
 def _auth(env: Mapping[str, str], base: Mapping[str, str], *, bare_requested: bool) -> dict[str, Any]:
     """Classify the authentication path from the effective child environment.
 
@@ -465,7 +500,15 @@ def _auth(env: Mapping[str, str], base: Mapping[str, str], *, bare_requested: bo
     falls back to Claude Code's own managed authentication, which stays unproven until
     a model process actually succeeds; the bare path has no such fallback.
     """
-    if env.get("CLAUDE_CODE_USE_BEDROCK") == "1":
+    channels = credential_channels(env)
+    competing = sorted(name for name, active in channels.items()
+                       if active and name != SUBSCRIPTION_OAUTH_ENV)
+    if channels[SUBSCRIPTION_OAUTH_ENV] and competing:
+        # Deliberately before every other branch: the point is not which channel wins but
+        # that more than one is offered, which makes "this run exercised the OAuth path" an
+        # unbacked claim. Names only -- no value of any channel is read here.
+        mode, present = AUTH_OAUTH_SHADOWED, True
+    elif env.get("CLAUDE_CODE_USE_BEDROCK") == "1":
         mode = "bedrock"
         present: Any = True if (env.get("AWS_ACCESS_KEY_ID") and env.get("AWS_SECRET_ACCESS_KEY")) else UNKNOWN
     elif env.get("CLAUDE_CODE_USE_VERTEX") == "1":
@@ -473,6 +516,8 @@ def _auth(env: Mapping[str, str], base: Mapping[str, str], *, bare_requested: bo
         present = True if env.get("GOOGLE_APPLICATION_CREDENTIALS") else UNKNOWN
     elif env.get("ANTHROPIC_API_KEY"):
         mode, present = "anthropic-api-key", True
+    elif env.get("ANTHROPIC_AUTH_TOKEN"):
+        mode, present = AUTH_ANTHROPIC_AUTH_TOKEN, True
     elif env.get(SUBSCRIPTION_OAUTH_ENV):
         # Presence, and only presence. Whether the token authenticates is a separate
         # observation that no model-free command on this runtime provides.
@@ -486,6 +531,8 @@ def _auth(env: Mapping[str, str], base: Mapping[str, str], *, bare_requested: bo
         "runtime_authenticated": UNKNOWN,
         "host_only_channels_ignored": sorted(k for k in base if k in HOST_ONLY_AUTH_ENV),
         "subprocess_credential_scrub_requested": env.get(SUBPROCESS_SCRUB_ENV) == "1",
+        "credential_channels_active": sorted(n for n, active in channels.items() if active),
+        "competing_channels_beside_the_oauth_path": competing,
     }
 
 
@@ -1095,6 +1142,17 @@ def prepare_writable_launch(*, claude_binary: str, base_env: Mapping[str, str] |
     base = base_env if base_env is not None else os.environ
     config_dir.mkdir(parents=True, exist_ok=True)
     env, env_policy = _child_env(base, config_dir, B2_CONTROL_ENV)
+    mode = effective_auth_mode(env)
+    if mode == AUTH_OAUTH_SHADOWED:
+        # Fail closed. A pilot meant to exercise the subscription OAuth path cannot be run
+        # against an environment in which another credential channel is also offered: which
+        # one the runtime takes is not ours to assume, and `auth status` does not always say.
+        raise AdapterError(
+            f"{AUTH_OAUTH_SHADOWED}: {SUBSCRIPTION_OAUTH_ENV} is set alongside "
+            + ", ".join(sorted(n for n, active in credential_channels(env).items()
+                               if active and n != SUBSCRIPTION_OAUTH_ENV))
+            + ". A writable B2 launch exercises one named credential path or none."
+        )
     if env.get(SUBPROCESS_SCRUB_ENV) != "1":
         # Mandatory, with no weaker form. The model process is the only thing in the view that
         # holds a credential; without the scrub, a Bash subprocess it starts would inherit it.

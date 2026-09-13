@@ -156,6 +156,7 @@ criteria:
     runtime, working auth in the view''s own environment'
   blocking: true
   met: false
-  reason: 'authenticated_in_view: no-credential-accepted'
+  reason: 'authenticated_in_view: server credential validity not yet observed (local
+    state: no-credential-accepted; auth_status_discriminates_invalid_control=False)'
   evidence: b2_readiness_checks.confined_model_runtime_launchable
 note: An infrastructure decision. It says nothing about any agent's behaviour.

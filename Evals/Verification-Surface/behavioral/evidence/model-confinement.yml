@@ -3,11 +3,11 @@ model_involved: false
 bound_to:
   provider: unshare-namespace/v1
   boundary_code: sha256:5ee4d576878ab75dc8460782b4df7cb558419a267fb702c4a855b3c00490b44a
-  confinement_code: sha256:75a1a537ca6018d50026efbbf8fda7c0f9b53301df3d8615ba0574860d2824c3
+  confinement_code: sha256:83308cb532c9d775d6e2fc950bfc6a0a4961bbfbf30f9b7fec94ee28290e2fd1
   launcher_code: sha256:e337c039c62b364b5bbe54687d335365168310a9b6346b82fcd06c2ab0ca071d
   oracle_code: sha256:5a3c6cda0d93f994453f67d7700664567ed6b82053b1f3b4207e352403028880
   probe_code: sha256:a0d1b845708907c65efffb1c01c60cb51f7bb4d2f8867794d84216090d84de9a
-  preflight_code: sha256:5fc56b9d39a15c666bd9ea7c27b8ccc304f0697602ad5960e95ea68cca83d3ef
+  preflight_code: sha256:5b1f26cb0beefd6a6ceb5fcb57619d1e56dfe3f70f0945e15f81f345bede0a65
   driver: sha256:a45a50ceb0962e2479782e05e6759490f6459f834fefb4d61221ff29a311decb
   expectations: sha256:dfa47563ede2702a7d7a06901b087f22c272fd81691f2a8531e8c5fb5f230861
   platform: Linux-x86_64
@@ -101,7 +101,7 @@ transcript: '--- cwd
 
   --- cat evaluator sentinel
 
-  cat: /tmp/b2-sentinel-xf4xycoc/case-matrix.yml: No such file or directory
+  cat: /tmp/b2-sentinel-z033wo3w/case-matrix.yml: No such file or directory
 
   --- opt listing
 

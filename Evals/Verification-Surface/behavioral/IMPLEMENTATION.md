@@ -394,20 +394,35 @@ including the credential scrub, with only the credential replaced by a synthetic
 `claude auth status` and nothing else — no prompt, no `-p`, no request.
 
 ```
-credential_validity_observed = credential_accepted_by_cli
-                               AND NOT invalid_control_accepted_by_cli
+auth_status_discriminates_invalid_control = credential_accepted_by_cli
+                                            AND NOT invalid_control_accepted_by_cli
 ```
 
-| Actual credential | Invalid control | Validity observed | Criterion 22 auth sub-check |
-| --- | --- | --- | --- |
-| accepted | accepted | false | red — acceptance means "a value is set" |
-| accepted | refused | **true** | may be green |
-| not accepted | either | false | red |
+That is the question the control can answer, and it is strictly a question about the **local
+CLI**. A first version made it answer more than that — it treated a refused canary as evidence
+that the *real* credential is valid — and that inference does not hold. A refusal can come
+from syntax, length, character set, internal token structure, a checksum, a signature format
+or any other local parser rule, and nothing demonstrates the canary is parser-equivalent to a
+real `claude setup-token` credential. So the two questions are now two fields:
 
-Presence can never be enough, and no build is written into the rule. On Claude Code 2.1.270
-the control reproduces the false positive — `credential_accepted_by_cli: true`, exit 0 — and
-the criterion stays red. On a build that refused it, the same code would let a supplied
-credential count.
+| Field | Set by |
+| --- | --- |
+| `auth_status_discriminates_invalid_control` | the control, on every evaluation |
+| `server_credential_validity_observed` | only an operation that authenticates at the service — never derived from `auth status`, in either direction |
+
+The auth sub-check is green only when the intended credential path is recognised locally
+**and** a server-side authenticated operation has used it. This phase performs none, so the
+field is `unknown` — a tri-state that blocks like `false` and says something different.
+
+On Claude Code 2.1.270 the control reproduces the false positive
+(`invalid_control_accepted_by_cli: true`, exit 0), so the runtime does not even discriminate
+locally. On a build that refused the canary, `auth_status_discriminates_invalid_control` would
+turn true by itself — no build is written into the rule — and the criterion would still wait
+for the server-side observation.
+
+The control also has to be answerable by the canary *alone*. If the environment offers another
+credential channel, an acceptance could be that channel's doing, so the control records
+`answerable_by_the_canary_alone` and a control that is not stops counting as discrimination.
 
 The canary is built fresh per run, carries `B2-INVALID-CREDENTIAL-CONTROL` in plain sight so
 no transcript reader mistakes it for a credential, and is shaped like a subscription token on
@@ -417,9 +432,52 @@ presence. (Measured separately: this runtime accepts any non-blank value and ref
 whitespace, so the shape is not load-bearing today — it is insurance against the build that
 changes.) Neither the canary nor any credential, and no hash of either, reaches an artifact.
 
-Consequence for this phase, unchanged: **criterion 22 cannot be turned green by supplying a
-real token alone** — not because a constant says so, but because the runtime, measured, does
-not discriminate.
+Consequence for this phase: **criterion 22 cannot be turned green by supplying a real token
+alone**, and the reason that remains is not this host's missing token but the missing
+server-side observation — the one that would still be missing on a host with a perfect
+credential.
+
+### Which credential path this launch would take
+
+A B2 pilot is meant to exercise the subscription OAuth path specifically, and "the variable is
+set" does not establish that. Claude Code takes credentials from several channels, and
+`auth status` does not always reveal which one won: measured on 2.1.270 inside the view,
+`CLAUDE_CODE_OAUTH_TOKEN` and `ANTHROPIC_AUTH_TOKEN` are *both* reported as
+`authMethod: oauth_token`, while an active Bedrock or Vertex selection overrides both.
+
+So there is no priority table in this repository to fall out of sync with the vendor. There is
+a refusal: when the OAuth token is set alongside any other credential channel — an active
+cloud-provider selection, `ANTHROPIC_AUTH_TOKEN`, or `ANTHROPIC_API_KEY` — the launch fails
+closed with `oauth-path-shadowed-by-higher-priority-credential`. Channel *names* only; no
+value of any channel is read, logged or persisted. `ANTHROPIC_AUTH_TOKEN` also gained its own
+mode, `anthropic-auth-token`: it was allowlisted as a secret but never classified, so a run
+carrying it reported as managed auth, which says something else entirely.
+
+### Path-valued transport variables
+
+The recorded evidence showed `NODE_EXTRA_CA_CERTS=/root/.ccr/ca-bundle.crt` handed to a view
+that deliberately has no `/root`, and the runtime answering `load failed: No such file or
+directory`. Not a boundary leak — the opposite: the boundary held and the launch was
+misconfigured across it. But a run would then have proceeded with a trust store it did not
+intend.
+
+Each path-valued transport variable now gets a plan, and the plan's result is tested inside
+the view:
+
+| Action | When | What happens |
+| --- | --- | --- |
+| `keep` | already under a view-visible prefix | passed through unchanged |
+| `stage` | a readable host **file** | copied read-only into `/b2-config/transport/<NAME>`, variable rewritten |
+| `drop` | names nothing on the host | removed — it was already inert |
+| `reject` | a **directory** outside the view | preflight fails closed; copying a trust-store directory silently is a trust decision, not a mechanical fix |
+
+No host mount, no `/root`, no host home. The staged file is one more read-only entry in the
+configuration view that already exists, and `stage_config` still refuses anything that is not
+on its allowlist. Evidence records `configured`, `accessible_in_view` and `action` — never the
+host path.
+
+On this host the three configured CA variables are staged, and the `load failed` line is gone
+from both the startup and the auth probe.
 
 
 ## Held-out oracle
@@ -446,7 +504,9 @@ input shape and nothing else. P4 confirms the separation by trying.
 | launch preflight | the confined runtime's launchability | let a pilot be admitted that cannot start, or start against a host path | criterion 22, `ViewLocalLaunchArgvTests`, `ConfinedLaunchPreflightTests` |
 | shared launch preparation | that the gate and the launch mean the same run | let the criterion pass on an environment or a binary the process never gets | `SharedLaunchPreparationTests`: host-only auth channel, allowed credential, binary identity |
 | subscription OAuth path | the one credential a confined run may carry | leak the token value, or let its mere presence count as authentication | `SubscriptionOAuthAuthPathTests`: canary token in no artifact, mandatory scrub, fail-closed launch, presence never green |
-| invalid-credential control | that "logged in" means something | let a runtime that accepts any value satisfy the criterion | a real `auth status` run in the real view with a synthetic invalid token, plus the four-combination rule test |
+| invalid-credential control | that "logged in" means something locally | let a runtime that accepts any value satisfy the criterion | a real `auth status` run in the real view with a synthetic invalid token, plus the four-combination rule test |
+| credential-path refusal | that the pilot exercises the OAuth path | let a second credential channel answer for it | `A22`–`A25`: shadowed mode, fail-closed launch, channel names without values |
+| transport path plan | that the launch's transport is the intended one | pass a host path the confined process cannot open | `TransportPathEnvironmentTests`: keep / stage / drop / reject, plus the in-view resolution check |
 | boundary lifecycle marker | telling a failed sandbox from a failing payload | let an instrumentation failure read as a red product | setup broken on purpose before `exec`: `BoundaryError`, payload never ran, oracle `not-run` |
 | check launcher (`bin/check`) | the one allowed Bash invocation | let `check` reach something other than the boundary | `CheckLauncherTests`: real PATH, real cwd, arguments refused, impostor not shadowing |
 | B2 model runner admission | the pilot gate | let a writable run start without passing the criteria | five refusal tests with a runner that fails if invoked |

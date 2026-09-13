@@ -2126,7 +2126,8 @@ class ConfinedLaunchPreflightTests(unittest.TestCase):
         self.assertIs(stored["model_involved"], False)
         self.assertEqual(sorted(stored["checks"]),
                          ["argv_paths_exist_in_view", "authenticated_in_view",
-                          "runtime_executable_in_view", "writable_flags_parse_in_view"])
+                          "runtime_executable_in_view", "transport_paths_resolve_in_view",
+                          "writable_flags_parse_in_view"])
 
     def test_G2_the_recorded_preflight_never_reached_a_model(self):
         """Every recorded command is one that cannot reach a model.
@@ -2735,8 +2736,14 @@ class SubscriptionOAuthAuthPathTests(unittest.TestCase):
         else:
             self.assertFalse(probe["logged_in"])
 
-    def test_A17_only_an_accepted_credential_beside_a_refused_control_counts(self):
-        """The three combinations, through the real rule rather than around it."""
+    def test_A17_the_control_answers_discrimination_and_not_server_validity(self):
+        """Two different questions, reported as two fields.
+
+        A refusal of the canary could come from syntax, length, character set, token structure
+        or a checksum — all local. Nothing shows the canary is parser-equivalent to a real
+        `setup-token` credential, so even a discriminating runtime says nothing about whether
+        the real credential is valid at the service.
+        """
         from tools import b2_launch_preflight as preflight_module
 
         cases = [
@@ -2745,24 +2752,26 @@ class SubscriptionOAuthAuthPathTests(unittest.TestCase):
             (True, True, False, "credential-accepted-but-runtime-accepts-an-invalid-one"),
             (True, False, True, "credential-accepted-and-invalid-control-refused"),
         ]
-        for actual, control, expected, state in cases:
+        for actual, control, discriminates, state in cases:
             with self.subTest(actual=actual, invalid_control=control):
                 report = self._preflight_with_auth(preflight_module, actual, control)
                 check = report["checks"]["authenticated_in_view"]
-                self.assertIs(check["credential_validity_observed"], expected)
-                self.assertIs(check["ok"], expected)
+                self.assertIs(check["auth_status_discriminates_invalid_control"], discriminates)
                 self.assertEqual(check["credential_accepted_by_cli"], actual)
                 self.assertEqual(check["invalid_control_accepted_by_cli"], control)
                 self.assertEqual(check["state"], state)
+                # Server validity is never derived from `auth status`, in either direction.
+                self.assertIsNot(check["server_credential_validity_observed"], True)
+                self.assertEqual(check["server_credential_validity_observed"], "unknown")
+                self.assertFalse(check["ok"], "no combination of local signals turns it green")
                 self.assertIs(report["invalid_credential_control"]["executed"], True)
                 self.assertIs(report["invalid_credential_control"]["model_involved"], False)
 
-    def test_A18_criterion_22_follows_the_same_rule(self):
-        """Green exactly once: accepted credential, refused control. Never on presence."""
+    def test_A18_criterion_22_stays_red_until_a_server_side_operation_says_otherwise(self):
+        """And the reason names the gap that would remain on a host with a perfect token."""
         from tools import b2_launch_preflight as preflight_module
 
-        for actual, control, expected in ((False, False, False), (False, True, False),
-                                          (True, True, False), (True, False, True)):
+        for actual, control in ((False, False), (False, True), (True, True), (True, False)):
             with self.subTest(actual=actual, invalid_control=control):
                 report = self._preflight_with_auth(preflight_module, actual, control)
                 original = preflight_module.preflight
@@ -2771,13 +2780,25 @@ class SubscriptionOAuthAuthPathTests(unittest.TestCase):
                     ok, reason = preflight_module.launchable(None)
                 finally:
                     preflight_module.preflight = original
-                self.assertIs(ok, expected)
-                if expected:
-                    self.assertIn("invalid one", reason)
-                else:
-                    self.assertIn("authenticated_in_view", reason)
+                self.assertFalse(ok)
+                self.assertIn("server credential validity not yet observed", reason)
 
-    def _preflight_with_auth(self, preflight_module, actual: bool, invalid_control: bool):
+    def test_A21_a_control_a_second_credential_could_answer_never_counts(self):
+        """The canary has to be what the control measures, or it measures the wrong thing."""
+        from tools import b2_launch_preflight as preflight_module
+
+        report = self._preflight_with_auth(preflight_module, True, False,
+                                           extra_env={"ANTHROPIC_API_KEY": "canary-api-key"})
+        control = report["invalid_credential_control"]
+        self.assertIs(control["answerable_by_the_canary_alone"], False)
+        self.assertEqual(control["control_effective_auth_mode"],
+                         "oauth-path-shadowed-by-higher-priority-credential")
+        self.assertIs(
+            report["checks"]["authenticated_in_view"]["auth_status_discriminates_invalid_control"],
+            False, "a refusal that another channel could explain is not discrimination")
+
+    def _preflight_with_auth(self, preflight_module, actual: bool, invalid_control: bool,
+                             extra_env: dict | None = None):
         """The real preflight, with both views' commands answered from a script.
 
         The two views are told apart the way they actually differ: the control view is the one
@@ -2810,10 +2831,19 @@ class SubscriptionOAuthAuthPathTests(unittest.TestCase):
                         "payload_started": True, "timed_out": False}
             yield run
 
+        context = self.context()
+        if extra_env:
+            # A second channel is added *after* the context was prepared: preparing one with
+            # it would be refused outright, which is a different test (A23).
+            context = context.__class__(
+                claude_binary=context.claude_binary,
+                child_env={**context.child_env, **extra_env},
+                env_policy=context.env_policy, capabilities=context.capabilities,
+                probe=context.probe)
         original = preflight_module.model_view
         try:
             preflight_module.model_view = fake_view
-            return preflight_module.preflight(self.context())
+            return preflight_module.preflight(context)
         finally:
             preflight_module.model_view = original
 
@@ -2856,3 +2886,175 @@ class SubscriptionOAuthAuthPathTests(unittest.TestCase):
         # And the sub-check still follows the measured semantics, not the token's presence.
         self.assertIs(check["credential_validity_observed"],
                       not report["invalid_credential_control"]["credential_accepted_by_cli"])
+
+    # 2 -- the OAuth path has to be the path this launch would actually take
+    def test_A22_a_lone_oauth_token_is_the_effective_credential_path(self):
+        from tools.behavioral_harness_claude import (
+            AUTH_SUBSCRIPTION_OAUTH, SUBSCRIPTION_OAUTH_ENV, effective_auth_mode,
+        )
+        self.assertEqual(effective_auth_mode({SUBSCRIPTION_OAUTH_ENV: self.FAKE_TOKEN}),
+                         AUTH_SUBSCRIPTION_OAUTH)
+        self.assertEqual(effective_auth_mode(self.context().child_env), AUTH_SUBSCRIPTION_OAUTH)
+
+    def test_A23_a_competing_credential_channel_fails_the_launch_closed(self):
+        """Not a priority table we would have to keep in sync — a refusal.
+
+        Which channel the runtime picks is not this repository's to assume, and `auth status`
+        cannot always say: measured on 2.1.270, CLAUDE_CODE_OAUTH_TOKEN and
+        ANTHROPIC_AUTH_TOKEN are both reported as `oauth_token`. A pilot meant to exercise one
+        named path does not run against an environment offering two.
+        """
+        from tools.behavioral_harness_claude import (
+            AUTH_OAUTH_SHADOWED, AdapterError, SUBSCRIPTION_OAUTH_ENV, effective_auth_mode,
+        )
+        competitors = {
+            "ANTHROPIC_API_KEY": "canary-api-key",
+            "ANTHROPIC_AUTH_TOKEN": "canary-auth-token",
+            "CLAUDE_CODE_USE_BEDROCK": "1",
+            "CLAUDE_CODE_USE_VERTEX": "1",
+        }
+        for name, value in competitors.items():
+            with self.subTest(competitor=name):
+                env = self.raw_env(**{name: value})
+                self.assertEqual(effective_auth_mode({SUBSCRIPTION_OAUTH_ENV: self.FAKE_TOKEN,
+                                                      name: value}), AUTH_OAUTH_SHADOWED)
+                with self.assertRaises(AdapterError) as caught:
+                    self.context(env)
+                self.assertIn(AUTH_OAUTH_SHADOWED, str(caught.exception))
+                self.assertIn(name, str(caught.exception))
+                self.assertNotIn(value, str(caught.exception),
+                                 "the refusal names channels, never their values")
+                self.assertNotIn(self.FAKE_TOKEN, str(caught.exception))
+
+    def test_A24_the_auth_token_channel_is_classified_rather_than_called_managed(self):
+        """It sat in SECRET_ENV but was never classified, so a run carrying it read as managed."""
+        from tools.behavioral_harness_claude import (
+            AUTH_ANTHROPIC_AUTH_TOKEN, AUTH_CLAUDE_MANAGED, effective_auth_mode,
+        )
+        self.assertEqual(effective_auth_mode({"ANTHROPIC_AUTH_TOKEN": "canary-auth-token"}),
+                         AUTH_ANTHROPIC_AUTH_TOKEN)
+        self.assertEqual(effective_auth_mode({}), AUTH_CLAUDE_MANAGED)
+        self.assertEqual(effective_auth_mode({"ANTHROPIC_API_KEY": "canary"}), "anthropic-api-key")
+        self.assertEqual(effective_auth_mode({"CLAUDE_CODE_USE_BEDROCK": "1"}), "bedrock")
+        self.assertEqual(effective_auth_mode({"CLAUDE_CODE_USE_VERTEX": "1"}), "vertex")
+
+    def test_A25_no_credential_value_reaches_the_channel_report(self):
+        from tools.behavioral_harness_claude import _auth
+        raw = self.raw_env(ANTHROPIC_AUTH_TOKEN="canary-auth-token")
+        env = {k: v for k, v in raw.items() if k != "CLAUDE_CODE_OAUTH_TOKEN_FILE"}
+        auth = _auth(env, raw, bare_requested=False)
+        blob = json.dumps(auth, default=str)
+        self.assertIn("ANTHROPIC_AUTH_TOKEN", auth["credential_channels_active"])
+        for value in (self.FAKE_TOKEN, "canary-auth-token"):
+            with self.subTest(value=value[:12]):
+                self.assertNotIn(value, blob)
+
+
+class TransportPathEnvironmentTests(unittest.TestCase):
+    """A path-valued transport variable must name something the confined process can open.
+
+    The evidence showed `NODE_EXTRA_CA_CERTS=/root/.ccr/ca-bundle.crt` handed to a view with
+    no `/root`. Not a boundary leak — but the runtime logged `load failed: No such file or
+    directory` and carried on with a trust store the launch had not intended.
+    """
+
+    def plan(self, env):
+        from tools.b2_model_confinement import transport_path_plan
+        return transport_path_plan(env)
+
+    def test_T1_a_path_already_inside_the_view_is_kept(self):
+        plan = self.plan({"SSL_CERT_FILE": "/etc/ssl/certs/ca-certificates.crt"})
+        self.assertEqual(plan["SSL_CERT_FILE"]["action"], "keep")
+        self.assertIs(plan["SSL_CERT_FILE"]["accessible_in_view"], True)
+
+    def test_T2_a_readable_host_file_is_staged_and_rewritten(self):
+        from tools.b2_model_confinement import CONFIG_MOUNT, view_environment
+
+        with tempfile.TemporaryDirectory() as tmp:
+            bundle = Path(tmp) / "ca-bundle.crt"
+            bundle.write_text("# canary bundle\n", encoding="utf-8")
+            env = {"NODE_EXTRA_CA_CERTS": str(bundle)}
+            plan = self.plan(env)
+            self.assertEqual(plan["NODE_EXTRA_CA_CERTS"]["action"], "stage")
+            self.assertIs(plan["NODE_EXTRA_CA_CERTS"]["accessible_in_view"], False)
+            view = view_environment(env)
+            self.assertEqual(view["NODE_EXTRA_CA_CERTS"],
+                             f"{CONFIG_MOUNT}/transport/NODE_EXTRA_CA_CERTS")
+            self.assertNotIn(str(bundle), json.dumps(view))
+
+    def test_T3_a_path_that_names_nothing_is_removed_rather_than_passed_on(self):
+        """The variable was already inert; passing it on only produced a load failure."""
+        from tools.b2_model_confinement import view_environment
+        env = {"REQUESTS_CA_BUNDLE": "/nonexistent/host/only/ca-bundle.crt"}
+        plan = self.plan(env)
+        self.assertEqual(plan["REQUESTS_CA_BUNDLE"]["action"], "drop")
+        self.assertNotIn("REQUESTS_CA_BUNDLE", view_environment(env))
+
+    def test_T3b_the_case_the_review_found_is_staged_on_this_host(self):
+        """`/root/.ccr/ca-bundle.crt` exists and is readable, so it is staged, not dropped.
+
+        Either branch fixes the reported defect — what must never happen again is the value
+        travelling unchanged into a view with no `/root`.
+        """
+        import os
+
+        from tools.b2_model_confinement import CONFIG_MOUNT, view_environment
+
+        configured = os.environ.get("NODE_EXTRA_CA_CERTS")
+        if not configured:
+            self.skipTest("no NODE_EXTRA_CA_CERTS configured on this host")
+        plan = self.plan({"NODE_EXTRA_CA_CERTS": configured})
+        entry = plan["NODE_EXTRA_CA_CERTS"]
+        self.assertIn(entry["action"], ("keep", "stage"))
+        view = view_environment({"NODE_EXTRA_CA_CERTS": configured})
+        if entry["action"] == "stage":
+            self.assertTrue(view["NODE_EXTRA_CA_CERTS"].startswith(CONFIG_MOUNT + "/"))
+            self.assertNotEqual(view["NODE_EXTRA_CA_CERTS"], configured)
+
+    def test_T4_a_trust_store_directory_outside_the_view_is_refused_not_guessed(self):
+        from tools.b2_model_confinement import view_environment
+        with tempfile.TemporaryDirectory() as tmp:
+            env = {"SSL_CERT_DIR": tmp}
+            plan = self.plan(env)
+            self.assertEqual(plan["SSL_CERT_DIR"]["action"], "reject")
+            self.assertNotIn("SSL_CERT_DIR", view_environment(env))
+
+    def test_T5_the_staged_file_lands_in_the_configuration_view_and_nothing_else_does(self):
+        from tools.b2_model_confinement import (
+            EMPTY_MCP_FILENAME, TRANSPORT_STAGE_DIR, ConfinementError, stage_config,
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            bundle = Path(tmp) / "ca-bundle.crt"
+            bundle.write_text("# canary bundle\n", encoding="utf-8")
+            task = Path(tmp) / "task"
+            staged = stage_config(task, {"SSL_CERT_FILE": str(bundle)})
+            self.assertEqual(sorted(p.name for p in staged.iterdir()),
+                             sorted([EMPTY_MCP_FILENAME, TRANSPORT_STAGE_DIR]))
+            copied = staged / TRANSPORT_STAGE_DIR / "SSL_CERT_FILE"
+            self.assertEqual(copied.read_text(encoding="utf-8"), "# canary bundle\n")
+            (staged / TRANSPORT_STAGE_DIR / "smuggled.pem").write_text("x", encoding="utf-8")
+            with self.assertRaises(ConfinementError):
+                stage_config(task, {"SSL_CERT_FILE": str(bundle)})
+
+    @requires_boundary
+    def test_T6_the_recorded_preflight_resolved_every_transport_path_in_the_view(self):
+        stored = load_yaml(B2 / "evidence/launch-preflight.yml")
+        check = stored["checks"]["transport_paths_resolve_in_view"]
+        self.assertTrue(check["ok"])
+        self.assertEqual(check["unreachable_in_view"], [])
+        self.assertEqual(check["rejected"], [])
+        self.assertEqual(check["removed_but_still_in_view_environment"], [])
+        for name, entry in stored["transport_path_environment"].items():
+            with self.subTest(variable=name):
+                self.assertIn(entry["action"], ("keep", "stage", "drop", "reject"))
+                self.assertNotIn("/root/", json.dumps(entry),
+                                 "no raw host path belongs in the evidence")
+
+    @requires_boundary
+    def test_T7_the_runtime_no_longer_reports_a_failed_ca_bundle_load(self):
+        stored = load_yaml(B2 / "evidence/launch-preflight.yml")
+        for name in ("runtime_executable_in_view", "authenticated_in_view"):
+            with self.subTest(check=name):
+                stderr = stored["checks"][name]["detail"]["stderr_tail"] or ""
+                self.assertNotIn("load failed", stderr)
+                self.assertNotIn("No such file or directory", stderr)
