@@ -382,15 +382,44 @@ shape*, and accepting it as the criterion's evidence would mean a junk token tur
 gate green — the green-by-construction shape this whole phase exists to catch, arriving
 through the acceptance rule itself.
 
-The sub-check therefore reports three things instead of one: `credential_accepted_by_cli`,
-`credential_validity_observed`, and a `state`. It is green only when both are true, and
-nothing model-free on this runtime sets the second. Its `validity_gap` field says so in the
-artifact rather than in a comment.
+The first version drew the right conclusion the wrong way: it set
+`credential_validity_observed = False` as a constant, with the finding recorded in a comment.
+That made the gate correct today and wrong later — a runtime that started validating would
+have stayed locked out by a hard-coded answer — and it left the finding resting on a test that
+stubbed `auth status` and so proved only how our own logic reacts, not what the runtime does.
 
-Consequence, stated plainly: **criterion 22 cannot be turned green by supplying a real token
-alone.** Closing it needs one observation that only a valid credential can produce, and the
-cheapest such observation is a request — which this phase does not make. That decision belongs
-to the next order, not to this one.
+The semantics are now **measured, on every evaluation**, by a second auth probe: same binary,
+same confinement provider, same mount contract, same filtered environment, same controls
+including the credential scrub, with only the credential replaced by a synthetic invalid one.
+`claude auth status` and nothing else — no prompt, no `-p`, no request.
+
+```
+credential_validity_observed = credential_accepted_by_cli
+                               AND NOT invalid_control_accepted_by_cli
+```
+
+| Actual credential | Invalid control | Validity observed | Criterion 22 auth sub-check |
+| --- | --- | --- | --- |
+| accepted | accepted | false | red — acceptance means "a value is set" |
+| accepted | refused | **true** | may be green |
+| not accepted | either | false | red |
+
+Presence can never be enough, and no build is written into the rule. On Claude Code 2.1.270
+the control reproduces the false positive — `credential_accepted_by_cli: true`, exit 0 — and
+the criterion stays red. On a build that refused it, the same code would let a supplied
+credential count.
+
+The canary is built fresh per run, carries `B2-INVALID-CREDENTIAL-CONTROL` in plain sight so
+no transcript reader mistakes it for a credential, and is shaped like a subscription token on
+purpose: a malformed value could be refused for its *shape*, and a control refused for the
+wrong reason would read as "this runtime validates" and hand the criterion back to mere
+presence. (Measured separately: this runtime accepts any non-blank value and refuses only
+whitespace, so the shape is not load-bearing today — it is insurance against the build that
+changes.) Neither the canary nor any credential, and no hash of either, reaches an artifact.
+
+Consequence for this phase, unchanged: **criterion 22 cannot be turned green by supplying a
+real token alone** — not because a constant says so, but because the runtime, measured, does
+not discriminate.
 
 
 ## Held-out oracle
@@ -417,6 +446,7 @@ input shape and nothing else. P4 confirms the separation by trying.
 | launch preflight | the confined runtime's launchability | let a pilot be admitted that cannot start, or start against a host path | criterion 22, `ViewLocalLaunchArgvTests`, `ConfinedLaunchPreflightTests` |
 | shared launch preparation | that the gate and the launch mean the same run | let the criterion pass on an environment or a binary the process never gets | `SharedLaunchPreparationTests`: host-only auth channel, allowed credential, binary identity |
 | subscription OAuth path | the one credential a confined run may carry | leak the token value, or let its mere presence count as authentication | `SubscriptionOAuthAuthPathTests`: canary token in no artifact, mandatory scrub, fail-closed launch, presence never green |
+| invalid-credential control | that "logged in" means something | let a runtime that accepts any value satisfy the criterion | a real `auth status` run in the real view with a synthetic invalid token, plus the four-combination rule test |
 | boundary lifecycle marker | telling a failed sandbox from a failing payload | let an instrumentation failure read as a red product | setup broken on purpose before `exec`: `BoundaryError`, payload never ran, oracle `not-run` |
 | check launcher (`bin/check`) | the one allowed Bash invocation | let `check` reach something other than the boundary | `CheckLauncherTests`: real PATH, real cwd, arguments refused, impostor not shadowing |
 | B2 model runner admission | the pilot gate | let a writable run start without passing the criteria | five refusal tests with a runner that fails if invoked |

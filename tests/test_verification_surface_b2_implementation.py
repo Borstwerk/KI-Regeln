@@ -2702,58 +2702,106 @@ class SubscriptionOAuthAuthPathTests(unittest.TestCase):
         self.assertIs(report["process_environment_read_rule"]["in_requested_deny_rules"], True)
         del preflight_module
 
-    # 11 -- what a fake or missing token does to criterion 22
-    def test_A16_a_present_credential_alone_never_turns_the_auth_check_green(self):
-        """The finding that shaped this: `auth status` does not validate.
+    # 11 -- the negative control, measured on the runtime rather than assumed
+    @requires_boundary
+    def test_A16_the_runtimes_auth_semantics_are_measured_not_assumed(self):
+        """Does `claude auth status` discriminate a valid credential from an invalid one?
 
-        Measured inside the real view, a deliberately invalid token yields `loggedIn: true`
-        and exit 0. Accepting that as the criterion's evidence would be exactly the
-        green-by-construction shape this phase exists to catch, so the sub-check requires a
-        validity observation that no model-free command on this runtime provides.
+        This is a property of the installed runtime, so it is measured on the installed
+        runtime: a synthetic invalid token, the real confinement provider, the real mount
+        contract, `auth status` and nothing else. No prompt, no `-p`, no model request.
+
+        The assertion is deliberately not pinned to any build. Whatever this runtime does is
+        what the gate then does — a build that starts validating is recognised rather than
+        locked out by a constant, and a build that does not is reported rather than believed.
         """
+        from tools.b2_model_confinement import model_view
+        from tools.behavioral_harness_claude import SUBSCRIPTION_OAUTH_ENV
+        from tools.b2_launch_preflight import _auth_probe, invalid_credential_canary
+
+        context = self.context()
+        env = dict(context.child_env)
+        env[SUBSCRIPTION_OAUTH_ENV] = invalid_credential_canary()
+        with model_view(claude_binary=context.claude_binary, env=env, timeout=300) as run:
+            probe = _auth_probe(run, context.claude_binary)
+
+        self.assertIn(probe["accepted"], (True, False))
+        self.assertIsNotNone(probe["result"]["returncode"], "the control has to have run")
+        if probe["accepted"]:
+            # What this runtime does today: acceptance means "a value is set". Recorded as the
+            # measurement it is, not as a constant somewhere in the source.
+            self.assertTrue(probe["logged_in"])
+            self.assertEqual(probe["result"]["returncode"], 0)
+        else:
+            self.assertFalse(probe["logged_in"])
+
+    def test_A17_only_an_accepted_credential_beside_a_refused_control_counts(self):
+        """The three combinations, through the real rule rather than around it."""
         from tools import b2_launch_preflight as preflight_module
 
-        for logged_in in (True, False):
-            with self.subTest(logged_in=logged_in):
-                report = self._preflight_with_auth(preflight_module, logged_in)
+        cases = [
+            (False, False, False, "no-credential-accepted"),
+            (False, True, False, "no-credential-accepted"),
+            (True, True, False, "credential-accepted-but-runtime-accepts-an-invalid-one"),
+            (True, False, True, "credential-accepted-and-invalid-control-refused"),
+        ]
+        for actual, control, expected, state in cases:
+            with self.subTest(actual=actual, invalid_control=control):
+                report = self._preflight_with_auth(preflight_module, actual, control)
                 check = report["checks"]["authenticated_in_view"]
-                self.assertFalse(check["ok"])
-                self.assertIs(check["credential_validity_observed"], False)
-                self.assertEqual(check["credential_accepted_by_cli"], logged_in)
-                self.assertEqual(
-                    check["state"],
-                    "credential-accepted-validity-unverified" if logged_in
-                    else "no-credential-accepted")
+                self.assertIs(check["credential_validity_observed"], expected)
+                self.assertIs(check["ok"], expected)
+                self.assertEqual(check["credential_accepted_by_cli"], actual)
+                self.assertEqual(check["invalid_control_accepted_by_cli"], control)
+                self.assertEqual(check["state"], state)
+                self.assertIs(report["invalid_credential_control"]["executed"], True)
+                self.assertIs(report["invalid_credential_control"]["model_involved"], False)
 
-    def test_A17_criterion_22_stays_red_with_a_fake_or_missing_token(self):
+    def test_A18_criterion_22_follows_the_same_rule(self):
+        """Green exactly once: accepted credential, refused control. Never on presence."""
         from tools import b2_launch_preflight as preflight_module
 
-        for logged_in in (True, False):
-            with self.subTest(logged_in=logged_in):
-                report = self._preflight_with_auth(preflight_module, logged_in)
+        for actual, control, expected in ((False, False, False), (False, True, False),
+                                          (True, True, False), (True, False, True)):
+            with self.subTest(actual=actual, invalid_control=control):
+                report = self._preflight_with_auth(preflight_module, actual, control)
                 original = preflight_module.preflight
                 try:
                     preflight_module.preflight = lambda context=None, **kw: report
                     ok, reason = preflight_module.launchable(None)
                 finally:
                     preflight_module.preflight = original
-                self.assertFalse(ok)
-                self.assertIn("authenticated_in_view", reason)
+                self.assertIs(ok, expected)
+                if expected:
+                    self.assertIn("invalid one", reason)
+                else:
+                    self.assertIn("authenticated_in_view", reason)
 
-    def _preflight_with_auth(self, preflight_module, logged_in: bool):
-        """Run the real preflight with the view's four commands answered from a script."""
+    def _preflight_with_auth(self, preflight_module, actual: bool, invalid_control: bool):
+        """The real preflight, with both views' commands answered from a script.
+
+        The two views are told apart the way they actually differ: the control view is the one
+        whose environment carries the synthetic canary.
+        """
         from contextlib import contextmanager as _cm
 
-        payload = json.dumps({
-            "loggedIn": logged_in, "authMethod": "oauth_token" if logged_in else "none",
-            "apiProvider": "firstParty", "configDirectory": "/scratch/claude-config",
-        })
+        from tools.behavioral_harness_claude import SUBSCRIPTION_OAUTH_ENV
+
+        def payload(logged_in):
+            return json.dumps({
+                "loggedIn": logged_in, "authMethod": "oauth_token" if logged_in else "none",
+                "apiProvider": "firstParty", "configDirectory": "/scratch/claude-config",
+            })
 
         @_cm
         def fake_view(claude_binary="claude", env=None, timeout=300):
+            token = (env or {}).get(SUBSCRIPTION_OAUTH_ENV, "")
+            is_control = "B2-INVALID-CREDENTIAL-CONTROL" in token
+            logged_in = invalid_control if is_control else actual
+
             def run(argv, view_timeout=None):
                 if argv[1:3] == ["auth", "status"]:
-                    return {"returncode": 0 if logged_in else 1, "stdout": payload,
+                    return {"returncode": 0 if logged_in else 1, "stdout": payload(logged_in),
                             "stderr": "", "payload_started": True, "timed_out": False}
                 if argv[1:2] == ["--permission-mode"]:
                     return {"returncode": 1, "stdout": "", "stderr": "",
@@ -2769,8 +2817,23 @@ class SubscriptionOAuthAuthPathTests(unittest.TestCase):
         finally:
             preflight_module.model_view = original
 
+    def test_A19_the_canary_is_synthetic_fresh_and_never_persisted(self):
+        from tools.b2_launch_preflight import invalid_credential_canary
+
+        first, second = invalid_credential_canary(), invalid_credential_canary()
+        self.assertNotEqual(first, second, "built fresh, so there is nothing to store")
+        self.assertIn("B2-INVALID-CREDENTIAL-CONTROL", first,
+                      "a reader of any transcript must see at once that it is not a credential")
+        self.assertTrue(first.startswith("sk-ant-oat01-"),
+                        "shape-plausible, so a refusal can only be about the value")
+        for path in sorted(B2.glob("evidence/*.yml")):
+            with self.subTest(evidence=path.name):
+                text = path.read_text(encoding="utf-8")
+                self.assertNotIn("B2-INVALID-CREDENTIAL-CONTROL", text)
+                self.assertNotIn("sk-ant-oat01-", text)
+
     # 12 -- the real-token stage, only when the operator supplied one
-    def test_A18_a_real_token_is_exercised_only_when_the_operator_supplied_one(self):
+    def test_A20_a_real_token_is_exercised_only_when_the_operator_supplied_one(self):
         """Stage B. Skipped unless a real token is in this host's environment.
 
         When it is, the only thing run is `claude auth status` inside the real confined view.
@@ -2790,3 +2853,6 @@ class SubscriptionOAuthAuthPathTests(unittest.TestCase):
         self.assertEqual(check["auth_method"], "oauth_token")
         self.assertEqual(check["config_directory"], "/scratch/claude-config")
         self.assertNotIn(os.environ[SUBSCRIPTION_OAUTH_ENV], json.dumps(report, default=str))
+        # And the sub-check still follows the measured semantics, not the token's presence.
+        self.assertIs(check["credential_validity_observed"],
+                      not report["invalid_credential_control"]["credential_accepted_by_cli"])

@@ -179,6 +179,36 @@ def _context_for(context: Any, claude_binary: str, base_env: Mapping[str, str] |
                                       config_dir=Path(tmp) / "claude-config")
 
 
+def invalid_credential_canary() -> str:
+    """A synthetic value for the negative control. Built fresh, never stored anywhere.
+
+    Deliberately shaped like a subscription OAuth token. The installed runtime turns out not
+    to care -- measured, any non-blank value is accepted and only whitespace is not -- but a
+    later runtime that did validate could reject a malformed value on *shape*, and a control
+    rejected for the wrong reason would read as "this runtime validates" and let mere presence
+    turn the criterion green. A shape-plausible canary can only be rejected for its value.
+    """
+    import uuid
+    return f"sk-ant-oat01-B2-INVALID-CREDENTIAL-CONTROL-{uuid.uuid4().hex}{uuid.uuid4().hex}"
+
+
+def _auth_probe(run, claude_binary: str, *, timeout: int = 180) -> dict[str, Any]:
+    """`claude auth status` inside a view. No prompt, no -p, no request of any kind."""
+    result = _run_in_view(run, [claude_binary, "auth", "status"], timeout=timeout)
+    try:
+        parsed = json.loads(result["stdout_tail"])
+    except (ValueError, TypeError):
+        parsed = None
+    if not isinstance(parsed, dict):
+        parsed = {}
+    return {
+        "result": result,
+        "parsed": parsed,
+        "logged_in": parsed.get("loggedIn") is True,
+        "accepted": result["returncode"] == 0 and parsed.get("loggedIn") is True,
+    }
+
+
 def _run_in_view(run, argv: list[str], *, timeout: int | None = None) -> dict[str, Any]:
     out = run(argv, view_timeout=timeout)
     return {"argv": argv, "returncode": out["returncode"], "payload_started": out["payload_started"],
@@ -252,44 +282,62 @@ def _preflight(context: Any, model: str) -> dict[str, Any]:
         }
 
         # 3. The authentication path, in exactly this view and this environment.
-        auth = _run_in_view(run, [claude_binary, "auth", "status"], timeout=180)
-        parsed: Any = None
-        try:
-            parsed = json.loads(auth["stdout_tail"])
-        except (ValueError, TypeError):
-            parsed = None
-        logged_in = bool(isinstance(parsed, dict) and parsed.get("loggedIn") is True)
-        accepted = auth["returncode"] == 0 and logged_in
-        # `auth status` on this runtime reports that a credential is present and well formed.
-        # It does not contact the service: measured here, a deliberately invalid
-        # CLAUDE_CODE_OAUTH_TOKEN produces `loggedIn: true` and exit 0 inside this very view.
-        # So "logged in" is a necessary condition for a launchable runtime and not a
-        # sufficient one, and nothing model-free on this runtime closes the gap. The check is
-        # therefore never green on presence alone -- that is exactly the shape of failure this
-        # phase exists to avoid.
-        validity_observed = False
-        if not accepted:
-            state = "no-credential-accepted"
-        else:
-            state = "credential-accepted-validity-unverified"
-        checks["authenticated_in_view"] = {
-            "ok": accepted and validity_observed,
-            "state": state,
-            "credential_accepted_by_cli": accepted,
-            "logged_in": logged_in,
-            "credential_validity_observed": validity_observed,
-            "validity_gap": ("`claude auth status` does not contact the service: an invalid "
-                             "token yields loggedIn true and exit 0. No model-free command on "
-                             "this runtime distinguishes a valid credential from a malformed "
-                             "one, so this sub-check cannot be satisfied without a request, "
-                             "which this phase does not make."),
-            # Names and classifications only. No token, no value, no hash of a value.
-            "auth_method": (parsed or {}).get("authMethod") if isinstance(parsed, dict) else None,
-            "api_provider": (parsed or {}).get("apiProvider") if isinstance(parsed, dict) else None,
-            "config_directory": (parsed or {}).get("configDirectory") if isinstance(parsed, dict) else None,
-            "subscription_token_supplied": SUBSCRIPTION_OAUTH_ENV in env,
-            "detail": auth,
-        }
+        actual = _auth_probe(run, claude_binary)
+
+    # 4. The negative control, in a second view built from the same contract: same binary,
+    # same provider, same mounts, same filtered environment and the same controls, with only
+    # the credential replaced by a synthetic invalid one. Whether `auth status` reports
+    # anything about *validity* is a property of the runtime, so it is measured on the runtime
+    # rather than assumed -- and re-measured on every evaluation, so a build that starts
+    # validating is recognised instead of being locked out by a constant.
+    control_env = dict(env)
+    control_env[SUBSCRIPTION_OAUTH_ENV] = invalid_credential_canary()
+    with model_view(claude_binary=claude_binary, env=control_env) as control_run:
+        control = _auth_probe(control_run, claude_binary)
+    # Discriminating power, not presence: the credential path counts as observed only when the
+    # runtime accepts the real one *and* refuses a deliberately invalid one. A runtime that
+    # accepts both has told us that acceptance means "a value is set", which is not evidence.
+    validity_observed = actual["accepted"] and not control["accepted"]
+    if not actual["accepted"]:
+        state = "no-credential-accepted"
+    elif control["accepted"]:
+        state = "credential-accepted-but-runtime-accepts-an-invalid-one"
+    else:
+        state = "credential-accepted-and-invalid-control-refused"
+    parsed = actual["parsed"]
+    checks["authenticated_in_view"] = {
+        "ok": actual["accepted"] and validity_observed,
+        "state": state,
+        "credential_accepted_by_cli": actual["accepted"],
+        "logged_in": actual["logged_in"],
+        "credential_validity_observed": validity_observed,
+        "invalid_control_accepted_by_cli": control["accepted"],
+        "validity_rule": ("credential_validity_observed = credential_accepted_by_cli AND NOT "
+                          "invalid_control_accepted_by_cli"),
+        # Names and classifications only. No token, no canary, no value, no hash of a value.
+        "auth_method": parsed.get("authMethod"),
+        "api_provider": parsed.get("apiProvider"),
+        "config_directory": parsed.get("configDirectory"),
+        "subscription_token_supplied": SUBSCRIPTION_OAUTH_ENV in env,
+        "detail": actual["result"],
+    }
+    invalid_credential_control = {
+        "executed": True,
+        "model_involved": False,
+        "credential_accepted_by_cli": control["accepted"],
+        "logged_in": control["logged_in"],
+        "returncode": control["result"]["returncode"],
+        "auth_method": control["parsed"].get("authMethod"),
+        "variable": SUBSCRIPTION_OAUTH_ENV,
+        "canary_persisted": False,
+        "what_it_decides": ("whether `auth status` discriminates a valid credential from an "
+                            "invalid one on this runtime; when it does not, no supplied token "
+                            "can satisfy the criterion"),
+        "same_as_the_measured_launch": ["claude_binary", "confinement provider", "mount contract",
+                                        "filtered child environment", "controls including "
+                                        + SUBPROCESS_SCRUB_ENV],
+        "detail": {k: v for k, v in control["result"].items() if k != "stdout_tail"},
+    }
 
     ok = audit["ok"] and all(c["ok"] for c in checks.values())
     return {
@@ -309,6 +357,7 @@ def _preflight(context: Any, model: str) -> dict[str, Any]:
             "removed_other_count": context.env_policy.get("removed_other_count"),
         },
         "view_environment_names": sorted(view_environment(env, claude_binary)),
+        "invalid_credential_control": invalid_credential_control,
         "permission_rule_syntax": rule_syntax_evidence(claude_binary),
         "process_environment_read_rule": {
             "rule": DENY_PROC_RULE,
@@ -372,7 +421,10 @@ def launchable(context: Any = None) -> tuple[bool, str]:
     if failures:
         return False, "; ".join(failures)
     return True, ("the writable argv is view-local, the runtime starts and parses the writable "
-                  "flags inside the view, and the view's auth path reports logged in")
+                  "flags inside the view, and the credential path was observed with "
+                  "discriminating power: the real credential was accepted inside the view "
+                  "while a synthetic invalid one, measured under the same contract, was "
+                  "refused")
 
 
 EVIDENCE_CONTRACT = "verification-governance-b2-launch-preflight-evidence/v1"
