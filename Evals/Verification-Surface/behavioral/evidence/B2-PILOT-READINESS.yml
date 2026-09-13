@@ -137,7 +137,7 @@ criteria:
   criterion: Runtime offers the locked-down permission mode a writable run needs
   blocking: true
   met: true
-  reason: Claude Code 2.1.269 (Claude Code) parses the writable flag form and exits
+  reason: Claude Code 2.1.270 (Claude Code) parses the writable flag form and exits
     at --help (rc 0), and rejects an invalid --permission-mode (rc 1); the argv requests
     --tools Read,Edit,Write,Bash, allow rules ['Read', 'Edit', 'Write', 'Bash(check)']
     and --permission-mode dontAsk

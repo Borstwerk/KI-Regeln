@@ -23,6 +23,8 @@ import argparse
 import json
 import shlex
 import sys
+import tempfile
+from contextlib import contextmanager
 from pathlib import Path
 from typing import Any, Mapping
 
@@ -32,14 +34,18 @@ try:
         ConfinementError, _node_runtime, model_view, mount_contract, view_environment,
     )
     from .b2_boundary import SCRATCH_MOUNT, WORKSPACE_MOUNT, BoundaryError
-    from .behavioral_harness_claude import AdapterError, _argv, probe_claude_code
+    from .behavioral_harness_claude import (
+        AdapterError, WritableLaunchContext, _argv, prepare_writable_launch,
+    )
 except ImportError:  # direct script sibling import
     from b2_model_confinement import (
         BIN_MOUNT, CONFIG_MOUNT, MODEL_RUNTIME_BINDS, RUNTIME_MOUNT, VIEW_MCP_CONFIG,
         ConfinementError, _node_runtime, model_view, mount_contract, view_environment,
     )
     from b2_boundary import SCRATCH_MOUNT, WORKSPACE_MOUNT, BoundaryError
-    from behavioral_harness_claude import AdapterError, _argv, probe_claude_code
+    from behavioral_harness_claude import (
+        AdapterError, WritableLaunchContext, _argv, prepare_writable_launch,
+    )
 
 PREFLIGHT_CONTRACT = "verification-governance-b2-launch-preflight/v1"
 ROOT = Path(__file__).resolve().parents[1]
@@ -103,18 +109,36 @@ def argv_audit(argv: list[str], *, claude_binary: str = "claude") -> dict[str, A
     }
 
 
-def writable_launch_argv(claude_binary: str = "claude", model: str = PLACEHOLDER_MODEL,
-                         process_runner=None) -> tuple[list[str], dict[str, Any]]:
+def writable_launch_argv(context: Any, model: str = PLACEHOLDER_MODEL,
+                         ) -> tuple[list[str], dict[str, Any]]:
     """The real writable inner argv, built by the adapter's own code path.
 
-    Not a reconstruction: `_argv` is the function the launch path calls, so an argv change
-    that reintroduced a host path would break this check rather than pass beside it.
+    Not a reconstruction: `_argv` is the function the launch path calls, and the capabilities
+    come from the context the launch was prepared with, so an argv change that reintroduced a
+    host path would break this check rather than pass beside it.
     """
-    probe = probe_claude_code(claude_binary, *( (process_runner,) if process_runner else () ))
-    argv, controls = _argv(claude_binary, model, "<preflight task prompt>", "preflight-session",
-                           probe["capabilities"], Path("/unused-host-path-must-not-appear"),
-                           writable=True)
+    argv, controls = _argv(context.claude_binary, model, "<preflight task prompt>",
+                           "preflight-session", context.capabilities,
+                           Path("/unused-host-path-must-not-appear"), writable=True)
     return argv, controls
+
+
+@contextmanager
+def _context_for(context: Any, claude_binary: str, base_env: Mapping[str, str] | None):
+    """Yield the launch context to measure: the caller's, or one derived the same way.
+
+    A context that arrives from the adapter is used as it is. Otherwise one is built by
+    `prepare_writable_launch` -- the adapter's own function -- so there is never a second
+    implementation of the environment contract for the criterion to measure against.
+    """
+    if context is not None:
+        if not isinstance(context, WritableLaunchContext):
+            raise AdapterError("the launch preflight requires a prepared launch context")
+        yield context
+        return
+    with tempfile.TemporaryDirectory(prefix="b2-preflight-") as tmp:
+        yield prepare_writable_launch(claude_binary=claude_binary, base_env=base_env,
+                                      config_dir=Path(tmp) / "claude-config")
 
 
 def _run_in_view(run, argv: list[str], *, timeout: int | None = None) -> dict[str, Any]:
@@ -124,13 +148,24 @@ def _run_in_view(run, argv: list[str], *, timeout: int | None = None) -> dict[st
             "stdout_tail": (out["stdout"] or "")[-2000:], "stderr_tail": (out["stderr"] or "")[-2000:]}
 
 
-def preflight(claude_binary: str = "claude", base_env: Mapping[str, str] | None = None,
+def preflight(context: Any = None, *, claude_binary: str = "claude",
+              base_env: Mapping[str, str] | None = None,
               model: str = PLACEHOLDER_MODEL) -> dict[str, Any]:
-    """Answer all three questions. No model request is made at any point."""
-    import os
+    """Answer all three questions, for one launch context. No model request is made.
 
-    env = dict(base_env if base_env is not None else os.environ)
-    argv, controls = writable_launch_argv(claude_binary, model)
+    The environment handed to the view is the adapter's **filtered child environment**, not
+    the raw host environment. That distinction is the whole point of the parameter: measuring
+    a view built from `os.environ` would have answered a question about variables the model
+    process never inherits -- including, in principle, a credential it never receives.
+    """
+    with _context_for(context, claude_binary, base_env) as prepared:
+        return _preflight(prepared, model)
+
+
+def _preflight(context: Any, model: str) -> dict[str, Any]:
+    claude_binary = context.claude_binary
+    env = dict(context.child_env)
+    argv, controls = writable_launch_argv(context, model)
     audit = argv_audit(argv, claude_binary=claude_binary)
 
     checks: dict[str, Any] = {}
@@ -195,7 +230,18 @@ def preflight(claude_binary: str = "claude", base_env: Mapping[str, str] | None 
         "contract": PREFLIGHT_CONTRACT,
         "phase": "4.2C / B2",
         "model_placeholder": model,
+        "claude_binary": claude_binary,
         "mount_contract": mount_contract(claude_binary),
+        # Names only, and only the names the adapter's own environment contract admits.
+        "child_environment_names": sorted(env),
+        "child_environment_policy": {
+            "policy": context.env_policy.get("policy"),
+            "inherited_names": list(context.env_policy.get("inherited_names", [])),
+            "controls_applied": list(context.env_policy.get("controls_applied", [])),
+            "removed_agent_names": list(context.env_policy.get("removed_agent_names", [])),
+            "removed_generation_names": list(context.env_policy.get("removed_generation_names", [])),
+            "removed_other_count": context.env_policy.get("removed_other_count"),
+        },
         "view_environment_names": sorted(view_environment(env, claude_binary)),
         "normalized_inner_argv": list(controls["normalized_argv"]),
         "argv_audit": audit,
@@ -207,10 +253,10 @@ def preflight(claude_binary: str = "claude", base_env: Mapping[str, str] | None 
     }
 
 
-def launchable() -> tuple[bool, str]:
+def launchable(context: Any = None) -> tuple[bool, str]:
     """The readiness criterion: one answer, with the failing part named."""
     try:
-        report = preflight()
+        report = preflight(context)
     except (AdapterError, BoundaryError, ConfinementError, OSError) as exc:
         return False, f"the launch preflight could not run: {type(exc).__name__}: {exc}"
     failures = []
@@ -239,7 +285,7 @@ def evidence_document(claude_binary: str = "claude") -> dict[str, Any]:
         from .b2_pilot_readiness import evidence_binding
     except ImportError:  # direct script sibling import
         from b2_pilot_readiness import evidence_binding
-    report = preflight(claude_binary)
+    report = preflight(claude_binary=claude_binary)
     return {
         "contract": EVIDENCE_CONTRACT,
         "model_involved": False,

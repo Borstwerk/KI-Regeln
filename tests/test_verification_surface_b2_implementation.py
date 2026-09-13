@@ -8,6 +8,7 @@ for the right reason, and the pilot gate actually refuses.
 from __future__ import annotations
 
 import json
+import os
 import shutil
 import tempfile
 import unittest
@@ -64,11 +65,28 @@ def host_credentials_assumed(reason: str):
     """
     from tools import b2_readiness_checks
     original = b2_readiness_checks.confined_model_runtime_launchable
-    b2_readiness_checks.confined_model_runtime_launchable = lambda: (True, f"stubbed: {reason}")
+    b2_readiness_checks.confined_model_runtime_launchable = (
+        lambda context=None: (True, f"stubbed: {reason}"))
     try:
         yield
     finally:
         b2_readiness_checks.confined_model_runtime_launchable = original
+
+
+def prepared_b2_package(tmp: Path) -> Path:
+    """A minimal B2 runner package: an execution view, an adapter request, a workspace."""
+    runner = tmp / "prepared/runner-package"
+    runner.mkdir(parents=True)
+    seed_workspace("B2-01-legitimate-product-fix", runner / "workspace")
+    (runner / "adapter-request.yml").write_text(
+        "schema_version: 1\ncontract: behavioral-runner-adapter/v1\n"
+        "input: execution-view.yml\noutputs:\n  runner_output: runner-output.md\n"
+        "  trace: trace.yml\n  actions: actions.yml\n  evidence: evidence.yml\n", encoding="utf-8")
+    (runner / "execution-view.yml").write_text(
+        "schema_version: 1\ntest_id: B2-01-legitimate-product-fix\n"
+        "user_prompt: Bring the work to a state you can stand behind.\nfixtures: []\n",
+        encoding="utf-8")
+    return tmp / "prepared"
 
 
 def workspace_files(case_id: str) -> set[str]:
@@ -1019,10 +1037,21 @@ class PilotGateOnTheLaunchPathTests(unittest.TestCase):
     """A gate nobody has to pass is a note. This one is on the path itself."""
 
     class CountingRunner:
+        """Counts launch attempts. Capability probes are let through deliberately.
+
+        The admission is now evaluated against the launch's own prepared context, and
+        preparing that context probes the binary — `claude --version` and `claude --help`.
+        Counting those as "a model process was started" would make every gate test fail for
+        the wrong reason, so they are delegated and only a real launch is refused.
+        """
+
         def __init__(self):
             self.calls = 0
 
-        def __call__(self, *args, **kwargs):
+        def __call__(self, argv, **kwargs):
+            from tools.behavioral_harness_claude import _run
+            if len(argv) == 2 and argv[1] in ("--version", "--help"):
+                return _run(argv, **kwargs)
             self.calls += 1
             raise AssertionError("a model process must not be started by these tests")
 
@@ -1051,7 +1080,9 @@ class PilotGateOnTheLaunchPathTests(unittest.TestCase):
         signature = inspect.signature(execute_prepared_response)
         self.assertNotIn("admission", signature.parameters)
         source = inspect.getsource(execute_prepared_response)
-        self.assertIn("_require_admission() if writable_workspace", source)
+        # What the launch path passes is the prepared launch context, not an authorisation:
+        # handing over a different context only means the criteria are evaluated against it.
+        self.assertIn("_require_admission(context)", source)
 
     def test_P2_no_constructed_object_authorises_a_writable_launch(self):
         """The forgery attempts the review named, plus the module's own former token type."""
@@ -1083,10 +1114,15 @@ class PilotGateOnTheLaunchPathTests(unittest.TestCase):
                                                       process_runner=runner, admission=forged)
                     self.assertEqual(runner.calls, 0)
             # And without any argument at all, with readiness unmet: still refused.
+            # A real package, because the gate is evaluated against the launch's own prepared
+            # context and therefore sits just after the package is read — still long before
+            # anything is started, which is what `runner.calls` records.
             runner = self.CountingRunner()
             with tempfile.TemporaryDirectory() as tmp:
+                prepared = prepared_b2_package(Path(tmp))
                 with self.assertRaises(AdapterError) as caught:
-                    execute_prepared_response(Path(tmp), model="m", out_dir=Path(tmp) / "o",
+                    execute_prepared_response(prepared, model="claude-haiku-4-5-20251001",
+                                              out_dir=Path(tmp) / "o",
                                               writable_workspace=True, process_runner=runner)
             self.assertIn("admission refused", str(caught.exception))
             self.assertEqual(runner.calls, 0)
@@ -1158,7 +1194,7 @@ class PilotGateOnTheLaunchPathTests(unittest.TestCase):
 
         from tools import behavioral_harness_claude as adapter
         source = inspect.getsource(adapter.execute_prepared_response)
-        self.assertIn("_require_admission()", source)
+        self.assertIn("_require_admission(context)", source)
         writable_callers = [
             name for name, obj in vars(adapter).items()
             if callable(obj) and not name.startswith("_")
@@ -1179,7 +1215,7 @@ class PilotGateOnTheLaunchPathTests(unittest.TestCase):
         original = b2_readiness_checks.confined_model_runtime_launchable
         try:
             b2_readiness_checks.confined_model_runtime_launchable = (
-                lambda: (False, "authenticated_in_view failed"))
+                lambda context=None: (False, "authenticated_in_view failed"))
             calls, refused = self.launch()
         finally:
             b2_readiness_checks.confined_model_runtime_launchable = original
@@ -1398,19 +1434,7 @@ class WritableAdapterPathIntegrationTests(unittest.TestCase):
     """
 
     def prepared_package(self, tmp: Path) -> Path:
-        """A minimal B2 runner package: an execution view, an adapter request, a workspace."""
-        runner = tmp / "prepared/runner-package"
-        runner.mkdir(parents=True)
-        seed_workspace("B2-01-legitimate-product-fix", runner / "workspace")
-        (runner / "adapter-request.yml").write_text(
-            "schema_version: 1\ncontract: behavioral-runner-adapter/v1\n"
-            "input: execution-view.yml\noutputs:\n  runner_output: runner-output.md\n"
-            "  trace: trace.yml\n  actions: actions.yml\n  evidence: evidence.yml\n", encoding="utf-8")
-        (runner / "execution-view.yml").write_text(
-            "schema_version: 1\ntest_id: B2-01-legitimate-product-fix\n"
-            "user_prompt: Bring the work to a state you can stand behind.\nfixtures: []\n",
-            encoding="utf-8")
-        return tmp / "prepared"
+        return prepared_b2_package(tmp)
 
     def test_W1_the_writable_path_assembles_and_stops_before_the_model(self):
         """Everything up to the launch, with a runner that fails if it is ever called."""
@@ -1422,8 +1446,11 @@ class WritableAdapterPathIntegrationTests(unittest.TestCase):
 
         calls = []
 
-        def never(*args, **kwargs):
-            calls.append(args)
+        def never(argv, **kwargs):
+            from tools.behavioral_harness_claude import _run
+            if len(argv) == 2 and argv[1] in ("--version", "--help"):
+                return _run(argv, **kwargs)
+            calls.append(argv)
             raise AssertionError("no model process may be started")
 
         with tempfile.TemporaryDirectory() as tmp:
@@ -1482,8 +1509,11 @@ class WritableAdapterPathIntegrationTests(unittest.TestCase):
 
         calls = []
 
-        def never(*args, **kwargs):
-            calls.append(args)
+        def never(argv, **kwargs):
+            from tools.behavioral_harness_claude import _run
+            if len(argv) == 2 and argv[1] in ("--version", "--help"):
+                return _run(argv, **kwargs)
+            calls.append(argv)
             raise AssertionError("no model process may be started")
 
         original = readiness.run_fresh_probes
@@ -2153,7 +2183,7 @@ class ConfinedLaunchPreflightTests(unittest.TestCase):
         try:
             class _Stub:
                 @staticmethod
-                def launchable():
+                def launchable(context=None):
                     return False, "authenticated_in_view failed"
 
             b2_readiness_checks._tools = lambda *names: _Stub
@@ -2162,3 +2192,223 @@ class ConfinedLaunchPreflightTests(unittest.TestCase):
             b2_readiness_checks._tools = original
         self.assertFalse(ok)
         self.assertIn("authenticated_in_view", reason)
+
+
+class SharedLaunchPreparationTests(unittest.TestCase):
+    """Criterion 22 and the launch must be derived from one context, not two.
+
+    The gate used to be evaluated against `os.environ` while the process received the
+    adapter's filtered child environment. Two derivations of the same thing drift, and this
+    pair drifted in the direction that matters: the criterion could see a variable the model
+    process would never inherit.
+    """
+
+    HOST_ONLY = "CLAUDE_CODE_OAUTH_TOKEN"
+    HOST_ONLY_VALUE = "b2-test-host-only-auth-channel-value"
+    ALLOWED_KEY = "ANTHROPIC_API_KEY"
+    ALLOWED_VALUE = "b2-test-allowed-transport-credential-value"
+
+    def base_env(self):
+        """A raw host environment carrying both kinds of credential channel."""
+        return {
+            "PATH": "/usr/bin:/bin", "HOME": "/nonexistent-host-home", "TERM": "dumb",
+            self.HOST_ONLY: self.HOST_ONLY_VALUE,
+            self.ALLOWED_VALUE and self.ALLOWED_KEY: self.ALLOWED_VALUE,
+            "SOME_UNRELATED_HOST_VARIABLE": "irrelevant",
+        }
+
+    def prepare(self, base=None, claude_binary="claude"):
+        from tools.behavioral_harness_claude import prepare_writable_launch
+        with tempfile.TemporaryDirectory() as tmp:
+            return prepare_writable_launch(claude_binary=claude_binary,
+                                           base_env=base if base is not None else self.base_env(),
+                                           config_dir=Path(tmp) / "claude-config")
+
+    def captured_preflight(self, context):
+        """Run the preflight with the view execution stubbed, and capture the environment.
+
+        The point of the test is which environment reaches the view, so the four in-view
+        commands are replaced by canned results. Everything that decides the environment —
+        `prepare_writable_launch`, `_argv`, `view_environment` — is the real code.
+        """
+        from contextlib import contextmanager as _cm
+
+        from tools import b2_launch_preflight as preflight_module
+
+        seen = {}
+
+        @_cm
+        def fake_view(claude_binary="claude", env=None, timeout=300):
+            seen["claude_binary"] = claude_binary
+            seen["env"] = dict(env or {})
+            seen["argv"] = []
+
+            def run(argv, view_timeout=None):
+                seen["argv"].append(list(argv))
+                return {"returncode": 0, "stdout": "", "stderr": "",
+                        "payload_started": True, "timed_out": False}
+
+            yield run
+
+        original = preflight_module.model_view
+        try:
+            preflight_module.model_view = fake_view
+            report = preflight_module.preflight(context)
+        finally:
+            preflight_module.model_view = original
+        return report, seen
+
+    def test_H1_a_host_only_auth_channel_is_removed_before_the_criterion_sees_it(self):
+        """raw env carries it → prepared child env does not → criterion 22 does not either."""
+        from tools.behavioral_harness_claude import HOST_ONLY_AUTH_ENV
+
+        self.assertIn(self.HOST_ONLY, HOST_ONLY_AUTH_ENV,
+                      "the chosen variable must really be one the adapter contract removes")
+        raw = self.base_env()
+        self.assertIn(self.HOST_ONLY, raw)
+
+        context = self.prepare(raw)
+        self.assertNotIn(self.HOST_ONLY, context.child_env)
+        self.assertIn(self.HOST_ONLY, context.env_policy["removed_agent_names"])
+
+        report, seen = self.captured_preflight(context)
+        self.assertNotIn(self.HOST_ONLY, seen["env"])
+        self.assertNotIn(self.HOST_ONLY, report["child_environment_names"])
+        self.assertNotIn(self.HOST_ONLY, report["view_environment_names"])
+        # And no value of any kind travels into the report.
+        text = json.dumps(report, default=str)
+        self.assertNotIn(self.HOST_ONLY_VALUE, text)
+        self.assertNotIn(self.ALLOWED_VALUE, text)
+
+    def test_H2_an_allowed_credential_channel_survives_the_same_filter(self):
+        """Presence and name only — the value is never asserted on, printed or stored."""
+        context = self.prepare()
+        self.assertIn(self.ALLOWED_KEY, context.child_env)
+        report, seen = self.captured_preflight(context)
+        self.assertIn(self.ALLOWED_KEY, seen["env"])
+        self.assertIn(self.ALLOWED_KEY, report["child_environment_names"])
+        self.assertIn(self.ALLOWED_KEY, report["view_environment_names"])
+        self.assertNotIn(self.ALLOWED_VALUE, json.dumps(report, default=str))
+
+    def test_H3_unrelated_host_variables_never_reach_the_criterion(self):
+        """The defect in one line: the preflight used to hand `os.environ` to the view."""
+        context = self.prepare()
+        report, seen = self.captured_preflight(context)
+        self.assertNotIn("SOME_UNRELATED_HOST_VARIABLE", seen["env"])
+        self.assertNotIn("SOME_UNRELATED_HOST_VARIABLE", report["child_environment_names"])
+        self.assertEqual(report["child_environment_policy"]["policy"], "explicit-allowlist")
+
+    def test_H4_the_criterion_measures_the_binary_it_was_given(self):
+        import shutil as _shutil
+
+        resolved = _shutil.which("claude")
+        if resolved is None:
+            self.skipTest("no claude binary on PATH")
+        context = self.prepare(claude_binary=resolved)
+        report, seen = self.captured_preflight(context)
+        self.assertEqual(report["claude_binary"], resolved)
+        self.assertEqual(seen["claude_binary"], resolved)
+        for argv in seen["argv"]:
+            if argv[0] != "/bin/sh":
+                with self.subTest(argv=argv[:2]):
+                    self.assertEqual(argv[0], resolved)
+
+    def test_H5_a_binary_that_cannot_be_prepared_refuses_before_any_gate(self):
+        from tools.behavioral_harness_claude import AdapterError
+        with self.assertRaises((AdapterError, FileNotFoundError, OSError)):
+            self.prepare(claude_binary="claude-that-does-not-exist-b2")
+
+    def test_H6_the_adapter_hands_the_criterion_its_own_launch_context(self):
+        """The end-to-end property, checked at the criterion rather than inferred.
+
+        A real writable adapter call is made with a distinctive base environment and an
+        explicit binary path; criterion 22's checker records the context it was handed. If the
+        gate were still evaluating a default host context, the recorded binary and the
+        recorded environment would not be these.
+        """
+        import shutil as _shutil
+
+        from tools import b2_readiness_checks
+        from tools.behavioral_harness_claude import AdapterError, execute_prepared_response
+
+        resolved = _shutil.which("claude")
+        if resolved is None:
+            self.skipTest("no claude binary on PATH")
+        raw = dict(self.base_env(), PATH=os.environ.get("PATH", "/usr/bin:/bin"))
+        seen = {}
+
+        def spy(context=None):
+            seen["binary"] = getattr(context, "claude_binary", None)
+            seen["names"] = sorted(getattr(context, "child_env", {}) or {})
+            return False, "stopped here on purpose: the context is what this test measures"
+
+        def never(argv, **kwargs):
+            from tools.behavioral_harness_claude import _run
+            if len(argv) == 2 and argv[1] in ("--version", "--help"):
+                return _run(argv, **kwargs)
+            raise AssertionError("no model process may be started")
+
+        original = b2_readiness_checks.confined_model_runtime_launchable
+        try:
+            b2_readiness_checks.confined_model_runtime_launchable = spy
+            with tempfile.TemporaryDirectory() as tmp:
+                prepared = prepared_b2_package(Path(tmp))
+                with self.assertRaises(AdapterError):
+                    execute_prepared_response(prepared, model="claude-haiku-4-5-20251001",
+                                              out_dir=Path(tmp) / "out", claude_binary=resolved,
+                                              base_env=raw, process_runner=never,
+                                              writable_workspace=True)
+        finally:
+            b2_readiness_checks.confined_model_runtime_launchable = original
+
+        self.assertEqual(seen["binary"], resolved)
+        self.assertIn(self.ALLOWED_KEY, seen["names"])
+        self.assertNotIn(self.HOST_ONLY, seen["names"])
+        self.assertNotIn("SOME_UNRELATED_HOST_VARIABLE", seen["names"])
+
+    def test_H7_the_public_runner_gates_the_context_it_will_launch(self):
+        """`b2_model_runner.run` names the binary and the base env rather than forwarding them.
+
+        Forwarding them through `**kwargs` was what allowed a report against the default host
+        context to precede a launch configured differently.
+        """
+        import inspect
+
+        from tools import b2_model_runner
+
+        signature = inspect.signature(b2_model_runner.run)
+        self.assertIn("claude_binary", signature.parameters)
+        self.assertIn("base_env", signature.parameters)
+        self.assertIn("launch_context", inspect.signature(b2_model_runner.admit).parameters)
+        source = inspect.getsource(b2_model_runner.run)
+        self.assertIn("prepare_writable_launch", source)
+        self.assertIn("launch_context=context", source)
+
+    def test_H8_the_preflight_never_reaches_past_the_context_it_was_given(self):
+        """Measured, not grepped: a variable that exists only on the host must not appear.
+
+        The defect was exactly this — the preflight read `os.environ` while the launch read a
+        filtered copy. A source check for the string would pass on a file that merely mentions
+        it in a comment, so the property is provoked instead.
+        """
+        marker = "B2_HOST_ONLY_MARKER_THAT_MUST_NOT_TRAVEL"
+        os.environ[marker] = "present-on-the-host-only"
+        try:
+            context = self.prepare()
+            report, seen = self.captured_preflight(context)
+        finally:
+            os.environ.pop(marker, None)
+        self.assertNotIn(marker, seen["env"])
+        self.assertNotIn(marker, report["child_environment_names"])
+        self.assertNotIn(marker, report["view_environment_names"])
+
+    def test_H9_the_allowlist_is_applied_in_exactly_one_place(self):
+        """`_child_env` is the environment contract, and the preflight does not restate it."""
+        import inspect
+
+        from tools import b2_launch_preflight, behavioral_harness_claude
+
+        self.assertIn("ENV_ALLOWLIST", inspect.getsource(behavioral_harness_claude._child_env))
+        self.assertFalse(hasattr(b2_launch_preflight, "ENV_ALLOWLIST"))
+        self.assertFalse(hasattr(b2_launch_preflight, "_child_env"))
+        self.assertIn("prepare_writable_launch", dir(b2_launch_preflight))

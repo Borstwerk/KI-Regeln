@@ -996,21 +996,69 @@ def _method(response_id, stream, actions, outside, controls, model_fp, runtime_f
     }
 
 
-def _require_admission() -> dict[str, Any]:
+@dataclass(frozen=True)
+class WritableLaunchContext:
+    """Everything a writable B2 launch is determined by, derived exactly once.
+
+    The gate and the launch used to derive their context separately: the adapter filtered the
+    host environment through `_child_env`, while the launch preflight handed `os.environ`
+    straight to the view. Two derivations of the same thing drift, and this one drifted in the
+    direction that matters -- the gate saw variables the model process would never inherit, so
+    it could in principle have gone green on a credential the run does not get.
+
+    There is now one derivation. This object is it, and both the criterion and the launch are
+    fed from the same instance.
+    """
+
+    claude_binary: str
+    child_env: Mapping[str, str]
+    env_policy: Mapping[str, Any]
+    capabilities: Mapping[str, bool]
+    probe: Mapping[str, Any]
+
+
+def prepare_writable_launch(*, claude_binary: str, base_env: Mapping[str, str] | None,
+                            config_dir: Path, process_runner: ProcessRunner = _run,
+                            ) -> WritableLaunchContext:
+    """Probe the binary, apply the adapter's environment contract, and stop there.
+
+    Nothing here starts anything. It is the shared prefix of the gate and the launch, so that
+    "the context the criterion measured" and "the context the process gets" are the same
+    object rather than two things that resemble each other.
+    """
+    probe = probe_claude_code(claude_binary, process_runner)
+    if not probe["required_capabilities_present"]:
+        raise AdapterError("Claude Code binary lacks required adapter capabilities: "
+                           + ", ".join(probe["missing_required_capabilities"]))
+    if not probe["capabilities"].get("safe_mode"):
+        raise AdapterError(
+            "Claude Code binary does not support --safe-mode; the adapter does not fall back to --bare, "
+            "which never reads managed authentication and closes fewer customization sources"
+        )
+    base = base_env if base_env is not None else os.environ
+    config_dir.mkdir(parents=True, exist_ok=True)
+    env, env_policy = _child_env(base, config_dir)
+    return WritableLaunchContext(claude_binary=claude_binary, child_env=env, env_policy=env_policy,
+                                 capabilities=probe["capabilities"], probe=probe)
+
+
+def _require_admission(context: WritableLaunchContext) -> dict[str, Any]:
     """Evaluate the B2 pilot entry criteria here, on the launch path itself.
 
     The first version took a token object and checked a public marker on it, which any caller
-    could construct -- a ticket anyone can print is not a gate. There is now nothing to pass:
-    the writable path evaluates the criteria itself, immediately before the model process
-    would start, with the boundary probes re-run rather than read from a stored file.
+    could construct -- a ticket anyone can print is not a gate. There is still nothing to
+    forge: what is passed is not an authorisation but the launch context itself, and handing
+    over a *different* context only means the criteria are evaluated against that one.
 
     Imported lazily because the readiness checks exercise this module.
     """
+    if not isinstance(context, WritableLaunchContext):
+        raise AdapterError("a writable admission requires the prepared launch context")
     try:
         from .b2_pilot_readiness import gate
     except ImportError:  # direct script sibling import
         from b2_pilot_readiness import gate
-    allowed, reason = gate(fresh_probes=True)
+    allowed, reason = gate(fresh_probes=True, launch_context=context)
     if not allowed:
         raise AdapterError(f"B2 pilot admission refused: {reason}")
     return {"admitted": True, "reason": reason}
@@ -1031,7 +1079,6 @@ def execute_prepared_response(
     if model.lower() in {"sonnet", "opus", "haiku", "default"}:
         raise AdapterError("model aliases are not accepted; pass an explicit full model id")
     tool_policy = effective_tool_policy(writable_workspace)
-    admission = _require_admission() if writable_workspace else None
     runner = _runner_dir(prepared); execution = _validate_package(runner); response_id = str(execution["test_id"])
     probe = probe_claude_code(claude_binary, process_runner)
     if not probe["required_capabilities_present"]:
@@ -1061,7 +1108,17 @@ def execute_prepared_response(
             spared = (workspace, task / "bin", task / "b2-runtime")
         read_only = _read_only(task, skip=spared or None)
         base = base_env if base_env is not None else os.environ
-        env, env_policy = _child_env(base, config)
+        if writable_workspace:
+            # One derivation for the gate and for the launch. The criterion is evaluated
+            # against this exact binary and this exact filtered environment, and the process
+            # started below gets the same object -- not a reconstruction of it.
+            context = prepare_writable_launch(claude_binary=claude_binary, base_env=base,
+                                              config_dir=config, process_runner=process_runner)
+            env, env_policy = dict(context.child_env), dict(context.env_policy)
+            admission = _require_admission(context)
+        else:
+            admission = None
+            env, env_policy = _child_env(base, config)
         argv, controls = _argv(claude_binary, model, _prompt(execution), requested_session,
                                probe["capabilities"], empty_mcp, writable=writable_workspace)
         auth = _auth(env, base, bare_requested=controls["bare_requested"])

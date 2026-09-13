@@ -330,7 +330,7 @@ def model_process_workspace_confinement() -> tuple[bool, str]:
     )
 
 
-def confined_model_runtime_launchable() -> tuple[bool, str]:
+def confined_model_runtime_launchable(launch_context=None) -> tuple[bool, str]:
     """Can the model process actually start inside the view it is confined to?
 
     Confinement created a precondition that did not exist before: the launch has to work from
@@ -342,6 +342,13 @@ def confined_model_runtime_launchable() -> tuple[bool, str]:
     Deliberately one criterion, not three: it expresses one precondition, "the confined
     runtime is launchable", and splitting it would let two thirds of a launch count as
     progress toward a pilot that still cannot start.
+
+    `launch_context` is the adapter's own prepared context for the launch that is about to
+    happen -- the same binary and the same filtered child environment. Without it the check
+    would answer a question about the default host context, which is not necessarily the
+    question being asked. When none is supplied (the standalone readiness CLI, for instance)
+    one is derived here by the same function the adapter uses, never by a second copy of the
+    rules.
     """
     preflight = _tools("b2_launch_preflight")
-    return preflight.launchable()
+    return preflight.launchable(launch_context)

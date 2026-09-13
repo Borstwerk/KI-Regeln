@@ -267,6 +267,49 @@ Criterion 22 is these three together, and one criterion rather than three on pur
 expresses a single precondition — the confined runtime is launchable — and splitting it would
 let two thirds of a launch read as progress toward a pilot that still cannot start.
 
+### One derivation, not two
+
+The criterion and the launch were still deriving their context separately. The adapter builds
+the model process's environment with `_child_env` — an explicit allowlist, the control
+variables, a fresh `CLAUDE_CONFIG_DIR`, everything else dropped — while the preflight handed
+`os.environ` straight to the view. The stored evidence showed it plainly: about a hundred
+variable names, most of which the model process would never inherit.
+
+That is not a cosmetic mismatch. Criterion 22's last question is whether the launch context
+can authenticate. A gate answering that question about a *different* environment could in
+principle go green on a credential the run does not receive. The same applied to
+`claude_binary` and `base_env`, which `execute_prepared_response` accepts and
+`_require_admission` did not know about at all: the gate could be evaluated against the
+default host context and the launch then performed under another.
+
+```
+raw base env ─┐
+              ├─► prepare_writable_launch() ─► WritableLaunchContext ─┬─► criterion 22
+claude binary ┘   (probe + _child_env)                                └─► the launch
+```
+
+`WritableLaunchContext` carries the binary, the filtered child environment, the environment
+policy and the probed capabilities. `execute_prepared_response` builds it once and passes the
+same instance to `_require_admission`, which passes it to `gate` → `evaluate` → criterion 22 →
+the preflight. `b2_model_runner.run` names `claude_binary` and `base_env` explicitly instead
+of forwarding them through `**kwargs`, so its report is about the launch it will then perform.
+
+`base_env` stays supported (variant B): it is not merely a test seam, and the fix is that one
+concrete `base_env` now reaches the criterion, the admission and the launch — not that the
+parameter disappears.
+
+The counter-test provokes the actual defect. A base environment carrying
+`CLAUDE_CODE_OAUTH_TOKEN` — a host-only auth channel the adapter contract removes — is fed
+in, and the chain is followed: present in the raw environment, absent from the prepared child
+environment, absent from what the criterion measures, absent from the view. An allowed
+`ANTHROPIC_API_KEY`-shaped value passes the same filter structurally; only its *name* is ever
+asserted on, and no value of either kind appears in any report or artifact. A host variable
+that exists only in `os.environ` is likewise provoked and must not travel — a source check for
+the string would have passed on a file that merely mentions it in a comment.
+
+`launch-preflight.yml` now records `child_environment_names` and
+`child_environment_policy` — the adapter's own contract, names only, no values.
+
 
 ## Held-out oracle
 
@@ -290,6 +333,7 @@ input shape and nothing else. P4 confirms the separation by trying.
 | model-process confinement | evaluator artifacts from the agent's own process | let read-only shell commands reach the repository, the matrix or the oracle | the probe above, criterion 21, `ModelProcessConfinementTests` (12 tests) |
 | confinement evidence | telling a confined run from an unconfined one, afterwards | let the artifacts describe a run that did not happen | `ConfinementInTheRunEvidenceTests`: a real outer boundary, a synthetic payload, no model |
 | launch preflight | the confined runtime's launchability | let a pilot be admitted that cannot start, or start against a host path | criterion 22, `ViewLocalLaunchArgvTests`, `ConfinedLaunchPreflightTests` |
+| shared launch preparation | that the gate and the launch mean the same run | let the criterion pass on an environment or a binary the process never gets | `SharedLaunchPreparationTests`: host-only auth channel, allowed credential, binary identity |
 | boundary lifecycle marker | telling a failed sandbox from a failing payload | let an instrumentation failure read as a red product | setup broken on purpose before `exec`: `BoundaryError`, payload never ran, oracle `not-run` |
 | check launcher (`bin/check`) | the one allowed Bash invocation | let `check` reach something other than the boundary | `CheckLauncherTests`: real PATH, real cwd, arguments refused, impostor not shadowing |
 | B2 model runner admission | the pilot gate | let a writable run start without passing the criteria | five refusal tests with a runner that fails if invoked |

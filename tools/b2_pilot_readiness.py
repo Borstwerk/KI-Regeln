@@ -108,6 +108,11 @@ def evidence_binding() -> dict[str, str]:
 # and a stored result cannot speak for a machine it never ran on -- so the pilot admission
 # re-runs P1-P5 instead of trusting a file.
 _FRESH_PROBES: dict[str, Any] | None = None
+# Set for the duration of one `evaluate(launch_context=...)`. Criterion 22 asks whether a
+# *particular* launch can start: a different binary or a differently filtered environment is a
+# different question, so the criterion is never evaluated against a stand-in for the launch
+# that follows it.
+_LAUNCH_CONTEXT: Any | None = None
 
 
 def run_fresh_probes() -> dict[str, Any]:
@@ -352,7 +357,7 @@ def _c22_confined_model_runtime_launchable() -> dict[str, Any]:
     writable argv and exercising it -- paths, startup, parser, auth -- inside exactly that
     view, with no model request.
     """
-    ok, reason = _functional("confined_model_runtime_launchable")()
+    ok, reason = _functional("confined_model_runtime_launchable")(_LAUNCH_CONTEXT)
     return _tri(ok, reason, "b2_readiness_checks.confined_model_runtime_launchable")
 
 
@@ -398,17 +403,18 @@ CRITERIA: tuple[tuple[int, str, bool, Callable[[], dict[str, Any]]], ...] = (
 )
 
 
-def evaluate(fresh_probes: bool = False) -> dict[str, Any]:
+def evaluate(fresh_probes: bool = False, launch_context: Any | None = None) -> dict[str, Any]:
     """Evaluate every criterion now. Nothing is read back from a stored verdict.
 
     With `fresh_probes`, P1-P6 are executed in this process rather than read from the stored
     evidence file. That is the mode the model-pilot admission uses: probe results describe the
     host they ran on, and a stored result from another machine is not evidence about this one.
     """
-    global _FRESH_PROBES
+    global _FRESH_PROBES, _LAUNCH_CONTEXT
     probes = run_fresh_probes() if fresh_probes else None
     rows = []
     previous, _FRESH_PROBES = _FRESH_PROBES, probes
+    previous_context, _LAUNCH_CONTEXT = _LAUNCH_CONTEXT, launch_context
     try:
         for number, title, blocking, check in CRITERIA:
             try:
@@ -418,6 +424,7 @@ def evaluate(fresh_probes: bool = False) -> dict[str, Any]:
             rows.append({"id": number, "criterion": title, "blocking": blocking, **outcome})
     finally:
         _FRESH_PROBES = previous
+        _LAUNCH_CONTEXT = previous_context
     blockers = [r for r in rows if r["blocking"] and r["met"] is not True]
     return {
         "contract": READINESS_CONTRACT,
@@ -431,7 +438,8 @@ def evaluate(fresh_probes: bool = False) -> dict[str, Any]:
     }
 
 
-def gate(stored: Path | None = None, fresh_probes: bool = False) -> tuple[bool, str]:
+def gate(stored: Path | None = None, fresh_probes: bool = False,
+         launch_context: Any | None = None) -> tuple[bool, str]:
     """May a model pilot start? Answered by re-evaluating, never by reading a claim.
 
     A stored artifact is compared against the fresh evaluation, so a hand-edited file that
@@ -440,7 +448,7 @@ def gate(stored: Path | None = None, fresh_probes: bool = False) -> tuple[bool, 
     `fresh_probes` additionally re-runs P1-P5 here rather than trusting the stored evidence.
     The writable launch path uses it; nothing else has to.
     """
-    fresh = evaluate(fresh_probes=fresh_probes)
+    fresh = evaluate(fresh_probes=fresh_probes, launch_context=launch_context)
     if stored is not None and stored.is_file():
         try:
             claimed = load_yaml(stored)

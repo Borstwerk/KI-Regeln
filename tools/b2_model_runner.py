@@ -16,39 +16,62 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+import tempfile
 from pathlib import Path
+from typing import Mapping
 
 try:
-    from .behavioral_harness_claude import AdapterError, execute_prepared_response
+    from .behavioral_harness_claude import (
+        AdapterError, execute_prepared_response, prepare_writable_launch,
+    )
     from .b2_pilot_readiness import evaluate, gate
 except ImportError:  # direct script sibling import
-    from behavioral_harness_claude import AdapterError, execute_prepared_response
+    from behavioral_harness_claude import (
+        AdapterError, execute_prepared_response, prepare_writable_launch,
+    )
     from b2_pilot_readiness import evaluate, gate
 
 
-def admit(stored: Path | None = None, fresh_probes: bool = True) -> dict:
-    """Evaluate the entry criteria and report the outcome. Not an authorisation token.
+def admit(stored: Path | None = None, fresh_probes: bool = True, launch_context=None) -> dict:
+    """Evaluate the entry criteria for one launch context and report the outcome.
 
     Nothing this returns admits anything. The writable adapter path evaluates the criteria
     again for itself immediately before launching, so a caller cannot skip the gate by
     skipping this function, and cannot pass it by constructing a value.
+
+    `launch_context` matters even so: a report produced against the default host context,
+    followed by a launch configured with a different binary or a different base environment,
+    would describe a run that is not the one about to happen.
     """
-    report = evaluate(fresh_probes=fresh_probes)
-    allowed, reason = gate(stored, fresh_probes=fresh_probes)
+    report = evaluate(fresh_probes=fresh_probes, launch_context=launch_context)
+    allowed, reason = gate(stored, fresh_probes=fresh_probes, launch_context=launch_context)
     if not allowed:
         raise AdapterError(f"B2 pilot admission refused: {reason}")
     return {"status": report["status"], "reason": reason}
 
 
 def run(prepared: Path, *, model: str, out_dir: Path, stored_readiness: Path | None = None,
-        preflight_only: bool = False, **kwargs):
-    """Report the admission, then launch. The launch re-checks it regardless."""
-    outcome = admit(stored_readiness)
+        preflight_only: bool = False, claude_binary: str = "claude",
+        base_env: Mapping[str, str] | None = None, **kwargs):
+    """Report the admission for this launch context, then launch it. The launch re-checks.
+
+    The binary and the base environment are named here rather than passed through `**kwargs`
+    precisely so that the admission cannot be evaluated against one context and the launch
+    performed under another.
+    """
+    with tempfile.TemporaryDirectory(prefix="b2-admit-") as tmp:
+        context = prepare_writable_launch(
+            claude_binary=claude_binary, base_env=base_env,
+            config_dir=Path(tmp) / "claude-config",
+            **({"process_runner": kwargs["process_runner"]} if "process_runner" in kwargs else {}),
+        )
+        outcome = admit(stored_readiness, launch_context=context)
     if preflight_only:
         return {"admitted": True, "status": outcome["status"], "reason": outcome["reason"],
                 "stopped_before": "model process launch", "model_started": False}
     return execute_prepared_response(prepared, model=model, out_dir=out_dir,
-                                     writable_workspace=True, **kwargs)
+                                     writable_workspace=True, claude_binary=claude_binary,
+                                     base_env=base_env, **kwargs)
 
 
 def _cli(argv: list[str] | None = None) -> int:
