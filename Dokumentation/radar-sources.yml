@@ -1,4 +1,4 @@
-schema_version: 1
+schema_version: 2
 last_updated: '2026-09-21'
 
 # Discovery-only sources and recurring search topics.
@@ -24,26 +24,31 @@ policy:
     relevant to a local rule or skill, and its provenance/use class has been
     deliberately assessed.
 
-monthly_report_evidence:
+discovery_report_evidence:
   required: true
   unknown_value: UNVERIFIED
-  principle: Evidence before summary; missing observation must not be replaced by a plausible state.
+  principle: Evidence before classification; missing observation must not be replaced by a plausible state.
   fields:
     - source_id
     - source_class
     - observed_at
-    - registered_state
-    - observed_state
-    - change_detected
+    - finding
     - classification
     - evidence
+    - overlap_with_local
     - local_impact
+    - risks_and_limits
+  classifications:
+    - STRONG-CANDIDATE
+    - METHOD-CANDIDATE
+    - OBSERVE
+    - REJECT
   notes:
-    - For discovery-only radar sources, registered_state may be NOT_APPLICABLE.
-    - For exact-sha upstreams, registered_state and observed_state should contain the registered and freshly observed blob SHA.
-    - For semantic-review upstreams, use a concise state/version/date summary instead of inventing a synthetic SHA.
-    - If the current source state cannot be verified, use UNVERIFIED and do not classify it as unchanged.
-    - A prose summary may aggregate findings, but it does not replace the per-source evidence record.
+    - Search results are leads; open and assess the actual sources.
+    - Compare candidates against the current skill-catalog.yml before classifying novelty.
+    - Repetition across independent sources increases relevance but does not prove trustworthiness.
+    - If the current source state cannot be verified, use UNVERIFIED.
+    - Discovery never writes upstream-sources.yml automatically.
 
 sources:
   - id: agent-skills-specification
