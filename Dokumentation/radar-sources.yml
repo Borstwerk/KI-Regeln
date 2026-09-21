@@ -238,3 +238,4 @@ sources:
       - held-out and regression validation
       - anti-overfitting and anti-bloat methods
       - human gates versus autonomous self-modification
+      - trajectory poisoning and evidence-promotion attacks
