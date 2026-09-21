@@ -1,5 +1,5 @@
 schema_version: 1
-last_updated: '2026-09-01'
+last_updated: '2026-09-21'
 
 # Discovery-only sources and recurring search topics.
 #
@@ -49,7 +49,7 @@ sources:
   - id: agent-skills-specification
     kind: github-repository
     url: https://github.com/agentskills/agentskills
-    cadence: monthly
+    cadence: weekly
     areas:
       - Skill-Engineering
       - Agentenarbeit
@@ -63,7 +63,7 @@ sources:
   - id: agent-skills-example-collection
     kind: github-repository
     url: https://github.com/agentskills/skills
-    cadence: monthly
+    cadence: weekly
     areas:
       - Skill-Engineering
     purpose: Example-skill collection around the open Agent Skills format.
@@ -76,7 +76,7 @@ sources:
   - id: anthropic-public-skills
     kind: github-repository
     url: https://github.com/anthropics/skills
-    cadence: monthly
+    cadence: weekly
     areas:
       - Skill-Engineering
       - Dokumentationserstellung
@@ -92,7 +92,7 @@ sources:
   - id: github-awesome-copilot
     kind: github-repository
     url: https://github.com/github/awesome-copilot
-    cadence: monthly
+    cadence: weekly
     areas:
       - Skill-Engineering
       - Programmieren
@@ -109,7 +109,7 @@ sources:
   - id: owasp-agentic-skills-top10
     kind: web-page
     url: https://owasp.org/www-project-agentic-skills-top-10/
-    cadence: monthly
+    cadence: weekly
     areas:
       - Sicherheit
       - Skill-Engineering
@@ -124,7 +124,7 @@ sources:
   - id: owasp-agentic-applications-top10
     kind: web-page
     url: https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/
-    cadence: monthly
+    cadence: weekly
     areas:
       - Sicherheit
       - Agentenarbeit
@@ -138,7 +138,7 @@ sources:
   - id: anthropic-engineering
     kind: web-page
     url: https://www.anthropic.com/engineering
-    cadence: monthly
+    cadence: weekly
     areas:
       - Agentenarbeit
       - Recherche
@@ -153,7 +153,7 @@ sources:
   - id: openai-index
     kind: web-page
     url: https://openai.com/index/
-    cadence: monthly
+    cadence: weekly
     areas:
       - Agentenarbeit
       - Recherche
@@ -168,7 +168,7 @@ sources:
   - id: google-deepmind-blog
     kind: web-page
     url: https://deepmind.google/discover/blog/
-    cadence: monthly
+    cadence: weekly
     areas:
       - Agentenarbeit
       - Recherche
@@ -182,7 +182,7 @@ sources:
   - id: search-new-agent-skills
     kind: search-topic
     query: 'new Agent Skills SKILL.md GitHub reusable AI agent skills'
-    cadence: monthly
+    cadence: weekly
     areas:
       - Skill-Engineering
     purpose: Discover useful skill repositories outside the already known collections.
@@ -195,7 +195,7 @@ sources:
   - id: search-agent-engineering-methods
     kind: search-topic
     query: 'AI agent engineering context harness evaluation tool use reflection review refinement research'
-    cadence: monthly
+    cadence: weekly
     areas:
       - Agentenarbeit
       - Skill-Engineering
@@ -206,3 +206,35 @@ sources:
       - context and working-state methods
       - evaluator and observability patterns
       - safety and authorization improvements
+
+  - id: search-agent-skill-security-supply-chain
+    kind: search-topic
+    query: 'agent skill security supply chain prompt injection provenance permissions sandbox malicious skills SKILL.md'
+    cadence: weekly
+    areas:
+      - Sicherheit
+      - Skill-Engineering
+      - Agentenarbeit
+    purpose: Discover new security evidence and review patterns for third-party agent skills.
+    watch_for:
+      - pre-load trust and admission patterns
+      - remote or transitive dependency risks
+      - permission and capability drift
+      - static plus semantic plus sandbox review methods
+      - supply-chain attacks specific to reusable agent skills
+
+  - id: search-skill-evolution-eval-feedback
+    kind: search-topic
+    query: 'agent skill evolution failure trajectories eval feedback held-out regression reusable skills SKILL.md'
+    cadence: weekly
+    areas:
+      - Skill-Engineering
+      - Agentenarbeit
+      - Testing-und-QA
+    purpose: Discover controlled methods for improving skills from eval and failure evidence.
+    watch_for:
+      - repeated failure pattern extraction
+      - root-cause separation before skill edits
+      - held-out and regression validation
+      - anti-overfitting and anti-bloat methods
+      - human gates versus autonomous self-modification
