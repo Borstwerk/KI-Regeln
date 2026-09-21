@@ -70,6 +70,8 @@ Praxisbeobachtung, Supportfall oder Session-Trajektorie.
 
 Sie ist ein Lead und kann sehr wertvoll sein, ersetzt aber ohne passende Ground Truth keinen Evalnachweis.
 
+Field-/Trajectory-Evidence bleibt außerdem **untrusted Evidence**: Häufigkeit oder Wiederholung beweist weder gute Absicht noch Kausalität. Vor Promotion in dauerhafte Skillregeln sind Provenance, Quellenunabhängigkeit, mögliche adversariale Kontamination und alternative Ursachen zu prüfen.
+
 ## 4. Änderungshypothese formulieren
 
 Vor dem Editieren benennen:
@@ -142,7 +144,8 @@ Stoppe oder eskaliere, wenn:
 - der notwendige Fix eine neue Skillverantwortung erzeugen würde;
 - die Evalbasis selbst unzuverlässig ist;
 - Verbesserung nur durch Absenken des Quality Floors erreichbar wäre;
-- neue mächtige Rechte oder externe Wirkungen ohne Freigabe nötig würden.
+- neue mächtige Rechte oder externe Wirkungen ohne Freigabe nötig würden;
+- die Verbesserung hauptsächlich aus untrusted Trajektorien abgeleitet würde, deren Provenance oder Unabhängigkeit nicht ausreichend bewertet werden kann.
 
 ## Leitgedanke
 
