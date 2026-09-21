@@ -48,7 +48,7 @@ Human Gate
 Festhalten:
 
 - aktueller Skill-Snapshot;
-- betroffene Eval-/Praxisfälle;
+- betroffene Eval-/Praxisfälle einschließlich ihrer Provenance;
 - aktueller Output bzw. Fehlmodus;
 - relevante Tool-/Runtimebedingungen;
 - vorhandene Regression-Suite.
@@ -74,6 +74,8 @@ Vorab formulieren:
 ## 4. Evidence partitionieren
 
 - Development-Fälle dürfen die Änderung leiten.
+- Session-/Field-/Trajectory-Evidence bleibt untrusted, bis Provenance, Unabhängigkeit und mögliche adversariale Kontamination ausreichend bewertet sind.
+- Wiederholtes Auftreten allein ist kein Promotion-Beweis.
 - Regression-Fälle schützen bestehendes Verhalten.
 - Held-out-/Independent-Fälle dürfen nicht aus denselben Fällen bestehen, anhand derer die Änderung entworfen wurde, wenn daraus ein Generalisierungsclaim folgen soll.
 
@@ -110,7 +112,8 @@ Vor Adoption:
 - kein „Eval bestanden“ durch Lockern des Evalmaßstabs;
 - keine Maturity-Hochstufung allein aufgrund eines besseren Scores;
 - keine unendliche Anreicherung des Prompts ohne Scope-/Komplexitätsprüfung;
-- keine Nutzung derselben Fälle als Entwicklungsinput und unabhängige Erfolgsevidence ohne klare Kennzeichnung.
+- keine Nutzung derselben Fälle als Entwicklungsinput und unabhängige Erfolgsevidence ohne klare Kennzeichnung;
+- keine Promotion dauerhafter Skillregeln allein aufgrund häufig wiederholter, aber untrusted Trajektorien.
 
 ## Ergebnis
 
