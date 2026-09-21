@@ -96,6 +96,21 @@ Methodisch relevant ist, wiederkehrende Session-/Trajektorien-Signale zu aggregi
 
 Nicht übernommen werden automatische globale Verteilung oder selbstautorisierte Updates einer gemeinsamen Skill-Library.
 
+### Trajectory Poisoning als Gegenbeleg
+
+Paper:
+
+https://arxiv.org/abs/2608.05563
+
+Die Arbeit untersucht, wie manipulierte Nutzungstrajektorien bei selbst-evolvierenden Skill-Systemen in dauerhafte Instruktionen übergehen können. Methodisch relevant ist deshalb die zusätzliche Trust Boundary zwischen beobachteter Erfahrung und ihrer Promotion in persistente Skillregeln.
+
+KI-Regeln leitet daraus ab:
+
+- Field-/Trajectory-Evidence bleibt untrusted;
+- Wiederholung ist kein Vertrauensbeweis;
+- Provenance und Quellenunabhängigkeit müssen vor Promotion betrachtet werden;
+- autonome Evolution erhält keine eigene Freigabeautorität.
+
 ### SkillAudit und verwandte Forschung
 
 Paper:
