@@ -8,6 +8,18 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Skill-Security-Hardening und evidence-getriebene Skill-Verbesserung
+
+- den bereits vorhandenen `skill-security-review` statt eines Doppel-Skills gehärtet: zu prüfende Skills gelten bis zur Admission als untrusted Input; read-only Inspektion und operative Aktivierung sind getrennt; Snapshot-/Bundle-Vollständigkeit, deklarierte versus abgeleitete Capabilities, mutable Remote-Abhängigkeiten und Capability Drift werden explizit geprüft;
+- Security-Evidence mehrstufig modelliert: deterministische/statische Prüfung, semantische Verhaltensanalyse und nur bei Bedarf isolierte dynamische Proben mit synthetischen Daten/Canaries; Scannerstatus und Sandbox-Erfolg sind Evidence, keine automatische Sicherheitsfreigabe;
+- `Skill-Supply-Chain.md` um Pre-Load-Trust, transitive/Remote-Abhängigkeiten und die Grenze „lokal gepinnt ≠ Runtime-Abhängigkeiten gepinnt“ erweitert; Agent-Skills-Client-Guidance und aktuelle Snyk-Supply-Chain-Evidence als methodische Quellen ergänzt;
+- vier zusätzliche Evalfälle für `skill-security-review` definiert: untrusted Project Skill vor dem Laden, mutable Remote-Instruktionen, grüner Scanner trotz Over-Privilege und Sandbox-Probe ohne echte Secrets; dadurch 656 definierte Cases, ohne Behavioral-Evals als ausgeführt oder bestanden zu behaupten;
+- neue Fachgrundlage `Skill-Engineering/Evidence-getriebene-Skill-Verbesserung.md` und Workflow `Workflows/Skill-Verbesserung-aus-Evals-und-Fehlern.md` ergänzt; bewusst **kein neuer Skill**, weil der Job aus `agent-eval`, `skill-authoring`, `verification-loop`, `skill-review` und bei Bedarf `skill-security-review` komponiert wird;
+- Failure-/Eval-Evidence in Development-, Regression-, Held-out-/Independent- und Field-Evidence getrennt; vor Skilländerungen ist Root-Cause-Klassifikation verpflichtend, und zur Änderung verwendete Fälle werden nicht nachträglich als unabhängige Erfolgsevidence ausgegeben;
+- EvoSkill und SkillClaw als konkrete mutable Methodenreferenzen mit geprüftem Snapshot, Lizenz- und Provenance-Evidence registriert; SkillAudit und weitere datierte Forschung bleiben stabile Fachquellen statt künstlicher Upstream-Watches; autonome Selbstmutation, automatische globale Skillverteilung und selbstautorisierte Adoption werden nicht übernommen;
+- `Dokumentation/radar-sources.yml` auf wöchentliche Discovery-Cadence ausgerichtet und um Suchthemen für Skill-Supply-Chain-Security sowie Eval-/Failure-getriebene Skill-Evolution ergänzt; `Quellenregister.md` trennt nun ausdrücklich wöchentlichen Discovery-Radar von monatlicher Upstream-Maintenance;
+- Skillzahl und Maturity bleiben unverändert bei 150 Skills, 125× `partial`, 25× `none`, 0× `core`/`broad`; kein aktiver Skill wird autonom überschrieben, kein Upstream automatisch synchronisiert und keine Maturity hochgestuft.
+
 ### Phase 4.2C · B2 — Launch-Kontext und Aufzeichnung
 
 - view-lokaler `--mcp-config`: die leere MCP-Konfiguration lag im Host-Temp-Verzeichnis des Adapters und wurde dem confinten Prozess als Hostpfad übergeben, den er nicht öffnen kann; sie erhält jetzt eine eigene read-only View `/b2-config` mit genau einer Datei, und `--strict-mcp-config` ist für writable B2 erzwungen statt optional; die Inline-JSON-Variante wurde nicht genommen, weil keine modellfreie Invocation der installierten CLI diese Option parst und eine Annahme aus der Hilfe keine Messung ist;
