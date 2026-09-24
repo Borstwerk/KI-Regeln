@@ -8,6 +8,14 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Separate Open-Content-Lizenzierung für Praxisbeispiel-Bilder
+
+- sechs vorhandene Bildassets aus drei Praxisbeispielen ausdrücklich aus der Root-MIT-Lizenz herausgelöst und – soweit daran wirksam lizenzierbare Rechte bestehen – unter **CC BY-SA 4.0** gestellt;
+- `ASSET-LICENSES.md` als menschenlesbare Source of Truth für Dateiliste, Attribution und KI-Provenienz ergänzt;
+- dokumentiert, dass die Bildausgaben vollständig durch OpenAI-Bildgenerierung entstanden, während Idee, Prompts, Gestaltungsvorgaben, Art Direction, Auswahl und Freigabe menschlich gesteuert wurden;
+- `REUSE.toml` als maschinenlesbare SPDX-Zuordnung für exakt diese sechs Assets ergänzt, ohne daraus eine vollständige REUSE-Compliance des gesamten Repositories abzuleiten;
+- Root-README, `CONTRIBUTING.md` und die drei betroffenen Praxisbeispiele auf die getrennte Medienlizenzierung ausgerichtet; fehlerhafte `.jpg`-Referenz des vorhandenen Web-POC-Bildes auf den tatsächlichen `.png`-Pfad korrigiert.
+
 ### Skill-Security-Hardening und evidence-getriebene Skill-Verbesserung
 
 - den bereits vorhandenen `skill-security-review` statt eines Doppel-Skills gehärtet: zu prüfende Skills gelten bis zur Admission als untrusted Input; read-only Inspektion und operative Aktivierung sind getrennt; Snapshot-/Bundle-Vollständigkeit, deklarierte versus abgeleitete Capabilities, mutable Remote-Abhängigkeiten und Capability Drift werden explizit geprüft;
