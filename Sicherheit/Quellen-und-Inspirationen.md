@@ -23,6 +23,46 @@ Für dieses Repository besonders relevant sind Provenance, Least Privilege, Cont
 
 Die OWASP-Arbeit wird als Sicherheitsrahmen genutzt, nicht als automatische Vorgabe jeder technischen Einzelmaßnahme.
 
+## Agent Skills – Client-Trust-Guidance
+
+Quelle:
+
+https://github.com/agentskills/agentskills/blob/main/docs/client-implementation/adding-skills-support.mdx
+
+Geprüfter Stand:
+
+- Repository-Commit: `69ef37e9424c0a7ea9dd2293b559e43ec8176379`
+- Blob-SHA: `6c784309faec4ea27715e57734e1e0b5929c1977`
+- Lizenz am geprüften Stand: Apache-2.0
+
+Methodisch relevant ist die Trust-Grenze für projektlokale Skills: Skills aus einem noch nicht vertrauenswürdigen Projekt sollen nicht automatisch als operative Instruktionen geladen werden.
+
+KI-Regeln generalisiert daraus:
+
+> Discovery/Inspektion eines Skills und seine operative Aktivierung sind getrennte Schritte.
+
+Die konkrete Client-Implementierung oder deren UI-/Runtime-Modell wird nicht übernommen.
+
+## Snyk – ToxicSkills / Agent-Skill-Supply-Chain-Analyse
+
+Quellen:
+
+https://snyk.io/blog/toxicskills-malicious-ai-agent-skills-clawhub/
+https://snyk.io/blog/agent-skill-security-scanning/
+
+Einordnung:
+
+Die 2026 veröffentlichte Untersuchung großer öffentlicher Skill-Sammlungen zeigt, dass Sicherheitsprobleme nicht nur in offensichtlich schädlichem Code liegen. Relevante Klassen umfassen unter anderem Prompt Injection, Secret-/Credential-Zugriff, verdächtige Downloads, dynamische bzw. unverifizierbare Abhängigkeiten und mutable Remote-Inhalte.
+
+Für KI-Regeln werden daraus keine Scanner-Defaults übernommen. Relevant ist vielmehr die methodische Konsequenz:
+
+- statische Musterprüfung ist nützlich, aber nicht vollständig;
+- semantische Verhaltensanalyse ergänzt Syntax-/Regex-Signale;
+- Remote-/Runtime-Nachladen erweitert den Trust Scope;
+- ein grüner Scanner ist Evidence, keine automatische Admission.
+
+Diese datierte Analyse ist Forschungs-/Praxis-Evidence und wird nicht als mutable technische Dependency registriert.
+
 ## OWASP Top 10 for Agentic Applications 2026
 
 Quelle:

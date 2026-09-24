@@ -27,6 +27,7 @@ Ein guter Skill soll:
 - `Skill-Komposition-und-Abhaengigkeiten.md` – Beziehungen zwischen Skills;
 - `Skill-Review-und-Evals.md` – Review- und Evaluationsregeln;
 - `Skill-Lifecycle-und-Deprecation.md` – Reife, Änderung und Ablösung;
+- `Evidence-getriebene-Skill-Verbesserung.md` – kontrollierte Verbesserung aus Failure-/Eval-Evidence ohne autonome Selbstfreigabe;
 - `Quellen-und-Inspirationen.md` – externe Grundlagen und Abgrenzung;
 - `Skills/skill-authoring/SKILL.md` – operativer Skill zum Erstellen/Überarbeiten von Skills;
 - `Skills/skill-review/SKILL.md` – unabhängiger Review eines Skills.
@@ -45,7 +46,9 @@ Bedarf erkennen
 → Evals
 → Maturity festlegen
 → veröffentlichen / verwenden
-→ beobachten / weiterentwickeln / deprecaten
+→ beobachten
+→ Failure-/Eval-Evidence bei Bedarf kontrolliert auswerten
+→ weiterentwickeln / deprecaten
 ```
 
 ## Leitgedanke

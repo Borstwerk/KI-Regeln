@@ -62,6 +62,32 @@ Evals und Changelog prüfen.
 
 Möglicherweise neuer Skill statt stiller Umdefinition.
 
+## Evidence-getriebene Verbesserung
+
+Wiederkehrende Fehler oder Eval-Funde dürfen Änderungen anstoßen, aber nicht automatisch den aktiven Skill umschreiben.
+
+Empfohlenes Muster:
+
+```text
+beobachtete Failure-/Eval-Evidence
+→ Ursache klassifizieren
+→ Änderungshypothese
+→ Candidate-Diff
+→ Regression + unabhängige Evidence
+→ Skill-/Security-Review
+→ Human Gate
+→ übernehmen / verwerfen
+```
+
+Dabei gilt:
+
+- Development-Fälle, die zur Änderung geführt haben, sind danach keine unabhängige Held-out-Evidence;
+- Benchmark- oder Evalverbesserung allein erhöht keine Maturity;
+- automatische Mutation darf höchstens Änderungskandidaten erzeugen, nicht deren Freigabe;
+- Verbesserung kann auch Vereinfachung, Löschung, Aufteilung oder Deprecation bedeuten.
+
+Details stehen in `Evidence-getriebene-Skill-Verbesserung.md`.
+
 ## Deprecation
 
 Ein deprecated Skill soll dokumentieren:
@@ -81,4 +107,4 @@ Lokale Maturity bewertet **unser tatsächliches Skillverhalten**.
 
 ## Leitgedanke
 
-> Reife ist eine Aussage über erprobtes Verhalten – nicht über Alter, Dateigröße oder Popularität.
+> Reife ist eine Aussage über erprobtes Verhalten – nicht über Alter, Dateigröße, Popularität oder einen einzelnen besseren Score.

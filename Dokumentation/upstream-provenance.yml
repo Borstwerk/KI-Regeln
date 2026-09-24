@@ -1,6 +1,6 @@
 schema_version: 2
 source_registry: Dokumentation/upstream-sources.yml
-last_reviewed: '2026-09-06'
+last_reviewed: '2026-09-21'
 sources:
 - source_id: guillaumemeyer-watermarks-remover-remove-ai-marks
   reviewed_at: 2026-09-06
@@ -1975,3 +1975,110 @@ sources:
     source_path: agents/research-harness-engineer.agent.md
     observed_ref: main
     observed_blob_sha: fbf37744cc70fedcfa3328a97b4d1f014c9fc52f
+- source_id: agent-skills-client-trust-guidance
+  reviewed_at: '2026-09-21'
+  repository_commit: 69ef37e9424c0a7ea9dd2293b559e43ec8176379
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence:
+  - The upstream client guidance contributes the trust-boundary concept that project-local skills from an untrusted project should not automatically become operative instructions.
+  - Local rules independently generalize this into pre-load inspection, snapshot binding, layered security evidence and explicit admission; no client runtime or wording is copied.
+  - The source is used as method reference only and no redistribution permission is relied on.
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: Apache-2.0
+  license_source: same-state root LICENSE
+  license_source_commit_or_ref: 69ef37e9424c0a7ea9dd2293b559e43ec8176379
+  license_path: LICENSE
+  license_blob_sha: a20f4476df158a57a68409015ea607c738856f57
+  path_specific_license_notes:
+  - Same-state root Apache-2.0 LICENSE was verified; local use is concepts/methods-only and redistribution permission is not relied on.
+  license_status_at_observation: verified-at-snapshot
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence:
+    artifact_declarations: []
+    same_state_files:
+    - path: LICENSE
+      blob_sha: a20f4476df158a57a68409015ea607c738856f57
+      spdx: Apache-2.0
+    notes:
+    - The observed client-guidance blob 6c784309faec4ea27715e57734e1e0b5929c1977 was verified at repository commit 69ef37e9424c0a7ea9dd2293b559e43ec8176379.
+  source_snapshot:
+    repository: agentskills/agentskills
+    source_path: docs/client-implementation/adding-skills-support.mdx
+    observed_ref: main
+    observed_blob_sha: 6c784309faec4ea27715e57734e1e0b5929c1977
+
+- source_id: sentient-agi-evoskill-readme
+  reviewed_at: '2026-09-21'
+  repository_commit: 36f6f04952293d7054145550c2b9f0b0411bff1c
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence:
+  - EvoSkill contributes the general pattern of diagnosing failure trajectories, proposing bounded skill changes and evaluating candidates on separate tasks.
+  - KI-Regeln independently narrows this into a human-gated candidate workflow with explicit root-cause classification, regression protection and Development-versus-Held-out evidence separation.
+  - Autonomous self-modification, benchmark-specific optimization and upstream runtime architecture are deliberately not adopted.
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: Apache-2.0
+  license_source: same-state root LICENSE
+  license_source_commit_or_ref: 36f6f04952293d7054145550c2b9f0b0411bff1c
+  license_path: LICENSE
+  license_blob_sha: 261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64
+  path_specific_license_notes:
+  - Same-state root Apache-2.0 LICENSE was verified; local use is concepts/methods-only and redistribution permission is not relied on.
+  license_status_at_observation: verified-at-snapshot
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence:
+    artifact_declarations: []
+    same_state_files:
+    - path: LICENSE
+      blob_sha: 261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64
+      spdx: Apache-2.0
+    notes:
+    - The observed README blob 61565ea29a63b42242dbe33d4ba3df3cec752c85 was verified at repository commit 36f6f04952293d7054145550c2b9f0b0411bff1c.
+  source_snapshot:
+    repository: sentient-agi/EvoSkill
+    source_path: README.md
+    observed_ref: main
+    observed_blob_sha: 61565ea29a63b42242dbe33d4ba3df3cec752c85
+
+- source_id: amap-skillclaw-readme
+  reviewed_at: '2026-09-21'
+  repository_commit: 3938f7537645c961d94498a0a79fc0a977019595
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence:
+  - SkillClaw contributes the general pattern of aggregating repeated session or trajectory signals, deduplicating them and using them as input to a versioned skill-maintenance process.
+  - KI-Regeln independently treats field trajectories as leads rather than ground truth and requires a candidate diff, independent review and explicit adoption gate.
+  - Automatic shared propagation and self-authorized updates are deliberately not adopted.
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: MIT
+  license_source: same-state root LICENSE
+  license_source_commit_or_ref: 3938f7537645c961d94498a0a79fc0a977019595
+  license_path: LICENSE
+  license_blob_sha: 098d8668bf1e3335e9147f453d099ccfeb152438
+  path_specific_license_notes:
+  - Same-state root MIT LICENSE was verified; local use is concepts/methods-only and redistribution permission is not relied on.
+  license_status_at_observation: verified-at-snapshot
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence:
+    artifact_declarations: []
+    same_state_files:
+    - path: LICENSE
+      blob_sha: 098d8668bf1e3335e9147f453d099ccfeb152438
+      spdx: MIT
+    notes:
+    - The observed README blob 9158146e42a17247e15934879f7f5265bdbd6484 was verified at repository commit 3938f7537645c961d94498a0a79fc0a977019595.
+  source_snapshot:
+    repository: AMAP-ML/SkillClaw
+    source_path: README.md
+    observed_ref: main
+    observed_blob_sha: 9158146e42a17247e15934879f7f5265bdbd6484

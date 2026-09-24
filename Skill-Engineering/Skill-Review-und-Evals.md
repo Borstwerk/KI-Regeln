@@ -92,19 +92,39 @@ Beispiele:
 
 Subjektive Qualitätsurteile bleiben dort sinnvoll, wo echte Wirkung, Stil oder fachliche Angemessenheit beurteilt werden muss.
 
+## Failure Evidence als Verbesserungsinput
+
+Fehlgeschlagene Läufe, Nutzerkorrekturen und Eval-Funde dürfen Skilländerungen anstoßen. Vor einer Änderung muss jedoch geprüft werden, ob die Ursache tatsächlich im Skill liegt oder beispielsweise in Tooling, Runtime, Daten, Spezifikation, Modellvariabilität oder dem Eval-Harness.
+
+Für systematische Verbesserungen gilt `Evidence-getriebene-Skill-Verbesserung.md`.
+
+Besonders wichtig:
+
+- Fälle, anhand derer die Änderung entworfen wurde, sind **Development Evidence**;
+- sie werden nicht anschließend als unabhängige Held-out-Evidence ausgegeben;
+- relevante Regression-Fälle schützen bestehendes Verhalten;
+- allgemeine Verbesserungsclaims benötigen nach Möglichkeit unabhängige bzw. held-out Evidence;
+- Skilländerung und Änderung des Bewertungsmaßstabs sind getrennte Änderungen.
+
 ## Änderungsgate
 
 Bei wesentlichen Skilländerungen:
 
 ```text
-Änderung
+Failure / neue Evidence
+→ Ursache klassifizieren
+→ Änderungshypothese
 → betroffene Evals identifizieren
+→ Development-, Regression- und Held-out-Rollen trennen
 → vorher/nachher vergleichen
 → Regressionen erklären oder beheben
+→ unabhängiger Skill-/Security-Review soweit relevant
 → Maturity prüfen
 → Changelog
 ```
 
+Kein automatisches Self-Update des aktiven Skills allein aufgrund eines Fehlers oder besseren Scores.
+
 ## Leitgedanke
 
-> Skills werden an Verhalten gemessen, nicht an der Eleganz ihrer Prompt-Prosa.
+> Skills werden an Verhalten gemessen, nicht an der Eleganz ihrer Prompt-Prosa – und Verbesserungen brauchen Evidence, die nicht vollständig aus ihrem eigenen Trainingssignal besteht.

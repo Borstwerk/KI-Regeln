@@ -1,5 +1,5 @@
 schema_version: 2
-last_updated: 2026-09-06
+last_updated: 2026-09-21
 
 maturity_levels: [experimental, candidate, stable, deprecated, retired]
 eval_coverage_levels: [none, partial, core, broad]
@@ -101,7 +101,7 @@ skills:
   - {id: docs-review, area: Dokumentationserstellung, path: Dokumentationserstellung/Skills/docs-review/SKILL.md, maturity: experimental, eval_coverage: partial, purpose: "Dokumentation auf Korrektheit, Drift, Verifikation und Leserfit prüfen.", capabilities: [source-of-truth-access-preferred], related: [technical-writing]}
   - {id: skill-authoring, area: Skill-Engineering, path: Skill-Engineering/Skills/skill-authoring/SKILL.md, maturity: experimental, eval_coverage: partial, purpose: "Neue Agent-Skills nach dem zentralen Skill-Engineering-Standard entwerfen.", capabilities: [repository-read-preferred]}
   - {id: skill-review, area: Skill-Engineering, path: Skill-Engineering/Skills/skill-review/SKILL.md, maturity: experimental, eval_coverage: partial, purpose: "Agent-Skills unabhängig auf Schnitt, Trigger, Verträge, Capabilities und Evals prüfen.", capabilities: [repository-read-preferred], related: [skill-authoring]}
-  - {id: skill-security-review, area: Sicherheit, path: Sicherheit/Skills/skill-security-review/SKILL.md, maturity: experimental, eval_coverage: partial, purpose: "Agent-Skills auf Supply-Chain-, Berechtigungs-, Daten- und External-Action-Risiken prüfen.", capabilities: [repository-read-preferred], related: [skill-review]}
+  - {id: skill-security-review, area: Sicherheit, path: Sicherheit/Skills/skill-security-review/SKILL.md, maturity: experimental, eval_coverage: partial, purpose: "Agent-Skills vor Aktivierung/Freigabe auf Trust-, Supply-Chain-, Berechtigungs-, Daten-, Remote-Dependency- und External-Action-Risiken prüfen.", capabilities: [repository-read-preferred], related: [skill-review, prompt-injection-review, tool-permission-review]}
   - {id: prompt-injection-review, area: Sicherheit, path: Sicherheit/Skills/prompt-injection-review/SKILL.md, maturity: experimental, eval_coverage: partial, purpose: "Externe Inhalte auf Prompt-Injection- und Trust-Boundary-Risiken analysieren.", capabilities: [untrusted-source-access]}
   - {id: tool-permission-review, area: Sicherheit, path: Sicherheit/Skills/tool-permission-review/SKILL.md, maturity: experimental, eval_coverage: partial, purpose: "Tool- und Berechtigungsrechte gegen Least Privilege, Fallbacks und Gates prüfen.", capabilities: [capability-inventory-required], related: [skill-security-review]}
   - {id: inhaltsprovenienz-review, area: Sicherheit, path: Sicherheit/Skills/inhaltsprovenienz-review/SKILL.md, maturity: experimental, eval_coverage: partial, purpose: "Vorhandene Dateien und Inhalte read-only auf belegbare Provenienz-, Metadaten- und Unicode-Signale sowie deren Evidence-Grenzen prüfen.", capabilities: [artifact-inspection-preferred], related: [metadaten-hygiene, natuerliches-schreiben, deutsche-typografie, tool-permission-review]}

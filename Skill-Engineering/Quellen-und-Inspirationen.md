@@ -54,6 +54,77 @@ Daraus stammen insbesondere die allgemeinen Anforderungen an:
 - getrennte Review-Skills;
 - kleine, klar verantwortete Skillbausteine.
 
+## Evidence-getriebene Skill-Evolution
+
+### EvoSkill
+
+Paper:
+
+https://arxiv.org/abs/2603.02766
+
+Repository:
+
+https://github.com/sentient-agi/EvoSkill
+
+Geprüfter Repository-Stand:
+
+- Commit: `36f6f04952293d7054145550c2b9f0b0411bff1c`
+- README-Blob-SHA: `61565ea29a63b42242dbe33d4ba3df3cec752c85`
+- Lizenz am geprüften Stand: Apache-2.0
+
+Methodisch relevant sind Failure Analysis, explizite Änderungskandidaten und getrennte Validierung auf nicht zur Änderung verwendeten Aufgaben.
+
+Nicht übernommen wird autonome Skill-Selbständerung als Freigabemechanismus. In KI-Regeln erzeugt Failure Evidence nur einen reviewbaren Kandidaten.
+
+### SkillClaw
+
+Paper:
+
+https://arxiv.org/abs/2604.08377
+
+Repository:
+
+https://github.com/AMAP-ML/SkillClaw
+
+Geprüfter Repository-Stand:
+
+- Commit: `3938f7537645c961d94498a0a79fc0a977019595`
+- README-Blob-SHA: `9158146e42a17247e15934879f7f5265bdbd6484`
+- Lizenz am geprüften Stand: MIT
+
+Methodisch relevant ist, wiederkehrende Session-/Trajektorien-Signale zu aggregieren, zu deduplizieren und als Input für Skillpflege zu verwenden.
+
+Nicht übernommen werden automatische globale Verteilung oder selbstautorisierte Updates einer gemeinsamen Skill-Library.
+
+### Trajectory Poisoning als Gegenbeleg
+
+Paper:
+
+https://arxiv.org/abs/2608.05563
+
+Die Arbeit untersucht, wie manipulierte Nutzungstrajektorien bei selbst-evolvierenden Skill-Systemen in dauerhafte Instruktionen übergehen können. Methodisch relevant ist deshalb die zusätzliche Trust Boundary zwischen beobachteter Erfahrung und ihrer Promotion in persistente Skillregeln.
+
+KI-Regeln leitet daraus ab:
+
+- Field-/Trajectory-Evidence bleibt untrusted;
+- Wiederholung ist kein Vertrauensbeweis;
+- Provenance und Quellenunabhängigkeit müssen vor Promotion betrachtet werden;
+- autonome Evolution erhält keine eigene Freigabeautorität.
+
+### SkillAudit und verwandte Forschung
+
+Paper:
+
+https://arxiv.org/abs/2606.14239
+
+Methodisch relevant ist der Vergleich mit/ohne Kandidat und die Trennung von Verbesserung und Reparatur, besonders wenn perfekte Ground Truth fehlt.
+
+Ergänzende aktuelle Arbeiten zu Skill-Evolution bestätigen außerdem das Risiko von Drift, Overfitting und unnötigem Skillwachstum. KI-Regeln übernimmt daraus keine Benchmark- oder Framework-Defaults, sondern die Governance-Regel:
+
+> Änderungssignal, Änderungskandidat, unabhängige Evidence und Freigabe bleiben getrennte Rollen.
+
+Diese Paper sind datierte Forschungsquellen und werden nicht künstlich als mutable Upstream-Dependencies registriert.
+
 ## Eigene Synthese
 
 Dieses Repository ergänzt die reine Dateiformatfrage bewusst um:

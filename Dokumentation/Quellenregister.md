@@ -117,6 +117,16 @@ Beispiel:
 
 ## Cadence
 
+### `weekly`
+
+Für Discovery-Quellen mit hoher Änderungsrate:
+
+- aktive Skill-Sammlungen;
+- Security-/Agent-Research-Hubs;
+- wiederkehrende Suchthemen für neue Capabilities und Methoden.
+
+Der wöchentliche Lauf ist **Discovery/Triage**, kein Upstream-Sync.
+
 ### `monthly`
 
 Für Quellen mit höherer Änderungswahrscheinlichkeit:
@@ -136,7 +146,27 @@ Für langsamere lebende Leitfäden:
 
 Der monatliche Pflegejob kann quartalsweise Einträge überspringen, solange sie noch nicht fällig sind.
 
+## Wöchentlicher Discovery-Radar
+
+Der Discovery-Radar liest zuerst den aktuellen `skill-catalog.yml` und danach `radar-sources.yml`.
+
+Ziel:
+
+```text
+neuer Fund
+→ gegen vorhandene Skills / Workflows prüfen
+→ Quelle und Aktualität bewerten
+→ neue Capability oder bessere Methode?
+→ STRONG-CANDIDATE / METHOD-CANDIDATE / OBSERVE / REJECT
+```
+
+Der Radar verändert weder Fachregeln noch `upstream-sources.yml` automatisch.
+
+Ein Fund wird erst nach bewusster lokaler Prüfung zu einem Upstream oder einer lokalen Regel.
+
 ## Monatlicher Upstream-Check
+
+Der monatliche Lauf ist **Maintenance bereits registrierter Quellen**, nicht allgemeine Discovery.
 
 Für `exact-sha`:
 
@@ -174,7 +204,7 @@ relevante Funktion / Terminologie / Empfehlung geändert?
       übernehmen / beobachten / verwerfen
 ```
 
-Der monatliche Radar-Check liest zusätzlich `radar-sources.yml`, um neue Kandidaten außerhalb bereits bekannter Upstreams zu entdecken. Radar-Funde verändern weder `upstream-sources.yml` noch Fachregeln automatisch.
+Neue Skill-/Methodenkandidaten werden im separaten wöchentlichen Discovery-Radar behandelt. Der monatliche Maintenance-Lauf bleibt auf bereits registrierte Upstreams und deren lokale Auswirkungen fokussiert.
 
 ## Keine automatische Synchronisierung
 
