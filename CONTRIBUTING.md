@@ -37,6 +37,20 @@ Keine fremden Texte, Skills, Templates, Tabellen, Codefragmente oder sonstigen A
 - Eine heutige Repository-Root-Lizenz ist kein automatischer Nachweis für einen historischen Blob oder Unterpfad.
 - Unklare Fälle nicht durch automatische Umformulierung als rechtlich geklärt darstellen.
 
+## Medienassets und abweichende Lizenzen
+
+Neue Bilder, Screenshots, Collagen, Audio-/Video-Dateien oder andere Medienassets werden nicht automatisch durch die Root-MIT-Lizenz erfasst.
+
+Vor dem Commit eines neuen Medienassets ist deshalb explizit zu klären und zu dokumentieren:
+
+- Herkunft und Erzeugungsweg;
+- ob Drittmaterial oder geschützte Marken-/Persönlichkeitsrechte betroffen sind;
+- welche Rechte tatsächlich weiterlizenziert werden können;
+- welche konkrete Lizenz für die Datei gelten soll;
+- ob `ASSET-LICENSES.md` und die maschinenlesbare Dateizuordnung in `REUSE.toml` ergänzt werden müssen.
+
+Für KI-generierte Medien ist die KI-Provenienz transparent zu dokumentieren. Eine Lizenzangabe darf nicht als Behauptung formuliert werden, dass rein KI-generierte Bestandteile in jeder Rechtsordnung zwingend urheberrechtlich geschützt sind.
+
 ## Sicherheit und vertrauliche Daten
 
 Keine Secrets, Zugangsdaten, produktiven Connection Strings, vertraulichen internen Inhalte, personenbezogenen Daten, echten Patienten-/Kundendaten oder proprietären Konfigurationen committen.
