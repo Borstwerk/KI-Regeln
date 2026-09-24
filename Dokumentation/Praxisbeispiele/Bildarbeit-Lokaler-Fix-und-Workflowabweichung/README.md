@@ -175,3 +175,10 @@ Genau an dieser Stelle können Pre-Brief, Entitätsbibel, Bildreview und Kontinu
 Das Beispiel bleibt trotzdem bewusst bei der engeren Aussage:
 
 **Praxisbeobachtung statt Wirksamkeitsbeweis.**
+
+## Lizenzhinweis zu den Abbildungen
+
+Die in diesem Praxisbeispiel eingebetteten Bilddateien sind abweichend von der Root-MIT-Lizenz unter **CC BY-SA 4.0** lizenziert, soweit daran lizenzierbare Rechte bestehen. Die Bildausgaben wurden vollständig durch OpenAI-Bildgenerierung erzeugt; Idee, Prompts, Gestaltungsvorgaben, Art Direction, Auswahl und Freigabe wurden menschlich gesteuert.
+
+Die verbindliche Dateiliste, Attribution und Provenienz stehen in [`ASSET-LICENSES.md`](../../../ASSET-LICENSES.md). Die maschinenlesbare Zuordnung steht in [`REUSE.toml`](../../../REUSE.toml).
+
