@@ -1,0 +1,18 @@
+version = 1
+
+# Separate license mapping for the six media assets listed in ASSET-LICENSES.md.
+# This annotation is intentionally limited to those assets and does not by itself
+# claim full REUSE compliance for the complete repository.
+
+[[annotations]]
+path = [
+  "Dokumentation/Praxisbeispiele/Bildarbeit-Lokaler-Fix-und-Workflowabweichung/images/Band15-Lokaler-Fix-01-Ausgangsbild.png",
+  "Dokumentation/Praxisbeispiele/Bildarbeit-Lokaler-Fix-und-Workflowabweichung/images/Band15-Lokaler-Fix-02-Entgleister-Fix.png",
+  "Dokumentation/Praxisbeispiele/Bildarbeit-Lokaler-Fix-und-Workflowabweichung/images/Band15-Lokaler-Fix-03-Neustart-mit-Skills.png",
+  "Dokumentation/Praxisbeispiele/Bildentwicklung-Indiana-Hood-Band-14/images/Band14-Beispiel-Handproblem-repo.jpg",
+  "Dokumentation/Praxisbeispiele/Bildentwicklung-Indiana-Hood-Band-14/images/Band14-Collage.png",
+  "Dokumentation/Praxisbeispiele/Webentwicklung-BorstWerk-Website-POC/images/ergebnis-uebersicht.png",
+]
+precedence = "override"
+SPDX-FileCopyrightText = "2026 KI-Regeln (BorstWerk)"
+SPDX-License-Identifier = "CC-BY-SA-4.0"
