@@ -223,14 +223,21 @@ Der Master-Router steht in [`Dokumentation/Skill-Handbuch.md`](Dokumentation/Ski
 
 ## Public Entry Path und Lizenz
 
-Die Root-Projektlizenz ist MIT und gilt für das projekt-eigene KI-Regeln-Material. Drittmaterial wird dadurch nicht automatisch unter MIT gestellt.
+Die Root-Projektlizenz ist MIT und gilt für das projekt-eigene KI-Regeln-Material, **soweit keine Datei ausdrücklich abweichend lizenziert ist**. Drittmaterial wird dadurch nicht automatisch unter MIT gestellt.
+
+Sechs Bildassets aus den dokumentierten Praxisbeispielen sind ausdrücklich von der MIT License ausgenommen und stehen – soweit daran lizenzierbare Rechte bestehen – unter **CC BY-SA 4.0**. Die Bildausgaben wurden vollständig durch OpenAI-Bildgenerierung erzeugt; Idee, Prompts, Gestaltungsvorgaben, Art Direction, Auswahl und Freigabe wurden menschlich gesteuert. Die genaue Dateiliste, Attribution und Provenienz stehen in [`ASSET-LICENSES.md`](ASSET-LICENSES.md).
+
+Die maschinenlesbare Zuordnung dieser sechs Dateien steht zusätzlich in [`REUSE.toml`](REUSE.toml).
 
 Maßgeblich sind zusätzlich:
 
 - [`ACKNOWLEDGEMENTS.md`](ACKNOWLEDGEMENTS.md) – methodische Referenzräume;
 - [`THIRD-PARTY-NOTICES.md`](THIRD-PARTY-NOTICES.md) – redistribution-relevante Drittmaterial-Notices;
+- [`ASSET-LICENSES.md`](ASSET-LICENSES.md) – separat lizenzierte Medienassets und deren KI-Provenienz;
 - [`Dokumentation/open-source-readiness.yml`](Dokumentation/open-source-readiness.yml) – maschinenlesbarer Readiness-/Release-Gate-Status;
 - [`Dokumentation/Open-Source-Readiness-2026-08-25.md`](Dokumentation/Open-Source-Readiness-2026-08-25.md) – historischer Phase-3-Auditbericht.
+
+Für die in `ASSET-LICENSES.md` aufgeführten Medienassets gilt ausdrücklich: **The MIT License does not apply to these media assets.**
 
 Eine vorhandene Root-`LICENSE` ist keine automatische Veröffentlichungsfreigabe. Der Public-Release-Status wird weiterhin ausschließlich über `Dokumentation/open-source-readiness.yml` bestimmt.
 

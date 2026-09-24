@@ -311,3 +311,10 @@ Auftrag und Kapiteltext lesen
 ```
 
 Für andere Bildaufgaben kann der Ablauf deutlich kürzer, länger oder anders zusammengesetzt sein. Das Beispiel ist ein **Worked Example**, keine normative Pipeline.
+
+## Lizenzhinweis zu den Abbildungen
+
+Die in diesem Praxisbeispiel eingebetteten Bilddateien sind abweichend von der Root-MIT-Lizenz unter **CC BY-SA 4.0** lizenziert, soweit daran lizenzierbare Rechte bestehen. Die Bildausgaben wurden vollständig durch OpenAI-Bildgenerierung erzeugt; Idee, Prompts, Gestaltungsvorgaben, Art Direction, Auswahl und Freigabe wurden menschlich gesteuert.
+
+Die verbindliche Dateiliste, Attribution und Provenienz stehen in [`ASSET-LICENSES.md`](../../../ASSET-LICENSES.md). Die maschinenlesbare Zuordnung steht in [`REUSE.toml`](../../../REUSE.toml).
+

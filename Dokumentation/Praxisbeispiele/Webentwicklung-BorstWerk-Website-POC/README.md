@@ -166,7 +166,7 @@ Im konkreten Proof of Concept entstanden drei zusammengehörige, aber nicht iden
 
 Die gemeinsame visuelle Sprache wurde damit an fachlich unterschiedlichen Seiten gegengeprüft, statt nur auf einer einzelnen Landingpage zu funktionieren.
 
-![Ergebnisübersicht des BorstWerk-Website-POC mit Homepage in Light und Dark Mode sowie E-Rechnung und GoBD-Doku](images/ergebnis-uebersicht.jpg)
+![Ergebnisübersicht des BorstWerk-Website-POC mit Homepage in Light und Dark Mode sowie E-Rechnung und GoBD-Doku](images/ergebnis-uebersicht.png)
 
 Die Abbildung ist eine kuratierte Ergebnisübersicht aus dem bereitgestellten POC-Stand v0.8. Sie zeigt bewusst nur ausgewählte Desktop-Zustände und ist keine vollständige Visual-Verification-Evidence aller getesteten Viewports und Interaktionszustände.
 
@@ -225,3 +225,10 @@ Auftrag verstehen
 ```
 
 Für andere Aufgaben kann dieser Ablauf kürzer, länger oder anders zusammengesetzt sein. Das Beispiel ist ein **Worked Example**, keine normative Pipeline.
+
+## Lizenzhinweis zu den Abbildungen
+
+Die in diesem Praxisbeispiel eingebetteten Bilddateien sind abweichend von der Root-MIT-Lizenz unter **CC BY-SA 4.0** lizenziert, soweit daran lizenzierbare Rechte bestehen. Die Bildausgaben wurden vollständig durch OpenAI-Bildgenerierung erzeugt; Idee, Prompts, Gestaltungsvorgaben, Art Direction, Auswahl und Freigabe wurden menschlich gesteuert.
+
+Die verbindliche Dateiliste, Attribution und Provenienz stehen in [`ASSET-LICENSES.md`](../../../ASSET-LICENSES.md). Die maschinenlesbare Zuordnung steht in [`REUSE.toml`](../../../REUSE.toml).
+
