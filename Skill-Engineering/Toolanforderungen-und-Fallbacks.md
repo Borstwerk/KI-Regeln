@@ -84,6 +84,26 @@ muss Tool X mit Parameter Y verwenden
 
 sofern die konkrete Plattform nicht selbst Gegenstand des Skills ist.
 
+### Portabler Kern und Runtime-Adapter
+
+Modellwahl, konkrete Toolnamen, Turn-Limits, Isolationseinstellungen oder client-spezifische Subagent-/Hook-Konfiguration gehören nicht automatisch in den fachlichen Skill-Kern.
+
+Bevorzugtes Modell:
+
+```text
+Skill-Kern
+→ fachliche Disziplin + Capability-Vertrag
+
+Runtime-Adapter
+→ konkrete Tools + Modell + Limits + Hostmechanik
+```
+
+Ein beobachteter Modellfehler soll nicht reflexartig als allgemeine Skillregel konserviert werden. Zuerst prüfen, ob eine fachliche Invariante fehlt oder lediglich ein host-/modellspezifischer Workaround nötig ist.
+
+Adapter dürfen Sicherheits-, Scope- oder Human-Gates des Kerns nicht abschwächen.
+
+Details: `Portabler-Skill-Kern-und-Runtime-Adapter.md`.
+
 ## Leitgedanke
 
 > Ein portabler Skill beschreibt benötigte Fähigkeiten und ehrliche Fallbacks – nicht eine erfundene Idealumgebung.
