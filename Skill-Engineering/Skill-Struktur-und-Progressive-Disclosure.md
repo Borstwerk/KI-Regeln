@@ -101,10 +101,27 @@ Wo möglich soll die Skilllogik nicht an einen einzigen Agentenclient gebunden w
 Plattformspezifische Details gehören in:
 
 - Compatibility-/Capability-Hinweise;
-- Adapter;
+- Runtime-Adapter oder klar gekapselte Metadaten;
 - Fallbacks;
 
 statt in die fachliche Kernlogik.
+
+### Shared Core statt Client-Kopien
+
+Wenn mehrere Clients dieselbe Arbeitsdisziplin nutzen, bleibt `SKILL.md` die gemeinsame fachliche Source of Truth.
+
+Client- oder modellspezifische Konfiguration wird davon getrennt gehalten, insbesondere:
+
+- Modellrouting;
+- konkrete Tool-Allow-/Deny-Listen;
+- Turn-/Execution-Limits;
+- Isolation/Subagent-Konfiguration;
+- host-spezifische Hooks;
+- temporäre Runtime-Workarounds.
+
+Mehrere fast identische Skillkopien sind zu vermeiden, wenn nur die Laufzeitkonfiguration variiert.
+
+Details: `Portabler-Skill-Kern-und-Runtime-Adapter.md`.
 
 ## Leitgedanke
 
