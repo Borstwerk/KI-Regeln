@@ -24,6 +24,7 @@ Ein guter Skill soll:
 - `Trigger-und-Description-Design.md` – Aktivierungslogik und Near-Miss-Abgrenzung;
 - `Inputs-Outputs-und-Vertraege.md` – erwartete Eingaben, Ausgaben und Evidence;
 - `Toolanforderungen-und-Fallbacks.md` – Capabilities, Rechte und degradierte Betriebsmodi;
+- `Portabler-Skill-Kern-und-Runtime-Adapter.md` – Trennung fachlicher Skilllogik von client-/modell-/runtime-spezifischer Konfiguration;
 - `Skill-Komposition-und-Abhaengigkeiten.md` – Beziehungen zwischen Skills;
 - `Skill-Review-und-Evals.md` – Review- und Evaluationsregeln;
 - `Skill-Lifecycle-und-Deprecation.md` – Reife, Änderung und Ablösung;
