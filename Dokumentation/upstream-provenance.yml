@@ -1,6 +1,6 @@
 schema_version: 2
 source_registry: Dokumentation/upstream-sources.yml
-last_reviewed: '2026-09-21'
+last_reviewed: '2026-09-30'
 sources:
 - source_id: guillaumemeyer-watermarks-remover-remove-ai-marks
   reviewed_at: 2026-09-06
@@ -2082,3 +2082,111 @@ sources:
     source_path: README.md
     observed_ref: main
     observed_blob_sha: 9158146e42a17247e15934879f7f5265bdbd6484
+
+- source_id: addyosmani-agent-skills-portable-runtime-config
+  reviewed_at: '2026-09-30'
+  repository_commit: 2686b620fc1fed2e8f60c704839c766b8594c6b6
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence:
+  - The source contributes the general separation between portable skill logic and client-specific runtime controls.
+  - KI-Regeln independently generalizes this into a capability-oriented core/runtime-adapter boundary and deliberately avoids copying vendor field mappings or host-specific defaults.
+  - No upstream runtime, configuration generator or expression is redistributed.
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: MIT
+  license_source: same-state root LICENSE
+  license_source_commit_or_ref: 2686b620fc1fed2e8f60c704839c766b8594c6b6
+  license_path: LICENSE
+  license_blob_sha: d67778ada6b9cda6227e9130da182c13e73c8b2e
+  path_specific_license_notes:
+  - Same-state root MIT LICENSE was verified; local use is concepts/methods-only and redistribution permission is not relied on.
+  license_status_at_observation: verified-at-snapshot
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence:
+    artifact_declarations: []
+    same_state_files:
+    - path: LICENSE
+      blob_sha: d67778ada6b9cda6227e9130da182c13e73c8b2e
+      spdx: MIT
+    notes:
+    - The observed advanced configuration blob d06a87b7cec0c657ee321fbcd8d910d074ee5954 was verified at repository commit 2686b620fc1fed2e8f60c704839c766b8594c6b6.
+  source_snapshot:
+    repository: addyosmani/agent-skills
+    source_path: docs/advanced-per-agent-configuration.md
+    observed_ref: main
+    observed_blob_sha: d06a87b7cec0c657ee321fbcd8d910d074ee5954
+
+- source_id: addyosmani-agent-skills-eval-ratchet
+  reviewed_at: '2026-09-30'
+  repository_commit: 2686b620fc1fed2e8f60c704839c766b8594c6b6
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence:
+  - The source contributes a deterministic routing-eval tier and a floor that fails when measured routing quality drops below the registered baseline.
+  - KI-Regeln independently generalizes this into metric-agnostic ratchet governance that requires comparable population, metric semantics and runtime evidence.
+  - The upstream TF-IDF implementation, numeric thresholds and host-specific behavioral runner are deliberately not adopted as universal defaults.
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: MIT
+  license_source: same-state root LICENSE
+  license_source_commit_or_ref: 2686b620fc1fed2e8f60c704839c766b8594c6b6
+  license_path: LICENSE
+  license_blob_sha: d67778ada6b9cda6227e9130da182c13e73c8b2e
+  path_specific_license_notes:
+  - Same-state root MIT LICENSE was verified; local use is concepts/methods-only and redistribution permission is not relied on.
+  license_status_at_observation: verified-at-snapshot
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence:
+    artifact_declarations: []
+    same_state_files:
+    - path: LICENSE
+      blob_sha: d67778ada6b9cda6227e9130da182c13e73c8b2e
+      spdx: MIT
+    notes:
+    - The observed eval guidance blob 4f501cdb0da265812458c43f2bc433b056fb357b was verified at repository commit 2686b620fc1fed2e8f60c704839c766b8594c6b6.
+  source_snapshot:
+    repository: addyosmani/agent-skills
+    source_path: evals/README.md
+    observed_ref: main
+    observed_blob_sha: 4f501cdb0da265812458c43f2bc433b056fb357b
+
+- source_id: ag1rin-skillguard-readme
+  reviewed_at: '2026-09-30'
+  repository_commit: 39dd38c5d507fdcf5c4536a72361f692f58b8559
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence:
+  - The source contributes package-wide discovery, static scanning of companion files, machine-readable reporting, CI gating and scan-state fingerprinting as methodological inputs.
+  - KI-Regeln independently combines those ideas with semantic review, provenance, capability analysis and explicit admission; scanner scores are not treated as security authority.
+  - No scanner implementation, regex corpus, thresholds or executable upstream material is copied or required at runtime.
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: MIT
+  license_source: same-state root LICENSE
+  license_source_commit_or_ref: 39dd38c5d507fdcf5c4536a72361f692f58b8559
+  license_path: LICENSE
+  license_blob_sha: 1907fc0a62eef70b511b8702c4bbc42b9bda6fbc
+  path_specific_license_notes:
+  - Same-state root MIT LICENSE was verified; local use is concepts/methods-only and redistribution permission is not relied on.
+  license_status_at_observation: verified-at-snapshot
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence:
+    artifact_declarations: []
+    same_state_files:
+    - path: LICENSE
+      blob_sha: 1907fc0a62eef70b511b8702c4bbc42b9bda6fbc
+      spdx: MIT
+    notes:
+    - The observed README blob a842be867a6369336d330eabc4d295bbbcebcd04 was verified at repository commit 39dd38c5d507fdcf5c4536a72361f692f58b8559.
+  source_snapshot:
+    repository: Ag1rin/SkillGuard
+    source_path: README.md
+    observed_ref: main
+    observed_blob_sha: a842be867a6369336d330eabc4d295bbbcebcd04
