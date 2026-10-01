@@ -1,16 +1,42 @@
-# ChatGPT-Funktionen und Lernwerkzeuge
+# ChatGPT-Befehle, Lernwerkzeuge und interaktive Funktionen
 
 Stand: 2026-10-01
 
 ## Zweck
 
-Diese Seite sammelt **produktseitige ChatGPT-Funktionen, Shortcuts und interaktive Lernwerkzeuge**, die beim Lernen, Wiederholen, Visualisieren und Prüfen von Wissen helfen können.
+Diese Seite ist eine **praktische Referenz für Befehle, Shortcuts, Skills und interaktive Werkzeuge in ChatGPT**.
 
-Sie sind **keine KI-Regeln-Skills**.
+Sie beantwortet vier Fragen:
 
-KI-Regeln beschreibt wiederverwendbare Arbeitsdisziplinen. Diese Seite beantwortet dagegen:
+1. Was gibt es?
+2. Was macht es?
+3. Wann ist es nützlich?
+4. Wie rufe ich es auf?
 
-> Welche interaktiven Werkzeuge stellt ChatGPT selbst aktuell bereit und wie kann ich sie sinnvoll fürs Lernen einsetzen?
+Die hier beschriebenen Produktfunktionen sind **keine KI-Regeln-Skills**. KI-Regeln beschreibt wiederverwendbare Arbeitsdisziplinen; diese Seite dokumentiert Werkzeuge, die ChatGPT selbst oder installierte/aktivierte Skills und Plugins bereitstellen.
+
+## Wichtig: Nicht jeder Slash-Befehl ist gleich
+
+Das ChatGPT-Eingabefeld kann mehrere Arten von Einträgen zusammen anzeigen:
+
+- offizielle App-/Desktop-Slash-Commands;
+- account- oder rolloutabhängige Lernshortcuts;
+- aktivierte Skills;
+- benutzerdefinierte Prompts;
+- Plugins, die über `@` aufgerufen werden;
+- reine Prompt-Kürzel, die nur wie Slash-Befehle aussehen.
+
+OpenAI dokumentiert ausdrücklich:
+
+- `/` öffnet beziehungsweise filtert die aktuell verfügbare Command-Liste;
+- verfügbare Slash Commands können von Umgebung und Zugriff abhängen;
+- aktivierte Skills können ebenfalls in der Slash-Command-Liste erscheinen;
+- benutzerdefinierte Prompts können als `/prompts:<name>` auftauchen;
+- auf ChatGPT Web gilt die dort tatsächlich angezeigte Composer-Liste; Desktop-/Codex-Befehle sind nicht automatisch identisch mit Web.
+
+Deshalb ist die eigene Oberfläche immer die beste Antwort auf:
+
+> Welche Befehle kann **ich hier gerade** wirklich benutzen?
 
 ## Statusklassen
 
@@ -18,246 +44,766 @@ KI-Regeln beschreibt wiederverwendbare Arbeitsdisziplinen. Diese Seite beantwort
 |---|---|
 | `DOCUMENTED` | durch eine aktuelle OpenAI-Primärquelle dokumentiert |
 | `UI-OBSERVED` | in einer aktuellen ChatGPT-Oberfläche beobachtet, aber nicht als universell verfügbar dokumentiert |
-| `PROMPT-SHORTCUT` | nur eine nützliche Kurzschreibweise/Community-Konvention, kein belastbar dokumentierter Produktbefehl |
+| `CONDITIONAL` | offiziell beschrieben, aber nur in bestimmten Clients, Accounts oder Rollouts verfügbar |
+| `PLUGIN` | installierbares/aktivierbares Werkzeug, meist über `@` |
+| `PROMPT-SHORTCUT` | nützliche Kurzschreibweise, aber kein belegter Produktbefehl |
 | `UNVERIFIED` | aktueller Produktstatus nicht ausreichend belegt |
 
-Wichtig:
+---
 
-> Slash-Befehle und aktivierte Skills können je nach Client, Account, Plan, Experiment und verfügbarer Umgebung unterschiedlich sein.
+# 1. Lernen und visuelles Verstehen
 
-Die verlässlichste aktuelle Sicht auf die eigene Oberfläche ist deshalb:
+Diese Werkzeuge sind besonders interessant für Schule, Studium, Weiterbildung und Prüfungsvorbereitung.
 
-```text
-im Chat-Eingabefeld "/" tippen
-→ angebotene Befehle prüfen
-→ nur dort sichtbare Befehle als für diese Umgebung verfügbar behandeln
-```
+## Übersicht
 
-In unterstützten Oberflächen können aktivierte Skills ebenfalls in der Slash-Command-Liste erscheinen. Die konkrete Liste ist deshalb keine dauerhaft universelle API.
+| Aufruf | Werkzeug | Wofür? | Status |
+|---|---|---|---|
+| `/flashcards` | Lernkarten | Fakten, Begriffe, Definitionen, Vokabeln | `UI-OBSERVED` · Funktion `DOCUMENTED` |
+| `/quiz` / Quizfragen | Quiz | aktives Abrufen, Wissenslücken finden | `CONDITIONAL` |
+| `/sketchnodes` | Sketchnotes | Thema als visuelle Notizen mit Struktur | `UI-OBSERVED` |
+| `/mindmaps` | Mindmap | Beziehungen und Hierarchien verstehen | `UI-OBSERVED` |
+| `/comicnodes` | Lerncomic | Ablauf oder Konzept bildhaft erzählen | `UI-OBSERVED` |
+| `@study` | Lernmodus | schrittweise lernen statt Antwort bekommen | `DOCUMENTED` |
+| `@Visualize` | interaktive Visualisierung | Diagramme, Maps, Rechner, Simulationen | `CONDITIONAL` |
+| `@MindMap` | MindMap-Plugin | interaktive, zoombare Mindmaps | `PLUGIN` |
 
-## Lernwerkzeuge
+Die `UI-OBSERVED`-Einträge sind bewusst nicht als universelle ChatGPT-API dokumentiert. Sie wurden in aktuellen ChatGPT-Oberflächen beobachtet beziehungsweise können durch aktivierte Skills/Experimente in der Slash-Liste auftauchen.
 
-### Lernkarten / Flashcards
+## /flashcards — Lernkarten
 
-**Status:** `DOCUMENTED` für die Funktion · Slash-Shortcut abhängig von Oberfläche
+**Wofür**
 
-Typischer Shortcut in unterstützten Oberflächen:
+- Definitionen;
+- Vokabeln;
+- Formeln;
+- Fakten;
+- Frage-Antwort-Paare;
+- Prüfungsvorbereitung.
+
+**Beispiel**
 
 ```text
 /flashcards
+
+Erstelle aus diesem Kapitel 20 Lernkarten.
+Eine Karte = genau eine prüfbare Information.
 ```
 
-Alternativ immer verständlich:
+Oder ohne Shortcut:
 
 ```text
 Erstelle mir Lernkarten aus diesen Notizen.
 ```
 
-Geeignet für:
+**Was ChatGPT aktuell kann**
 
-- Begriffe und Definitionen;
-- Fakten;
-- Vokabeln;
-- Formeln und Zuordnungen;
-- prüfbare Frage-Antwort-Paare;
-- Wiederholung aus hochgeladenen Lernunterlagen.
+Die interaktive Flashcard-Funktion ist offiziell dokumentiert:
 
-ChatGPT kann interaktive Lernkarten erzeugen, Karten umdrehen, bekannte/unbekannte Karten markieren und Kartensätze in der Bibliothek ablegen.
+- Karten umdrehen;
+- bekannte/unbekannte Karten markieren;
+- falsch beantwortete Karten erneut üben;
+- Karten mischen;
+- Kartensätze in der Bibliothek speichern;
+- Karten nachträglich ergänzen oder bearbeiten.
 
-### Quiz
+**Wann besonders gut**
 
-**Status:** `DOCUMENTED` für die Funktion · Slash-Shortcut nicht als universell dokumentiert
+Wenn einzelne Informationen zuverlässig abrufbar sein müssen.
 
-Beispiel:
+---
+
+## Quiz / Quizfragen
+
+**Wofür**
+
+- aktives Abrufen;
+- Prüfungssimulation;
+- Wissenslücken;
+- Transferfragen;
+- Verständnis statt Wiedererkennen.
+
+OpenAI dokumentiert, dass manche Accounts oder Apps eigene Lernshortcuts wie **Quizzes** anzeigen können. Die genaue Shortcut-Bezeichnung kann variieren.
+
+**Beispiel**
 
 ```text
-Quiz mich zu diesem Kapitel. Eine Frage nach der anderen. Erkläre Fehler erst nach meiner Antwort.
+Quiz mich zu diesem Kapitel.
+Eine Frage nach der anderen.
+Warte auf meine Antwort.
+Erkläre Fehler erst danach.
 ```
 
-Geeignet für:
+Für höheren Anspruch:
 
-- aktives Abrufen statt bloßes Wiederlesen;
-- Prüfungsvorbereitung;
-- Erkennen von Wissenslücken;
-- Wiederholung nach Lernkarten;
-- Transferfragen statt reinem Faktenabfragen.
+```text
+Stell mir 10 Fragen.
+4 Faktenfragen
+3 Verständnisfragen
+3 Transferfragen
 
-### Sketchnotes / visuelle Lernnotizen
+Bewerte erst nach meiner Antwort.
+```
 
-**Status:** `UI-OBSERVED` für `/sketchnodes`; derzeit keine belastbare öffentliche Primärdokumentation für universelle Verfügbarkeit
+---
 
-In unterstützten Oberflächen kann beispielsweise erscheinen:
+## /sketchnodes — visuelle Sketchnotes
+
+**Wofür**
+
+- ein Thema schnell überblicken;
+- Zusammenhänge sichtbar machen;
+- Text in visuelle Lernnotizen verwandeln;
+- vor dem Auswendiglernen erstmal verstehen.
+
+**Beispiel**
 
 ```text
 /sketchnodes
+
+Erkläre den Blutkreislauf.
+Zeige Hauptstationen, Pfeile und kurze Merksätze.
 ```
 
-Sinnvoll für:
+**Besonders sinnvoll**
 
-- visuelle Zusammenfassungen;
-- Beziehungen zwischen Konzepten;
-- Lernstoff mit vielen Abhängigkeiten;
-- Überblick vor Detaillernen;
-- Kombination aus Text, Symbolen und Struktur.
+Bei Stoff, der gleichzeitig Struktur und einzelne Begriffe enthält.
 
-Da solche UI-Shortcuts experimentell oder accountabhängig sein können, vor Nutzung im aktuellen Slash-Menü prüfen.
+**Status**
 
-### Visualize
+Aktuell als UI-/Skill-Shortcut beobachtet; keine belastbare öffentliche Primärquelle garantiert den Befehl für alle Accounts.
+
+---
+
+## /mindmaps — Mindmap
+
+**Wofür**
+
+- Oberthema → Unterthemen;
+- Ursache/Wirkung;
+- Kapitelstruktur;
+- Konzeptbeziehungen;
+- Brainstorming;
+- große Stoffmengen vorstrukturieren.
+
+**Beispiel**
+
+```text
+/mindmaps
+
+Erstelle eine Mindmap zur Photosynthese.
+Hauptzweige:
+- Voraussetzungen
+- Ablauf
+- Produkte
+- Bedeutung
+- typische Prüfungsfragen
+```
+
+**Lerntipp**
+
+Mindmap zuerst für das **Verstehen**, danach Flashcards für das **Abrufen**.
+
+```text
+Mindmap
+→ schwache Knoten erkennen
+→ daraus Flashcards bauen
+→ Quiz
+```
+
+**Status**
+
+Als UI-/Skill-Shortcut beobachtet; kann account-, rollout- oder skillabhängig sein.
+
+---
+
+## /comicnodes — Lernstoff als Comic
+
+**Wofür**
+
+- Abläufe;
+- Ursache/Wirkung;
+- historische Ereignisse;
+- biologische Prozesse;
+- abstrakte Konzepte mit handelnden Elementen;
+- Stoff, den man sich über eine Geschichte besser merkt.
+
+**Beispiel**
+
+```text
+/comicnodes
+
+Erkläre Mitose als kurzen Lerncomic.
+Jede Phase soll ein eigenes Panel bekommen.
+Unter jedem Panel: ein korrekter Merksatz.
+```
+
+Oder:
+
+```text
+/comicnodes
+
+Erkläre Angebot und Nachfrage als Gespräch
+zwischen Verkäufer, Käufer und Marktpreis.
+```
+
+**Stärke**
+
+Narrative und Bilder erzeugen zusätzliche Erinnerungsanker.
+
+**Grenze**
+
+Ein Comic ist eine Erklärungsschicht, keine Primärquelle. Fachliche Vereinfachungen gegen Lernmaterial prüfen.
+
+**Status**
+
+Als UI-/Skill-Shortcut beobachtet; derzeit keine öffentliche OpenAI-Dokumentation gefunden, die universelle Verfügbarkeit garantiert.
+
+---
+
+## @study — Lernmodus
 
 **Status:** `DOCUMENTED`
 
-Aktueller Einstieg:
+Auf ChatGPT Web:
+
+```text
+@study
+```
+
+eingeben und **Study / Lernen** aus den Vorschlägen wählen.
+
+Alternativ:
+
+```text
+chatgpt.com/studymode
+```
+
+Der Lernmodus ist dafür gedacht, nicht sofort nur die Endantwort auszugeben.
+
+Er kann:
+
+- Fragen stellen;
+- schrittweise Hinweise geben;
+- Vorwissen berücksichtigen;
+- Verständnis überprüfen;
+- hochgeladene Notizen/PDFs einbeziehen;
+- Quizfragen erstellen;
+- Karteikarten-artige Wiederholung durchführen.
+
+**Beispiel**
+
+```text
+@study
+
+Ich lerne SQL-Joins.
+Frag zuerst mein Vorwissen ab.
+Erkläre dann nur die Lücken.
+Gib mir anschließend 5 Aufgaben.
+```
+
+---
+
+## @Visualize — interaktive Visualisierung
+
+**Status:** `CONDITIONAL`
+
+OpenAI beschreibt Visualizations als Preview. Je nach Plan, Plattform, Account und Workspace kann es fehlen.
+
+Aufruf:
 
 ```text
 @Visualize
 ```
 
-Danach die gewünschte interaktive Visualisierung beschreiben.
+**Kann geeignet sein für**
+
+- Diagramme;
+- Maps;
+- Rechner;
+- Simulationen;
+- interaktive Erklärungen;
+- veränderbare Parameter.
+
+**Beispiel**
+
+```text
+@Visualize
+
+Zeige mir interaktiv,
+wie sich Zins, Laufzeit und Sparrate
+auf das Endkapital auswirken.
+```
+
+Oder:
+
+```text
+@Visualize
+
+Visualisiere den Wasserkreislauf
+mit klickbaren Stationen.
+```
+
+---
+
+## @MindMap — optionales MindMap-Plugin
+
+Im ChatGPT-Plugin-Verzeichnis ist aktuell ein Plugin **MindMap** verfügbar.
+
+Aufruf nach Installation:
+
+```text
+@MindMap
+```
+
+Beispiel:
+
+```text
+@MindMap Visualise deep learning topics
+```
+
+Es erzeugt interaktive, ein-/ausklappbare Mindmaps mit Pan/Zoom und erklärbaren Knoten.
+
+Das ist von einem eingebauten Slash-Shortcut wie `/mindmaps` zu unterscheiden:
+
+```text
+/mindmaps
+→ account-/skillabhängiger Shortcut
+
+@MindMap
+→ konkret installiertes Plugin
+```
+
+---
+
+# 2. Offizielle ChatGPT-/Desktop-Slash-Commands
+
+OpenAI dokumentiert für die Desktop-/Developer-Oberflächen eine Reihe echter Slash Commands.
+
+Wichtig:
+
+> ChatGPT Web besitzt eine eigene Composer-Command-Liste. Nicht jeder Desktop-/Codex-Befehl muss dort erscheinen.
+
+## Planung und längere Aufgaben
+
+### /plan
+
+Planmodus für mehrschrittige Aufgaben.
+
+```text
+/plan
+```
+
+Sinnvoll vor:
+
+- größeren Codingaufgaben;
+- Migrationen;
+- Rechercheprojekten;
+- komplexen Dokumenten;
+- Aufgaben mit mehreren Abhängigkeiten.
+
+### /goal
+
+Setzt ein persistentes Ziel, auf das ChatGPT hinarbeitet.
+
+OpenAI empfiehlt, das Ziel bei Bedarf zuerst mit `/plan` zu formen.
+
+```text
+/plan
+→ Plan klären
+/goal
+→ Ziel als laufende Aufgabe setzen
+```
+
+### /side
+
+Öffnet einen temporären Nebenchat, ohne den Hauptfaden zu unterbrechen.
+
+Praktisch für:
+
+- Zwischenfrage;
+- Begriff klären;
+- Alternative prüfen;
+- kleinen Seitentest durchführen.
+
+### /compact
+
+Komprimiert den Kontext eines langen Chats.
+
+Nützlich, wenn:
+
+- ein Chat sehr lang geworden ist;
+- viel alter Arbeitskontext vorhanden ist;
+- der Hauptstand erhalten, aber Ballast reduziert werden soll.
+
+---
+
+## Modell und Verhalten
+
+### /model
+
+Modell für den aktuellen Chat auswählen.
+
+### /reasoning
+
+Reasoning-/Thinking-Aufwand wählen, wenn verfügbar.
+
+### /personality
+
+Antwortstil/Personality auswählen, wenn Modell und Oberfläche es unterstützen.
+
+### /fast
+
+Verfügbaren Fast-Service-Tier ein-/ausschalten.
+
+---
+
+## Projekte, Chats und Arbeitskontext
+
+### /project
+
+Projekt für neue Chats wählen.
+
+### /task
+
+Chat ohne Projekt starten.
+
+### /fork
+
+Aktuellen Chat in einen neuen Chat beziehungsweise Worktree verzweigen.
+
+Praktisch, wenn zwei Lösungswege unabhängig weiterverfolgt werden sollen.
+
+### /worktree
+
+Arbeit in einem neuen Git-Worktree starten, wenn diese Developer-Funktion verfügbar ist.
+
+### /local
+
+Chat im ausgewählten lokalen Projekt ausführen.
+
+### /cloud
+
+Chat in der Cloud ausführen, wenn verfügbar.
+
+### /cloud-environment
+
+Cloud-Umgebung auswählen.
+
+### /ide-context
+
+Geteilten IDE-Kontext an-/ausschalten.
+
+---
+
+## Review und Entwicklung
+
+### /review
+
+Startet Code-Review-Modus.
 
 Geeignet für:
 
-- Systeme und Zusammenhänge;
-- Prozesse;
-- räumliche oder zeitliche Beziehungen;
-- interaktive Erklärungen;
-- komplexe Konzepte, die sich schlecht nur als Fließtext lernen lassen.
+- uncommittete Änderungen;
+- Vergleich mit einem Base-Branch;
+- gezieltes Diff-Review.
 
-## Sinnvoller Lernworkflow
+### /init
 
-Die Werkzeuge ergänzen sich besser, als wenn man nur eines davon benutzt.
+Erzeugt ein `AGENTS.md`-Grundgerüst für das aktuelle Projekt.
 
-### 1. Verstehen
+### /mcp
+
+Zeigt MCP-Status und verbundene Server.
+
+---
+
+## Status und Steuerung
+
+### /status
+
+Zeigt unter anderem:
+
+- Chat-ID;
+- Kontextnutzung;
+- Rate Limits.
+
+### /memories
+
+Steuert, ob der Chat Erinnerungen verwenden oder erzeugen darf, wenn Memories verfügbar ist.
+
+### /feedback
+
+Öffnet den Feedbackdialog.
+
+### /approve
+
+Erlaubt einen Retry nach einer automatischen Review-Ablehnung, wenn dieser Mechanismus aktiv ist.
+
+---
+
+# 3. Skills, Plugins und eigene Commands
+
+## $ — Skills direkt aufrufen
+
+OpenAI dokumentiert:
 
 ```text
-Sketchnotes / Visualize
-→ Struktur und Zusammenhänge sichtbar machen
+$
 ```
 
-### 2. Verdichten
+öffnet beziehungsweise adressiert Skills.
+
+Aktivierte Skills können zusätzlich in der Slash-Command-Liste erscheinen.
+
+Das erklärt, warum Nutzer in ihrem `/`-Menü Befehle sehen können, die in der allgemeinen Slash-Command-Dokumentation nicht auftauchen.
+
+Beispielprinzip:
 
 ```text
-Zusammenfassung
-→ Kernbegriffe und Regeln identifizieren
+$<skill>
 ```
 
-### 3. Enkodieren
+Die konkret verfügbaren Skills hängen von Account, Workspace und aktivierten Funktionen ab.
+
+## @ — Plugins und Werkzeuge
+
+Beispiele:
 
 ```text
-Flashcards
-→ atomare, prüfbare Wissenseinheiten erzeugen
+@study
+@Visualize
+@MindMap
+@Canva
+@Miro
 ```
 
-### 4. Abrufen
+`@` adressiert ein konkretes verfügbares Werkzeug beziehungsweise Plugin.
+
+## /prompts:<name>
+
+Benutzerdefinierte Prompts können laut OpenAI als
 
 ```text
-Quiz
-→ Wissen ohne Vorlage reproduzieren
+/prompts:<name>
 ```
 
-### 5. Lücken reparieren
+in der Command-Liste auftauchen.
+
+Damit lassen sich eigene wiederkehrende Arbeitsweisen als Kurzaufruf verfügbar machen.
+
+---
+
+# 4. Prompt-Shortcuts: nützlich, aber keine Produktbefehle
+
+Im Internet kursieren hunderte Einträge wie:
 
 ```text
-falsch beantwortete Fragen
-→ gezielte Erklärung
-→ neue oder überarbeitete Lernkarten
-→ erneutes Quiz
+/eli5
+/mindmap
+/flowchart
+/timeline
+/cheatsheet
+/teacher
+/tutor
+/roadmap
+/diagram
+/anatomy
+/xray
+```
+
+Viele davon sind **keine offiziellen ChatGPT-Befehle**.
+
+Sie funktionieren häufig trotzdem, weil das Modell versteht:
+
+```text
+/mindmap Thema
+≈
+"Stelle das Thema als Mindmap dar."
+```
+
+Solche Kürzel sind als persönliche Prompt-Sprache völlig legitim.
+
+Aber:
+
+```text
+funktioniert als Prompt
+≠
+eingebaute Produktfunktion
+```
+
+Für KI-Regeln werden solche Einträge nur als `PROMPT-SHORTCUT` geführt, solange keine belastbare Produkt- oder UI-Evidence vorliegt.
+
+---
+
+# 5. Welches Lernwerkzeug für welchen Zweck?
+
+| Ziel | Werkzeug |
+|---|---|
+| Stoff erstmal begreifen | `@study` |
+| Gesamtstruktur erkennen | `/mindmaps` |
+| visuell und locker verstehen | `/sketchnodes` |
+| Ablauf/Geschichte einprägen | `/comicnodes` |
+| einzelne Fakten behalten | `/flashcards` |
+| Wissenslücken finden | Quiz |
+| Zusammenhänge interaktiv erkunden | `@Visualize` |
+| editierbare Mindmap erzeugen | `@MindMap` |
+| langen Lernchat entlasten | `/compact` |
+| Lernprojekt in Schritte zerlegen | `/plan` |
+
+---
+
+# 6. Empfohlener Lernworkflow
+
+## Phase 1 – Orientierung
+
+```text
+@study
+oder
+/mindmaps
+```
+
+Ziel: Stoffstruktur verstehen.
+
+## Phase 2 – visuelle Verankerung
+
+```text
+/sketchnodes
+oder
+/comicnodes
+```
+
+Ziel: zusätzliche Bilder, Beziehungen und Geschichten im Gedächtnis erzeugen.
+
+## Phase 3 – Abruftraining
+
+```text
+/flashcards
+```
+
+Ziel: einzelne Informationen aktiv erinnern.
+
+## Phase 4 – Prüfung
+
+```text
+Quiz mich.
+```
+
+Ziel: echte Wissenslücken sichtbar machen.
+
+## Phase 5 – Reparatur
+
+```text
+Erkläre nur die falsch beantworteten Themen.
+Erstelle danach neue Karten nur für meine Lücken.
 ```
 
 Kurz:
 
 ```text
 verstehen
-→ verdichten
+→ strukturieren
+→ visualisieren
 → erinnern
 → prüfen
-→ Lücken schließen
+→ Lücken reparieren
 ```
 
-## Gute Lernkarten statt Kartenfriedhof
+---
 
-Eine Lernkarte sollte möglichst **eine prüfbare Information** enthalten.
+# 7. Gute Lernkarten statt Kartenfriedhof
 
-Bevorzugen:
+Eine Karte sollte möglichst **eine prüfbare Information** enthalten.
+
+Gut:
 
 ```text
-Frage: Was ist der Primärschlüssel einer relationalen Tabelle?
-Antwort: Ein Attribut oder Attributsatz, der jeden Datensatz eindeutig identifiziert.
+Frage:
+Was ist ein Primärschlüssel?
+
+Antwort:
+Ein Attribut oder Attributsatz,
+der jeden Datensatz eindeutig identifiziert.
 ```
 
-Vermeiden:
+Schlecht:
 
 ```text
-Erkläre Primärschlüssel, Fremdschlüssel, Normalisierung,
-Transaktionen und ACID vollständig.
+Erkläre Primärschlüssel, Fremdschlüssel,
+Normalisierung, Transaktionen und ACID.
 ```
 
-Das ist eher eine kleine Klausur als eine Karte.
+Das ist eine kleine Klausur, keine Lernkarte.
 
-Bei prüfungsrelevanten oder fachlich kritischen Inhalten sollten Karten gegen die ursprünglichen Lernunterlagen oder andere verbindliche Quellen geprüft werden.
+Bei prüfungsrelevanten Inhalten Karten gegen die ursprünglichen Lernunterlagen prüfen.
 
-## Produktbefehle sind keine Prompt-Magie
+---
 
-Im Internet kursieren viele Listen mit Einträgen wie:
+# 8. Pflege dieser Liste
+
+Diese Seite beschreibt **Produktoberfläche**, keine dauerhaft stabile Protokollspezifikation.
+
+Bei neuen Einträgen:
+
+1. im aktuellen `/`-, `$`- oder `@`-Menü prüfen;
+2. nach OpenAI-Primärdokumentation suchen;
+3. zugrunde liegende Funktion und konkreten Shortcut getrennt bewerten;
+4. Status setzen;
+5. Beispielaufruf ergänzen;
+6. Verfügbarkeitsgrenzen benennen.
+
+Wenn ein Befehl nur in einem Account beobachtet wurde:
 
 ```text
-/eli5
-/mindmap
-/teacher
-/study
-/rootcause
-/cheatsheet
+UI-OBSERVED
 ```
 
-Solche Kürzel können als **Prompt-Shortcuts** praktisch sein, sind aber nicht automatisch echte ChatGPT-Produktbefehle.
+statt ihn als universell verfügbar auszugeben.
 
-Deshalb gilt:
+Wenn ein Eintrag nur als verständliches Promptkürzel funktioniert:
 
 ```text
-im Slash-Menü vorhanden
-→ produktseitig verfügbar in dieser Umgebung
-
-nur irgendwo im Internet aufgelistet
-→ höchstens Prompt-Shortcut, bis primär belegt
+PROMPT-SHORTCUT
 ```
 
-KI-Regeln sollte diese beiden Klassen nicht vermischen.
+---
 
-## Quellen
+# Quellen
 
-### OpenAI – Slash Commands
+## OpenAI – Slash commands
 
 https://learn.chatgpt.com/docs/reference/slash-commands
 
-Relevante Aussagen am geprüften Stand:
+Dokumentiert die Slash-Command-Liste der Desktop-App sowie `/`, `$`, aktivierte Skills und `/prompts:<name>`.
 
-- verfügbare Slash Commands hängen von Umgebung und Zugriff ab;
-- `/` öffnet beziehungsweise filtert die aktuelle Command-Liste;
-- aktivierte Skills können in der Slash-Command-Liste erscheinen.
+## OpenAI – Developer commands
 
-### OpenAI – Flashcards in ChatGPT
+https://learn.chatgpt.com/docs/developer-commands
+
+Stellt ausdrücklich klar, dass ChatGPT Web eine eigene Composer-Command-Liste besitzt und Desktop-/CLI-/Codex-Commands nicht automatisch für Web gelten.
+
+## OpenAI – Study mode
+
+https://help.openai.com/en/articles/11780217-using-study-mode-in-chatgpt
+
+Dokumentiert `@study`, Lernmodus, Quiz-/Übungsfunktionen und accountabhängige Lernshortcuts.
+
+## OpenAI – Flashcards in ChatGPT
 
 https://help.openai.com/en/articles/20001533-flashcards-in-chatgpt
 
-Bestätigt die interaktive Lernkartenfunktion, Nutzung aus eigenen Notizen und Speicherung in der ChatGPT-Bibliothek.
+Dokumentiert die interaktive Flashcard-Funktion.
 
-### OpenAI Education – Flashcards, quizzes and Visualize
+## OpenAI – Visualizations
 
-https://edunewsletter.openai.com/p/the-edu-prompt-issue-6
+https://learn.chatgpt.com/docs/visualizations
 
-Bestätigt aktuelle interaktive Flashcards und Quizzes sowie `@Visualize` als Lernwerkzeug.
+Dokumentiert `@Visualize` und dessen rolloutabhängige Verfügbarkeit.
 
-## Pflege
+## ChatGPT Plugin Directory – MindMap
 
-Diese Seite beschreibt **Produktoberfläche**, keine stabile Protokollspezifikation.
-
-Deshalb bei Änderungen:
-
-1. aktuelle OpenAI-Primärquelle prüfen;
-2. tatsächliche Verfügbarkeit im Client gegenprüfen;
-3. Slash-Shortcut und zugrunde liegende Fähigkeit getrennt bewerten;
-4. nicht mehr belegte Einträge auf `UNVERIFIED` setzen statt still weiterzuführen;
-5. Community-Promptkürzel nicht als offizielle Befehle ausgeben.
+Aktuell verfügbares Plugin zum Erzeugen interaktiver Mindmaps; Aufruf nach Installation über `@MindMap`.
 
 ## Leitgedanke
 
-> KI-Regeln erklärt die Methode. ChatGPT-Funktionen können dafür das passende interaktive Werkzeug liefern.
+> Erst unterscheiden, **was** ein Werkzeug ist; dann lernen, **wann** man es sinnvoll einsetzt.
