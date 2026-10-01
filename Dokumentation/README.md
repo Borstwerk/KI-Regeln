@@ -15,6 +15,7 @@ Er richtet sich vor allem an Menschen, die:
 ## Inhalte
 
 - `Nutzung-des-Repositories.md` – erklärt, wie das Repository in echten Projekten eingesetzt wird;
+- `ChatGPT-Funktionen-und-Lernwerkzeuge.md` – aktuelle produktseitige Lernfunktionen, UI-Shortcuts und deren Verifikationsstatus, getrennt von KI-Regeln-Skills;
 - `Skill-Handbuch.md` – erklärt die allgemeinen Skills in verständlicher Sprache;
 - `Skill-Handbuch-Context-und-Long-Horizon.md` – erklärt Context Engineering, Context Audit, Compaction und Session-Handoffs für längere Agentenläufe;
 - `Skill-Handbuch-Wissensmanagement.md` – erklärt Design, Ingest, Distillation, Synthese, Query, Maintenance und Review persistenter Wissensbasen;
