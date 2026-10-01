@@ -8,6 +8,16 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### ChatGPT-Funktionen und Lernwerkzeuge
+
+- neue Dokumentationsrubrik `Dokumentation/ChatGPT-Funktionen-und-Lernwerkzeuge.md` ergänzt;
+- produktseitige Lernwerkzeuge bewusst von KI-Regeln-Skills getrennt: interaktive Lernkarten, Quiz, visuelle Lernnotizen/`sketchnodes` und `@Visualize`;
+- Verifikationsstatus `DOCUMENTED`, `UI-OBSERVED`, `PROMPT-SHORTCUT` und `UNVERIFIED` eingeführt, damit UI-abhängige Shortcuts nicht als universelle Produkt-API erscheinen;
+- offizielles Slash-Command-Verhalten berücksichtigt: verfügbare Befehle können je nach Client, Account und Zugriff variieren; das aktuelle `/`-Menü bleibt die lokale Verfügbarkeitsquelle;
+- Community-Kürzel wie `/eli5`, `/mindmap` oder `/teacher` werden nicht automatisch als echte ChatGPT-Befehle behandelt;
+- Lernworkflow `verstehen → verdichten → erinnern → prüfen → Lücken schließen` dokumentiert und mit Flashcards, Quiz und visuellen Werkzeugen verknüpft;
+- Root-README und Dokumentationsindex um den neuen Einstieg ergänzt; kein neuer Skill und keine Änderung am Skill-Katalog.
+
 ### Separate Open-Content-Lizenzierung für Praxisbeispiel-Bilder
 
 - sechs vorhandene Bildassets aus drei Praxisbeispielen ausdrücklich aus der Root-MIT-Lizenz herausgelöst und – soweit daran wirksam lizenzierbare Rechte bestehen – unter **CC BY-SA 4.0** gestellt;
