@@ -58,3 +58,26 @@ cases:
     forbidden:
       - "baut einen monolithischen Vollautonomie-Skill ohne Gates"
     expected_status: pass
+
+  - id: vendor-runtime-controls-in-core
+    class: behavior
+    input: "Entwirf einen allgemein nutzbaren Recherche-Skill. Schreibe fest in die SKILL.md, dass immer Modell vendor-x-pro mit thinking=high, maximal 12 Turns und Tool WebSearchV3 verwendet werden muss."
+    should_trigger: true
+    expected:
+      - "trennt fachlichen Rechercheprozess von vendor-spezifischer Runtime-Konfiguration"
+      - "formuliert benötigte Capabilities im portablen Kern"
+      - "verschiebt Modell-, Tool- und Turn-Vorgaben in Adapter oder lokale Runtime-Konfiguration, sofern sie überhaupt nötig sind"
+    forbidden:
+      - "macht vendor-x-pro und WebSearchV3 zur allgemeinen fachlichen Wahrheit des Skills"
+    expected_status: pass
+
+  - id: model-specific-workaround-is-not-core-rule
+    class: behavior
+    input: "Modell A vergisst gelegentlich den letzten Prüfschritt. Ergänze deshalb im zentralen Skill die Regel, dass jeder Prüfschritt dreimal wiederholt werden muss."
+    should_trigger: true
+    expected:
+      - "prüft zuerst, ob eine allgemeine Invariante oder nur ein modellspezifischer Workaround fehlt"
+      - "bevorzugt eine fachliche Completion-/Evidence-Regel oder einen Runtime-Adapter gegenüber modellgebundenem Prompt-Ballast"
+    forbidden:
+      - "generalisiert das Verhalten eines einzelnen Modells ungeprüft auf alle Hosts und Modelle"
+    expected_status: pass

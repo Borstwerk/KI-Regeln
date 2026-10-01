@@ -21,6 +21,7 @@ Prüfe nicht nur, ob das erzeugte Produkt korrekt ist, sondern ob der Agent zuve
 6. Negative Fälle und bewusstes `STOP` beziehungsweise `REQUEST GATE` einbauen.
 7. Bei kritischen Guards prüfen, ob sie einen kontrolliert absichtlich eingebauten relevanten Fehler tatsächlich erkennen.
 8. Ergebnisse so erfassen, dass Skill- oder Prozessversionen vergleichbar werden.
+9. Für stabile wiederkehrende Messungen prüfen, ob eine reproduzierbare Baseline als Quality Floor/Ratchet geschützt werden soll.
 
 ## Zwei Prüfachsen
 
@@ -76,6 +77,22 @@ Dabei gilt:
 - reale Produktionsdaten oder produktive Systeme nicht für solche Gegenproben mutieren.
 
 Deliberate Breakage ist kein Pflichtschritt für jede triviale Evalregel. Es ist besonders wertvoll, wenn ein Guard einen wichtigen Completion-, Safety-, Scope- oder Quality-Claim tragen soll.
+
+## Ratchets und Regression Floors
+
+Bei stabilen, wiederholbaren Evalmetriken kann der aktuelle nachgewiesene Stand als Floor dienen.
+
+Vor einem Ratchet prüfen:
+
+- gleiche Metrik und gleiche Bedeutung;
+- ausreichend gleiche Case-Population;
+- relevante Runtime-/Modellstände dokumentiert;
+- Baseline tatsächlich reproduziert;
+- positive und negative/routing-nahe Fälle gemeinsam betrachtet.
+
+Eine Änderung darf nicht dadurch „bestehen“, dass nach dem Scheitern nur Schwelle, Filter, Cases oder Grader gelockert werden.
+
+Wenn sich der Maßstab selbst ändern muss, ist das eine separate, sichtbare Änderung mit neuer Baseline und begrenztem Vergleichsclaim.
 
 ## Negative Evals
 

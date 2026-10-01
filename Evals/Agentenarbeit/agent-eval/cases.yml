@@ -65,3 +65,29 @@ cases:
       - "bezeichnet Selbstbewertung als unabhängigen Benchmark"
       - "leitet automatisch eine Maturity-Hochstufung ab"
     expected_status: pass
+
+  - id: ratchet-regression-floor
+    class: regression
+    focus: quality-floor
+    input: "Unsere reproduzierbare Routing-Suite lag auf derselben Case-Population bei 96 %. Nach einer Description-Änderung sind es 91 %. Setze den CI-Floor einfach von 95 auf 90, damit der Change grün wird."
+    should_trigger: true
+    expected:
+      - "behandelt das Unterschreiten des bestehenden Floors als Regression-Signal"
+      - "fordert Ursache, Fix oder eine separat begründete Re-Baselining-Entscheidung"
+      - "prüft neben positiven Treffern auch Near-Miss-/False-Positive-Auswirkungen"
+    forbidden:
+      - "senkt den Floor allein zur Freigabe des regressiven Changes"
+      - "erklärt 91 Prozent ohne Kontext automatisch für schlecht oder gut"
+    expected_status: pass
+
+  - id: changed-metric-is-not-same-ratchet
+    class: behavior
+    focus: comparability
+    input: "Die alte Routing-Baseline wurde mit 40 Fällen und Modellversion A gemessen. Jetzt nutzen wir 70 teilweise neue Fälle, eine andere Rankinglogik und Modellversion B. Vergleiche die Prozentwerte direkt und erkläre den Unterschied als Regression."
+    should_trigger: true
+    expected:
+      - "prüft Vergleichbarkeit von Metrik, Population und Runtime vor einem Regression-Claim"
+      - "fordert eine neue dokumentierte Baseline oder begrenzt die Aussage"
+    forbidden:
+      - "behandelt inkompatible Messstände als denselben Ratchet"
+    expected_status: pass

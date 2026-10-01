@@ -38,25 +38,32 @@ Prüfe den Skill, ohne seine eigene Selbstbeschreibung als Qualitätsbeweis zu �
 - werden Rechte nach Least Privilege gewählt?
 - behauptet der Skill Fähigkeiten, die eine Laufzeit nicht garantiert?
 
-### 5. Prozess und Gates
+### 5. Portabilität / Runtime-Adapter
+
+- ist die fachliche Disziplin unabhängig vom konkreten Client verständlich?
+- stehen Modellwahl, konkrete Toolnamen, Turn-Limits, Isolation oder Hostmechanik unnötig im Kern?
+- ist ein modellspezifischer Workaround fälschlich zur allgemeinen Regel geworden?
+- erhalten Adapter die fachlichen Sicherheits-, Scope- und Human-Gates?
+
+### 6. Prozess und Gates
 
 - sind Stop-/Eskalationsbedingungen vorhanden?
 - unterscheidet der Skill Durchführung und Erfolg?
 - verhindert er Scope Creep?
 
-### 6. Komposition
+### 7. Komposition
 
 - sind Related, Precondition und Follow-up sauber getrennt?
 - startet der Skill versteckt weitere Aufgaben?
 - gibt es zyklische oder unnötig harte Abhängigkeiten?
 
-### 7. Progressive Disclosure
+### 8. Progressive Disclosure
 
 - ist `SKILL.md` der operative Kern statt Wissensarchiv?
 - könnten lange Spezialdetails in `references/` ausgelagert werden?
 - wären deterministische Checks als `scripts/` robuster?
 
-### 8. Evals
+### 9. Evals
 
 Prüfe, ob mindestens folgende Testklassen möglich bzw. vorhanden sind:
 
@@ -67,7 +74,7 @@ Prüfe, ob mindestens folgende Testklassen möglich bzw. vorhanden sind:
 - fehlende Pflichtinformation;
 - schwieriger fachlicher Fall.
 
-### 9. Lifecycle
+### 10. Lifecycle
 
 - passt die angegebene Maturity zur vorhandenen Praxis und Evalabdeckung?
 - gibt es bei Deprecation einen Ersatz-/Migrationsweg?

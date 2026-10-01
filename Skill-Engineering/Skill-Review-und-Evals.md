@@ -92,6 +92,28 @@ Beispiele:
 
 Subjektive Qualitätsurteile bleiben dort sinnvoll, wo echte Wirkung, Stil oder fachliche Angemessenheit beurteilt werden muss.
 
+## Routing-Evals und Ratchets
+
+Bei wachsenden Skill-Katalogen soll Triggerqualität nicht nur pro Skill isoliert betrachtet werden.
+
+Relevante Fälle:
+
+- positive Trigger;
+- paraphrasierte positive Trigger;
+- Near-Miss-Negatives;
+- pairwise Routing gegen den fachlich zuständigen Nachbarskill;
+- Kollisionen zwischen überbreiten Descriptions.
+
+Wenn eine reproduzierbare Baseline existiert, kann sie als Ratchet/Quality Floor dienen.
+
+Dabei gilt:
+
+- Floor nur auf vergleichbarer Messbasis anwenden;
+- Schwelle nicht nach einer Regression still absenken;
+- Änderung an Cases, Grader, Rankinglogik, Runtime oder Population separat dokumentieren;
+- Ratchet nicht mit einem universellen Zielwert verwechseln;
+- bessere Recall-Werte dürfen nicht durch schlechtere Präzision auf angrenzenden Skills erkauft werden.
+
 ## Failure Evidence als Verbesserungsinput
 
 Fehlgeschlagene Läufe, Nutzerkorrekturen und Eval-Funde dürfen Skilländerungen anstoßen. Vor einer Änderung muss jedoch geprüft werden, ob die Ursache tatsächlich im Skill liegt oder beispielsweise in Tooling, Runtime, Daten, Spezifikation, Modellvariabilität oder dem Eval-Harness.
