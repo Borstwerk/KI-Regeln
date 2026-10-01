@@ -536,13 +536,49 @@ Steuert, ob der Chat Erinnerungen verwenden oder erzeugen darf, wenn Memories ve
 
 Öffnet den Feedbackdialog.
 
+### /pet
+
+Weckt oder versteckt das Desktop-Pet.
+
+```text
+/pet
+```
+
+Rein funktional ist es für Lernen eher überschaubar. Für die wissenschaftlich hochrelevante Frage „Kann meine Entwicklungsumgebung ein Haustier haben?“ dagegen hervorragend.
+
+**Scope:** ChatGPT Desktop, wenn die Funktion verfügbar ist.
+
 ### /approve
 
 Erlaubt einen Retry nach einer automatischen Review-Ablehnung, wenn dieser Mechanismus aktiv ist.
 
 ---
 
-# 3. Skills, Plugins und eigene Commands
+# 3. Codex-/CLI-only Extras
+
+Die Developer-/CLI-Oberflächen besitzen zusätzliche Commands. Diese **nicht mit der normalen ChatGPT-Weboberfläche verwechseln**.
+
+| Command | Zweck |
+|---|---|
+| `/permissions` | Berechtigungs-/Approval-Profil wechseln |
+| `/ide` | offenen IDE-Kontext einbeziehen |
+| `/btw` | Alias/Variante für einen kurzen Side-Chat |
+| `/stop` | laufende Background-Terminals stoppen |
+| `/raw` | Raw-Scrollback ein-/ausschalten |
+| `/resume` | gespeicherten Chat fortsetzen |
+| `/new` | neuen Chat in derselben CLI-Sitzung starten |
+| `/archive` | aktuelle Session archivieren |
+| `/delete` | aktuelle Session löschen |
+| `/app` | Session in der ChatGPT-Desktop-App fortsetzen |
+| `/keymap` | CLI-Tastenbelegung konfigurieren |
+| `/vim` | Vim-Modus für den Composer ein-/ausschalten |
+| `/quit` | CLI beenden |
+
+Diese Commands sind für Entwickler interessant, aber für einen normalen Lernchat im Web meist irrelevant.
+
+---
+
+# 4. Skills, Plugins und eigene Commands
 
 ## $ — Skills direkt aufrufen
 
@@ -594,7 +630,7 @@ Damit lassen sich eigene wiederkehrende Arbeitsweisen als Kurzaufruf verfügbar 
 
 ---
 
-# 4. Prompt-Shortcuts: nützlich, aber keine Produktbefehle
+# 5. Prompt-Shortcuts: nützlich, aber keine Produktbefehle
 
 Im Internet kursieren hunderte Einträge wie:
 
@@ -636,7 +672,7 @@ Für KI-Regeln werden solche Einträge nur als `PROMPT-SHORTCUT` geführt, solan
 
 ---
 
-# 5. Welches Lernwerkzeug für welchen Zweck?
+# 6. Welches Lernwerkzeug für welchen Zweck?
 
 | Ziel | Werkzeug |
 |---|---|
@@ -653,7 +689,7 @@ Für KI-Regeln werden solche Einträge nur als `PROMPT-SHORTCUT` geführt, solan
 
 ---
 
-# 6. Empfohlener Lernworkflow
+# 7. Empfohlener Lernworkflow
 
 ## Phase 1 – Orientierung
 
@@ -711,7 +747,7 @@ verstehen
 
 ---
 
-# 7. Gute Lernkarten statt Kartenfriedhof
+# 8. Gute Lernkarten statt Kartenfriedhof
 
 Eine Karte sollte möglichst **eine prüfbare Information** enthalten.
 
@@ -739,7 +775,7 @@ Bei prüfungsrelevanten Inhalten Karten gegen die ursprünglichen Lernunterlagen
 
 ---
 
-# 8. Pflege dieser Liste
+# 9. Pflege dieser Liste
 
 Diese Seite beschreibt **Produktoberfläche**, keine dauerhaft stabile Protokollspezifikation.
 
