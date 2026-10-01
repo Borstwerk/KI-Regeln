@@ -8,6 +8,19 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Skill-Portabilität, Eval-Ratchets und packageweite Admission
+
+- keinen neuen Admission-Skill angelegt: der bereits gehärtete `skill-security-review` bleibt die zuständige Capability und prüft nun explizit den gesamten relevanten Skill-Bundle-Scope statt nur `SKILL.md`; Begleit-Scripts, Referenzen, Hook-/MCP-/Konfigurationsdateien, Runtime-Nachladepfade und nicht geprüfte Bestandteile werden als Teil der Admission-Evidence behandelt;
+- Security-Review um optionalen Bundle-/Snapshot-Fingerprint, maschinenlesbare Findings und CI-Grenzen erweitert; deterministische Blocker dürfen automatisiert gaten, semantische Unsicherheit bleibt Reviewpflicht, und ein belastbarer Critical-Fund darf nicht durch einen niedrigen Aggregatscore weggeglättet werden;
+- zwei zusätzliche `skill-security-review`-Evalfälle zu ungescannten Begleitdateien und irreführendem Aggregatscore definiert; Ag1rin/SkillGuard dient mit geprüftem MIT-Snapshot als methodische Referenz für packageweite Discovery, Reporting und Fingerprinting, ohne dessen Regex-Regeln oder Score-Schwellen zu übernehmen;
+- neue Fachgrundlage `Skill-Engineering/Portabler-Skill-Kern-und-Runtime-Adapter.md` ergänzt: fachlicher Skill-Kern, Capability-Vertrag und Gates bleiben hostneutral; Modellwahl, konkrete Toolnamen, Turn-Limits, Isolation, Hooks und client-spezifische Orchestrierung gehören in Runtime-Adapter oder gekapselte Metadaten, sofern die Plattform nicht selbst Gegenstand des Skills ist;
+- `skill-authoring`, `skill-review`, Tool-/Fallback- und Progressive-Disclosure-Regeln entsprechend gehärtet; drei zusätzliche Skill-Engineering-Evalfälle prüfen Vendor-Runtime-Kopplung, modellspezifische Workarounds und die Core/Adapter-Grenze;
+- Agent-Evals und Skill-Review um Quality-Floor-/Ratchet-Governance erweitert: reproduzierbare Baselines können gegen stille Regression geschützt werden, aber nur bei vergleichbarer Metrik, Population und Runtime; Floors werden nicht nach einem regressiven Change abgesenkt, Re-Baselining ist eine separate Maßstabsänderung;
+- Routing-Evidence umfasst positive Trigger, Near-Misses und soweit sinnvoll pairwise Routing gegen zuständige Nachbarskills; bessere Recall-Werte dürfen nicht durch breitere Skill-Kaperung erkauft werden; keine universelle Prozentgrenze übernommen;
+- zwei zusätzliche `agent-eval`-Fälle zu Ratchet-Regression und nicht vergleichbaren Messständen definiert;
+- `addyosmani/agent-skills` am Release-/Repository-Stand 0.6.11 als konkrete mutable Methodenreferenz für Core/Adapter-Trennung und Eval-Ratcheting registriert; Vendor-Felder, TF-IDF-Implementierung, konkrete Modelle und externe CI-Schwellen werden nicht universalisiert;
+- insgesamt sieben neue Evalfälle definiert; keine Behavioral-Evals als ausgeführt oder bestanden behauptet, keine Maturity hochgestuft und kein neuer Skill angelegt.
+
 ### Separate Open-Content-Lizenzierung für Praxisbeispiel-Bilder
 
 - sechs vorhandene Bildassets aus drei Praxisbeispielen ausdrücklich aus der Root-MIT-Lizenz herausgelöst und – soweit daran wirksam lizenzierbare Rechte bestehen – unter **CC BY-SA 4.0** gestellt;

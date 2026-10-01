@@ -63,6 +63,28 @@ Für KI-Regeln werden daraus keine Scanner-Defaults übernommen. Relevant ist vi
 
 Diese datierte Analyse ist Forschungs-/Praxis-Evidence und wird nicht als mutable technische Dependency registriert.
 
+## Ag1rin/SkillGuard
+
+Repository:
+
+https://github.com/Ag1rin/SkillGuard
+
+Geprüfter Stand:
+
+- Repository-Commit: `39dd38c5d507fdcf5c4536a72361f692f58b8559`
+- README-Blob-SHA: `a842be867a6369336d330eabc4d295bbbcebcd04`
+- Lizenz am geprüften Stand: MIT
+
+Methodisch relevant sind:
+
+- packageweite Discovery statt Prüfung nur einer `SKILL.md`;
+- statische Prüfung von Markdown, Scripts und Konfigurationen;
+- maschinenlesbare Reports für CI;
+- Bindung eines Scanergebnisses an einen Paket-/Dateizustand;
+- klare Aussage, dass ein statischer SAFE-Befund keine Sicherheitsgarantie ist.
+
+KI-Regeln übernimmt **nicht** die konkrete Regex-Regelmenge, Severity-Gewichte oder Score-Schwellen als allgemeine Sicherheitswahrheit. Ein Aggregatscore bleibt Triage-Evidence; konkrete kritische Findings, semantischer Review, Provenance, Least Privilege und Admission bleiben eigenständige Prüfachsen.
+
 ## OWASP Top 10 for Agentic Applications 2026
 
 Quelle:

@@ -31,11 +31,13 @@ Erzeuge einen kleinen, klar verantworteten Skill, der zuverlässig aktiviert, po
    - Evidence und Abschlussstatus;
    - Stop-/Eskalationsbedingungen.
 
-5. **Capabilities definieren**
+5. **Capabilities und Runtime-Grenze definieren**
    - benötigte Fähigkeiten;
    - optionale Fähigkeiten;
    - Fallbacks;
-   - keine unnötigen Rechte.
+   - keine unnötigen Rechte;
+   - fachlichen Skill-Kern von Modell-, Tool-, Turn-, Isolation- oder Clientkonfiguration trennen;
+   - runtime-spezifische Einstellungen in Adapter oder klar gekapselte Metadaten auslagern, sofern die Plattform nicht selbst Gegenstand des Skills ist.
 
 6. **Struktur wählen**
    - operativer Kern in `SKILL.md`;
@@ -64,6 +66,8 @@ Erzeuge einen kleinen, klar verantworteten Skill, der zuverlässig aktiviert, po
 - Keine unnötigen externen Schreib-/Ausführungsrechte verlangen.
 - Kein Skill-Monster bauen, wenn ein Workflow mehrere unabhängige Skills verbinden sollte.
 - Keine bestehende Skillverantwortung nur unter neuem Namen duplizieren.
+- Keine vendor-/modell-spezifischen Runtime-Defaults als allgemeine Skillwahrheit festschreiben.
+- Einen Workaround für ein einzelnes Modell nicht als allgemeine Prozessregel konservieren, wenn eine Adapterlösung oder eine allgemeinere Invariante ausreicht.
 
 ## Ergebnis
 
@@ -84,6 +88,7 @@ Mindestens:
 - `../../Trigger-und-Description-Design.md`
 - `../../Inputs-Outputs-und-Vertraege.md`
 - `../../Toolanforderungen-und-Fallbacks.md`
+- `../../Portabler-Skill-Kern-und-Runtime-Adapter.md`
 - `../../Skill-Komposition-und-Abhaengigkeiten.md`
 - `../../Skill-Review-und-Evals.md`
 - `../../Skill-Lifecycle-und-Deprecation.md`

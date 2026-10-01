@@ -73,6 +73,23 @@ Eine lokal harmlose `SKILL.md` ist kein vollständiger Reviewgegenstand, wenn ih
 - ist er im Quellenregister erfasst?
 - können Upstream-Änderungen Rechte, Abhängigkeiten, Trust Boundaries oder Verhalten erweitern?
 
+## Package-/Bundle-weite Inventarisierung
+
+Der Reviewgegenstand ist nicht nur `SKILL.md`.
+
+Vor einer Admission soll der prüfbare Scope möglichst vollständig inventarisiert werden:
+
+- Markdown- und Referenzdateien;
+- Scripts und ausführbare Hilfen;
+- JSON/YAML/TOML-/MCP-/Hook-Konfigurationen;
+- Installer- oder Dependency-Hinweise;
+- Remote-URLs und Runtime-Nachladepfade;
+- Dateien, die Rechte, Tools oder Außenwirkung verändern.
+
+Wenn möglich, den geprüften Bundlezustand zusätzlich zu Commit/Blob-SHAs mit einem reproduzierbaren lokalen Fingerprint binden.
+
+> Ungeprüfte Begleitdateien sind kein „clean scan“, sondern ein Coverage Gap.
+
 ## Mehrstufige Evidence
 
 Security Review soll mehrere unabhängige Signalarten kombinieren:
@@ -82,6 +99,29 @@ Security Review soll mehrere unabhängige Signalarten kombinieren:
 3. **optional dynamisch** – nur wenn nötig, isoliert, mit synthetischen Daten/Canaries und ohne echte Secrets.
 
 Kein einzelner Scanner ist Sicherheitsautorität. Ebenso beweist eine erfolgreiche Sandbox-Ausführung nur den beobachteten Lauf, nicht die allgemeine Ungefährlichkeit des Skills.
+
+## Maschinenlesbare Evidence und CI
+
+Statische Scanner oder Validatoren können für wiederholbare Checks nützlich sein, besonders für:
+
+- bekannte gefährliche Ausführungsmuster;
+- Secret-/Credential-Pfade;
+- ungepinnte Dependencies oder Remote-Downloads;
+- verdächtige Hook-/Config-Dateien;
+- unerwartete Netzwerk- oder Filesystem-Wirkung.
+
+Für CI-taugliche Evidence sollten Findings möglichst enthalten:
+
+- betroffene Datei/Stelle;
+- Regel oder nachvollziehbare Ursache;
+- Severity;
+- beobachtetes Signal;
+- empfohlene Remediation;
+- geprüften Snapshot/Fingerprint.
+
+Ein Aggregatscore kann zur Triage helfen, ist aber **keine Sicherheitswahrheit**. Ein einzelner belastbarer CRITICAL-Fund bleibt kritisch, auch wenn viele harmlose Dateien den Durchschnitt „schönrechnen“.
+
+Deterministische Blocker dürfen CI rot machen. Semantische oder unsichere Findings sollen dagegen sichtbar in einen Review-/Admission-Schritt führen, statt durch einen scheinpräzisen Score automatisch entschieden zu werden.
 
 ## Findings
 

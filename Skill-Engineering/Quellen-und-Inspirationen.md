@@ -54,6 +54,30 @@ Daraus stammen insbesondere die allgemeinen Anforderungen an:
 - getrennte Review-Skills;
 - kleine, klar verantwortete Skillbausteine.
 
+## Addy Osmani Agent Skills – Portabilität und Eval-Ratcheting
+
+Repository:
+
+https://github.com/addyosmani/agent-skills
+
+Geprüfter Stand:
+
+- Release-/Repository-Stand: `0.6.11`
+- Repository-Commit: `2686b620fc1fed2e8f60c704839c766b8594c6b6`
+- `docs/advanced-per-agent-configuration.md`: Blob-SHA `d06a87b7cec0c657ee321fbcd8d910d074ee5954`
+- `evals/README.md`: Blob-SHA `4f501cdb0da265812458c43f2bc433b056fb357b`
+- Lizenz am geprüften Stand: MIT
+
+Methodisch relevant sind zwei getrennte Muster:
+
+1. **Portabler Skill-Kern / Runtime-Adapter**  
+   Fachliche Skilllogik bleibt hostübergreifend; Modellrouting, konkrete Tools, Turn-Limits und client-spezifische Orchestrierung werden als Runtime-Konfiguration behandelt.
+
+2. **Eval-Ratchet**  
+   Ein reproduzierbar gemessener Routing-/Qualitätsstand kann als Floor geschützt werden, damit spätere Änderungen den gemessenen Stand nicht still verschlechtern.
+
+KI-Regeln übernimmt daraus bewusst **keine** konkreten Vendor-Felder, Modellnamen, Toollisten, TF-IDF-Routinglogik oder die dortige CI-Schwelle. Lokal generalisiert werden nur die Trennung Kern/Adapter sowie die Ratchet-Governance auf einer vergleichbaren, eigenen Messbasis.
+
 ## Evidence-getriebene Skill-Evolution
 
 ### EvoSkill

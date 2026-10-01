@@ -148,6 +148,59 @@ Wenn Fälle zur Abstimmung einer Rubrik, eines Judges oder von Schwellenwerten v
 
 Blindes oder double-blind Design kann bei besonders hohem Assurance-Bedarf Kontamination oder Evaluator-Leakage reduzieren. Es ist kein universeller Pflichtprozess.
 
+## Eval-Ratcheting und Quality Floors
+
+Ein belastbar gemessener aktueller Stand kann als **Quality Floor** dienen, der durch spätere Änderungen nicht still unterschritten werden darf.
+
+Ein Ratchet ist sinnvoll, wenn:
+
+- dieselbe Metrik und Semantik weiterverwendet wird;
+- Population, Cases und relevante Runtime-/Modellbedingungen ausreichend vergleichbar sind;
+- die Baseline reproduzierbar und als Evidence gespeichert ist;
+- die Metrik tatsächlich ein relevantes Verhalten abbildet.
+
+Beispiele für ratchet-fähige Signale:
+
+- Trigger-/Routing-Treffer auf einer stabilen Suite;
+- Near-Miss-/False-Positive-Rate;
+- Scope-Verstöße;
+- Anteil vollständig gelieferter Pflicht-Evidence;
+- deterministische Guard-/Validator-Ergebnisse.
+
+### Routing nicht nur als Trefferquote
+
+Bei mehreren Skills reicht ein positiver Trigger allein nicht.
+
+Für Routing-Evidence möglichst gemeinsam betrachten:
+
+- positive Fälle, die den vorgesehenen Skill auswählen sollen;
+- Near-Misses, bei denen er **nicht** gewinnen darf;
+- pairwise Fälle, bei denen der fachlich zuständige Nachbarskill vor ihm liegen soll;
+- Kollisionen oder Überlappung zwischen Skillbeschreibungen.
+
+Damit wird verhindert, dass eine „verbesserte“ Description nur dadurch mehr Treffer erzeugt, dass sie angrenzende Aufgaben kapert.
+
+### Ratchet-Regeln
+
+```text
+reproduzierbare Baseline
+→ Quality Floor festlegen
+→ relevante Änderung
+→ gleiche Messung erneut ausführen
+→ Floor gehalten?
+   ├─ ja → Ratchet kann bestehen oder bewusst angehoben werden
+   └─ nein → Regression erklären / beheben / explizit neu baselinen
+```
+
+Dabei gilt:
+
+- einen Floor **nicht absenken**, nur damit ein regressiver Change grün wird;
+- eine geänderte Metrik, Suite, Population, Runtime oder Modellversion ist nicht automatisch mit der alten Baseline vergleichbar;
+- notwendiges Re-Baselining als eigene Maßstabsänderung dokumentieren;
+- keine universelle Prozentgrenze ohne lokale Evidence erfinden;
+- stochastic/modelbasierte Messungen mit Wiederholungen, Runtime-/Modellstand und Unsicherheit dokumentieren;
+- ein Ratchet schützt nur das gemessene Signal und ersetzt keine fachliche Ergebnisprüfung.
+
 ## Evals für Skill-Änderungen
 
 Wenn zentrale Skills verändert werden, können Evals prüfen, ob sich das Verhalten verbessert oder verschlechtert.

@@ -61,3 +61,15 @@ cases:
     forbidden:
       - "empfiehlt stable allein wegen eines Selbsttests"
     expected_status: pass
+
+  - id: portable-core-runtime-adapter
+    class: behavior
+    input: "Reviewe einen allgemein veröffentlichten Skill, dessen fachlicher Ablauf portabel ist, der aber im Kern feste Modellnamen, konkrete Tool-IDs, ein Turn-Limit und einen Workaround für einen einzelnen Client erzwingt."
+    should_trigger: true
+    expected:
+      - "erkennt unnötige Runtime-Kopplung als Reviewfund"
+      - "trennt fachliche Invarianten von Adapter-/Clientkonfiguration"
+      - "prüft, ob Sicherheits- und Human-Gates bei der Auslagerung erhalten bleiben"
+    forbidden:
+      - "wertet Vendor-Kopplung als Qualitätsmerkmal nur weil sie aktuell funktioniert"
+    expected_status: pass
