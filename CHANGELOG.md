@@ -8,15 +8,18 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
-### ChatGPT-Funktionen und Lernwerkzeuge
+### ChatGPT-Befehle, Lernwerkzeuge und interaktive Funktionen
 
-- neue Dokumentationsrubrik `Dokumentation/ChatGPT-Funktionen-und-Lernwerkzeuge.md` ergänzt;
-- produktseitige Lernwerkzeuge bewusst von KI-Regeln-Skills getrennt: interaktive Lernkarten, Quiz, visuelle Lernnotizen/`sketchnodes` und `@Visualize`;
-- Verifikationsstatus `DOCUMENTED`, `UI-OBSERVED`, `PROMPT-SHORTCUT` und `UNVERIFIED` eingeführt, damit UI-abhängige Shortcuts nicht als universelle Produkt-API erscheinen;
-- offizielles Slash-Command-Verhalten berücksichtigt: verfügbare Befehle können je nach Client, Account und Zugriff variieren; das aktuelle `/`-Menü bleibt die lokale Verfügbarkeitsquelle;
-- Community-Kürzel wie `/eli5`, `/mindmap` oder `/teacher` werden nicht automatisch als echte ChatGPT-Befehle behandelt;
-- Lernworkflow `verstehen → verdichten → erinnern → prüfen → Lücken schließen` dokumentiert und mit Flashcards, Quiz und visuellen Werkzeugen verknüpft;
-- Root-README und Dokumentationsindex um den neuen Einstieg ergänzt; kein neuer Skill und keine Änderung am Skill-Katalog.
+- die bisher kurze Lernwerkzeug-Seite zu einer praktischen Befehlsreferenz ausgebaut: Aufruf, Zweck, typischer Einsatz, Beispiel und Verfügbarkeitsstatus stehen nun direkt am jeweiligen Werkzeug;
+- Lern-/Visual-Shortcuts `/flashcards`, Quizfragen, `/sketchnodes`, `/mindmaps` und `/comicnodes` getrennt dokumentiert; beobachtete UI-/Skill-Shortcuts werden nicht als universelle Produkt-API ausgegeben;
+- `@study`, `@Visualize` und das optionale `@MindMap`-Plugin als eigene Werkzeugklasse mit konkreten Einsatzbeispielen aufgenommen;
+- die aktuell dokumentierten Desktop-/Developer-Slash-Commands wie `/plan`, `/goal`, `/compact`, `/side`, `/model`, `/reasoning`, `/review`, `/status`, `/project`, `/fork`, `/mcp` und weitere als Referenz ergänzt;
+- erklärt, dass die Composer-Liste mehrere Mechanismen zusammenführen kann: echte Slash Commands, aktivierte Skills, `$skill`-Aufrufe, `@plugin`-Werkzeuge und `/prompts:<name>`;
+- ChatGPT Web und Desktop-/Developer-Oberflächen ausdrücklich getrennt, da OpenAI unterschiedliche Command-Sets dokumentiert;
+- Statusklassen `DOCUMENTED`, `UI-OBSERVED`, `CONDITIONAL`, `PLUGIN`, `PROMPT-SHORTCUT` und `UNVERIFIED` eingeführt;
+- Community-Kürzel wie `/eli5`, `/flowchart`, `/teacher` oder `/xray` bleiben als Prompt-Shortcuts klar von echten Produktbefehlen getrennt;
+- Lernworkflow `verstehen → strukturieren → visualisieren → erinnern → prüfen → Lücken reparieren` dokumentiert und den passenden Werkzeugen zugeordnet;
+- Root-README und Dokumentationsindex bleiben der Einstieg; kein neuer KI-Regeln-Skill und keine Änderung am Skill-Katalog.
 
 ### Skill-Portabilität, Eval-Ratchets und packageweite Admission
 
