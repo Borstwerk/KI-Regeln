@@ -1,5 +1,15 @@
 # Skill Lifecycle und Deprecation
 
+## Inhalt
+
+- Zweck
+- Empfohlene Reifestufen
+- Änderungen nach Risiko
+- Evidence-getriebene Verbesserung
+- Deprecation
+- Upstream ist nicht Lifecycle
+- Leitgedanke
+
 ## Zweck
 
 Skills verändern sich. Deshalb braucht ein Skill neben Inhalt auch einen nachvollziehbaren Reife- und Ablöseprozess.

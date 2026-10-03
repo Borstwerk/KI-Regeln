@@ -41,10 +41,12 @@ Bedarf erkennen
 → Trigger und Near-Misses definieren
 → Inputs / Outputs / Evidence festlegen
 → Capabilities + Fallbacks definieren
+→ Freiheitsgrad je wesentlichem Schritt nach Fragilität und Variabilität wählen
 → SKILL.md kompakt schreiben
-→ References / Scripts nur bei Bedarf ergänzen
+→ References / Scripts nur bei Bedarf ergänzen und navigierbar halten
+→ Script-Abhängigkeiten explizit machen
 → Review
-→ Evals
+→ Evals über die tatsächlich vorgesehenen Modell-/Runtime-Ziele planen
 → Maturity festlegen
 → veröffentlichen / verwenden
 → beobachten

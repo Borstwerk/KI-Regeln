@@ -133,6 +133,23 @@ Für nichttriviale Motion sollten, sofern Capability vorhanden:
 
 Wenn Browser-/Renderzugriff fehlt, Implementation als Codezustand liefern und visuelle Verifikation ausdrücklich offenlassen.
 
+## Codebasierte Video-/Motion-Compositionen
+
+Wenn dieser Skill innerhalb einer browserbasierten, später als Video gerenderten Composition verwendet wird, besitzt er **nur den technischen Motion-Layer**.
+
+Er übernimmt dadurch nicht automatisch:
+
+- Script oder Storyboard;
+- Fakten-/Produktrecherche;
+- Asset-Sourcing und Rechteklärung;
+- Voiceover, Musik oder SFX;
+- vollständigen Video-Review;
+- finalen Render oder Veröffentlichung.
+
+Für solche Aufgaben den Workflow `../../../Workflows/Codebasierte-Motion-Graphics-und-Video.md` verwenden.
+
+Bei einem frameweisen Renderpfad außerdem nicht aus „Code“ automatisch Determinismus ableiten. Seekability, Zeit-/Zufallsverhalten, Mediensteuerung, Fonts und Renderer-Version müssen gegen den konkreten Runtime-Vertrag geprüft werden.
+
 ## Ausgabe
 
 ```text

@@ -55,7 +55,9 @@ Bei Motion liefert dieser Skill reproduzierbare Browser-/Viewport-/Interaktions-
 
 - Code gelesen ≠ UI verifiziert.
 - Screenshot ≠ Interaktion verifiziert.
+- Kontaktbogen / Proof-Frames ≠ Timing, Schnittfluss oder Audio-Sync verifiziert.
 - Video ≠ technische Implementierung oder Library bewiesen.
+- Bei framegerenderten Motion-/Video-Compositionen statische Proof-Frames und bewegte Playback-/Render-Evidence getrennt behandeln.
 - neue visuelle Baseline ≠ Änderung automatisch korrekt.
 - ungeprüfte Viewports nicht als bestanden melden.
 - reale oder realistische Inhalte verwenden.

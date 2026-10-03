@@ -1,5 +1,20 @@
 # Evidence-getriebene Skill-Verbesserung
 
+## Inhalt
+
+- Zweck
+- Eingangskriterien
+- 1. Baseline binden
+- 2. Ursache klassifizieren
+- 3. Evidence-Rollen trennen
+- 4. Änderungshypothese formulieren
+- 5. Kandidat statt Selbstmutation
+- 6. Verbessern heißt nicht nur hinzufügen
+- 7. Eval und Quality Floor schützen
+- 8. Review und Adoption
+- Stop
+- Leitgedanke
+
 ## Zweck
 
 Skills sollen aus realen Fehlern, Evals und wiederkehrenden Nutzungsmustern lernen können, ohne sich autonom selbst umzuschreiben oder Testmaßstäbe passend zum gewünschten Ergebnis zu verändern.

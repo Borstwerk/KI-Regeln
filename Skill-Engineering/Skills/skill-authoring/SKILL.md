@@ -39,24 +39,34 @@ Erzeuge einen kleinen, klar verantworteten Skill, der zuverlässig aktiviert, po
    - fachlichen Skill-Kern von Modell-, Tool-, Turn-, Isolation- oder Clientkonfiguration trennen;
    - runtime-spezifische Einstellungen in Adapter oder klar gekapselte Metadaten auslagern, sofern die Plattform nicht selbst Gegenstand des Skills ist.
 
-6. **Struktur wählen**
-   - operativer Kern in `SKILL.md`;
+6. **Freiheitsgrad je Arbeitsschritt wählen**
+   - hoher Freiheitsgrad für kontextabhängige Aufgaben mit mehreren gültigen Wegen;
+   - mittlerer Freiheitsgrad für bevorzugte Templates/Pseudocode mit erlaubter Variation;
+   - niedriger Freiheitsgrad für fragile, folgenreiche oder reproduzierbare Schritte;
+   - wenn exakt gleiches Verhalten nötig ist, Script/Check statt immer mehr Prompttext bevorzugen.
+
+7. **Struktur wählen**
+   - operativer Kern in `SKILL.md`, als praktische Heuristik möglichst unter 500 Zeilen Body;
    - lange Details in `references/`;
+   - Referenz-/Fachdokumente über ungefähr 100 Zeilen mit Inhaltsverzeichnis oder begründeter Navigationsausnahme;
+   - benötigte Referenzen möglichst direkt aus `SKILL.md` erreichbar machen;
    - deterministische Arbeit ggf. in `scripts/`;
+   - für Scripts Runtime, Packages/Tools, Availability Check und Fallback als Dependency Contract festhalten;
    - Templates/Ressourcen ggf. in `assets/`.
 
-7. **Komposition prüfen**
+8. **Komposition prüfen**
    - Related / Precondition / Follow-up unterscheiden;
    - keine versteckte Workflow-Orchestrierung einbauen.
 
-8. **Review- und Evalplan ergänzen**
+9. **Review- und Evalplan ergänzen**
    - Trigger-Positives;
    - Near-Miss-Negatives;
    - fehlende Capability;
    - schwieriger Fall;
-   - erwartete Behavior-/Outcome-Kriterien.
+   - erwartete Behavior-/Outcome-Kriterien;
+   - tatsächlich vorgesehene Modell-/Runtime-Ziele benennen und Run-Evidence dort binden, nicht als allgemeine fachliche Frontmatter-Pflicht.
 
-9. **Maturity setzen**
+10. **Maturity setzen**
    - neue Skills starten standardmäßig `experimental`, sofern keine belastbare Praxis eine höhere Einstufung rechtfertigt.
 
 ## Harte Regeln
@@ -68,6 +78,8 @@ Erzeuge einen kleinen, klar verantworteten Skill, der zuverlässig aktiviert, po
 - Keine bestehende Skillverantwortung nur unter neuem Namen duplizieren.
 - Keine vendor-/modell-spezifischen Runtime-Defaults als allgemeine Skillwahrheit festschreiben.
 - Einen Workaround für ein einzelnes Modell nicht als allgemeine Prozessregel konservieren, wenn eine Adapterlösung oder eine allgemeinere Invariante ausreicht.
+- Fehlende Script-Packages oder Tools nicht automatisch installieren; Verfügbarkeit, Runtime-Rechte und Fallback zuerst prüfen.
+- Cross-Model-Kompatibilität nicht aus einem einzelnen erfolgreichen Modelllauf ableiten.
 
 ## Ergebnis
 

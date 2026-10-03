@@ -8,6 +8,29 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Anthropic Skill-Best-Practices-Hardening
+
+- aktuelle Anthropic-Dokumentation zu Skill Authoring und Prompting als semantisch überwachte Skill-Engineering-Upstreams registriert; YouTube-/Community-Zusammenfassungen dienen nur als Discovery-Signal, nicht als Source of Truth;
+- Progressive Disclosure gehärtet: `SKILL.md` bleibt kompakter operativer Kern, lange Referenz-/Fachdokumente über ungefähr 100 Zeilen erhalten ein Inhaltsverzeichnis oder eine begründete Navigationsausnahme; die Grenze wird ausdrücklich als Authoring-Heuristik und nicht als harte Sichtbarkeitsgrenze behandelt;
+- Freiheitsgrad pro Arbeitsschritt eingeführt: hoch für kontextabhängige Mehrwege-Aufgaben, mittel für bevorzugte Muster mit Variation, niedrig für fragile/reproduzierbare Schritte; deterministische Checks/Scripts werden dort bevorzugt, wo mehr Prompttext keine Robustheit schafft;
+- Modell-/Runtime-Kompatibilität an tatsächliche Eval-/Run-Evidence gebunden: beabsichtigte Ziele werden als Matrix geprüft, `NOT RUN`/`UNVERIFIED` bleiben sichtbar, und konkrete Modellwahl wird nicht als neue Vendor-Pflicht in den portablen Skill-Kern geschrieben;
+- Script Dependency Contract ergänzt: Runtime, Packages/Tools, Availability Check und Fallback müssen explizit sein; fehlende Dependency erzeugt keine automatische Installations-, Netzwerk- oder Write-Autorisierung;
+- `skill-authoring` und `skill-review` entsprechend gehärtet und um insgesamt acht neue definierte Evalfälle erweitert; die Fälle sind **DEFINED / NOT RUN**, keine Behavioral-Pass-Aussage und keine Maturity-Hochstufung;
+- bestehende lange Skill-Engineering-Fachdokumente im geänderten Scope mit Inhaltsverzeichnissen versehen; kein neuer Skill und keine Änderung der Skillanzahl.
+
+
+### Codebasierte Motion-Graphics-/Video-Produktion
+
+- zweites Praxisvideo als Discovery-/Field-Observation ausgewertet: gezeigte Qualitäts-, Zeit- und Kostenergebnisse werden ausdrücklich **nicht** als Benchmark oder allgemeine Modellzusage übernommen;
+- `heygen-com/hyperframes` am Commit `5561b8cb2f8b747e3da8844d32463f9859bd4050` source-spezifisch geprüft; README und `motion-graphics`-Skill als `reference/inspiration`, Apache-2.0-Lizenz am selben Snapshot dokumentiert, keine Redistribution-Abhängigkeit;
+- neue frameworkneutrale Fachgrundlage `Webentwicklung/Codebasierte-Motion-Graphics-und-Video.md`: editierbare Code-Composition, Source-/Asset-first, Storyboard-/Claim-Visual-Mapping, getrennte Audioebene, lokale Korrekturen und Render-/Publikationsgates;
+- neuer Workflow `Workflows/Codebasierte-Motion-Graphics-und-Video.md` für Brief → Quellen/Assets → Storyboard → Composition → statische Proof-Frames → bewegte Playback-/Audio-Prüfung → Render/Handoff;
+- HyperFrames bleibt konkrete Methodenreferenz, **kein Pflichtframework**; CLI-Kommandos, Plugin-/Cloudpfade, Workflow-Namen und Runtime-Garantien werden nicht universalisiert;
+- `motion-implementation` gegen Mega-Skill-Scope gehärtet: bei gerenderten Browser-Compositionen besitzt er nur den technischen Motion-Layer, nicht Script, Research, Assetrechte, Audio oder Gesamtproduktion;
+- `motion-review` und `visual-verification` trennen nun explizit Kontaktbogen/Proof-Frames von zeitlicher Playback-/Render-Evidence; Standbilder belegen weder Timing noch Schnittfluss, Flicker, Caption-Sync oder Audio-Sync;
+- zwei zusätzliche Evalfälle definiert: Gesamtvideoproduktion als Workflow-Near-Miss für `motion-implementation` sowie Kontaktbogen-ohne-Playback als `partial`-Fall für `motion-review`; beide **DEFINED / NOT RUN**;
+- Webentwicklungs-README und Workflow-Index ergänzt; kein neuer zentraler Skill und keine Maturity-Hochstufung.
+
 ### ChatGPT-Befehle, Lernwerkzeuge und interaktive Funktionen
 
 - die bisher kurze Lernwerkzeug-Seite zu einer praktischen Befehlsreferenz ausgebaut: Aufruf, Zweck, typischer Einsatz, Beispiel und Verfügbarkeitsstatus stehen nun direkt am jeweiligen Werkzeug;

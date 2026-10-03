@@ -1,5 +1,18 @@
 # Quellen und Inspirationen – Skill Engineering
 
+## Inhalt
+
+- Zweck
+- Agent Skills Specification
+- Anthropic Skills
+- Anthropic Skill authoring best practices
+- Anthropic Prompting best practices
+- Bestehende Skill-Sammlungen dieses Repositories
+- Addy Osmani Agent Skills – Portabilität und Eval-Ratcheting
+- Evidence-getriebene Skill-Evolution
+- Eigene Synthese
+- Leitgedanke
+
 ## Zweck
 
 Diese Datei dokumentiert externe Grundlagen, die beim Aufbau der allgemeinen Skill-Engineering-Regeln berücksichtigt wurden.
@@ -41,6 +54,56 @@ Relevante Beobachtung:
 
 - öffentliche Skills zeigen kompakte operative Anweisungen und ergänzende Ressourcen;
 - die frühere Agent-Skills-Spezifikation verweist inzwischen auf `agentskills.io`.
+
+## Anthropic Skill authoring best practices
+
+Quelle:
+
+https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices
+
+Semantisch geprüft am 2026-10-03.
+
+Methodisch relevant sind insbesondere:
+
+- `SKILL.md` als kompakter operativer Einstieg und Progressive Disclosure für tiefere Details;
+- praktische Zielgröße von unter 500 Zeilen für den `SKILL.md`-Body;
+- direkt erreichbare Referenzen und Inhaltsverzeichnisse für lange Referenzdateien;
+- unterschiedliche Freiheitsgrade je nach Variabilität und Fragilität eines Arbeitsschritts;
+- Scripts für deterministische beziehungsweise besonders fragile Operationen;
+- Tests auf den tatsächlich vorgesehenen Modellen statt impliziter Cross-Model-Annahmen;
+- explizite Paket-/Toolvoraussetzungen und Prüfung ihrer Verfügbarkeit;
+- Feedback-/Validationschleifen für qualitätskritische Arbeit.
+
+KI-Regeln übernimmt daraus vier konkrete Hardening-Linien:
+
+1. Referenz-/Fachdokumente über ungefähr 100 Zeilen sollen ein Inhaltsverzeichnis besitzen oder eine begründete Navigationsausnahme dokumentieren.
+2. Skill-Authoring und -Review betrachten hohen, mittleren und niedrigen Freiheitsgrad pro wesentlichem Arbeitsschritt.
+3. Modell-/Runtime-Kompatibilität wird über tatsächlich ausgeführte Eval-/Run-Evidence dokumentiert und nicht als herstellerspezifische Pflichtmetadaten in den portablen Skill-Kern eingebaut.
+4. Scripts erhalten einen expliziten Dependency Contract; fehlende Packages bedeuten nicht automatisch Installationsautorisierung.
+
+Bewusst **nicht** übernommen werden:
+
+- eine bestimmte Anthropic-Modellfamilie als universelle Testpflicht für alle Hosts;
+- ein generisches `model:`-Frontmatter-Feld als zentrale Skillwahrheit;
+- unbedingte Paketinstallation bei fehlenden Dependencies;
+- die vereinfachte Behauptung, Inhalt nach Zeile 100 sei grundsätzlich nicht sichtbar;
+- autonome Selbstmutation produktiver Skills aus einem einzelnen erfolgreichen oder fehlgeschlagenen Lauf.
+
+## Anthropic Prompting best practices
+
+Quelle:
+
+https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices
+
+Semantisch geprüft am 2026-10-03.
+
+Für Skill-Engineering relevant ist die aktuelle Trennung:
+
+- bei offenen Problemlösungen Ziel, Kontext und gewünschtes Ergebnis klar beschreiben, ohne unnötig einen internen Denk-/Lösungsweg vorzuschreiben;
+- Beispiele und Referenzen gezielt einsetzen, wenn Format, Stil oder Struktur wichtig sind;
+- nummerierte beziehungsweise sequenzielle Schritte dort verwenden, wo Reihenfolge oder Vollständigkeit tatsächlich zählt.
+
+Das stützt die lokale Freiheitsgrad-Regel, ohne daraus das Dogma „nie Schritte verwenden“ abzuleiten.
 
 ## Bestehende Skill-Sammlungen dieses Repositories
 

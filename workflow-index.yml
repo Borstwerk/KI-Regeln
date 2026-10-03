@@ -9,6 +9,7 @@ workflows:
   - Workflows/Bildserie.md
   - Workflows/Bugdiagnose.md
   - Workflows/Build-Deploy-und-Promotion.md
+  - Workflows/Codebasierte-Motion-Graphics-und-Video.md
   - Workflows/Community-Engagement-und-Eskalation.md
   - Workflows/Content-Performance-und-Readiness-Review.md
   - Workflows/Content-Praesenz-Baseline-und-Strategie.md

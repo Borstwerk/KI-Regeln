@@ -45,25 +45,36 @@ Prüfe den Skill, ohne seine eigene Selbstbeschreibung als Qualitätsbeweis zu �
 - ist ein modellspezifischer Workaround fälschlich zur allgemeinen Regel geworden?
 - erhalten Adapter die fachlichen Sicherheits-, Scope- und Human-Gates?
 
-### 6. Prozess und Gates
+### 6. Freiheitsgrad und Determinismus
+
+- passt der Instruktionsgrad je wesentlichem Schritt zu Variabilität, Fragilität und Fehlerfolge?
+- ist ein kreativer oder kontextabhängiger Schritt unnötig überbestimmt?
+- ist ein fragiler Schritt zu frei formuliert, obwohl Script, Check oder enger Vertrag robuster wäre?
+- werden Human-/Safety-Gates unabhängig vom Freiheitsgrad erhalten?
+
+### 7. Prozess und Gates
 
 - sind Stop-/Eskalationsbedingungen vorhanden?
 - unterscheidet der Skill Durchführung und Erfolg?
 - verhindert er Scope Creep?
 
-### 7. Komposition
+### 8. Komposition
 
 - sind Related, Precondition und Follow-up sauber getrennt?
 - startet der Skill versteckt weitere Aufgaben?
 - gibt es zyklische oder unnötig harte Abhängigkeiten?
 
-### 8. Progressive Disclosure
+### 9. Progressive Disclosure
 
 - ist `SKILL.md` der operative Kern statt Wissensarchiv?
+- bleibt der Body als praktische Heuristik möglichst unter ungefähr 500 Zeilen?
 - könnten lange Spezialdetails in `references/` ausgelagert werden?
+- besitzen Referenz-/Fachdokumente über ungefähr 100 Zeilen ein Inhaltsverzeichnis oder eine begründete Navigationsausnahme?
+- sind für die Ausführung wichtige Referenzen direkt aus `SKILL.md` erreichbar statt nur über tiefe Referenzketten?
 - wären deterministische Checks als `scripts/` robuster?
+- deklarieren Scripts Runtime-/Package-/Toolabhängigkeiten und einen ehrlichen Fallback?
 
-### 9. Evals
+### 10. Evals
 
 Prüfe, ob mindestens folgende Testklassen möglich bzw. vorhanden sind:
 
@@ -74,7 +85,13 @@ Prüfe, ob mindestens folgende Testklassen möglich bzw. vorhanden sind:
 - fehlende Pflichtinformation;
 - schwieriger fachlicher Fall.
 
-### 10. Lifecycle
+Zusätzlich bei mehreren beabsichtigten Modell-/Runtime-Zielen:
+
+- ist sichtbar, welche Kombinationen tatsächlich ausgeführt wurden?
+- bleiben nicht getestete Ziele `NOT RUN`/`UNVERIFIED`?
+- wird ein einzelner erfolgreicher Lauf nicht als allgemeine Cross-Model-Evidence ausgegeben?
+
+### 11. Lifecycle
 
 - passt die angegebene Maturity zur vorhandenen Praxis und Evalabdeckung?
 - gibt es bei Deprecation einen Ersatz-/Migrationsweg?

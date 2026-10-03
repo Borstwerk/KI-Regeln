@@ -127,6 +127,16 @@ Arbeite dann beobachtungsnah:
 
 Ein Video beweist nicht automatisch, welche Library oder CSS-Eigenschaft verwendet wurde.
 
+## Gerenderte Motion-Graphics-/Video-Evidence
+
+Bei codebasierten Video-Compositionen sind statische und zeitliche Evidence getrennte Prüfschichten.
+
+Snapshots oder Kontaktbögen können insbesondere Layout, Typografie, Branding, Crop und Schlüsselzustände belegen. Sie reichen **nicht** aus, um Timing, Schnittfluss, Flicker, Caption-Sync, Voice-/Audio-Sync oder tatsächlichen Bewegungsrhythmus freizugeben.
+
+Für solche Claims ist bewegte Preview-/Render-Evidence erforderlich. Audioqualität benötigt zusätzlich eine tatsächlich hörbare beziehungsweise gerenderte Tonspur.
+
+Ein Review dieses Skills bewertet Motion-Craft. Inhaltliche Claims, Asset-Rechte, Gesamtredaktion und Publikationsfreigabe bleiben eigene Prüfgegenstände.
+
 ## Ausgabe
 
 ```text

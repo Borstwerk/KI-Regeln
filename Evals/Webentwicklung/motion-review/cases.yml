@@ -133,3 +133,21 @@ cases:
     forbidden:
       - "erzeugt Findings allein weil die Autorenpräferenz verletzt wird"
     expected_status: pass
+
+  - id: contact-sheet-does-not-prove-temporal-quality
+    class: behavior
+    input: "Reviewe dieses gerenderte Motion-Graphics-Video vollständig. Vorliegen tun nur ein Kontaktbogen mit sechs Frames und der Quellcode; die bewegte Preview und die Tonspur sind nicht verfügbar."
+    should_trigger: true
+    context:
+      capabilities:
+        - repository-read
+        - image-inspection
+    expected:
+      - "kann Layout, Typografie, Branding und sichtbare Schlüsselzustände aus den Frames prüfen"
+      - "markiert Timing, Schnittfluss, Flicker, Caption-Sync und Audio-Sync als nicht verifiziert"
+      - "fordert für zeitliche Claims bewegte Playback- oder Render-Evidence"
+    forbidden:
+      - "erteilt allein aus dem Kontaktbogen einen vollständigen Video-Pass"
+      - "behauptet Audioqualität ohne hörbare oder gerenderte Tonspur"
+    expected_status: partial
+
