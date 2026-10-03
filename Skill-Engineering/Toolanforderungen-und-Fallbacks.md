@@ -1,5 +1,17 @@
 # Toolanforderungen und Fallbacks
 
+## Inhalt
+
+- Grundprinzip
+- Typische Capabilities
+- Capability Detection
+- Gute Fallbacks
+- Kein Capability-Theater
+- Rechte und Least Privilege
+- Script Dependency Contract
+- Portabilität
+- Leitgedanke
+
 ## Grundprinzip
 
 Ein Skill darf Fähigkeiten der Laufzeit nicht stillschweigend voraussetzen.
@@ -65,6 +77,34 @@ Ein Skill soll nur die Rechte verlangen, die sein Auftrag wirklich benötigt.
 Lesen und Bewerten benötigt nicht automatisch Schreib-, Netzwerk- oder Ausführungsrechte.
 
 Riskante, irreversible oder extern sichtbare Aktionen bleiben an vorhandene Freigaberegeln gebunden.
+
+## Script Dependency Contract
+
+Ein Skill, der Scripts oder andere ausführbare Hilfen nutzt, soll deren Laufzeitvoraussetzungen explizit machen.
+
+Mindestens prüfen beziehungsweise dokumentieren:
+
+- benötigte Runtime oder Interpreter;
+- benötigte Packages, Libraries oder externe Tools;
+- Versionsgrenzen nur dort, wo sie fachlich oder technisch relevant sind;
+- ob Package-Manager, Netzwerk oder weitere Installationsrechte benötigt würden;
+- wie die Verfügbarkeit vor Ausführung geprüft wird;
+- welcher Fallback oder `blocked`-/`unverified`-Status gilt, wenn eine Abhängigkeit fehlt.
+
+Eine fehlende Dependency ist **keine automatische Installationsautorisierung**.
+
+```text
+Dependency feststellen
+→ bereits vorhanden?
+   ├─ ja → verwenden
+   └─ nein
+        ↓
+      Installation in dieser Runtime möglich und autorisiert?
+        ├─ ja → kontrolliert installieren / bereitstellen
+        └─ nein → Fallback oder blocked
+```
+
+Ein `pip install`, `npm install`, System-Package-Install oder vergleichbarer Write/Network-Schritt darf nicht allein deshalb ausgeführt werden, weil ein Script ihn benötigt. Runtime-Adapter oder vorbereitete Umgebungen dürfen Dependencies bereitstellen, ohne den portablen Skill-Kern mit host-spezifischen Installationsbefehlen zu füllen.
 
 ## Portabilität
 

@@ -1,5 +1,5 @@
 schema_version: 2
-last_updated: '2026-09-30'
+last_updated: '2026-10-03'
 
 # Mutable external sources whose changes may affect local rules or skills.
 # A changed upstream is a review signal, never an automatic sync instruction.
@@ -1470,6 +1470,35 @@ sources:
       - Skill-Engineering/Skills/skill-review/SKILL.md
       - skill-catalog.yml
 
+  - id: anthropic-skill-authoring-best-practices
+    area: Skill-Engineering
+    kind: web-page
+    url: https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices
+    monitor_mode: semantic-review
+    cadence: monthly
+    last_checked: '2026-10-03'
+    local_impact:
+      - Skill-Engineering/Skill-Struktur-und-Progressive-Disclosure.md
+      - Skill-Engineering/Toolanforderungen-und-Fallbacks.md
+      - Skill-Engineering/Portabler-Skill-Kern-und-Runtime-Adapter.md
+      - Skill-Engineering/Skill-Review-und-Evals.md
+      - Skill-Engineering/Skills/skill-authoring/SKILL.md
+      - Skill-Engineering/Skills/skill-review/SKILL.md
+      - Evals/Skill-Engineering/skill-authoring/cases.yml
+      - Evals/Skill-Engineering/skill-review/cases.yml
+
+  - id: anthropic-prompting-best-practices
+    area: Skill-Engineering
+    kind: web-page
+    url: https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices
+    monitor_mode: semantic-review
+    cadence: monthly
+    last_checked: '2026-10-03'
+    local_impact:
+      - Skill-Engineering/Skill-Struktur-und-Progressive-Disclosure.md
+      - Skill-Engineering/Skills/skill-authoring/SKILL.md
+      - Skill-Engineering/Skills/skill-review/SKILL.md
+
   - id: agent-skills-client-trust-guidance
     area: Sicherheit
     kind: github-file
@@ -2074,6 +2103,38 @@ sources:
       - Dokumentation/Webdesign-Motion-Audit-Phase-3-5.md
       - Webentwicklung/Webdesign/Motion-und-Mikrointeraktionen.md
       - Webentwicklung/Skills/motion-design/SKILL.md
+  - id: heygen-hyperframes-readme
+    area: Webentwicklung
+    kind: github-file
+    repository: heygen-com/hyperframes
+    path: README.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: 973727c5af7ea2c8163a95a463f8627c3f8d8495
+    last_checked: '2026-10-03'
+    local_impact:
+      - Webentwicklung/Codebasierte-Motion-Graphics-und-Video.md
+      - Webentwicklung/Quellen-und-Inspirationen.md
+      - Workflows/Codebasierte-Motion-Graphics-und-Video.md
+
+  - id: heygen-hyperframes-motion-graphics
+    area: Webentwicklung
+    kind: github-file
+    repository: heygen-com/hyperframes
+    path: skills/motion-graphics/SKILL.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: 59ec607875ea7a14df5f3ee7207730fd01063e0f
+    last_checked: '2026-10-03'
+    local_impact:
+      - Webentwicklung/Codebasierte-Motion-Graphics-und-Video.md
+      - Workflows/Codebasierte-Motion-Graphics-und-Video.md
+      - Webentwicklung/Skills/motion-implementation/SKILL.md
+      - Webentwicklung/Skills/motion-review/SKILL.md
+      - Webentwicklung/Skills/visual-verification/SKILL.md
+
   - id: mdn-prefers-reduced-motion
     area: Webentwicklung
     kind: web-page

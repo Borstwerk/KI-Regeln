@@ -1,5 +1,22 @@
 # Quellen und Inspirationen – Webentwicklung
 
+## Inhalt
+
+- Zweck
+- Anthropic – `frontend-design`
+- Impeccable
+- Firzus Agent Skills – Frontend Design Pipeline
+- Vercel Labs – Agent Skills
+- PracticalSwan – Frontend Design
+- Ilm-Alan – Frontend Design
+- Design-to-Code Skill-Sammlungen
+- Motion und Mikrointeraktionen – methodische Referenzen
+- HyperFrames – codebasierte Motion Graphics und Video
+- Motion und Mikrointeraktionen – technische Primärquellen
+- skills.sh
+- Übernommene allgemeine Prinzipien
+- Lizenz- und Übernahmehinweis
+
 ## Zweck
 
 Dieses Dokument nennt externe Quellen und Skill-Sammlungen, die bei der Entwicklung der allgemeinen Webdesign- und Frontend-Regeln berücksichtigt wurden.
@@ -147,6 +164,40 @@ Einordnung:
 Die Quellen wurden **nicht** als Normenkatalog übernommen. Insbesondere feste Dauer-/Easingtabellen, harte Toolrankings, absolute Performancebehauptungen, benannte Skalen und Defaultwerte wurden nicht als universelle lokale Wahrheit übernommen. mblode wird bei Emil-nahen Craft-Heuristiken wegen genealogischer Nähe nicht als unabhängiger Konsens doppelt gezählt. Die konkrete Provenance-Klassifikation und die beobachteten Blob-SHAs stehen in `../Dokumentation/upstream-provenance.yml`.
 
 Die daraus entstandene lokale Struktur trennt `motion-design`, `motion-implementation` und `motion-review`. Reverse Engineering aus Video ist ein Evidence-Modus von `motion-review`; die technische Umsetzung und die anschließende Browser-Gegenprüfung werden mit `motion-implementation` beziehungsweise `visual-verification` komponiert.
+
+## HyperFrames – codebasierte Motion Graphics und Video
+
+Repository:
+
+https://github.com/heygen-com/hyperframes
+
+Geprüfter Stand am 2026-10-03:
+
+- Repository-Commit: `5561b8cb2f8b747e3da8844d32463f9859bd4050`
+- `README.md`: Blob-SHA `973727c5af7ea2c8163a95a463f8627c3f8d8495`
+- `skills/motion-graphics/SKILL.md`: Blob-SHA `59ec607875ea7a14df5f3ee7207730fd01063e0f`
+- Root-Lizenz: Apache-2.0, Blob-SHA `ae06b37e1c5116ccfaa615ac25ec1aabf5658d8c`
+
+Methodisch relevant sind:
+
+- HTML-/CSS-/Media-basierte Komposition als editierbarer Videoquellzustand;
+- seekbare Animation und frameweises Rendering als expliziter Runtime-Vertrag;
+- getrennte Plan-, Source-, Design-, Build-, Verify- und Renderphasen;
+- Asset-first-Planung und lokale, nachvollziehbare Medienquellen;
+- Proof-Snapshots beziehungsweise Kontaktbögen als statische Evidence vor Render;
+- Trennung verschiedener Produktionsmodi wie kurze Motion Graphics, Produktvideo, Explainer und Talking-Head-Repackage.
+
+Die lokale Übernahme bleibt frameworkneutral. Insbesondere werden **nicht** als allgemeine Regeln übernommen:
+
+- HyperFrames als Pflichtframework;
+- konkrete CLI-Kommandos, Plugin-/Cloudpfade oder Installationsregeln;
+- HyperFrames-spezifische Workflow-Namen als universelle Taxonomie;
+- Runtime-Garantien von HyperFrames für andere Engines;
+- konkrete Agenten-, Subagenten- oder Tool-Orchestrierung des Upstreams.
+
+Das begleitende Video-/Praxisbeispiel, durch das diese Quelle entdeckt wurde, wird nur als **Field Observation / Discovery Lead** behandelt. Die gezeigten Qualitäts-, Zeit- oder Kostenergebnisse sind kein unabhängiger Benchmark und werden nicht als allgemeine Leistungszusage übernommen.
+
+Daraus entstanden `Codebasierte-Motion-Graphics-und-Video.md` und der gleichnamige Workflow. Bestehende Motion-Skills wurden nur an den Stellen erweitert, an denen statische versus zeitliche Evidence oder die Scope-Grenze zur Gesamtvideoproduktion betroffen ist.
 
 ## Motion und Mikrointeraktionen – technische Primärquellen
 

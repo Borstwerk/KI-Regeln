@@ -1,5 +1,17 @@
 # Portabler Skill-Kern und Runtime-Adapter
 
+## Inhalt
+
+- Zweck
+- Zwei Ebenen
+- Source of Truth
+- Modell-spezifische Workarounds
+- Capability statt Toolname
+- Modell-/Runtime-Evidence
+- Reviewfragen
+- Ausnahmen
+- Leitgedanke
+
 ## Zweck
 
 Wiederverwendbare Skills sollen ihre **fachliche Arbeitsdisziplin** von agenten-, modell- oder runtime-spezifischer Ausführungskonfiguration trennen.
@@ -90,6 +102,22 @@ statt konkrete Toolnamen als allgemeine Wahrheit einzubauen.
 
 Konkrete Toolzuordnung ist Aufgabe des Adapters oder der aktuellen Laufzeit.
 
+## Modell-/Runtime-Evidence
+
+Die Frage **welches konkrete Modell mit welcher Runtime einen Skill erfolgreich ausgeführt hat** gehört primär in Eval-/Run-Evidence oder Runtime-Konfiguration – nicht als allgemeine fachliche Wahrheit in den portablen Skill-Kern.
+
+Für Skills, die auf mehreren Modell-/Runtime-Zielen verwendet werden sollen:
+
+- die tatsächlich vorgesehenen Ziele benennen;
+- dieselben relevanten Evalfälle auf diesen Zielen ausführen, soweit praktisch möglich;
+- konkrete Provider-/Modellkennung, Runtime-/Adapterstand und Ergebnis im Run dokumentieren, wenn bekannt;
+- nicht ausgeführte Kombinationen als `NOT RUN` oder `UNVERIFIED` behandeln;
+- Claims auf die tatsächlich gemessenen Umgebungen begrenzen.
+
+Eine herstellerspezifische Modellreihe ist ein Beispiel für eine Testmatrix, **keine universelle Pflichtliste** für alle KI-Regeln-Skills. Ebenso wird kein generisches `model:`-Feld in die gemeinsame `SKILL.md`-Frontmatter eingeführt, nur um eine konkrete Testumgebung festzuschreiben.
+
+Wenn unterschiedliche Modelle unterschiedliche Unterstützung benötigen, zuerst prüfen, ob eine fachliche Invariante im Kern fehlt, der Skill unnötig übererklärt oder unterbestimmt ist, ein deterministischer Schritt besser als Script abgebildet wird oder der Unterschied in einen Runtime-Adapter gehört.
+
 ## Reviewfragen
 
 - Ist die fachliche Logik ohne einen bestimmten Client verständlich?
@@ -98,6 +126,7 @@ Konkrete Toolzuordnung ist Aufgabe des Adapters oder der aktuellen Laufzeit.
 - kann derselbe Kern in einem zweiten kompatiblen Host genutzt werden?
 - bleiben Sicherheits- und Human-Gates beim Adapter erhalten?
 - ist klar, welche Teile portable Regeln und welche Runtime-Konfiguration sind?
+- sind Modell-/Runtime-Claims an tatsächlich ausgeführte Evidence gebunden statt aus Kompatibilität vermutet?
 
 ## Ausnahmen
 

@@ -97,3 +97,16 @@ cases:
       - "meldet die Animation ohne Renderzugriff als visuell verifiziert"
       - "behauptet 60fps oder ruckelfrei ohne Profiler-Evidence"
     expected_status: partial
+
+  - id: full-video-production-is-workflow
+    class: trigger
+    input: "Erstelle aus diesem 60-Sekunden-Talking-Head-Clip einen fertigen Social-Short: Versprecher schneiden, Claims recherchieren, Logos und Screenshots sourcen, Captions und Motion Graphics bauen, Musik und SFX mischen und das Video final rendern."
+    should_trigger: false
+    expected:
+      - "behandelt die Gesamtaufgabe als codebasierte Video-/Motion-Produktion mit mehreren Disziplinen"
+      - "routet zur passenden Workflow-Komposition statt motion-implementation als Mega-Skill zu missbrauchen"
+      - "kann motion-implementation später nur für den technischen browserbasierten Motion-Layer verwenden"
+    forbidden:
+      - "übernimmt mit motion-implementation ungeprüft Recherche, Assetrechte, Audio und Gesamtredaktion"
+    expected_status: pass
+

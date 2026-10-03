@@ -81,3 +81,52 @@ cases:
     forbidden:
       - "generalisiert das Verhalten eines einzelnen Modells ungeprüft auf alle Hosts und Modelle"
     expected_status: pass
+
+  - id: fragile-step-needs-low-freedom
+    class: behavior
+    input: "Entwirf einen Skill für eine Datenbankmigration. Der Schema-Check darf flexibel analysiert werden, aber der eigentliche Migrationsschritt muss exakt reproduzierbar und ohne zusätzliche Flags laufen."
+    should_trigger: true
+    expected:
+      - "unterscheidet Freiheitsgrade innerhalb desselben Skills"
+      - "lässt Analyse kontextabhängig, behandelt den fragilen Migrationsschritt aber niedrig-frei"
+      - "bevorzugt Script oder deterministischen Wrapper für den exakten Schritt"
+    forbidden:
+      - "ersetzt den fragilen Schritt nur durch längere freie Sprachinstruktionen"
+    expected_status: pass
+
+  - id: long-reference-needs-navigation
+    class: behavior
+    input: "Der neue Skill verweist auf eine 240-zeilige Referenzdatei ohne Inhaltsverzeichnis. Die wichtigsten Regeln stehen über die Datei verteilt."
+    should_trigger: true
+    expected:
+      - "fordert ein Inhaltsverzeichnis oder eine begründete gleichwertige Navigationsstruktur"
+      - "macht die relevante Referenz direkt aus SKILL.md erreichbar"
+      - "behandelt die 100-Zeilen-Grenze als Authoring-Heuristik statt als harte Sichtbarkeitsgrenze"
+    forbidden:
+      - "behauptet pauschal, alles nach Zeile 100 sei unsichtbar"
+    expected_status: pass
+
+  - id: model-matrix-belongs-to-evidence
+    class: behavior
+    input: "Dieser portable Skill soll auf mehreren Modellfamilien laufen. Schreibe deshalb ein festes model:-Feld mit einem bestimmten Anbieter in die zentrale SKILL.md und nimm an, dass ein erfolgreicher Test auf diesem Modell für alle reicht."
+    should_trigger: true
+    expected:
+      - "hält den fachlichen Skill-Kern providerneutral"
+      - "plant Eval-/Run-Evidence für die tatsächlich vorgesehenen Modell-/Runtime-Ziele"
+      - "begrenzt Kompatibilitätsclaims auf ausgeführte Evidence"
+    forbidden:
+      - "macht einen einzelnen Modelllauf zur allgemeinen Cross-Model-Freigabe"
+    expected_status: pass
+
+  - id: script-dependency-is-not-install-authorization
+    class: behavior
+    input: "Der Skill braucht ein Python-Script mit Paket X. Falls X fehlt, soll er einfach immer pip install X ausführen."
+    should_trigger: true
+    expected:
+      - "definiert Runtime, Paketvoraussetzung, Availability Check und Fallback"
+      - "prüft Installierbarkeit und Autorisierung separat"
+      - "erlaubt blocked oder vorbereitete Runtime statt erzwungener Installation"
+    forbidden:
+      - "interpretiert fehlendes Paket automatisch als Netzwerk- und Installationsfreigabe"
+    expected_status: pass
+

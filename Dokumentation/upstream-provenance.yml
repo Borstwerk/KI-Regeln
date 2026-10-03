@@ -1,6 +1,6 @@
 schema_version: 2
 source_registry: Dokumentation/upstream-sources.yml
-last_reviewed: '2026-09-30'
+last_reviewed: '2026-10-03'
 sources:
 - source_id: guillaumemeyer-watermarks-remover-remove-ai-marks
   reviewed_at: 2026-09-06
@@ -2190,3 +2190,76 @@ sources:
     source_path: README.md
     observed_ref: main
     observed_blob_sha: a842be867a6369336d330eabc4d295bbbcebcd04
+
+- source_id: heygen-hyperframes-readme
+  reviewed_at: '2026-10-03'
+  repository_commit: 5561b8cb2f8b747e3da8844d32463f9859bd4050
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence:
+  - The source is used to confirm the existence and current contract of an HTML/CSS/media based video-rendering framework with agent-oriented workflows and seekable/frame-rendered compositions.
+  - KI-Regeln independently generalizes only the editable-composition, workflow-separation and verification concepts; no README wording, CLI recipe or vendor taxonomy is redistributed.
+  - Video quality, time savings and cost claims from community demonstrations are not treated as benchmark evidence.
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: Apache-2.0
+  license_source: same-state root LICENSE
+  license_source_commit_or_ref: 5561b8cb2f8b747e3da8844d32463f9859bd4050
+  license_path: LICENSE
+  license_blob_sha: ae06b37e1c5116ccfaa615ac25ec1aabf5658d8c
+  path_specific_license_notes:
+  - Root Apache-2.0 license was verified at the same reviewed repository commit; redistribution permission is not relied on because local use is concepts/methods-only reference.
+  license_status_at_observation: verified-at-snapshot
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence:
+    artifact_declarations: []
+    same_state_files:
+    - path: LICENSE
+      blob_sha: ae06b37e1c5116ccfaa615ac25ec1aabf5658d8c
+      spdx: Apache-2.0
+    notes:
+    - README blob 973727c5af7ea2c8163a95a463f8627c3f8d8495 and root LICENSE were observed at repository commit 5561b8cb2f8b747e3da8844d32463f9859bd4050.
+  source_snapshot:
+    repository: heygen-com/hyperframes
+    source_path: README.md
+    observed_ref: main
+    observed_blob_sha: 973727c5af7ea2c8163a95a463f8627c3f8d8495
+
+- source_id: heygen-hyperframes-motion-graphics
+  reviewed_at: '2026-10-03'
+  repository_commit: 5561b8cb2f8b747e3da8844d32463f9859bd4050
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence:
+  - The source contributes plan/source/design/build/verify/render separation, asset-first planning and static proof-frame checks as methodological input for rendered motion compositions.
+  - KI-Regeln independently models a framework-neutral workflow and explicitly separates static frame evidence from temporal playback/audio evidence.
+  - HyperFrames commands, file schemas, agent orchestration, workflow names and implementation text are not copied or required at runtime.
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: Apache-2.0
+  license_source: same-state root LICENSE
+  license_source_commit_or_ref: 5561b8cb2f8b747e3da8844d32463f9859bd4050
+  license_path: LICENSE
+  license_blob_sha: ae06b37e1c5116ccfaa615ac25ec1aabf5658d8c
+  path_specific_license_notes:
+  - Root Apache-2.0 license was verified at the same reviewed repository commit; redistribution permission is not relied on because local use is concepts/methods-only reference.
+  license_status_at_observation: verified-at-snapshot
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence:
+    artifact_declarations: []
+    same_state_files:
+    - path: LICENSE
+      blob_sha: ae06b37e1c5116ccfaa615ac25ec1aabf5658d8c
+      spdx: Apache-2.0
+    notes:
+    - motion-graphics SKILL blob 59ec607875ea7a14df5f3ee7207730fd01063e0f and root LICENSE were observed at repository commit 5561b8cb2f8b747e3da8844d32463f9859bd4050.
+  source_snapshot:
+    repository: heygen-com/hyperframes
+    source_path: skills/motion-graphics/SKILL.md
+    observed_ref: main
+    observed_blob_sha: 59ec607875ea7a14df5f3ee7207730fd01063e0f
+

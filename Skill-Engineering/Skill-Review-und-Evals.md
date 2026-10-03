@@ -1,5 +1,18 @@
 # Skill Review und Evals
 
+## Inhalt
+
+- Grundsatz
+- Review-Achsen
+- Eval-Klassen
+- Positive und negative Fälle
+- Deterministisch vor subjektiv
+- Modell-/Runtime-Matrix
+- Routing-Evals und Ratchets
+- Failure Evidence als Verbesserungsinput
+- Änderungsgate
+- Leitgedanke
+
 ## Grundsatz
 
 > Ein Skill wird nicht dadurch gut, dass seine Anweisungen plausibel klingen.
@@ -25,6 +38,8 @@ Er muss gegen typische Aufgaben, Grenzfälle und Fehlanwendungen geprüft werden
 - sind harte Gates und Stop-Regeln vorhanden?
 - wird fehlende Evidenz ehrlich behandelt?
 - vermeidet der Skill unnötige Schritte?
+- passt der Freiheitsgrad jedes kritischen Schritts zu Variabilität, Fragilität und Fehlerfolge?
+- werden deterministische Schritte als solche behandelt, statt sie nur mit mehr Prompttext abzusichern?
 
 ### 4. Capabilities
 
@@ -91,6 +106,20 @@ Beispiele:
 - ausgeführter Teststatus.
 
 Subjektive Qualitätsurteile bleiben dort sinnvoll, wo echte Wirkung, Stil oder fachliche Angemessenheit beurteilt werden muss.
+
+## Modell-/Runtime-Matrix
+
+Skill-Evidence soll die Umgebung benennen, in der sie tatsächlich entstanden ist.
+
+Für Skills mit mehreren beabsichtigten Modell-/Runtime-Zielen gilt:
+
+- relevante Evalfälle möglichst über diese Ziele wiederholen;
+- konkrete Modell-/Provider-/Runtime-Informationen im Run dokumentieren, wenn verfügbar;
+- unterschiedliche Instruktionsbedarfe als Evidence behandeln, nicht sofort als neue universelle Kernregel;
+- nicht getestete Kombinationen nicht still als unterstützt darstellen;
+- ein gutes Ergebnis auf einem einzelnen Modell nicht als allgemeine Cross-Model-Evidence ausgeben.
+
+Die Matrix darf konkret benannte Modelle enthalten, wenn genau diese ausgeführt wurden. Für die zentrale Skilldefinition reicht dagegen die portable fachliche Disziplin; Modellrouting bleibt Adapter-/Runtime-Thema.
 
 ## Routing-Evals und Ratchets
 

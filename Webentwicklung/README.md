@@ -70,6 +70,17 @@ Das Problem ist nicht, dass eines dieser Mittel grundsätzlich verboten wäre. D
 - responsive Implementierung;
 - Render- und Browser-Verifikation.
 
+### Motion und codebasierte Medien
+
+`Webdesign/Motion-und-Mikrointeraktionen.md` behandelt interaktive Web-Motion. Ergänzend beschreibt `Codebasierte-Motion-Graphics-und-Video.md` eine eigene Delivery-Lane für browser-/codebasierte Motion Graphics und gerenderte Videos.
+
+Dabei bleiben zwei Dinge getrennt:
+
+- **UI-Motion** – Teil einer interaktiven Weboberfläche;
+- **gerenderte Motion-Composition** – zeitbasiertes Medienartefakt mit Storyboard, Assets, Audio, Frame-/Playback-Evidence und Renderpfad.
+
+Der Workflow `../Workflows/Codebasierte-Motion-Graphics-und-Video.md` verbindet bei Bedarf Research-, Design-, Motion-, Provenienz- und Verifikationsschritte, ohne ein bestimmtes Rendering-Framework zentral vorzuschreiben.
+
 ## Anti-Slop-Grundsatz
 
 > Jedes visuelle Element soll Information, Hierarchie, Interaktion oder Identität tragen. Sonst braucht es einen guten Grund, überhaupt vorhanden zu sein.
@@ -115,7 +126,10 @@ Unter `Skills/` liegen kompakte Arbeitsdisziplinen:
 - `web-design-review` – bestehende Oberfläche kritisch auf Identität, Hierarchie und Anti-Slop prüfen;
 - `accessibility-review` – Bedienbarkeit, Semantik, Kontrast, Fokus und assistive Nutzung prüfen;
 - `frontend-performance` – relevante Performance-Risiken gezielt untersuchen;
-- `visual-verification` – gerenderte Oberfläche auf Desktop, Mobile und relevante Zustände prüfen.
+- `visual-verification` – gerenderte Oberfläche auf Desktop, Mobile und relevante Zustände prüfen;
+- `motion-design` – Zweck und Verhalten von Web-Motion definieren;
+- `motion-implementation` – definierte browserbasierte Motion technisch umsetzen;
+- `motion-review` – vorhandene Motion unabhängig anhand passender Render-/Video-Evidence prüfen.
 
 ## Verhältnis zu anderen Bereichen
 

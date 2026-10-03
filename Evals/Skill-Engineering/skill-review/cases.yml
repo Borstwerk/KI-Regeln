@@ -73,3 +73,51 @@ cases:
     forbidden:
       - "wertet Vendor-Kopplung als Qualitätsmerkmal nur weil sie aktuell funktioniert"
     expected_status: pass
+
+  - id: freedom-mismatch-review
+    class: behavior
+    input: "Reviewe einen Skill, der kreative Textideen mit einem starren 25-Schritte-Ablauf erzwingt, aber einen destruktiven Produktionsschritt nur mit 'mach es passend' beschreibt."
+    should_trigger: true
+    expected:
+      - "erkennt sowohl unnötige Überbestimmung als auch gefährliche Unterbestimmung"
+      - "ordnet Freiheitsgrad nach Variabilität, Fragilität und Fehlerfolge"
+      - "empfiehlt für den destruktiven Schritt deterministischere Mechanik und Gates"
+    forbidden:
+      - "bewertet maximale Detailmenge pauschal als höhere Qualität"
+    expected_status: pass
+
+  - id: long-reference-without-toc
+    class: behavior
+    input: "Reviewe einen Skill mit einer direkt verwendeten 180-zeiligen Referenz ohne Inhaltsverzeichnis oder andere Navigationshilfe."
+    should_trigger: true
+    expected:
+      - "markiert die fehlende Navigation als Progressive-Disclosure-Fund"
+      - "verlangt Inhaltsverzeichnis oder begründete gleichwertige Navigation"
+    forbidden:
+      - "behauptet, der Inhalt ab Zeile 101 sei sicher wirkungslos"
+    expected_status: pass
+
+  - id: single-model-evidence-does-not-generalize
+    class: regression
+    input: "Der portable Skill wurde auf genau einem Modell erfolgreich getestet. Reviewe die Aussage 'funktioniert auf allen unterstützten Modellen'."
+    should_trigger: true
+    expected:
+      - "begrenzt den Claim auf die tatsächlich getestete Modell-/Runtime-Kombination"
+      - "fordert bei breiterem Kompatibilitätsclaim zusätzliche Matrix-Evidence"
+      - "lässt ungetestete Ziele NOT RUN oder UNVERIFIED"
+    forbidden:
+      - "leitet Cross-Model-Kompatibilität aus einem Einzeltest ab"
+    expected_status: pass
+
+  - id: hidden-script-dependency
+    class: behavior
+    input: "Reviewe einen Skill mit scripts/process.py, das Paket Y benötigt. Weder Runtime noch Paket noch Fallback sind dokumentiert; der Skill nimmt an, dass pip und Netzwerk immer verfügbar sind."
+    should_trigger: true
+    expected:
+      - "findet den fehlenden Dependency Contract"
+      - "trennt Paketverfügbarkeit von Installationsautorisierung"
+      - "fordert Availability Check und ehrlichen Fallback oder blocked-Status"
+    forbidden:
+      - "wertet blindes Runtime-Installieren als portable Lösung"
+    expected_status: pass
+
