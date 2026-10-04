@@ -1,5 +1,23 @@
 # Informationsarchitektur und Greyboxing
 
+## Inhalt
+
+- Zweck
+- Grundregel
+- 1. Informationsarchitektur vor Dekoration
+- 2. Jede Seite braucht einen klaren Zweck
+- 3. Greybox vor High-Fidelity
+- 4. Kein Lorem-Ipsum-Layoutdenken
+- 5. Hierarchie statt Komponentenparade
+- 6. Navigation als Informationsmodell
+- 7. Seitenrhythmus und Abschnittslogik
+- 8. Signature Sections bewusst planen
+- 9. Experience Storyboard für immersive Seiten
+- 10. Mobile früh mitdenken
+- 11. Greybox-Gate
+- Qualitätscheck
+- Leitgedanke
+
 ## Zweck
 
 Dieses Dokument trennt Seitenstruktur und Informationshierarchie von visueller Ausgestaltung.
@@ -116,7 +134,46 @@ Beispiele:
 
 Signature Sections dürfen nicht erst am Ende als Dekoration aufgeklebt werden.
 
-## 9. Mobile früh mitdenken
+## 9. Experience Storyboard für immersive Seiten
+
+Wenn eine Website ihre Hauptaussage über Scrolltelling, 3D, räumliche Navigation, Parallax, gestaffelte Szenen oder andere stark zeit-/interaktionsabhängige Mittel vermittelt, reicht ein statischer Greybox allein nicht immer aus.
+
+Dann ergänze ein **Experience Storyboard**.
+
+Für jeden Beat oder Abschnitt mindestens festhalten:
+
+```text
+Nutzerfrage / Aussage
+→ sichtbarer Inhalt
+→ Interaktion oder Kamera-/Scrollzustand
+→ was Motion / 3D / Spezialeffekt tatsächlich erklärt
+→ Core Content ohne Spezialeffekt
+→ Mobile-/Touch-Variante
+→ Reduced-Motion-/Fallback-Variante
+→ Übergang zum nächsten Beat
+```
+
+Der Storyboard-Schritt kommt **vor** der Wahl einer konkreten Effektbibliothek.
+
+Nicht:
+
+```text
+Three.js ist installiert
+→ was können wir drehen lassen?
+```
+
+Sondern:
+
+```text
+Dieser Zusammenhang soll räumlich verständlich werden
+→ welche Experience hilft?
+→ welche einfache Alternative trägt dieselbe Aussage?
+→ erst dann technische Umsetzung
+```
+
+Ein Experience Storyboard ist nur nötig, wenn die Experience selbst Teil der Informationsvermittlung ist. Normale Seiten werden dadurch nicht künstlich in eine filmische Dramaturgie gezwungen.
+
+## 10. Mobile früh mitdenken
 
 Greyboxing nicht nur für Desktop durchführen.
 
@@ -128,7 +185,7 @@ Mindestens prüfen:
 - Welche Tabellen oder komplexen Layouts brauchen Alternativen?
 - Welche Aktionen müssen erreichbar bleiben?
 
-## 10. Greybox-Gate
+## 11. Greybox-Gate
 
 Vor High-Fidelity sollte klar sein:
 
@@ -152,6 +209,7 @@ Wenn diese Punkte noch offen sind, ist Designpolitur verfrüht.
 6. Ist Navigation verständlich?
 7. Sind Desktop und Mobile berücksichtigt?
 8. Ist klar, welche Teile Standard und welche bewusst besonders sind?
+9. Falls eine immersive Experience zentral ist: besitzt sie ein Storyboard mit Core Content und Fallbackpfaden?
 
 ## Leitgedanke
 

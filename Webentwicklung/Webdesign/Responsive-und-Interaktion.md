@@ -1,5 +1,23 @@
 # Responsive Design und Interaktion
 
+## Inhalt
+
+- Zweck
+- Grundregel
+- 1. Mobile nicht erst am Ende prüfen
+- 2. Inhalt priorisieren statt nur umbrechen
+- 3. Breakpoints aus Layoutbedarf ableiten
+- 4. Touch und Pointer unterscheiden
+- 5. Interaktion braucht sichtbare Zustände
+- 6. Motion unterstützt Orientierung
+- 7. Motion begrenzen
+- 8. Progressive Experience Enhancement
+- 9. Formulare als Interaktionssystem
+- 10. Navigation muss erreichbar bleiben
+- 11. Dichte bewusst steuern
+- Qualitätscheck
+- Leitgedanke
+
 ## Zweck
 
 Dieses Dokument beschreibt responsive Gestaltung und Interaktion als Teil des Designs – nicht als nachträgliche technische Reparatur.
@@ -89,7 +107,36 @@ Vermeiden:
 
 `prefers-reduced-motion` und vergleichbare Nutzerpräferenzen berücksichtigen.
 
-## 8. Formulare als Interaktionssystem
+## 8. Progressive Experience Enhancement
+
+Aufwendige 3D-, WebGL-, Canvas-, Parallax-, Scrolltelling- oder andere Experience-Layer dürfen die Kernaufgabe einer Website nicht versehentlich an eine einzige technische Fähigkeit binden.
+
+Für relevante Signature Experiences einen lokalen **Fallback Contract** definieren:
+
+```text
+Core Experience
+- Welche Information / Aufgabe muss erhalten bleiben?
+
+Enhanced Experience
+- Was fügt 3D / Motion / Scroll / Canvas tatsächlich hinzu?
+
+Mobile / Touch
+- Wie funktioniert die Aufgabe ohne Hover oder große Pointerfläche?
+
+Reduced Motion
+- Welche Information bleibt erhalten, wenn Bewegung reduziert/ersetzt wird?
+
+Capability / Failure
+- Was passiert, wenn Spezialruntime, Asset, WebGL/Canvas oder Enhancement nicht verfügbar ist?
+```
+
+Für Marketing-, Editorial- und Informationsseiten soll Kerninhalt beziehungsweise Haupt-CTA nicht ausschließlich hinter einem Spezialeffekt liegen.
+
+Bei Produkten, deren eigentliche Funktion technisch an 3D/WebGL gebunden ist, muss der Fallback nicht dieselbe Funktion vollständig replizieren. Er soll aber den Zustand ehrlich erklären und, soweit möglich, Orientierung oder einen alternativen Pfad anbieten.
+
+Progressive Enhancement bedeutet nicht zwingend „alles muss ohne JavaScript identisch funktionieren“. Es bedeutet, dass zusätzliche technische Fähigkeiten **bewusst** auf einen tragfähigen Kern aufgesetzt werden und ihr Ausfall nicht zufällig über Produktbedeutung oder Navigation entscheidet.
+
+## 9. Formulare als Interaktionssystem
 
 Prüfen:
 
@@ -101,7 +148,7 @@ Prüfen:
 - Datenverlust bei Fehlern vermeiden;
 - korrekte Tastaturbedienung.
 
-## 9. Navigation muss erreichbar bleiben
+## 10. Navigation muss erreichbar bleiben
 
 Responsive Navigation darf nicht nur kompakter, sondern muss weiterhin verständlich sein.
 
@@ -115,7 +162,7 @@ Prüfen:
 - Scrollposition;
 - Touchbedienung.
 
-## 10. Dichte bewusst steuern
+## 11. Dichte bewusst steuern
 
 Desktop darf mehr Parallelität zeigen, Mobile braucht häufiger Sequenz.
 
@@ -130,7 +177,8 @@ Das bedeutet nicht automatisch große Abstände auf kleinen Screens. Entscheiden
 5. Sind Focus-, Loading-, Error- und Empty-States vorhanden?
 6. Dient Motion der Orientierung?
 7. Werden Nutzerpräferenzen berücksichtigt?
-8. Sind Formulare und Navigation auch per Tastatur und Touch bedienbar?
+8. Besitzen aufwendige Signature Experiences einen expliziten Core-/Enhanced-/Fallback-Vertrag?
+9. Sind Formulare und Navigation auch per Tastatur und Touch bedienbar?
 
 ## Leitgedanke
 

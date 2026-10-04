@@ -42,12 +42,15 @@ Offensichtlich unmotivierte oder störende Motion darf als Designproblem benannt
    - Interaktion;
    - Responsive-Verhalten.
 3. Suche explizit nach generischen AI-Mustern.
-4. Unterscheide Stilmittel mit Begründung von reflexartigen Defaults.
-5. Priorisiere Funde nach Auswirkung.
-6. Benenne Ursache und Wirkung statt nur kosmetische Vorlieben.
-7. Schütze starke bestehende Entscheidungen vor unnötigem Redesign.
-8. Erfinde keine neue Markenrichtung, wenn nur Review beauftragt ist.
-9. Wenn die Reviewfrage speziell reale Motion betrifft, komponiere mit `motion-review` statt Motion-Craft hier zu duplizieren.
+4. Bei referenzgetriebenen Entwürfen prüfe Reference-Overfit: abstrahierte Prinzipien versus faktische Reproduktion fremder Komposition/Markensignatur.
+5. Prüfe das Novelty Budget: erfüllen auffällige 3D-, Parallax-, Scrolltelling-, Minigame- oder Motion-Elemente einen klaren Produktzweck oder konkurrieren sie nur um Aufmerksamkeit?
+6. Bei immersiven Experiences prüfe, ob Core Content, Mobile/Touch, Reduced Motion und Capability-/Failure-Fallbacks definiert sind.
+7. Unterscheide Stilmittel mit Begründung von reflexartigen Defaults.
+8. Priorisiere Funde nach Auswirkung.
+9. Benenne Ursache und Wirkung statt nur kosmetische Vorlieben.
+10. Schütze starke bestehende Entscheidungen vor unnötigem Redesign.
+11. Erfinde keine neue Markenrichtung, wenn nur Review beauftragt ist.
+12. Wenn die Reviewfrage speziell reale Motion betrifft, komponiere mit `motion-review` statt Motion-Craft hier zu duplizieren.
 
 ## Typische Anti-Slop-Funde
 
@@ -59,7 +62,11 @@ Offensichtlich unmotivierte oder störende Motion darf als Designproblem benannt
 - monotone Abschnittsstruktur;
 - Fake-KPIs/Testimonialblöcke;
 - generische Marketingphrasen;
-- Motion als Dekoration statt Orientierung.
+- Motion als Dekoration statt Orientierung;
+- überfrachtete „Experience“-Seite, auf der mehrere Gimmicks um Aufmerksamkeit konkurrieren;
+- 3D/WebGL/Parallax ohne erkennbaren Informations- oder Produktzweck;
+- enge Referenzreproduktion ohne eigenständige Produktidentität;
+- Signature Experience ohne brauchbaren Mobile-/Reduced-Motion-/Failure-Pfad.
 
 ## Ausgabe
 

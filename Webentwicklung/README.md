@@ -21,11 +21,13 @@ Ein guter Webprozess trennt mindestens:
 ```text
 Produkt / Zielgruppe
 → Information und Content
-→ Designrichtung
+→ Reference Board / Designrichtung, falls Referenzen genutzt werden
 → Designsystem
 → Greybox / Informationsarchitektur
+→ Experience Storyboard nur bei wirklich immersiven/zeitabhängigen Seiten
 → echter Content
 → Frontend-Implementierung
+→ Progressive-Experience-Fallbacks
 → Accessibility und Performance
 → gerenderte Verifikation
 → unabhängiger Design-Review
@@ -84,6 +86,8 @@ Der Workflow `../Workflows/Codebasierte-Motion-Graphics-und-Video.md` verbindet 
 ## Anti-Slop-Grundsatz
 
 > Jedes visuelle Element soll Information, Hierarchie, Interaktion oder Identität tragen. Sonst braucht es einen guten Grund, überhaupt vorhanden zu sein.
+
+Das gilt ausdrücklich auch für technisch beeindruckende Experiences. 3D, WebGL, Parallax, Scrollytelling, Minigames und andere Spezialeffekte sind keine automatische Qualitätssteigerung. Wenige begründete Signature Experiences sind stärker als eine Leistungsschau aller verfügbaren Agentenfähigkeiten.
 
 Keine Technik ist automatisch schlecht. Gradient, Card, Pill, Shadow, Blur oder Animation sind Werkzeuge. Sie werden problematisch, wenn sie ohne semantische oder gestalterische Begründung reflexartig eingesetzt werden.
 

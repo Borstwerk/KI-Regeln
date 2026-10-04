@@ -1,5 +1,23 @@
 # Performance
 
+## Inhalt
+
+- Zweck
+- Grundregel
+- 1. Kritische Pfade priorisieren
+- 2. Waterfalls vermeiden
+- 3. Bundle bewusst halten
+- 4. Bilder und Medien optimieren
+- 5. Renderingkosten verstehen
+- 6. Client-JavaScript begrenzen
+- 7. Fonts bewusst laden
+- 8. Immersive Experiences als eigene Kostenklasse
+- 9. Performancebudgets lokal definieren
+- 10. Messung reproduzierbar machen
+- 11. Performance-Regressionen mechanisieren
+- Qualitätscheck
+- Leitgedanke
+
 ## Zweck
 
 Dieses Dokument beschreibt Frontend-Performance als Nutzer- und Systemqualität.
@@ -102,7 +120,34 @@ Prüfen:
 - Layout Shift durch Fontwechsel;
 - Lizenz und Hostingmodell.
 
-## 8. Performancebudgets lokal definieren
+## 8. Immersive Experiences als eigene Kostenklasse
+
+3D-, WebGL-, Canvas-, große Parallax-/Scrolltelling-Szenen und dauerhaft laufende visuelle Simulationen können andere Kostenprofile besitzen als normale DOM-Oberflächen.
+
+Je nach konkreter Technik zusätzlich prüfen:
+
+- Initial- und Route-Bundle;
+- Modell-, Textur-, Shader- und Mediengrößen;
+- CPU-/GPU-Arbeit;
+- Main-Thread-Blockierung;
+- Speicher und Layer-/Scene-Komplexität;
+- laufende Renderloops, auch wenn die Szene nicht sichtbar ist;
+- Energie-/Thermik auf mobilen Geräten;
+- Lade- und Decode-Zeit;
+- Verhalten bei langsamer Hardware oder fehlender Spezialfähigkeit.
+
+Mögliche Strategien – nur bei gemessenem Bedarf:
+
+- Lazy Loading / Dynamic Import;
+- Qualitätsstufen oder reduzierte Szenen;
+- statische Poster-/Content-Fallbacks;
+- Renderloop pausieren, wenn nicht sichtbar;
+- Assetkomplexität reduzieren;
+- Experience nur dort laden, wo sie tatsächlich gebraucht wird.
+
+„Low Poly“, `transform`, GPU oder WebGL sind **keine** automatische Performancegarantie.
+
+## 9. Performancebudgets lokal definieren
 
 Für relevante Projekte konkrete Ziele festlegen, beispielsweise:
 
@@ -114,7 +159,7 @@ Für relevante Projekte konkrete Ziele festlegen, beispielsweise:
 
 Zentrale Regeln geben keine universellen Zahlen vor.
 
-## 9. Messung reproduzierbar machen
+## 10. Messung reproduzierbar machen
 
 Vergleiche nur unter ausreichend ähnlichen Bedingungen.
 
@@ -127,7 +172,7 @@ Dokumentieren:
 - Messwerkzeug;
 - relevante Datenmenge.
 
-## 10. Performance-Regressionen mechanisieren
+## 11. Performance-Regressionen mechanisieren
 
 Wo sinnvoll:
 
@@ -146,9 +191,10 @@ Wo sinnvoll:
 5. Gibt es unnötige Renderarbeit?
 6. Wird Client-JavaScript bewusst eingesetzt?
 7. Sind Fonts sinnvoll geladen?
-8. Gibt es projektlokale Budgets, wenn Performance kritisch ist?
-9. Sind Vorher/Nachher-Messungen vergleichbar?
-10. Können wichtige Regressionen automatisch erkannt werden?
+8. Wurden immersive/3D-/Canvas-Kosten als eigene Risikoklasse betrachtet, falls vorhanden?
+9. Gibt es projektlokale Budgets, wenn Performance kritisch ist?
+10. Sind Vorher/Nachher-Messungen vergleichbar?
+11. Können wichtige Regressionen automatisch erkannt werden?
 
 ## Leitgedanke
 

@@ -1,5 +1,20 @@
 # Designrichtung und Identität
 
+## Inhalt
+
+- Zweck
+- Grundregel
+- 1. Ausgangspunkt: Produkt, Publikum, Aufgabe
+- 2. Eine konkrete Designrichtung formulieren
+- 3. Eine Richtung statt Stil-Mischmasch
+- 4. Hero als These, nicht als Template
+- 5. Signature Elements und Novelty Budget
+- 6. Reference Board: analysieren statt kopieren
+- 7. AI-Slop-Risiko explizit benennen
+- 8. DESIGN.md als lokale Quelle der Wahrheit
+- Qualitätscheck
+- Leitgedanke
+
 ## Zweck
 
 Dieses Dokument beschreibt, wie vor der eigentlichen Frontend-Umsetzung eine eigenständige visuelle Richtung entwickelt wird.
@@ -82,7 +97,7 @@ Mögliche Formen:
 
 Die Form folgt dem Inhalt.
 
-## 5. Signature Elements bewusst wählen
+## 5. Signature Elements und Novelty Budget
 
 Ein wiederkehrendes Gestaltungselement kann Identität schaffen, beispielsweise:
 
@@ -93,25 +108,71 @@ Ein wiederkehrendes Gestaltungselement kann Identität schaffen, beispielsweise:
 - eigenständige Navigationslogik;
 - kontrollierte Motion-Sprache.
 
-Nicht fünf Signature Elements gleichzeitig erzwingen.
+Nicht viele Signature Elements gleichzeitig erzwingen.
 
-## 6. Referenzen analysieren statt kopieren
+Bei technisch sehr leistungsfähigen Agenten gilt zusätzlich ein **Novelty Budget**:
 
-Referenzen dienen zur Klärung von:
+> Nur weil ein Effekt, Minigame, 3D-Objekt oder Scroll-Experiment technisch möglich ist, hat es noch keinen Platz im Produkt.
+
+Für jedes auffällige Experience-Element mindestens begründen:
+
+- welche Information, Orientierung oder Produktwirkung es trägt;
+- ob es tatsächlich identitätsbildend ist;
+- welchen Interaktions- und Performancepreis es erzeugt;
+- ob bereits ein anderes Signature Element dieselbe Aufmerksamkeit beansprucht;
+- welche ruhigere Variante denselben Zweck erfüllen könnte.
+
+Es gibt keine universelle Zahl erlaubter Effekte. Ziel ist eine klare Hierarchie: wenige starke Entscheidungen statt einer Demonstration aller verfügbaren Fähigkeiten.
+
+## 6. Reference Board: analysieren statt kopieren
+
+Visuelle Referenzen sind **Design-Evidence**, keine automatische Implementierungsvorlage.
+
+Für neue oder sichtbar generische Projekte kann vor der Art Direction ein kleines Reference Board helfen. Pro Referenz dokumentieren:
+
+```text
+Quelle / Herkunft
+Wofür ist sie relevant?
+Welches abstrakte Prinzip ist nützlich?
+Was ist produktspezifisch und darf nicht übernommen werden?
+Welche Assets / Markenmerkmale / konkreten Ausdrucksformen bleiben außen vor?
+Rechte-/Nutzungshinweis, falls konkrete Medien weiterverwendet werden sollen
+```
+
+Mögliche Analyseachsen:
 
 - Typografie;
 - Rhythmus;
 - Informationsdichte;
 - Farbwirkung;
-- Interaktion;
-- Bildsprache.
+- Raster und Komposition;
+- Navigation;
+- Interaktionsmuster;
+- Motion;
+- Bild- und Materialsprache.
+
+Danach mehrere Funde **abstrahieren und neu kombinieren**:
+
+```text
+Referenz A → typografische Hierarchie
+Referenz B → räumliche Dramaturgie
+Referenz C → Navigationsprinzip
+        ↓
+Produkt / Audience / Aufgabe
+        ↓
+eigene Designrichtung
+```
 
 Nicht übernehmen:
 
-- ganze Kompositionen ohne Anpassung;
-- fremde Markenmerkmale;
+- ganze Kompositionen ohne eigenständige Ableitung;
+- fremde Markenmerkmale oder charakteristische Signaturen;
+- konkrete Assets ohne passende Nutzungsrechte;
 - dekorative Details ohne funktionalen Bezug;
-- Fehler oder Inkonsistenzen der Vorlage.
+- Fehler oder Inkonsistenzen der Vorlage;
+- eine einzelne Referenz so eng, dass das Ergebnis faktisch zur Reproduktion wird.
+
+Der technische Zugriff auf Designbibliotheken, Screenshots oder MCP-Quellen ändert diese Grenze nicht.
 
 ## 7. AI-Slop-Risiko explizit benennen
 
@@ -155,7 +216,9 @@ Diese Datei ist lokale Produktwahrheit und gehört nicht in dieses zentrale Repo
 5. Ist der Einstieg inhaltlich begründet?
 6. Gibt es wenige klare Signature Elements?
 7. Sind Anti-Slop-Risiken benannt?
-8. Ist die Richtung lokal dokumentierbar?
+8. Wurden Referenzen in Prinzipien zerlegt statt nachgebaut?
+9. Ist das Novelty Budget nachvollziehbar und konkurrieren nicht zu viele Signature Experiences?
+10. Ist die Richtung lokal dokumentierbar?
 
 ## Leitgedanke
 

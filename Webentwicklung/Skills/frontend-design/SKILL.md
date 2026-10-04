@@ -34,13 +34,15 @@ Entwickle für eine Website oder Weboberfläche eine konkrete, begründete Desig
 ## Arbeitsweise
 
 1. Formuliere die wichtigste Aussage oder Aufgabe der Seite.
-2. Leite daraus eine konkrete Designrichtung ab.
-3. Definiere ein bis zwei prägende Signature Elements.
-4. Bestimme Typografie-, Farb-, Surface- und Rhythmuscharakter auf hoher Ebene.
-5. Benenne explizit unpassende oder generische Defaultmuster.
-6. Prüfe, ob Hero und Hauptabschnitte aus dem Inhalt statt aus einem Standardtemplate entstehen.
-7. Übergib die Richtung als klaren Designbrief oder lokale `DESIGN.md`-Grundlage.
-8. Wenn Interaktionscharakter konkrete Motion benötigt, übergib Produkt-, Marken- und Intensitätsrahmen an `motion-design`, statt die Motion-Details hier auszuarbeiten.
+2. Wenn externe Referenzen genutzt werden: baue ein kleines Reference Board und zerlege jede Referenz in übertragbare Prinzipien, produktspezifische Merkmale und klare Nicht-Übernahme-Grenzen.
+3. Leite daraus eine konkrete Designrichtung ab – nicht aus einer einzelnen Vorlage.
+4. Definiere wenige prägende Signature Elements und ein bewusstes Novelty Budget.
+5. Bestimme Typografie-, Farb-, Surface- und Rhythmuscharakter auf hoher Ebene.
+6. Benenne explizit unpassende oder generische Defaultmuster.
+7. Prüfe, ob Hero und Hauptabschnitte aus dem Inhalt statt aus einem Standardtemplate entstehen.
+8. Bei immersiven/scrollgetriebenen Ideen: formuliere zunächst die gewünschte Experience-Wirkung und übergib Storyboard-/Fallbackbedarf an `greybox`, bevor eine konkrete 3D-/Motion-Technik gewählt wird.
+9. Übergib die Richtung als klaren Designbrief oder lokale `DESIGN.md`-Grundlage.
+10. Wenn Interaktionscharakter konkrete Motion benötigt, übergib Produkt-, Marken- und Intensitätsrahmen an `motion-design`, statt die Motion-Details hier auszuarbeiten.
 
 ## Anti-Slop-Check
 
@@ -52,7 +54,9 @@ Nicht reflexartig verwenden:
 - Icon-Kacheln ohne Informationsfunktion;
 - Glow/Blur/Glass als Modernitätsersatz;
 - Fake-KPIs oder Testimonials;
-- Scroll-Reveal auf jedem Abschnitt.
+- Scroll-Reveal auf jedem Abschnitt;
+- 3D/Parallax/Minigames nur als technische Leistungsschau;
+- enge Reproduktion einer einzelnen Designreferenz ohne eigenständige Produktableitung.
 
 Diese Mittel sind erlaubt, wenn sie konkret begründet sind.
 
@@ -69,6 +73,8 @@ Typografischer Charakter
 Farb-/Surface-Logik
 Rhythmus / Dichte
 Interaktionscharakter
+Reference Board / abstrahierte Referenzprinzipien, falls genutzt
+Signature Elements + Novelty Budget
 Bewusste Ausschlüsse / Anti-Patterns
 Offene lokale Entscheidungen
 ```

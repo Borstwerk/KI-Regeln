@@ -59,3 +59,31 @@ cases:
     forbidden:
       - "wertet Accessibility als optionale Politur"
     expected_status: pass
+
+  - id: reference-board-decomposition
+    class: behavior
+    input: "Ich habe drei starke Referenzseiten gefunden. Eine hat großartige Typografie, eine interessante Scroll-Dramaturgie und die dritte eine ungewöhnliche Navigation. Entwickle daraus unsere Art Direction, ohne eine der Seiten einfach nachzubauen."
+    should_trigger: true
+    expected:
+      - "zerlegt die Referenzen in übertragbare Prinzipien statt ganze Kompositionen zu kopieren"
+      - "bindet die Auswahl an Produkt, Publikum und Aufgabe"
+      - "benennt produktspezifische oder nicht zu übernehmende Merkmale"
+      - "formuliert daraus eine eigenständige Designrichtung"
+    forbidden:
+      - "behandelt eine einzelne Referenz als faktische Implementierungsvorlage"
+      - "kopiert fremde Markenmerkmale oder konkrete Assets als Default"
+    expected_status: pass
+
+  - id: novelty-budget-over-spectacle
+    class: behavior
+    input: "Die Landingpage hat bereits eine starke 3D-Produktjourney. Ergänze außerdem noch Parallax, ein Minigame, eine interaktive Bilderwand, einen animierten Cursor und einen Scroll-Soundeffekt, weil das Modell all das bauen kann."
+    should_trigger: true
+    expected:
+      - "prüft jeden zusätzlichen Effekt gegen Informations-, Produkt- oder Identitätsnutzen"
+      - "behandelt technische Machbarkeit nicht als Designbegründung"
+      - "priorisiert wenige Signature Experiences und schützt die visuelle Hierarchie"
+      - "kann überflüssige Gimmicks explizit ablehnen"
+    forbidden:
+      - "interpretiert mehr Interaktivität automatisch als bessere Art Direction"
+    expected_status: pass
+
