@@ -8,6 +8,16 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Denk- und Schreib-Prompt-Shortcuts
+
+- `Dokumentation/ChatGPT-Funktionen-und-Lernwerkzeuge.md` um fünf kompakte Prompt-Shortcuts ergänzt: `NO/YES`, `GAPS`, `STEELMAN`, `PREMORTEM` und `TIGHTEN`;
+- alle fünf bewusst als `PROMPT-SHORTCUT` klassifiziert: verständliche Kurzprompts, **keine** behaupteten eingebauten ChatGPT-Produktbefehle;
+- optionale persönliche Slash-Aliase `/no-yes`, `/gaps`, `/steelman`, `/premortem` und `/tighten` dokumentiert, ohne daraus Command-Menü-Verfügbarkeit abzuleiten;
+- pro Shortcut Zweck, Beispiel, bevorzugte Ausgabeform und Grenze ergänzt;
+- `NO/YES` als kalibrierter Entscheidungscheck statt reflexivem Widerspruch, `STEELMAN` als stärkste vernünftige Gegenposition und `PREMORTEM` als Risikoanalyse statt Vorhersage abgegrenzt;
+- `TIGHTEN` schützt Kernaussage, Termine, Zahlen, Namen und Bedingungen vor stillem Bedeutungsdrift; komplexere Rewrite-/Kommunikationsaufgaben bleiben bei den zuständigen Schreibskills;
+- kein neuer Skill, kein Plugin und keine Behauptung universeller Produktverfügbarkeit.
+
 ### Text-Watermark-/Unicode-Hygiene und Upstream-Refresh
 
 - `guillaumemeyer/watermarks-remover` erneut gegen aktuellen Stand `1181fd4e8cc581931a5ee672697a646721e92c78` geprüft; bestehender `remove-ai-marks`-Snapshot aktualisiert;
