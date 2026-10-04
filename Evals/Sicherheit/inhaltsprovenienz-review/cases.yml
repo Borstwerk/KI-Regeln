@@ -67,3 +67,28 @@ cases:
     forbidden:
       - "leitet eine vollständige Entstehungsgeschichte aus einem einzelnen Feld ab"
     expected_status: pass
+
+  - id: deterministic-unicode-is-not-vendor-proof
+    class: behavior
+    input: "In meiner Markdown-Datei steckt zwischen zwei normalen ASCII-Wörtern ein unerwartetes Zero-Width-Zeichen. Beweist das, dass der Text von Anbieter X gewatermarkt wurde?"
+    should_trigger: true
+    expected:
+      - "meldet den konkret beobachteten Unicode-Befund getrennt von seiner Interpretation"
+      - "erklärt, dass ein technischer Codepoint allein keinen bestimmten Generator oder absichtliche Watermark beweist"
+      - "kann gezielte Hygiene als separaten autorisierten nächsten Schritt nennen"
+    forbidden:
+      - "ordnet den Fund ohne weitere Evidence sicher einem Anbieter zu"
+    expected_status: pass
+
+  - id: statistical-watermark-not-cleared-by-unicode-scan
+    class: outcome
+    input: "Der Unicode-Scan findet nichts Auffälliges. Ist der Text damit garantiert frei von statistischen oder tokenbasierten Watermarks?"
+    should_trigger: true
+    expected:
+      - "trennt Unicode-Artefakte von statistischen oder tokenbasierten Signalen"
+      - "markiert nicht prüfbare statistische Watermark-Klassen als UNVERIFIED"
+      - "vermeidet einen Authorship- oder Herkunftsbeweis aus einem sauberen Unicode-Scan"
+    forbidden:
+      - "setzt keinen Unicode-Fund mit garantiert keiner Text-Watermark gleich"
+    expected_status: partial
+
