@@ -1,6 +1,6 @@
 # ChatGPT-Befehle, Lernwerkzeuge und interaktive Funktionen
 
-Stand: 2026-10-01
+Stand: 2026-10-04
 
 ## Zweck
 
@@ -669,6 +669,261 @@ eingebaute Produktfunktion
 ```
 
 Für KI-Regeln werden solche Einträge nur als `PROMPT-SHORTCUT` geführt, solange keine belastbare Produkt- oder UI-Evidence vorliegt.
+
+## Kurze Denk- und Schreibcodes
+
+Die folgenden Kürzel sind **keine belegten eingebauten ChatGPT-Befehle**. Sie sind kompakte Prompt-Shortcuts für wiederkehrende Denk- oder Schreibaufgaben.
+
+Sie können als beobachtetes Schlüsselwort geschrieben werden:
+
+```text
+STEELMAN
+PREMORTEM
+TIGHTEN
+```
+
+oder als persönliche Slash-Schreibweise:
+
+```text
+/steelman
+/premortem
+/tighten
+```
+
+Die Slash-Variante ist dabei nur eigene Prompt-Sprache. Sie garantiert keinen Eintrag im ChatGPT-Command-Menü.
+
+| Kürzel | Zweck | Typische Ausgabe | Status |
+|---|---|---|---|
+| `NO/YES` · `/no-yes` | Entscheidung oder Plan kritisch gegenprüfen | mögliche Fehlannahme, stärkstes Gegenargument, Bedingung für ein belastbareres Ja/Nein | `PROMPT-SHORTCUT` |
+| `GAPS` · `/gaps` | übersehene Lücken in einem Plan finden | fehlende Aufgaben, Zuständigkeiten, Risiken oder Voraussetzungen | `PROMPT-SHORTCUT` |
+| `STEELMAN` · `/steelman` | stärkste vernünftige Gegenposition formulieren | bestes Gegenargument ohne Strohmann | `PROMPT-SHORTCUT` |
+| `PREMORTEM` · `/premortem` | Scheitern gedanklich vorwegnehmen | wahrscheinlichste Fehlerursachen, frühe Warnsignale, mögliche Gegenmaßnahmen | `PROMPT-SHORTCUT` |
+| `TIGHTEN` · `/tighten` | Text straffen | kürzere Fassung ohne unnötige Füllsätze und ohne stillen Bedeutungsverlust | `PROMPT-SHORTCUT` |
+
+### NO/YES — Entscheidung gegenprüfen
+
+**Wofür**
+
+- Kündigung oder Selbstständigkeit;
+- größere Anschaffung;
+- Projektstart;
+- Priorisierungsentscheidung;
+- Plan, bei dem man möglicherweise zu schnell auf ein gewünschtes Ergebnis zuläuft.
+
+**Beispiel**
+
+```text
+Ich will meinen Job kündigen
+und mich nächstes Jahr selbstständig machen.
+
+NO/YES
+```
+
+Sinnvolle Antwortstruktur:
+
+```text
+WO DU FALSCH LIEGEN KÖNNTEST
+- zentrale Annahme, die möglicherweise nicht trägt
+
+STÄRKSTES GEGENARGUMENT
+- die belastbarste Gegenposition
+
+JA / NEIN / JA-WENN
+- nur soweit die vorhandenen Fakten das tragen
+
+WAS DIE ENTSCHEIDUNG ÄNDERN WÜRDE
+- fehlende Evidence oder konkrete Bedingung
+```
+
+**Grenze**
+
+Nicht künstlich widersprechen. Ein kritischer Shortcut ist kein Auftrag, zwanghaft `NO` zu sagen. Ziel ist Kalibrierung statt Yes-Man oder No-Man.
+
+---
+
+### GAPS — Was fehlt noch?
+
+**Wofür**
+
+- Launchpläne;
+- Projektpläne;
+- Veranstaltungen;
+- Reisen;
+- Prozesse;
+- Produkte;
+- organisatorische Vorhaben.
+
+**Beispiel**
+
+```text
+Plan:
+Wir launchen unseren Online-Kurs Mitte November.
+
+GAPS
+```
+
+Mögliche Kategorien:
+
+- Recht / Compliance;
+- Zahlung / Abrechnung;
+- Rollen und Zuständigkeiten;
+- Support;
+- technische Voraussetzungen;
+- Kommunikation;
+- Abhängigkeiten;
+- Erfolgsmessung;
+- Fallbacks.
+
+Der Shortcut soll **plausible Lücken finden**, nicht eine endlose Universalcheckliste erzeugen. Fehlende Fakten als Fragen oder Annahmen markieren.
+
+---
+
+### STEELMAN — stärkste Gegenposition
+
+Ein Steelman ist das Gegenteil eines Strohmanns.
+
+Statt die Gegenseite möglichst leicht angreifbar zu formulieren, wird ihre **stärkste vernünftige Version** gebaut.
+
+**Beispiel**
+
+```text
+Homeoffice ist produktiver als das Büro.
+
+STEELMAN
+```
+
+Mögliche Ausgabe:
+
+```text
+DIE STÄRKSTE GEGENPOSITION
+
+- bestes sachliches Gegenargument
+- Bedingungen, unter denen es besonders stark ist
+- stärkster Punkt, den die Ausgangsthese beantworten müsste
+```
+
+**Grenze**
+
+`STEELMAN` bedeutet nicht, dass die Gegenposition automatisch wahr ist. Es verbessert die Qualität der anschließenden Bewertung.
+
+---
+
+### PREMORTEM — Scheitern vorwegnehmen
+
+Beim Premortem wird angenommen, dass ein Vorhaben bereits gescheitert ist.
+
+Dann wird rückwärts gefragt:
+
+> Was waren wahrscheinlich die Gründe?
+
+**Beispiel**
+
+```text
+Plan:
+Wir starten im Januar einen Firmen-Podcast.
+
+PREMORTEM
+```
+
+Bevorzugte Struktur:
+
+```text
+ANGENOMMEN, ES IST GESCHEITERT
+
+1. wahrscheinliche Ursache
+   Frühestes Warnsignal
+   mögliche Gegenmaßnahme
+
+2. wahrscheinliche Ursache
+   Frühestes Warnsignal
+   mögliche Gegenmaßnahme
+
+3. wahrscheinliche Ursache
+   Frühestes Warnsignal
+   mögliche Gegenmaßnahme
+```
+
+**Besonders sinnvoll**
+
+Vor Launches, Migrationen, Investitionen oder Projekten mit mehreren Abhängigkeiten.
+
+**Grenze**
+
+Ein Premortem ist Risikoanalyse, keine Vorhersage. Wahrscheinlichkeit und Schadenshöhe getrennt betrachten.
+
+---
+
+### TIGHTEN — Text straffen
+
+`TIGHTEN` ist ein Rewrite-Shortcut.
+
+Ziel:
+
+> denselben Inhalt mit weniger Ballast ausdrücken.
+
+**Beispiel**
+
+Ausgangstext:
+
+```text
+Hallo zusammen, ich wollte euch nur kurz darüber informieren,
+dass wir das für Donnerstag angesetzte Meeting aus verschiedenen
+organisatorischen Gründen leider nicht wie geplant durchführen
+können und es stattdessen auf Montag um 10 Uhr verschieben möchten.
+
+TIGHTEN
+```
+
+Bevorzugte Regeln:
+
+- Kernaussage nach vorn;
+- Füllformulierungen entfernen;
+- Dopplungen streichen;
+- Ton und notwendige Höflichkeit erhalten;
+- Zahlen, Termine, Namen und Bedingungen unverändert lassen;
+- keine neuen Gründe, Zusagen oder Fakten hinzufügen.
+
+Sinngemäß:
+
+```text
+Das Meeting am Donnerstag entfällt aus organisatorischen Gründen.
+Neuer Termin: Montag, 10 Uhr.
+```
+
+Für komplexere oder sensible Texte bleibt `natuerliches-schreiben` beziehungsweise `adressatengerechte-kommunikation` die eigentliche Arbeitsdisziplin. Der Shortcut ist nur eine kompakte Bedienform.
+
+---
+
+## Warum diese Codes nützlich sind
+
+Sie verändern weniger das **Thema** des Prompts als die gewünschte **Denkoperation**:
+
+```text
+NO/YES
+→ Entscheidung challengen
+
+GAPS
+→ fehlende Teile suchen
+
+STEELMAN
+→ Gegenposition maximieren
+
+PREMORTEM
+→ Scheitern rückwärts analysieren
+
+TIGHTEN
+→ sprachlichen Ballast entfernen
+```
+
+Das macht sie als persönliche Prompt-Sprache nützlich.
+
+Es bleibt aber:
+
+```text
+verständlicher Kurzprompt
+≠
+eingebaute ChatGPT-Funktion
+```
 
 ---
 
