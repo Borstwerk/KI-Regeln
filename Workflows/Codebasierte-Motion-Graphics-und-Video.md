@@ -19,11 +19,13 @@ Nicht automatisch verwenden, wenn der Nutzer ausdrücklich nur ein generatives V
 ```text
 Brief + Quellen
 → Asset-/Rechteplan
-→ Script / Storyboard / Beats
+→ Canonical-Media-Contract
+→ Script / Storyboard / Beats + Blocking
 → visuelle Richtung + Motion-Logik
+→ Performance-/Derived-Media bei Bedarf erzeugen
 → Composition implementieren
 → statische Proof-Frames prüfen
-→ bewegten Preview / Audio prüfen
+→ Identity / Voice / Lip-Sync / Playback / Audio getrennt prüfen
 → korrigieren
 → finalen Render freigeben
 → Artefakt + Provenienz + offene Risiken übergeben
@@ -56,7 +58,43 @@ Bei Marken-/Produktmaterial:
 
 Bei relevanter Provenienzprüfung `inhaltsprovenienz-review` ergänzen.
 
-## 3. Script und Storyboard
+## 3. Canonical-Media-Contract
+
+Vor generativen Zwischenstufen definieren, welche Quellen für welche Eigenschaften kanonisch bleiben.
+
+Mögliche Rollen:
+
+- `character-identity`;
+- `voice-master`;
+- `approved-script`;
+- `brand-asset`;
+- `product-ui`;
+- `factual-claim-source`.
+
+Für jede relevante Rolle dokumentieren:
+
+- konkrete Datei/Version/Referenz;
+- erlaubte Transformationen;
+- zu erhaltende Eigenschaften;
+- spätere Rückprüfung;
+- ob die kanonische Quelle im Final erneut gebunden werden muss.
+
+Generierte Zwischenartefakte werden als **derived** markiert. Sie dürfen eine kanonische Quelle nicht allein aufgrund ihrer Position in der Pipeline ersetzen.
+
+Beispiel:
+
+```text
+voice-master.wav
+→ Performance-Generator für Lippenbewegung / Gestik
+→ derived-performance.mp4
+→ finaler Composite verwendet Video aus derived-performance.mp4
+  + bindet voice-master.wav erneut als Final-Voice
+→ Lip-Sync gegen genau diese Finalkombination prüfen
+```
+
+Nur anwenden, wenn die konkrete Runtime/Toolkette diese Trennung unterstützt.
+
+## 4. Script, Storyboard und Blocking
 
 Das Narrativ in Beats oder Szenen zerlegen.
 
@@ -69,9 +107,17 @@ Für jeden Beat festhalten:
 - benötigte Assets;
 - ungefährer Zeitbereich.
 
-Visuals und Narration müssen semantisch zusammenpassen.
+Bei Avatar-/Character-Performance zusätzlich:
 
-## 4. Design und Motion
+- Blickrichtung;
+- Zeige-/Greifrichtung;
+- reservierte Overlay-/Grafikflächen;
+- Schutzbereiche für Gesicht, Hände und wichtige Produktelemente;
+- gewünschte Interaktion mit späteren Einblendungen.
+
+Visuals und Narration müssen semantisch zusammenpassen. Blocking-Anweisungen sind Planungs- und Prüfkriterien, keine Garantie, dass ein generatives Modell sie exakt erfüllt.
+
+## 5. Design und Motion
 
 Lokale Brand- und Designquellen schlagen generische Modellästhetik.
 
@@ -82,7 +128,7 @@ Bei Bedarf:
 
 Tool- oder Frameworkwahl aus Projektanforderungen ableiten, nicht aus persönlicher Vorliebe.
 
-## 5. Implementierung
+## 6. Implementierung
 
 Runtime-Vertrag zuerst prüfen:
 
@@ -96,9 +142,9 @@ Runtime-Vertrag zuerst prüfen:
 
 Änderungen lokal halten und bereits freigegebene Bereiche nicht unnötig neu bauen.
 
-## 6. Verifikation
+## 7. Verifikation
 
-Mindestens zwei Prüfschichten:
+Mindestens zwei Prüfschichten und bei hybriden Character-/Voice-Pipelines zusätzliche Identitätsachsen:
 
 ### A. Frame-/Snapshot-Prüfung
 
@@ -127,7 +173,21 @@ Bei Motion-Craft `motion-review` verwenden. Browser-/Renderzustände können mit
 
 Ein Kontaktbogen allein darf keinen vollständigen Video-Pass begründen.
 
-## 7. Korrekturschleife
+### C. Canonical-/Derived-Media-Prüfung
+
+Wenn kanonische Quellen und generierte Zwischenartefakte beteiligt sind, relevante Achsen separat bewerten:
+
+- Character Identity gegen `character-identity`;
+- Voice Identity gegen `voice-master`;
+- Lip-Sync gegen die **tatsächlich im Final verwendete** Audiospur;
+- Blocking gegen Storyboard und reservierte Grafikräume;
+- Brand-/Produktdarstellung gegen freigegebene Quellen.
+
+Ein Derived Performance Clip darf als Video-`PASS` weiterverwendet werden, obwohl seine erzeugte Audiospur verworfen wird. Umgekehrt darf ein passender Voice Master keinen fehlerhaften Character- oder Lip-Sync-Zustand verdecken.
+
+Kein zusammenfassender `PASS`, wenn eine relevante Achse `FAIL`, `NOT RUN` oder `UNVERIFIED` ist.
+
+## 8. Korrekturschleife
 
 ```text
 Fund
@@ -139,7 +199,7 @@ Fund
 
 Keine Dauer, Auflösung oder Qualitätsstufe nur deshalb reduzieren, um einen sichtbaren Fehler zu verstecken.
 
-## 8. Render- und Veröffentlichungsgate
+## 9. Render- und Veröffentlichungsgate
 
 Wenn der finale Render erhebliche Laufzeit, Credits oder externe Kosten verursacht, Preview beziehungsweise Draft vor dem finalen Render bestätigen lassen.
 
@@ -153,7 +213,9 @@ Mindestens liefern:
 - Runtime/Version soweit relevant;
 - finaler Renderpfad und tatsächliche Dauer;
 - verwendete Quellen/Assets und Provenienz;
+- Canonical-/Derived-Media-Rollen, soweit relevant;
 - ausgeführte statische und bewegte Verifikation;
+- getrennte Identity-/Voice-/Lip-Sync-/Blocking-Statuswerte, soweit relevant;
 - bekannte Abweichungen;
 - nicht ausgeführte Checks;
 - Veröffentlichungsstatus.

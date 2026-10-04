@@ -8,6 +8,17 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Canonical Media und hybride KI-Video-Pipelines
+
+- weiteres Praxisvideo als **Field Observation / Discovery Lead** ausgewertet; Aussagen zur Ersetzung von Videoeditoren, zur „höchsten Konsistenz“ oder zu universellen Modellparametern werden nicht als Benchmark beziehungsweise zentrale Regel übernommen;
+- bestehende Fachgrundlage für codebasierte Motion-/Videoproduktion um **Canonical Media vs. Derived Media** erweitert: eine spätere generative Zwischenstufe wird nicht automatisch neue Source of Truth für Character Identity, Voice, Brand oder freigegebene Claims;
+- `Canonical-Media-Contract` im Video-Workflow ergänzt: Rollen wie `character-identity`, `voice-master`, `approved-script`, `brand-asset` oder `product-ui` binden konkrete Quellen, erlaubte Transformationen und Rückprüfungen;
+- Rebinding-Muster dokumentiert: ein generierter Performance-Clip darf Bewegung/Lipsync liefern, während eine hörbar veränderte Derived-Audiospur verworfen und der kanonische Voice Master im Final erneut gebunden wird; Lip-Sync wird anschließend gegen genau diese Final-Audiospur geprüft;
+- **Character Blocking** vor Performance-Generierung ergänzt: Blick-/Zeigerichtung, Bewegungsraum, reservierte Grafikflächen und Schutzbereiche werden bereits im Storyboard geplant und später gegen die tatsächliche Performance geprüft;
+- Video-QA in getrennte Evidence-Achsen aufgeteilt: Character Identity, Voice Identity, Lip-Sync, Blocking, Motion/Composition, Captions und Brand-/Produktdarstellung; ein `PASS` einer Achse darf nicht auf andere übertragen werden;
+- `motion-review` entsprechend gehärtet und um zwei definierte Evalfälle zu Derived-Voice-Drift sowie Blocking-/Overlay-Konflikt erweitert; beide **DEFINED / NOT RUN**;
+- kein neuer Skill, kein neuer externer Upstream und keine Maturity-Hochstufung; die Praxisbeobachtung dient nur als Auslöser für eine eigenständig formulierte, frameworkneutrale Regelergänzung.
+
 ### Anthropic Skill-Best-Practices-Hardening
 
 - aktuelle Anthropic-Dokumentation zu Skill Authoring und Prompting als semantisch überwachte Skill-Engineering-Upstreams registriert; YouTube-/Community-Zusammenfassungen dienen nur als Discovery-Signal, nicht als Source of Truth;
