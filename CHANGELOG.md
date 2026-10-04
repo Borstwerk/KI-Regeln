@@ -8,6 +8,19 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Web Experience Design und Anti-Slop-Hardening
+
+- weiteres Webdesign-Praxisvideo als **Discovery-/Field-Observation** ausgewertet; Modell-, Benchmark-, Produkt- und Werbeaussagen daraus werden nicht als zentrale Wahrheit übernommen;
+- Referenzarbeit gehärtet: `frontend-design` und die Designrichtungs-Dokumentation unterscheiden nun **Reference Board / Reference Decomposition** von faktischer Reproduktion; pro Referenz werden übertragbare Prinzipien, produktspezifische Merkmale, Nicht-Übernahme-Grenzen und Rechte-/Nutzungshinweise getrennt;
+- **Novelty Budget** ergänzt: technisch mögliche 3D-, WebGL-, Parallax-, Scrollytelling-, Minigame- oder Motion-Effekte brauchen einen konkreten Informations-, Interaktions-, Produkt- oder Identitätszweck; mehrere Signature Experiences dürfen nicht nur als Agenten-Leistungsschau konkurrieren;
+- `greybox` und Informationsarchitektur um **Experience Storyboards** erweitert: immersive/scrollgetriebene Seiten planen Aussage, Beats, Interaktion, Core Content, Mobile/Touch, Reduced Motion und Fallback vor der konkreten Effektbibliothek;
+- Responsive-/Interaktionsregeln um **Progressive Experience Enhancement** und lokalen Fallback Contract ergänzt: Core, Enhanced, Mobile/Touch, Reduced Motion sowie Capability-/Failure-Pfad werden getrennt beschrieben; keine pauschale „alles muss ohne JavaScript identisch sein“-Regel;
+- Frontend-Performance um eine eigene Kostenklasse für 3D/WebGL/Canvas/immersive Experiences erweitert; Low-Poly, GPU, WebGL oder einzelne technische Tricks gelten nicht als automatische Performancegarantie;
+- `web-design-review` prüft nun Reference-Overfit, Novelty Budget und fehlende Experience-Fallbacks; `visual-verification` trennt erfolgreichen High-End-Desktop-Happy-Path von tatsächlich ausgeführten Mobile-/Reduced-Motion-/Capability-Fallbacks;
+- Workflow `Website-Neuentwicklung.md` auf Reference Board → Art Direction → Greybox/Experience Storyboard → Progressive-Experience-Contract → Qualitätsgates erweitert;
+- insgesamt **9 neue definierte Evalfälle** ergänzt: 2× `frontend-design`, 2× `greybox`, 3× `web-design-review`, 2× `visual-verification`; alle **DEFINED / NOT RUN**;
+- `greybox`, `web-design-review` und `visual-verification` im Skill-Katalog wegen der neuen Evalpacks von `none` auf `partial` gesetzt; keine Maturity-Hochstufung und kein neuer Skill.
+
 ### Canonical Media und hybride KI-Video-Pipelines
 
 - weiteres Praxisvideo als **Field Observation / Discovery Lead** ausgewertet; Aussagen zur Ersetzung von Videoeditoren, zur „höchsten Konsistenz“ oder zu universellen Modellparametern werden nicht als Benchmark beziehungsweise zentrale Regel übernommen;

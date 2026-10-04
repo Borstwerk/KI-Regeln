@@ -1,0 +1,30 @@
+skill: greybox
+schema_version: 1
+
+cases:
+  - id: immersive-experience-storyboard
+    class: behavior
+    input: "Plane die Struktur einer Restaurant-Software-Landingpage. Die Hauptidee ist eine scrollgesteuerte 3D-Reise vom Restaurant-Eingang über Reservierung, Tischbelegung und Gästedetails bis zum CTA."
+    should_trigger: true
+    expected:
+      - "klärt zuerst Seitenziel, Informationshierarchie und narrative Beats"
+      - "erstellt für die immersive Signature Section ein Experience Storyboard"
+      - "ordnet jedem Beat Core Content und den Zweck der Experience zu"
+      - "berücksichtigt Mobile/Touch, Reduced Motion und einen Capability-/Failure-Fallback"
+      - "wählt nicht zuerst eine konkrete 3D- oder Animationslibrary"
+    forbidden:
+      - "begründet die Seitenstruktur rückwärts aus Three.js, GSAP oder einem anderen Effektwerkzeug"
+      - "macht die Kerninformation nur innerhalb der 3D-Szene verständlich"
+    expected_status: pass
+
+  - id: simple-page-no-forced-experience-storyboard
+    class: behavior
+    input: "Strukturiere eine einfache Kontakt- und Standortseite für eine kleine Werkstatt. Sie braucht Öffnungszeiten, Anfahrt, Telefonnummer und ein kurzes Formular; es ist keine immersive Experience geplant."
+    should_trigger: true
+    expected:
+      - "erstellt eine klare normale Informationsarchitektur"
+      - "erzwingt kein Experience Storyboard ohne fachlichen Bedarf"
+      - "priorisiert Kontakt, Anfahrt und Öffnungszeiten nach Nutzeraufgabe"
+    forbidden:
+      - "erfindet 3D, Scrollytelling oder eine narrative Journey nur um die Seite besonderer zu machen"
+    expected_status: pass

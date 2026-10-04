@@ -1,5 +1,5 @@
 schema_version: 2
-last_updated: 2026-10-03
+last_updated: 2026-10-04
 
 maturity_levels: [experimental, candidate, stable, deprecated, retired]
 eval_coverage_levels: [none, partial, core, broad]
@@ -46,12 +46,12 @@ skills:
   - {id: tdd, area: Programmieren, path: Programmieren/Skills/tdd/SKILL.md, maturity: candidate, eval_coverage: none, purpose: "Verhalten in kleinen Red-Green-Zyklen testgetrieben implementieren.", capabilities: [repository-read, code-execution]}
   - {id: frontend-design, area: Webentwicklung, path: Webentwicklung/Skills/frontend-design/SKILL.md, maturity: experimental, eval_coverage: partial, purpose: "Eine eigenständige, kontextpassende visuelle Webrichtung definieren.", capabilities: [browser-preferred]}
   - {id: design-system, area: Webentwicklung, path: Webentwicklung/Skills/design-system/SKILL.md, maturity: experimental, eval_coverage: none, purpose: "Freigegebene Designrichtung in wiederverwendbare Tokens und Regeln übersetzen.", related: [frontend-design]}
-  - {id: greybox, area: Webentwicklung, path: Webentwicklung/Skills/greybox/SKILL.md, maturity: experimental, eval_coverage: none, purpose: "Informationsarchitektur und Seitenhierarchie vor visueller Politur klären.", related: [design-system]}
+  - {id: greybox, area: Webentwicklung, path: Webentwicklung/Skills/greybox/SKILL.md, maturity: experimental, eval_coverage: partial, purpose: "Informationsarchitektur und Seitenhierarchie vor visueller Politur klären.", related: [design-system]}
   - {id: web-content, area: Webentwicklung, path: Webentwicklung/Skills/web-content/SKILL.md, maturity: experimental, eval_coverage: none, purpose: "Webtexte und UI-Inhalte konkret, ehrlich und frei von Füll-/Fake-Content gestalten."}
-  - {id: web-design-review, area: Webentwicklung, path: Webentwicklung/Skills/web-design-review/SKILL.md, maturity: experimental, eval_coverage: none, purpose: "Gerenderte Weboberflächen unabhängig auf Designqualität und Anti-Slop prüfen.", capabilities: [browser-preferred]}
+  - {id: web-design-review, area: Webentwicklung, path: Webentwicklung/Skills/web-design-review/SKILL.md, maturity: experimental, eval_coverage: partial, purpose: "Gerenderte Weboberflächen unabhängig auf Designqualität und Anti-Slop prüfen.", capabilities: [browser-preferred]}
   - {id: accessibility-review, area: Webentwicklung, path: Webentwicklung/Skills/accessibility-review/SKILL.md, maturity: experimental, eval_coverage: none, purpose: "Weboberflächen auf semantische und bedienbare Accessibility prüfen.", capabilities: [browser-preferred]}
   - {id: frontend-performance, area: Webentwicklung, path: Webentwicklung/Skills/frontend-performance/SKILL.md, maturity: experimental, eval_coverage: none, purpose: "Frontendperformance messungsbasiert diagnostizieren und verbessern.", capabilities: [measurement-preferred]}
-  - {id: visual-verification, area: Webentwicklung, path: Webentwicklung/Skills/visual-verification/SKILL.md, maturity: experimental, eval_coverage: none, purpose: "Weboberflächen in realen Renderzuständen und Viewports verifizieren.", capabilities: [browser-required]}
+  - {id: visual-verification, area: Webentwicklung, path: Webentwicklung/Skills/visual-verification/SKILL.md, maturity: experimental, eval_coverage: partial, purpose: "Weboberflächen in realen Renderzuständen und Viewports verifizieren.", capabilities: [browser-required]}
   - {id: motion-design, area: Webentwicklung, path: Webentwicklung/Skills/motion-design/SKILL.md, maturity: experimental, eval_coverage: partial, purpose: "Zweck, Intensität und Verhalten von Web-Motion als Motion-Contract definieren.", related: [frontend-design, design-system, motion-implementation, motion-review]}
   - {id: motion-implementation, area: Webentwicklung, path: Webentwicklung/Skills/motion-implementation/SKILL.md, maturity: experimental, eval_coverage: partial, purpose: "Definierte Web-Motion mit einer kontextgerechten Webplattform- oder Library-Mechanik umsetzen.", capabilities: [repository-read-preferred, browser-preferred], related: [motion-design, motion-review, frontend-performance, visual-verification]}
   - {id: motion-review, area: Webentwicklung, path: Webentwicklung/Skills/motion-review/SKILL.md, maturity: experimental, eval_coverage: partial, purpose: "Vorhandene Web-Motion unabhängig, evidenzbezogen und ohne ungefragte Reimplementation prüfen.", capabilities: [browser-preferred], related: [motion-design, motion-implementation, accessibility-review, frontend-performance, visual-verification]}

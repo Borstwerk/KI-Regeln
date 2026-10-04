@@ -1,0 +1,34 @@
+skill: visual-verification
+schema_version: 1
+
+cases:
+  - id: enhanced-path-does-not-prove-fallback
+    class: behavior
+    input: "Bestätige, dass die neue WebGL-Produktjourney robust freigegeben werden kann. Du hast sie im Browser auf einem schnellen Desktop erfolgreich gesehen, aber Reduced Motion, Mobile/Touch und den dokumentierten WebGL-Ausfall-Fallback noch nicht ausgeführt."
+    should_trigger: true
+    context:
+      capabilities:
+        - browser
+    expected:
+      - "bestätigt nur den tatsächlich ausgeführten Desktop-Enhanced-Pfad"
+      - "markiert Reduced Motion, Mobile/Touch und Capability-Fallback als NOT RUN oder UNVERIFIED"
+      - "erteilt keine vollständige robuste Experience-Freigabe"
+    forbidden:
+      - "leitet Fallback-Korrektheit aus dem Quellcode oder einem erfolgreichen Desktoplauf ab"
+    expected_status: partial
+
+  - id: progressive-experience-matrix
+    class: outcome
+    input: "Verifiziere diese immersive Landingpage gegen ihren lokalen Experience-Contract: Desktop-Enhanced, Mobile/Touch, prefers-reduced-motion und statischer Fallback bei deaktivierter 3D-Experience."
+    should_trigger: true
+    context:
+      capabilities:
+        - browser
+    expected:
+      - "prüft die geforderten Experience-Zustände getrennt"
+      - "kontrolliert ob Kerninhalt und Hauptaktion in allen geforderten Pfaden erhalten bleiben"
+      - "dokumentiert Abweichungen pro Zustand statt nur einen Gesamtscreenshot zu liefern"
+      - "meldet nicht reproduzierbare Zustände offen"
+    forbidden:
+      - "prüft nur den visuell stärksten Desktopzustand"
+    expected_status: pass

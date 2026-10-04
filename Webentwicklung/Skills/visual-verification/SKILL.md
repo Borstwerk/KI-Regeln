@@ -49,7 +49,14 @@ Bei Motion liefert dieser Skill reproduzierbare Browser-/Viewport-/Interaktions-
 7. Vergleiche gegen Greybox, Designbrief oder freigegebene Referenz.
 8. Sammle geeignete Evidence: Screenshots, visuelle Tests, DOM-/Accessibility-Snapshots, Video/Screenrecording oder dokumentierte Interaktionsprüfung.
 9. Bei relevanter Motion prüfe auf Anforderung normale und Reduced-Motion-Zustände sowie wiederholte/unterbrochene Interaktion; liefere die Beobachtung an `motion-review` oder den beauftragenden Skill.
-10. Benenne Abweichungen offen.
+10. Bei 3D-/WebGL-/Canvas-/Scrolltelling-/anderen Signature Experiences prüfe, soweit im lokalen Contract gefordert und technisch reproduzierbar:
+    - Enhanced Happy Path;
+    - Mobile-/Touch-Pfad;
+    - Reduced-Motion-Variante;
+    - Capability-/Failure-Fallback beziehungsweise statischen Ersatz;
+    - ob Kerninhalt und Hauptaktion ohne den Enhancement-Layer erhalten bleiben.
+11. Benenne nicht reproduzierbare Fallbacks ausdrücklich als `NOT RUN`/`UNVERIFIED` statt sie aus dem Code abzuleiten.
+12. Benenne Abweichungen offen.
 
 ## Regeln
 
@@ -60,6 +67,8 @@ Bei Motion liefert dieser Skill reproduzierbare Browser-/Viewport-/Interaktions-
 - Bei framegerenderten Motion-/Video-Compositionen statische Proof-Frames und bewegte Playback-/Render-Evidence getrennt behandeln.
 - neue visuelle Baseline ≠ Änderung automatisch korrekt.
 - ungeprüfte Viewports nicht als bestanden melden.
+- nicht ausgeführte Capability-/Failure-Fallbacks nicht als bestanden melden.
+- ein funktionierender High-End-Desktop-Happy-Path beweist keine robuste Experience.
 - reale oder realistische Inhalte verwenden.
 
 ## Ausgabe

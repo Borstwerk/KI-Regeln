@@ -24,11 +24,15 @@ frontend-design
 
 `frontend-design`
 
+Wenn externe Inspiration relevant ist, zuerst ein kleines Reference Board erstellen und die Vorlagen in übertragbare Prinzipien versus produktspezifische/geschützte Ausdrucksformen zerlegen. Keine einzelne Referenz als faktische Implementierungsvorlage behandeln.
+
 Output:
 
 - Produkt-/Zielgruppenfit;
 - visuelle These;
+- abstrahierte Referenzprinzipien, falls genutzt;
 - Signature Elements;
+- Novelty Budget;
 - bewusste Anti-Patterns.
 
 ### 2. Designsystem
@@ -47,7 +51,16 @@ Stabile Typo-, Farb-, Spacing-, Surface- und Interaktionsregeln.
 - Hauptaktionen;
 - Mobile-Logik.
 
-Erst freigeben, wenn die Struktur ohne visuelle Tricks funktioniert.
+Wenn eine Seite ihre Hauptaussage wesentlich über Scrolltelling, 3D oder eine andere immersive Signature Experience vermittelt, zusätzlich ein Experience Storyboard erstellen:
+
+- narrative/inhaltliche Beats;
+- Core Content pro Beat;
+- Enhancement-Zweck;
+- Mobile-/Touch-Pfad;
+- Reduced-Motion-Pfad;
+- Capability-/Failure-Fallback.
+
+Erst freigeben, wenn die Struktur ohne visuelle Tricks verständlich bleibt und eine immersive Experience einen tragfähigen Kern besitzt.
 
 ### 4. Echter Content
 
@@ -59,11 +72,17 @@ Keine Fake-KPIs, Fake-Testimonials oder bedeutungsleere Template-Sektionen.
 
 Technischen Stack aus dem Projekt übernehmen. Allgemeine Programmierregeln und bei Bedarf TDD/Code Review verwenden.
 
+Aufwendige Experience-Layer nur aus einer bereits begründeten Design-/Storyboard-Entscheidung ableiten. Nicht GSAP, Three.js, WebGL, Canvas oder eine andere Library zuerst wählen und danach nach einem Zweck suchen.
+
+Für relevante Signature Experiences den lokalen Progressive-Experience-Contract implementieren: Core, Enhanced, Mobile/Touch, Reduced Motion und Capability-/Failure-Fallback.
+
 ### 6. Qualitätsgates
 
 - `accessibility-review`;
 - `frontend-performance`;
 - `visual-verification`.
+
+Bei immersiven Experiences reicht der High-End-Desktop-Happy-Path nicht. Soweit lokal relevant, auch Mobile/Touch, Reduced Motion und dokumentierte Capability-/Failure-Fallbacks prüfen oder ehrlich als `NOT RUN`/`UNVERIFIED` markieren.
 
 ### 7. Unabhängiger Designreview
 
@@ -76,9 +95,12 @@ Der erzeugende Agent soll sein eigenes Ergebnis nicht allein freigeben.
 ```text
 Designidentität
 + Aufgabenfit
++ Reference-Originalität, falls externe Referenzen genutzt werden
++ begründetes Novelty Budget
 + echte Inhalte
 + Accessibility
 + Responsive Verhalten
++ Progressive-Experience-Fallbacks, falls relevant
 + Performance-Evidence
 + gerenderte Verifikation
 + unabhängiger Review

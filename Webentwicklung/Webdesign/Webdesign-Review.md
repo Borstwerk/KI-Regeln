@@ -1,5 +1,20 @@
 # Webdesign-Review
 
+## Inhalt
+
+- Zweck
+- Grundregel
+- 1. Gegen die lokale Designquelle prüfen
+- 2. Reviewachsen getrennt bewerten
+- 3. Anti-Slop-Check
+- 4. Reference-Overfit und Novelty Budget prüfen
+- 5. Funde priorisieren
+- 6. Ursache statt kosmetischem Symptom benennen
+- 7. Nicht redesignen, wenn Review gefragt ist
+- 8. Vorversionen und Referenzen vergleichen
+- Review-Ausgabe
+- Leitgedanke
+
 ## Zweck
 
 Dieses Dokument beschreibt einen unabhängigen Review einer bestehenden Website oder Weboberfläche.
@@ -77,7 +92,40 @@ Auffällige Muster ausdrücklich prüfen:
 
 Ein Fund ist noch kein automatischer Fehler. Entscheidend ist, ob das Stilmittel funktional oder identitätsbildend begründet ist.
 
-## 4. Funde priorisieren
+## 4. Reference-Overfit und Novelty Budget prüfen
+
+Bei referenzgetriebenen oder stark interaktiven Seiten zusätzlich fragen:
+
+### Reference-Overfit
+
+- Wurde aus mehreren Referenzen eine eigene Produktlogik abgeleitet?
+- Oder ist eine fremde Komposition, Markenidee oder charakteristische Experience praktisch nur rekonstruiert worden?
+- Sind konkrete Assets und markenspezifische Signaturen sauber getrennt von abstrakten Designprinzipien?
+- Kann begründet werden, warum das Ergebnis zu **diesem** Produkt gehört?
+
+Technisch leichte Rekonstruktion ist kein Qualitätsargument.
+
+### Novelty Budget
+
+Prüfe auffällige Experience-Elemente einzeln:
+
+- Welchen Zweck erfüllen sie?
+- Konkurrieren mehrere Signature Experiences um dieselbe Aufmerksamkeit?
+- Wird Produktverständnis durch Effekte verbessert oder verdeckt?
+- Existieren Spielereien, die nur demonstrieren, was der Agent technisch konnte?
+- Würde Entfernen einzelner Effekte die Seite klarer machen, ohne Nutzwert zu verlieren?
+
+### Fallback
+
+Bei 3D-/WebGL-/Scrolltelling-/stark bewegten Experiences:
+
+- ist Core Content ohne den Enhancement-Layer erreichbar?
+- existieren sinnvolle Mobile-/Touch- und Reduced-Motion-Pfade?
+- ist das Verhalten bei fehlender Spezialfähigkeit oder Assetfehler definiert?
+
+Ein visuell beeindruckender Happy Path ist noch kein freigabefähiges Gesamtdesign.
+
+## 5. Funde priorisieren
 
 Nicht hundert gleichgewichtete Designmeinungen auflisten.
 
@@ -88,7 +136,7 @@ Bevorzugte Prioritäten:
 - **mittel** – relevante Qualitätsminderung;
 - **niedrig** – lokaler Feinschliff.
 
-## 5. Ursache statt kosmetischem Symptom benennen
+## 6. Ursache statt kosmetischem Symptom benennen
 
 Schwach:
 
@@ -98,7 +146,7 @@ Stärker:
 
 > Fünf verschachtelte Flächen konkurrieren um dieselbe Hierarchie. Zwei Ebenen können durch Abstand und Typografie ersetzt werden.
 
-## 6. Nicht redesignen, wenn Review gefragt ist
+## 7. Nicht redesignen, wenn Review gefragt ist
 
 Ein Review benennt:
 
@@ -109,7 +157,7 @@ Ein Review benennt:
 
 Es soll nicht ungefragt eine komplett neue Designrichtung einführen.
 
-## 7. Vorversionen und Referenzen vergleichen
+## 8. Vorversionen und Referenzen vergleichen
 
 Wenn mehrere Versionen vorhanden sind:
 

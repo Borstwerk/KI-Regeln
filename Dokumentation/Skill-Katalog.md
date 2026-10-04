@@ -94,7 +94,9 @@ Für Requirements und Spezifikations-Engineering sind sechs Startfälle je Skill
 
 Für Social Media und Content-Präsenz sind sechs Startfälle je Skill definiert, insgesamt 54. Die erwartete Verteilung ist 36× `pass`, 9× `partial` und 9× `blocked`. Diese 54 Fälle sind derzeit **definiert, aber noch nicht ausgeführt oder bestanden**.
 
-Für Webentwicklung ergänzen `motion-design`, `motion-implementation` und `motion-review` den Bestand als `experimental` mit `partial` Evalabdeckung. Für diese drei Skills sind 26 Motion-Cases definiert. Darunter befindet sich ein kombinierter Screenrecording-Reproduktionsfall, der die Komposition `motion-review → motion-implementation → visual-verification` absichert; er begründet derzeit keinen separaten `motion-reverse-engineering`-Skill. Die 26 Fälle sind **definiert, aber noch nicht als Behavioral Evals ausgeführt oder bestanden**.
+Für Webentwicklung besitzen `frontend-design`, `greybox`, `web-design-review`, `visual-verification`, `motion-design`, `motion-implementation` und `motion-review` derzeit `partial` Evalabdeckung. `design-system`, `web-content`, `accessibility-review` und `frontend-performance` bleiben `none`, solange dafür keine formalen Evalpacks vorliegen.
+
+Die Motion-Evalpacks sichern weiterhin unter anderem die Komposition `motion-review → motion-implementation → visual-verification` ab. Das Web-Experience-Hardening ergänzt zusätzlich definierte Fälle zu Reference Decomposition, Novelty Budget, Experience Storyboards, Reference-Overfit sowie Mobile-/Reduced-Motion-/Capability-Fallbacks. Diese Fälle sind **definiert, aber noch nicht als Behavioral Evals ausgeführt oder bestanden**.
 
 Der Stand nach Phase 3.5 betrug 131 Skills, davon 103× `partial` und 28× `none`, 0× `core`/`broad`; 103 Skill-Evalpacks mit insgesamt 515 definierten Cases. Die drei neuen Skills aus Phase 3.5 wurden nicht über `experimental` hinaus hochgestuft.
 

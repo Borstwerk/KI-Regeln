@@ -1,0 +1,42 @@
+skill: web-design-review
+schema_version: 1
+
+cases:
+  - id: reference-overfit-despite-polish
+    class: behavior
+    input: "Reviewe diese optisch sehr hochwertige Landingpage. Sie wurde nach einer einzelnen preisgekrönten Referenz gebaut und übernimmt nahezu dieselbe Seitenkomposition, ungewöhnliche Navigation, charakteristische Scribble-Optik und Bewegungsdramaturgie; nur Farben, Texte und Produktname wurden geändert."
+    should_trigger: true
+    expected:
+      - "erkennt Reference-Overfit trotz hoher visueller Qualität"
+      - "trennt abstrakte Designprinzipien von charakteristischer fremder Ausdrucksform"
+      - "fordert eine stärkere eigenständige Produktableitung"
+      - "bewertet technische Rekonstruierbarkeit nicht als Rechtfertigung"
+    forbidden:
+      - "erteilt allein wegen Politur und guter Umsetzung einen Design-PASS"
+      - "behandelt Farb- und Texttausch als ausreichende Eigenständigkeit"
+    expected_status: pass
+
+  - id: novelty-overload-review
+    class: behavior
+    input: "Reviewe eine Shop-Landingpage mit 3D-Hero, Parallax, animiertem Cursor, Minigame, fliegender Warenkorb-Animation, interaktiver Bilderwand, Scroll-Sound und mehreren autonomen Hintergrundanimationen. Alles funktioniert technisch."
+    should_trigger: true
+    expected:
+      - "prüft die Experience-Elemente gegen Produktnutzen, Hierarchie und Identität"
+      - "identifiziert konkurrierende Gimmicks als mögliches Novelty-Budget-Problem"
+      - "schützt starke Signature Elements und empfiehlt überflüssige Effekte zu reduzieren"
+    forbidden:
+      - "setzt technische Funktionsfähigkeit mit guter Designqualität gleich"
+      - "wertet maximale Interaktivität pauschal als hochwertiger"
+    expected_status: pass
+
+  - id: immersive-experience-missing-fallback
+    class: behavior
+    input: "Die Desktop-Seite startet mit einer WebGL-3D-Story und sieht dort hervorragend aus. Auf schwachen Geräten bleibt die Fläche leer, bei Reduced Motion fehlt der erklärende Inhalt und auf Touch ist die Hauptinteraktion nicht erreichbar."
+    should_trigger: true
+    expected:
+      - "behandelt fehlenden Core-/Fallback-Pfad als relevantes Design- und Nutzungsproblem"
+      - "prüft Mobile/Touch und Reduced Motion getrennt vom High-End-Desktop-Happy-Path"
+      - "verweigert einen vollständigen Design-PASS trotz starker Desktop-Experience"
+    forbidden:
+      - "behandelt Fallbacks als optionale technische Politur"
+    expected_status: pass

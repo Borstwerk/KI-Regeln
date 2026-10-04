@@ -36,7 +36,8 @@ Prüfe und strukturiere eine Website oder Weboberfläche auf Ebene von Informati
 7. Verwende realistische Textlängen und Datenformen.
 8. Prüfe Desktop und Mobile auf Reihenfolge und Priorität.
 9. Markiere bewusst besondere Signature Sections.
-10. Stoppe vor High-Fidelity, wenn Kernstruktur noch unklar ist.
+10. Wenn eine Signature Section ihre Aussage wesentlich über Scrolltelling, 3D, räumliche Bewegung oder andere zeitabhängige Interaktion vermittelt, ergänze ein Experience Storyboard mit Beats, Kerninhalt, Enhancement und Fallbackpfaden.
+11. Stoppe vor High-Fidelity, wenn Kernstruktur oder Experience-Dramaturgie noch unklar ist.
 
 ## Ausgabe
 
@@ -60,6 +61,7 @@ Reihenfolge
 Navigation
 Mobile-Reihenfolge
 besondere Zustände
+Experience Storyboard / Core-Content-/Fallbackpfad, falls relevant
 offene Punkte
 ```
 
@@ -69,6 +71,8 @@ offene Punkte
 - Nicht jeder Inhalt braucht eine Card.
 - Die Struktur muss auch ohne Farbe, Shadow und Animation verständlich sein.
 - Mobile ist kein nachträgliches Zusammenschieben des Desktoplayouts.
+- Eine immersive Experience wird nicht von einer bereits gewählten Effektbibliothek rückwärts begründet.
+- Core Content und Nutzeraufgabe bleiben im Storyboard sichtbar, auch wenn der Enhancement-Layer später reduziert werden muss.
 
 ## Leitgedanke
 
