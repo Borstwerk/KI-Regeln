@@ -1,5 +1,5 @@
 schema_version: 2
-last_updated: '2026-10-03'
+last_updated: '2026-10-04'
 
 # Mutable external sources whose changes may affect local rules or skills.
 # A changed upstream is a review signal, never an automatic sync instruction.
@@ -24,13 +24,14 @@ sources:
     ref: main
     monitor_mode: exact-sha
     cadence: monthly
-    observed_sha: 41193a86405589e542205bbfaa76414569e4dbae
-    last_checked: 2026-09-06
+    observed_sha: 4a8e681d3a00d0d063daa3a3454783c1ec9b93c7
+    last_checked: 2026-10-04
     local_impact:
       - Sicherheit/Inhaltsprovenienz-und-Metadatenhygiene.md
       - Sicherheit/Skills/inhaltsprovenienz-review/SKILL.md
       - Sicherheit/Skills/metadaten-hygiene/SKILL.md
       - Workflows/Inhaltsprovenienz-und-Metadatenhygiene.md
+      - Sicherheit/Quellen-und-Inspirationen.md
 
   - id: guillaumemeyer-watermarks-remover-ethics
     area: Sicherheit
@@ -41,7 +42,39 @@ sources:
     monitor_mode: exact-sha
     cadence: monthly
     observed_sha: 7506562f2d37748fc5129ea89760dfe2c7c27cc4
-    last_checked: 2026-09-06
+    last_checked: 2026-10-04
+    local_impact:
+      - Sicherheit/Inhaltsprovenienz-und-Metadatenhygiene.md
+      - Sicherheit/Skills/inhaltsprovenienz-review/SKILL.md
+      - Sicherheit/Skills/metadaten-hygiene/SKILL.md
+      - Sicherheit/Quellen-und-Inspirationen.md
+
+  - id: guillaumemeyer-watermarks-remover-clean-user-facing-text
+    area: Sicherheit
+    kind: github-file
+    repository: guillaumemeyer/watermarks-remover
+    path: skills/clean-user-facing-text/SKILL.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: f5fa0e8a63b7b58b900d46216fdf1c48d41a1db5
+    last_checked: 2026-10-04
+    local_impact:
+      - Sicherheit/Inhaltsprovenienz-und-Metadatenhygiene.md
+      - Sicherheit/Skills/inhaltsprovenienz-review/SKILL.md
+      - Sicherheit/Skills/metadaten-hygiene/SKILL.md
+      - Sicherheit/Quellen-und-Inspirationen.md
+
+  - id: guillaumemeyer-watermarks-remover-clean-responsible-use
+    area: Sicherheit
+    kind: github-file
+    repository: guillaumemeyer/watermarks-remover
+    path: skills/clean-user-facing-text/references/responsible-use.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: d51c326638f8df9e0a335cf4debcc0871e6463a4
+    last_checked: 2026-10-04
     local_impact:
       - Sicherheit/Inhaltsprovenienz-und-Metadatenhygiene.md
       - Sicherheit/Skills/inhaltsprovenienz-review/SKILL.md

@@ -1,22 +1,22 @@
 schema_version: 2
 source_registry: Dokumentation/upstream-sources.yml
-last_reviewed: '2026-10-03'
+last_reviewed: '2026-10-04'
 sources:
 - source_id: guillaumemeyer-watermarks-remover-remove-ai-marks
-  reviewed_at: 2026-09-06
-  repository_commit: d9e9590d94e19b39eb2794266292324bfec8249a
+  reviewed_at: 2026-10-04
+  repository_commit: 1181fd4e8cc581931a5ee672697a646721e92c78
   use_class: reference/inspiration
   review_status: assessed
   material_scope: concepts/methods-only
   classification_evidence:
-  - Source-specific review used Inspect-first, provenance-class separation, capability detection, before/after evidence and residual-risk concepts as methodological input.
-  - Local skills were independently authored with a narrower purpose and explicitly reject detector-evasion, watermark-stealing, destructive purification and provenance-disclosure bypass as product goals.
-  - Manual expression comparison found no substantive source sentence, template or runtime structure copied into the registered local impacts beyond generic technical terminology.
+  - Current source-specific review uses inspect-first, provenance-class separation, capability detection, before/after evidence and residual-risk concepts as methodological input.
+  - Local rules remain narrower than the upstream and explicitly reject detector-evasion, watermark-stealing, destructive purification and provenance-disclosure bypass as product goals.
+  - No upstream executable material, service contract or skill prose is redistributed; local rules are independently authored around the observed method classes.
   similarity_audit: no-signal
   redistribution_reliance: not-relied-on
   license_spdx: MIT
-  license_source: https://github.com/guillaumemeyer/watermarks-remover/blob/d9e9590d94e19b39eb2794266292324bfec8249a/LICENSE
-  license_source_commit_or_ref: d9e9590d94e19b39eb2794266292324bfec8249a
+  license_source: https://github.com/guillaumemeyer/watermarks-remover/blob/1181fd4e8cc581931a5ee672697a646721e92c78/LICENSE
+  license_source_commit_or_ref: 1181fd4e8cc581931a5ee672697a646721e92c78
   license_path: LICENSE
   license_blob_sha: 0a2436a2facf906e40b9807db070eba97630e0cf
   path_specific_license_notes:
@@ -31,27 +31,26 @@ sources:
       blob_sha: 0a2436a2facf906e40b9807db070eba97630e0cf
       spdx: MIT
     notes:
-    - License and reviewed source artifacts were observed at repository commit d9e9590d94e19b39eb2794266292324bfec8249a.
+    - License and reviewed source artifact were observed at repository commit 1181fd4e8cc581931a5ee672697a646721e92c78.
   source_snapshot:
     repository: guillaumemeyer/watermarks-remover
     source_path: skills/remove-ai-marks/SKILL.md
     observed_ref: main
-    observed_blob_sha: 41193a86405589e542205bbfaa76414569e4dbae
+    observed_blob_sha: 4a8e681d3a00d0d063daa3a3454783c1ec9b93c7
 - source_id: guillaumemeyer-watermarks-remover-ethics
-  reviewed_at: 2026-09-06
-  repository_commit: d9e9590d94e19b39eb2794266292324bfec8249a
+  reviewed_at: 2026-10-04
+  repository_commit: 1181fd4e8cc581931a5ee672697a646721e92c78
   use_class: reference/inspiration
   review_status: assessed
   material_scope: concepts/methods-only
   classification_evidence:
-  - Source-specific review used the ownership/authorization, disclosure and honest-reporting boundaries as one input to the local Privacy-/Provenance gates.
-  - Local rules independently narrow the allowed job to read-only provenance review and authorized metadata hygiene; no upstream wording or executable material is redistributed.
-  - Manual expression comparison found no substantive copied expression beyond unavoidable domain terms such as C2PA, metadata and provenance.
+  - Ownership/authorization, disclosure preservation and honest reporting remain methodological inputs to the local privacy/provenance gates.
+  - Local rules independently narrow the allowed job to read-only provenance review and authorized hygiene; no upstream wording or executable material is redistributed.
   similarity_audit: no-signal
   redistribution_reliance: not-relied-on
   license_spdx: MIT
-  license_source: https://github.com/guillaumemeyer/watermarks-remover/blob/d9e9590d94e19b39eb2794266292324bfec8249a/LICENSE
-  license_source_commit_or_ref: d9e9590d94e19b39eb2794266292324bfec8249a
+  license_source: https://github.com/guillaumemeyer/watermarks-remover/blob/1181fd4e8cc581931a5ee672697a646721e92c78/LICENSE
+  license_source_commit_or_ref: 1181fd4e8cc581931a5ee672697a646721e92c78
   license_path: LICENSE
   license_blob_sha: 0a2436a2facf906e40b9807db070eba97630e0cf
   path_specific_license_notes:
@@ -66,12 +65,81 @@ sources:
       blob_sha: 0a2436a2facf906e40b9807db070eba97630e0cf
       spdx: MIT
     notes:
-    - License and reviewed ethics reference were observed at repository commit d9e9590d94e19b39eb2794266292324bfec8249a.
+    - License and reviewed ethics reference were observed at repository commit 1181fd4e8cc581931a5ee672697a646721e92c78.
   source_snapshot:
     repository: guillaumemeyer/watermarks-remover
     source_path: skills/remove-ai-marks/references/ethics.md
     observed_ref: main
     observed_blob_sha: 7506562f2d37748fc5129ea89760dfe2c7c27cc4
+- source_id: guillaumemeyer-watermarks-remover-clean-user-facing-text
+  reviewed_at: 2026-10-04
+  repository_commit: 1181fd4e8cc581931a5ee672697a646721e92c78
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence:
+  - Methodological input is limited to protecting non-prose spans, preserving claims/facts during rewriting, separating deterministic Unicode cleanup from best-effort statistical rewriting and preserving writer voice instead of flattening every irregularity.
+  - KI-Regeln does not adopt the upstream stylometry score as an authorship detector or acceptance gate and does not adopt detector-evasion or recursive paraphrase as a default objective.
+  - No vendored scripts, phrase lists, prompts or service/runtime implementation are redistributed.
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: MIT
+  license_source: https://github.com/guillaumemeyer/watermarks-remover/blob/1181fd4e8cc581931a5ee672697a646721e92c78/LICENSE
+  license_source_commit_or_ref: 1181fd4e8cc581931a5ee672697a646721e92c78
+  license_path: LICENSE
+  license_blob_sha: 0a2436a2facf906e40b9807db070eba97630e0cf
+  path_specific_license_notes:
+  - Root MIT license was verified at the same reviewed repository commit; redistribution permission is not relied on because local use is concepts/methods-only reference.
+  license_status_at_observation: verified-at-snapshot
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence:
+    artifact_declarations: []
+    same_state_files:
+    - path: LICENSE
+      blob_sha: 0a2436a2facf906e40b9807db070eba97630e0cf
+      spdx: MIT
+    notes:
+    - License and reviewed clean-user-facing-text skill were observed at repository commit 1181fd4e8cc581931a5ee672697a646721e92c78.
+  source_snapshot:
+    repository: guillaumemeyer/watermarks-remover
+    source_path: skills/clean-user-facing-text/SKILL.md
+    observed_ref: main
+    observed_blob_sha: f5fa0e8a63b7b58b900d46216fdf1c48d41a1db5
+- source_id: guillaumemeyer-watermarks-remover-clean-responsible-use
+  reviewed_at: 2026-10-04
+  repository_commit: 1181fd4e8cc581931a5ee672697a646721e92c78
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence:
+  - The source reinforces ownership/authorization, preservation of required disclosure and the boundary against presenting cleanup as proof of human authorship.
+  - Local rules are independently phrased and narrower than a general watermark-removal toolkit.
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: MIT
+  license_source: https://github.com/guillaumemeyer/watermarks-remover/blob/1181fd4e8cc581931a5ee672697a646721e92c78/LICENSE
+  license_source_commit_or_ref: 1181fd4e8cc581931a5ee672697a646721e92c78
+  license_path: LICENSE
+  license_blob_sha: 0a2436a2facf906e40b9807db070eba97630e0cf
+  path_specific_license_notes:
+  - Root MIT license was verified at the same reviewed repository commit; redistribution permission is not relied on because local use is concepts/methods-only reference.
+  license_status_at_observation: verified-at-snapshot
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence:
+    artifact_declarations: []
+    same_state_files:
+    - path: LICENSE
+      blob_sha: 0a2436a2facf906e40b9807db070eba97630e0cf
+      spdx: MIT
+    notes:
+    - License and reviewed responsible-use reference were observed at repository commit 1181fd4e8cc581931a5ee672697a646721e92c78.
+  source_snapshot:
+    repository: guillaumemeyer/watermarks-remover
+    source_path: skills/clean-user-facing-text/references/responsible-use.md
+    observed_ref: main
+    observed_blob_sha: d51c326638f8df9e0a335cf4debcc0871e6463a4
 - source_id: addyosmani-observability-instrumentation-skill
   reviewed_at: &id001 2026-08-25
   repository_commit: null

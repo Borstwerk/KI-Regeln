@@ -90,6 +90,49 @@ Die Regel lautet:
 
 Aggressive Normalisierung nur nach konkretem Zweck und mit Prüfung möglicher semantischer, sprachlicher oder typografischer Nebenwirkungen.
 
+## Textsignale getrennt behandeln
+
+Bei Text mindestens drei technisch verschiedene Klassen auseinanderhalten:
+
+### 1. Deterministische Artefakte
+
+Beispiele können sein:
+
+- unerwartete Zero-Width-/Tag-Zeichen;
+- bestimmte Bidi-/Default-Ignorable-Steuerzeichen;
+- ungewöhnliche Private-Use- oder Noncharacter-Zeichen;
+- unbeabsichtigte Homoglyphen oder technisch schädliche Whitespace-Artefakte.
+
+Wenn Position und Funktion konkret geprüft werden können, ist ein gezielter Before/After-Check möglich.
+
+Aber auch hier gilt: Das Zeichen selbst beweist **keinen** bestimmten Generator. Derselbe Codepoint kann legitime Sprach-, Emoji-, Layout- oder Typografiefunktion besitzen.
+
+### 2. Statistische / tokenbasierte Signale
+
+Ein statistisches Text-Watermark oder ein Detektorsignal lebt nicht als einzelnes unsichtbares Zeichen in der Datei.
+
+Daraus folgt:
+
+- Unicode-/Metadaten-Cleaning beweist keine Entfernung statistischer Signale;
+- ein Rewrite kann Tokenmuster verändern, ist aber ohne passenden Detector/Key kein verifizierter „Watermark-Remove“;
+- fehlende lokale Detection ist kein Herkunftsbeweis;
+- ein Stylometry-/Burstiness-/Phrase-Score ist höchstens Diagnose-Evidence für genau seine gemessenen Merkmale.
+
+### 3. Sprachqualität / Voice
+
+Generische, gleichförmige oder künstlich klingende Prosa ist ein Schreibqualitätsproblem und gehört primär zu `natuerliches-schreiben`, `stilreview` oder `korrekturlektorat`.
+
+Bei Rewrite müssen insbesondere geschützt bleiben:
+
+- Claims und Fakten;
+- Zahlen, Namen und Zitate;
+- Unsicherheit und Einschränkungen;
+- Fachbegriffe, Code, Pfade, URLs und Identifikatoren;
+- erforderliche Disclosure-/Attributionsangaben;
+- beobachtbare Eigenheiten einer tatsächlichen Autorstimme, solange sie kein klares Verständlichkeitsproblem erzeugen.
+
+Nicht jeden ungewöhnlichen Rhythmus oder jede Wiederholung „wegpolieren“, nur weil sie von einem Heuristik-Score als auffällig bewertet wird.
+
 ## Privacy-Hygiene
 
 Legitime Hygieneziele können sein:
@@ -152,12 +195,16 @@ Bei einer autorisierten Bereinigung:
 
 ## Upstream-Einordnung
 
-Methodische Referenz ist `guillaumemeyer/watermarks-remover`, geprüft am Repository-Commit `d9e9590d94e19b39eb2794266292324bfec8249a` (MIT).
+Methodische Referenz ist `guillaumemeyer/watermarks-remover`, geprüft am Repository-Commit `1181fd4e8cc581931a5ee672697a646721e92c78` (MIT).
+
+Besonders relevant sind inzwischen sowohl `remove-ai-marks` als auch der getrennte `clean-user-facing-text`-Skill.
 
 Übernommen werden Konzepte wie:
 
 - Inspect-first;
 - Trennung verschiedener Provenienz-/Markerklassen;
+- deterministische Unicode-Hygiene getrennt von statistischer Rewrite-Evidence;
+- Schutz nicht-prosaischer und inhaltlich stabiler Bereiche;
 - Capability Detection;
 - Before/After-Evidence;
 - False-Positive- und Residual-Risk-Denken;

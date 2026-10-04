@@ -135,30 +135,40 @@ https://github.com/guillaumemeyer/watermarks-remover
 
 Geprüfter Repository-Stand:
 
-`d9e9590d94e19b39eb2794266292324bfec8249a`
+`1181fd4e8cc581931a5ee672697a646721e92c78`
 
 Lizenz am geprüften Stand: MIT.
+
+Geprüfte Kernartefakte:
+
+- `skills/remove-ai-marks/SKILL.md` – Blob-SHA `4a8e681d3a00d0d063daa3a3454783c1ec9b93c7`;
+- `skills/remove-ai-marks/references/ethics.md` – Blob-SHA `7506562f2d37748fc5129ea89760dfe2c7c27cc4`;
+- `skills/clean-user-facing-text/SKILL.md` – Blob-SHA `f5fa0e8a63b7b58b900d46216fdf1c48d41a1db5`;
+- `skills/clean-user-facing-text/references/responsible-use.md` – Blob-SHA `d51c326638f8df9e0a335cf4debcc0871e6463a4`.
 
 Methodisch relevant sind insbesondere:
 
 - Inspect-first statt blindem Entfernen;
-- Trennung von Unicode-Artefakten, C2PA/Content Credentials, EXIF/XMP, Dokumentmetadaten und anderen Markerklassen;
+- Trennung von **deterministischen Textartefakten** wie bestimmten unsichtbaren Unicode-/Tag-/Bidi-Zeichen von **statistischen/tokenbasierten Signalen**, die nicht als simples Metadatum existieren;
+- Schutz von Code, Befehlen, Pfaden, URLs, Identifikatoren, Formeln, Zitaten, Zahlen, Namen und erforderlichen Disclosure-Hinweisen bei Textbereinigung;
+- Preservation Gate für Claims, Fakten, Unsicherheit und tatsächliche Autorstimme;
 - Capability Detection: nur behaupten, was das vorhandene Tool tatsächlich prüfen kann;
 - Before/After-Evidence und Re-Inspection;
 - Confidence-, False-Positive- und Residual-Risk-Denken;
 - klare Trennung zwischen verifizierbaren technischen Entfernungen und best-effort Aussagen.
 
-Bewusst **nicht** als lokale Produktlogik übernommen werden:
+KI-Regeln übernimmt daraus **nicht**:
 
+- einen Stylometry-/AI-Density-Score als Authorship-Detector oder Akzeptanzgate;
 - Detector-Evasion oder „human score“-Optimierung;
-- statistische Rewrite-Rezepte zur Schwächung von Text-Watermarks;
+- rekursive/statistische Rewrite-Rezepte zur Schwächung von Text-Watermarks als Default;
 - Watermark-Stealing oder Secret-Key-Rekonstruktion;
 - destructive Pixel-/Audio-/Video-Purification als allgemeine Standardfähigkeit;
 - Entfernen verpflichtender Provenienz-, Attribution- oder Disclosure-Signale;
 - die Annahme, fehlende oder entfernte Marker bewiesen menschliche Urheberschaft;
-- die konkrete Claude-Plugin-, HTTP-Service-, Docker-, Modell- oder Backend-Architektur des Upstreams.
+- vendorte `clean_text.py`-/Scoring-Scripts, Phrase-Listen, Rewrite-Prompts oder die konkrete Claude-Plugin-, HTTP-Service-, Docker-, Modell- oder Backend-Architektur des Upstreams.
 
-Der Upstream dient als methodischer Referenzraum. KI-Regeln übernimmt weder dessen Runtime noch dessen Skilltext oder automatische Synchronisation.
+Der Upstream dient als methodischer Referenzraum. Die vier oben genannten Dateien sind in `Dokumentation/upstream-sources.yml` als `monthly`/`exact-sha` registriert. Änderungen werden beim KI-Regeln-Monatscheck als Review-Signal sichtbar; sie lösen **keinen automatischen Sync oder Merge** aus.
 
 ## Eigene Synthese
 

@@ -8,6 +8,18 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Text-Watermark-/Unicode-Hygiene und Upstream-Refresh
+
+- `guillaumemeyer/watermarks-remover` erneut gegen aktuellen Stand `1181fd4e8cc581931a5ee672697a646721e92c78` geprüft; bestehender `remove-ai-marks`-Snapshot aktualisiert;
+- neuen Upstream `skills/clean-user-facing-text/SKILL.md` sowie dessen Responsible-Use-Referenz als `reference/inspiration`, `concepts/methods-only` aufgenommen; keine Scripts, Phrase-Listen, Rewrite-Prompts oder Runtime-Implementierung werden redistribuiert;
+- alle vier relevanten Watermarks-Remover-Artefakte in `Dokumentation/upstream-sources.yml` mit `cadence: monthly` und `monitor_mode: exact-sha` registriert; der wieder aktivierte monatliche KI-Regeln-Monatscheck nimmt sie dadurch automatisch in seinen Registry-Lauf auf;
+- Provenance-/Lizenzsnapshot auf denselben Repository-Commit aktualisiert; MIT-Root-Lizenz am Snapshot dokumentiert;
+- Text-Provenienz stärker getrennt in deterministische Unicode-/Steuerzeichen-Artefakte, statistische/tokenbasierte Signale und normale Schreib-/Voice-Qualität;
+- klare Evidence-Grenze ergänzt: sauberer Unicode-Scan beweist weder Abwesenheit statistischer Watermarks noch menschliche Urheberschaft; lokale Stylometry-/Burstiness-Scores sind kein Vendor-Detector;
+- autorisierte Text-Hygiene bleibt minimal: konkrete technische Funde gezielt entfernen, Code/URLs/Identifikatoren/Zahlen/Zitate/Claims und erforderliche Disclosures schützen, danach Re-Inspection;
+- drei neue definierte Evalfälle ergänzt: Vendor-Overclaim bei Zero-Width-Fund, statistische Watermark nach sauberem Unicode-Scan sowie minimaler autorisierter Zero-Width-Clean; alle **DEFINED / NOT RUN**;
+- kein neuer zentraler Skill, kein Detector-Evasion-Gate und keine Maturity-Hochstufung.
+
 ### Web Experience Design und Anti-Slop-Hardening
 
 - weiteres Webdesign-Praxisvideo als **Discovery-/Field-Observation** ausgewertet; Modell-, Benchmark-, Produkt- und Werbeaussagen daraus werden nicht als zentrale Wahrheit übernommen;

@@ -59,14 +59,20 @@ Befunde mindestens trennen in:
 
 Ein ungewöhnliches Unicode-Zeichen ist nicht automatisch ein Watermark. Ein Softwarefeld beweist nicht, welches Modell einen Inhalt erzeugt hat. Fehlende C2PA-Daten beweisen nicht, dass keine KI beteiligt war.
 
-## Unicode-Grenze
+## Unicode- und Textsignal-Grenze
 
 Bei Text insbesondere unterscheiden zwischen:
 
 - unerwarteten unsichtbaren Steuer-/Tag-Zeichen;
 - legitimen NBSP-, Narrow-NBSP-, CJK-, Bidi- oder typografischen Zeichen;
+- Emoji-/Script-Joiner und andere kontextabhängig notwendige Formatzeichen;
 - Homoglyphen oder Normalisierungsfragen;
+- statistischen/tokenbasierten Signalen, die **nicht** als einzelner Codepoint oder Metadatenwert vorliegen;
 - tatsächlicher Funktion im konkreten Kontext.
+
+Ein deterministisch gefundener Codepoint kann als technischer Befund gemeldet werden. Seine Existenz allein beweist aber weder einen bestimmten KI-Anbieter noch eine absichtliche Watermark.
+
+Ein Stylometry-, Perplexity-, Burstiness- oder Phrase-Density-Score ist keine strukturierte Provenienz und kein Authorship-Verdict. Wenn der konkret verwendete Vendor-Detector oder Schlüssel nicht verfügbar ist, bleibt die entsprechende Watermark-Klasse `UNVERIFIED`.
 
 Keine aggressive Normalisierung allein aufgrund einer Auffälligkeit empfehlen.
 
