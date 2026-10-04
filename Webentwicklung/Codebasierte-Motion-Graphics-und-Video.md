@@ -21,13 +21,14 @@ Der Ansatz ersetzt weder generative Videomodelle noch klassische Schnittsoftware
 - 1. Brief und Source of Truth
 - 2. Runtime und Reproduzierbarkeit
 - 3. Assets, Provenienz und Rechte
-- 4. Storyboard, Narration und visuelle Semantik
-- 5. Composition statt Prompt-Lotterie
-- 6. Verifikation: Standbild und Zeit getrennt
-- 7. Audio ist eine eigene Qualitätsschicht
-- 8. Typische Produktionsmodi
-- 9. Human Gates und Außenwirkung
-- 10. Frameworkneutralität
+- 4. Canonical Media und Derived Media
+- 5. Storyboard, Narration und visuelle Semantik
+- 6. Composition statt Prompt-Lotterie
+- 7. Verifikation: Standbild, Zeit und Identität getrennt
+- 8. Audio ist eine eigene Qualitätsschicht
+- 9. Typische Produktionsmodi
+- 10. Human Gates und Außenwirkung
+- 11. Frameworkneutralität
 - Leitgedanke
 
 ## Scope und Abgrenzung
@@ -101,7 +102,55 @@ Logos, UI-Screenshots oder Produktdarstellungen nicht plausibel nachzeichnen, we
 
 „Lizenzfrei“ oder „royalty-free“ nicht als allgemeines Synonym für uneingeschränkt frei verwendbar behandeln.
 
-## 4. Storyboard, Narration und visuelle Semantik
+## 4. Canonical Media und Derived Media
+
+In hybriden KI-Video-Pipelines entstehen häufig mehrere Fassungen desselben inhaltlichen Elements. Deshalb muss sichtbar bleiben, **welches Artefakt für welche Eigenschaft die Source of Truth ist**.
+
+Beispiele:
+
+- ein freigegebenes Charakterbild kann kanonische Identitätsreferenz sein;
+- eine freigegebene Voice-/Narrationsspur kann kanonische Audioquelle sein;
+- ein generierter Performance-Clip kann daraus Bewegung und Lippenbewegung ableiten;
+- eine codebasierte Composition kann Performance, Voice, Captions, Motion Graphics, Musik und SFX zusammenführen.
+
+Ein generiertes Zwischenartefakt darf eine kanonische Quelle **nicht stillschweigend ersetzen**, nur weil es technisch später in der Pipeline entstanden ist.
+
+```text
+Canonical Character / Voice / Brand / Claim
+        ↓
+Derived Performance / Animation / Composite
+        ↓
+gezielte Weiterverarbeitung
+        ↓
+Final Composite
+
+Derived Artifact ≠ automatisch neue Source of Truth
+```
+
+Für relevante kanonische Medien mindestens festhalten:
+
+- Rolle der Quelle, zum Beispiel `character-identity`, `voice-master`, `brand-asset`, `approved-script`;
+- konkrete Datei/Version beziehungsweise stabile Referenz;
+- welche Transformationen erlaubt sind;
+- welche Eigenschaften unverändert bleiben müssen;
+- wann ein Derived Artifact gegen die kanonische Quelle zurückgeprüft wird.
+
+Wenn ein Zwischenmodell Audio, Gesicht, Text, Branding oder Timing neu interpretiert, ist das ein **Derived State**. Für das Final kann die kanonische Quelle erneut gebunden werden, wenn genau diese Eigenschaft erhalten bleiben soll.
+
+Beispiel:
+
+```text
+Voice Master
+→ Performance-Modell nutzt Audio für Lipsync/Bewegung
+→ Performance-Modell verändert hörbar Stimme oder Pausen
+→ Videoanteil bleibt nutzbar
+→ Final Composite bindet wieder den Voice Master
+→ Lip-Sync und Timing erneut prüfen
+```
+
+Damit wird nicht vorausgesetzt, dass jede Pipeline denselben technischen Weg unterstützt. Entscheidend ist die explizite Quellenrolle.
+
+## 5. Storyboard, Narration und visuelle Semantik
 
 Vor dem Feinschliff die zeitliche Aussage strukturieren.
 
@@ -119,7 +168,22 @@ Für erklärende Inhalte gilt:
 
 Bei Voiceover oder Talking Head visuelle Overlays deshalb an die tatsächlich gesprochenen Claims koppeln.
 
-## 5. Composition statt Prompt-Lotterie
+### Character Blocking und reservierte Grafikräume
+
+Wenn generierte Figuren oder Avatare später mit Motion Graphics zusammenspielen sollen, diese Beziehung **vor** der Performance-Generierung planen.
+
+Für relevante Beats festhalten:
+
+- Blickrichtung;
+- Zeige-/Greifrichtung;
+- Körperposition und Bewegungsraum;
+- reservierte Flächen für Text, Diagramme, UI oder andere Overlays;
+- Bereiche, die Gesicht, Hände oder wichtige Produktelemente nicht verdecken dürfen;
+- geplante Übergabe zwischen Performance und späterer Grafik.
+
+Blocking ist keine Garantie, dass ein generatives Videomodell die Regieanweisung exakt umsetzt. Es reduziert aber vermeidbare Kollisionen und schafft überprüfbare Erwartungen für die spätere Composition.
+
+## 6. Composition statt Prompt-Lotterie
 
 Der Vorteil einer codebasierten Komposition liegt in kontrollierbaren Zuständen.
 
@@ -148,7 +212,7 @@ Für komplexe Produktionen Schichten bewusst trennen:
 - SFX;
 - Render-/Exportkonfiguration.
 
-## 6. Verifikation: Standbild und Zeit getrennt
+## 7. Verifikation: Standbild, Zeit und Identität getrennt
 
 Eine Kontaktübersicht, Snapshot-Serie oder ausgewählte Proof-Frames ist stark für:
 
@@ -181,7 +245,32 @@ Frame-/Snapshot-Evidence
 
 Bei Audio zusätzlich den tatsächlichen Mix beziehungsweise die gerenderte Tonspur prüfen.
 
-## 7. Audio ist eine eigene Qualitätsschicht
+Bei hybriden Avatar-/Performance-Pipelines reicht außerdem ein einziger Gesamt-`PASS` nicht. Relevante Eigenschaften separat prüfen:
+
+| Prüfachse | Vergleich / Evidence |
+| --- | --- |
+| Character Identity | gegen kanonische Character-/Referenzquelle |
+| Voice Identity | gegen kanonischen Voice Master |
+| Lip-Sync | bewegte Performance gegen tatsächlich verwendete Final-Audiospur |
+| Blocking | Blick, Gesten und freie Grafikräume gegen Storyboard/Beat-Plan |
+| Motion / Composition | Playback-/Render-Evidence |
+| Captions | Textinhalt und zeitliche Synchronität |
+| Brand / Produktdarstellung | gegen freigegebene Brand-/Produktquelle |
+
+Ein guter Character-Frame beweist weder Voice-Treue noch Lip-Sync. Eine korrekte Stimme beweist weder Blocking noch Composition.
+
+```text
+Identity PASS
+Voice FAIL
+Lip-Sync PASS
+Composition PASS
+
+≠ Gesamt-PASS
+```
+
+Der Gesamtstatus bleibt eingeschränkt, solange eine für den Auftrag relevante Achse nicht bestanden oder nicht geprüft wurde.
+
+## 8. Audio ist eine eigene Qualitätsschicht
 
 Gute Visuals kompensieren keinen schlechten Ton.
 
@@ -197,7 +286,7 @@ Voice, Musik und SFX getrennt betrachten:
 
 Synthetisch erzeugtes Audio ist nicht automatisch ungeeignet, aber auch nicht automatisch produktionsreif. Es wird wie jeder andere Output geprüft.
 
-## 8. Typische Produktionsmodi
+## 9. Typische Produktionsmodi
 
 Die folgenden Modi sind Routinghilfen, keine verpflichtenden Produktkategorien:
 
@@ -217,7 +306,7 @@ Produktwirkung wird über reale UI-/Brand-/Produktquellen sichtbar gemacht. Beso
 
 Fachliche Aussage und visuelle Erklärung werden gemeinsam geplant. Quellenqualität, Verständlichkeit und Claim-Visual-Mapping sind wichtiger als Effektmenge.
 
-## 9. Human Gates und Außenwirkung
+## 10. Human Gates und Außenwirkung
 
 Mindestens getrennt behandeln:
 
@@ -229,7 +318,7 @@ Ein technisch bestandener Render ist keine Veröffentlichungsfreigabe.
 
 Bei Werbe-, Schulungs- oder öffentlich sichtbaren Inhalten zusätzlich Claims, Rechte, Branding und sensible Informationen vor Veröffentlichung prüfen.
 
-## 10. Frameworkneutralität
+## 11. Frameworkneutralität
 
 HyperFrames ist eine konkrete aktuelle Referenz für HTML-/CSS-/Media-basierte, seekbare und frameweise gerenderte Kompositionen. Andere Runtimes können andere Verträge besitzen.
 

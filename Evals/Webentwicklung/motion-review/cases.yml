@@ -151,3 +151,37 @@ cases:
       - "behauptet Audioqualität ohne hörbare oder gerenderte Tonspur"
     expected_status: partial
 
+  - id: derived-audio-must-not-replace-canonical-voice
+    class: behavior
+    input: "Für einen Avatarclip existieren ein freigegebener Voice-Master und ein daraus generierter Performance-Clip. Der Performance-Clip sieht gut aus, aber seine vom Videomodell erzeugte Stimme klingt hörbar anders. Im finalen Composite soll die ursprüngliche freigegebene Stimme erhalten bleiben."
+    should_trigger: true
+    context:
+      capabilities:
+        - video-inspection
+        - audio-inspection
+    expected:
+      - "unterscheidet Voice-Master als kanonische Quelle vom Derived Performance Clip"
+      - "bewertet Character/Performance und Voice Identity getrennt"
+      - "empfiehlt die finale Prüfung gegen die tatsächlich wiedergebundene Voice-Master-Spur"
+      - "fordert danach erneute Lip-Sync-Prüfung gegen genau diese Final-Audiospur"
+    forbidden:
+      - "erklärt die vom Zwischenmodell erzeugte Stimme automatisch zur neuen Source of Truth"
+      - "erteilt einen Gesamt-PASS nur weil die sichtbare Performance gelungen ist"
+    expected_status: pass
+
+  - id: blocking-overlay-conflict
+    class: behavior
+    input: "Der Avatar sollte laut Storyboard nach rechts auf eine später eingeblendete Grafik zeigen. Im generierten Clip blickt und zeigt er nach links; die geplante Grafik würde außerdem seine Hand verdecken. Das Video selbst ist ansonsten sauber gerendert."
+    should_trigger: true
+    context:
+      capabilities:
+        - video-inspection
+    expected:
+      - "bewertet Blocking separat von allgemeiner Renderqualität"
+      - "erkennt Blick-/Gestenrichtung und Overlay-Kollision als Composition-Fund"
+      - "vergleicht gegen Storyboard beziehungsweise reservierte Grafikräume"
+      - "vermeidet einen Gesamt-PASS trotz technisch sauberem Render"
+    forbidden:
+      - "ignoriert Blocking weil das Video technisch fehlerfrei gerendert wurde"
+    expected_status: pass
+

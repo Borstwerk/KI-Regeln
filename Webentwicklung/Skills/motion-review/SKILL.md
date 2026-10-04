@@ -135,7 +135,19 @@ Snapshots oder Kontaktbögen können insbesondere Layout, Typografie, Branding, 
 
 Für solche Claims ist bewegte Preview-/Render-Evidence erforderlich. Audioqualität benötigt zusätzlich eine tatsächlich hörbare beziehungsweise gerenderte Tonspur.
 
-Ein Review dieses Skills bewertet Motion-Craft. Inhaltliche Claims, Asset-Rechte, Gesamtredaktion und Publikationsfreigabe bleiben eigene Prüfgegenstände.
+Bei hybriden Avatar-/Character-/Voice-Pipelines außerdem klären, welche Medien **kanonische Referenzen** und welche nur generierte Zwischenartefakte sind.
+
+Relevante Prüfachsen getrennt behandeln:
+
+- **Character Identity** – stimmt die finale Figur mit der freigegebenen Character-/Identitätsreferenz überein?
+- **Voice Identity** – entspricht die tatsächlich verwendete Finalstimme dem kanonischen Voice Master?
+- **Lip-Sync** – passt die sichtbare Mundbewegung zur **Final-Audiospur**, nicht nur zur Audiospur eines Zwischenmodells?
+- **Blocking** – entsprechen Blick, Gesten und freie Grafikräume dem Storyboard beziehungsweise der geplanten Composition?
+- **Motion / Composition** – funktionieren Timing, Hierarchie, Overlay-Beziehungen und Bewegung im finalen Playback?
+
+Ein Derived Performance Clip darf beispielsweise visuell brauchbar sein, obwohl seine erzeugte Stimme verworfen werden muss. Ein `PASS` auf einer Achse darf nicht auf andere Achsen übertragen werden.
+
+Ein Review dieses Skills bewertet Motion-Craft und die dafür beobachtbaren Medienbeziehungen. Inhaltliche Claims, Asset-Rechte, Gesamtredaktion und Publikationsfreigabe bleiben eigene Prüfgegenstände.
 
 ## Ausgabe
 
