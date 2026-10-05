@@ -8,6 +8,17 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Allgemeine Prompt-Shortcuts
+
+- neuen Katalog `Dokumentation/Allgemeine-Prompt-Shortcuts.md` mit **100** funktionalen Kurzbefehlen ergänzt; alle Einträge sind `PROMPT-SHORTCUT`, keine behaupteten offiziellen ChatGPT-Commands;
+- statische nutzerbereitgestellte Referenz „100 ChatGPT-Codes“ (Christian / @KI.GLATZE, Ausgabe 2026) als Inspiration dokumentiert, ohne PDF, Abbildungen, Tabellenlayout oder längere Originaltexte zu redistribuieren und ohne eine freie Lizenz der Ausgangsdatei anzunehmen;
+- die 100 Kurzlabels in eigenständig formulierte Kategorien und Beschreibungen überführt: Priorisieren/Prompting, Schreiben, Lernen, Format, Content, Entscheiden, Denksysteme, Kreativ/Zukunft, Coding/Technik und Alltag;
+- Kollisionen mit bereits dokumentierten Kürzeln explizit geregelt: `/gaps` kontextabhängig für Wissens- oder Planlücken, `/mindmap` getrennt vom möglichen UI-/Skill-Shortcut `/mindmaps`, `/carousel` nach Content-/Bildkontext und `/slides` als Struktur-Shortcut statt automatischer PPTX-Auftrag;
+- `/genius` gehärtet: gründliche Prüfung, Annahmen und relevante Rechenschritte statt Aufforderung zur Offenlegung privater Chain-of-Thought;
+- Unsicherheitsgates für `/odds`, `/predict`, `/simulate` und `/numbers`; Rechts-/Vertragsgrenze für `/decode`; Self-Reflection-Grenzen für `/shrink`, `rewire` und `/habit`; Evidence-Grenzen für `/tests`, `/security`, `/sql` und andere technische Kürzel;
+- allgemeine ChatGPT-Shortcut-Doku, Dokumentationsindex und `ACKNOWLEDGEMENTS.md` auf den neuen Katalog beziehungsweise die statische Inspirationsquelle ergänzt;
+- kein neuer Skill, kein Plugin, keine mutable Upstream-Abhängigkeit und keine PDF-Datei im Repository.
+
 ### Bild- und Medien-Prompt-Shortcuts
 
 - neuen Katalog `Dokumentation/Bild-und-Medien-Prompt-Shortcuts.md` mit **220** funktionalen Bild-/Medien-Kürzeln ergänzt; alle Einträge sind `PROMPT-SHORTCUT`, keine behaupteten offiziellen ChatGPT-Commands;

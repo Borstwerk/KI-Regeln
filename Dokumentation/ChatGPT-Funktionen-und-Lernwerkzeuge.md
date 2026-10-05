@@ -1,6 +1,6 @@
 # ChatGPT-Befehle, Lernwerkzeuge und interaktive Funktionen
 
-Stand: 2026-10-04
+Stand: 2026-10-05
 
 ## Zweck
 
@@ -891,6 +891,49 @@ Neuer Termin: Montag, 10 Uhr.
 ```
 
 Für komplexere oder sensible Texte bleibt `natuerliches-schreiben` beziehungsweise `adressatengerechte-kommunikation` die eigentliche Arbeitsdisziplin. Der Shortcut ist nur eine kompakte Bedienform.
+
+---
+
+## Allgemeine 100er-Prompt-Shortcuts
+
+Für allgemeine Kurzbefehle existiert jetzt ein eigener kuratierter Katalog:
+
+`Allgemeine-Prompt-Shortcuts.md`
+
+Er enthält **100** als `PROMPT-SHORTCUT` klassifizierte Kürzel für:
+
+- Priorisieren und Prompting;
+- Schreiben und Ton;
+- Lernen und Verstehen;
+- Format und Ausgabe;
+- Ideen und Content;
+- Analysieren und Entscheiden;
+- Denksysteme;
+- Kreativität und Zukunft;
+- Coding und Technik;
+- Alltag und Planung.
+
+Beispiele:
+
+```text
+/pareto
+/autoprompt
+/signal
+/odds
+/polish
+/teachback
+/matrix
+/swot
+/systemmap
+/debug
+/travel
+```
+
+Die Seite dokumentiert außerdem Namenskollisionen wie `/gaps`, `/mindmap`, `/carousel` und `/slides`, damit ein Prompt-Shortcut nicht mit einem UI-/Skill-Command oder einem Artefaktauftrag verwechselt wird.
+
+Besonders wichtig:
+
+`/genius` bedeutet bei KI-Regeln **gründlich prüfen und begründen**, nicht private Chain-of-Thought offenlegen.
 
 ---
 
