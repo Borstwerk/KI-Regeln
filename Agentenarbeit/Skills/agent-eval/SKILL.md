@@ -22,6 +22,8 @@ Prüfe nicht nur, ob das erzeugte Produkt korrekt ist, sondern ob der Agent zuve
 7. Bei kritischen Guards prüfen, ob sie einen kontrolliert absichtlich eingebauten relevanten Fehler tatsächlich erkennen.
 8. Ergebnisse so erfassen, dass Skill- oder Prozessversionen vergleichbar werden.
 9. Für stabile wiederkehrende Messungen prüfen, ob eine reproduzierbare Baseline als Quality Floor/Ratchet geschützt werden soll.
+10. Bei Skill-Evals nach Möglichkeit eine echte Kontrollbedingung ohne den zu prüfenden Skill vorsehen und den beobachtbaren Lift statt nur den absoluten Erfolg messen.
+11. Instruktionsqualität und natürliche Discovery getrennt prüfen: erzwungene Skill-Nutzung testet primär den Skillinhalt; natürliche Auswahl testet zusätzlich Trigger und Routing.
 
 ## Zwei Prüfachsen
 
@@ -109,6 +111,17 @@ Mindestens dort einsetzen, wo korrektes Verhalten **Nicht-Weiterarbeiten** bedeu
 
 Bei Skill-Änderungen dieselbe Eval-Suite gegen alte und neue Fassung ausführen, wenn ein reproduzierbarer Vergleich möglich ist.
 
+Bei Skill-Evals ist – sofern technisch reproduzierbar – ein A/B-artiger Vergleich besonders aussagekräftig:
+
+```text
+gleiche Aufgabe + gleiche relevante Runtimebedingungen
+→ ohne Skill / mit bisherigem Stand
+→ mit geprüftem Skill
+→ Delta in Ergebnis, Prozess, Triggerverhalten und Aufwand
+```
+
+Der Kontrolllauf darf nicht künstlich schlechter gemacht werden. Modell, Reasoning-/Budgetklasse, Fixtures, erlaubte Tools und Grader möglichst konstant halten oder Abweichungen sichtbar dokumentieren. Bei stochastischen Läufen Wiederholungen beziehungsweise pass@k nur mit dokumentierter Runzahl und identischen Vergleichsbedingungen interpretieren.
+
 Nicht nur Gesamterfolg vergleichen, sondern auch:
 
 - Scope-Verstöße;
@@ -118,6 +131,12 @@ Nicht nur Gesamterfolg vergleichen, sondern auch:
 - Evidence-Vollständigkeit.
 
 Wenn Rubrik, Judge oder Schwellenwerte anhand bestimmter Fälle kalibriert werden, diese Fälle nicht anschließend als unabhängige Held-out-Evidence ausgeben. Kalibrierungsdaten und unabhängige Vergleichsdaten trennen, wenn aus dem Lauf ein Generalisierungs- oder Vergleichsclaim abgeleitet werden soll.
+
+Für Skill-Routing zusätzlich unterscheiden:
+
+- **forced invocation**: Skill ist sicher aktiv; prüft vor allem Instruktions- und Ausführungsqualität;
+- **natural discovery**: Skill muss aus der Aufgabe korrekt gewählt werden; prüft Trigger, Routing und Near-Misses;
+- **negative control**: Aufgabe darf den Skill nicht aktivieren oder muss bewusst stoppen.
 
 Nullmodelle, Kontrollbedingungen, blindes oder double-blind Design können bei höherem Assurance-Bedarf sinnvoll sein. Sie sind keine universelle Pflicht und ersetzen keine passende Ground Truth oder reproduzierbare Baseline.
 
