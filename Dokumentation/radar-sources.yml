@@ -1,5 +1,5 @@
 schema_version: 2
-last_updated: '2026-09-21'
+last_updated: '2026-10-05'
 
 # Discovery-only sources and recurring search topics.
 #
@@ -169,6 +169,25 @@ sources:
       - context and efficiency methods
       - evaluation approaches
       - new interaction patterns worth generalizing
+
+  - id: openai-plugin-directory
+    kind: web-page
+    url: https://openai.com/business/plugins/
+    cadence: weekly
+    areas:
+      - Skill-Engineering
+      - Agentenarbeit
+      - Sicherheit
+      - Programmieren
+      - Bildarbeit
+      - Social-Media-und-Content-Praesenz
+    purpose: Discover new plugin/app capability classes and integrations that can replace manual fallback steps.
+    watch_for:
+      - new capability classes
+      - plugins that replace recurring manual export or copy-paste workflows
+      - new write or action capabilities
+      - changed setup, permission or workspace assumptions
+      - integrations with meaningful privacy or security implications
 
   - id: google-deepmind-blog
     kind: web-page

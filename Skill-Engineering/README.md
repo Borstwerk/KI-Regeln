@@ -24,6 +24,7 @@ Ein guter Skill soll:
 - `Trigger-und-Description-Design.md` – Aktivierungslogik und Near-Miss-Abgrenzung;
 - `Inputs-Outputs-und-Vertraege.md` – erwartete Eingaben, Ausgaben und Evidence;
 - `Toolanforderungen-und-Fallbacks.md` – Capabilities, Rechte und degradierte Betriebsmodi;
+- `Plugin-App-und-Capability-Routing.md` – Auswahl zwischen nativen Fähigkeiten, verbundenen Plugins/Apps, Plugin-Discovery und manuellen Fallbacks;
 - `Portabler-Skill-Kern-und-Runtime-Adapter.md` – Trennung fachlicher Skilllogik von client-/modell-/runtime-spezifischer Konfiguration;
 - `Skill-Komposition-und-Abhaengigkeiten.md` – Beziehungen zwischen Skills;
 - `Skill-Review-und-Evals.md` – Review- und Evaluationsregeln;
@@ -41,6 +42,7 @@ Bedarf erkennen
 → Trigger und Near-Misses definieren
 → Inputs / Outputs / Evidence festlegen
 → Capabilities + Fallbacks definieren
+→ mögliche native / Plugin- / App-Runtime getrennt vom fachlichen Kern routen
 → Freiheitsgrad je wesentlichem Schritt nach Fragilität und Variabilität wählen
 → SKILL.md kompakt schreiben
 → References / Scripts nur bei Bedarf ergänzen und navigierbar halten

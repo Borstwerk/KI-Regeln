@@ -5,6 +5,7 @@
 - Grundprinzip
 - Typische Capabilities
 - Capability Detection
+- Plugin-/App-Routing
 - Gute Fallbacks
 - Kein Capability-Theater
 - Rechte und Least Privilege
@@ -49,6 +50,46 @@ bevorzugter Weg
         ├─ ja → transparent degradieren
         └─ nein → blocked / unverified melden
 ```
+
+## Plugin-/App-Routing
+
+Eine benötigte Capability kann aus unterschiedlichen Runtime-Quellen kommen:
+
+- nativ aus dem Host;
+- aus einem bereits installierten/verbundenen Plugin oder einer App;
+- aus einer erst noch zu verbindenden externen Integration;
+- aus einem manuellen Fallback.
+
+Bevor ein Nutzer zu Copy-Paste, CSV-Export, Screenshots oder einem manuellen Wechsel in ein Fremdsystem geschickt wird, prüfen:
+
+~~~text
+Capability benötigt
+→ nativ vorhanden?
+   ├─ ja → nutzen
+   └─ nein
+        ↓
+      passende verbundene Integration vorhanden?
+        ├─ ja → Scope + Rechte prüfen → nutzen
+        └─ nein
+             ↓
+           Plugin/App verfügbar und materiell hilfreich?
+             ├─ ja → Verbindung/Installation anbieten
+             └─ nein → Fallback
+~~~
+
+Dabei gilt:
+
+~~~text
+verfügbar ≠ verbunden
+verbunden ≠ autorisiert
+lesen ≠ schreiben ≠ externe Aktion
+~~~
+
+Für die lokale Risikoabschätzung können externe Integrationen grob als `READ`, `WRITE` oder `ACTION` betrachtet werden. Das ist eine Governancehilfe, keine universelle technische Plugin-Klassifikation.
+
+Konkrete Appnamen gehören normalerweise in Runtime-/Adapterlogik, nicht in den portablen fachlichen Skill-Kern.
+
+Details: `Plugin-App-und-Capability-Routing.md`.
 
 ## Gute Fallbacks
 

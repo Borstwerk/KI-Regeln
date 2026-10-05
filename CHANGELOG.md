@@ -8,6 +8,19 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Plugin-, App- und Capability-Routing
+
+- neue Fachgrundlage `Skill-Engineering/Plugin-App-und-Capability-Routing.md`: fachlichen Job zuerst bestimmen, danach native Capability, verbundene Plugin-/App-Runtime, Plugin-Discovery und erst anschließend manuellen Fallback wählen;
+- neue Nutzerreferenz `Dokumentation/ChatGPT-Plugins-und-Apps.md` mit aktuell beobachteten Beispielklassen für Design, Dateien, Mail/Kalender, Projektmanagement, Entwicklung, Daten, Marketing, CRM, Business, Recht, Reisen und Lernen; bewusst **keine** behauptet vollständige statische Pluginliste;
+- OpenAI-Produktmodell sauber getrennt: Plugins können Workflow-Funktionen bündeln, Apps verbinden externe Dienste/Daten/Aktionen; Installation ersetzt keine notwendige App-/Account-/Workspace-Autorisierung;
+- lokales Risikomodell `READ / WRITE / ACTION` ergänzt; `verfügbar ≠ verbunden ≠ autorisiert` wird als harte Routinggrenze behandelt;
+- `AGENTS.md` prüft bei externen Diensten künftig native Capabilities und bereits verbundene Plugins/Apps vor manuellen Export-/Copy-Paste-Workarounds; passende fehlende Integrationen können transparent angeboten werden, ohne externe Aktionen selbst zu autorisieren;
+- `Toolanforderungen-und-Fallbacks.md` und `skill-authoring` auf providerneutrale Capability-Verträge gehärtet: konkrete Apps sind normalerweise Runtime-/Adapterdetails, keine universelle fachliche Skillwahrheit;
+- offizielles OpenAI Plugin Directory als **wöchentliche Discoveryquelle** in `radar-sources.yml` registriert; beobachtet werden neue Capability-Klassen, Write-/Action-Fähigkeiten, ersetzbare manuelle Fallbacks und Security-/Privacy-relevante Integrationen;
+- offizielle OpenAI-Dokumentation zu Plugins und Apps als **monatliche semantic-review Upstreams** registriert, weil Plugin-/App-Begriffe, Availability und Berechtigungsgrenzen nun lokale Routingregeln beeinflussen;
+- zwei zusätzliche `skill-authoring`-Evalfälle zu Vendor-App-Kopplung und falscher Action-Autorisierung definiert; beide **DEFINED / NOT RUN**;
+- kein neuer zentraler Skill, keine automatische Plugininstallation und keine externe Aktion aus bloßer Pluginverfügbarkeit.
+
 ### Allgemeine Prompt-Shortcuts
 
 - neuen Katalog `Dokumentation/Allgemeine-Prompt-Shortcuts.md` mit **100** funktionalen Kurzbefehlen ergänzt; alle Einträge sind `PROMPT-SHORTCUT`, keine behaupteten offiziellen ChatGPT-Commands;

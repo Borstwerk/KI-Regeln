@@ -1,5 +1,5 @@
 schema_version: 2
-last_updated: '2026-10-04'
+last_updated: '2026-10-05'
 
 # Mutable external sources whose changes may affect local rules or skills.
 # A changed upstream is a review signal, never an automatic sync instruction.
@@ -1531,6 +1531,32 @@ sources:
       - Skill-Engineering/Skill-Struktur-und-Progressive-Disclosure.md
       - Skill-Engineering/Skills/skill-authoring/SKILL.md
       - Skill-Engineering/Skills/skill-review/SKILL.md
+
+  - id: openai-chatgpt-plugins-docs
+    area: Skill-Engineering
+    kind: web-page
+    url: https://help.openai.com/en/articles/20001256-plugins-in-chatgpt
+    monitor_mode: semantic-review
+    cadence: monthly
+    last_checked: '2026-10-05'
+    local_impact:
+      - Skill-Engineering/Plugin-App-und-Capability-Routing.md
+      - Skill-Engineering/Toolanforderungen-und-Fallbacks.md
+      - Skill-Engineering/Skills/skill-authoring/SKILL.md
+      - Dokumentation/ChatGPT-Plugins-und-Apps.md
+      - AGENTS.md
+
+  - id: openai-chatgpt-apps-docs
+    area: Skill-Engineering
+    kind: web-page
+    url: https://help.openai.com/en/articles/11487775-apps-in-chatgpt
+    monitor_mode: semantic-review
+    cadence: monthly
+    last_checked: '2026-10-05'
+    local_impact:
+      - Skill-Engineering/Plugin-App-und-Capability-Routing.md
+      - Skill-Engineering/Toolanforderungen-und-Fallbacks.md
+      - Dokumentation/ChatGPT-Plugins-und-Apps.md
 
   - id: agent-skills-client-trust-guidance
     area: Sicherheit
