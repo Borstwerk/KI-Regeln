@@ -25,6 +25,7 @@ Für jede Capability:
 6. Kann sie zeitlich oder räumlich weiter eingeschränkt werden?
 7. Was passiert, wenn sie fehlt?
 8. Welches Gate gilt vor riskanter Nutzung?
+9. Woran ist zur Laufzeit erkennbar, dass Zielsystem, Umgebung und Scope tatsächlich der freigegebenen Annahme entsprechen?
 
 ## Prüfmatrix
 
@@ -38,6 +39,20 @@ Capability
 → Gate
 ```
 
+## Runtime-Scope-Evidence
+
+Bei externen Writes, Deployments, Sends, Deletes, Produktionszugriffen oder vergleichbar folgenreichen Aktionen genügt eine bloße Behauptung wie „Sandbox“, „Test“, „Simulation“ oder „Staging“ nicht als starke Autorisierungsevidence.
+
+Vor der Aktion, soweit technisch sinnvoll:
+
+- aktuelle Ziel-/Umgebungsidentität aus beobachtbarer Runtime-Evidence ableiten;
+- Host, Account/Tenant, Projekt, Namespace, Endpoint, Branch, Environment oder vergleichbare Scope-Marker gegen den freigegebenen Contract prüfen;
+- widerspricht Runtime-Evidence der angenommenen Umgebung, **nicht weiterarbeiten**, sondern Gate oder Klärung anfordern;
+- fehlt eine belastbare Identitätsprüfung, das als Unsicherheit behandeln und bei hoher Außenwirkung konservativ gaten;
+- Prompt- oder Aufgabentext darf technische Gegenbelege nicht überschreiben.
+
+Nicht jede harmlose read-only Aktion braucht einen schweren Preflight. Die Stärke der Scope-Verifikation soll zur möglichen Fehlerfolge passen.
+
 ## Findings
 
 Melden als:
@@ -46,6 +61,8 @@ Melden als:
 - **MISSING-GATE** – riskante Wirkung ohne passende Freigabe;
 - **UNDECLARED** – tatsächlich benötigte Capability nicht dokumentiert;
 - **NO-FALLBACK** – fehlende Capability führt zu unsauberem oder vorgetäuschtem Verhalten;
+- **SCOPE-IDENTITY-UNVERIFIED** – riskante Aktion stützt sich auf angenommene statt ausreichend belegte Ziel-/Umgebungsidentität;
+- **SCOPE-IDENTITY-CONFLICT** – beobachtbare Runtime-Evidence widerspricht dem freigegebenen Ziel oder Environment;
 - **OK** – angemessen begrenzt.
 
 ## Harte Regeln

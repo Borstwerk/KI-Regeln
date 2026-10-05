@@ -90,8 +90,24 @@ Zusätzlich bei mehreren beabsichtigten Modell-/Runtime-Zielen:
 - ist sichtbar, welche Kombinationen tatsächlich ausgeführt wurden?
 - bleiben nicht getestete Ziele `NOT RUN`/`UNVERIFIED`?
 - wird ein einzelner erfolgreicher Lauf nicht als allgemeine Cross-Model-Evidence ausgegeben?
+- wurde bei relevanten Skilländerungen – sofern reproduzierbar – gegen eine Kontrollbedingung ohne Skill oder gegen den bisherigen Skillstand verglichen?
+- sind Instruktionsqualität (Skill sicher aktiv) und Discovery/Trigger (natürliche Auswahl) getrennt geprüft?
+- ist ein behaupteter Qualitätsgewinn als beobachtbares Delta belegt statt nur durch einen grünen Einzellauf?
 
-### 11. Lifecycle
+### 11. Release- und Evidence-Bindung
+
+Wenn der Review eine Freigabe oder Veröffentlichung tragen soll:
+
+- ist eindeutig, **welcher Skillstand** fachlich reviewed wurde?
+- entspricht der evaluierte Stand dem reviewed Stand?
+- entspricht der zur Freigabe vorgesehene Stand wiederum diesem Stand?
+- umfasst die Bindung neben `SKILL.md` auch verhaltensrelevante Scripts, References, Assets und Konfigurationen?
+- werden Änderungen nach Review/Eval als neue Evidence-Pflicht behandelt statt still von der alten Freigabe abgedeckt?
+- ist bei höherem Assurance-Bedarf ein reproduzierbarer Bundle-Fingerprint, Manifest oder vergleichbare Integritätsbindung sinnvoll?
+
+Ein Release- oder Skill-Card-Artefakt kann Reviewzustand, Evalstand, geprüfte Capabilities, bekannte Grenzen und Bundle-Identität zusammenfassen. Das ist eine Dokumentationsoption, keine Pflicht zu einem bestimmten Vendorformat oder Signaturverfahren.
+
+### 12. Lifecycle
 
 - passt die angegebene Maturity zur vorhandenen Praxis und Evalabdeckung?
 - gibt es bei Deprecation einen Ersatz-/Migrationsweg?

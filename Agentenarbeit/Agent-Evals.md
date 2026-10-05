@@ -201,6 +201,35 @@ Dabei gilt:
 - stochastic/modelbasierte Messungen mit Wiederholungen, Runtime-/Modellstand und Unsicherheit dokumentieren;
 - ein Ratchet schützt nur das gemessene Signal und ersetzt keine fachliche Ergebnisprüfung.
 
+## Skill-Lift und Discovery getrennt messen
+
+Bei einem Skill ist ein grüner Lauf allein schwache Evidence: Vielleicht hätte der Agent dieselbe Aufgabe ohne Skill genauso gut gelöst.
+
+Wenn die Runtime einen fairen Vergleich erlaubt, dieselbe Aufgabe unter möglichst gleichen Bedingungen ausführen:
+
+```text
+Kontrollbedingung: ohne Skill oder bisheriger Skillstand
+Behandlung:        neuer/geänderter Skillstand
+
+vergleichen:
+- Outcome-/Produktqualität
+- Prozessqualität
+- Scope-/Gate-Verhalten
+- Trigger-/Routing-Verhalten
+- Aufwand wie Tokens, Laufzeit oder Toolnutzung, wenn relevant
+```
+
+Der relevante Claim ist dann nicht nur „mit Skill bestanden“, sondern der **beobachtete Lift gegenüber der Kontrollbedingung**. Ein negativer oder nicht belastbarer Lift ist ebenfalls ein Ergebnis und darf nicht durch nachträgliches Ändern von Cases oder Gradern versteckt werden.
+
+Für Skill-Evals zwei unterschiedliche Fragen nicht vermischen:
+
+1. **Instruktionstest / forced invocation** – der Skill ist sicher aktiv. Damit wird primär geprüft, ob seine Regeln und Arbeitsweise helfen.
+2. **Discovery-/Routing-Test** – der Agent erhält nur die natürliche Aufgabe. Damit wird geprüft, ob der Skill überhaupt korrekt ausgewählt wird und bei Near-Misses fernbleibt.
+
+Negative Controls sollten Aufgaben enthalten, bei denen der Skill plausibel ähnlich klingt, aber **nicht** zuständig ist. So lässt sich vermeiden, dass bessere Trefferquote nur durch aggressiveres Kapern angrenzender Aufgaben entsteht.
+
+Bei stochastischen Runs Runzahl, Modell-/Runtimeversion, Reasoning-/Budgetklasse und relevante Harnessbedingungen dokumentieren. pass@k oder Erfolgsquoten nur zwischen ausreichend vergleichbaren Bedingungen gegenüberstellen.
+
 ## Evals für Skill-Änderungen
 
 Wenn zentrale Skills verändert werden, können Evals prüfen, ob sich das Verhalten verbessert oder verschlechtert.
@@ -223,6 +252,29 @@ Vergleich:
 ```
 
 Damit wird eine Skill-Änderung selbst überprüfbar.
+
+## Review-, Eval- und Release-Stand binden
+
+Wenn Evals eine Skill-Freigabe tragen, muss nachvollziehbar sein, dass drei Dinge zusammengehören:
+
+```text
+reviewed artifact
+= evaluated artifact
+= released/admitted artifact
+```
+
+Das bedeutet nicht zwingend byte-identische Verpackung, wohl aber eine prüfbare Bindung aller **verhaltensrelevanten** Bestandteile: `SKILL.md`, Scripts, References, Konfigurationen, Assets mit Ausführungswirkung und relevante Capabilities.
+
+Ändert sich danach ein verhaltensrelevanter Bestandteil, darf die frühere Eval-Evidence nicht still auf den neuen Stand übertragen werden. Je nach Assurance-Bedarf können Commit-/Blob-SHAs, Bundle-Hashes, Manifeste oder signierte Metadaten die Bindung technisch stärken. Das Verfahren bleibt runtime- und vendorneutral.
+
+Eine kompakte Skill-/Release-Card kann optional dokumentieren:
+
+- geprüfter Stand und Bundle-Scope;
+- ausgeführte Evals und Kontrollbedingungen;
+- beobachteter Lift beziehungsweise bekannte Regressionen;
+- geprüfte Capabilities und Gates;
+- nicht geprüfte Ziele als `NOT RUN`/`UNVERIFIED`;
+- bekannte Grenzen und offene Risiken.
 
 ## Keine Eval-Metrik als Selbstzweck
 
