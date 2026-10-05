@@ -16,6 +16,7 @@ Er richtet sich vor allem an Menschen, die:
 
 - `Nutzung-des-Repositories.md` – erklärt, wie das Repository in echten Projekten eingesetzt wird;
 - `ChatGPT-Funktionen-und-Lernwerkzeuge.md` – aktuelle produktseitige Lernfunktionen, UI-Shortcuts und deren Verifikationsstatus, getrennt von KI-Regeln-Skills;
+- `Allgemeine-Prompt-Shortcuts.md` – kuratierter Katalog mit 100 nicht-offiziellen Prompt-Shortcuts für Schreiben, Lernen, Formatierung, Entscheidungen, Denksysteme, Coding und Alltag;
 - `Bild-und-Medien-Prompt-Shortcuts.md` – kuratierter Katalog mit 220 nicht-offiziellen Prompt-Shortcuts für Bild-, Social-, Marken-, Bearbeitungs- und toolabhängige Videoaufgaben;
 - `Skill-Handbuch.md` – erklärt die allgemeinen Skills in verständlicher Sprache;
 - `Skill-Handbuch-Context-und-Long-Horizon.md` – erklärt Context Engineering, Context Audit, Compaction und Session-Handoffs für längere Agentenläufe;
