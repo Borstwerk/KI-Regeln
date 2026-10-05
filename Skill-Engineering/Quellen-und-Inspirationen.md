@@ -7,6 +7,7 @@
 - Anthropic Skills
 - Anthropic Skill authoring best practices
 - Anthropic Prompting best practices
+- OpenAI Plugins und Apps
 - Bestehende Skill-Sammlungen dieses Repositories
 - Addy Osmani Agent Skills – Portabilität und Eval-Ratcheting
 - Evidence-getriebene Skill-Evolution
@@ -104,6 +105,31 @@ Für Skill-Engineering relevant ist die aktuelle Trennung:
 - nummerierte beziehungsweise sequenzielle Schritte dort verwenden, wo Reihenfolge oder Vollständigkeit tatsächlich zählt.
 
 Das stützt die lokale Freiheitsgrad-Regel, ohne daraus das Dogma „nie Schritte verwenden“ abzuleiten.
+
+## OpenAI Plugins und Apps
+
+Offizielle Quellen:
+
+https://help.openai.com/en/articles/20001256-plugins-in-chatgpt
+
+https://help.openai.com/en/articles/11487775-apps-in-chatgpt
+
+https://openai.com/business/plugins/
+
+Semantisch geprüft am 2026-10-05.
+
+Für das lokale Capability-Routing relevant sind:
+
+- Plugins als paketierte Workflow-Erweiterungen, die Skills, Apps oder weitere Komponenten enthalten können;
+- Apps als konkrete Verbindung zu externen Diensten, Daten und Aktionen;
+- getrennte Zustände für Plugin-Installation und notwendige App-/Account-Autorisierung;
+- Verfügbarkeit abhängig von Plan, Workspace, Rolle, Region und Oberfläche;
+- Plugin-/App-Discovery über ein dynamisches Verzeichnis statt über eine lokal behauptet vollständige statische Liste;
+- Verifizierungsstatus als nützliches Signal, aber nicht als Ersatz für organisationsspezifische Datenschutz-, Security- oder Vendorprüfung.
+
+Daraus folgt lokal:
+
+> Fachliche Capability zuerst bestimmen, dann native oder externe Runtime wählen. Verfügbarkeit erweitert Capability, nicht Autorisierung.
 
 ## Bestehende Skill-Sammlungen dieses Repositories
 

@@ -36,6 +36,9 @@ Erzeuge einen kleinen, klar verantworteten Skill, der zuverlässig aktiviert, po
    - optionale Fähigkeiten;
    - Fallbacks;
    - keine unnötigen Rechte;
+   - eine fachliche Capability nicht unnötig an eine konkrete Plugin-/App-Marke binden;
+   - berücksichtigen, dass dieselbe Capability nativ, über ein verbundenes Plugin/eine App oder über einen Fallback erfüllt werden kann;
+   - externe READ-, WRITE- und ACTION-Wirkung getrennt betrachten;
    - fachlichen Skill-Kern von Modell-, Tool-, Turn-, Isolation- oder Clientkonfiguration trennen;
    - runtime-spezifische Einstellungen in Adapter oder klar gekapselte Metadaten auslagern, sofern die Plattform nicht selbst Gegenstand des Skills ist.
 

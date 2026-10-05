@@ -34,9 +34,10 @@ Problem / Ziel des Nutzers
 4. **Kleinsten ausreichenden Skill-Satz wählen.** Nutze `skill-catalog.yml`; lade nur die tatsächlich benötigten `SKILL.md`-Dateien und deren zwingende Abhängigkeiten. `related` ist ein Routinghinweis, kein Ladebefehl.
 5. **Nur notwendige Lücken klären.** Frage nach Informationen, die für eine belastbare Bearbeitung wirklich fehlen. Keine vollständige Projekterhebung oder unnötige sensible Datensammlung nur deshalb durchführen, weil ein Skill sie theoretisch verwenden könnte.
 6. **Vor Ausführung prüfen.** `maturity`, `eval_coverage`, `capabilities` und `related` im Katalog sowie die Skill-Frontmatter beachten. Toolverfügbarkeit ist keine Autorisierung. Ein Eval-Pfad oder definierte Fälle bedeuten nicht, dass Evals bestanden wurden.
-7. **Ausführen.** Fachliche Wahrheit nicht aus allgemeinen Regeln erfinden. Riskante oder externe Aktionen nur innerhalb der ausdrücklich vorhandenen Rechte/Gates.
-8. **Verifizieren.** Ergebnis gegen Auftrag, lokale Sources of Truth, relevante Evals/Checks und Skill-Grenzen prüfen.
-9. **Review/Gate.** Offene Annahmen, Blocker, nicht ausgeführte Prüfungen und notwendige menschliche Freigaben sichtbar machen.
+7. **Capability-Runtime wählen.** Wenn eine externe App, ein Account oder ein Dienst materiell helfen würde, zuerst vorhandene native Capabilities und bereits verbundene Plugins/Apps prüfen. Ist keine passende Verbindung vorhanden, aber eine geeignete Integration verfügbar, Installation/Verbindung transparent anbieten statt reflexartig manuellen Export/Copy-Paste zu verlangen. READ, WRITE und extern sichtbare ACTIONS getrennt behandeln.
+8. **Ausführen.** Fachliche Wahrheit nicht aus allgemeinen Regeln erfinden. Riskante oder externe Aktionen nur innerhalb der ausdrücklich vorhandenen Rechte/Gates.
+9. **Verifizieren.** Ergebnis gegen Auftrag, lokale Sources of Truth, relevante Evals/Checks und Skill-Grenzen prüfen.
+10. **Review/Gate.** Offene Annahmen, Blocker, nicht ausgeführte Prüfungen und notwendige menschliche Freigaben sichtbar machen.
 
 ## Kommunikation der Skill-Auswahl
 
@@ -78,5 +79,6 @@ Die vorhandenen Python-Validatoren bleiben kanonische Prüflogik hinter dem Harn
 - Keine Maturity-Hochstufung aus Plausibilität oder wenigen Beispielen ableiten.
 - Keine Evals als bestanden darstellen, die nicht ausgeführt wurden.
 - Keine externen Quellen automatisch synchronisieren.
-- Keine produktiven Writes, Deployments, Veröffentlichungen oder sonstigen Außenaktionen aus bloßer Toolverfügbarkeit ableiten.
+- Keine produktiven Writes, Deployments, Veröffentlichungen oder sonstigen Außenaktionen aus bloßer Tool-, Plugin- oder App-Verfügbarkeit ableiten.
+- Eine vorhandene Plugin-/App-Verbindung erweitert Capability, nicht automatisch Autorisierung.
 - Externe Skills nur entsprechend dokumentierter Provenance und Lizenzlage übernehmen oder weiterverteilen.
