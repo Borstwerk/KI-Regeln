@@ -894,6 +894,40 @@ Für komplexere oder sensible Texte bleibt `natuerliches-schreiben` beziehungswe
 
 ---
 
+## Bild- und Medien-Shortcuts
+
+Für Bild- und Medienarbeit existiert jetzt ein eigener kuratierter Katalog:
+
+`Bild-und-Medien-Prompt-Shortcuts.md`
+
+Er enthält **220** als `PROMPT-SHORTCUT` klassifizierte Kürzel für:
+
+- erklärende/zerlegte Darstellungen;
+- Porträts und Personen;
+- Produktdarstellung;
+- Werbung;
+- Logo/Marke;
+- Mockups und Verpackung;
+- Social Media;
+- Bildbearbeitung;
+- Stil/Look;
+- toolabhängige Videoideen.
+
+Die Kürzel sind keine offiziellen ChatGPT-Befehle. Sie dienen als kompakte Prompt-Sprache und werden gegen die bestehenden Bildarbeits-, Rechte-, Provenienz- und Qualitätsregeln eingeordnet.
+
+Beispiel:
+
+```text
+/productshot
+→ /colorways
+→ /staticad
+→ /productreel
+```
+
+Das ist eine Arbeitskette, kein Versprechen, dass vier Wörter ohne Zwischenschritte automatisch einen fertigen Produktlaunch erzeugen.
+
+---
+
 ## Warum diese Codes nützlich sind
 
 Sie verändern weniger das **Thema** des Prompts als die gewünschte **Denkoperation**:

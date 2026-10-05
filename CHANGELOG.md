@@ -8,6 +8,17 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Bild- und Medien-Prompt-Shortcuts
+
+- neuen Katalog `Dokumentation/Bild-und-Medien-Prompt-Shortcuts.md` mit **220** funktionalen Bild-/Medien-Kürzeln ergänzt; alle Einträge sind `PROMPT-SHORTCUT`, keine behaupteten offiziellen ChatGPT-Commands;
+- statische nutzerbereitgestellte Referenz „220 Bild-Codes für ChatGPT“ (Christian / @KI.GLATZE, Ausgabe 2026) als Inspiration dokumentiert, ohne die PDF, Abbildungen oder längere Originaltexte zu redistribuieren und ohne eine freie Lizenz der Ausgangsdatei anzunehmen;
+- alle 220 funktionalen Kurzlabels in eigenständig formulierte Kategorien und Beschreibungen überführt: Erklären/Zerlegen, Porträts, Produkte, Anzeigen, Marke, Mockups, Social, Bildbearbeitung, Stil und toolabhängiges Video;
+- Schutzregeln ergänzt: keine erfundenen Testimonials/Preise/Statistiken, keine irreführenden Vorher-Nachher-Claims, Werbekennzeichnung nicht umgehen, `/passport` nicht als Compliance-Beweis, `/removetext` nicht zur Entfernung fremder Watermarks/Provenienzmarker;
+- Video-Kürzel bleiben capability-/runtimeabhängig; der in der Ausgangsreferenz genannte Higgsfield-Workflow wird nicht als universelle Toolpflicht übernommen;
+- „Codes stapeln“ als kontrollierte Arbeitskette dokumentiert: jeder Schritt besitzt weiterhin Keeper-/Source-of-Truth- und Review-Gates;
+- allgemeine ChatGPT-Shortcut-Doku, Dokumentationsindex und Bildarbeits-README auf den neuen Katalog verlinkt;
+- kein neuer Skill, kein Plugin, keine neue mutable Upstream-Abhängigkeit und keine PDF-Datei im Repository.
+
 ### Denk- und Schreib-Prompt-Shortcuts
 
 - `Dokumentation/ChatGPT-Funktionen-und-Lernwerkzeuge.md` um fünf kompakte Prompt-Shortcuts ergänzt: `NO/YES`, `GAPS`, `STEELMAN`, `PREMORTEM` und `TIGHTEN`;
