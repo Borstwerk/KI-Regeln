@@ -59,6 +59,14 @@ Nach jeder Generierung wird zwischen Keeper, lokalem Feinschliff, kontrolliertem
 
 Siehe `Bildpruefung-und-Freigabe.md`.
 
+### Prompt-Shortcuts
+
+Für schnelle Bedienkürzel existiert zusätzlich `../Dokumentation/Bild-und-Medien-Prompt-Shortcuts.md`.
+
+Die dortigen 220 Kürzel sind **keine** Bildarbeits-Skills und keine offiziellen ChatGPT-Befehle. Sie komprimieren nur häufige Aufträge wie Produktshot, Retusche, Mockup, Infografik oder Videoidee.
+
+Bei komplexen Aufgaben gelten weiterhin die Regeln dieses Bereichs zu Quellen, Referenzen, Kanon, Kontinuität und Review.
+
 ### Serienproduktion und Abschlussaudit
 
 Eine Bildserie wird nicht nur bildweise, sondern zusätzlich als Gesamtfolge geprüft.

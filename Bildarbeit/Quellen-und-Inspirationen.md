@@ -2,7 +2,7 @@
 
 Dieser Bereich fasst allgemeine Arbeitsprinzipien für konsistente Bildserien zusammen. Die folgenden Quellen dienten als Inspiration und technische Einordnung. Sie sind keine verbindliche Projektspezifikation.
 
-Letzte inhaltliche Prüfung dieser Quellenbasis: **2026-08-23**.
+Letzte inhaltliche Prüfung dieser Quellenbasis: **2026-10-05**.
 
 Lebende Produktdokumentationen werden zusätzlich über `../Dokumentation/upstream-sources.yml` semantisch beobachtet.
 
@@ -49,6 +49,25 @@ https://updates.midjourney.com/style-references-for-v7/
 https://docs.midjourney.com/hc/en-us/articles/41308374558221-Style-Creator
 
 Die laufend gepflegte Style-Creator-Dokumentation wird aktiv beobachtet. Der V7-Updateartikel bleibt als zeitbezogene Referenz dokumentiert, wird aber nicht als mutable Dependency behandelt.
+
+## Statische Prompt-Shortcut-Referenz – Christian / @KI.GLATZE
+
+Für den ergänzenden Katalog `../Dokumentation/Bild-und-Medien-Prompt-Shortcuts.md` wurde eine vom Nutzer bereitgestellte statische Referenz ausgewertet:
+
+> Christian · @KI.GLATZE · „220 Bild-Codes für ChatGPT“ · Ausgabe 2026
+
+Die PDF selbst ist **nicht** Bestandteil dieses Repositories und wird nicht redistribuiert.
+
+Es wird keine freie Lizenz der Ausgangs-PDF angenommen. Deshalb wurden:
+
+- nur die funktionalen Kurzlabels als Prompt-Sprache ausgewertet;
+- Beschreibungen, Gruppierung, Qualitätsregeln und Schutzplanken eigenständig formuliert;
+- keine längeren Originalpassagen, Seitengestaltung oder Abbildungen übernommen;
+- die Codes ausdrücklich als `PROMPT-SHORTCUT` statt als offizielle Produktbefehle eingeordnet.
+
+Die Quelle nennt außerdem einen konkreten Video-/Plugin-Workflow. KI-Regeln übernimmt daraus keine Toolpflicht: Video-Shortcuts bleiben runtime- und capabilityabhängig.
+
+Diese Quelle ist **statisch und nutzerbereitgestellt**. Sie wird daher nicht als mutable Dependency in `upstream-sources.yml` geführt.
 
 ## Allgemeine Einordnung
 
