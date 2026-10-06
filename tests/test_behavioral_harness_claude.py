@@ -600,7 +600,7 @@ class AdapterTests(unittest.TestCase):
         runtime = self.load(out, "runtime-configuration-preimage.yml")
         self.assertNotIn("--bare", runtime["cli_argv_normalized"])
         self.assertIn("--safe-mode", runtime["cli_argv_normalized"])
-        self.assertEqual("0.2.1", runtime["adapter_version"])
+        self.assertEqual("0.3.0", runtime["adapter_version"])
 
     def test_27_complete_evidence_yields_fresh_context_true(self):
         out = self.run_one(FakeRunner(), out_name="fresh-true")
