@@ -57,9 +57,12 @@ Erzeuge einen kleinen, klar verantworteten Skill, der zuverlässig aktiviert, po
    - für Scripts Runtime, Packages/Tools, Availability Check und Fallback als Dependency Contract festhalten;
    - Templates/Ressourcen ggf. in `assets/`.
 
-8. **Komposition prüfen**
+8. **Komposition und Discoverability prüfen**
    - Related / Precondition / Follow-up unterscheiden;
-   - keine versteckte Workflow-Orchestrierung einbauen.
+   - keine versteckte Workflow-Orchestrierung einbauen;
+   - prüfen, ob normales Domain-/Problem-Routing den Skill zuverlässig findet;
+   - nur bei echter domänenübergreifender Discovery-Lücke `routing-overlays.yml` als Kandidat erwägen;
+   - Trigger niemals in der Overlay-Datei duplizieren.
 
 9. **Review- und Evalplan ergänzen**
    - Trigger-Positives;
@@ -83,6 +86,7 @@ Erzeuge einen kleinen, klar verantworteten Skill, der zuverlässig aktiviert, po
 - Einen Workaround für ein einzelnes Modell nicht als allgemeine Prozessregel konservieren, wenn eine Adapterlösung oder eine allgemeinere Invariante ausreicht.
 - Fehlende Script-Packages oder Tools nicht automatisch installieren; Verfügbarkeit, Runtime-Rechte und Fallback zuerst prüfen.
 - Cross-Model-Kompatibilität nicht aus einem einzelnen erfolgreichen Modelllauf ableiten.
+- Einen Skill nicht allein für Sichtbarkeit zum Routing-Overlay machen; Overlays bleiben eine kleine Cross-Cutting-Ausnahmeliste.
 
 ## Ergebnis
 
@@ -101,6 +105,7 @@ Mindestens:
 - `../../Skill-Schnitt-und-Verantwortung.md`
 - `../../Skill-Struktur-und-Progressive-Disclosure.md`
 - `../../Trigger-und-Description-Design.md`
+- `../../Cross-Cutting-Skill-Discovery.md`
 - `../../Inputs-Outputs-und-Vertraege.md`
 - `../../Toolanforderungen-und-Fallbacks.md`
 - `../../Portabler-Skill-Kern-und-Runtime-Adapter.md`

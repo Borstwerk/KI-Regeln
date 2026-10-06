@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://borstwerk.github.io/KI-Regeln/schemas/routing-overlays.schema.json",
+  "type": "object",
+  "required": ["schema_version", "overlays"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "overlays": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["skill", "phase"],
+        "properties": {
+          "skill": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+          "phase": {"enum": ["presentation", "communication", "assurance", "security"]}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

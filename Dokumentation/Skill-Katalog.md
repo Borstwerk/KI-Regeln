@@ -41,6 +41,31 @@ Der Katalog enthält aktuell 152 zentrale Skills:
 
 Die Zahl ist kein Qualitätsziel. Neue Skills werden nur aufgenommen, wenn ein eigener belastbarer Schnitt statt bloßer Themenabdeckung entsteht.
 
+## Discovery ist nicht Inventar
+
+`../skill-catalog.yml` beantwortet, **welche Skills existieren**.
+
+Für die tatsächliche Auswahl gilt weiterhin problem-first Routing. Ein Agent soll nicht alle 152 Skills in den aktiven Kontext laden.
+
+Zusätzlich gibt es `../routing-overlays.yml` als kleine Cross-Cutting-Discovery-Liste. Sie enthält nur wenige domänenübergreifende Skills, die nach dem fachlichen Primärrouting noch kurz geprüft werden sollen.
+
+Wichtig:
+
+- Overlay-Eintrag ≠ Aktivierung;
+- Overlay-Phase ≠ Trigger;
+- Trigger und Near-Misses bleiben in der jeweiligen `SKILL.md`;
+- die Overlay-Liste soll klein bleiben;
+- neue Skills werden nicht automatisch zu Overlays.
+
+Damit gilt:
+
+~~~text
+großer Werkzeugschrank
+→ problemorientiertes Primärrouting
+→ kleine Overlay-Zweitprüfung
+→ kleiner aktiver Werkzeuggürtel
+~~~
+
 ## Maturity
 
 ```text
@@ -118,7 +143,7 @@ Der vertiefte Anthropic-Finance-Upstream-Audit ergänzt drei weitere Finance-Ski
 
 Der Inhaltsprovenienz-/Metadatenhygiene-Hardening-Lauf ergänzt im Bereich Sicherheit zwei neue Skills – `inhaltsprovenienz-review` und `metadaten-hygiene` – jeweils als `experimental` mit `partial` Evalabdeckung. Dafür sind zwei Evalpacks mit jeweils sechs Startfällen definiert, insgesamt 12. Diese Fälle sind **definiert, aber nicht als Behavioral Evals ausgeführt oder bestanden**. Detector-Evasion, Watermark-Stealing und die Verschleierung verpflichtender Provenienz oder Disclosure bleiben ausdrücklich außerhalb des lokalen Produktziels.
 
-Aktueller Gesamtstand: 150 Skills, davon 125× `partial` und 25× `none`, 0× `core`/`broad`; 125 Skill-Evalpacks mit insgesamt 652 definierten Cases.
+Aktueller Gesamtstand: 152 Skills, davon 130× `partial` und 22× `none`, 0× `core`/`broad`; 130 Skill-Evalpacks. Die genaue Zahl definierter Cases wird durch die jeweiligen Evaldateien bestimmt und ist kein Qualitätsnachweis.
 
 ## Hardening Phase 2 – Eval Coverage
 
@@ -134,7 +159,7 @@ Gegenüber dem Ausgangsstand `07b4907c9599ac0515f48afdb2d4cda64dd40b15` wurden e
 
 Die Auswahl folgt dem systemischen Hebel auf Routing, Evidence, Completion Claims, Dokumentation, Recherche und Skill-Review; andere Skills mit `none` wurden nicht allein aus Vollständigkeitsdogma aufgenommen. Details stehen in `../Evals/Coverage-Audit-2026-08-25.md`.
 
-Die acht Golden Tasks unter `../Evals/Golden-Tasks/` ergänzen Skill-Evals um systemweite Aufgaben. Ihre Definition und strukturelle Validität sind kein Beweis für Behavioral-Erfolg und keine Grundlage für eine automatische Maturity-Hochstufung.
+Die neun Golden Tasks unter `../Evals/Golden-Tasks/` ergänzen Skill-Evals um systemweite Aufgaben. GT-09 prüft explizit, ob ein Cross-Cutting-Overlay wie `visual-answer` ohne vom Nutzer genannten Skillnamen zusätzlich zum fachlichen Primärskill entdeckt wird. Ihre Definition und strukturelle Validität sind kein Beweis für Behavioral-Erfolg und keine Grundlage für eine automatische Maturity-Hochstufung.
 
 ## Capabilities
 

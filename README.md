@@ -39,7 +39,8 @@ Weitere Einstiege:
 Du beschreibst dein Problem oder Ziel
 → vorhandene Informationen / Dateien / Projektregeln werden als lokale Wahrheit bestimmt
 → die KI ordnet die Aufgabe ein
-→ sie wählt den kleinsten ausreichenden Workflow-/Skill-Satz
+→ sie wählt den kleinsten fachlich ausreichenden Workflow-/Skill-Satz
+→ sie prüft wenige domänenübergreifende Skills, die das Ergebnis materiell verbessern oder absichern könnten
 → fehlende, wirklich notwendige Informationen werden geklärt
 → die Aufgabe wird bearbeitet
 → Ergebnis und Evidence werden geprüft
@@ -130,7 +131,8 @@ Der Werkzeugkasten besteht aus mehreren Ebenen:
 - **Regeln** beschreiben allgemeine Leitplanken und Arbeitsweisen.
 - **Skills** beschreiben begrenzte, wiederverwendbare Fähigkeiten.
 - **Workflows** verbinden mehrere Skills für größere Aufgaben.
-- **Routing** hilft, vom Problem zum kleinsten ausreichenden Werkzeug-Satz zu gelangen.
+- **Routing** hilft, vom Problem zum kleinsten fachlich ausreichenden Werkzeug-Satz zu gelangen.
+- **Routing Overlays** erinnern den Agenten an wenige domänenübergreifende Skills, die nach dem Primärrouting zusätzlich relevant sein könnten, ohne deren Trigger zu duplizieren.
 - **Evidence und Verification** machen prüfbar, worauf Ergebnisse gestützt sind.
 - **Human Gates** trennen Analyse oder Vorschlag von realen, freigabepflichtigen Aktionen.
 - **Maturity und Eval Coverage** zeigen Reife und vorhandenen Prüfstand.
@@ -212,7 +214,8 @@ Nutzerproblem
 → lokale Wahrheit
 → fachlich einordnen
 → Workflow prüfen
-→ kleinsten Skill-Satz wählen
+→ primären Skill-Satz wählen
+→ Cross-Cutting-Overlay-Pass
 → nur notwendige Lücken klären
 → arbeiten
 → verifizieren
@@ -225,6 +228,7 @@ Der Master-Router steht in [`Dokumentation/Skill-Handbuch.md`](Dokumentation/Ski
 
 - [`Dokumentation/Skill-Katalog.md`](Dokumentation/Skill-Katalog.md) – Maturity und Eval Coverage
 - [`skill-catalog.yml`](skill-catalog.yml) – maschinenlesbares Skill-Inventar
+- [`routing-overlays.yml`](routing-overlays.yml) – kleine domänenübergreifende Zweitprüfung nach dem Primärrouting
 - [`workflow-index.yml`](workflow-index.yml) – vorhandene Workflows
 - [`Dokumentation/Quellenregister.md`](Dokumentation/Quellenregister.md) – Quellen-/Upstream-Governance
 - [`CONTRIBUTING.md`](CONTRIBUTING.md) – Beitrags- und Reviewprozess

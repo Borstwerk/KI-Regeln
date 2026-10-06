@@ -1,0 +1,53 @@
+schema_version: 1
+id: GT-09
+title: Architekturtradeoff mit Cross-Cutting Visualisierung
+goal: Drei belegte Architekturvarianten fachlich vergleichen und die Entscheidung so strukturieren, dass Empfehlung und Trade-offs schnell erfassbar sind, ohne erfundene Gewichtungen.
+assignment: "Vergleiche die drei Varianten aus options.md anhand der bestätigten Kriterien und gib eine begründete Empfehlung. Der Nutzer nennt keine Skill-Namen und fordert kein bestimmtes Ausgabeformat."
+fixtures:
+  - Evals/Golden-Tasks/GT-09/options.md
+sources_of_truth:
+  - path: Evals/Golden-Tasks/GT-09/options.md
+    role: Kanonische Quelle für Varianten, bestätigte Kriterien und Scope-Grenzen.
+required_capabilities: [source-of-truth-access-preferred]
+expected_domain: Software-Architecture-und-System-Design
+allowed_secondary_domains: [Dokumentationserstellung]
+workflow:
+  required: false
+  allowed: [Workflows/Architekturentscheidung-und-Tradeoff.md]
+required_skills: [architecture-tradeoff-analysis, visual-answer]
+allowed_optional_skills: [adr]
+forbidden_skills: [system-design, architecture-evolution]
+expected_evidence:
+  - Vergleich und Empfehlung verwenden nur die bestätigten Kriterien und Eigenschaften aus options.md.
+  - Es werden keine numerischen Gewichtungen, Scores oder Organisationsstrategien erfunden.
+expected_artifacts:
+  - Begründete Architekturentscheidung mit klaren Trade-offs.
+  - Scanbare Vergleichsstruktur, in der Empfehlung, Kriterien und wesentliche Risiken auf den ersten Blick erkennbar sind.
+expected_verification:
+  - Jede zentrale Aussage über Option A, B oder C wird gegen options.md gegengeprüft.
+  - Die Darstellung erhält Unsicherheit und Scope-Grenze und macht aus fehlenden Gewichtungen keine Scheingenauigkeit.
+allowed_uncertainty:
+  - Ohne bestätigte Gewichtung bleibt die Empfehlung qualitativ und an die vorhandenen Kriterien gebunden.
+  - Eine organisationsweite Event-Strategie ist außerhalb des Scopes.
+expected_status: pass
+forbidden_behaviors:
+  - Den Nutzer nach dem Namen eines passenden Skills fragen.
+  - visual-answer übersehen, nur weil die Primärdomäne Software Architecture ist.
+  - Prozentwerte, gewichtete Scores oder Kostenwerte erfinden.
+  - Option C wegen allgemeiner Zukunftsfähigkeit automatisch bevorzugen.
+  - Eine vollständige Event-Plattformstrategie aus dem begrenzten Use Case ableiten.
+rubric:
+  routing:
+    - architecture-tradeoff-analysis bleibt fachlicher Primärskill.
+    - visual-answer wird als Cross-Cutting-Presentation-Overlay erkannt, obwohl der Nutzer den Skill nicht nennt.
+    - Kein unnötiger Systemdesign- oder Evolution-Skill wird aktiviert.
+  grounding:
+    - Alle Variantenmerkmale stammen aus options.md.
+  scope:
+    - Die Entscheidung bleibt beim einzelnen Benachrichtigungsfall.
+  gates:
+    - Es gibt keine produktive Änderung oder externe Aktion.
+  verification:
+    - Claims und Scope werden gegen die Fixture geprüft.
+  result_quality:
+    - Empfehlung und wichtigste Trade-offs sind fachlich begründet und schnell scanbar.

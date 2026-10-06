@@ -79,6 +79,39 @@ formuliert werden.
 
 Sie sollen nicht versuchen, den vollständigen Skillprozess in Metadaten zu quetschen.
 
+## Cross-Cutting Discoverability
+
+Ein Skill kann fachlich sauber geschnitten sein und trotzdem leicht übersehen werden, wenn er **domänenübergreifend** wirkt.
+
+Beispiel:
+
+- `visual-answer` kann Finanzen, Architektur, Security-Reviews oder Rechercheausgaben verbessern;
+- seine Primärdomäne allein reicht deshalb nicht als Discovery-Signal.
+
+Für solche seltenen Fälle kann der Skill in `../routing-overlays.yml` aufgenommen werden.
+
+Ein Overlay ist sinnvoll, wenn:
+
+1. der Skill in mehreren unabhängigen Domänen materiell helfen kann;
+2. er nach normalem Domänenrouting regelmäßig übersehen würde;
+3. seine eigene Description präzise genug ist, um Übertriggerung zu vermeiden;
+4. der zusätzliche Prüfaufwand klein bleibt.
+
+Nicht jeder häufig verwendete Skill ist deshalb ein Overlay.
+
+Insbesondere nicht aufnehmen, nur weil:
+
+- der Skill populär ist;
+- er allgemein „Qualität verbessert“;
+- er viele `related`-Beziehungen besitzt;
+- ein Contributor ihn sichtbarer machen möchte.
+
+Wichtig:
+
+> `routing-overlays.yml` darf die Triggerbeschreibung nicht duplizieren.
+
+Die Overlay-Datei verweist nur auf den Skill. Positive Trigger, Near-Misses und Scope bleiben kanonisch in `SKILL.md`.
+
 ## Trigger-Konflikte
 
 Wenn zwei Skills dieselbe Anfrage plausibel beanspruchen:

@@ -11,13 +11,14 @@ Problem / Nutzerauftrag
 → lokale Sources of Truth und verfügbare Evidence
 → Aufgabe fachlich einordnen
 → passende Domäne / vorhandenen Workflow prüfen
-→ kleinsten ausreichenden Skill-Satz wählen
+→ kleinsten fachlich ausreichenden Skill-Satz wählen
+→ Cross-Cutting-Overlay-Pass
 → Capabilities / Maturity / Evals prüfen
 → Ausführung
 → Verification / Review / Gate
 ```
 
-Für Menschen ohne Repository-Vorkenntnisse beginnt der Einstieg in `../START-HIER.md`. Für einen frischen Agenten beginnt er in `../AGENTS.md`. Die maschinenlesbare Skill-Wahrheit liegt in `../skill-catalog.yml`; Workflows stehen in `../workflow-index.yml`.
+Für Menschen ohne Repository-Vorkenntnisse beginnt der Einstieg in `../START-HIER.md`. Für einen frischen Agenten beginnt er in `../AGENTS.md`. Die maschinenlesbare Skill-Wahrheit liegt in `../skill-catalog.yml`; Workflows stehen in `../workflow-index.yml`. Die kleine globale Zweitprüfung für domänenübergreifende Skills steht in `../routing-overlays.yml`.
 
 ## Problem-first Routing
 
@@ -45,11 +46,52 @@ Nicht vom Werkzeugnamen ausgehen, sondern von der zu erledigenden Arbeit.
 
 Die Tabelle ist keine vollständige Routingmatrix. Ein Auftrag kann mehrere Domänen berühren; trotzdem gilt: **so wenig Werkzeuge wie möglich, so viele wie nötig**.
 
+## Cross-Cutting-Overlay-Pass
+
+Nach dem primären fachlichen Routing wird **nicht** der gesamte Katalog ein zweites Mal durchsucht.
+
+Stattdessen prüft der Router nur die wenigen Einträge aus `../routing-overlays.yml`.
+
+Aktuelle Rollen:
+
+| Phase | Typischer Zweck |
+|---|---|
+| presentation | Darstellung verbessert Erfassbarkeit materiell |
+| communication | Empfängerwirkung / Beziehung / gewünschte Reaktion bestimmt die Form |
+| assurance | zusätzliche Evidence-/Review-Disziplin vor Abschluss |
+| security | externe Skills, neue Tools oder mächtige Rechte erzeugen Cross-Cutting-Risiken |
+
+Wichtig:
+
+- `routing-overlays.yml` enthält **keine Triggerlogik**;
+- die kanonische Aktivierungslogik bleibt in der Description der jeweiligen `SKILL.md`;
+- ein Overlay-Eintrag ist nur ein „nicht vergessen zu prüfen“-Signal;
+- kein Overlay wird allein wegen seiner Phase automatisch aktiviert;
+- der aktive Skill-Satz bleibt klein.
+
+Beispiel:
+
+~~~text
+"Drei Architekturvarianten vergleichen und Empfehlung geben."
+
+PRIMARY
+→ architecture-tradeoff-analysis
+
+OVERLAY PASS
+→ visual-answer Description passt
+→ visual-answer zusätzlich verwenden
+~~~
+
+Der Nutzer musste `visual-answer` dafür weder kennen noch nennen.
+
+Details: `../Skill-Engineering/Cross-Cutting-Skill-Discovery.md`.
+
 ## Routing-Regeln
 
 - Allgemeine Arbeitsweise zentral, konkrete Wahrheit lokal.
 - Der Nutzer muss keine Skill-Namen kennen. Fehlende Skill-Auswahl ist Aufgabe des Routers, nicht automatisch eine Rückfrage an den Nutzer.
-- Nicht alle Skills laden. Im Katalog nach `purpose`, `area`, `capabilities` und `related` routen und nur die benötigten `SKILL.md`-Dateien öffnen.
+- Nicht alle Skills laden. Im Katalog nach `purpose`, `area`, `capabilities` und `related` primär routen und nur die benötigten `SKILL.md`-Dateien öffnen.
+- Danach `routing-overlays.yml` als kleine Cross-Cutting-Zweitprüfung verwenden; die dort gelisteten Skills nur bei passender eigener Skill-Description laden.
 - Vor einer Rückfrage prüfen, ob Auftrag, lokale Quellen oder vorhandene Artefakte die Information bereits liefern.
 - Nur Informationen erfragen, die für die konkrete Aufgabe materiell fehlen; keine unnötige Vollerhebung oder sensible Datensammlung.
 - `maturity` ist Reifeinformation, keine Autorisierung.

@@ -1,0 +1,27 @@
+schema_version: 1
+
+# Kleine globale "don't forget"-Liste für domänenübergreifende Skills.
+#
+# Diese Datei definiert KEINE Triggerlogik. Ob ein Overlay wirklich passt,
+# entscheidet weiterhin ausschließlich die Description / Near-Miss-Grenze
+# der jeweiligen SKILL.md.
+#
+# Der Router prüft diese Liste erst NACH dem primären fachlichen Routing.
+overlays:
+  - skill: visual-answer
+    phase: presentation
+
+  - skill: adressatengerechte-kommunikation
+    phase: communication
+
+  - skill: citation-audit
+    phase: assurance
+
+  - skill: verification-loop
+    phase: assurance
+
+  - skill: skill-security-review
+    phase: security
+
+  - skill: tool-permission-review
+    phase: security
