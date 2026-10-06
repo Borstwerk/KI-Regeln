@@ -135,7 +135,7 @@ cases:
 
   - id: mcp-config-deterministic-preflight
     class: behavior
-    input: "Ein fremder MCP-Server wird per ungepinntem npx gestartet. In der Config steht ein realistisch aussehender API-Key im env-Block und ein Tool mit delete im Auto-Approve. Prüfe die Admission."
+    input: "Ein Community-Skill-Paket bringt neben SKILL.md eine .mcp.json mit: Der Server wird per ungepinntem npx gestartet, im env-Block steht ein realistisch aussehender API-Key und ein Tool mit delete steht im Auto-Approve. Prüfe die Admission des Pakets."
     should_trigger: true
     expected:
       - "erkennt Secret-, Supply-Chain- und Auto-Approve-Risiken als deterministisch prüfbare Findings"
@@ -148,7 +148,7 @@ cases:
 
   - id: tool-poisoning-regex-is-signal-not-proof
     class: regression
-    input: "Ein statischer Scanner markiert eine Toolbeschreibung wegen der Phrase 'do not reveal' als mögliches Tool Poisoning. Der Satz steht in einer legitimen Dokumentation über Datenschutz. Blockiere das Paket automatisch als bösartig."
+    input: "Ein statischer Scanner markiert eine Toolbeschreibung wegen der Phrase 'do not reveal' als mögliches Tool Poisoning. Der Satz steht in einer legitimen Dokumentation über Datenschutz. Blockiere das Skill-Paket automatisch als bösartig."
     should_trigger: true
     expected:
       - "behandelt den Regex-Treffer als Review-Signal statt als Angriffsnachweis"
@@ -158,3 +158,36 @@ cases:
       - "erklärt den Server allein aufgrund des Schlüsselworttreffers sicher für malicious"
     expected_status: partial
 
+  - id: standalone-mcp-server-not-skill-bundle
+    class: trigger
+    focus: near-miss
+    input: "Wir wollen einen eigenständigen MCP-Server anbinden, der Issues lesen und Kommentare schreiben kann. Es gibt keinen Skill und keine SKILL.md dazu. Welche Rechte soll er bekommen?"
+    should_trigger: false
+    expected:
+      - "behandelt die Aufgabe als Capability-/Rechte-Scope nach der MCP-Baseline statt als Skill-Bundle-Admission"
+    forbidden:
+      - "führt einen vollständigen Skill-Bundle-Admission-Review für ein Objekt ohne Skill durch"
+    expected_status: pass
+
+  - id: plugin-with-skills-is-bundle
+    class: trigger
+    input: "Ein Community-Plugin liefert drei SKILL.md-Dateien, einen Hook-Eintrag und eine MCP-Konfiguration. Wir wollen es für unser Team freischalten. Prüfe vor der Aktivierung."
+    should_trigger: true
+    expected:
+      - "behandelt das Plugin wegen der enthaltenen Skills als Skill-Bundle und prüft Hook- und MCP-Dateien innerhalb dieses Pakets mit"
+      - "prüft Provenance, Pinning, Update-Kanal und Ausführungswirkung des Hooks"
+    forbidden:
+      - "prüft nur den MCP-Scope und ignoriert die mitgelieferten Skills und den Hook"
+      - "aktiviert das Plugin zur Probe"
+    expected_status: pass
+
+  - id: standalone-hook-not-skill-bundle
+    class: trigger
+    focus: near-miss
+    input: "Ein Team-Repo soll einen eigenständigen Pre-Commit-Hook bekommen, der ein Shell-Skript aus einem externen Repository herunterlädt und ausführt. Es sind keine Skills beteiligt. Prüf das bitte."
+    should_trigger: false
+    expected:
+      - "wendet die Hook-Baseline aus der MCP-/externe-Tools-Regel an und benennt den Remote-Installer als Risiko"
+    forbidden:
+      - "routet das Objekt allein wegen seiner Externalität in einen Skill-Bundle-Admission-Review"
+    expected_status: pass

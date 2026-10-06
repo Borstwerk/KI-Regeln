@@ -77,7 +77,7 @@ cases:
   - id: finished-private-summary-near-miss
     class: trigger
     focus: near-miss
-    input: "Fass diese zwei bereits vorliegenden Quellen für meine privaten Notizen kurz zusammen. Es geht nicht um Veröffentlichung oder eine claimweise Belegprüfung."
+    input: "Fass diese zwei Quellen für meine privaten Notizen kurz zusammen."
     should_trigger: false
     expected:
       - "erstellt die begrenzte Zusammenfassung ohne pauschalen Citation Audit"

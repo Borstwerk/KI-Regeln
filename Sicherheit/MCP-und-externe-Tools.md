@@ -14,6 +14,31 @@ Nicht jede externe Integration ist ein Skill-Bundle.
 
 Ein externer Tooltyp wird nicht allein wegen seiner Externalität zu `skill-security-review` geroutet. Umgekehrt beweist ein bestandener Permission-Review weder Supply-Chain-Vertrauen noch sichere Inhalte.
 
+**Gemischte Pakete:** Liefert ein Plugin oder Paket mindestens einen Agent-Skill (`SKILL.md`) mit, ist das Gesamtpaket ein Skill-Bundle. `skill-security-review` ist dann Owner der Admission und prüft die mitgelieferten Hook-, MCP- und Script-Dateien innerhalb dieses Pakets mit. Die Baseline in dieser Datei gilt für Pakete **ohne** Skills.
+
+## Plugins und Connectors (ohne Skills)
+
+Vor Aktivierung klären:
+
+- Betreiber, Herkunft, Version und Pinning; gibt es automatische Updates, und wer kontrolliert den Update-Kanal?
+- Was ist tatsächlich enthalten: nur Konfiguration, oder auch Hooks, Commands, Scripts oder MCP-Server? Jede Komponente nach ihrem eigenen Typ behandeln.
+- Welche OAuth-Scopes oder Berechtigungen werden angefordert, und welche davon braucht die Aufgabe? Lesen, Schreiben und extern sichtbare Aktionen getrennt bewerten (`tool-permission-review`).
+- Welche Daten verlassen das System, und wohin?
+- Eine bestehende Verbindung erweitert Capability, nicht Autorisierung.
+
+Eine Änderung an Scopes, Update-Kanal oder enthaltenen Komponenten ist eine neue Admission-Entscheidung.
+
+## Hooks (ohne Skills)
+
+Hooks laufen ereignisgesteuert und nicht durch eine Entscheidung des Modells. Sie haben deshalb potenziell höhere Wirkung als ein Tool, das ausdrücklich aufgerufen wird.
+
+- Auslösende Events und den Befehl im Wortlaut lesen, nicht nur die Beschreibung.
+- Die Signale aus dem MCP-Config-Preflight oben gelten sinngemäß: Remote-Installer, ungepinnte Runtime-Pakete, riskante Shell-Wrapper, Weitergabe sensibler Environment-Variablen.
+- Netzwerkzugriff, Schreibzugriff außerhalb des Arbeitsbereichs und Zugriff auf Secrets nur mit ausdrücklicher Begründung.
+- Ein Hook darf Freigaben und Human Gates nicht umgehen und keine Instruktionen in den Kontext einspeisen. Instruktionshaltigen Hook-Output als untrusted behandeln (`prompt-injection-review` nur bei tatsächlichem Verdacht).
+- Hooks aus einem fremden Repository oder Plugin nie automatisch aktivieren; Änderungen an einem Hook sind eine neue Admission-Entscheidung.
+- Für Ausführungs- und Schreibrechte des Hooks `tool-permission-review`.
+
 ## Vor Nutzung prüfen
 
 - Wer betreibt das Tool?

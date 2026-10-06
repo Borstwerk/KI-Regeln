@@ -30,6 +30,10 @@ optional:
   - evidence_ref
   - gate_id
   - scope_ref
+  - checkpoint_id
+  - candidate_skill_id
+  - replaced_skill_id
+  - trigger_ref
   - error_code
   - note
 
@@ -48,6 +52,8 @@ recommended_event_types:
   - SKILL_ACTIVATED
   - SKILL_DEACTIVATED
   - ROUTING_REFINED
+  - ROUTING_REENTERED
+  - CANDIDATE_REJECTED
   - WORKFLOW_PHASE_STARTED
   - TOOL_CALLED
   - TOOL_FAILED

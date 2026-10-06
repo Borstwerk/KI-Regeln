@@ -96,7 +96,7 @@ Es gibt keine opaque Gesamtnote. Findings bleiben pro Dimension sichtbar.
 - `GT-10` – No-Skill-Control für eine einfache stabile Faktenfrage;
 - `GT-11` – Communication-Overlay verfeinert den Primärowner statt Rewrite-Bloat zu addieren;
 - `GT-12` – später `citation-audit` am Pre-Completion-Checkpoint;
-- `GT-13` – `verification-loop` mit frischer Evidence nach einer Korrektur;
+- `GT-13` – frische Completion-Evidence nach einer kleinen Korrektur, ohne Loop-Pflicht (testet die allgemeine Completion-Regel, nicht die Aktivierung von `verification-loop`);
 - `GT-14` – Security-Admission mit Deduplizierung von `tool-permission-review`;
 - `GT-15` – zweite No-Skill-Control: lokale Kurz-Zusammenfassung trotz Fixture;
 - `GT-16` – Add-Zweig: `adressatengerechte-kommunikation + natuerliches-schreiben` bei eigenständiger Voice-Evidence;
@@ -123,7 +123,11 @@ Für neue Behavioral Runs soll der Runner beziehungsweise Harness, soweit techni
 - `CHECKPOINT_REACHED` für tatsächlich erreichte Routing-Checkpoints;
 - `SKILL_ACTIVATED` nur wenn die konkrete `SKILL.md` tatsächlich geladen/aktiviert wurde;
 - `ROUTING_REFINED` wenn ein vorläufiger Owner ersetzt oder der aktive Skill-Satz materiell geändert wurde;
-- `SKILL_DEACTIVATED` wenn ein zuvor aktiver Skill durch Refinement entfernt wird.
+- `SKILL_DEACTIVATED` wenn ein zuvor aktiver Skill durch Refinement entfernt wird;
+- `ROUTING_REENTERED` wenn ein ereignisgesteuertes Re-Entry einen bereits geprüften Kandidaten erneut bewertet; `trigger_ref` verweist auf das auslösende Ereignis;
+- `CANDIDATE_REJECTED` wenn der Harness eine Kandidatenprüfung selbst sieht und der Kandidat nicht aktiviert wird.
+
+Strukturierte Felder: `checkpoint_id`, `candidate_skill_id`, `replaced_skill_id`, `trigger_ref` (siehe `Agentenarbeit/Trace-Datenmodell.md`). Ohne `CANDIDATE_REJECTED` ist ein Nicht-Aktivieren im Trace nicht von einer nie erfolgten Prüfung unterscheidbar; die Absenz eines Skills bleibt dann eine qualitative Beurteilung und gilt nicht als trace-verifiziert.
 
 Die Events sollen vom Runner/Harness aus tatsächlichen Loads und Routingaktionen erzeugt werden, nicht als freie Selbstauskunft im Antworttext. Fehlt diese Instrumentierung, darf die Routing-Dimension weiterhin qualitativ beurteilt werden, aber nicht als **trace-verifiziert** bezeichnet werden.
 

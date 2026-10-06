@@ -12,7 +12,7 @@ research-plan
 → source-evaluation
 → research-synthesis
 → claim-verification bei kritischen Claims
-→ citation-audit
+→ citation-audit bei Veröffentlichung, Belegpflicht oder materiellem Claim-zu-Zitation-Check
 ```
 
 ## Phasen
@@ -57,9 +57,9 @@ Struktur nach Erkenntnis, Konsens, Konflikt und Unsicherheit – nicht nach Quel
 
 ### 6. Citation Audit
 
-`citation-audit`
+`citation-audit`, wenn der Text veröffentlicht wird, eine Belegpflicht besteht oder ein materieller Claim-zu-Zitation-Check nötig ist.
 
-Prüft, ob Zitate die tatsächlichen Aussagen tragen.
+Prüft, ob Zitate die tatsächlichen Aussagen tragen. Ein fertiger Text allein ist kein Trigger.
 
 ## Security
 
@@ -76,7 +76,7 @@ Fertig, wenn:
 - wesentliche Teilfragen ausreichend abgedeckt sind;
 - relevante Konflikte sichtbar sind;
 - zentrale Claims Evidence besitzen;
-- Citation Audit keine offenen schweren Funde enthält.
+- ein erforderlicher Citation Audit keine offenen schweren Funde enthält.
 
 ## Verkürzte Variante
 
