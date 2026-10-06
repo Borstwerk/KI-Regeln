@@ -81,6 +81,7 @@ EXTRA_RUNTIME_FILES = (
 
 # These files describe eval architecture/results rather than the operational runtime.
 RUNTIME_EXCLUDED_RELATIVE = {
+    "Agentenarbeit/Agent-Evals.md",
     "Skill-Engineering/Cross-Cutting-Skill-Discovery.md",
     "Skill-Engineering/Skill-Review-und-Evals.md",
 }
@@ -293,23 +294,33 @@ def assert_curated_workspace_clean(repository_view: Path) -> None:
     if not repository_view.is_dir():
         raise HarnessError("curated repository view is missing")
 
+    violations: list[str] = []
     for path in repository_view.rglob("*"):
         if not path.is_file():
             continue
         rel = path.relative_to(repository_view)
+        rel_text = rel.as_posix()
         if set(rel.parts) & FORBIDDEN_RUNNER_PATH_PARTS:
-            raise HarnessError(f"forbidden evaluator/runtime path leaked into runner repository: {rel.as_posix()}")
+            violations.append(f"forbidden evaluator/runtime path: {rel_text}")
+            continue
         if len(rel.parts) == 1 and rel.name in FORBIDDEN_RUNNER_ROOT_FILES:
-            raise HarnessError(f"forbidden root metadata leaked into runner repository: {rel.as_posix()}")
-        if rel.as_posix() in RUNTIME_EXCLUDED_RELATIVE:
-            raise HarnessError(f"eval-describing operational doc leaked into runner repository: {rel.as_posix()}")
+            violations.append(f"forbidden root metadata: {rel_text}")
+            continue
+        if rel_text in RUNTIME_EXCLUDED_RELATIVE:
+            violations.append(f"eval-describing operational doc: {rel_text}")
+            continue
         if path.suffix.lower() in {".md", ".yml", ".yaml", ".json", ".txt"}:
             try:
                 text = path.read_text(encoding="utf-8")
             except UnicodeDecodeError:
                 continue
             if CONTAMINATION_PATTERN.search(text):
-                raise HarnessError(f"Golden-Task routing hint leaked into runner repository content: {rel.as_posix()}")
+                violations.append(f"Golden-Task routing hint: {rel_text}")
+
+    if violations:
+        raise HarnessError(
+            "runner repository contamination detected:\n- " + "\n- ".join(sorted(violations))
+        )
 
 
 def write_prepared_case(compiled: dict[str, Any], task_path: Path, repo_root: Path, out_dir: Path) -> None:
@@ -379,6 +390,7 @@ def write_prepared_case(compiled: dict[str, Any], task_path: Path, repo_root: Pa
             "CHANGELOG.md",
             "README.md",
             "Dokumentation/Skill-Katalog.md",
+            "Agentenarbeit/Agent-Evals.md",
             "Skill-Engineering/Cross-Cutting-Skill-Discovery.md",
             "Skill-Engineering/Skill-Review-und-Evals.md",
         ],
