@@ -147,9 +147,11 @@ Der Claude-Code-Adapter darf in read-only Runs drei lokale Werkzeuge bereitstell
 - `Glob` – Dateikandidaten im Paket finden;
 - `Grep` – Textkandidaten im Paket finden.
 
+Für Discovery-Aktionen werden Suchausdruck und Ereignisreihenfolge mitgeführt. Falls die Claude-Stream-Events keinen eigenen Zeitstempel liefern, bleibt der Laufzeit-Zeitstempel gröber, aber `sequence` erhält die beobachtete Reihenfolge.
+
 `Glob` und `Grep` sind **Discovery**, keine Skill-Aktivierung. Sie werden als read-only Actions aufgezeichnet. Nur ein tatsächlich erfolgreicher `Read` einer `SKILL.md` beziehungsweise Workflow-Datei erzeugt den entsprechenden Read-Event.
 
-Webzugriff, MCP, Bash, Edit/Write und Task/Subagent bleiben im read-only Pfad gesperrt.
+Webzugriff, MCP, Bash, Edit/Write und Task/Subagent bleiben im read-only Pfad gesperrt. Ein Prepared Package mit `runtime.execution_mode: writable` darf nicht über diesen read-only Pfad gestartet werden; der Adapter blockt den Modus-Mismatch vor dem Modellstart.
 
 ## Actual Route
 

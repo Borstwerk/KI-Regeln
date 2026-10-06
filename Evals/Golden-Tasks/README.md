@@ -18,6 +18,7 @@ Der Repo-Validator prüft nur die Struktur: Schema, IDs, Pfade, Skill-/Workflowr
 Eine vollständige Task kann definieren:
 
 - `behavioral_routing_mode: discovery-required | outcome-primary` als evaluator-only Aussage darüber, **was** der Behavioral Run beweisen soll;
+- `behavioral_execution_mode: read-only | writable` als evaluator-only Aussage darüber, welche Runner-Capability die Aufgabe tatsächlich benötigt;
 - `required_skills` für unverzichtbare Arbeitsdisziplinen;
 - `allowed_optional_skills` für legitime zusätzliche Disziplinen;
 - `forbidden_skills` nur für offensichtlich falsches oder scope-erweiterndes Routing;
@@ -53,10 +54,11 @@ Die Projektion wird reproduzierbar erzeugt mit:
 python tools/golden_task_execution_view.py Evals/Golden-Tasks/GT-01/task.yml --assert-blind
 ```
 
-Nicht in die Execution View gelangen insbesondere:
+Nicht in die direkte Golden-Task-Projektion gelangen insbesondere:
 
 - `id`, `title`, `goal`, `sources_of_truth`;
 - `behavioral_routing_mode`;
+- `behavioral_execution_mode`;
 - `expected_domain`;
 - `allowed_secondary_domains`;
 - `workflow`;
@@ -89,13 +91,14 @@ python tools/golden_task_behavioral_harness.py prepare-case \
 Das Runner-Paket enthält:
 
 - die Assignment als `user_prompt`;
+- einen operativen `runtime.execution_mode`, der aus der Judge-seitigen Capability-Anforderung abgeleitet wird;
 - Fixtures unter neutralen Pfaden wie `workspace/task/fixture-01-options.md`;
 - `workspace/repository/AGENTS.md`, Katalog, Overlay-Registry, Workflow-Index und die operativen Domain-/Skill-/Workflow-Dateien;
 - **nicht**: `Evals/**`, `.git/**`, `.github/**`, `tests/**`, `tools/**`, Root-Changelog/README sowie bekannte eval-beschreibende Metadokumente.
 
 Der Workspace wird dateiweise gehasht. `verify_prepared_integrity` lehnt einen vor dem Run veränderten Runner-Workspace ab.
 
-Der vorhandene Claude-Code-Adapter stellt für read-only Runs `Read`, `Glob` und `Grep` bereit. `Glob`/`Grep` dienen ausschließlich der kontrollierten Discovery innerhalb des vorbereiteten Pakets; Web, MCP, Bash und Mutation bleiben gesperrt.
+Der vorhandene Claude-Code-Adapter stellt für read-only Runs `Read`, `Glob` und `Grep` bereit. `Glob`/`Grep` dienen ausschließlich der kontrollierten Discovery innerhalb des vorbereiteten Pakets; Web, MCP, Bash und Mutation bleiben gesperrt. Ein als `writable` deklarierter Golden Task wird vom normalen read-only Pfad vor dem Modellstart abgewiesen und in `readiness.yml` als nicht bereit für diesen Runner markiert.
 
 Aus erfolgreichen `Read`-Toolereignissen erzeugt der Adapter objektive `skill_events: read` und `workflow_events: read`. `Glob`/`Grep` werden als read-only Actions protokolliert, aber ein Suchtreffer wird **nicht** als Skill-Read hochgestuft. Der Adapter leitet außerdem **nicht** `selected`, `applied`, `CANDIDATE_REJECTED`, Refinement oder Checkpoint-Reihenfolge aus Reads oder Modellprosa ab.
 

@@ -8,6 +8,18 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Bootstrap Discovery + Harness Evidence Hygiene
+
+- Rerun #3 zeigte bei allen vier `discovery-required`-Golden-Tasks trotz verfügbarer Read/Glob/Grep-Discovery keinen Skill-Read; fachliche Outputs blieben überwiegend gut. Das wird als belastbares Under-Routing-Signal für den Bootstrap behandelt, nicht als Anlass, einzelne Skills triggerfreudiger zu machen;
+- `AGENTS.md` und Master-Router erhalten deshalb ein verbindliches **Minimal-Discovery-Gate** für nichttriviale Aufgaben: Domäne/Workflow, plausible Katalog-Owner und aktuelle Cross-Cutting-Kandidaten dürfen nicht allein deshalb übersprungen werden, weil aus Nutzertext oder Fixture bereits eine plausible Antwort formulierbar ist;
+- der triviale Direktpfad bleibt ausdrücklich erhalten: kurze Faktenklärung, mechanische Kleintransformation und eng begrenzte Ein-Satz-Zusammenfassung ohne Spezialanforderung dürfen weiterhin ohne künstliche Skill-Suche zu `none` routen;
+- neues evaluator-only `behavioral_execution_mode: read-only | writable`; GT-13 ist als `writable` markiert. Prepared Packages geben den operativen Modus weiter, `readiness.yml` markiert Writable-Tasks als nicht bereit für den Default-Runner und der read-only Claude-Adapter blockt einen Modus-Mismatch vor dem Modellstart;
+- der explorative Visual-Answer-A/B-Bericht wird explizit aus Golden-Task-Runner-Snapshots ausgeschlossen, weil er konkrete Human-Evidence aus früheren Testformen enthält;
+- Claude-Discovery-Telemetrie protokolliert jetzt Suchausdruck und Ereignisreihenfolge für Glob/Grep sowie Action-ID/Sequenz für Skill-/Workflow-Reads; damit bleibt Reihenfolge auch dann rekonstruierbar, wenn Stream-Events keinen feingranularen Zeitstempel liefern;
+- beobachtete Plugins werden auf Namen/IDs normalisiert und in der Runtime-Evidence sichtbar gemacht; `fresh_context` bleibt bei vorhandenen Plugins weiterhin streng `false` statt künstlich bereinigt;
+- neue Regressionstests decken Writable-Readiness, Adapter-Modusblockade, A/B-Dokument-Isolation, Discovery-Ausdrücke/-Reihenfolge und Plugin-Namens-Evidence ab;
+- GT-09/GT-11/GT-12/GT-16 bleiben unverändert in ihren fachlichen Skill-Erwartungen; der nächste Behavioral-Lauf soll prüfen, ob der Bootstrap-Fix die Discovery tatsächlich auslöst.
+
 ### Behavioral Harness Discovery Hardening
 
 - read-only Claude-Runner erhalten zusätzlich zu `Read` kontrolliertes lokales `Glob` und `Grep`; Web, MCP, Bash und Mutation bleiben gesperrt;

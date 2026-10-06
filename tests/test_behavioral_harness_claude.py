@@ -350,8 +350,8 @@ class AdapterTests(unittest.TestCase):
 
         stream = {
             "tool_uses": {
-                "g1": {"name": "Glob", "input": {"pattern": "**/SKILL.md", "path": "sources"}},
-                "g2": {"name": "Grep", "input": {"pattern": "description:", "path": "sources"}},
+                "g1": {"name": "Glob", "input": {"pattern": "**/SKILL.md", "path": "sources"}, "sequence": 7},
+                "g2": {"name": "Grep", "input": {"pattern": "description:", "path": "sources"}, "sequence": 11},
             },
             "tool_results": {
                 "g1": {"is_error": False},
@@ -365,6 +365,18 @@ class AdapterTests(unittest.TestCase):
         self.assertTrue(all(x["package_local_target"] for x in actions["actions"]))
         self.assertTrue(all(x["action_class"] == ["read-only"] for x in actions["actions"]))
         self.assertTrue(all(x["authorization"]["present"] is True for x in actions["actions"]))
+        self.assertEqual(["**/SKILL.md", "description:"], [x["discovery_expression"] for x in actions["actions"]])
+        self.assertEqual([7, 11], [x["sequence"] for x in actions["actions"]])
+
+    def test_07c_execution_mode_mismatch_is_rejected_before_launch(self):
+        self.assertEqual(
+            "read-only",
+            adapter._require_execution_mode({"runtime": {"execution_mode": "read-only"}}, False),
+        )
+        with self.assertRaisesRegex(adapter.AdapterError, "requires a writable isolated runner"):
+            adapter._require_execution_mode({"runtime": {"execution_mode": "writable"}}, False)
+        with self.assertRaisesRegex(adapter.AdapterError, "must not be escalated"):
+            adapter._require_execution_mode({"runtime": {"execution_mode": "read-only"}}, True)
 
     def test_08_mcp_presence_prevents_network_true(self):
         def actual(argv, cwd, env):
@@ -600,7 +612,7 @@ class AdapterTests(unittest.TestCase):
         runtime = self.load(out, "runtime-configuration-preimage.yml")
         self.assertNotIn("--bare", runtime["cli_argv_normalized"])
         self.assertIn("--safe-mode", runtime["cli_argv_normalized"])
-        self.assertEqual("0.3.0", runtime["adapter_version"])
+        self.assertEqual("0.3.1", runtime["adapter_version"])
 
     def test_27_complete_evidence_yields_fresh_context_true(self):
         out = self.run_one(FakeRunner(), out_name="fresh-true")
@@ -625,6 +637,8 @@ class AdapterTests(unittest.TestCase):
             session = argv[argv.index("--session-id") + 1]
             return adapter.ProcessResult(0, stream_json(session=session, plugins=[{"name": "leaked", "path": "/p"}]), "")
         out = self.run_one(FakeRunner(actual_factory=actual), out_name="fresh-plugins")
+        observed = self.load(out, "evidence.yml")["evidence"][0]["observed"]
+        self.assertEqual(["leaked"], observed["plugins"])
         self.assertFalse(self.load(out, "method-evidence.yml")["fresh_context"])
         self.assertIn("no_observed_plugins", self.load(out, "evidence.yml")["evidence"][0]["fresh_context_assessment"]["violated"])
 

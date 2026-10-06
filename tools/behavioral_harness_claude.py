@@ -29,7 +29,7 @@ except ImportError:  # direct script sibling import
         VIEW_MCP_CONFIG, confined_model_invocation, confinement_facts, invocation_evidence,
     )
 
-VERSION = "0.3.0"
+VERSION = "0.3.1"
 RUNNER_TYPE = "claude-code"
 METHOD_CONTRACT = "behavioral-paired-run-method-evidence/v1"
 UNKNOWN = "unknown"
@@ -608,6 +608,24 @@ def _mcp(raw: Any):
     return UNKNOWN
 
 
+def _plugins(raw: Any):
+    if raw is None:
+        return UNKNOWN
+    if isinstance(raw, dict):
+        return sorted(str(k) for k in raw)
+    if isinstance(raw, list):
+        names = []
+        for item in raw:
+            if isinstance(item, str):
+                names.append(item)
+            elif isinstance(item, dict):
+                names.append(str(item.get("name") or item.get("plugin") or item.get("id") or item))
+            else:
+                names.append(str(item))
+        return sorted(names)
+    return UNKNOWN
+
+
 def _empty(value: Any) -> Any:
     """True when the value is provably an empty collection, False when provably non-empty."""
     if value == UNKNOWN or value is None or isinstance(value, bool):
@@ -639,6 +657,23 @@ def _target(tool_input: Any, tool_name: str | None = None) -> str:
     return UNKNOWN
 
 
+def _discovery_expression(tool_input: Any, tool_name: str) -> str:
+    if tool_name not in {"Glob", "Grep"} or not isinstance(tool_input, dict):
+        return UNKNOWN
+    for key in ("pattern", "query"):
+        if tool_input.get(key) is not None:
+            return str(tool_input[key])
+    return UNKNOWN
+
+
+def _event_timestamp(event: Mapping[str, Any]) -> str:
+    for key in ("timestamp", "created_at", "createdAt"):
+        value = event.get(key)
+        if isinstance(value, str) and value.strip():
+            return value
+    return UNKNOWN
+
+
 def _parse_stream(stdout: str) -> dict[str, Any]:
     events = []
     for no, line in enumerate(stdout.splitlines(), 1):
@@ -655,17 +690,25 @@ def _parse_stream(stdout: str) -> dict[str, Any]:
     session = next(iter(sessions)) if sessions else UNKNOWN
     model = init.get("model")
     uses, results = {}, {}
-    for e in events:
+    for event_index, e in enumerate(events, 1):
         msg = e.get("message")
         if e.get("type") == "assistant" and isinstance(msg, dict):
             model = model or msg.get("model")
             for block in msg.get("content", []) if isinstance(msg.get("content"), list) else []:
                 if isinstance(block, dict) and block.get("type") == "tool_use" and block.get("id"):
-                    uses[str(block["id"])] = {"name": str(block.get("name", UNKNOWN)), "input": block.get("input") or {}}
+                    uses[str(block["id"])] = {
+                        "name": str(block.get("name", UNKNOWN)),
+                        "input": block.get("input") or {},
+                        "sequence": event_index,
+                        "timestamp": _event_timestamp(e),
+                    }
         if e.get("type") == "user" and isinstance(msg, dict):
             for block in msg.get("content", []) if isinstance(msg.get("content"), list) else []:
                 if isinstance(block, dict) and block.get("type") == "tool_result" and block.get("tool_use_id"):
-                    results[str(block["tool_use_id"])] = block
+                    result = dict(block)
+                    result["_sequence"] = event_index
+                    result["_timestamp"] = _event_timestamp(e)
+                    results[str(block["tool_use_id"])] = result
     finals = [e for e in events if e.get("type") == "result"]
     if not finals: raise AdapterError("stream-json contains no final result event")
     final = finals[-1]
@@ -679,7 +722,7 @@ def _parse_stream(stdout: str) -> dict[str, Any]:
         "observed_model": str(model) if model else UNKNOWN, "observed_session_id": session,
         "observed_tools": sorted(str(x) for x in tools) if isinstance(tools, list) else UNKNOWN,
         "observed_mcp_servers": _mcp(init.get("mcp_servers")),
-        "observed_plugins": init.get("plugins", UNKNOWN), "observed_hooks": init.get("hooks", UNKNOWN),
+        "observed_plugins": _plugins(init.get("plugins")), "observed_hooks": init.get("hooks", UNKNOWN),
         "init_event_count": len(inits),
         "observed_plugin_errors": _errors(init.get("plugin_errors")),
         "observed_mcp_server_errors": _errors(init.get("mcp_server_errors")),
@@ -711,6 +754,7 @@ def _actions(stream: Mapping[str, Any], task: Path, timestamp: str):
     for i, (tool_id, item) in enumerate(stream["tool_uses"].items(), 1):
         name = str(item["name"])
         target = _target(item.get("input"), name)
+        discovery_expression = _discovery_expression(item.get("input"), name)
         result = stream["tool_results"].get(tool_id); error = bool(result.get("is_error")) if isinstance(result, dict) else False
         executed = result is not None and not error
         local = _local_target(target, task) if name in {"Read", "Glob", "Grep", "Write", "Edit", "NotebookEdit"} else UNKNOWN
@@ -720,10 +764,14 @@ def _actions(stream: Mapping[str, Any], task: Path, timestamp: str):
             # result proves nothing and stays unresolved.
             outside["executed" if executed else "blocked" if error else "unresolved"] = True
         classes = ["read-only"] if name in {"Read", "Glob", "Grep"} else ["productive"] if name in {"Write", "Edit", "NotebookEdit"} else ["external"] if name in {"WebSearch", "WebFetch"} or name.startswith("mcp__") else ["unknown"]
+        event_timestamp = item.get("timestamp")
         row = {
             "action_id": f"A-{i:03d}", "tool": name, "operation": "tool-call", "target": target,
+            "sequence": int(item.get("sequence") or i),
+            "discovery_expression": discovery_expression,
             "environment": "claude-code-ephemeral-runtime", "attempted": True, "executed": executed,
-            "result": "success" if executed else "tool-error" if error else "result-not-observed", "timestamp": timestamp,
+            "result": "success" if executed else "tool-error" if error else "result-not-observed",
+            "timestamp": event_timestamp if isinstance(event_timestamp, str) and event_timestamp != UNKNOWN else timestamp,
             "action_class": classes,
             "authorization": {
                 "required": False if name in {"Read", "Glob", "Grep"} and local is True else UNKNOWN,
@@ -795,6 +843,8 @@ def _trace(execution: Mapping[str, Any], reads: list[dict[str, Any]], task: Path
                     "event": "read",
                     "evidence_source": "tool-observation",
                     "artifact_ref": rel,
+                    "action_id": row.get("action_id"),
+                    "sequence": row.get("sequence"),
                     "timestamp": row.get("timestamp") or finished,
                 })
 
@@ -807,6 +857,8 @@ def _trace(execution: Mapping[str, Any], reads: list[dict[str, Any]], task: Path
                 "event": "read",
                 "evidence_source": "tool-observation",
                 "artifact_ref": rel,
+                "action_id": row.get("action_id"),
+                "sequence": row.get("sequence"),
                 "timestamp": row.get("timestamp") or finished,
             })
 
@@ -1166,6 +1218,19 @@ def _require_admission(context: WritableLaunchContext) -> dict[str, Any]:
     return {"admitted": True, "reason": reason}
 
 
+def _require_execution_mode(execution: Mapping[str, Any], writable_workspace: bool) -> str:
+    mode = str((execution.get("runtime") or {}).get("execution_mode") or "read-only")
+    if mode not in {"read-only", "writable"}:
+        raise AdapterError(f"unsupported prepared execution mode: {mode!r}")
+    if mode == "writable" and not writable_workspace:
+        raise AdapterError(
+            "prepared task requires a writable isolated runner; the default Claude run path is read-only"
+        )
+    if mode == "read-only" and writable_workspace:
+        raise AdapterError("prepared task is read-only and must not be escalated to writable mode")
+    return mode
+
+
 def execute_prepared_response(
     prepared: Path, *, model: str, out_dir: Path, claude_binary: str = "claude", session_id: str | None = None,
     process_runner: ProcessRunner = _run, base_env: Mapping[str, str] | None = None,
@@ -1182,6 +1247,7 @@ def execute_prepared_response(
         raise AdapterError("model aliases are not accepted; pass an explicit full model id")
     tool_policy = effective_tool_policy(writable_workspace)
     runner = _runner_dir(prepared); execution = _validate_package(runner); response_id = str(execution["test_id"])
+    _require_execution_mode(execution, writable_workspace)
     probe = require_capabilities(probe_claude_code(claude_binary, process_runner))
     out_dir = out_dir.resolve()
     if out_dir.exists(): raise AdapterError(f"output directory already exists: {out_dir}")
