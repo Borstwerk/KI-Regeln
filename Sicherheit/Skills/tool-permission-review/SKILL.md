@@ -1,6 +1,6 @@
 ---
 name: tool-permission-review
-description: Prüft die für einen Agenten, Skill oder Workflow vorgesehenen Tool- und Berechtigungsrechte gegen Least Privilege, Fallbacks und Human Gates. Verwenden wenn neue Tools, Netzwerk-, Schreib-, Ausführungs- oder Produktionsrechte eingeführt werden; nicht für reine Funktionsbeschreibung eines Tools.
+description: Prüft die für einen Agenten, Skill, Workflow oder eine eigenständige externe Integration vorgesehenen Tool- und Berechtigungsrechte gegen Least Privilege, Fallbacks und Human Gates. Verwenden wenn neue Tools, Netzwerk-, Schreib-, Ausführungs- oder Produktionsrechte eingeführt werden; nicht für reine Funktionsbeschreibung eines Tools und nicht als vollständiger Supply-Chain- oder Skill-Admission-Review.
 ---
 
 # Tool Permission Review

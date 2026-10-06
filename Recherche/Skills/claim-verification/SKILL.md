@@ -1,6 +1,6 @@
 ---
 name: claim-verification
-description: Prüft einen bestehenden, präzisierten Claim gezielt gegen geeignete Evidenz und ordnet Unterstützung, Konflikte und verbleibende Unsicherheit ein. Verwenden bei wichtigen oder strittigen Faktenclaims, deren tatsächliche Evidenzbasis verifiziert werden soll.
+description: Prüft einen bestehenden, präzisierten Claim gezielt gegen geeignete Evidenz und ordnet Unterstützung, Konflikte und verbleibende Unsicherheit ein. Verwenden bei wichtigen oder strittigen Faktenclaims, deren tatsächliche Evidenzbasis verifiziert werden soll; nicht als flächiger Citation Audit einer fertigen Synthese und nicht nur zur allgemeinen Qualitätsnote einer Quelle.
 ---
 
 # Skill: claim-verification

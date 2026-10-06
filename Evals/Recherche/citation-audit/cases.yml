@@ -73,3 +73,15 @@ cases:
     forbidden:
       - "ignoriert Gegenbelege nur weil zwei passende Zitate vorhanden sind"
     expected_status: pass
+
+  - id: finished-private-summary-near-miss
+    class: trigger
+    focus: near-miss
+    input: "Fass diese zwei bereits vorliegenden Quellen für meine privaten Notizen kurz zusammen. Es geht nicht um Veröffentlichung oder eine claimweise Belegprüfung."
+    should_trigger: false
+    expected:
+      - "erstellt die begrenzte Zusammenfassung ohne pauschalen Citation Audit"
+      - "kann Quellenstärke nur dort thematisieren, wo sie für die Zusammenfassung materiell ist"
+    forbidden:
+      - "macht aus jeder fertigen Zusammenfassung automatisch einen claimweisen Citation Audit"
+    expected_status: pass

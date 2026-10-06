@@ -185,3 +185,13 @@ cases:
       - "behandelt eine produktive Multi-User-Anwendung weiterhin nur als visuelles Antwortartefakt"
     expected_status: pass
 
+  - id: medium-review-readable-without-visual
+    class: trigger
+    input: "Gib mir zu diesem kleinen PR sechs unabhängige Lesbarkeits-Hinweise als kurze Stichpunkte. Keine Priorisierung oder Abhängigkeiten nötig."
+    should_trigger: false
+    expected:
+      - "liefert die sechs Hinweise kompakt im normalen Text"
+      - "aktiviert visual-answer nicht allein wegen der Anzahl der Findings"
+    forbidden:
+      - "baut ohne zusätzlichen Informationsgewinn ein visuelles Review-Artefakt"
+    expected_status: pass

@@ -126,6 +126,22 @@ Typischer Kandidat: `visual-answer`.
 
 Der Skill darf bereits `post-primary` ausgewählt worden sein. `pre-output` ist die zweite Chance, wenn erst das entstandene Ergebnis zeigt, dass Vergleich, Hierarchie, Timeline, Findings oder Abhängigkeiten visuell wesentlich schneller erfassbar wären.
 
+## Ereignisgesteuertes Re-Entry
+
+Checkpoints werden nicht bei jedem Zwischenschritt wiederholt. Ein bereits geprüfter oder verworfener Kandidat wird nur dann erneut bewertet, wenn **neue Evidence einen für seine Description relevanten Sachverhalt materiell verändert**.
+
+Typische Re-Entry-Ereignisse:
+
+- eine Nutzerantwort klärt Empfänger, Hierarchie, Ziel oder Scope;
+- ein Toolergebnis zeigt neue Rechte, neue Datenquellen oder einen anderen Zielzustand;
+- eine gefundene Datei verändert die lokale Wahrheit;
+- ein Fehlschlag erzwingt echtes Re-Planning;
+- Output-Typ oder Evidence-Anforderung ändert sich materiell.
+
+Nicht ausreichend sind bloß mehr Text, ein weiterer interner Gedankenschritt oder die Hoffnung, dass ein zusätzlicher Skill helfen könnte.
+
+Re-Entry ist **kein fünfter globaler Checkpoint** und kein vollständiger Katalogscan. Neu geprüft werden nur Kandidaten, deren kanonische Description durch den neuen Fakt plausibel anders beantwortet werden könnte.
+
 ## Addieren oder Primärrouting verfeinern?
 
 Overlay bedeutet nicht automatisch `Primary + Overlay`.
@@ -142,9 +158,11 @@ Regel:
 
 `skill-security-review` und `tool-permission-review` überschneiden sich absichtlich an der Permission-Grenze, haben aber unterschiedliche Ownership.
 
-`skill-security-review` ist Owner, wenn ein externer oder mächtiger Skill aufgenommen/aktiviert werden soll. Bundle, Provenance, Scripts, Remote Dependencies, Prompt Injection, Datenfluss, Rechte und Admission gehören zusammen.
+`skill-security-review` ist Owner, wenn ein externer oder mächtiger **Skill** aufgenommen/aktiviert werden soll. Bundle, Provenance, Scripts, Remote Dependencies, Prompt Injection, Datenfluss, Rechte und Admission gehören zusammen.
 
 `tool-permission-review` wird **zusätzlich** nur benötigt, wenn das Berechtigungsmodell selbst einen eigenständigen Design-/Reviewgegenstand bildet, etwa mehrere Tools/Rechte unabhängig vom Skill-Bundle gegeneinander abgewogen werden.
+
+Eigenständige MCP-Server, Plugins, Connectors oder Hooks sind keine Skill-Bundles. Ihre allgemeine Admission-Baseline steht in `Sicherheit/MCP-und-externe-Tools.md`. Für deren Capability-/Rechte-Scope ist `tool-permission-review` der passende Spezialskill; `prompt-injection-review` kommt nur hinzu, wenn konkrete externe Inhalte oder Toolmetadaten eine eigene Trust-Boundary-/Injection-Prüfung rechtfertigen.
 
 Nicht:
 
@@ -181,7 +199,7 @@ ERGEBNIS
 → direkte kurze Antwort
 ~~~
 
-Golden Tasks dürfen deshalb `required_skills: []`, `fixtures: []`, `sources_of_truth: []` und `expected_domain: none` verwenden, wenn genau diese Zurückhaltung geprüft werden soll.
+Golden Tasks dürfen deshalb `required_skills: []` und `expected_domain: none` verwenden, wenn genau diese Zurückhaltung geprüft werden soll. Fixtures oder lokale Sources of Truth dürfen trotzdem vorhanden sein, wenn die Aufgabe sie direkt lesen kann, ohne dass daraus automatisch ein spezieller Skillbedarf entsteht.
 
 ## Algorithmus für einen frischen Agenten
 
@@ -190,11 +208,12 @@ Golden Tasks dürfen deshalb `required_skills: []`, `fixtures: []`, `sources_of_
 3. Kleinsten fachlich ausreichenden Primärskill-Satz wählen – einschließlich `none`.
 4. Am `post-primary`-Checkpoint nur dafür registrierte Overlay-Kandidaten gegen ihre Description prüfen.
 5. Falls ein Kandidat spezifischerer Owner ist, Primärrouting verfeinern und redundanten generischen Skill entfernen.
-6. Am `pre-execution`-Checkpoint Verification-/Security-Kandidaten prüfen und Rechte/Gates klären.
-7. Aufgabe ausführen.
-8. Am `pre-completion`-Checkpoint späte Assurance-Trigger gegen das jetzt vorhandene Ergebnis prüfen.
-9. Am `pre-output`-Checkpoint Presentation-Kandidaten gegen die tatsächliche Informationsform prüfen.
-10. Completion Claim nur auf tatsächlich verifizierte Evidence begrenzen.
+6. Nur materiell fehlende Informationen klären. Ändert eine Antwort einen Description-relevanten Sachverhalt, genau dafür Re-Entry auslösen.
+7. Am `pre-execution`-Checkpoint Verification-/Security-Kandidaten prüfen und Rechte/Gates klären.
+8. Aufgabe ausführen. Bei materieller Scope-, Capability-, Evidence- oder Planänderung ereignisgesteuert re-routen statt alle Overlays erneut zu scannen.
+9. Am `pre-completion`-Checkpoint späte Assurance-Trigger gegen das jetzt vorhandene Ergebnis prüfen.
+10. Am `pre-output`-Checkpoint Presentation-Kandidaten gegen die tatsächliche Informationsform prüfen.
+11. Completion Claim nur auf frische Evidence für genau den behaupteten Zustand begrenzen; dafür nicht automatisch einen Verification Loop erfinden.
 
 ## Anti-Bloat-Regel
 
@@ -221,7 +240,7 @@ Cross-Cutting Routing braucht systemische Fälle, nicht nur isolierte Skill-Eval
 - No-Skill Control;
 - fehlende Capability ohne vorgetäuschte Ausführung.
 
-Die Golden Tasks `GT-09` bis `GT-14` decken diese Routingklasse als Startset ab. Definition ist kein Behavioral-Pass-Nachweis.
+Die Golden Tasks `GT-09` bis `GT-17` decken diese Routingklasse als Startset ab. Definition ist kein Behavioral-Pass-Nachweis.
 
 ## Leitgedanke
 

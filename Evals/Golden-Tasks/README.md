@@ -97,7 +97,10 @@ Es gibt keine opaque Gesamtnote. Findings bleiben pro Dimension sichtbar.
 - `GT-11` – Communication-Overlay verfeinert den Primärowner statt Rewrite-Bloat zu addieren;
 - `GT-12` – später `citation-audit` am Pre-Completion-Checkpoint;
 - `GT-13` – `verification-loop` mit frischer Evidence nach einer Korrektur;
-- `GT-14` – Security-Admission mit Deduplizierung von `tool-permission-review`.
+- `GT-14` – Security-Admission mit Deduplizierung von `tool-permission-review`;
+- `GT-15` – zweite No-Skill-Control: lokale Kurz-Zusammenfassung trotz Fixture;
+- `GT-16` – Add-Zweig: `adressatengerechte-kommunikation + natuerliches-schreiben` bei eigenständiger Voice-Evidence;
+- `GT-17` – positiver `tool-permission-review`-Fall ohne Skill-Bundle.
 
 Golden Tasks dürfen bewusst `required_skills: []`, leere Fixtures/Sources und `expected_domain: none` verwenden, wenn ein **No-Skill-Routing** das gewünschte Verhalten ist. Das ist ein Regressionstest gegen Skill-Bloat, kein unvollständiger Task.
 
@@ -110,6 +113,19 @@ Alle Fixtures sind lokal und selbst erzeugt. Die Suite hängt nicht von aktuelle
 ## Ausführung
 
 Die Definition einer Golden Task ist **kein Pass-Nachweis**. Behavioral Runs werden separat unter `runs/` dokumentiert und müssen Modell, Commit, Sichtbarkeit der Rubrik sowie Selbst-/Fremdbewertung offenlegen.
+
+### Routing-Trace für Behavioral Runs
+
+Ein Routing-Urteil darf nicht nur auf einer vom ausführenden Modell formulierten Zeile wie „Selected route“ beruhen.
+
+Für neue Behavioral Runs soll der Runner beziehungsweise Harness, soweit technisch verfügbar, einen **maschinenlesbaren Routing-Trace** auf Basis von `../../Agentenarbeit/trace-event.schema.yml` erzeugen:
+
+- `CHECKPOINT_REACHED` für tatsächlich erreichte Routing-Checkpoints;
+- `SKILL_ACTIVATED` nur wenn die konkrete `SKILL.md` tatsächlich geladen/aktiviert wurde;
+- `ROUTING_REFINED` wenn ein vorläufiger Owner ersetzt oder der aktive Skill-Satz materiell geändert wurde;
+- `SKILL_DEACTIVATED` wenn ein zuvor aktiver Skill durch Refinement entfernt wird.
+
+Die Events sollen vom Runner/Harness aus tatsächlichen Loads und Routingaktionen erzeugt werden, nicht als freie Selbstauskunft im Antworttext. Fehlt diese Instrumentierung, darf die Routing-Dimension weiterhin qualitativ beurteilt werden, aber nicht als **trace-verifiziert** bezeichnet werden.
 
 Für jeden Lauf ist insbesondere zu dokumentieren:
 

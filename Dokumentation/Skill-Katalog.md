@@ -159,7 +159,7 @@ Gegenüber dem Ausgangsstand `07b4907c9599ac0515f48afdb2d4cda64dd40b15` wurden e
 
 Die Auswahl folgt dem systemischen Hebel auf Routing, Evidence, Completion Claims, Dokumentation, Recherche und Skill-Review; andere Skills mit `none` wurden nicht allein aus Vollständigkeitsdogma aufgenommen. Details stehen in `../Evals/Coverage-Audit-2026-08-25.md`.
 
-Die 14 Golden Tasks unter `../Evals/Golden-Tasks/` ergänzen Skill-Evals um systemweite Aufgaben. GT-09 bis GT-14 prüfen Cross-Cutting-Discovery, No-Skill-Routing, Primary Refinement, späte Assurance-Trigger, Verification und Security-Deduplizierung. Ihre Definition und strukturelle Validität sind kein Beweis für Behavioral-Erfolg und keine Grundlage für eine automatische Maturity-Hochstufung.
+Die 17 Golden Tasks unter `../Evals/Golden-Tasks/` ergänzen Skill-Evals um systemweite Aufgaben. GT-09 bis GT-14 prüfen Cross-Cutting-Discovery, No-Skill-Routing, Primary Refinement, späte Assurance-Trigger, Verification und Security-Deduplizierung. Ihre Definition und strukturelle Validität sind kein Beweis für Behavioral-Erfolg und keine Grundlage für eine automatische Maturity-Hochstufung.
 
 ## Capabilities
 

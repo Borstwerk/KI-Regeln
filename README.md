@@ -216,9 +216,10 @@ Nutzerproblem
 → fachlich einordnen
 → Workflow prüfen
 → primären Skill-Satz wählen
-→ Cross-Cutting-Overlay-Pass
-→ nur notwendige Lücken klären
+→ Cross-Cutting-Checkpoints
+→ nur notwendige Lücken klären / bei materiell neuen Fakten gezielt re-routen
 → arbeiten
+→ Pre-Completion / Pre-Output prüfen
 → verifizieren
 → erforderliche Gates sichtbar machen
 ```

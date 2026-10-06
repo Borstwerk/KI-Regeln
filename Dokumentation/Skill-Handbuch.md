@@ -69,7 +69,8 @@ Wichtig:
 - ein später Trigger darf nicht dadurch verloren gehen, dass er beim Start noch nicht erfüllt war;
 - ein Overlay muss nicht immer addiert werden: Ist es der spezifischere Primärowner, kann es einen redundanten generischen Skill ersetzen;
 - mehrere aktive Overlays brauchen jeweils einen eigenen notwendigen Job;
-- Security-Reviews werden dedupliziert: `skill-security-review` besitzt die Admission eines externen/mächtigen Skill-Bundles; `tool-permission-review` kommt nur zusätzlich hinzu, wenn Berechtigungsdesign selbst Gegenstand der Aufgabe ist.
+- Security-Reviews werden nach Objekt und Job dedupliziert: `skill-security-review` besitzt die Admission eines externen/mächtigen Skill-Bundles; `tool-permission-review` kommt dort nur zusätzlich hinzu, wenn Berechtigungsdesign selbst Gegenstand der Aufgabe ist. Eigenständige MCP-Server, Plugins, Connectors oder Hooks folgen der Baseline aus `../Sicherheit/MCP-und-externe-Tools.md` und werden nicht automatisch als Skill-Bundle behandelt.
+- Nach Rückfragen oder neuen Tool-/Dateifunden darf ein bereits geprüfter Kandidat ereignisgesteuert erneut bewertet werden, aber nur wenn der neue Fakt einen Description-relevanten Sachverhalt materiell ändert; kein kompletter Katalogscan.
 
 Details: `../Skill-Engineering/Cross-Cutting-Skill-Discovery.md`.
 

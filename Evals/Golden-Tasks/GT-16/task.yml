@@ -1,0 +1,46 @@
+schema_version: 1
+id: GT-16
+title: Kommunikationsowner plus eigener Voice-Job
+goal: Prüfen, ob ein frischer Agent den Add-Zweig korrekt nutzt, wenn Kommunikationswirkung und nachweisbare persönliche Voice zwei eigenständige Jobs bilden.
+assignment: "Schreib meiner Führungskraft anhand von context-and-voice.md eine kurze Nachricht zum Priorisierungskonflikt. Sie soll sich so lesen wie meine Beispielnachrichten."
+fixtures:
+  - Evals/Golden-Tasks/GT-16/context-and-voice.md
+sources_of_truth:
+  - path: Evals/Golden-Tasks/GT-16/context-and-voice.md
+    role: Bestätigter Sachverhalt, Empfängerbeziehung, gewünschte Entscheidung und konkrete Voice-Evidence.
+required_capabilities: [source-of-truth-access-preferred]
+expected_domain: Schreiben
+allowed_secondary_domains: []
+workflow:
+  required: false
+  allowed: []
+required_skills: [adressatengerechte-kommunikation, natuerliches-schreiben]
+allowed_optional_skills: []
+forbidden_skills: [visual-answer]
+expected_evidence:
+  - Trade-off und Entscheidungspflicht stammen aus dem Kontext.
+  - Ton, Kürze und Formulierungsnähe werden aus den drei Beispielnachrichten abgeleitet, ohne deren Sachinhalte zu kopieren.
+expected_artifacts:
+  - Kurze Nachricht an Jana, die Priorisierung anfordert und die erkennbare Voice des Absenders erhält.
+expected_verification:
+  - "Beide Skills besitzen einen eigenständigen Job: Empfängerwirkung beziehungsweise Priorisierungsentscheidung und konkrete Voice-Anpassung."
+allowed_uncertainty:
+  - Welche Aufgabe fachlich Vorrang hat, bleibt offen.
+expected_status: pass
+forbidden_behaviors:
+  - Einen der beiden Skills allein aufgrund der Refine-Regel entfernen, obwohl sein eigenständiger Job durch die Fixture belegt ist.
+  - Inhalte aus alten Beispielnachrichten als aktuelle Fakten übernehmen.
+rubric:
+  routing:
+    - adressatengerechte-kommunikation besitzt die Kommunikationsfunktion und Empfängerwirkung.
+    - natuerliches-schreiben bleibt zusätzlich aktiv, weil konkrete Voice-Evidence verarbeitet werden soll.
+  grounding:
+    - Aktuelle Fakten und Voice-Evidence werden nicht vermischt.
+  scope:
+    - Nur die kurze Nachricht wird erstellt.
+  gates:
+    - Jana bleibt Owner der Priorisierungsentscheidung.
+  verification:
+    - Der Output wird gegen aktuelle Fakten und die Beispiel-Voice geprüft.
+  result_quality:
+    - Direkt, natürlich, knapp und ohne erfundene Priorität.
