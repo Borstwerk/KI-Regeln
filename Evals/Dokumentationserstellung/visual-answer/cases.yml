@@ -187,7 +187,7 @@ cases:
 
   - id: medium-review-readable-without-visual
     class: trigger
-    input: "Gib mir zu diesem kleinen PR sechs unabhängige Lesbarkeits-Hinweise als kurze Stichpunkte. Keine Priorisierung oder Abhängigkeiten nötig."
+    input: "Gib mir zu diesem kleinen PR sechs unabhängige Lesbarkeits-Hinweise als kurze Stichpunkte."
     should_trigger: false
     expected:
       - "liefert die sechs Hinweise kompakt im normalen Text"

@@ -8,6 +8,18 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Review-Korrekturen zu Routing Evidence Follow-up Hardening
+
+- GT-13 widersprach der neuen allgemeinen Completion-Regel (Ein-Fix-Aufgabe verlangte `verification-loop`); GT-13 testet jetzt die Completion-Evidence, `verification-loop` und `diagnose` sind optional;
+- Eval `mcp-config-deterministic-preflight` für `skill-security-review` auf ein Skill-Paket mit `.mcp.json` umgestellt, damit es der Bundle-Grenze nicht mehr widerspricht; Grenzfälle für eigenständigen MCP-Server, Plugin mit Skills und eigenständigen Hook ergänzt, ebenso ein positiver `tool-permission-review`-Fall für einen eigenständigen MCP-Server;
+- `Sicherheit/MCP-und-externe-Tools.md` um Baseline für Plugins/Connectors und Hooks sowie die Regel „Paket mit Skills ist Skill-Bundle“ ergänzt;
+- Routing-Trace um strukturierte Felder (`checkpoint_id`, `candidate_skill_id`, `replaced_skill_id`, `trigger_ref`) und die Events `ROUTING_REENTERED`, `CANDIDATE_REJECTED` erweitert; `Trace-Datenmodell.md` nachgezogen;
+- Deep-Research-Workflow: `citation-audit` ist bedingt statt bedingungslos;
+- drei Near-Miss-Fälle so umformuliert, dass der Prompt das Negativ nicht mehr selbst ankündigt;
+- `AGENTS.md` Schritt 12 verweist auf die Registry statt Skill-Namen hart zu kodieren; Dateimodus von `tools/repo_validator.py` auf ausführbar zurückgesetzt;
+- Hinweis: Die automatische Repo-Validation blockiert Merges nur, wenn sie in der Branch Protection als Required Check eingetragen ist. Das lässt sich aus dem Repository nicht prüfen;
+- weiterhin offen: kein Golden Task und kein Eval-Fall für das ereignisgesteuerte Re-Entry; Behavioral Runs bleiben **DEFINED / NOT RUN**.
+
 ### Routing Evidence Follow-up Hardening
 
 - Repo-Validation läuft zusätzlich zu `workflow_dispatch` automatisch auf Pull Requests und auf Pushes nach `main`; damit kann ein strukturell roter Golden Task nicht mehr still über einen normalen PR gemerged werden;

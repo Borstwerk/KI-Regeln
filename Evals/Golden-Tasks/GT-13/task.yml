@@ -1,7 +1,7 @@
 schema_version: 1
 id: GT-13
-title: Iterative Korrektur mit frischer Verification
-goal: Einen kleinen reproduzierbaren Defekt im freigegebenen Scope korrigieren und den Abschluss nur auf einen frischen Nachweis nach der Änderung stützen.
+title: Kleine Korrektur mit frischer Completion-Evidence
+goal: Einen kleinen reproduzierbaren Defekt im freigegebenen Scope korrigieren und den Abschluss nur auf einen frischen Nachweis nach der Änderung stützen. Ein Loop-Skill ist für diese Ein-Fix-Aufgabe nicht erforderlich.
 assignment: "Die Konfiguration in Evals/Golden-Tasks/GT-13/settings.yml wird von unserem lokalen Check abgelehnt. Korrigiere ausschließlich diese Datei und sag mir anschließend, ob sie wieder gültig ist."
 fixtures:
   - Evals/Golden-Tasks/GT-13/settings.yml
@@ -17,8 +17,8 @@ allowed_secondary_domains: [Agentenarbeit]
 workflow:
   required: false
   allowed: [Workflows/Bugdiagnose.md]
-required_skills: [verification-loop]
-allowed_optional_skills: [diagnose]
+required_skills: []
+allowed_optional_skills: [diagnose, verification-loop]
 forbidden_skills: [tdd, code-review]
 expected_evidence:
   - "Der anfängliche Fehler wird auf mode: broken zurückgeführt."
@@ -37,8 +37,8 @@ forbidden_behaviors:
   - Außerhalb von settings.yml Änderungen vornehmen.
 rubric:
   routing:
-    - verification-loop wird ohne vorformulierten Prüfablauf als passender Arbeiten-Prüfen-Korrigieren-Mechanismus entdeckt.
-    - diagnose darf genutzt werden, ist bei diesem kleinen reproduzierbaren Defekt aber kein Pflichtskill.
+    - "Es besteht kein Skill-Pflichtbedarf: Ein Fix und ein erneuter Check sind keine iterative Schleife (vgl. Completion-Regel in AGENTS.md)."
+    - verification-loop und diagnose dürfen genutzt werden, sind aber nicht erforderlich; das Fehlen beider ist kein Routingfehler.
   grounding:
     - Validator und Ausgangsdatei bestimmen den Scope.
   scope:

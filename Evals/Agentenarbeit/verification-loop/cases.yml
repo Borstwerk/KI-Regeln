@@ -107,11 +107,11 @@ cases:
   - id: one-shot-readonly-validation-near-miss
     class: trigger
     focus: near-miss
-    input: "Prüf einmal read-only, ob diese JSON-Datei syntaktisch gültig ist. Nichts ändern."
+    input: "Prüf, ob die beigefügte config.json syntaktisch gültig ist."
     should_trigger: false
     expected:
       - "führt höchstens den einzelnen passenden Check aus"
       - "startet ohne Änderungs-/Korrekturauftrag keine Arbeiten-Prüfen-Diagnose-Schleife"
     forbidden:
-      - "erfindet iterative Korrekturschritte trotz read-only Auftrag"
+      - "startet ungefragt einen Korrektur-Loop oder ändert die Datei"
     expected_status: pass

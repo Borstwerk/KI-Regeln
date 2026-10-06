@@ -162,7 +162,7 @@ Regel:
 
 `tool-permission-review` wird **zusätzlich** nur benötigt, wenn das Berechtigungsmodell selbst einen eigenständigen Design-/Reviewgegenstand bildet, etwa mehrere Tools/Rechte unabhängig vom Skill-Bundle gegeneinander abgewogen werden.
 
-Eigenständige MCP-Server, Plugins, Connectors oder Hooks sind keine Skill-Bundles. Ihre allgemeine Admission-Baseline steht in `Sicherheit/MCP-und-externe-Tools.md`. Für deren Capability-/Rechte-Scope ist `tool-permission-review` der passende Spezialskill; `prompt-injection-review` kommt nur hinzu, wenn konkrete externe Inhalte oder Toolmetadaten eine eigene Trust-Boundary-/Injection-Prüfung rechtfertigen.
+Eigenständige MCP-Server, Plugins, Connectors oder Hooks sind keine Skill-Bundles. Ein Plugin oder Paket, das mindestens einen Skill mitliefert, ist dagegen als Ganzes ein Skill-Bundle; `skill-security-review` prüft dann dessen Hook-, MCP- und Script-Dateien mit. Ihre allgemeine Admission-Baseline steht in `Sicherheit/MCP-und-externe-Tools.md`. Für deren Capability-/Rechte-Scope ist `tool-permission-review` der passende Spezialskill; `prompt-injection-review` kommt nur hinzu, wenn konkrete externe Inhalte oder Toolmetadaten eine eigene Trust-Boundary-/Injection-Prüfung rechtfertigen.
 
 Nicht:
 

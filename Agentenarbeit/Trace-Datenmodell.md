@@ -28,7 +28,11 @@ Wo technische Observability genutzt wird, helfen stabile Referenzen:
 - `skill_id` – aktivierter Skill;
 - `workflow_id` – optionales Recipe;
 - `artifact_ref` – Diff, Datei, Report, Build oder anderes Ergebnis;
-- `gate_id` – Freigabe-/Stop-Gate.
+- `gate_id` – Freigabe-/Stop-Gate;
+- `checkpoint_id` – erreichter Routing-Checkpoint (`post-primary`, `pre-execution`, `pre-completion`, `pre-output`);
+- `candidate_skill_id` – geprüfter, aber nicht zwingend aktivierter Skill;
+- `replaced_skill_id` – bei `ROUTING_REFINED` der ersetzte Skill (`skill_id` ist dann der neue Owner);
+- `trigger_ref` – Verweis auf das Ereignis, das ein Re-Entry ausgelöst hat (Nutzerantwort, Tool-/Dateifund, Scope-Wechsel).
 
 ## Ereignistypen
 
@@ -36,7 +40,12 @@ Empfohlener Basissatz:
 
 ```text
 TASK_STARTED
+CHECKPOINT_REACHED
 SKILL_ACTIVATED
+SKILL_DEACTIVATED
+ROUTING_REFINED
+ROUTING_REENTERED
+CANDIDATE_REJECTED
 WORKFLOW_PHASE_STARTED
 TOOL_CALLED
 TOOL_FAILED
