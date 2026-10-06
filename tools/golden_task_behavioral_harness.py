@@ -82,6 +82,7 @@ EXTRA_RUNTIME_FILES = (
 # These files describe eval architecture/results rather than the operational runtime.
 RUNTIME_EXCLUDED_RELATIVE = {
     "Skill-Engineering/Cross-Cutting-Skill-Discovery.md",
+    "Skill-Engineering/Skill-Review-und-Evals.md",
 }
 
 FORBIDDEN_RUNNER_PATH_PARTS = {".git", ".github", "Evals", "tests", "tools"}
@@ -379,6 +380,7 @@ def write_prepared_case(compiled: dict[str, Any], task_path: Path, repo_root: Pa
             "README.md",
             "Dokumentation/Skill-Katalog.md",
             "Skill-Engineering/Cross-Cutting-Skill-Discovery.md",
+            "Skill-Engineering/Skill-Review-und-Evals.md",
         ],
     }
 
