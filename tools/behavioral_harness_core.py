@@ -533,4 +533,26 @@ def verify_prepared_integrity(prepared_dir: Path) -> dict[str, Any]:
             raise HarnessError("runner-package execution-view hash mismatch")
         assert_runner_package_clean(prepared_dir / "runner-package")
 
+    workspace = hashes.get("runner_workspace")
+    if workspace is not None:
+        if not isinstance(workspace, dict) or not isinstance(workspace.get("files"), dict):
+            raise HarnessError("runner_workspace in hashes.yml is malformed")
+        root = prepared_dir / "runner-package" / str(workspace.get("dir") or "workspace")
+        if not root.is_dir():
+            raise HarnessError(f"runner workspace directory missing: {root}")
+        present = {p.relative_to(root).as_posix() for p in root.rglob("*") if p.is_file()}
+        recorded = {str(k): str(v) for k, v in workspace["files"].items()}
+        if present != set(recorded):
+            missing = sorted(set(recorded) - present)
+            extra = sorted(present - set(recorded))
+            raise HarnessError(f"runner workspace file set changed: missing={missing} unexpected={extra}")
+        for rel, expected in sorted(recorded.items()):
+            actual = hash_file(root / rel)
+            if actual != expected:
+                raise HarnessError(
+                    f"runner workspace artifact hash mismatch for {rel}: expected {expected}, got {actual}"
+                )
+        if hash_object(recorded) != str(workspace.get("tree_hash")):
+            raise HarnessError("runner workspace tree hash does not match its own file list")
+
     return {"execution": execution, "judge": judge, "hashes": hashes}

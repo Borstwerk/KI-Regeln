@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Project a Golden Task into an execution-only view without evaluator expectations."""
+"""Project a Golden Task into a blind execution-only view."""
 from __future__ import annotations
 
 import argparse
@@ -10,16 +10,17 @@ from typing import Any
 import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
+
+# Keep the runner view deliberately smaller than the full task definition.
+# title/goal/id are editorial/evaluator metadata and have repeatedly encoded
+# the expected route in natural language. sources_of_truth roles can do the same.
 EXECUTION_FIELDS = (
     "schema_version",
-    "id",
-    "title",
-    "goal",
     "assignment",
     "fixtures",
-    "sources_of_truth",
     "required_capabilities",
 )
+
 EVALUATOR_ONLY_FIELDS = (
     "expected_domain",
     "allowed_secondary_domains",
@@ -35,6 +36,15 @@ EVALUATOR_ONLY_FIELDS = (
     "forbidden_behaviors",
     "rubric",
 )
+
+ROUTING_HINT_FIELDS = (
+    "id",
+    "title",
+    "goal",
+    "sources_of_truth",
+)
+
+BLINDNESS_FORBIDDEN_FIELDS = frozenset(EVALUATOR_ONLY_FIELDS + ROUTING_HINT_FIELDS)
 
 
 def load_task(path: Path) -> dict[str, Any]:
@@ -52,11 +62,22 @@ def project(data: dict[str, Any]) -> dict[str, Any]:
     return {field: data[field] for field in EXECUTION_FIELDS}
 
 
+def assert_blind(view: dict[str, Any]) -> None:
+    leaked = sorted(set(view) & BLINDNESS_FORBIDDEN_FIELDS)
+    if leaked:
+        raise SystemExit(f"blindness-sensitive fields leaked into execution view: {leaked}")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("task", help="Repository-relative path to a Golden Task task.yml")
     parser.add_argument("--json", action="store_true", help="Emit JSON instead of YAML")
-    parser.add_argument("--assert-no-evaluator-fields", action="store_true")
+    parser.add_argument(
+        "--assert-no-evaluator-fields",
+        action="store_true",
+        help="Compatibility flag: assert that neither evaluator fields nor routing-hint metadata leaked.",
+    )
+    parser.add_argument("--assert-blind", action="store_true", help="Assert the blind runner-view contract.")
     args = parser.parse_args()
 
     rel = Path(args.task)
@@ -66,10 +87,8 @@ def main() -> int:
     data = load_task(path)
     view = project(data)
 
-    if args.assert_no_evaluator_fields:
-        leaked = sorted(set(view) & set(EVALUATOR_ONLY_FIELDS))
-        if leaked:
-            raise SystemExit(f"evaluator-only fields leaked into execution view: {leaked}")
+    if args.assert_no_evaluator_fields or args.assert_blind:
+        assert_blind(view)
 
     if args.json:
         print(json.dumps(view, ensure_ascii=False, indent=2))

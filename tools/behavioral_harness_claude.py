@@ -142,8 +142,8 @@ CONTEXT_EXTENDING_FLAGS = {"--add-dir", "--plugin-dir", "--plugin-url", "--agent
 SESSION_CARRYOVER_FLAGS = {"--resume", "-r", "--continue", "-c", "--fork-session"}
 SYSTEM_PROMPT = (
     "Execute one isolated behavioral-evaluation response. Use only files explicitly supplied "
-    "in the runner package. Do not access the web or repository, do not write/edit files, "
-    "and return only the final answer to the user task."
+    "in the runner package. Do not access the web or any repository outside that package, "
+    "do not write/edit files, and return only the final answer to the user task."
 )
 # Phase 4.2C / B2. The read-only prompt above forbids writing, which would forbid the very
 # behaviour B2 exists to observe, so the writable mode carries its own.
@@ -298,13 +298,31 @@ def probe_claude_code(binary: str, runner: ProcessRunner = _run) -> dict[str, An
 
 def _prompt(execution: Mapping[str, Any]) -> str:
     fixtures = [str(x["path"]) for x in execution.get("fixtures", []) or []]
-    sources = [x for x in fixtures if x.startswith("sources/")]
-    instruction = (execution.get("runtime") or {}).get("skill_instruction")
-    lines = ["Execute exactly one prepared behavioral-harness task.", "Read every listed subject source:"]
-    lines.extend(f"- {x}" for x in sources)
+    runtime = execution.get("runtime") or {}
+    sources = [str(x) for x in (runtime.get("subject_sources") or [])]
+    if not sources:
+        sources = [x for x in fixtures if x.startswith("sources/")]
+    instruction = runtime.get("skill_instruction")
+    bootstrap = [str(x) for x in (runtime.get("bootstrap_files") or [])]
+    repository_view = runtime.get("repository_view")
+
+    lines = ["Execute exactly one prepared behavioral-harness task."]
+    if bootstrap:
+        lines.append("Start with the supplied project bootstrap file(s):")
+        lines.extend(f"- {x}" for x in bootstrap)
+    if repository_view:
+        lines += [
+            f"Project routing, workflow and skill files are available under: {repository_view}",
+            "Discover and read only the project files that are actually needed for the user task; do not recursively read unrelated files.",
+        ]
+    if sources:
+        lines.append("Task source files are available at:")
+        lines.extend(f"- {x}" for x in sources)
     if instruction:
         lines += ["Read and apply this treatment instruction:", f"- {instruction}"]
-    lines += ["Do not mention experimental treatment or instruction-file names.", "User task:", str(execution.get("user_prompt", ""))]
+    if instruction:
+        lines.append("Do not mention experimental treatment or instruction-file names.")
+    lines += ["User task:", str(execution.get("user_prompt", ""))]
     return "\n".join(lines).strip() + "\n"
 
 
@@ -724,22 +742,81 @@ def _skill_id(path: Path) -> str:
     return UNKNOWN
 
 
+def _resolved_read_path(task: Path, target: str) -> tuple[Path | None, str]:
+    if target == UNKNOWN:
+        return None, UNKNOWN
+    raw = Path(str(target))
+    try:
+        resolved = raw.resolve() if raw.is_absolute() else (task / raw).resolve()
+        rel = resolved.relative_to(task.resolve()).as_posix()
+    except (OSError, ValueError):
+        return None, UNKNOWN
+    return (resolved if resolved.is_file() else None), rel
+
+
+def _workflow_ref(relative_path: str) -> str | None:
+    parts = Path(relative_path).parts
+    if "Workflows" not in parts:
+        return None
+    index = parts.index("Workflows")
+    candidate = Path(*parts[index:]).as_posix()
+    return candidate if candidate.endswith(".md") else None
+
+
 def _trace(execution: Mapping[str, Any], reads: list[dict[str, Any]], task: Path, mutating: bool, finished: str):
-    instruction = (execution.get("runtime") or {}).get("skill_instruction")
-    events = []
-    if instruction and any(Path(str(x["target"])).as_posix().endswith(str(instruction)) for x in reads):
-        events.append({
-            "event_id": "S-001", "skill_id": _skill_id(task / _safe_rel(instruction, "runtime.skill_instruction")),
-            "event": "read", "evidence_source": "tool-observation", "artifact_ref": str(instruction), "timestamp": finished,
-        })
+    skill_events = []
+    workflow_events = []
+    seen_skills: set[tuple[str, str]] = set()
+    seen_workflows: set[str] = set()
+
+    for row in reads:
+        resolved, rel = _resolved_read_path(task, str(row.get("target", UNKNOWN)))
+        if resolved is None:
+            continue
+
+        if resolved.name == "SKILL.md":
+            skill_id = _skill_id(resolved)
+            key = (skill_id, rel)
+            if key not in seen_skills:
+                seen_skills.add(key)
+                skill_events.append({
+                    "event_id": f"S-{len(skill_events) + 1:03d}",
+                    "skill_id": skill_id,
+                    "event": "read",
+                    "evidence_source": "tool-observation",
+                    "artifact_ref": rel,
+                    "timestamp": row.get("timestamp") or finished,
+                })
+
+        workflow = _workflow_ref(rel)
+        if workflow and workflow not in seen_workflows:
+            seen_workflows.add(workflow)
+            workflow_events.append({
+                "event_id": f"W-{len(workflow_events) + 1:03d}",
+                "workflow": workflow,
+                "event": "read",
+                "evidence_source": "tool-observation",
+                "artifact_ref": rel,
+                "timestamp": row.get("timestamp") or finished,
+            })
+
     return {
         "schema_version": 1,
         "observability": {
-            "skill_file_reads": True, "workflow_file_reads": True, "skill_selected": UNKNOWN, "skill_applied": UNKNOWN,
-            "tool_calls": True, "external_mutation": mutating, "internal_model_reasoning": False,
-            "notes": ["Tool events come from Claude Code stream-json; internal reasoning is not inferred."],
+            "skill_file_reads": True,
+            "workflow_file_reads": True,
+            "skill_selected": UNKNOWN,
+            "skill_applied": UNKNOWN,
+            "tool_calls": True,
+            "external_mutation": mutating,
+            "internal_model_reasoning": False,
+            "notes": [
+                "Skill/workflow read events come from successful Claude Code Read tool observations.",
+                "Selection, application, rejection and routing checkpoints are not inferred from file reads or model prose.",
+            ],
         },
-        "skill_events": events, "workflow_events": [],
+        "skill_events": skill_events,
+        "workflow_events": workflow_events,
         "status": {"observed_status": "pass", "source": "claude-code-process-and-final-result"},
     }
 

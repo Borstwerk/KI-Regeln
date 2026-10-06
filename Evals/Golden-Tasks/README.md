@@ -30,25 +30,24 @@ Behavioral-Smokes trennen zwei Sichten.
 
 ### Execution View
 
-Der ausführende Agent erhält nur:
+Der ausführende Agent erhält in der direkten Golden-Task-Projektion nur:
 
 - `schema_version`;
-- `id`;
-- `title`;
-- `goal`;
 - `assignment`;
 - `fixtures`;
-- `sources_of_truth`;
 - `required_capabilities`.
+
+`id`, `title`, `goal` und `sources_of_truth` bleiben aus der Runner-View heraus. Diese Felder sind fachlich nützlich für Autoren/Judges, können aber in natürlicher Sprache bereits die erwartete Route, einen Skillnamen oder die gewünschte Testeigenschaft verraten.
 
 Die Projektion wird reproduzierbar erzeugt mit:
 
 ```bash
-python tools/golden_task_execution_view.py Evals/Golden-Tasks/GT-01/task.yml --assert-no-evaluator-fields
+python tools/golden_task_execution_view.py Evals/Golden-Tasks/GT-01/task.yml --assert-blind
 ```
 
-Nicht in die Execution View gelangen:
+Nicht in die Execution View gelangen insbesondere:
 
+- `id`, `title`, `goal`, `sources_of_truth`;
 - `expected_domain`;
 - `allowed_secondary_domains`;
 - `workflow`;
@@ -64,6 +63,30 @@ Nicht in die Execution View gelangen:
 - `rubric`.
 
 Der Runner soll über normale KI-Regeln, `AGENTS.md`, lokale Sources of Truth und den Repository-Router selbst zu einem fachlich sinnvollen Weg kommen.
+
+### Blindes Runner-Paket
+
+Für echte Behavioral Runs reicht eine YAML-Projektion allein nicht. Der Runner darf auch nicht durch rekursive Dateisuche auf `Evals/**`, alte Runberichte, Changelog-Einträge oder evaluator-nahe Metadokumente stoßen.
+
+Dafür baut `tools/golden_task_behavioral_harness.py` ein vorbereitetes Paket auf Basis des vorhandenen Behavioral Harness:
+
+```bash
+python tools/golden_task_behavioral_harness.py prepare-case \
+  Evals/Golden-Tasks/GT-09/task.yml \
+  --repo-commit <commit-sha> \
+  --out <temp-dir>/GT-09
+```
+
+Das Runner-Paket enthält:
+
+- die Assignment als `user_prompt`;
+- Fixtures unter neutralen Pfaden wie `workspace/task/fixture-01-options.md`;
+- `workspace/repository/AGENTS.md`, Katalog, Overlay-Registry, Workflow-Index und die operativen Domain-/Skill-/Workflow-Dateien;
+- **nicht**: `Evals/**`, `.git/**`, `.github/**`, `tests/**`, `tools/**`, Root-Changelog/README sowie bekannte eval-beschreibende Metadokumente.
+
+Der Workspace wird dateiweise gehasht. `verify_prepared_integrity` lehnt einen vor dem Run veränderten Runner-Workspace ab.
+
+Der vorhandene Claude-Code-Adapter kann aus erfolgreichen `Read`-Toolereignissen objektive `skill_events: read` und `workflow_events: read` erzeugen. Er leitet daraus **nicht** `selected`, `applied`, `CANDIDATE_REJECTED`, Refinement oder Checkpoint-Reihenfolge ab.
 
 ### Judge View
 
