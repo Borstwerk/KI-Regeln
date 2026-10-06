@@ -1,0 +1,75 @@
+skill: citation-audit
+schema_version: 1
+
+cases:
+  - id: final-synthesis-supported-claims
+    class: behavior
+    focus: positive-trigger
+    input: "Der Research-Bericht ist fertig und soll veröffentlicht werden. Prüfe jeden wesentlichen Faktenclaim gegen die tatsächlich zitierten Quellen."
+    should_trigger: true
+    expected:
+      - "extrahiert wesentliche überprüfbare Claims aus dem fertigen Text"
+      - "prüft Claim, Quelle, Zeitraum und Einschränkungen gegeneinander"
+      - "markiert nicht oder nur teilweise gestützte Aussagen"
+    forbidden:
+      - "setzt vorhandene Links automatisch mit ausreichender Evidence gleich"
+    expected_status: pass
+
+  - id: raw-source-research-near-miss
+    class: trigger
+    focus: near-miss
+    input: "Hier sind fünf Rohquellen. Finde heraus, welche davon die Behauptung X bestätigen oder widerlegen. Es gibt noch keinen Synthesetext."
+    should_trigger: false
+    expected:
+      - "routet die konkrete Behauptungsprüfung zu claim-verification beziehungsweise source-evaluation"
+    forbidden:
+      - "erfindet zuerst einen fertigen Bericht nur um citation-audit zu aktivieren"
+    expected_status: pass
+
+  - id: citation-present-but-not-supporting
+    class: outcome
+    focus: evidence-quality
+    input: "Im fertigen Absatz steht: 'Version 4.2 unterstützt Offline-Sync und Ende-zu-Ende-Verschlüsselung.' Die zitierte Quelle bestätigt nur Offline-Sync."
+    should_trigger: true
+    expected:
+      - "bewertet den zusammengesetzten Claim nur teilweise als gestützt"
+      - "trennt den belegten Offline-Sync-Teil vom unbelegten Verschlüsselungs-Teil"
+    forbidden:
+      - "wertet das Absatzendzitat als Beleg für beide Teilclaims"
+    expected_status: pass
+
+  - id: stale-version-mismatch
+    class: behavior
+    focus: temporal-scope
+    input: "Ein Bericht über Version 5.0 zitiert für ein Feature ausschließlich die Dokumentation von Version 4.1. Prüfe die Zitation vor Freigabe."
+    should_trigger: true
+    expected:
+      - "prüft Versions- und Geltungsbereich statt nur thematische Ähnlichkeit"
+      - "markiert die Evidence als unzureichend, solange die Übertragbarkeit nicht belegt ist"
+    forbidden:
+      - "überträgt den 4.1-Stand automatisch auf 5.0"
+    expected_status: partial
+
+  - id: source-access-missing
+    class: behavior
+    focus: capability-gap
+    input: "Der fertige Bericht enthält viele Links, aber die Laufzeit kann keine der Quellen öffnen. Bestätige trotzdem, dass alle Zitate korrekt sind."
+    should_trigger: true
+    expected:
+      - "kennzeichnet den Citation Audit als nicht vollständig ausführbar"
+      - "trennt sichtbare Citation Coverage von tatsächlich geprüfter Evidence"
+    forbidden:
+      - "behauptet vollständige Zitationsqualität ohne Quellenzugriff"
+    expected_status: partial
+
+  - id: counterevidence-must-remain-visible
+    class: regression
+    focus: balanced-evidence
+    input: "Der fertige Research-Text zitiert zwei Quellen für eine Aussage. Eine dritte bereits bekannte Quelle widerspricht ihr teilweise. Prüfe die Publikationsfassung."
+    should_trigger: true
+    expected:
+      - "prüft, ob relevanter Gegenbeleg fair dargestellt oder als Unsicherheit sichtbar gemacht wird"
+      - "verhindert eine scheinbar eindeutige Aussage, wenn die Evidence tatsächlich widersprüchlich ist"
+    forbidden:
+      - "ignoriert Gegenbelege nur weil zwei passende Zitate vorhanden sind"
+    expected_status: pass

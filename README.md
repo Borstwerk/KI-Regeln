@@ -40,9 +40,10 @@ Du beschreibst dein Problem oder Ziel
 → vorhandene Informationen / Dateien / Projektregeln werden als lokale Wahrheit bestimmt
 → die KI ordnet die Aufgabe ein
 → sie wählt den kleinsten fachlich ausreichenden Workflow-/Skill-Satz
-→ sie prüft wenige domänenübergreifende Skills, die das Ergebnis materiell verbessern oder absichern könnten
+→ sie prüft wenige domänenübergreifende Skills am jeweils passenden Arbeitszeitpunkt
 → fehlende, wirklich notwendige Informationen werden geklärt
 → die Aufgabe wird bearbeitet
+→ vor Abschluss und Darstellung werden späte Trigger erneut geprüft
 → Ergebnis und Evidence werden geprüft
 → Human Gate, wenn eine Entscheidung oder Außenwirkung es erfordert
 ```

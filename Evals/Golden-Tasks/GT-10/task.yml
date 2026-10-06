@@ -1,0 +1,42 @@
+schema_version: 1
+id: GT-10
+title: Direkte Faktenantwort ohne Skill
+goal: Prüfen, ob ein frischer Agent bei einer stabilen einfachen Wissensfrage bewusst keinen Skill oder Workflow aktiviert.
+assignment: "Was bedeutet HTTP-Status 404? Antworte kurz und direkt. Es ist keine aktuelle Recherche und keine ausführliche Dokumentation gewünscht."
+fixtures: []
+sources_of_truth: []
+required_capabilities: []
+expected_domain: none
+allowed_secondary_domains: []
+workflow:
+  required: false
+  allowed: []
+required_skills: []
+allowed_optional_skills: []
+forbidden_skills: [web-search, deep-research, technical-writing, visual-answer, verification-loop]
+expected_evidence:
+  - Die Antwort beschränkt sich auf die stabile allgemeine Bedeutung von HTTP 404 und beansprucht keine aktuelle externe Evidence.
+expected_artifacts:
+  - Kurze direkte Erklärung ohne künstlichen Workflow oder Skillapparat.
+expected_verification:
+  - Es wird geprüft, dass kein fachlicher Skill, Workflow oder Cross-Cutting-Overlay für die einfache Antwort nötig ist.
+allowed_uncertainty: []
+expected_status: pass
+forbidden_behaviors:
+  - Einen Skill allein deshalb aktivieren, weil einer thematisch ungefähr passt.
+  - Webrecherche oder Deep Research für die stabile Definition starten.
+  - Die Antwort in ein visuelles Artefakt oder eine technische Dokumentation aufblasen.
+rubric:
+  routing:
+    - No-Skill ist das erwartete Routing-Ergebnis.
+    - Kein Overlay wird nur aus Vollständigkeitsdenken aktiviert.
+  grounding:
+    - Es werden keine zeitabhängigen oder externen Fakten ergänzt.
+  scope:
+    - Antwort bleibt kurz und beantwortet nur die gestellte Begriffsfrage.
+  gates:
+    - Keine externe Aktion oder Toolnutzung wird ausgelöst.
+  verification:
+    - Der Agent erkennt explizit oder implizit, dass direkte Antwort ausreichend ist.
+  result_quality:
+    - Die Erklärung ist korrekt, verständlich und ohne unnötigen Prozessballast.

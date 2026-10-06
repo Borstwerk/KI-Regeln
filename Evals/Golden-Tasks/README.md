@@ -91,11 +91,21 @@ Es gibt keine opaque Gesamtnote. Findings bleiben pro Dimension sichtbar.
 - `GT-05` – Requirement Change / Impact;
 - `GT-06` – Datenmigration / Backfill planen;
 - `GT-07` – Web-Qualitätsreview;
-- `GT-08` – Research → Social Content.
+- `GT-08` – Research → Social Content;
+- `GT-09` – Architekturtradeoff mit automatisch entdecktem `visual-answer`;
+- `GT-10` – No-Skill-Control für eine einfache stabile Faktenfrage;
+- `GT-11` – Communication-Overlay verfeinert den Primärowner statt Rewrite-Bloat zu addieren;
+- `GT-12` – später `citation-audit` am Pre-Completion-Checkpoint;
+- `GT-13` – `verification-loop` mit frischer Evidence nach einer Korrektur;
+- `GT-14` – Security-Admission mit Deduplizierung von `tool-permission-review`.
+
+Golden Tasks dürfen bewusst `required_skills: []`, leere Fixtures/Sources und `expected_domain: none` verwenden, wenn ein **No-Skill-Routing** das gewünschte Verhalten ist. Das ist ein Regressionstest gegen Skill-Bloat, kein unvollständiger Task.
 
 Alle Fixtures sind lokal und selbst erzeugt. Die Suite hängt nicht von aktuellen Webseiten, Social-Trends oder ungepinnten Repositories ab.
 
-`GT-04` erwartet bewusst `partial`: Die Fixture reicht für belastbare Fakten, Hypothesen und nächste Diagnose, aber nicht für eine bestätigte Root Cause. `partial` ist dort der erwartete Erfolg epistemisch korrekten Verhaltens und kein fehlgeschlagener Golden Task.
+`GT-04` erwartet bewusst `partial`: Die Fixture reicht für belastbare Fakten, Hypothesen und nächste Diagnose, aber nicht für eine bestätigte Root Cause.
+
+`GT-14` erwartet bewusst `blocked`: Ein ungepinnter externer Skill mit mutablem Remote-Nachladen erhält ohne vollständigen prüfbaren Snapshot keine Admission.
 
 ## Ausführung
 

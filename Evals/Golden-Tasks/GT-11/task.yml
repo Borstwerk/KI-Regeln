@@ -1,0 +1,47 @@
+schema_version: 1
+id: GT-11
+title: Kommunikationsowner statt Rewrite-Bloat
+goal: Einen konkreten Priorisierungskonflikt adressatengerecht formulieren und dabei den spezifischen Kommunikationsskill als Owner wählen.
+assignment: "Formuliere anhand von communication-context.md eine kurze Nachricht an die Führungskraft, die den Kapazitätskonflikt erklärt und eine klare Priorisierungsentscheidung anfordert."
+fixtures:
+  - Evals/Golden-Tasks/GT-11/communication-context.md
+sources_of_truth:
+  - path: Evals/Golden-Tasks/GT-11/communication-context.md
+    role: Bestätigter Sachverhalt, Beziehung und gewünschte Entscheidung.
+required_capabilities: [source-of-truth-access-preferred]
+expected_domain: Schreiben
+allowed_secondary_domains: []
+workflow:
+  required: false
+  allowed: []
+required_skills: [adressatengerechte-kommunikation]
+allowed_optional_skills: []
+forbidden_skills: [natuerliches-schreiben, visual-answer]
+expected_evidence:
+  - Kapazitätsgrenze, Deadline und fehlende Priorisierung stammen ausschließlich aus communication-context.md.
+expected_artifacts:
+  - Kurze Nachricht, die A/B-Trade-off und benötigte Entscheidung klar macht.
+expected_verification:
+  - Die Nachricht verspricht nicht beide Aufgaben gleichzeitig und erfindet keine Priorität.
+  - Das Routing nutzt den spezifischen Kommunikationsowner ohne redundanten generischen Rewrite-Skill.
+allowed_uncertainty:
+  - Welche Aufgabe fachlich wichtiger ist, ist nicht bestätigt.
+expected_status: pass
+forbidden_behaviors:
+  - natuerliches-schreiben zusätzlich laden, obwohl kein eigenständiger Voice- oder Rewrite-Job besteht.
+  - Eine Priorität selbst festlegen.
+  - Den Kapazitätskonflikt als persönliche Beschwerde formulieren.
+rubric:
+  routing:
+    - adressatengerechte-kommunikation verfeinert das vorläufige Schreiben-Routing zum spezifischen Primärowner.
+    - Der generische Rewrite-Skill wird nicht aus Gewohnheit zusätzlich aktiviert.
+  grounding:
+    - Nachricht bleibt bei den bestätigten Fakten.
+  scope:
+    - Aufgabe endet bei der kurzen schriftlichen Priorisierungsanfrage.
+  gates:
+    - Die Führungskraft bleibt Owner der Priorisierungsentscheidung.
+  verification:
+    - Trade-off und gewünschte Reaktion sind im finalen Text eindeutig erkennbar.
+  result_quality:
+    - Nachricht ist direkt, professionell und entscheidungsfähig ohne Corporate-Füllstoff.

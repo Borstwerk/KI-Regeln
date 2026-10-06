@@ -12,9 +12,10 @@ Problem / Nutzerauftrag
 → Aufgabe fachlich einordnen
 → passende Domäne / vorhandenen Workflow prüfen
 → kleinsten fachlich ausreichenden Skill-Satz wählen
-→ Cross-Cutting-Overlay-Pass
+→ Cross-Cutting-Checkpoints nach Bedarf
 → Capabilities / Maturity / Evals prüfen
 → Ausführung
+→ Pre-Completion / Pre-Output Checkpoints
 → Verification / Review / Gate
 ```
 
@@ -46,43 +47,29 @@ Nicht vom Werkzeugnamen ausgehen, sondern von der zu erledigenden Arbeit.
 
 Die Tabelle ist keine vollständige Routingmatrix. Ein Auftrag kann mehrere Domänen berühren; trotzdem gilt: **so wenig Werkzeuge wie möglich, so viele wie nötig**.
 
-## Cross-Cutting-Overlay-Pass
+## Cross-Cutting-Checkpoints
 
-Nach dem primären fachlichen Routing wird **nicht** der gesamte Katalog ein zweites Mal durchsucht.
+Nach dem primären fachlichen Routing wird **nicht** der gesamte Katalog ein zweites Mal durchsucht und auch nicht nur einmal pauschal ein Overlay-Pass ausgeführt.
 
-Stattdessen prüft der Router nur die wenigen Einträge aus `../routing-overlays.yml`.
+Stattdessen nennt `../routing-overlays.yml` für wenige domänenübergreifende Kandidaten Checkpoints, an denen ihre **kanonische Skill-Description** gegen den dann tatsächlich vorhandenen Arbeitszustand geprüft wird.
 
-Aktuelle Rollen:
-
-| Phase | Typischer Zweck |
+| Checkpoint | Zweck |
 |---|---|
-| presentation | Darstellung verbessert Erfassbarkeit materiell |
-| communication | Empfängerwirkung / Beziehung / gewünschte Reaktion bestimmt die Form |
-| assurance | zusätzliche Evidence-/Review-Disziplin vor Abschluss |
-| security | externe Skills, neue Tools oder mächtige Rechte erzeugen Cross-Cutting-Risiken |
+| `post-primary` | direkt nach dem vorläufigen Primärrouting; kann einen spezifischeren Owner entdecken oder Darstellung früh planen |
+| `pre-execution` | vor Toolnutzung, Änderungen oder iterativer Arbeit; vor allem Verification- und Security-Fragen |
+| `pre-completion` | wenn ein Ergebnis weitgehend vorliegt, aber noch kein Completion Claim abgegeben wurde |
+| `pre-output` | unmittelbar vor der Darstellung; tatsächliche Informationsdichte kann Presentation-Skills erst jetzt rechtfertigen |
+
+Die vorhandenen `phase`-Werte beschreiben weiterhin die Rolle eines Overlays. `checkpoints` beschreiben nur, **wann** der Kandidat geprüft wird. Beides enthält keine Triggerlogik.
 
 Wichtig:
 
-- `routing-overlays.yml` enthält **keine Triggerlogik**;
-- die kanonische Aktivierungslogik bleibt in der Description der jeweiligen `SKILL.md`;
-- ein Overlay-Eintrag ist nur ein „nicht vergessen zu prüfen“-Signal;
-- kein Overlay wird allein wegen seiner Phase automatisch aktiviert;
-- der aktive Skill-Satz bleibt klein.
-
-Beispiel:
-
-~~~text
-"Drei Architekturvarianten vergleichen und Empfehlung geben."
-
-PRIMARY
-→ architecture-tradeoff-analysis
-
-OVERLAY PASS
-→ visual-answer Description passt
-→ visual-answer zusätzlich verwenden
-~~~
-
-Der Nutzer musste `visual-answer` dafür weder kennen noch nennen.
+- `routing-overlays.yml` ist keine zweite Triggerdatenbank;
+- Overlay-Eintrag ≠ Aktivierung;
+- ein später Trigger darf nicht dadurch verloren gehen, dass er beim Start noch nicht erfüllt war;
+- ein Overlay muss nicht immer addiert werden: Ist es der spezifischere Primärowner, kann es einen redundanten generischen Skill ersetzen;
+- mehrere aktive Overlays brauchen jeweils einen eigenen notwendigen Job;
+- Security-Reviews werden dedupliziert: `skill-security-review` besitzt die Admission eines externen/mächtigen Skill-Bundles; `tool-permission-review` kommt nur zusätzlich hinzu, wenn Berechtigungsdesign selbst Gegenstand der Aufgabe ist.
 
 Details: `../Skill-Engineering/Cross-Cutting-Skill-Discovery.md`.
 
@@ -91,7 +78,7 @@ Details: `../Skill-Engineering/Cross-Cutting-Skill-Discovery.md`.
 - Allgemeine Arbeitsweise zentral, konkrete Wahrheit lokal.
 - Der Nutzer muss keine Skill-Namen kennen. Fehlende Skill-Auswahl ist Aufgabe des Routers, nicht automatisch eine Rückfrage an den Nutzer.
 - Nicht alle Skills laden. Im Katalog nach `purpose`, `area`, `capabilities` und `related` primär routen und nur die benötigten `SKILL.md`-Dateien öffnen.
-- Danach `routing-overlays.yml` als kleine Cross-Cutting-Zweitprüfung verwenden; die dort gelisteten Skills nur bei passender eigener Skill-Description laden.
+- `routing-overlays.yml` an den angegebenen Checkpoints prüfen; die dort gelisteten Skills nur bei passender eigener Skill-Description aktivieren und redundante generische Skills bei spezifischerem Ownership-Signal entfernen.
 - Vor einer Rückfrage prüfen, ob Auftrag, lokale Quellen oder vorhandene Artefakte die Information bereits liefern.
 - Nur Informationen erfragen, die für die konkrete Aufgabe materiell fehlen; keine unnötige Vollerhebung oder sensible Datensammlung.
 - `maturity` ist Reifeinformation, keine Autorisierung.

@@ -19,9 +19,10 @@ konkretes Problem oder Ziel beschreiben
 → vorhandene Informationen / Dateien / Projektregeln bereitstellen
 → KI ordnet die Aufgabe ein
 → KI wählt den kleinsten fachlichen Skill-/Workflow-Satz
-→ KI prüft zusätzlich wenige domänenübergreifende Fähigkeiten, die materiell helfen könnten
+→ KI prüft zusätzlich wenige domänenübergreifende Fähigkeiten am passenden Arbeitszeitpunkt
 → fehlende, wirklich notwendige Informationen klären
 → Aufgabe bearbeiten
+→ vor Abschluss und Darstellung späte Trigger erneut prüfen
 → Ergebnis gegen Quellen, Regeln und Auftrag prüfen
 → Human Gate, wenn eine reale Entscheidung oder Außenwirkung es erfordert
 ```
@@ -38,7 +39,7 @@ Die KI soll dann nur konkrete relevante Möglichkeiten nennen – nicht den gesa
 
 Du kannst einer KI zum Beispiel schreiben:
 
-> Ich möchte folgende Aufgabe lösen: **[Aufgabe beschreiben]**. Prüfe in diesem Repository, welche Regeln, Skills oder Workflows dafür tatsächlich passen. Wähle zuerst den kleinsten fachlich ausreichenden Satz und prüfe danach, ob domänenübergreifende Fähigkeiten aus dem Routing-Overlay das Ergebnis materiell verbessern oder absichern. Erkläre die Auswahl kurz und arbeite dann damit. Nutze meine Projektinformationen und vorhandenen Quellen als konkrete Wahrheit. Frage nur nach Informationen, die für die Aufgabe wirklich fehlen. Erfinde fehlende Fakten nicht und mache notwendige menschliche Freigaben sichtbar.
+> Ich möchte folgende Aufgabe lösen: **[Aufgabe beschreiben]**. Prüfe in diesem Repository, welche Regeln, Skills oder Workflows dafür tatsächlich passen. Wähle zuerst den kleinsten fachlich ausreichenden Satz und prüfe domänenübergreifende Fähigkeiten aus dem Routing-Overlay an ihren vorgesehenen Checkpoints und nur dann, wenn sie das Ergebnis materiell verbessern, absichern oder das Primärrouting präzisieren. Erkläre die Auswahl kurz und arbeite dann damit. Nutze meine Projektinformationen und vorhandenen Quellen als konkrete Wahrheit. Frage nur nach Informationen, die für die Aufgabe wirklich fehlen. Erfinde fehlende Fakten nicht und mache notwendige menschliche Freigaben sichtbar.
 
 Das ist nur ein Einstiegsmuster, kein Pflichtprompt.
 
