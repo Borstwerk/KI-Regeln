@@ -33,9 +33,11 @@ Nicht vom Werkzeugnamen ausgehen, sondern von der zu erledigenden Arbeit.
 | „Analysiere dieses Unternehmen fundamental oder ordne die neuesten Quartalszahlen ein.“ | Finanzen + Recherche für aktuelle Evidence |
 | „Bewerte dieses Unternehmen mit DCF oder vergleichbaren Unternehmen.“ | Finanzen + Recherche für aktuelle Evidence |
 | „Erstelle oder prüfe eine Bildserie.“ | Bildarbeit |
+| „Entwickle, kritisiere oder überarbeite ein Logo / Brand Mark.“ | Bildarbeit → `logo-design` |
 | „Baue oder prüfe diese Website.“ | Webentwicklung |
 | „Finde die Ursache dieses Fehlers.“ | Programmieren / Diagnose, je nach System weitere Fachdomänen |
 | „Dokumentiere diese Datenbanktabelle.“ | Dokumentationserstellung + Datenbanken |
+| „Mach diese komplexe Erklärung, Entscheidung oder Review auf einen Blick erfassbar.“ | Dokumentationserstellung → `visual-answer` |
 | „Kläre, was dieses Feature eigentlich können soll.“ | Requirements und Spezifikations-Engineering |
 | „Baue eine langfristig nutzbare Wissensbasis.“ | Wissensmanagement |
 | „Welche Provenienz-, Geräte- oder Bearbeitungshinweise stecken in dieser Datei?“ | Sicherheit → `inhaltsprovenienz-review` |

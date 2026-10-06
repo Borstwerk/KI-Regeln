@@ -1,5 +1,5 @@
 schema_version: 2
-last_updated: '2026-10-05'
+last_updated: '2026-10-06'
 
 # Mutable external sources whose changes may affect local rules or skills.
 # A changed upstream is a review signal, never an automatic sync instruction.
@@ -2276,6 +2276,164 @@ sources:
     local_impact:
       - Webentwicklung/Webdesign/Motion-und-Mikrointeraktionen.md
       - Webentwicklung/Skills/motion-implementation/SKILL.md
+
+  # ---------------------------------------------------------------------------
+  # HypeRadar Opportunity Hardening 2026-10-06
+  # ---------------------------------------------------------------------------
+  - id: graygnat-mcp-audit-secrets
+    area: Sicherheit
+    kind: github-file
+    repository: graygnatconsole/mcp-audit-tool
+    path: src/mcp_audit_tool/rules/secrets.py
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: 05c86dcd117b14cd93afa87764307ae4bb7de119
+    last_checked: '2026-10-06'
+    local_impact:
+      - Sicherheit/MCP-und-externe-Tools.md
+      - Sicherheit/Quellen-und-Inspirationen.md
+      - Evals/Sicherheit/skill-security-review/cases.yml
+
+  - id: graygnat-mcp-audit-supply-chain
+    area: Sicherheit
+    kind: github-file
+    repository: graygnatconsole/mcp-audit-tool
+    path: src/mcp_audit_tool/rules/supply_chain.py
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: 76382ba404874a7f6ffd08f83c614865f663a7f4
+    last_checked: '2026-10-06'
+    local_impact:
+      - Sicherheit/MCP-und-externe-Tools.md
+      - Sicherheit/Quellen-und-Inspirationen.md
+      - Evals/Sicherheit/skill-security-review/cases.yml
+
+  - id: graygnat-mcp-audit-metadata
+    area: Sicherheit
+    kind: github-file
+    repository: graygnatconsole/mcp-audit-tool
+    path: src/mcp_audit_tool/rules/metadata.py
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: e4c7f1a108c7af2ecdb65cc1f42bb7b5c72bf3ed
+    last_checked: '2026-10-06'
+    local_impact:
+      - Sicherheit/MCP-und-externe-Tools.md
+      - Sicherheit/Quellen-und-Inspirationen.md
+      - Evals/Sicherheit/skill-security-review/cases.yml
+
+  - id: kaankiziltug-logo-design-skill
+    area: Bildarbeit
+    kind: github-file
+    repository: kaankiziltug/logo-design-skill
+    path: skills/logo-design/SKILL.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: 6762d2849ef14ff35d579b4cb38dc9144a97febf
+    last_checked: '2026-10-06'
+    local_impact:
+      - Bildarbeit/Logo-Design.md
+      - Bildarbeit/Skills/logo-design/SKILL.md
+      - Bildarbeit/Quellen-und-Inspirationen.md
+      - Evals/Bildarbeit/logo-design/cases.yml
+      - skill-catalog.yml
+
+  - id: kaankiziltug-logo-design-trademarks
+    area: Bildarbeit
+    kind: github-file
+    repository: kaankiziltug/logo-design-skill
+    path: TRADEMARKS.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: 8eb23307ccb77ce38bc97219b33a655b70287ffd
+    last_checked: '2026-10-06'
+    local_impact:
+      - Bildarbeit/Logo-Design.md
+      - Bildarbeit/Skills/logo-design/SKILL.md
+      - Bildarbeit/Quellen-und-Inspirationen.md
+
+  - id: bootloops-acceptance-gate
+    area: Agentenarbeit
+    kind: github-file
+    repository: BootLoops-ai/skills
+    path: skills/acceptance-gate/SKILL.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: 220beabcdf214546eb2c9a992d64e7792070d418
+    last_checked: '2026-10-06'
+    local_impact:
+      - Agentenarbeit/Skills/verification-loop/SKILL.md
+      - Agentenarbeit/Quellen-und-Inspirationen.md
+      - Evals/Agentenarbeit/verification-loop/cases.yml
+
+  - id: bootloops-independence-bookkeeping
+    area: Agentenarbeit
+    kind: github-file
+    repository: BootLoops-ai/skills
+    path: skills/independence-bookkeeping/SKILL.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: e4bca31655ec85b122c261d3b448b19aebfa8b65
+    last_checked: '2026-10-06'
+    local_impact:
+      - Agentenarbeit/Skills/verification-loop/SKILL.md
+      - Agentenarbeit/Quellen-und-Inspirationen.md
+      - Evals/Agentenarbeit/verification-loop/cases.yml
+
+  - id: bootloops-planted-truth
+    area: Agentenarbeit
+    kind: github-file
+    repository: BootLoops-ai/skills
+    path: skills/planted-truth/SKILL.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: b7ee9ab297077704cd4a933c87762a1ac9fd500a
+    last_checked: '2026-10-06'
+    local_impact:
+      - Agentenarbeit/Skills/verification-loop/SKILL.md
+      - Agentenarbeit/Quellen-und-Inspirationen.md
+      - Evals/Agentenarbeit/verification-loop/cases.yml
+
+  - id: multimodal-product-discovery-readme
+    area: Wissensmanagement
+    kind: github-file
+    repository: Jiarui-0410/multimodal-product-discovery
+    path: README.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: f1d49b04169e4735f88ed29cef062bb2788ad4f7
+    last_checked: '2026-10-06'
+    local_impact:
+      - Wissensmanagement/Retrieval-Findability-und-Wissensabfrage.md
+      - Wissensmanagement/Skills/knowledge-query/SKILL.md
+      - Wissensmanagement/Quellen-und-Inspirationen.md
+      - Evals/Wissensmanagement/knowledge-query/cases.yml
+
+  - id: qingyuna-answer-me-with-html-skill
+    area: Dokumentationserstellung
+    kind: github-file
+    repository: QingYunA/answer-me-with-html
+    path: skills/answer-me-with-html/SKILL.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: 54a48115184f6c8625c633890a0bb5c004cbf90a
+    last_checked: '2026-10-06'
+    local_impact:
+      - Dokumentationserstellung/Visuelle-Antworten-und-HTML-Artefakte.md
+      - Dokumentationserstellung/Skills/visual-answer/SKILL.md
+      - Dokumentationserstellung/Quellen-und-Inspirationen.md
+      - Evals/Dokumentationserstellung/visual-answer/cases.yml
+
 policy:
   on_change: review-only
   auto_sync: false

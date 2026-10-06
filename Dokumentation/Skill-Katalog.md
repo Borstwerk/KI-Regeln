@@ -14,14 +14,14 @@ Der Skill-Katalog beantwortet zusätzlich:
 
 ## Aktueller Bestand
 
-Der Katalog enthält aktuell 150 zentrale Skills:
+Der Katalog enthält aktuell 152 zentrale Skills:
 
 - Arbeitsweisen: 3;
 - Agentenarbeit: 8;
 - Schreiben: 6;
 - Storyentwicklung und Fiktion: 5;
 - Finanzen: 9;
-- Bildarbeit: 4;
+- Bildarbeit: 5;
 - Programmieren: 4;
 - Webentwicklung: 11;
 - Recherche: 7;
@@ -33,7 +33,7 @@ Der Katalog enthält aktuell 150 zentrale Skills:
 - Software Architecture und System Design: 7;
 - Requirements und Spezifikations-Engineering: 8;
 - Social Media und Content-Präsenz: 9;
-- Dokumentationserstellung: 10;
+- Dokumentationserstellung: 11;
 - Skill Engineering: 2;
 - Sicherheit: 5;
 - Datenbanken: 7;
@@ -82,7 +82,7 @@ Empfohlene Werte:
 
 Maturity und Eval Coverage sind nicht identisch. Ein Skill kann viel Praxis haben und trotzdem noch unzureichende formale Evals besitzen.
 
-Aktuell besitzt `context-engineering` als bestehender `candidate` `partial` Evalabdeckung. Die ergänzten Context-Skills, alle sieben Wissensmanagement-Skills, alle fünf Schnittstellen-/Contract-Skills, alle sieben Infrastruktur-/DevOps-Skills, alle acht Reliability-/System-Observability-Skills, alle neun Data-Engineering-Skills, alle sieben Software-Architecture-/System-Design-Skills, alle acht Requirements-/Specification-Skills, alle neun Social-Media-/Content-Präsenz-Skills, alle fünf Storyentwicklung-/Fiktion-Skills, alle neun Finanz-Skills, die beiden neuen Security-Skills sowie `korrekturlektorat` und `deutsche-typografie` starten beziehungsweise bleiben bewusst `experimental` mit `partial` Evalabdeckung.
+Aktuell besitzt `context-engineering` als bestehender `candidate` `partial` Evalabdeckung. Die ergänzten Context-Skills, alle sieben Wissensmanagement-Skills, alle fünf Schnittstellen-/Contract-Skills, alle sieben Infrastruktur-/DevOps-Skills, alle acht Reliability-/System-Observability-Skills, alle neun Data-Engineering-Skills, alle sieben Software-Architecture-/System-Design-Skills, alle acht Requirements-/Specification-Skills, alle neun Social-Media-/Content-Präsenz-Skills, alle fünf Storyentwicklung-/Fiktion-Skills, alle neun Finanz-Skills, die beiden neuen Security-Skills, der neue experimentelle Bildarbeit-Skill `logo-design`, der neue Dokumentationserstellungs-Skill `visual-answer` sowie `korrekturlektorat` und `deutsche-typografie` starten beziehungsweise bleiben bewusst `experimental` mit `partial` Evalabdeckung.
 
 Für Reliability sind sechs Startfälle je Skill definiert, insgesamt 48. Der erste Same-Model-Smoke-Lauf wurde am 2026-08-24 ausgeführt; das ersetzt keinen unabhängigen verblindeten Benchmark und rechtfertigt allein keine Hochstufung.
 
@@ -221,6 +221,10 @@ Für Software-Architecture-/System-Design-Skills sollte zusätzlich an realen Sy
 Für Requirements-/Specification-Skills sollte zusätzlich an realen Spezifikationen und Stakeholder-/Source-Evidence geprüft werden, ob Soll-Baselines korrekt rekonstruiert, Inferenz sichtbar bleibt, keine Zielwerte erfunden, Acceptance und Traceability sinnvoll getrennt, Changes mit Downstream-Impact erkannt und Validation/Review nicht mit Product Approval verwechselt werden. Ein ausgefülltes PRD, 100 Prozent Traceability oder definierte Evalcases allein reichen nicht für eine Hochstufung.
 
 Für Social-Media-/Content-Präsenz-Skills sollte zusätzlich an realen Content-Historien, Plattformdaten und Community-Situationen geprüft werden, ob Ziel-/Audience-Fit korrekt erfasst, Plattformfolklore von aktueller Evidence getrennt, Claims und Repurposing sauber behandelt, Performance ohne Scheinkausalität analysiert und Publishing-/Community-Aktionen zuverlässig gegatet werden. Ein gefüllter Content-Kalender, ein viraler Einzelpost oder definierte Evalcases allein reichen nicht für eine Hochstufung.
+
+Für `visual-answer` sollte zusätzlich an realen komplexen Antworten und mit mehreren unabhängigen Reviewern geprüft werden, ob visuelle Struktur die Time-to-Signal tatsächlich verkürzt, ohne Claims, Unsicherheit oder Gegenargumente zu verlieren. Die drei explorativen A/B-Vergleiche vom 2026-10-06 mit einem Reviewer stützen nur den experimentellen Status; sie sind kein verblindeter Behavioral Benchmark.
+
+Für `logo-design` sollte zusätzlich an realen Briefs und vorhandenen Marken geprüft werden, ob Kategorieklischees erkannt, wirklich unterschiedliche Konzepte erzeugt, Small-size-/Einfarb-/Shelf-Risiken zuverlässig gefunden und Konzept-Checkpoints eingehalten werden. Ein hübsches Mockup oder definierter Evalcase allein reicht nicht für eine Hochstufung.
 
 Für Storyentwicklung-/Fiktion-Skills sollte zusätzlich an realen Erzählprojekten geprüft werden, ob Kanon und Planung getrennt bleiben, Figurenwissen und Zustände über längere Strecken korrekt fortgeführt, Storymodelle nicht mechanisch erzwungen, Worldbuilding-Folgen plausibel berücksichtigt und Kontinuitätsfindings ohne ungefragte Retcons erkannt werden. Eine vollständige Story-Bible oder definierte Evalcases allein reichen nicht für eine Hochstufung.
 

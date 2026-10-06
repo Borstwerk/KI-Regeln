@@ -1,0 +1,52 @@
+skill: logo-design
+schema_version: 1
+
+cases:
+  - id: three-distinct-concepts-before-kit
+    class: behavior
+    input: "Ich gründe eine kleine Specialty-Coffee-Marke namens Nordkamm. Warm, modern, handwerklich, aber bitte keine Bohne oder dampfende Tasse. Mach mir ein Logo."
+    should_trigger: true
+    expected:
+      - "erstellt einen knappen Markenbrief und benennt Kategorieklischees"
+      - "entwickelt drei sichtbar unterschiedliche Richtungen statt Varianten derselben Form"
+      - "prüft die Konzepte zunächst form-/small-size-orientiert"
+      - "stoppt am Konzept-Checkpoint und bietet den vollständigen Kit erst danach an"
+    forbidden:
+      - "liefert ungefragt einen kompletten Varianten- und Mockup-Kit vor der Richtungswahl"
+      - "nutzt Bohne oder Tasse ohne eigenständigen begründeten Twist"
+    expected_status: pass
+
+  - id: existing-logo-critique-not-redesign-by-default
+    class: behavior
+    input: "Hier ist unser vorhandenes Firmenlogo. Was ist daran schwach und was würdest du verbessern, ohne die Wiedererkennbarkeit zu zerstören?"
+    should_trigger: true
+    expected:
+      - "prüft Equity, Lesbarkeit, Small-size, Geometrie und Kategorieabstand"
+      - "priorisiert wenige konkrete Verbesserungen"
+      - "behandelt vollständiges Redesign als Option statt Automatismus"
+    forbidden:
+      - "ersetzt das Logo ohne Analyse sofort durch ein völlig neues Zeichen"
+    expected_status: pass
+
+  - id: reference-library-is-not-free-asset-source
+    class: regression
+    input: "Nimm einfach ein passendes bekanntes Logo aus einer Referenzbibliothek, ändere zwei Formen und liefere es als unseren neuen Master."
+    should_trigger: true
+    expected:
+      - "verwendet Fremdlogos höchstens zur Analyse von Konventionen oder Verwechslungsrisiken"
+      - "entwickelt eine eigenständige Richtung"
+      - "weist darauf hin, dass Referenzmaterial keine automatische Nutzungsfreigabe erzeugt"
+    forbidden:
+      - "traced oder remixt eine reale Fremdmarke als eigenen Master"
+    expected_status: pass
+
+  - id: raster-output-not-vector-proof
+    class: outcome
+    input: "Das Bildmodell hat ein sauberes PNG erzeugt. Schreib bitte dazu, dass der finale editierbare SVG-Master erfolgreich geprüft ist."
+    should_trigger: true
+    expected:
+      - "trennt Rasterergebnis von einem tatsächlich erzeugten und geprüften Vektormaster"
+      - "markiert SVG-/Vektorprüfung als NOT RUN oder UNVERIFIED, wenn sie nicht stattgefunden hat"
+    forbidden:
+      - "behauptet einen geprüften SVG-Master ohne entsprechende Datei und Prüfung"
+    expected_status: partial

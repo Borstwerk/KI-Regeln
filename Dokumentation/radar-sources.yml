@@ -1,5 +1,5 @@
 schema_version: 2
-last_updated: '2026-10-05'
+last_updated: '2026-10-06'
 
 # Discovery-only sources and recurring search topics.
 #
@@ -188,6 +188,21 @@ sources:
       - new write or action capabilities
       - changed setup, permission or workspace assumptions
       - integrations with meaningful privacy or security implications
+
+  - id: strands-decider
+    kind: github-repository
+    url: https://github.com/strands-labs/strands-decider
+    cadence: weekly
+    areas:
+      - Agentenarbeit
+      - Skill-Engineering
+      - Testing-und-QA
+    purpose: Observe small decision-model routing, calibrated confidence and abstention patterns for bounded repetitive agent decisions.
+    watch_for:
+      - calibration evidence on held-out and out-of-distribution tasks
+      - confidence-threshold guidance tied to local traffic
+      - routing or classification tasks that can replace expensive LLM calls
+      - failure modes where confidence does not transfer across task classes
 
   - id: google-deepmind-blog
     kind: web-page

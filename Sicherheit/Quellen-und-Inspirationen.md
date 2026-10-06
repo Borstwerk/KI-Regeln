@@ -170,6 +170,39 @@ KI-Regeln übernimmt daraus **nicht**:
 
 Der Upstream dient als methodischer Referenzraum. Die vier oben genannten Dateien sind in `Dokumentation/upstream-sources.yml` als `monthly`/`exact-sha` registriert. Änderungen werden beim KI-Regeln-Monatscheck als Review-Signal sichtbar; sie lösen **keinen automatischen Sync oder Merge** aus.
 
+## graygnatconsole/mcp-audit-tool
+
+Quelle:
+
+https://github.com/graygnatconsole/mcp-audit-tool
+
+Geprüfter Repository-Stand:
+
+`94fec3bd11cd7c122f2f417130c090729ecce0cf`
+
+Lizenz: MIT.
+
+Für KI-Regeln methodisch relevant sind insbesondere die deterministischen MCP-Config-Signale in den geprüften Regeldateien:
+
+- Secret-/Credential-Hygiene;
+- ungepinnte Runtime-Pakete;
+- Remote-Installer wie `curl | shell`;
+- Tool-Metadaten als mögliche Prompt-Injection-/Tool-Poisoning-Fläche;
+- Auto-Approve riskanter Tools;
+- Wildcard-Rechte;
+- maschinenlesbare Findings und CI-Einbindung.
+
+Nicht übernommen werden:
+
+- der A+–F Aggregatscore als Sicherheitswahrheit;
+- konkrete Severity oder CWE-Zuordnung als universelle Policy;
+- regexbasierte Tool-Poisoning-Treffer als Beweis eines Angriffs;
+- das Tool selbst oder dessen Python-Code.
+
+Lokale Regel bleibt:
+
+> Deterministischer Scanner = reproduzierbare Evidence-Schicht, nicht vollständige Admission.
+
 ## Eigene Synthese
 
 Der Sicherheitsbereich verbindet diese Quellen mit den bereits vorhandenen Regeln zu Human Gates, Context Engineering, Upstream-Monitoring und Agenten-Observability.

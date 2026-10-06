@@ -1,0 +1,94 @@
+skill: visual-answer
+schema_version: 1
+
+cases:
+  - id: architecture-overview-visual-trigger
+    class: behavior
+    input: "Erkläre mir, wie Skills, Workflows, Capabilities, Plugins, Runtime-Adapter, Evals und Human Gates in unserem System zusammenspielen."
+    should_trigger: true
+    expected:
+      - "stellt die Kernaussage vor die Details"
+      - "bildet Beziehungen als Flow, Architektur oder klar gruppierte visuelle Struktur ab"
+      - "bewahrt die fachlichen Unterschiede zwischen den Schichten"
+    forbidden:
+      - "verteilt denselben Fließtext nur auf dekorative Karten"
+    expected_status: pass
+
+  - id: decision-comparison-visual-trigger
+    class: behavior
+    input: "Vergleiche drei Architekturvarianten nach Portabilität, Aufwand, Lock-in, Nutzermehrwert und Risiko und gib eine Empfehlung."
+    should_trigger: true
+    expected:
+      - "macht Kriterien und Empfehlung schnell scanbar"
+      - "erhält relevante Trade-offs und Unsicherheiten"
+      - "trennt Urteil von Detailbegründung"
+    forbidden:
+      - "lässt die visuelle Gestaltung eine Option eindeutiger erscheinen als die Evidence trägt"
+    expected_status: pass
+
+  - id: multi-finding-review-visual-trigger
+    class: behavior
+    input: "Hier sind 14 Review-Findings mit Critical, High, Medium und Low. Zeig mir zuerst Blocker und Priorität und danach die Details."
+    should_trigger: true
+    expected:
+      - "zeigt Gesamturteil, Severity-Verteilung und wichtigste Findings vor den Details"
+      - "codiert Severity nicht ausschließlich über Farbe"
+      - "gruppiert Finding, Auswirkung und Fix verständlich"
+    forbidden:
+      - "sortiert Critical und Low ohne erkennbare Priorität gleichwertig"
+    expected_status: pass
+
+  - id: short-fact-near-miss
+    class: trigger
+    input: "Was bedeutet HTTP 404?"
+    should_trigger: false
+    expected:
+      - "antwortet knapp ohne unnötiges visuelles Artefakt"
+    forbidden:
+      - "erzeugt für die kurze Faktenantwort eine mehrteilige HTML-Seite"
+    expected_status: pass
+
+  - id: user-requests-plain-text
+    class: trigger
+    input: "Vergleiche die drei Optionen bitte ausschließlich als Plain Text, keine Datei, kein HTML und keine Visualisierung."
+    should_trigger: false
+    expected:
+      - "respektiert die gewünschte Textausgabe"
+    forbidden:
+      - "erzeugt trotzdem ein visuelles Artefakt"
+    expected_status: pass
+
+  - id: visual-overkill-regression
+    class: regression
+    input: "Fasse diese drei kurzen Stichpunkte zusammen. Jeder Stichpunkt ist nur ein Satz."
+    should_trigger: false
+    expected:
+      - "verwendet einfache strukturierte Textausgabe, wenn visuelle Aufbereitung keinen materiellen Mehrwert bringt"
+    forbidden:
+      - "erzeugt mehrere dekorative Panels nur um den Skill zu benutzen"
+    expected_status: pass
+
+  - id: visual-must-preserve-content
+    class: outcome
+    input: "Die Textanalyse enthält zwei Gegenargumente, drei Unsicherheiten und einen BLOCK-Status. Mach daraus eine übersichtliche visuelle Antwort."
+    should_trigger: true
+    expected:
+      - "erhält Gegenargumente, Unsicherheiten und BLOCK-Status"
+      - "ordnet Inhalte neu, ohne fachliche Claims zu verändern"
+      - "prüft die visuelle Fassung gegen die Textbasis"
+    forbidden:
+      - "entfernt unbequeme Gegenargumente oder Unsicherheit für ein saubereres Layout"
+      - "ändert BLOCK zu PASS oder Empfehlung"
+    expected_status: pass
+
+  - id: no-render-capability-fallback
+    class: behavior
+    input: "Diese Architektur wäre visuell leichter zu verstehen, aber in dieser Runtime kann keine HTML-Datei oder Grafik erzeugt werden."
+    should_trigger: true
+    expected:
+      - "nutzt einen klar strukturierten Markdown-Fallback"
+      - "behauptet keine erzeugte oder visuell geprüfte HTML-Datei"
+      - "erhält Kernaussage und visuelle Informationslogik soweit im Text möglich"
+    forbidden:
+      - "täuscht eine nicht vorhandene Renderer-Capability vor"
+    expected_status: partial

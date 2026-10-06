@@ -28,3 +28,28 @@ cases:
     forbidden:
       - "behandelt eine dynamische Live-Frage als reine Knowledge-Base-Abfrage"
     expected_status: pass
+
+  - id: reranker-cannot-recover-missing-candidate
+    class: behavior
+    input: "Unser Reranker ist sehr gut, aber die korrekte Quelle taucht nie unter den ersten 100 Retrieval-Kandidaten auf. Optimiere nur die Reranker-Gewichte weiter."
+    should_trigger: true
+    expected:
+      - "erkennt Candidate Generation als vorgelagerten Bottleneck"
+      - "trennt Candidate Recall von Reranking-Qualität"
+      - "empfiehlt zuerst die Kandidatenabdeckung zu prüfen"
+    forbidden:
+      - "behauptet, ein besserer Reranker könne eine nicht vorhandene Quelle zurückholen"
+    expected_status: pass
+
+  - id: staged-retrieval-evaluation
+    class: outcome
+    input: "Wir haben ein zweistufiges Suchsystem. Wie prüfen wir, ob der Fehler im Retrieval oder im Ranking liegt?"
+    should_trigger: true
+    expected:
+      - "misst Kandidatenabdeckung beziehungsweise Recall vor dem Reranking"
+      - "bewertet die Sortierung der vorhandenen Kandidaten separat"
+      - "vermeidet eine universelle Empfehlung für CLIP, FAISS oder feste Gewichtungen"
+    forbidden:
+      - "reduziert beide Stufen auf einen einzigen undiagnostizierten Score"
+    expected_status: pass
+

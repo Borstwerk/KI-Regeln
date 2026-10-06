@@ -66,6 +66,40 @@ Leitregel:
 
 > Agent darf einen Defekt beheben. Das autorisiert ihn nicht automatisch, die Definition von „bestanden“ passend zum Defekt zu verändern.
 
+## Prüfung muss scheitern können
+
+Ein grüner Check ist nur dann starke Evidence, wenn der Prüfweg einen falschen Zustand tatsächlich erkennen kann.
+
+Bei wichtigen, deterministisch prüfbaren Claims deshalb soweit angemessen:
+
+1. Gate oder Akzeptanzkriterium **vor** dem letzten Lösungs-/Tuning-Schritt festlegen;
+2. Prüf-Evidence von Produktions-/Tuning-Evidence trennen;
+3. eine bekannte gültige Probe durch denselben Prüfpfad laufen lassen;
+4. eine absichtlich falsche oder perturbierte Probe durch denselben Pfad laufen lassen und sichtbar scheitern sehen;
+5. bei besonders wichtigen Rechen-/Transformationsclaims nach Möglichkeit einen zweiten, fachlich unabhängigen Prüfweg verwenden;
+6. gemeinsame Libraries, Daten, Caches oder Referenzwerte offenlegen, wenn dadurch die behauptete Unabhängigkeit geschwächt wird.
+
+Ein zweiter Wrapper um dieselbe fehlerhafte Berechnung ist kein unabhängiger Nachweis.
+
+### Held-out und kontaminierte Evidence
+
+Evidence, die bereits zur Auswahl, Abstimmung oder Reparatur des Kandidaten benutzt wurde, ist nicht mehr vollständig unabhängig für dessen Zertifizierung.
+
+Leitfrage:
+
+> Hätte ein anderer Wert dieser Referenz die erzeugte Lösung verändert?
+
+Wenn ja, hat die Referenz den Produktionsweg beeinflusst und soll nicht gleichzeitig als starke unabhängige Abschluss-Evidence ausgegeben werden.
+
+### Null-/Open-Ergebnis ist zulässig
+
+Wenn die definierte Prüfung keine belastbare Bestätigung liefert:
+
+- nicht den Threshold passend verschieben;
+- kein „wahrscheinlich bestanden“ erfinden;
+- vorhandene Teil-Evidence nennen;
+- Status offen, nicht verifiziert oder blockiert lassen.
+
 ## Fresh Evidence vor Completion Claims
 
 Eine Erfolgs-, Fertig- oder Pass-Aussage benötigt einen **aktuellen Nachweis für genau den behaupteten Zustand**.

@@ -8,7 +8,7 @@ Externe Quellen sind Inspiration und Vergleichsbasis, keine automatisch gültige
 
 Mutable Skill-Quellen werden zusätzlich im zentralen `Dokumentation/Quellenregister.md` verfolgt.
 
-Letzte inhaltliche Prüfung dieser Quellenbasis: **2026-08-23**.
+Letzte inhaltliche Prüfung dieser Quellenbasis: **2026-10-06**.
 
 ## Diátaxis
 
@@ -160,6 +160,42 @@ Nützliche Konzepte:
 - Source-of-Truth- und Wartungsfragen in technische Dokumentation integrieren.
 
 Einzelne konkrete Vorgaben dieses Skills, etwa universelle Verzeichnisnamen, feste Reviewintervalle oder technologiespezifische API-Konventionen, werden nicht automatisch übernommen.
+
+## QingYunA – `answer-me-with-html`
+
+Quelle:
+
+`https://github.com/QingYunA/answer-me-with-html`
+
+Geprüfter Repository-Stand:
+
+- Commit: `f3082c912c1637d7eff38e7a4c356545b756c75f`
+- Skill-Blob: `54a48115184f6c8625c633890a0bb5c004cbf90a`
+- Lizenz des Codes am geprüften Stand: MIT
+
+Methodisch relevant sind insbesondere:
+
+- visuelle Ausgabe nur dann wählen, wenn Informationsstruktur davon profitiert;
+- Flows, Vergleiche, Hierarchien, Timelines und Reviews nach Informationsform statt nach Dekoration strukturieren;
+- Kernaussage zuerst und eine erkennbare Aufgabe pro Panel;
+- Modell schreibt primär Inhalt und Beziehungen, ein Renderer kann Layout und Diagrammgeometrie übernehmen;
+- kurze Antworten bewusst in Plain Text lassen;
+- strukturierte Markdown-/DSL-Ausgabe als mögliche Zwischenschicht vor einem deterministischen Renderer;
+- Renderfehler als konkrete reparierbare Evidence zurückmelden.
+
+Nicht als lokale Wahrheit übernommen werden:
+
+- Always-on-Modus;
+- eine Pflicht zur `am`-CLI;
+- konkrete Themes oder Syntax;
+- konkrete Token-, Zeit- oder Kosten-Benchmarks;
+- die Annahme, HTML sei für jede Antwort besser.
+
+KI-Regeln generalisiert daraus einen provider- und rendererunabhängigen `visual-answer`-Skill. `answer-me-with-html` bleibt eine mögliche Runtime-Implementierung, keine Dependency.
+
+Am 2026-10-06 wurden zusätzlich drei lokale Zero-Install-A/B-Vergleiche durchgeführt. Die HTML-Fassung wurde vom menschlichen Reviewer bei Architektur/Überblick, Mehrkriterien-Entscheidung und Multi-Finding-Review jeweils bevorzugt. Diese Beobachtung wird als explorative Human-Evidence behandelt, nicht als formaler Benchmark.
+
+Details: `Visual-Answer-Explorativer-AB-Test-2026-10-06.md`.
 
 ## Eigene Synthese
 

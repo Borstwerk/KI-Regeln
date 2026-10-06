@@ -264,6 +264,34 @@ https://www.aihero.dev/skills
 
 Lizenz- und Attributionshinweise zu übernommenen beziehungsweise adaptierten Skill-Ideen stehen zusätzlich in `../THIRD-PARTY-NOTICES.md`.
 
+## BootLoops – falsifizierbare Verifikation
+
+Quellen:
+
+https://github.com/BootLoops-ai/skills
+
+https://github.com/BootLoops-ai/bootloops
+
+Geprüfter Skills-Stand:
+
+`ca892277dcf0468d995f0036f3bd6d753a8afe7d`
+
+Methodisch ausgewertet wurden insbesondere:
+
+- `acceptance-gate`;
+- `independence-bookkeeping`;
+- `planted-truth`.
+
+Für KI-Regeln übernommen beziehungsweise verallgemeinert werden:
+
+- ein Check soll nachweislich auch scheitern können;
+- Positive-/Known-good- und Negative-/Known-bad-Kontrollen erhöhen die Aussagekraft eines Validators;
+- held-out beziehungsweise nicht zur Konstruktion verwendete Evidence ist stärker als dieselbe Evidence nach Tuning;
+- ein zweiter Prüfweg ist nur so unabhängig wie seine tatsächlichen Daten-, Code- und Library-Abhängigkeiten;
+- ein ehrlicher Null-/Open-Befund ist besser als eine erfundene geschlossene Antwort.
+
+Nicht universalisiert werden mathematische Spezialregeln wie feste Digit-Anzahlen, PSLQ-/Ringparameter, physikspezifische Oracles oder konkrete Toolchains.
+
 ## Einordnung
 
 Neue Begriffe oder Frameworks werden nicht allein deshalb übernommen, weil sie aktuell verbreitet sind.

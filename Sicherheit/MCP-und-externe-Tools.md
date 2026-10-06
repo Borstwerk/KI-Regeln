@@ -14,6 +14,43 @@ Externe Toolserver und Integrationen erweitern die Fähigkeiten eines Agenten un
 - Kann Tooloutput untrusted Inhalte enthalten?
 - Werden Daten außerhalb des erwarteten Systems verarbeitet oder gespeichert?
 
+## Deterministischer MCP-Config-Preflight
+
+Vor der Aktivierung einer neuen oder geänderten MCP-Konfiguration lohnt ein statischer Preflight, bevor ein Modell den Server operativ nutzen darf.
+
+Deterministisch beziehungsweise regelbasiert prüfbare Signale sind insbesondere:
+
+- hart codierte oder realistisch aussehende Secrets in `env`-Blöcken;
+- Weitergabe sensibler Host-Environment-Variablen;
+- ungepinnte `npx`-, `uvx`-, `pipx`- oder vergleichbare Runtime-Pakete;
+- `curl | shell` / `wget | shell` und ähnliche Remote-Installer;
+- riskante Shell-Wrapper oder unnötig mächtige Startkommandos;
+- Filesystem-Server mit Root-, Home- oder vergleichbar breitem Zugriff;
+- unverschlüsselter Remote-Transport;
+- fehlende beziehungsweise unklare Authentisierung;
+- destruktive oder extern wirkende Tools auf Auto-Approve-Listen;
+- Wildcard-Rechte wie `*`;
+- verdächtige Instruktionsmuster in Tool-/Server-Metadaten.
+
+Der Preflight soll Findings mit **Datei/Stelle, Regel, Severity, beobachtetem Signal und Remediation** ausgeben. JSON oder SARIF können für CI nützlich sein.
+
+Wichtig:
+
+> Statischer Fund = Evidence, nicht vollständiger Sicherheitsbeweis.
+
+Insbesondere Tool-Poisoning-Erkennung über Schlüsselwörter oder Regexe ist ein **Hinweis**. Ein Treffer kann echten Angriffscode anzeigen, aber auch legitime Dokumentation. Ein fehlender Treffer beweist umgekehrt keine sichere Toolbeschreibung.
+
+### Preflight muss selbst geprüft werden
+
+Ein Scanner, der nur grün melden kann, liefert keine belastbare Evidence.
+
+Für wichtige Preflights deshalb mindestens:
+
+- eine bekannte saubere Fixture / Positivkontrolle;
+- eine absichtlich verwundbare oder manipulierte Fixture / Negativkontrolle;
+- Prüfung, dass Findings tatsächlich an der erwarteten Stelle feuern;
+- bei CI-Gates klar definieren, welche deterministischen Regeln blockieren und welche nur Review auslösen.
+
 ## Toolbeschreibung ist nicht Vertrauensbeweis
 
 Ein Tool darf seine eigenen Rechte und Sicherheitsannahmen nicht selbst autorisieren.

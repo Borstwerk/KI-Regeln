@@ -2,7 +2,7 @@
 
 Dieser Bereich fasst allgemeine Arbeitsprinzipien für konsistente Bildserien zusammen. Die folgenden Quellen dienten als Inspiration und technische Einordnung. Sie sind keine verbindliche Projektspezifikation.
 
-Letzte inhaltliche Prüfung dieser Quellenbasis: **2026-10-05**.
+Letzte inhaltliche Prüfung dieser Quellenbasis: **2026-10-06**.
 
 Lebende Produktdokumentationen werden zusätzlich über `../Dokumentation/upstream-sources.yml` semantisch beobachtet.
 
@@ -68,6 +68,39 @@ Es wird keine freie Lizenz der Ausgangs-PDF angenommen. Deshalb wurden:
 Die Quelle nennt außerdem einen konkreten Video-/Plugin-Workflow. KI-Regeln übernimmt daraus keine Toolpflicht: Video-Shortcuts bleiben runtime- und capabilityabhängig.
 
 Diese Quelle ist **statisch und nutzerbereitgestellt**. Sie wird daher nicht als mutable Dependency in `upstream-sources.yml` geführt.
+
+## kaankiziltug/logo-design-skill
+
+Quelle:
+
+https://github.com/kaankiziltug/logo-design-skill
+
+Geprüfter Repository-Stand:
+
+`0ecf52e9a4b3ac92b714f7cc6e3148ab8c774134`
+
+Lizenz des Codes am geprüften Stand: MIT.
+
+Methodisch relevant sind insbesondere:
+
+- kurzer Discovery-/Markenbrief vor dem eigentlichen Zeichnen;
+- Kategorieklischees explizit benennen;
+- viele günstige Ideen vor teuren Ausarbeitungen;
+- mehrere unterschiedliche Markentypen statt kosmetischer Varianten;
+- Form zunächst schwarz/einfarbig prüfen;
+- Small-size-, Reversed-, Shelf- und unbeabsichtigte-Lesart-Checks;
+- ein Konzept-Checkpoint vor dem vollständigen Varianten-/Mockup-Kit;
+- technische SVG-/Exportchecks nur als bestanden melden, wenn sie tatsächlich ausgeführt wurden.
+
+Nicht übernommen werden:
+
+- die mitgelieferte Bibliothek realer Markenlogos;
+- deren SVG-Assets oder Klassifikationsdaten;
+- konkrete Python-Scripts und Dateiformate;
+- konkrete Schwellenwerte als universelle Wahrheit;
+- die Annahme, ein Designprozess könne rechtliche Trademark-Clearance ersetzen.
+
+Der Upstream weist selbst darauf hin, dass die reale Logo-Bibliothek Marken Dritter enthält und **nicht** durch dessen MIT-Lizenz freigegeben wird. KI-Regeln nutzt diese Bibliothek deshalb weder als lokale Assetquelle noch als Redistributionsmaterial.
 
 ## Allgemeine Einordnung
 

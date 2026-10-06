@@ -1,5 +1,5 @@
 schema_version: 2
-last_updated: 2026-10-04
+last_updated: 2026-10-06
 
 maturity_levels: [experimental, candidate, stable, deprecated, retired]
 eval_coverage_levels: [none, partial, core, broad]
@@ -40,6 +40,7 @@ skills:
   - {id: entitaetsbibel, area: Bildarbeit, path: Bildarbeit/Skills/entitaetsbibel/SKILL.md, maturity: candidate, eval_coverage: none, purpose: "Wiederkehrende visuelle Entitäten konsistent definieren."}
   - {id: serien-kontinuitaetscheck, area: Bildarbeit, path: Bildarbeit/Skills/serien-kontinuitaetscheck/SKILL.md, maturity: candidate, eval_coverage: none, purpose: "Bildserien auf Identitäts-, Stil-, Struktur- und Zustandsdrift prüfen.", capabilities: [image-inspection]}
   - {id: bildreview, area: Bildarbeit, path: Bildarbeit/Skills/bildreview/SKILL.md, maturity: candidate, eval_coverage: none, purpose: "Ein Bild unabhängig auf Keeper, Feinschliff oder Neubau prüfen.", capabilities: [image-inspection]}
+  - {id: logo-design, area: Bildarbeit, path: Bildarbeit/Skills/logo-design/SKILL.md, maturity: experimental, eval_coverage: partial, purpose: "Logos und Brand Marks vom Brief über unterschiedliche getestete Konzepte bis zum freigegebenen Logo-Kit entwickeln oder prüfen.", related: [bild-prebrief, bildreview]}
   - {id: code-review, area: Programmieren, path: Programmieren/Skills/code-review/SKILL.md, maturity: candidate, eval_coverage: partial, purpose: "Konkrete Codeänderungen gegen Anforderungen und Standards prüfen.", capabilities: [repository-read]}
   - {id: diagnose, area: Programmieren, path: Programmieren/Skills/diagnose/SKILL.md, maturity: candidate, eval_coverage: partial, purpose: "Bugs und Performanceprobleme reproduzierbar bis zur Ursache diagnostizieren.", capabilities: [repository-read, code-execution-preferred]}
   - {id: domain-modeling, area: Programmieren, path: Programmieren/Skills/domain-modeling/SKILL.md, maturity: candidate, eval_coverage: none, purpose: "Domänenbegriffe, Grenzen und Modelle präzisieren.", capabilities: [repository-read-preferred]}
@@ -99,6 +100,7 @@ skills:
   - {id: adr, area: Dokumentationserstellung, path: Dokumentationserstellung/Skills/adr/SKILL.md, maturity: experimental, eval_coverage: none, purpose: "Architekturentscheidungen mit Kontext, Alternativen und Konsequenzen dokumentieren.", capabilities: [decision-source-required]}
   - {id: runbook, area: Dokumentationserstellung, path: Dokumentationserstellung/Skills/runbook/SKILL.md, maturity: experimental, eval_coverage: none, purpose: "Operative, unter Stress ausführbare Betriebsanleitungen erstellen.", capabilities: [operational-source-required]}
   - {id: docs-review, area: Dokumentationserstellung, path: Dokumentationserstellung/Skills/docs-review/SKILL.md, maturity: experimental, eval_coverage: partial, purpose: "Dokumentation auf Korrektheit, Drift, Verifikation und Leserfit prüfen.", capabilities: [source-of-truth-access-preferred], related: [technical-writing]}
+  - {id: visual-answer, area: Dokumentationserstellung, path: Dokumentationserstellung/Skills/visual-answer/SKILL.md, maturity: experimental, eval_coverage: partial, purpose: "Komplexe Antworten mit visueller Hierarchie so strukturieren, dass Kernaussage, Priorität und Beziehungen schneller erfassbar werden.", related: [technical-writing, explanation-docs]}
   - {id: skill-authoring, area: Skill-Engineering, path: Skill-Engineering/Skills/skill-authoring/SKILL.md, maturity: experimental, eval_coverage: partial, purpose: "Neue Agent-Skills nach dem zentralen Skill-Engineering-Standard entwerfen.", capabilities: [repository-read-preferred]}
   - {id: skill-review, area: Skill-Engineering, path: Skill-Engineering/Skills/skill-review/SKILL.md, maturity: experimental, eval_coverage: partial, purpose: "Agent-Skills unabhängig auf Schnitt, Trigger, Verträge, Capabilities, Portabilität und Evals prüfen.", capabilities: [repository-read-preferred], related: [skill-authoring]}
   - {id: skill-security-review, area: Sicherheit, path: Sicherheit/Skills/skill-security-review/SKILL.md, maturity: experimental, eval_coverage: partial, purpose: "Agent-Skills und Skill-Pakete vor Aktivierung/Freigabe auf Trust-, Supply-Chain-, Berechtigungs-, Daten-, Remote-Dependency- und External-Action-Risiken prüfen.", capabilities: [repository-read-preferred], related: [skill-review, prompt-injection-review, tool-permission-review]}
