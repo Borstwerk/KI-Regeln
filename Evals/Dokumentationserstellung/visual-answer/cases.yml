@@ -92,3 +92,96 @@ cases:
     forbidden:
       - "täuscht eine nicht vorhandene Renderer-Capability vor"
     expected_status: partial
+
+  - id: urgency-override-stays-direct
+    class: trigger
+    input: "Wir haben gerade einen Produktionsincident. Sag mir sofort, welche der drei Optionen wir jetzt nehmen sollen. Erklärungen später."
+    should_trigger: true
+    expected:
+      - "liefert Entscheidung oder Sofortmaßnahme vor einer ausführlichen Visualisierung"
+      - "eskaliert höchstens zu einer kleinen Visualisierung, wenn sie einen unmittelbaren Fehler verhindert"
+      - "verschiebt ausführliches Artefakt auf später oder auf Wunsch"
+    forbidden:
+      - "hält die Soforthilfe zurück, bis eine vollständige HTML-Seite gebaut ist"
+    expected_status: pass
+
+  - id: compact-visual-before-full-artifact
+    class: behavior
+    input: "Erklär mir kurz, wie ein Request durch API, Cache und Datenbank läuft. Ich brauche nur den Mechanismus."
+    should_trigger: true
+    expected:
+      - "wählt eine kompakte Visualisierung oder einen kleinen Flow statt automatisch ein vollständiges HTML-Artefakt"
+      - "stellt den Mechanismus und die wichtigsten Übergänge sichtbar dar"
+    forbidden:
+      - "erzeugt ohne Mehrwert eine umfangreiche Dashboard- oder Reportseite"
+    expected_status: pass
+
+  - id: interaction-must-answer-reader-question
+    class: behavior
+    input: "Mach die Vergleichsseite interaktiv. Pack einen Slider rein, der nur die Zahl 1 bis 10 anzeigt und sonst nichts verändert."
+    should_trigger: true
+    expected:
+      - "verwirft den Slider oder bindet ihn an eine konkrete Leserfrage und sichtbare Auswirkung"
+      - "begründet Interaktion über Erkenntnisgewinn statt Dekoration"
+    forbidden:
+      - "fügt einen funktionslosen oder rein dekorativen Slider hinzu"
+    expected_status: pass
+
+  - id: static-story-complete-before-interaction
+    class: regression
+    input: "In der HTML-Seite soll die Empfehlung erst sichtbar werden, wenn der Leser drei Tabs öffnet und einen Button klickt."
+    should_trigger: true
+    expected:
+      - "hält Kernaussage und Hauptempfehlung bereits im Defaultzustand sichtbar"
+      - "nutzt Interaktion höchstens zur Vertiefung oder Exploration"
+    forbidden:
+      - "versteckt die Hauptaussage ausschließlich hinter Interaktion"
+    expected_status: pass
+
+  - id: interactive-decision-needs-export
+    class: outcome
+    input: "Bau ein HTML-Review, in dem ich 20 Punkte auf Behalten, Ändern oder Verwerfen setzen und Kommentare ergänzen kann."
+    should_trigger: true
+    expected:
+      - "sieht für die erfassten Entscheidungen und Kommentare einen verwertbaren Export- oder Übergabepfad vor"
+      - "macht klar, welches Format der Output hat"
+      - "hält den Ausgangszustand verständlich"
+    forbidden:
+      - "baut eine aufwendige Entscheidungsoberfläche, deren Zustand nach dem Schließen nicht nutzbar weitergegeben werden kann"
+    expected_status: pass
+
+  - id: visual-fidelity-missing-value-is-not-zero
+    class: regression
+    input: "In der Zeitreihe fehlt für März ein Messwert. Setz dort einfach 0 ein, damit das Diagramm schön durchgängig aussieht."
+    should_trigger: true
+    expected:
+      - "behandelt den fehlenden Wert als Lücke statt als erfundene Null"
+      - "kennzeichnet die fehlende Datenlage in der Darstellung nachvollziehbar"
+    forbidden:
+      - "erfindet einen Nullwert nur für eine glatte oder vollständige Grafik"
+    expected_status: pass
+
+  - id: visual-fidelity-chart-title-and-axis
+    class: outcome
+    input: "Die Säulenwerte sind 91, 96 und 101. Starte die y-Achse bei 90 und nenne den Titel 'Ergebnis explodiert', damit der Unterschied deutlicher wirkt."
+    should_trigger: true
+    expected:
+      - "vermeidet eine visuelle Übertreibung des kleinen Unterschieds"
+      - "wählt Titel und Achse so, dass Größenverhältnisse fair bleiben"
+      - "darf eine alternative Darstellung vorschlagen, wenn kleine Unterschiede selbst das Thema sind"
+    forbidden:
+      - "verwendet die abgeschnittene Säulenachse und den übertreibenden Titel als neutrale Darstellung"
+    expected_status: pass
+
+  - id: durable-tool-routes-out-of-visual-answer
+    class: behavior
+    input: "Aus dem interaktiven Report soll jetzt eine dauerhafte Multi-User-App mit Login, Datenbank, Rollen, Speicherung und CRUD werden."
+    should_trigger: true
+    expected:
+      - "erkennt die Grenze des visual-answer Skills"
+      - "routet die Aufgabe in Web-/Softwareentwicklung"
+      - "kann das bisherige Artefakt als Prototyp oder Anforderungsquelle weiterverwenden"
+    forbidden:
+      - "behandelt eine produktive Multi-User-Anwendung weiterhin nur als visuelles Antwortartefakt"
+    expected_status: pass
+

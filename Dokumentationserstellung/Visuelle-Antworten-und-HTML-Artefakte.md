@@ -49,6 +49,45 @@ Near-Misses:
 - die visuelle Fassung würde nur denselben Text in dekorative Karten zerlegen;
 - Artefakterstellung wäre deutlich aufwendiger als der Informationsgewinn.
 
+## Visuelle Eskalation
+
+Nicht jede nützliche Visualisierung braucht eine eigene HTML-Datei.
+
+Vor dem Renderer zuerst die **kleinste ausreichende Darstellungsstufe** wählen:
+
+| Level | Wann | Typische Ausgabe |
+| --- | --- | --- |
+| **0 – Direct** | einfache oder dringende Frage | kurze Textantwort |
+| **1 – Compact Visual** | ein nicht-trivialer Mechanismus, Vergleich oder Flow | eine kompakte Tabelle, ASCII-/Mermaid-/Inline-Visualisierung plus wenige Callouts |
+| **2 – Visual Explanation** | mehrere Akteure, Phasen, Optionen, Risiken oder zusammenhängende Konzepte | strukturierte visuelle Erklärung mit wenigen Modulen |
+| **3 – Visual Artifact** | Nutzer will HTML/Artefakt, hohe Informationsdichte, Wiederverwendung oder sinnvolle Interaktion | eigenständiges HTML-/Artifact-Dokument |
+
+Leitregel:
+
+> So weit eskalieren wie nötig, nicht so weit wie technisch möglich.
+
+### Whiteboard-Test
+
+Visualisierung ist besonders plausibel, wenn ein guter Erklärer spontan etwas **zeichnen** würde, weil Struktur wichtig ist:
+
+- Was passiert zuerst und danach?
+- Was hängt womit zusammen?
+- Wer wartet auf wen?
+- Wie ändert sich ein Zustand?
+- Welche Option passt unter welcher Bedingung?
+- Welche Eingaben verändern welches Ergebnis?
+
+Wenn eine gute Antwort natürlicherweise ein Satz wäre, ist Level 0 meist richtig.
+
+### Urgency Override
+
+Bei Incident, Meeting oder ausdrücklichem Zeitdruck:
+
+1. Entscheidung / Sofortmaßnahme zuerst;
+2. kein vollständiges Artefakt vor der eigentlichen Hilfe;
+3. höchstens eine kleine Visualisierung, wenn sie einen Fehler verhindert;
+4. ausführliche Visual-Erklärung erst danach oder auf Wunsch.
+
 ## Informationsarchitektur vor Renderer
 
 Zuerst die Informationsform bestimmen:
@@ -121,7 +160,29 @@ Sie darf nicht:
 - Gegenargumente unterschlagen, nur damit die Seite sauberer aussieht;
 - eine komplexe Entscheidung durch Design scheinbar eindeutiger machen als die Evidence erlaubt.
 
-### 5. Progressive Detailtiefe
+### 5. Visual Fidelity
+
+Korrekte Zahlen können trotzdem irreführend dargestellt werden.
+
+Bei Daten, KPIs und Charts zusätzlich prüfen:
+
+- **Datenform vor Charttyp:** erst klären, was ein Datenpunkt trägt, danach die Darstellung wählen;
+- fehlender Wert bleibt fehlend und wird nicht still zu `0`;
+- geschätzte / modellierte Werte nicht ununterscheidbar in eine Ist-Serie mischen;
+- fortgeschriebene oder veraltete Werte sichtbar kennzeichnen;
+- Titel und Callouts dürfen der tatsächlichen Datenlage nicht widersprechen;
+- Einheit und Bezugsgröße müssen sichtbar sein, wenn sie für Interpretation nötig sind;
+- 3D-Darstellung vermeiden, wenn Perspektive Größen verzerrt;
+- Dual-Axis nur mit sehr guter Begründung; sonst bevorzugt getrennte oder normalisierte Ansichten;
+- bei Balken-/Säulen-/Flächendiagrammen einen abgeschnittenen Wertebereich nicht so einsetzen, dass kleine Unterschiede massiv größer wirken;
+- bei Liniencharts ist ein Nullstart nicht automatisch erforderlich; die Achse muss die Aussage fair und nachvollziehbar tragen;
+- Farbe unterstützt Bedeutung, ersetzt aber keine Labels.
+
+Bei Review eines vorhandenen Charts gilt:
+
+> Nicht aus Pixeln schätzen, was als Wert, Achsgrenze oder Einheit nicht tatsächlich belegt ist.
+
+### 6. Progressive Detailtiefe
 
 Auf den ersten Blick:
 
@@ -136,6 +197,78 @@ Beim zweiten Blick:
 - Evidence;
 - Details;
 - Fix / nächste Aktion.
+
+## Interaction Gate
+
+Interaktion ist nur dann sinnvoll, wenn sie eine konkrete Leserfrage beantwortet.
+
+Jedes Control muss diese Kette besitzen:
+
+```text
+Reader Question
+→ User Action
+→ sofort sichtbare neue Erkenntnis
+```
+
+Beispiele:
+
+- Slider → zeigt eine nicht-triviale Auswirkung eines Parameters;
+- Tabs → vergleichen zwei konkrete Zustände oder Codepfade;
+- Stepper → macht eine echte Reihenfolge / einen Zustandspfad nachvollziehbar;
+- Auswahlkarten → unterstützen eine Entscheidung zwischen klaren Optionen.
+
+Nicht ausreichend:
+
+- Button ändert nur Dekoration;
+- Slider zeigt lediglich seinen eigenen Zahlenwert;
+- Tabs verstecken Text ohne Vergleichsgewinn;
+- Interaktion ist nötig, um überhaupt die Kernaussage zu entdecken.
+
+### Static Story Complete
+
+Die Defaultansicht muss die Hauptaussage bereits tragen.
+
+Interaktion darf:
+
+- Details vertiefen;
+- Parameter erkunden;
+- Alternativen vergleichen;
+- Entscheidungen erfassen.
+
+Sie darf nicht die einzige Route zur Kernaussage sein.
+
+### Export Contract für Entscheidungs-/Editierartefakte
+
+Wenn Interaktion Nutzerentscheidungen, Kommentare, Prioritäten oder editierte Werte erfasst, braucht das Artefakt einen klaren Rückweg:
+
+- Copy as text / markdown / JSON;
+- Download/Export, wenn die Runtime das sauber unterstützt;
+- oder eine gleichwertige host-native Übergabe.
+
+Ohne verwertbaren Output ist ein aufwendiges interaktives Review-/Editierartefakt oft nur ein Spielzeug.
+
+## Ausgabeform nach Nutzung
+
+Nicht jede visuelle Antwort ist dasselbe Produkt.
+
+| Nutzung | Bevorzugte Form |
+| --- | --- |
+| mehrere unabhängige Kennzahlen überwachen | Dashboard |
+| eine Schlussfolgerung mit Evidence erklären | Report / Visual Explanation |
+| kompakt drucken oder mitnehmen | One-Pager |
+| wenige Kernbefunde in Mail/Chat transportieren | Snapshot / kompakte Visualisierung |
+| live präsentieren | Präsentations-/Slides-Workflow statt Visual-Answer-Kern |
+| Parameter erkunden / Optionen auswählen | Explorable Artifact |
+
+Wenn das Ergebnis dauerhafte Datenspeicherung, Authentisierung, Mehrbenutzerbetrieb, echte CRUD-Workflows oder produktive Web-App-Funktion braucht, endet `visual-answer`:
+
+```text
+Visual Explanation / temporary artifact
+→ visual-answer
+
+durable application / workflow tool
+→ Webentwicklung / Software-Workflow
+```
 
 ## Renderer- und Runtime-Vertrag
 
@@ -202,13 +335,17 @@ Wenn externe Assets oder Scripts nötig sind, diese als Runtime-/Security-Abhän
 
 Vor Abschluss prüfen:
 
-1. Sind Kernaussage und Prioritäten sofort sichtbar?
-2. Sind alle wesentlichen Claims aus der Textbasis erhalten?
-3. Wurden keine Zahlen, Status oder Unsicherheiten verändert?
-4. Gibt es dekorative Elemente ohne Informationswert?
-5. Funktioniert die Ausgabe bei kleiner Breite grundsätzlich weiter?
-6. Ist die Datei tatsächlich erzeugt?
-7. Wurde sie visuell geprüft?
+1. War die gewählte Eskalationsstufe wirklich nötig?
+2. Sind Kernaussage und Prioritäten sofort sichtbar?
+3. Sind alle wesentlichen Claims aus der Textbasis erhalten?
+4. Wurden keine Zahlen, Status oder Unsicherheiten verändert?
+5. Ist die visuelle Darstellung proportional und datengetreu?
+6. Gibt es dekorative Elemente oder Controls ohne Informationswert?
+7. Ist die Hauptaussage auch ohne Interaktion sichtbar?
+8. Funktioniert die Ausgabe bei kleiner Breite grundsätzlich weiter?
+9. Ist die Datei tatsächlich erzeugt?
+10. Wurde sie visuell in einer echten Render-/Browseransicht geprüft?
+11. Falls Nutzerzustand erfasst wird: gibt es einen verwertbaren Export-/Übergabepfad?
 
 Wichtige Grenze:
 

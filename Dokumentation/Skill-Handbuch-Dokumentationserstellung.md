@@ -204,11 +204,32 @@ Ein Skill für komplexe Antworten, bei denen visuelle Hierarchie die **Time-to-S
 - Plain-Text-Wunsch;
 - dekorative Karten ohne Informationsgewinn.
 
-Der Skill ist rendererunabhängig. HTML ist eine mögliche Ausgabe. Fehlt eine geeignete Artifact-/Renderer-Capability, bleibt ein strukturierter Markdown-Fallback zulässig.
+**Eskalation:**
+
+```text
+0 Direct
+→ 1 Compact Visual
+→ 2 Visual Explanation
+→ 3 Visual Artifact
+```
+
+Es wird nur so weit eskaliert, wie die Aufgabe tatsächlich profitiert. Bei Incident-/Zeitdruck kommt die Entscheidung zuerst.
+
+Interaktion braucht einen konkreten Lern-/Entscheidungsgewinn:
+
+```text
+Reader Question
+→ User Action
+→ sichtbare neue Erkenntnis
+```
+
+Wenn Interaktion Entscheidungen oder Edits erfasst, braucht sie einen nutzbaren Export-/Übergabepfad.
+
+Der Skill ist rendererunabhängig. HTML ist eine mögliche Ausgabe. Fehlt eine geeignete Artifact-/Renderer-Capability, bleibt ein strukturierter Markdown-Fallback zulässig. Dauerhafte Multi-User-/CRUD-Anwendungen werden an Web-/Softwareentwicklung geroutet.
 
 Wichtig:
 
-> Visuelle Struktur darf Information ordnen, aber keine Claims, Unsicherheit oder Gegenargumente wegdesignen.
+> Visuelle Struktur darf Information ordnen, aber keine Claims, Unsicherheit, Gegenargumente oder Größenverhältnisse wegdesignen.
 
 ---
 

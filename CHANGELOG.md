@@ -8,6 +8,20 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Visual Answer Hardening: Eskalation, Interaktion und Visual Fidelity
+
+- `visual-answer` bleibt ein einzelner `experimental` Skill und wird **nicht** in mehrere Renderer-/HTML-Skills aufgespalten;
+- neue Eskalationslogik eingeführt: `Level 0 Direct → Level 1 Compact Visual → Level 2 Visual Explanation → Level 3 Visual Artifact`; der Agent soll die kleinste ausreichende Stufe wählen statt komplexe Fragen reflexartig als HTML-Datei auszugeben;
+- Whiteboard-Test und Urgency Override ergänzt: Visualisierung ist besonders sinnvoll bei Reihenfolge, Topologie, Zuständen, Entscheidungen und Kausalität; bei Incident/Meeting kommt Entscheidung/Sofortmaßnahme vor dem Artefakt;
+- Interaction Gate ergänzt: jedes Control muss `Reader Question → User Action → sichtbare neue Erkenntnis` erfüllen; die statische Defaultansicht muss die Hauptaussage bereits tragen;
+- interaktive Review-/Editierartefakte brauchen einen verwertbaren Export-/Übergabepfad für Nutzerentscheidungen, Kommentare oder geänderte Werte;
+- klare Routinggrenze ergänzt: temporäre explorable Artefakte können `visual-answer` bleiben; dauerhafte Multi-User-/Auth-/Persistenz-/CRUD-Anwendungen werden an Web-/Softwareentwicklung übergeben;
+- Ausgabeform stärker an Nutzung gebunden: Monitoring → Dashboard, Argument+Evidence → Report/Explanation, Print → One-Pager, Live Talk → Slides-Workflow, Exploration → explorable Artifact;
+- neue **Visual-Fidelity**-Regeln für Daten/Charts: fehlend ≠ 0, Schätzung ≠ Ist-Wert, stale values kennzeichnen, Titel gegen Daten prüfen, Einheiten sichtbar halten, 3D-/Dual-Axis-/Truncated-Axis-Risiken beachten und bei Chartreview keine Werte aus Pixeln erfinden;
+- acht zusätzliche `visual-answer`-Evalfälle für Urgency Override, Compact Visual, Interaction Gate, Static Story, Export Contract, fehlende Werte, Charttitel/Achse und durable-tool Routing ergänzt; `visual-answer` besitzt damit **16 definierte Fälle, NOT RUN**;
+- `Maksim-Burtsev/visual-teacher` (Skill + Decision Rubric), `joshuadavidthomas/agent-skills/html-artifacts`, `robonuggets/html-it` sowie `raghuramsirigiri/raghuram-skills` (`chart-dashboard`, `chart-honesty`) als concepts/methods-only Quellen geprüft und als monatliche `exact-sha` Upstreams registriert;
+- konkrete Rubric-Punktwerte, Host-spezifische Templates, HTML-by-default-Dogma, Style-Systeme, Chartbibliotheken und fremde Runtime-Implementierungen werden nicht übernommen.
+
 ### Visual Answer und HTML-Artefakte
 
 - neuen experimentellen Skill `Dokumentationserstellung/Skills/visual-answer/SKILL.md` ergänzt; Ziel ist **Time-to-Signal** bei komplexen Antworten, nicht dekoratives HTML;

@@ -197,6 +197,135 @@ Am 2026-10-06 wurden zusätzlich drei lokale Zero-Install-A/B-Vergleiche durchge
 
 Details: `Visual-Answer-Explorativer-AB-Test-2026-10-06.md`.
 
+## Maksim-Burtsev – `visual-teacher`
+
+Quelle:
+
+`https://github.com/Maksim-Burtsev/visual-teacher`
+
+Geprüfter Repository-Stand:
+
+- Commit: `a8bd4382a79f47b3388ac4d48a40470317ddafb5`
+- Skill-Blob: `5d590a7b17267ebd8d10d095690cb2ed78ae0937`
+- Decision-Rubric-Blob: `2697b30c8de31aa89ece0fb3cb4aa4c0fa30799b`
+- Lizenz: MIT
+
+Methodisch relevant:
+
+- visuelle Eskalation statt binärem „Text oder HTML“;
+- kleinste ausreichende Visualisierung;
+- Visualisierung nach Erklärform statt Themenliste;
+- Whiteboard-Test für Reihenfolge, Topologie, Zustände, Entscheidungen und Kausalität;
+- Urgency Override: bei Incident/Meeting Entscheidung zuerst;
+- harte Negativtrigger für kurze, lokale oder ausdrücklich textuelle Fragen;
+- Trigger-Evals getrennt von Outputqualität.
+
+Nicht übernommen:
+
+- konkrete Punktwerte und Thresholds des Upstream-Rubrics;
+- Mermaid als universelle Pflicht;
+- konkrete Level-Namen als Produkt-API;
+- Upstream-Benchmarks als lokale Evidence.
+
+KI-Regeln übernimmt das Prinzip als Level 0–3 und evaluiert die eigene Triggerlogik separat.
+
+## Joshua David Thomas – `html-artifacts`
+
+Quelle:
+
+`https://github.com/joshuadavidthomas/agent-skills/tree/main/html-artifacts`
+
+Geprüfter Repository-Stand:
+
+- Commit: `516dee7a422b90937b2958d11c03694154ab9c09`
+- Skill-Blob: `649206d0fa6213b99c7ff13026704fc5c8d84810`
+- Lizenz: MIT
+
+Methodisch relevant:
+
+- Source/Evidence vor Artefaktdesign;
+- die statische Defaultansicht muss die Hauptgeschichte vollständig tragen;
+- Interaktion nur, wenn sie eine konkrete Leserfrage beantwortet;
+- eigenständige Offline-Datei als robuste Defaultform;
+- keine Veröffentlichung ohne ausdrücklichen Auftrag;
+- Browser-/Renderprüfung vor Completion Claim;
+- explorable document und presentation als unterschiedliche Nutzungsmodi.
+
+Lokal verallgemeinert:
+
+```text
+Reader Question
+→ User Action
+→ sichtbar neue Erkenntnis
+```
+
+und:
+
+> Interaktion darf vertiefen, aber nicht die Kernaussage verstecken.
+
+## RoboNuggets – `html-it`
+
+Quelle:
+
+`https://github.com/robonuggets/html-it`
+
+Geprüfter Repository-Stand:
+
+- Commit: `c5a2a060da20881aa926d511adacd86f37b31527`
+- Skill-Blob: `94577da4c17510badafcfbff364bc6f1a222e49e`
+- Lizenz: MIT
+
+Methodisch relevant:
+
+- statische Dokumente, visuelle Artefakte und interaktive Artefakte als steigende Capability-/Aufwandsstufen behandeln;
+- Interaktion, die Entscheidungen oder Edits sammelt, braucht einen Rückweg in weiterverwendbare strukturierte Ausgabe;
+- ein Wegwerf-Artefakt darf leichtgewichtig bleiben;
+- ab echter App-Funktion entsteht eine andere Aufgabenklasse.
+
+Nicht übernommen werden:
+
+- „HTML statt Markdown“ als Defaultdogma;
+- feste Längen-/Zeilenschwellen;
+- konkrete Designpalette oder Typografie;
+- Level-4-Mini-App als Teil des `visual-answer`-Kerns.
+
+Lokale Grenze:
+
+> Temporäres Explorable Artifact kann `visual-answer` sein; dauerhafte App mit Auth, Persistenz oder Multi-User-State gehört in Web-/Softwareentwicklung.
+
+## Raghuram Sirigiri – `chart-dashboard` und `chart-honesty`
+
+Quelle:
+
+`https://github.com/raghuramsirigiri/raghuram-skills`
+
+Geprüfter Repository-Stand:
+
+- Commit: `d8742edd530057dee76a57057682e81f14b5b183`
+- `chart-dashboard`-Blob: `c7b81828288f563590749917cd7e6aded40e96b1`
+- `chart-honesty`-Blob: `74edf3aeec4c5b6034abe86ec94a23d3cf03c255`
+- Lizenz: MIT
+
+Methodisch relevant:
+
+- erst Datenform und Leseraufgabe bestimmen, danach Chart/Format wählen;
+- Dashboard, Report, One-Pager, Snapshot und Präsentation erfüllen unterschiedliche Konsumaufgaben;
+- fehlende Werte nicht als Null erfinden;
+- geschätzte Werte nicht ununterscheidbar in Ist-Daten mischen;
+- Charttitel gegen tatsächliche Daten prüfen;
+- Einheiten sichtbar halten;
+- 3D-, Dual-Axis- und abgeschnittene-Achsen-Risiken bewusst behandeln;
+- bei Chartreview keine Werte oder Achsgrenzen aus Pixeln schätzen.
+
+Nicht übernommen:
+
+- konkrete Chartbibliothek;
+- Template-/Gridmaße;
+- feste Chart-Auswahltabellen als universelle Wahrheit;
+- geschlossene Review-Testliste als vollständige Visual-QA.
+
+KI-Regeln generalisiert daraus **Visual Fidelity**: korrekte Daten müssen auch proportional, nachvollziehbar und nicht irreführend dargestellt werden.
+
 ## Eigene Synthese
 
 Aus der Recherche wurde insbesondere diese Trennung entwickelt:
