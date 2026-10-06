@@ -2682,3 +2682,213 @@ sources:
     observed_ref: main
     observed_blob_sha: 54a48115184f6c8625c633890a0bb5c004cbf90a
 
+- source_id: visual-teacher-skill
+  reviewed_at: '2026-10-06'
+  repository_commit: a8bd4382a79f47b3388ac4d48a40470317ddafb5
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence:
+  - Used as methodological evidence for graded visual escalation, shape-based visual choice, negative triggers and an urgency override.
+  - KI-Regeln defines its own Level 0–3 routing and does not adopt the upstream's host-specific invocation, output templates or benchmark results.
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: MIT
+  license_source: https://github.com/Maksim-Burtsev/visual-teacher/blob/a8bd4382a79f47b3388ac4d48a40470317ddafb5/LICENSE
+  license_source_commit_or_ref: a8bd4382a79f47b3388ac4d48a40470317ddafb5
+  license_path: LICENSE
+  license_blob_sha: 3b64aebe35f5e4be8b269a77b9a3120c2161abcd
+  path_specific_license_notes:
+  - Root MIT license was verified at the same reviewed repository commit; local use is concepts/methods-only and redistribution permission is not relied on.
+  license_status_at_observation: verified-at-snapshot
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence:
+    artifact_declarations: []
+    same_state_files:
+    - path: LICENSE
+      blob_sha: 3b64aebe35f5e4be8b269a77b9a3120c2161abcd
+      spdx: MIT
+    notes:
+    - Reviewed artifact and root LICENSE were observed at repository commit a8bd4382a79f47b3388ac4d48a40470317ddafb5.
+  source_snapshot:
+    repository: Maksim-Burtsev/visual-teacher
+    source_path: skills/visual-teacher/SKILL.md
+    observed_ref: master
+    observed_blob_sha: 5d590a7b17267ebd8d10d095690cb2ed78ae0937
+
+- source_id: visual-teacher-decision-rubric
+  reviewed_at: '2026-10-06'
+  repository_commit: a8bd4382a79f47b3388ac4d48a40470317ddafb5
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence:
+  - Used as methodological evidence that activation should be evaluated independently, with explicit positive and negative signals and special handling for urgent/text-only requests.
+  - Concrete point values and thresholds are not copied or treated as universal trigger policy.
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: MIT
+  license_source: https://github.com/Maksim-Burtsev/visual-teacher/blob/a8bd4382a79f47b3388ac4d48a40470317ddafb5/LICENSE
+  license_source_commit_or_ref: a8bd4382a79f47b3388ac4d48a40470317ddafb5
+  license_path: LICENSE
+  license_blob_sha: 3b64aebe35f5e4be8b269a77b9a3120c2161abcd
+  path_specific_license_notes:
+  - Root MIT license was verified at the same reviewed repository commit; local use is concepts/methods-only and redistribution permission is not relied on.
+  license_status_at_observation: verified-at-snapshot
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence:
+    artifact_declarations: []
+    same_state_files:
+    - path: LICENSE
+      blob_sha: 3b64aebe35f5e4be8b269a77b9a3120c2161abcd
+      spdx: MIT
+    notes:
+    - Reviewed artifact and root LICENSE were observed at repository commit a8bd4382a79f47b3388ac4d48a40470317ddafb5.
+  source_snapshot:
+    repository: Maksim-Burtsev/visual-teacher
+    source_path: skills/visual-teacher/references/decision-rubric.md
+    observed_ref: master
+    observed_blob_sha: 2697b30c8de31aa89ece0fb3cb4aa4c0fa30799b
+
+- source_id: jdt-html-artifacts-skill
+  reviewed_at: '2026-10-06'
+  repository_commit: 516dee7a422b90937b2958d11c03694154ab9c09
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence:
+  - Used as methodological evidence for source-grounded visual artifacts, static-story completeness, interaction that answers a concrete reader question, local/offline defaults and browser validation.
+  - KI-Regeln independently expresses these as runtime-neutral interaction and verification gates rather than copying the upstream artifact workflow.
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: MIT
+  license_source: https://github.com/joshuadavidthomas/agent-skills/blob/516dee7a422b90937b2958d11c03694154ab9c09/LICENSE
+  license_source_commit_or_ref: 516dee7a422b90937b2958d11c03694154ab9c09
+  license_path: LICENSE
+  license_blob_sha: 74d5cc2c1435df5d011d78a0c511da90700b90de
+  path_specific_license_notes:
+  - Root MIT license was verified at the same reviewed repository commit; local use is concepts/methods-only and redistribution permission is not relied on.
+  license_status_at_observation: verified-at-snapshot
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence:
+    artifact_declarations: []
+    same_state_files:
+    - path: LICENSE
+      blob_sha: 74d5cc2c1435df5d011d78a0c511da90700b90de
+      spdx: MIT
+    notes:
+    - Reviewed artifact and root LICENSE were observed at repository commit 516dee7a422b90937b2958d11c03694154ab9c09.
+  source_snapshot:
+    repository: joshuadavidthomas/agent-skills
+    source_path: html-artifacts/SKILL.md
+    observed_ref: main
+    observed_blob_sha: 649206d0fa6213b99c7ff13026704fc5c8d84810
+
+- source_id: robonuggets-html-it-skill
+  reviewed_at: '2026-10-06'
+  repository_commit: c5a2a060da20881aa926d511adacd86f37b31527
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence:
+  - Used as methodological evidence for separating static documents, visual artifacts and interactive artifacts by capability/effort, and for exporting captured user decisions or edits.
+  - The upstream's HTML-by-default stance, style system, fixed thresholds and Level-4 mini-app behavior are not adopted; durable application work routes out of visual-answer.
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: MIT
+  license_source: https://github.com/robonuggets/html-it/blob/c5a2a060da20881aa926d511adacd86f37b31527/LICENSE
+  license_source_commit_or_ref: c5a2a060da20881aa926d511adacd86f37b31527
+  license_path: LICENSE
+  license_blob_sha: 86139c9c6c695f11c834741deba965f9aa57e898
+  path_specific_license_notes:
+  - Root MIT license was verified at the same reviewed repository commit; local use is concepts/methods-only and redistribution permission is not relied on.
+  license_status_at_observation: verified-at-snapshot
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence:
+    artifact_declarations: []
+    same_state_files:
+    - path: LICENSE
+      blob_sha: 86139c9c6c695f11c834741deba965f9aa57e898
+      spdx: MIT
+    notes:
+    - Reviewed artifact and root LICENSE were observed at repository commit c5a2a060da20881aa926d511adacd86f37b31527.
+  source_snapshot:
+    repository: robonuggets/html-it
+    source_path: SKILL.md
+    observed_ref: main
+    observed_blob_sha: 94577da4c17510badafcfbff364bc6f1a222e49e
+
+- source_id: raghuram-chart-dashboard-skill
+  reviewed_at: '2026-10-06'
+  repository_commit: d8742edd530057dee76a57057682e81f14b5b183
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence:
+  - Used as methodological evidence to choose output form from reader task and data shape before choosing chart/layout, and to preserve gaps, estimates and stale values honestly.
+  - Concrete templates, chart library, grid sizes, API contracts and dataset-specific rules are not copied into KI-Regeln.
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: MIT
+  license_source: https://github.com/raghuramsirigiri/raghuram-skills/blob/d8742edd530057dee76a57057682e81f14b5b183/LICENSE
+  license_source_commit_or_ref: d8742edd530057dee76a57057682e81f14b5b183
+  license_path: LICENSE
+  license_blob_sha: e04c11c9dfe978219b59bb11341849b520885743
+  path_specific_license_notes:
+  - Root MIT license was verified at the same reviewed repository commit; local use is concepts/methods-only and redistribution permission is not relied on.
+  license_status_at_observation: verified-at-snapshot
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence:
+    artifact_declarations: []
+    same_state_files:
+    - path: LICENSE
+      blob_sha: e04c11c9dfe978219b59bb11341849b520885743
+      spdx: MIT
+    notes:
+    - Reviewed artifact and root LICENSE were observed at repository commit d8742edd530057dee76a57057682e81f14b5b183.
+  source_snapshot:
+    repository: raghuramsirigiri/raghuram-skills
+    source_path: plugins/chart-dashboard/skills/chart-dashboard/SKILL.md
+    observed_ref: main
+    observed_blob_sha: c7b81828288f563590749917cd7e6aded40e96b1
+
+- source_id: raghuram-chart-honesty-skill
+  reviewed_at: '2026-10-06'
+  repository_commit: d8742edd530057dee76a57057682e81f14b5b183
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence:
+  - Used as methodological evidence that correct source numbers can still be visually misleading through chart type, 3D, dual axes, truncated scales, contradictory titles or missing units.
+  - KI-Regeln generalizes this into visual-fidelity checks and does not adopt the upstream's closed chart-review taxonomy or file-format-specific implementation.
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: MIT
+  license_source: https://github.com/raghuramsirigiri/raghuram-skills/blob/d8742edd530057dee76a57057682e81f14b5b183/LICENSE
+  license_source_commit_or_ref: d8742edd530057dee76a57057682e81f14b5b183
+  license_path: LICENSE
+  license_blob_sha: e04c11c9dfe978219b59bb11341849b520885743
+  path_specific_license_notes:
+  - Root MIT license was verified at the same reviewed repository commit; local use is concepts/methods-only and redistribution permission is not relied on.
+  license_status_at_observation: verified-at-snapshot
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence:
+    artifact_declarations: []
+    same_state_files:
+    - path: LICENSE
+      blob_sha: e04c11c9dfe978219b59bb11341849b520885743
+      spdx: MIT
+    notes:
+    - Reviewed artifact and root LICENSE were observed at repository commit d8742edd530057dee76a57057682e81f14b5b183.
+  source_snapshot:
+    repository: raghuramsirigiri/raghuram-skills
+    source_path: plugins/chart-honesty/skills/chart-honesty/SKILL.md
+    observed_ref: main
+    observed_blob_sha: 74edf3aeec4c5b6034abe86ec94a23d3cf03c255
+

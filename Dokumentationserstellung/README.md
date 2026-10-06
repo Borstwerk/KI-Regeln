@@ -88,7 +88,7 @@ Wartungs- und Driftregeln festlegen
 - `adr` – Architekturentscheidungen mit Kontext und Alternativen dokumentieren;
 - `runbook` – operative Abläufe unter realen Störungsbedingungen dokumentieren;
 - `docs-review` – Korrektheit, Struktur, Beispiele, Links und Drift unabhängig prüfen;
-- `visual-answer` – komplexe Antworten als schnell erfassbares visuelles Artefakt oder strukturierten Fallback aufbereiten, ohne fachlichen Inhalt oder Unsicherheit zu verlieren.
+- `visual-answer` – komplexe Antworten mit abgestufter Visualisierung, ehrlicher Daten-/Chartdarstellung und gegateter Interaktion schneller erfassbar machen; von Compact Visual bis HTML-Artefakt, mit Markdown-/Runtime-Fallback.
 
 ## Abgrenzung
 

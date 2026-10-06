@@ -2434,6 +2434,107 @@ sources:
       - Dokumentationserstellung/Quellen-und-Inspirationen.md
       - Evals/Dokumentationserstellung/visual-answer/cases.yml
 
+
+  # ---------------------------------------------------------------------------
+  # Visual Answer hardening 2026-10-06
+  # ---------------------------------------------------------------------------
+  - id: visual-teacher-skill
+    area: Dokumentationserstellung
+    kind: github-file
+    repository: Maksim-Burtsev/visual-teacher
+    path: skills/visual-teacher/SKILL.md
+    ref: master
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: 5d590a7b17267ebd8d10d095690cb2ed78ae0937
+    last_checked: '2026-10-06'
+    local_impact:
+      - Dokumentationserstellung/Visuelle-Antworten-und-HTML-Artefakte.md
+      - Dokumentationserstellung/Skills/visual-answer/SKILL.md
+      - Dokumentationserstellung/Quellen-und-Inspirationen.md
+      - Dokumentation/Skill-Handbuch-Dokumentationserstellung.md
+      - Evals/Dokumentationserstellung/visual-answer/cases.yml
+
+  - id: visual-teacher-decision-rubric
+    area: Dokumentationserstellung
+    kind: github-file
+    repository: Maksim-Burtsev/visual-teacher
+    path: skills/visual-teacher/references/decision-rubric.md
+    ref: master
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: 2697b30c8de31aa89ece0fb3cb4aa4c0fa30799b
+    last_checked: '2026-10-06'
+    local_impact:
+      - Dokumentationserstellung/Visuelle-Antworten-und-HTML-Artefakte.md
+      - Dokumentationserstellung/Skills/visual-answer/SKILL.md
+      - Dokumentationserstellung/Quellen-und-Inspirationen.md
+      - Evals/Dokumentationserstellung/visual-answer/cases.yml
+
+  - id: jdt-html-artifacts-skill
+    area: Dokumentationserstellung
+    kind: github-file
+    repository: joshuadavidthomas/agent-skills
+    path: html-artifacts/SKILL.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: 649206d0fa6213b99c7ff13026704fc5c8d84810
+    last_checked: '2026-10-06'
+    local_impact:
+      - Dokumentationserstellung/Visuelle-Antworten-und-HTML-Artefakte.md
+      - Dokumentationserstellung/Skills/visual-answer/SKILL.md
+      - Dokumentationserstellung/Quellen-und-Inspirationen.md
+      - Evals/Dokumentationserstellung/visual-answer/cases.yml
+
+  - id: robonuggets-html-it-skill
+    area: Dokumentationserstellung
+    kind: github-file
+    repository: robonuggets/html-it
+    path: SKILL.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: 94577da4c17510badafcfbff364bc6f1a222e49e
+    last_checked: '2026-10-06'
+    local_impact:
+      - Dokumentationserstellung/Visuelle-Antworten-und-HTML-Artefakte.md
+      - Dokumentationserstellung/Skills/visual-answer/SKILL.md
+      - Dokumentationserstellung/Quellen-und-Inspirationen.md
+      - Evals/Dokumentationserstellung/visual-answer/cases.yml
+
+  - id: raghuram-chart-dashboard-skill
+    area: Dokumentationserstellung
+    kind: github-file
+    repository: raghuramsirigiri/raghuram-skills
+    path: plugins/chart-dashboard/skills/chart-dashboard/SKILL.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: c7b81828288f563590749917cd7e6aded40e96b1
+    last_checked: '2026-10-06'
+    local_impact:
+      - Dokumentationserstellung/Visuelle-Antworten-und-HTML-Artefakte.md
+      - Dokumentationserstellung/Skills/visual-answer/SKILL.md
+      - Dokumentationserstellung/Quellen-und-Inspirationen.md
+      - Evals/Dokumentationserstellung/visual-answer/cases.yml
+
+  - id: raghuram-chart-honesty-skill
+    area: Dokumentationserstellung
+    kind: github-file
+    repository: raghuramsirigiri/raghuram-skills
+    path: plugins/chart-honesty/skills/chart-honesty/SKILL.md
+    ref: main
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: 74edf3aeec4c5b6034abe86ec94a23d3cf03c255
+    last_checked: '2026-10-06'
+    local_impact:
+      - Dokumentationserstellung/Visuelle-Antworten-und-HTML-Artefakte.md
+      - Dokumentationserstellung/Skills/visual-answer/SKILL.md
+      - Dokumentationserstellung/Quellen-und-Inspirationen.md
+      - Evals/Dokumentationserstellung/visual-answer/cases.yml
+
 policy:
   on_change: review-only
   auto_sync: false
