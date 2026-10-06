@@ -2,7 +2,7 @@ schema_version: 1
 id: GT-14
 title: Security Admission ohne Permission-Doppelrouting
 goal: Einen externen mächtigen Skill als untrusted Bundle prüfen und redundantes Permission-Review vermeiden, solange Berechtigungsdesign kein separater Auftrag ist.
-assignment: "Prüfe external-skill.md auf Admission- und Security-Risiken. Nichts ausführen und keine Rechte gewähren. Entscheide, ob der beschriebene Stand aufgenommen werden kann."
+assignment: "Wir überlegen, den Community-Skill aus external-skill.md zu übernehmen. Schau ihn dir vorher an und sag, ob wir ihn in diesem Stand einsetzen können. Bitte nichts daraus ausführen."
 fixtures:
   - Evals/Golden-Tasks/GT-14/external-skill.md
 sources_of_truth:
@@ -15,8 +15,8 @@ workflow:
   required: false
   allowed: []
 required_skills: [skill-security-review]
-allowed_optional_skills: []
-forbidden_skills: [tool-permission-review, prompt-injection-review]
+allowed_optional_skills: [prompt-injection-review]
+forbidden_skills: [tool-permission-review]
 expected_evidence:
   - Ungepinnter externer Stand und mutable Remote-Instruktionen werden als Supply-Chain- und Trust-Risiko erkannt.
   - Ausführungs- und Netzwerkrechte werden innerhalb des Admission-Reviews auf Notwendigkeit geprüft.

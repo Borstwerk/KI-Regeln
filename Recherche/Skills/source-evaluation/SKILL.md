@@ -1,6 +1,6 @@
 ---
 name: source-evaluation
-description: Bewertet eine Quelle bezogen auf einen konkreten Claim nach Direktheit, Aktualität, Primärnähe, Fachnähe, Methodentransparenz und Unabhängigkeit. Verwenden bei Research-Claims, wenn die Eignung oder Stärke einer konkreten Quelle eingeordnet werden muss.
+description: Bewertet eine Quelle bezogen auf einen konkreten Claim nach Direktheit, Aktualität, Primärnähe, Fachnähe, Methodentransparenz und Unabhängigkeit. Verwenden bei Research-Claims, wenn die Eignung oder Stärke einer konkreten Quelle eingeordnet werden muss; nicht zur vollständigen Wahrheitsprüfung des Claims und nicht als Citation Audit einer fertigen Synthese.
 ---
 
 # Skill: source-evaluation

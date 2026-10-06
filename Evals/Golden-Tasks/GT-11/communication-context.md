@@ -7,4 +7,3 @@
 - Es gibt keine bestätigte Priorisierung.
 - Ziel der Nachricht: Führungskraft soll entscheiden, welche Aufgabe Vorrang hat.
 - Kein Konflikt und keine persönliche Beschwerde.
-- Keine besondere Voice- oder Stilvorgabe.

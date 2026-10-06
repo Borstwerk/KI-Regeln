@@ -1,6 +1,6 @@
 ---
 name: skill-security-review
-description: Prüft einen Agent-Skill vor Aktivierung oder Freigabe auf Trust-/Admission-, Supply-Chain-, Berechtigungs-, Prompt-Injection-, Datenexfiltrations-, Script-, Remote-Dependency-, External-Action- und Update-Risiken. Verwenden bei externen oder mächtigen Skills und bei sicherheitsrelevanten Upstream-Änderungen; nicht als allgemeiner fachlicher Skillreview ohne Sicherheitsbezug.
+description: Prüft einen Agent-Skill vor Aktivierung oder Freigabe auf Trust-/Admission-, Supply-Chain-, Berechtigungs-, Prompt-Injection-, Datenexfiltrations-, Script-, Remote-Dependency-, External-Action- und Update-Risiken. Verwenden bei externen oder mächtigen Skills und bei sicherheitsrelevanten Upstream-Änderungen; nicht als allgemeiner fachlicher Skillreview und nicht für die allgemeine Admission eines eigenständigen MCP-Servers, Plugins, Connectors oder Hooks, sofern dieser nicht Teil des Skill-Bundles ist.
 ---
 
 # Skill Security Review

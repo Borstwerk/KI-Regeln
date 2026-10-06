@@ -392,6 +392,14 @@ def validate_golden_tasks(by_id: dict[str, dict[str, Any]]) -> int:
 
         workflow = data.get("workflow") or {}
         allowed = workflow.get("allowed") or [] if isinstance(workflow, dict) else []
+        if expected_domain == "none":
+            if optional:
+                err("GOLDEN_DOMAIN", f"{task_id}: expected_domain none conflicts with optional skills {sorted(optional)}")
+            secondary = data.get("allowed_secondary_domains") or []
+            if secondary:
+                err("GOLDEN_DOMAIN", f"{task_id}: expected_domain none conflicts with secondary domains {sorted(secondary)}")
+            if isinstance(workflow, dict) and (workflow.get("required") is True or allowed):
+                err("GOLDEN_WORKFLOW", f"{task_id}: expected_domain none conflicts with workflow routing")
         if isinstance(workflow, dict) and workflow.get("required") is True and not allowed:
             err("GOLDEN_WORKFLOW", f"{task_id}: workflow.required=true but no allowed workflow is listed")
         for workflow_path in allowed:

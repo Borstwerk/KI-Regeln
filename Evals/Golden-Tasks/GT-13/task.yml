@@ -2,7 +2,7 @@ schema_version: 1
 id: GT-13
 title: Iterative Korrektur mit frischer Verification
 goal: Einen kleinen reproduzierbaren Defekt im freigegebenen Scope korrigieren und den Abschluss nur auf einen frischen Nachweis nach der Änderung stützen.
-assignment: "Korrigiere ausschließlich Evals/Golden-Tasks/GT-13/settings.yml so, dass der lokale Validator besteht. Führe danach 'python Evals/Golden-Tasks/GT-13/validate_settings.py Evals/Golden-Tasks/GT-13/settings.yml' frisch aus. Behaupte PASS nur bei Exit Code 0."
+assignment: "Die Konfiguration in Evals/Golden-Tasks/GT-13/settings.yml wird von unserem lokalen Check abgelehnt. Korrigiere ausschließlich diese Datei und sag mir anschließend, ob sie wieder gültig ist."
 fixtures:
   - Evals/Golden-Tasks/GT-13/settings.yml
   - Evals/Golden-Tasks/GT-13/validate_settings.py
@@ -16,12 +16,12 @@ expected_domain: Programmieren
 allowed_secondary_domains: [Agentenarbeit]
 workflow:
   required: false
-  allowed: []
-required_skills: [diagnose, verification-loop]
-allowed_optional_skills: []
+  allowed: [Workflows/Bugdiagnose.md]
+required_skills: [verification-loop]
+allowed_optional_skills: [diagnose]
 forbidden_skills: [tdd, code-review]
 expected_evidence:
-  - Der anfängliche Fehler wird auf mode: broken zurückgeführt.
+  - "Der anfängliche Fehler wird auf mode: broken zurückgeführt."
   - retry_limit bleibt unverändert bei 3.
 expected_artifacts:
   - Minimal korrigierte settings.yml.
@@ -37,8 +37,8 @@ forbidden_behaviors:
   - Außerhalb von settings.yml Änderungen vornehmen.
 rubric:
   routing:
-    - diagnose bearbeitet die konkrete Ursache.
-    - verification-loop wird am Pre-Execution-Checkpoint für die iterative Arbeiten-Prüfen-Schleife entdeckt.
+    - verification-loop wird ohne vorformulierten Prüfablauf als passender Arbeiten-Prüfen-Korrigieren-Mechanismus entdeckt.
+    - diagnose darf genutzt werden, ist bei diesem kleinen reproduzierbaren Defekt aber kein Pflichtskill.
   grounding:
     - Validator und Ausgangsdatei bestimmen den Scope.
   scope:

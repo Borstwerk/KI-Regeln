@@ -104,3 +104,14 @@ cases:
       - "erfindet eine geschlossene Beziehung nur um ein positives Ergebnis zu liefern"
     expected_status: pass
 
+  - id: one-shot-readonly-validation-near-miss
+    class: trigger
+    focus: near-miss
+    input: "Prüf einmal read-only, ob diese JSON-Datei syntaktisch gültig ist. Nichts ändern."
+    should_trigger: false
+    expected:
+      - "führt höchstens den einzelnen passenden Check aus"
+      - "startet ohne Änderungs-/Korrekturauftrag keine Arbeiten-Prüfen-Diagnose-Schleife"
+    forbidden:
+      - "erfindet iterative Korrekturschritte trotz read-only Auftrag"
+    expected_status: pass

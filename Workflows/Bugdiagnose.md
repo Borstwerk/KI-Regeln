@@ -11,7 +11,7 @@ diagnose
 → optional domain-modeling bei unklarer Fachbedeutung
 → Fix
 → verification-loop
-→ code-review
+→ code-review bei nichttrivialer oder risikoreicher Codeänderung
 ```
 
 ## 1. Diagnose
@@ -60,13 +60,15 @@ Prüft:
 
 ## 5. Review
 
-`code-review`
+`code-review` verwenden, wenn Quellcode geändert wurde und der Fix nicht trivial ist, relevante Nachbarlogik berührt oder ein zusätzlicher unabhängiger Review materiell Risiko senkt.
 
-Prüft insbesondere:
+Prüft dann insbesondere:
 
 - Fix trifft Root Cause statt Symptom;
 - kein unnötiger Scope;
 - keine fragile Sonderbehandlung ohne Begründung.
+
+Bei einer eng begrenzten Konfigurations- oder Datendatei-Korrektur mit deterministischem Akzeptanzcheck und ohne Codeänderung ist `code-review` kein Pflichtschritt.
 
 ## Blocker
 

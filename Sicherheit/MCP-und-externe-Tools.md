@@ -4,6 +4,16 @@
 
 Externe Toolserver und Integrationen erweitern die Fähigkeiten eines Agenten und damit auch seine Angriffsfläche.
 
+## Ownership nach Objekttyp
+
+Nicht jede externe Integration ist ein Skill-Bundle.
+
+- **Externer oder mächtiger Agent-Skill:** `skill-security-review` besitzt die Bundle-Admission einschließlich Provenance, Remote Dependencies, Prompt-Injection- und Permission-Risiken.
+- **Eigenständiger MCP-Server, Plugin, Connector oder Hook:** diese Datei bildet die allgemeine Admission-Baseline. `tool-permission-review` prüft den Capability-/Rechte-Scope, wenn neue Lese-, Schreib-, Netzwerk-, Execute- oder Produktionsrechte vorgesehen sind.
+- **Verdächtige oder instruktionshaltige externe Inhalte/Tooloutputs:** `prompt-injection-review` nur dann zusätzlich einsetzen, wenn genau diese Trust-Boundary-Frage einen eigenen Prüfjob bildet.
+
+Ein externer Tooltyp wird nicht allein wegen seiner Externalität zu `skill-security-review` geroutet. Umgekehrt beweist ein bestandener Permission-Review weder Supply-Chain-Vertrauen noch sichere Inhalte.
+
 ## Vor Nutzung prüfen
 
 - Wer betreibt das Tool?

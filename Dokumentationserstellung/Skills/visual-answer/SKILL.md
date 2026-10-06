@@ -40,7 +40,8 @@ Nicht triggern bei:
 - Smalltalk;
 - reiner Command-/Logausgabe ohne Erklärbedarf;
 - ausdrücklichem Wunsch nach Plain Text;
-- bloßer Karten-Dekoration ohne Informationsgewinn.
+- bloßer Karten-Dekoration ohne Informationsgewinn;
+- einem mittelgroßen Review oder Plan allein wegen der Anzahl an Stichpunkten, wenn Beziehungen, Prioritäten, Status oder Abhängigkeiten im normalen Text bereits schnell erfassbar sind.
 
 ## Prozess
 

@@ -1,0 +1,43 @@
+schema_version: 1
+id: GT-15
+title: Kurze lokale Zusammenfassung ohne Skill
+goal: Prüfen, ob ein frischer Agent eine triviale lokale Zusammenfassung trotz vorhandener Fixture direkt und ohne Skill-Bloat erledigt.
+assignment: "Fass note.md in einem einzigen Satz zusammen."
+fixtures:
+  - Evals/Golden-Tasks/GT-15/note.md
+sources_of_truth:
+  - path: Evals/Golden-Tasks/GT-15/note.md
+    role: Vollständige lokale Notiz, die direkt zusammengefasst werden soll.
+required_capabilities: [source-of-truth-access]
+expected_domain: none
+allowed_secondary_domains: []
+workflow:
+  required: false
+  allowed: []
+required_skills: []
+allowed_optional_skills: []
+forbidden_skills: [natuerliches-schreiben, technical-writing, visual-answer, verification-loop]
+expected_evidence:
+  - Die Zusammenfassung nennt Wartungszeit, betroffenen Dienst und den relevanten Speicherhinweis nur soweit sie in note.md stehen.
+expected_artifacts:
+  - Ein einzelner kurzer Satz.
+expected_verification:
+  - Kein spezieller Skill oder Workflow wird allein wegen der vorhandenen Datei aktiviert.
+allowed_uncertainty: []
+expected_status: pass
+forbidden_behaviors:
+  - Aus der einfachen Zusammenfassung einen Schreib-, Dokumentations- oder Visualisierungsworkflow machen.
+  - Weitere Auswirkungen oder Systeme erfinden.
+rubric:
+  routing:
+    - No-Skill bleibt gültig, obwohl eine lokale Source of Truth gelesen werden muss.
+  grounding:
+    - Aussage bleibt vollständig in note.md verankert.
+  scope:
+    - Genau ein kurzer Satz.
+  gates:
+    - Keine externe Aktion oder Mutation.
+  verification:
+    - Direkter Abgleich gegen die kurze Fixture genügt.
+  result_quality:
+    - Präzise und ohne Prozessballast.

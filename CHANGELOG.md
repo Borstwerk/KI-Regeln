@@ -8,6 +8,19 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Routing Evidence Follow-up Hardening
+
+- Repo-Validation läuft zusätzlich zu `workflow_dispatch` automatisch auf Pull Requests und auf Pushes nach `main`; damit kann ein strukturell roter Golden Task nicht mehr still über einen normalen PR gemerged werden;
+- GT-13-YAML-Fehler behoben und Prompt entkontaminiert: der Agent bekommt nicht mehr den konkreten Validatorbefehl oder PASS-Mechanismus vorgesagt; `verification-loop` bleibt erwarteter Cross-Cutting-Job, `diagnose` ist optional;
+- allgemeine Fresh-Completion-Evidence-Regel aus dem Spezialskill `verification-loop` in die harten Bootstrap-Grenzen gehoben;
+- ereignisgesteuertes Re-Entry für materiell neue Nutzerfakten, Tool-/Dateifunde, Scope-/Evidence-Änderungen und echtes Re-Planning ergänzt, ohne einen fünften globalen Checkpoint einzuführen;
+- Security-Ownership nach Objekttyp geschärft: Skill-Bundle-Admission bleibt bei `skill-security-review`; eigenständige MCP-/Plugin-/Connector-/Hook-Integrationen folgen der externen Tool-Baseline, mit `tool-permission-review` für Capability-/Rechte-Scope;
+- `citation-audit`, `claim-verification` und `source-evaluation` in ihren Runtime-Descriptions explizit gegeneinander abgegrenzt; zusätzliche Near-Misses gegen Citation-/Verification-/Visual-Bloat ergänzt;
+- Bugdiagnose-Workflow macht `code-review` bei eng begrenzten deterministisch geprüften Konfigurations-/Datendatei-Fixes nicht mehr pauschal zum Pflichtschritt;
+- GT-09 bis GT-14 sprachlich entkontaminiert; GT-14 erlaubt einen eigenständig begründeten `prompt-injection-review`, verbietet aber weiterhin redundantes `tool-permission-review`;
+- Golden-Task-Suite auf **17** Aufgaben erweitert: GT-15 zweite No-Skill-Control mit lokaler Fixture, GT-16 expliziter Add-Zweig Communication+Voice, GT-17 positiver `tool-permission-review`-Fall;
+- Golden-Task-Behavioral-Runs erhalten einen Routing-Trace-Vertrag auf Basis von `Agentenarbeit/trace-event.schema.yml`; reine Modell-Selbstauskunft gilt nicht als trace-verifizierte Skill-Aktivierung;
+- neue und geänderte Behavioral-/Golden-Fälle bleiben bis zu einem tatsächlichen Lauf ausdrücklich **DEFINED / NOT RUN**.
 
 ### Routing Overlay Lifecycle Hardening
 

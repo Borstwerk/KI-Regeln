@@ -2,7 +2,7 @@ schema_version: 1
 id: GT-12
 title: Research-Synthese mit spätem Citation Audit
 goal: Ein publikationsreifes Briefing erzeugen und den Citation Audit erst am Pre-Completion-Zustand gegen die fertige Synthese anwenden.
-assignment: "Erstelle aus sources.md ein kurzes publikationsreifes Briefing zu NovaDesk 3.2. Nutze nur ausreichend belegte Aussagen und stelle sicher, dass die fertige Fassung ihre wesentlichen Faktenclaims tatsächlich trägt."
+assignment: "Schreibe aus sources.md ein kurzes Briefing zu NovaDesk 3.2, das wir so veröffentlichen könnten. Bleib bei dem, was die vorliegenden Quellen tatsächlich hergeben."
 fixtures:
   - Evals/Golden-Tasks/GT-12/sources.md
 sources_of_truth:

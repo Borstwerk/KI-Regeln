@@ -1,6 +1,6 @@
 ---
 name: citation-audit
-description: Prüft fertige oder weitgehend fertige Research-Synthesen darauf, ob wesentliche Faktenclaims tatsächlich durch passende Quellen und konkrete Evidence gestützt werden. Verwenden vor Abschluss oder Veröffentlichung eines Research-Texts, wenn Citation Coverage und Zitationsqualität überprüft werden sollen.
+description: Prüft fertige oder weitgehend fertige Research-Synthesen darauf, ob wesentliche Faktenclaims durch die tatsächlich zugeordneten Quellen und konkrete Evidence gestützt werden. Verwenden vor Abschluss oder Veröffentlichung, wenn Claim-zu-Zitation-Support materiell geprüft werden muss; nicht für die frühe Qualitätsbewertung einzelner Quellen oder die isolierte Verifikation eines einzelnen Claims.
 ---
 
 # Skill: citation-audit
@@ -24,6 +24,13 @@ Eine fertige oder weitgehend fertige Research-Synthese darauf prüfen, ob wesent
 6. Prüfe auf Phantomzitate und nicht verifizierte Quellen.
 7. Prüfe, ob relevante Gegenbelege im Text fair dargestellt sind.
 8. Korrigiere oder markiere schwache Claims statt sie durch mehr Links kosmetisch zu verdecken.
+
+## Abgrenzung
+
+- **Quelle für einen Claim bewerten, bevor oder während recherchiert wird** → `source-evaluation`.
+- **Einen einzelnen bestehenden Claim gegen Evidence verifizieren** → `claim-verification`.
+- **Einen fertigen oder weitgehend fertigen Text claimweise gegen seine zugeordneten Zitate/Evidence prüfen** → `citation-audit`.
+- Ein fertiger Text allein ist noch kein Trigger. Wenn weder Publikations-/Belegpflicht noch ein materieller Claim-zu-Zitation-Check nötig ist, keinen Audit aus Vollständigkeitsdenken erzwingen.
 
 ## Ergebnisformat
 
