@@ -132,15 +132,15 @@ Die One-Sided-Signale sind Review-Hinweise und keine Pass-/Fail-Regeln. Insbeson
 
 Phase 2 ergänzt gezielt elf systemisch wirksame Evalpacks mit je fünf Fällen, insgesamt 55 neue Cases: `task-graph`, `verification-loop`, `delegation-contract`, `agent-eval`, `docs-plan`, `technical-writing`, `reference-docs`, `web-search`, `research-plan`, `claim-verification` und `skill-review`. Diese Skills wechseln dadurch ausschließlich von `none` auf `partial`; Maturity bleibt unverändert. Die Priorisierung ist in `Coverage-Audit-2026-08-25.md` dokumentiert.
 
-Zusätzlich besteht unter `Golden-Tasks/` eine getrennte systemweite Suite mit acht lokalen, reproduzierbaren End-to-End-Aufgaben (`GT-01` bis `GT-08`). Der Repo-Validator prüft deren Struktur, nicht das Modellverhalten.
+Zusätzlich besteht unter `Golden-Tasks/` eine getrennte systemweite Suite mit 14 lokalen, reproduzierbaren End-to-End-Aufgaben (`GT-01` bis `GT-14`). Der Repo-Validator prüft deren Struktur, nicht das Modellverhalten.
 
 Für Behavioral-Smokes wird eine Execution View reproduzierbar aus `task.yml` projiziert. Der Runner sieht Auftrag, Fixtures, Sources of Truth und Capability-Setup, aber keine Routing-/Skill-Erwartungen, Statusvorgaben, Forbidden-Kriterien oder Rubrik. Erst anschließend bewertet die Judge View gegen die vollständige Taskdefinition. Details stehen in `Golden-Tasks/README.md`.
 
 `GT-04` erwartet bewusst `partial`, weil die Fixture keine bestätigte Root Cause beweist. Dieser Status ist dort epistemisch korrektes Zielverhalten, kein automatischer Golden-Task-Fehlschlag.
 
-Die Existenz der 55 neuen Skill-Cases und acht Golden Tasks ist kein Behavioral-Pass-Nachweis. Ausgeführte Smokes werden separat dokumentiert.
+Die Existenz der 55 neuen Skill-Cases und 14 Golden Tasks ist kein Behavioral-Pass-Nachweis. Ausgeführte Smokes werden separat dokumentiert.
 
-## Fallstruktur
+Cross-Cutting-Systemtests: `GT-09` bis `GT-14` prüfen Presentation-Discovery, No-Skill-Routing, Primary Refinement, späte Assurance-Trigger, frische Verification Evidence und Security-Deduplizierung. Diese Golden Tasks sind **definiert, aber noch nicht behavioral ausgeführt oder bestanden**.\n\n## Fallstruktur
 
 Jeder Fall beschreibt mindestens:
 

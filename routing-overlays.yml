@@ -1,4 +1,4 @@
-schema_version: 1
+schema_version: 2
 
 # Kleine globale "don't forget"-Liste für domänenübergreifende Skills.
 #
@@ -6,22 +6,29 @@ schema_version: 1
 # entscheidet weiterhin ausschließlich die Description / Near-Miss-Grenze
 # der jeweiligen SKILL.md.
 #
-# Der Router prüft diese Liste erst NACH dem primären fachlichen Routing.
+# checkpoints steuern nur, WANN ein Kandidat erneut geprüft werden soll.
+# Sie sind keine zweite Triggerwahrheit.
 overlays:
   - skill: visual-answer
     phase: presentation
+    checkpoints: [post-primary, pre-output]
 
   - skill: adressatengerechte-kommunikation
     phase: communication
+    checkpoints: [post-primary]
 
   - skill: citation-audit
     phase: assurance
+    checkpoints: [pre-completion]
 
   - skill: verification-loop
     phase: assurance
+    checkpoints: [pre-execution]
 
   - skill: skill-security-review
     phase: security
+    checkpoints: [pre-execution]
 
   - skill: tool-permission-review
     phase: security
+    checkpoints: [pre-execution]

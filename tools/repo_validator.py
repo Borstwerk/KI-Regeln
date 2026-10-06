@@ -352,8 +352,9 @@ def validate_golden_tasks(by_id: dict[str, dict[str, Any]]) -> int:
         seen_ids.add(task_id)
         if task_path.parent.name != task_id:
             err("GOLDEN_ID", f"{ref}: directory {task_path.parent.name} != id {task_id}")
-        if data.get("expected_domain") not in areas:
-            err("GOLDEN_DOMAIN", f"{task_id}: unknown expected_domain {data.get('expected_domain')}")
+        expected_domain = data.get("expected_domain")
+        if expected_domain != "none" and expected_domain not in areas:
+            err("GOLDEN_DOMAIN", f"{task_id}: unknown expected_domain {expected_domain}")
         for area in data.get("allowed_secondary_domains") or []:
             if area not in areas:
                 err("GOLDEN_DOMAIN", f"{task_id}: unknown secondary domain {area}")
@@ -361,6 +362,8 @@ def validate_golden_tasks(by_id: dict[str, dict[str, Any]]) -> int:
         required = set(data.get("required_skills") or [])
         optional = set(data.get("allowed_optional_skills") or [])
         forbidden = set(data.get("forbidden_skills") or [])
+        if expected_domain == "none" and required:
+            err("GOLDEN_DOMAIN", f"{task_id}: expected_domain none conflicts with required skills {sorted(required)}")
         for sid in sorted(required | optional | forbidden):
             if sid not in by_id:
                 err("GOLDEN_SKILL", f"{task_id}: unknown skill id {sid}")

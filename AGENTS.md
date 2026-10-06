@@ -21,9 +21,11 @@ Problem / Ziel des Nutzers
 → Aufgabe fachlich einordnen
 → passenden Workflow prüfen
 → primären Skill-Satz wählen
-→ kleinen Cross-Cutting-Overlay-Pass ausführen
+→ Cross-Cutting-Kandidaten am passenden Checkpoint prüfen
+→ Primärrouting bei Bedarf verfeinern statt Skills nur zu addieren
 → nur wirklich fehlende Informationen klären
 → ausführen
+→ vor Completion/Output relevante Overlays erneut prüfen
 → verifizieren / reviewen / gaten
 ```
 
@@ -33,13 +35,16 @@ Problem / Ziel des Nutzers
 2. **Lokale Wahrheit zuerst.** Projektregeln, lokale Sources of Truth, vorhandene Artefakte und Nutzerangaben schlagen allgemeine Repository-Regeln. Allgemeine Arbeitsweise ist zentral; konkrete Wahrheit bleibt lokal.
 3. **Aufgabe einordnen.** Aus dem realen Problem geeignete Domäne(n) und vorhandene Workflows ableiten. Nutze `Dokumentation/Skill-Handbuch.md` als Master-Router und `workflow-index.yml` für vorhandene Workflows.
 4. **Primären Skill-Satz wählen.** Nutze `skill-catalog.yml`; lade nur die fachlich tatsächlich benötigten `SKILL.md`-Dateien und deren zwingende Abhängigkeiten. `related` ist ein Routinghinweis, kein Ladebefehl.
-5. **Cross-Cutting-Overlay-Pass.** Prüfe danach die kleine Liste in `routing-overlays.yml`. Lade nicht alle Overlay-Skills: lies nur die kanonische Description der dort genannten Kandidaten und aktiviere einen Overlay-Skill nur, wenn dessen eigene Trigger-/Near-Miss-Grenze für den konkreten Auftrag materiell passt. `routing-overlays.yml` enthält keine eigene Triggerwahrheit.
-6. **Nur notwendige Lücken klären.** Frage nach Informationen, die für eine belastbare Bearbeitung wirklich fehlen. Keine vollständige Projekterhebung oder unnötige sensible Datensammlung nur deshalb durchführen, weil ein Skill sie theoretisch verwenden könnte.
-7. **Vor Ausführung prüfen.** `maturity`, `eval_coverage`, `capabilities` und `related` im Katalog sowie die Skill-Frontmatter beachten. Toolverfügbarkeit ist keine Autorisierung. Ein Eval-Pfad oder definierte Fälle bedeuten nicht, dass Evals bestanden wurden.
-8. **Capability-Runtime wählen.** Wenn eine externe App, ein Account oder ein Dienst materiell helfen würde, zuerst vorhandene native Capabilities und bereits verbundene Plugins/Apps prüfen. Ist keine passende Verbindung vorhanden, aber eine geeignete Integration verfügbar, Installation/Verbindung transparent anbieten statt reflexartig manuellen Export/Copy-Paste zu verlangen. READ, WRITE und extern sichtbare ACTIONS getrennt behandeln.
-9. **Ausführen.** Fachliche Wahrheit nicht aus allgemeinen Regeln erfinden. Riskante oder externe Aktionen nur innerhalb der ausdrücklich vorhandenen Rechte/Gates.
-10. **Verifizieren.** Ergebnis gegen Auftrag, lokale Sources of Truth, relevante Evals/Checks und Skill-Grenzen prüfen.
-11. **Review/Gate.** Offene Annahmen, Blocker, nicht ausgeführte Prüfungen und notwendige menschliche Freigaben sichtbar machen.
+5. **Cross-Cutting-Checkpoints anwenden.** Nutze `routing-overlays.yml` nicht als einmaligen Pass, sondern nur an den dort genannten Checkpoints. Prüfe jeweils ausschließlich die kanonische Description der Kandidaten, deren Checkpoint erreicht ist.
+6. **Primary verfeinern statt aufblasen.** Wenn ein Overlay-Kandidat laut eigener Description der spezifischere Primärowner für den Auftrag ist, darf er einen vorläufig gewählten generischen Skill ersetzen. Beide bleiben nur aktiv, wenn jeder einen eigenen notwendigen Job besitzt.
+7. **Nur notwendige Lücken klären.** Frage nach Informationen, die für eine belastbare Bearbeitung wirklich fehlen.
+8. **Vor Ausführung prüfen.** `maturity`, `eval_coverage`, `capabilities` und `related` im Katalog sowie die Skill-Frontmatter beachten. Toolverfügbarkeit ist keine Autorisierung.
+9. **Capability-Runtime wählen.** Wenn eine externe App, ein Account oder ein Dienst materiell helfen würde, zuerst native Capabilities und bereits verbundene Plugins/Apps prüfen. READ, WRITE und extern sichtbare ACTIONS getrennt behandeln.
+10. **Pre-Execution-Security deduplizieren.** `skill-security-review` ist Owner für Admission eines externen oder mächtigen Skill-Bundles und umfasst dessen Berechtigungsrisiken. `tool-permission-review` zusätzlich nur laden, wenn das Berechtigungsdesign selbst einen eigenständigen Prüfauftrag bildet.
+11. **Ausführen.** Fachliche Wahrheit nicht aus allgemeinen Regeln erfinden. Riskante oder externe Aktionen nur innerhalb der ausdrücklich vorhandenen Rechte/Gates.
+12. **Vor Completion und Output erneut prüfen.** Späte Trigger dürfen nicht verloren gehen: `citation-audit` kann erst nach Entstehung einer weitgehend fertigen Synthese sinnvoll werden; `visual-answer` kann aufgrund der tatsächlich entstandenen Informationsdichte am `pre-output`-Checkpoint neu relevant werden.
+13. **Verifizieren.** Ergebnis gegen Auftrag, lokale Sources of Truth, relevante Evals/Checks und Skill-Grenzen prüfen.
+14. **Review/Gate.** Offene Annahmen, Blocker, nicht ausgeführte Prüfungen und notwendige menschliche Freigaben sichtbar machen.
 
 ## Kommunikation der Skill-Auswahl
 
@@ -58,7 +63,7 @@ Typischer Startkontext:
 - relevante lokale Projektregeln / Sources of Truth;
 - `Dokumentation/Skill-Handbuch.md` nur zum Primärrouting;
 - passende Einträge aus `skill-catalog.yml`;
-- `routing-overlays.yml` als kleine globale Zweitprüfung;
+- `routing-overlays.yml` als kleine globale Checkpoint-Liste;
 - danach nur die tatsächlich ausgewählten Skills bzw. Workflows.
 
 Nicht erforderlich: komplettes Repository, alle katalogisierten Skills, vollständige Nutzungsdokumentation oder alle Fachhandbücher.

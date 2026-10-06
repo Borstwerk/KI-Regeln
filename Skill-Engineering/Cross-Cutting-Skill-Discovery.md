@@ -2,269 +2,227 @@
 
 ## Problem
 
-Problem-first Routing löst die erste Frage gut:
+Problem-first Routing beantwortet zuerst:
 
 > Welcher fachliche Skill bearbeitet den eigentlichen Auftrag?
 
-Bei einem größeren Skillbestand entsteht aber eine zweite Frage:
+Bei einem größeren Skillbestand entsteht zusätzlich:
 
-> Gibt es einen domänenübergreifenden Skill, den der Nutzer nicht kennen muss, der das Ergebnis trotzdem materiell verbessert oder absichert?
+> Gibt es einen domänenübergreifenden Skill, den der Nutzer nicht kennen muss, der das Ergebnis materiell verbessert, absichert oder das vorläufige Routing präzisiert?
+
+Diese zweite Entdeckung ist Systemarbeit. Sie darf weder dem Nutzer zugeschoben werden noch den aktiven Skill-Satz aufblasen.
+
+## Grundprinzip
+
+> Der Werkzeugschrank darf groß sein. Der aktive Werkzeuggürtel soll klein bleiben.
+
+Cross-Cutting Discovery besteht deshalb aus **wenigen Kandidaten** und **mehreren kleinen Checkpoints** statt aus einem vollständigen zweiten Katalogscan.
+
+## Warum ein einmaliger Overlay-Pass nicht genügt
+
+Einige Trigger sind schon am Anfang sichtbar:
+
+- konkrete Empfänger-/Hierarchiesituation;
+- externer oder mächtiger Skill;
+- neue Schreib-/Execute-/Produktionsrechte;
+- iterativer Implementierungsauftrag mit reproduzierbaren Checks.
+
+Andere Trigger entstehen erst während der Arbeit:
+
+- `citation-audit` braucht eine fertige oder weitgehend fertige Research-Synthese;
+- `visual-answer` kann erst anhand der tatsächlich entstandenen Informationsdichte sicher sinnvoll werden.
+
+Darum gilt:
+
+~~~text
+PRIMARY
+→ POST-PRIMARY
+→ PRE-EXECUTION
+→ EXECUTION
+→ PRE-COMPLETION
+→ PRE-OUTPUT
+→ COMPLETION
+~~~
+
+Nicht jeder Auftrag nutzt jeden Checkpoint. Geprüft werden nur die wenigen Kandidaten, die in `routing-overlays.yml` für diesen Checkpoint eingetragen sind.
+
+## routing-overlays.yml
+
+Die Datei ist **Discovery-Metadaten**, keine Triggerwahrheit.
+
+Sie enthält:
+
+- `skill` – kanonische Skill-ID;
+- `phase` – Cross-Cutting-Rolle;
+- `checkpoints` – Zeitpunkte, an denen die Description erneut geprüft werden soll.
+
+Beispiel:
+
+~~~yaml
+- skill: citation-audit
+  phase: assurance
+  checkpoints: [pre-completion]
+~~~
+
+Das bedeutet ausschließlich:
+
+> Wenn ein Auftrag den Pre-Completion-Zustand erreicht, prüfe kurz die kanonische Description von `citation-audit` gegen das jetzt vorhandene Ergebnis.
+
+Es bedeutet nicht, den Skill automatisch zu aktivieren, Triggertexte zu duplizieren oder fehlende Capability zu simulieren.
+
+## Checkpoints
+
+### post-primary
+
+Direkt nach dem vorläufigen fachlichen Routing. Hier kann ein domänenübergreifender Zusatznutzen sichtbar werden oder ein **spezifischerer Primärowner** entdeckt werden.
 
 Beispiel:
 
 ~~~text
-"Vergleiche drei Architekturvarianten
-und gib mir eine Empfehlung."
+"Schreib meinem Chef, dass ich A oder B schaffen kann,
+aber nicht beides. Er soll priorisieren."
+
+vorläufig:
+→ natuerliches-schreiben
+
+post-primary:
+→ adressatengerechte-kommunikation ist der spezifischere Owner
+
+Ergebnis:
+→ adressatengerechte-kommunikation
+→ natuerliches-schreiben nur zusätzlich bei eigenem Voice-/Rewrite-Job
 ~~~
 
-Primärer fachlicher Skill:
+### pre-execution
+
+Vor Toolnutzung, Änderungen, externer Aktivierung oder iterativer Ausführung.
+
+Typische Kandidaten:
+
+- `verification-loop`;
+- `skill-security-review`;
+- `tool-permission-review`.
+
+Hier müssen Rechte und Gates stehen, bevor der erste riskante Schritt passiert.
+
+### pre-completion
+
+Wenn ein Ergebnis weitgehend vorliegt, aber noch kein Fertig-/Pass-/Publikationsclaim abgegeben wurde.
+
+Typischer Kandidat: `citation-audit`.
 
 ~~~text
-architecture-tradeoff-analysis
+research-synthesis erzeugt Draft
+→ pre-completion
+→ citation-audit prüft wichtige Claims gegen tatsächliche Evidence
+→ erst danach Completion/Publication-Readiness behaupten
 ~~~
 
-Die Aufgabenform kann zusätzlich `visual-answer` rechtfertigen, obwohl der Nutzer den Skill nicht kennt, ihn nicht nennt und nicht einmal wissen muss, dass eine visuelle Antwort möglich ist.
+### pre-output
 
-Diese zweite Entdeckung ist Aufgabe des Routers.
+Unmittelbar vor der finalen Darstellung.
 
-## Grundprinzip
+Typischer Kandidat: `visual-answer`.
 
-> Skill Discovery ist Systemarbeit, nicht Nutzerarbeit.
+Der Skill darf bereits `post-primary` ausgewählt worden sein. `pre-output` ist die zweite Chance, wenn erst das entstandene Ergebnis zeigt, dass Vergleich, Hierarchie, Timeline, Findings oder Abhängigkeiten visuell wesentlich schneller erfassbar wären.
 
-Der Nutzer darf Skillnamen verwenden. Er muss sie aber nicht kennen.
+## Addieren oder Primärrouting verfeinern?
 
-Ein frischer Agent soll deshalb nicht nur nach fachlicher Domäne routen, sondern nach dem Primärrouting einen kleinen globalen Overlay-Pass ausführen.
+Overlay bedeutet nicht automatisch `Primary + Overlay`.
 
-## Mehrstufiges Routing
+**Add:** Der Overlay-Skill besitzt einen eigenen zusätzlichen Job, etwa `architecture-tradeoff-analysis + visual-answer`.
 
-~~~text
-Nutzerauftrag
-      ↓
-1. PRIMARY
-   Was ist der eigentliche fachliche Job?
-      ↓
-2. WORKFLOW
-   Ist ein vorhandener mehrphasiger Workflow nötig?
-      ↓
-3. OVERLAY PASS
-   Gibt es domänenübergreifende Skills,
-   deren eigene Triggerbeschreibung jetzt passt?
-      ↓
-4. ASSURANCE / GATES
-   Welche Evidence, Reviews oder Freigaben
-   sind für den Completion Claim nötig?
-      ↓
-5. RUNTIME
-   Welche native Capability, Plugin/App oder
-   welcher Fallback führt den Job aus?
-~~~
+**Refine / Replace:** Der Overlay-Kandidat ist für den konkreten Auftrag der spezifischere Owner als ein vorläufig gewählter generischer Skill. Dann wird der redundante generische Skill entfernt, solange kein eigener Job übrig bleibt.
 
-Der Overlay-Pass ersetzt weder primäres Routing noch fachliche Skills.
+Regel:
 
-## routing-overlays.yml
+> Zwei Skills bleiben nur aktiv, wenn jeder einen eigenständigen notwendigen Beitrag liefert.
 
-Die Datei `../routing-overlays.yml` ist absichtlich klein.
+## Security-Deduplizierung
 
-Sie ist keine zweite Skill-Datenbank und enthält keine Triggertexte.
+`skill-security-review` und `tool-permission-review` überschneiden sich absichtlich an der Permission-Grenze, haben aber unterschiedliche Ownership.
 
-Beispielstruktur:
+`skill-security-review` ist Owner, wenn ein externer oder mächtiger Skill aufgenommen/aktiviert werden soll. Bundle, Provenance, Scripts, Remote Dependencies, Prompt Injection, Datenfluss, Rechte und Admission gehören zusammen.
 
-~~~yaml
-- skill: visual-answer
-  phase: presentation
-~~~
-
-Das bedeutet nur:
-
-> Nach dem fachlichen Routing soll der Router die Description von `visual-answer` kurz gegen die konkrete Aufgabe prüfen.
-
-Es bedeutet **nicht**:
-
-- Skill automatisch laden;
-- Skill immer aktivieren;
-- Trigger aus dem Overlay ableiten;
-- einen Skill allein wegen seiner Phase verwenden.
-
-Die Trigger-Wahrheit bleibt in der jeweiligen `SKILL.md`.
-
-## Overlay-Phasen
-
-### presentation
-
-Prüft, ob Form und Darstellung die Nutzbarkeit materiell verbessern.
-
-Beispiel: `visual-answer`.
-
-### communication
-
-Prüft, ob Empfänger, Beziehung, gewünschte Reaktion oder Kommunikationslage die Formulierung materiell bestimmen.
-
-Beispiel: `adressatengerechte-kommunikation`.
-
-### assurance
-
-Prüft, ob ein Ergebnis vor Abschluss zusätzliche Evidence-/Review-Disziplin benötigt.
-
-Beispiele: `citation-audit`, `verification-loop`.
-
-### security
-
-Prüft Cross-Cutting-Risiken, wenn externe Skills, neue Tools oder mächtige Rechte in den Auftrag geraten.
-
-Beispiele: `skill-security-review`, `tool-permission-review`.
-
-Die Phasen sind Routinghilfen, keine Autorisierungs- oder Maturityklassen.
-
-## Algorithmus für einen frischen Agenten
-
-### Schritt 1 – Primären Job finden
-
-Nutze `AGENTS.md`, `Dokumentation/Skill-Handbuch.md`, `skill-catalog.yml` und bei Bedarf `workflow-index.yml`.
-
-Ziel: kleinsten fachlich ausreichenden Skill-/Workflow-Satz bestimmen.
-
-### Schritt 2 – Overlay-Liste lesen
-
-Nur die wenigen IDs aus `routing-overlays.yml` berücksichtigen. Nicht alle zentralen Skills erneut durchsuchen.
-
-### Schritt 3 – Triggerbeschreibung prüfen
-
-Für jeden Overlay-Kandidaten:
-
-1. Catalog-Eintrag prüfen;
-2. Description der `SKILL.md` lesen;
-3. positive Trigger und Near-Miss-Grenzen gegen den realen Auftrag prüfen;
-4. nur bei materiellem Zusatznutzen auswählen.
-
-`related` bleibt ein Hinweis und erzeugt keine automatische Aktivierung.
-
-### Schritt 4 – klein halten
-
-Der Overlay-Pass soll den Skill-Satz nicht aufblasen.
-
-Typischer Auftrag:
-
-~~~text
-1 Primary Skill
-+ 0–1 Presentation/Communication Overlay
-+ nur notwendige Assurance-/Security-Skills
-~~~
-
-Mehrere Overlays sind möglich, müssen aber jeweils einen eigenen notwendigen Job besitzen.
-
-## Beispiele
-
-### Architekturvergleich
-
-~~~text
-Auftrag:
-"Drei Varianten vergleichen und Empfehlung geben."
-
-PRIMARY
-→ architecture-tradeoff-analysis
-
-OVERLAY PASS
-→ visual-answer: ja,
-   weil mehrere Optionen × Kriterien × Empfehlung
-
-ERGEBNIS
-→ fachlich belastbarer Vergleich
-+ scanbare Entscheidung
-~~~
-
-### Kurzer Faktenlookup
-
-~~~text
-Auftrag:
-"Was bedeutet HTTP 404?"
-
-PRIMARY
-→ direkte Antwort / ggf. kein Skill
-
-OVERLAY PASS
-→ visual-answer: nein
-→ communication: nein
-→ assurance: nein
-
-ERGEBNIS
-→ kurze Antwort
-~~~
-
-### Belegte Research-Synthese vor Veröffentlichung
-
-~~~text
-PRIMARY
-→ research-synthesis
-
-OVERLAY / ASSURANCE
-→ citation-audit,
-   wenn der Text weitgehend fertig ist und
-   wichtige Claims gegen konkrete Evidence
-   geprüft werden sollen
-~~~
-
-### Neue externe Agent-Fähigkeit
-
-~~~text
-PRIMARY
-→ eigentlicher Fachjob
-
-SECURITY OVERLAY
-→ skill-security-review,
-   wenn ein externer/mächtiger Skill aktiviert werden soll
-
-→ tool-permission-review,
-   wenn neue Netzwerk-, Schreib-, Execute-
-   oder Produktionsrechte verlangt werden
-~~~
-
-## Menschlicher Einstieg
-
-Ein neuer Nutzer soll nicht zuerst den Skill-Katalog lesen.
-
-Ausreichend ist:
-
-> Beschreibe die Aufgabe in normaler Sprache. KI-Regeln soll selbst passende fachliche Skills, mögliche Cross-Cutting-Overlays und notwendige Reviews auswählen.
-
-Optional kann der Nutzer fragen:
-
-> Welche zusätzlichen Fähigkeiten könnten bei dieser Aufgabe helfen, die ich wahrscheinlich nicht kenne?
-
-Die Antwort soll konkrete relevante Möglichkeiten nennen, nicht den gesamten Katalog auskippen.
-
-## Anti-Patterns
+`tool-permission-review` wird **zusätzlich** nur benötigt, wenn das Berechtigungsmodell selbst einen eigenständigen Design-/Reviewgegenstand bildet, etwa mehrere Tools/Rechte unabhängig vom Skill-Bundle gegeneinander abgewogen werden.
 
 Nicht:
 
 ~~~text
-alle Skills
-→ alle Trigger im Kontext prüfen
-~~~
-
-Nicht:
-
-~~~text
-routing-overlays.yml
-→ alle Overlays automatisch aktivieren
-~~~
-
-Nicht:
-
-~~~text
-Trigger in SKILL.md
-+ zweite Triggerkopie im Overlay
-→ Drift
+externer Skill fordert Shell + Netzwerk
+→ automatisch beide Security-Skills
 ~~~
 
 Sondern:
 
 ~~~text
-Primärraum klein halten
-→ kleine Overlay-Liste
-→ kanonische Skill-Description prüfen
-→ nur materiell passende Skills laden
+Admission eines externen Skills
+→ skill-security-review
+
+separater Permission-Architecture-Job?
+→ ja: zusätzlich tool-permission-review
+→ nein: kein Duplikat
 ~~~
+
+## No-Skill ist ein gültiges Routing-Ergebnis
+
+Ein guter Router muss nicht nur den richtigen Skill finden, sondern unnötige Skills vermeiden.
+
+~~~text
+"Was bedeutet HTTP 404?"
+
+PRIMARY
+→ none
+
+OVERLAYS
+→ none
+
+ERGEBNIS
+→ direkte kurze Antwort
+~~~
+
+Golden Tasks dürfen deshalb `required_skills: []`, `fixtures: []`, `sources_of_truth: []` und `expected_domain: none` verwenden, wenn genau diese Zurückhaltung geprüft werden soll.
+
+## Algorithmus für einen frischen Agenten
+
+1. Nutzerproblem und lokale Wahrheit bestimmen.
+2. Primärdomäne/Workflow problem-first wählen.
+3. Kleinsten fachlich ausreichenden Primärskill-Satz wählen – einschließlich `none`.
+4. Am `post-primary`-Checkpoint nur dafür registrierte Overlay-Kandidaten gegen ihre Description prüfen.
+5. Falls ein Kandidat spezifischerer Owner ist, Primärrouting verfeinern und redundanten generischen Skill entfernen.
+6. Am `pre-execution`-Checkpoint Verification-/Security-Kandidaten prüfen und Rechte/Gates klären.
+7. Aufgabe ausführen.
+8. Am `pre-completion`-Checkpoint späte Assurance-Trigger gegen das jetzt vorhandene Ergebnis prüfen.
+9. Am `pre-output`-Checkpoint Presentation-Kandidaten gegen die tatsächliche Informationsform prüfen.
+10. Completion Claim nur auf tatsächlich verifizierte Evidence begrenzen.
+
+## Anti-Bloat-Regel
+
+Typischer Auftrag:
+
+~~~text
+0–1 fachlicher Primärowner
++ nur notwendige zusätzliche Fachskills
++ 0–1 Presentation/Communication-Overlay
++ nur eigenständig begründete Assurance-/Security-Overlays
+~~~
+
+Die Zahlen sind kein hartes Limit. Sie sind ein Warnsignal gegen „mehr Skills = bessere Antwort“.
+
+## Evalstrategie
+
+Cross-Cutting Routing braucht systemische Fälle, nicht nur isolierte Skill-Evals. Mindestens testen:
+
+- Positive Discovery ohne genannten Skillnamen;
+- Near-Miss: Overlay muss schweigen;
+- Primary Refinement statt Add-Bloat;
+- späten Pre-Completion-Trigger;
+- Security-Deduplizierung;
+- No-Skill Control;
+- fehlende Capability ohne vorgetäuschte Ausführung.
+
+Die Golden Tasks `GT-09` bis `GT-14` decken diese Routingklasse als Startset ab. Definition ist kein Behavioral-Pass-Nachweis.
 
 ## Leitgedanke
 
-> Der Werkzeugschrank darf groß sein. Der aktive Werkzeuggürtel soll klein bleiben.
+> Ein Skill ist gut entdeckt, wenn er bei seiner Aufgabe zuverlässig erscheint, bei der Nachbaraufgabe zuverlässig schweigt und keinen redundanten Kollegen mitbringt.

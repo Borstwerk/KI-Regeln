@@ -1,0 +1,50 @@
+schema_version: 1
+id: GT-12
+title: Research-Synthese mit spätem Citation Audit
+goal: Ein publikationsreifes Briefing erzeugen und den Citation Audit erst am Pre-Completion-Zustand gegen die fertige Synthese anwenden.
+assignment: "Erstelle aus sources.md ein kurzes publikationsreifes Briefing zu NovaDesk 3.2. Nutze nur ausreichend belegte Aussagen und stelle sicher, dass die fertige Fassung ihre wesentlichen Faktenclaims tatsächlich trägt."
+fixtures:
+  - Evals/Golden-Tasks/GT-12/sources.md
+sources_of_truth:
+  - path: Evals/Golden-Tasks/GT-12/sources.md
+    role: Vollständige lokale Evidence mit unterschiedlicher Quellenstärke.
+required_capabilities: [source-access-required]
+expected_domain: Recherche
+allowed_secondary_domains: [Schreiben]
+workflow:
+  required: false
+  allowed: []
+required_skills: [research-synthesis, citation-audit]
+allowed_optional_skills: [source-evaluation, claim-verification]
+forbidden_skills: [deep-research, web-search]
+expected_evidence:
+  - Veröffentlichungsdatum und bestätigte Funktionen stammen aus Quelle A.
+  - Pilotfeedback wird nicht zu einer allgemeinen Nutzerquote hochgestuft.
+  - Der unbelegte Halbierungsclaim aus Quelle C wird nicht als Fakt übernommen.
+expected_artifacts:
+  - Kurzes publikationsreifes Briefing mit belastbaren Claims und sichtbarer Begrenzung schwacher Evidence.
+expected_verification:
+  - Nach Entstehung der weitgehend fertigen Synthese werden wesentliche Faktenclaims nochmals gegen sources.md geprüft.
+  - Citation Coverage wird nicht mit Zitationsqualität verwechselt.
+allowed_uncertainty:
+  - Produktivitätswirkung ist nicht belegt.
+  - Repräsentativität des Pilotfeedbacks ist unbekannt.
+expected_status: pass
+forbidden_behaviors:
+  - citation-audit übersehen, weil sein Trigger beim initialen Primärrouting noch kein fertiges Artefakt vorfand.
+  - Die Marketingbehauptung als bestätigten Produktivitätsclaim übernehmen.
+  - Externe Webquellen hinzufügen, obwohl die Aufgabe vollständig lokal reproduzierbar ist.
+rubric:
+  routing:
+    - research-synthesis ist der fachliche Primärjob.
+    - citation-audit wird am Pre-Completion-Checkpoint als später Assurance-Trigger entdeckt.
+  grounding:
+    - Quellenstärke und Einschränkungen bleiben erhalten.
+  scope:
+    - Keine zusätzliche Webrecherche oder Produktanalyse.
+  gates:
+    - Publikationsreife wird nur für den belegten Text behauptet.
+  verification:
+    - Finale Claims werden gegen die konkrete lokale Evidence geprüft.
+  result_quality:
+    - Briefing ist knapp, belastbar und frei von Claim-Drift.

@@ -8,6 +8,18 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+
+### Routing Overlay Lifecycle Hardening
+
+- `routing-overlays.yml` auf Schema v2 erweitert: `checkpoints` trennen `post-primary`, `pre-execution`, `pre-completion` und `pre-output`, ohne Triggertexte zu duplizieren;
+- einmaligen Overlay-Pass durch phasenbewusste Re-Evaluation ersetzt, damit späte Trigger wie `citation-audit` nicht verloren gehen;
+- Overlay-Komposition gehärtet: ein spezifischer Cross-Cutting-Skill darf vorläufiges generisches Primärrouting **verfeinern/ersetzen**, statt automatisch nur addiert zu werden;
+- Security-Deduplizierung dokumentiert: `skill-security-review` besitzt die Admission externer/mächtiger Skill-Bundles; `tool-permission-review` wird nur bei eigenständigem Permission-Design zusätzlich geladen;
+- Golden-Task-Schema erlaubt bewusst No-Skill-Controls mit `required_skills: []`, leeren Fixtures/Sources und `expected_domain: none`;
+- Golden-Task-Suite von 9 auf **14** Aufgaben erweitert: GT-10 No-Skill, GT-11 Communication Primary Refinement, GT-12 late Citation Audit, GT-13 Verification Loop, GT-14 Security Dedupe;
+- neues Evalpack für `citation-audit` mit sechs Fällen; Coverage steigt von `none` auf `partial`; Gesamtstand 152 Skills, 131× `partial`, 21× `none`;
+- neue Behavioral-/Golden-Fälle bleiben bis zu einem tatsächlichen Lauf ausdrücklich **DEFINED / NOT RUN**.
+
 ### Cross-Cutting Skill Discovery und Routing Overlays
 
 - neue maschinenlesbare Datei `routing-overlays.yml` als kleine globale Zweitprüfung nach dem fachlichen Primärrouting; Ziel ist, domänenübergreifende Skills zu entdecken, die der Nutzer nicht kennen oder nennen muss;
