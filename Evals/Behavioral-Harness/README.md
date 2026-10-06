@@ -307,6 +307,22 @@ Beim Packaging werden Hashes für neun Run-Artefakte gespeichert:
 
 `verify-run` prüft diese Byte-Hashes, die Schema-Verträge und die kanonischen View-/Manifest-Beziehungen erneut. Ein nachträglich verändertes Artefakt führt zu `HarnessError`.
 
+## Golden Tasks
+
+Die Golden-Task-Suite nutzt dieselbe technische Messmaschine statt eines zweiten parallelen Harness.
+
+`tools/golden_task_behavioral_harness.py prepare-case` kompiliert eine vorhandene `Evals/Golden-Tasks/GT-XX/task.yml` in die vorhandene Prepared-/Runner-/Judge-Struktur:
+
+- Runner-Input enthält nur den echten Assignment-Text und neutral materialisierte Fixtures;
+- editoriale Felder wie `title` und `goal` bleiben Judge-seitig;
+- der Runner erhält einen kuratierten operativen Repository-View ohne `Evals/**`, Changelog, Tests oder Harness-Implementierung;
+- der Workspace wird in `hashes.yml` gebunden und vor Packaging erneut geprüft;
+- `package-run`, Deterministic Gates und `verify-run` bleiben dieselben wie für andere Behavioral-Fälle.
+
+Damit gilt auch für Golden Tasks:
+
+> Maschine beobachtet Reads/Aktionen/Evidence. Judge bewertet Semantik und Routingqualität.
+
 ## Runner Isolation
 
 Der Harness führt derzeit **keinen ChatGPT-/LLM-Runner selbstständig aus**.

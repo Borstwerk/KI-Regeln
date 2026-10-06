@@ -8,6 +8,18 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Golden-Task Behavioral Blindness Hardening
+
+- `golden_task_execution_view.py` gibt `id`, `title`, `goal` und `sources_of_truth` nicht mehr an den Runner weiter; diese Felder hatten im ersten Fresh-Agent-Lauf konkrete Routing-Hinweise verraten;
+- neuer `golden_task_behavioral_harness.py` adaptiert Golden Tasks an den bestehenden Behavioral Harness statt ein paralleles Testsystem aufzubauen;
+- Task-Fixtures werden unter neutralen Runner-Pfaden materialisiert; GT-13 nennt deshalb im Assignment keinen `Evals/Golden-Tasks/...`-Pfad mehr;
+- Runner erhalten einen kuratierten Runtime-Repository-View mit Bootstrap, Katalog, Overlays, Workflows und operativen Domain-Dateien, aber ohne `Evals/**`, Changelog, Tests, Tools und bekannte evaluator-nahe Metadokumente;
+- der kuratierte Workspace wird dateiweise gehasht und durch `verify_prepared_integrity` gegen Vorab-Manipulation geschützt;
+- Claude-Code-Adapter erzeugt objektive `read`-Events für jedes tatsächlich gelesene `SKILL.md` und `Workflows/*.md`; Selection/Application/Rejected/Checkpoint werden weiterhin nicht aus File-Reads erfunden;
+- CI führt neue Blindness-Regressionstests aus und baut GT-09 bis GT-17 als blinde Runner-Pakete;
+- GT-09/GT-12-Routing wird in dieser Runde bewusst **nicht** fachlich verändert: erst der kontaminationsärmere Wiederholungslauf soll entscheiden, ob die beobachteten Misses echte Routingregressionen sind.
+
+
 ### Review-Korrekturen zu Routing Evidence Follow-up Hardening
 
 - GT-13 widersprach der neuen allgemeinen Completion-Regel (Ein-Fix-Aufgabe verlangte `verification-loop`); GT-13 testet jetzt die Completion-Evidence, `verification-loop` und `diagnose` sind optional;
