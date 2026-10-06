@@ -2,6 +2,7 @@ schema_version: 1
 id: GT-09
 title: Architekturtradeoff mit Cross-Cutting Visualisierung
 goal: Drei belegte Architekturvarianten fachlich vergleichen und die Entscheidung so strukturieren, dass Empfehlung und Trade-offs schnell erfassbar sind, ohne erfundene Gewichtungen.
+behavioral_routing_mode: discovery-required
 assignment: "Vergleiche die drei Varianten aus options.md anhand der bestätigten Kriterien und gib eine begründete Empfehlung."
 fixtures:
   - Evals/Golden-Tasks/GT-09/options.md

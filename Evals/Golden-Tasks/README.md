@@ -17,12 +17,20 @@ Der Repo-Validator prüft nur die Struktur: Schema, IDs, Pfade, Skill-/Workflowr
 
 Eine vollständige Task kann definieren:
 
+- `behavioral_routing_mode: discovery-required | outcome-primary` als evaluator-only Aussage darüber, **was** der Behavioral Run beweisen soll;
 - `required_skills` für unverzichtbare Arbeitsdisziplinen;
 - `allowed_optional_skills` für legitime zusätzliche Disziplinen;
 - `forbidden_skills` nur für offensichtlich falsches oder scope-erweiterndes Routing;
 - einen oder mehrere zulässige Workflows, sofern ein Workflow sinnvoll ist.
 
 Ein Agent muss daher nicht exakt eine vorgegebene interne Skillkette reproduzieren. Bewertet wird das beobachtbare Verhalten.
+
+Die beiden Behavioral-Routing-Modi trennen bewusst zwei Testziele:
+
+- **`discovery-required`** – Skill-/Workflow-Discovery ist selbst Teil des Tests. Bei vollständiger Read-Telemetrie kann ein fehlender erwarteter Skill-Read ein belastbarer Discovery-Miss sein.
+- **`outcome-primary`** – Ergebnis, Scope, Gates und fachliche Ownership stehen im Vordergrund. Ein fehlender Skill-File-Read ist allein **kein** Routing-Fail, wenn der Bootstrap oder andere bereits geladene Regeln das korrekte Verhalten tragen. Verbotene unnötige Reads bleiben weiterhin beobachtbar.
+
+Damit wird `required_skills` nicht mit „diese Datei muss in jedem Fall gelesen werden“ gleichgesetzt.
 
 ## Execution View und Judge View
 
@@ -48,6 +56,7 @@ python tools/golden_task_execution_view.py Evals/Golden-Tasks/GT-01/task.yml --a
 Nicht in die Execution View gelangen insbesondere:
 
 - `id`, `title`, `goal`, `sources_of_truth`;
+- `behavioral_routing_mode`;
 - `expected_domain`;
 - `allowed_secondary_domains`;
 - `workflow`;
@@ -86,11 +95,20 @@ Das Runner-Paket enthält:
 
 Der Workspace wird dateiweise gehasht. `verify_prepared_integrity` lehnt einen vor dem Run veränderten Runner-Workspace ab.
 
-Der vorhandene Claude-Code-Adapter kann aus erfolgreichen `Read`-Toolereignissen objektive `skill_events: read` und `workflow_events: read` erzeugen. Er leitet daraus **nicht** `selected`, `applied`, `CANDIDATE_REJECTED`, Refinement oder Checkpoint-Reihenfolge ab.
+Der vorhandene Claude-Code-Adapter stellt für read-only Runs `Read`, `Glob` und `Grep` bereit. `Glob`/`Grep` dienen ausschließlich der kontrollierten Discovery innerhalb des vorbereiteten Pakets; Web, MCP, Bash und Mutation bleiben gesperrt.
+
+Aus erfolgreichen `Read`-Toolereignissen erzeugt der Adapter objektive `skill_events: read` und `workflow_events: read`. `Glob`/`Grep` werden als read-only Actions protokolliert, aber ein Suchtreffer wird **nicht** als Skill-Read hochgestuft. Der Adapter leitet außerdem **nicht** `selected`, `applied`, `CANDIDATE_REJECTED`, Refinement oder Checkpoint-Reihenfolge aus Reads oder Modellprosa ab.
 
 ### Judge View
 
 Erst nach der Task-Ausführung wird die vollständige `task.yml` inklusive evaluator-only Feldern zur Bewertung herangezogen.
+
+Der technische Gate `required_skill_read` berücksichtigt `behavioral_routing_mode`:
+
+- bei `discovery-required` ist der objektive Read-Nachweis ein echter Gate;
+- bei `outcome-primary` wird kein Skill-Read erzwungen; die semantische Judge-Bewertung entscheidet anhand von Ergebnis, Grenzen, Gates und sichtbarem Bloat.
+
+Das ist keine Lockerung der Skill-Erwartung, sondern eine Trennung von **Outcome-Test** und **Discovery-Test**.
 
 ## Bewertungsachsen
 

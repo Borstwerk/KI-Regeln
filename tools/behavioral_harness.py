@@ -318,8 +318,44 @@ def cli_gates(args: argparse.Namespace) -> int:
     return 0
 
 
+def resolve_run_package_path(raw: Path) -> Path:
+    """Accept either the exact run package or an output root containing exactly one run.
+
+    package-run writes <out>/<test_id>/<run_id>. The CLI prints that path, but users
+    repeatedly passed <out> back to verify-run. Resolve the unambiguous case instead of
+    turning a harmless UX mismatch into "run hashes missing".
+    """
+    root = raw.resolve()
+    if (root / "hashes.yml").is_file() and (root / "manifest.yml").is_file():
+        return root
+    if not root.is_dir():
+        raise HarnessError(f"run path does not exist: {root}")
+
+    candidates = sorted(
+        p.parent for p in root.rglob("manifest.yml")
+        if (p.parent / "hashes.yml").is_file()
+    )
+    unique = []
+    seen = set()
+    for candidate in candidates:
+        key = str(candidate)
+        if key not in seen:
+            seen.add(key)
+            unique.append(candidate)
+    if len(unique) == 1:
+        return unique[0]
+    if not unique:
+        raise HarnessError(
+            f"no run package found under {root}; pass the directory printed by package-run"
+        )
+    raise HarnessError(
+        f"multiple run packages found under {root}; pass one exact run directory: "
+        + ", ".join(str(x) for x in unique)
+    )
+
+
 def cli_verify_run(args: argparse.Namespace) -> int:
-    result = verify_run_package(Path(args.run).resolve())
+    result = verify_run_package(resolve_run_package_path(Path(args.run)))
     print(yaml.safe_dump(result, allow_unicode=True, sort_keys=False), end="")
     return 0
 

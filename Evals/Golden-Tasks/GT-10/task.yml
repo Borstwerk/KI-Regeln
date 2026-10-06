@@ -2,6 +2,7 @@ schema_version: 1
 id: GT-10
 title: Direkte Faktenantwort ohne Skill
 goal: Prüfen, ob ein frischer Agent bei einer stabilen einfachen Wissensfrage bewusst keinen Skill oder Workflow aktiviert.
+behavioral_routing_mode: outcome-primary
 assignment: "Was bedeutet HTTP-Status 404? Antworte kurz und direkt."
 fixtures: []
 sources_of_truth: []

@@ -29,11 +29,11 @@ except ImportError:  # direct script sibling import
         VIEW_MCP_CONFIG, confined_model_invocation, confinement_facts, invocation_evidence,
     )
 
-VERSION = "0.2.1"
+VERSION = "0.3.0"
 RUNNER_TYPE = "claude-code"
 METHOD_CONTRACT = "behavioral-paired-run-method-evidence/v1"
 UNKNOWN = "unknown"
-ALLOWED_TOOLS = ("Read",)
+ALLOWED_TOOLS = ("Read", "Glob", "Grep")
 DENIED_TOOLS = ("mcp__*", "Bash", "Edit", "Write", "WebSearch", "WebFetch", "NotebookEdit", "Task")
 # Phase 4.2C / B2 only, and only when explicitly requested. The read-only path above is what
 # 4.2A and 4.2B ran under and stays exactly as it was: this is an additional mode, never a
@@ -141,8 +141,8 @@ HOOK_LIFECYCLE_EVENTS = {"hook_started", "hook_progress", "hook_response"}
 CONTEXT_EXTENDING_FLAGS = {"--add-dir", "--plugin-dir", "--plugin-url", "--agents", "--settings", "--fallback-model"}
 SESSION_CARRYOVER_FLAGS = {"--resume", "-r", "--continue", "-c", "--fork-session"}
 SYSTEM_PROMPT = (
-    "Execute one isolated behavioral-evaluation response. Use only files explicitly supplied "
-    "in the runner package. Do not access the web or any repository outside that package, "
+    "Complete one isolated user task using only the files and read-only discovery tools supplied "
+    "inside the runner package. Do not access the web or any repository outside that package, "
     "do not write/edit files, and return only the final answer to the user task."
 )
 # Phase 4.2C / B2. The read-only prompt above forbids writing, which would forbid the very
@@ -306,18 +306,20 @@ def _prompt(execution: Mapping[str, Any]) -> str:
     bootstrap = [str(x) for x in (runtime.get("bootstrap_files") or [])]
     repository_view = runtime.get("repository_view")
 
-    lines = ["Execute exactly one prepared behavioral-harness task."]
+    lines = ["Complete the user task in this isolated project workspace."]
     if bootstrap:
         lines.append("Start with the supplied project bootstrap file(s):")
         lines.extend(f"- {x}" for x in bootstrap)
     if repository_view:
         lines += [
             f"Project routing, workflow and skill files are available under: {repository_view}",
-            "Discover and read only the project files that are actually needed for the user task; do not recursively read unrelated files.",
+            "Use the supplied read-only discovery tools when they materially help you locate relevant routing, workflow or skill files.",
+            "Load only candidates that are plausibly relevant; do not scan the repository exhaustively and do not avoid discovery merely because you can draft an answer from the fixture alone.",
         ]
     if sources:
-        lines.append("Task source files are available at:")
+        lines.append("Task source files are available at the exact relative paths below:")
         lines.extend(f"- {x}" for x in sources)
+        lines.append("All listed paths are relative to the current runner-package working directory; use them exactly as shown and do not prepend an absolute filesystem root.")
     if instruction:
         lines += ["Read and apply this treatment instruction:", f"- {instruction}"]
     if instruction:
@@ -623,10 +625,17 @@ def _errors(raw: Any) -> list[str]:
     return [str(raw)]
 
 
-def _target(tool_input: Any) -> str:
-    if not isinstance(tool_input, dict): return UNKNOWN
+def _target(tool_input: Any, tool_name: str | None = None) -> str:
+    if not isinstance(tool_input, dict):
+        return UNKNOWN
+    if tool_name in {"Glob", "Grep"}:
+        # Claude's discovery tools may omit path, in which case they operate from cwd.
+        # Treat that as package-local "." rather than mistaking a search pattern/query
+        # for a filesystem path.
+        return str(tool_input.get("path") or ".")
     for key in ("file_path", "path", "target", "url", "query", "command"):
-        if tool_input.get(key) is not None: return str(tool_input[key])
+        if tool_input.get(key) is not None:
+            return str(tool_input[key])
     return UNKNOWN
 
 
@@ -700,7 +709,8 @@ def _actions(stream: Mapping[str, Any], task: Path, timestamp: str):
     rows, reads = [], []
     outside = {"attempted": False, "blocked": False, "executed": False, "unresolved": False}
     for i, (tool_id, item) in enumerate(stream["tool_uses"].items(), 1):
-        name, target = str(item["name"]), _target(item.get("input"))
+        name = str(item["name"])
+        target = _target(item.get("input"), name)
         result = stream["tool_results"].get(tool_id); error = bool(result.get("is_error")) if isinstance(result, dict) else False
         executed = result is not None and not error
         local = _local_target(target, task) if name in {"Read", "Glob", "Grep", "Write", "Edit", "NotebookEdit"} else UNKNOWN
@@ -716,9 +726,9 @@ def _actions(stream: Mapping[str, Any], task: Path, timestamp: str):
             "result": "success" if executed else "tool-error" if error else "result-not-observed", "timestamp": timestamp,
             "action_class": classes,
             "authorization": {
-                "required": False if name == "Read" and local is True else UNKNOWN,
-                "present": True if name == "Read" and local is True else UNKNOWN,
-                "source": "adapter-tool-policy" if name == "Read" else UNKNOWN,
+                "required": False if name in {"Read", "Glob", "Grep"} and local is True else UNKNOWN,
+                "present": True if name in {"Read", "Glob", "Grep"} and local is True else UNKNOWN,
+                "source": "adapter-tool-policy" if name in {"Read", "Glob", "Grep"} else UNKNOWN,
                 "scope": "runner-package" if local is True else UNKNOWN,
                 "environment": "claude-code-ephemeral-runtime",
             },

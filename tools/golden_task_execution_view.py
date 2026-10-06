@@ -22,6 +22,7 @@ EXECUTION_FIELDS = (
 )
 
 EVALUATOR_ONLY_FIELDS = (
+    "behavioral_routing_mode",
     "expected_domain",
     "allowed_secondary_domains",
     "workflow",

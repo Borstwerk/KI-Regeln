@@ -2,6 +2,7 @@ schema_version: 1
 id: GT-17
 title: Positives Tool-Permission-Routing
 goal: Prüfen, ob Berechtigungsdesign als eigener Auftrag zuverlässig zu tool-permission-review geroutet wird, ohne ein nicht vorhandenes Skill-Bundle zu erfinden.
+behavioral_routing_mode: outcome-primary
 assignment: "Prüfe den geplanten Zugriff in requested-access.md. Welche Rechte braucht der Agent wirklich, welche sind zu weit, und welche Freigaben müssen vor externen Aktionen bleiben?"
 fixtures:
   - Evals/Golden-Tasks/GT-17/requested-access.md

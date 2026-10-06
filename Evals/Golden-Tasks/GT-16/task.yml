@@ -2,6 +2,7 @@ schema_version: 1
 id: GT-16
 title: Kommunikationsowner plus eigener Voice-Job
 goal: Prüfen, ob ein frischer Agent den Add-Zweig korrekt nutzt, wenn Kommunikationswirkung und nachweisbare persönliche Voice zwei eigenständige Jobs bilden.
+behavioral_routing_mode: discovery-required
 assignment: "Schreib meiner Führungskraft anhand von context-and-voice.md eine kurze Nachricht zum Priorisierungskonflikt. Sie soll sich so lesen wie meine Beispielnachrichten."
 fixtures:
   - Evals/Golden-Tasks/GT-16/context-and-voice.md
