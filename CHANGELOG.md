@@ -8,6 +8,19 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Cross-Cutting Skill Discovery und Routing Overlays
+
+- neue maschinenlesbare Datei `routing-overlays.yml` als kleine globale Zweitprüfung nach dem fachlichen Primärrouting; Ziel ist, domänenübergreifende Skills zu entdecken, die der Nutzer nicht kennen oder nennen muss;
+- bewusst **keine zweite Triggerdatenbank**: `routing-overlays.yml` enthält nur Skill-ID und Phase; die kanonische Trigger-/Near-Miss-Wahrheit bleibt in der jeweiligen `SKILL.md`;
+- initiale Overlay-Kandidaten: `visual-answer` (presentation), `adressatengerechte-kommunikation` (communication), `citation-audit` und `verification-loop` (assurance), `skill-security-review` und `tool-permission-review` (security);
+- neue Fachgrundlage `Skill-Engineering/Cross-Cutting-Skill-Discovery.md` mit mehrstufigem Routing: Primary → Workflow → Overlay Pass → Assurance/Gates → Runtime;
+- `AGENTS.md`, `START-HIER.md`, Master-Router, Nutzungsdoku und Root-README auf automatische Skill-Discovery gehärtet: Nutzer müssen Skills nicht manuell aktivieren und frische Agenten sollen Overlays nach dem Primärrouting gezielt prüfen;
+- neuer Schema-Vertrag `Schemas/routing-overlays.schema.json`; zusätzliche Validatorlogik prüft Schema, unbekannte Skill-IDs und doppelte Overlay-Skills;
+- neuer Golden Task `GT-09`: Architekturtradeoff mit drei Varianten; der Prompt nennt keinen Skill und fordert kein Ausgabeformat, erwartet aber `architecture-tradeoff-analysis + visual-answer` als fachlichen Primärskill plus Presentation-Overlay;
+- Golden-Task-Suite auf **9** Aufgaben erweitert; `GT-09` ist **DEFINED / NOT RUN**;
+- Skillbestand bleibt **152**; Routing-Overlays sind Discovery-Metadaten und erzeugen weder neue Skills noch neue Autorisierung;
+- Anti-Bloat-Regel festgelegt: typischerweise 1 Primärskill + höchstens ein Presentation/Communication-Overlay + nur tatsächlich notwendige Assurance-/Security-Skills.
+
 ### Visual Answer Hardening: Eskalation, Interaktion und Visual Fidelity
 
 - `visual-answer` bleibt ein einzelner `experimental` Skill und wird **nicht** in mehrere Renderer-/HTML-Skills aufgespalten;

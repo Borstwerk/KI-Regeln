@@ -24,7 +24,8 @@ Zentrale Regeln beschreiben **wie** gearbeitet wird. Projekte definieren **was**
 Projektaufgabe
 → lokale Wahrheit / Anforderungen bestimmen
 → passenden Workflow prüfen
-→ nur benötigte Skills auswählen
+→ primär benötigte Skills auswählen
+→ routing-overlays.yml als kleine domänenübergreifende Zweitprüfung
 → skill-catalog.yml auf Maturity, Capabilities und Evals prüfen
 → lokale Regeln ergänzen
 → arbeiten und Evidence erzeugen
@@ -70,6 +71,22 @@ Skill A
 ### Eval
 
 Prüft, ob ein Skill in typischen, schwierigen und negativen Fällen das erwartete Verhalten zeigt.
+
+### Routing Overlay
+
+`../routing-overlays.yml` ist eine kleine globale Discovery-Liste für Skills, die fachbereichsübergreifend relevant werden können.
+
+Sie beantwortet nicht:
+
+> Wann triggert dieser Skill?
+
+Diese Wahrheit bleibt in der jeweiligen `SKILL.md`.
+
+Sie beantwortet nur:
+
+> Welchen kleinen zusätzlichen Kandidatensatz soll ein Agent nach dem fachlichen Primärrouting noch kurz prüfen?
+
+Dadurch muss weder ein Nutzer die Skillnamen kennen noch ein Agent den vollständigen Katalog in den aktiven Kontext laden.
 
 ### Skill-Katalog
 

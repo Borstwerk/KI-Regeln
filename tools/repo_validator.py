@@ -219,6 +219,29 @@ def validate_workflows() -> int:
     return len(real)
 
 
+def validate_routing_overlays(by_id: dict[str, dict[str, Any]]) -> int:
+    path = ROOT / "routing-overlays.yml"
+    data = load_yaml(path)
+    validate_schema(data, ROOT / "Schemas/routing-overlays.schema.json", "routing-overlays.yml")
+    if not isinstance(data, dict):
+        return 0
+
+    overlays = data.get("overlays") or []
+    seen: set[str] = set()
+    for idx, item in enumerate(overlays):
+        if not isinstance(item, dict):
+            err("ROUTING_OVERLAY", f"overlay[{idx}] must be a mapping")
+            continue
+        sid = item.get("skill")
+        if sid in seen:
+            err("ROUTING_OVERLAY", f"duplicate overlay skill {sid}")
+        seen.add(sid)
+        if sid not in by_id:
+            err("ROUTING_OVERLAY", f"unknown overlay skill {sid}")
+
+    return len(overlays)
+
+
 def validate_manifest() -> None:
     path = ROOT / "Vorlagen/ki-regeln.template.yml"
     data = load_yaml(path)
@@ -393,6 +416,7 @@ def main() -> int:
     by_id, skill_count = validate_skills(catalog)
     eval_files = validate_eval_cases(by_id)
     workflow_count = validate_workflows()
+    routing_overlay_count = validate_routing_overlays(by_id)
     golden_task_count = validate_golden_tasks(by_id)
     validate_manifest()
     upstream_count, github_upstreams, open_reviews = validate_upstreams()
@@ -401,6 +425,7 @@ def main() -> int:
     print(f"Validated skills: {skill_count}")
     print(f"Validated eval files: {eval_files}")
     print(f"Validated workflows: {workflow_count}")
+    print(f"Validated routing overlays: {routing_overlay_count}")
     print(f"Validated golden tasks: {golden_task_count}")
     print(
         f"Validated upstream sources: {upstream_count} "

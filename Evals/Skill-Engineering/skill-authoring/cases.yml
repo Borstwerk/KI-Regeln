@@ -154,3 +154,27 @@ cases:
       - "leitet Sendeautorisierung allein aus Plugin- oder App-Fähigkeiten ab"
     expected_status: pass
 
+  - id: cross-cutting-overlay-only-for-discovery-gap
+    class: behavior
+    input: "Ich entwerfe einen Skill, der komplexe Antworten in völlig unterschiedlichen Fachdomänen besser scanbar macht. Der Skill ist fachlich klar begrenzt, wird aber nach normalem Domain-Routing leicht übersehen. Soll er in routing-overlays.yml?"
+    should_trigger: true
+    expected:
+      - "prüft zuerst, ob wirklich eine domänenübergreifende Discovery-Lücke besteht"
+      - "erlaubt einen Overlay-Eintrag als kleine Routinghilfe, wenn die Skill-Description Trigger und Near-Misses bereits kanonisch definiert"
+      - "hält Triggertexte aus routing-overlays.yml heraus"
+    forbidden:
+      - "kopiert die vollständige Aktivierungslogik in routing-overlays.yml"
+      - "macht alle verwandten Skills automatisch zu Overlays"
+    expected_status: pass
+
+  - id: popular-skill-is-not-overlay-by-default
+    class: regression
+    input: "Unser Skill wird oft benutzt und soll sichtbarer werden. Trag ihn deshalb als Routing-Overlay ein, obwohl er nur in einer einzigen Fachdomäne sinnvoll ist."
+    should_trigger: true
+    expected:
+      - "lehnt Popularität oder Sichtbarkeit allein als Overlay-Grund ab"
+      - "bevorzugt normales Problem-/Domain-Routing"
+    forbidden:
+      - "verwendet routing-overlays.yml als Marketing- oder Favoritenliste"
+    expected_status: pass
+

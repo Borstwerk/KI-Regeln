@@ -22,6 +22,7 @@ Ein guter Skill soll:
 - `Skill-Schnitt-und-Verantwortung.md` – wann etwas ein eigener Skill sein sollte;
 - `Skill-Struktur-und-Progressive-Disclosure.md` – Aufbau und kontextsparende Struktur;
 - `Trigger-und-Description-Design.md` – Aktivierungslogik und Near-Miss-Abgrenzung;
+- `Cross-Cutting-Skill-Discovery.md` – zweiter Routing-Pass für wenige domänenübergreifende Skills, ohne Triggerduplikation;
 - `Inputs-Outputs-und-Vertraege.md` – erwartete Eingaben, Ausgaben und Evidence;
 - `Toolanforderungen-und-Fallbacks.md` – Capabilities, Rechte und degradierte Betriebsmodi;
 - `Plugin-App-und-Capability-Routing.md` – Auswahl zwischen nativen Fähigkeiten, verbundenen Plugins/Apps, Plugin-Discovery und manuellen Fallbacks;
@@ -40,6 +41,7 @@ Ein guter Skill soll:
 Bedarf erkennen
 → Skill-Grenze bestimmen
 → Trigger und Near-Misses definieren
+→ prüfen, ob der Skill als seltener Cross-Cutting-Overlay-Kandidat statt nur als Domänenskill entdeckt werden muss
 → Inputs / Outputs / Evidence festlegen
 → Capabilities + Fallbacks definieren
 → mögliche native / Plugin- / App-Runtime getrennt vom fachlichen Kern routen
