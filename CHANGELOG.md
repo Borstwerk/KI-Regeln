@@ -8,6 +8,18 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Behavioral Harness Discovery Hardening
+
+- read-only Claude-Runner erhalten zusätzlich zu `Read` kontrolliertes lokales `Glob` und `Grep`; Web, MCP, Bash und Mutation bleiben gesperrt;
+- Runner-Prompt von „Behavioral Evaluation / nur tatsächlich nötige Dateien lesen“ auf neutrale Aufgabenbearbeitung mit gezielter Discovery umgestellt, damit der Harness Skill-Suche nicht selbst unterdrückt;
+- Fixture-Pfade werden als exakte relative Pfade zum Runner-Package erklärt, um die im zweiten Lauf beobachteten falschen absoluten Pfade zu vermeiden;
+- Golden Tasks unterscheiden evaluator-only `behavioral_routing_mode: discovery-required | outcome-primary`: fehlender Skill-Read ist nur im Discovery-Modus ein harter Read-Gate;
+- GT-09, GT-11, GT-12 und GT-16 testen Discovery; GT-10, GT-13, GT-14, GT-15 und GT-17 bewerten primär Outcome/Gates und werden nicht allein wegen eines fehlenden Skill-Reads rot;
+- `verify-run --run` akzeptiert jetzt auch einen Output-Root mit genau einem Run Package und meldet bei Mehrdeutigkeit die Kandidaten statt irreführend `run hashes missing`;
+- Tests decken Discovery-Tool-Policy, lokale Search-Actions, Routing-Modus-Semantik und die neue Verify-Run-Pfadauflösung ab;
+- GT-09/GT-12-Skills bleiben unverändert: die nächste Aussage über echte Routingregressionen soll erst aus Rerun #3 mit kontrollierter Discovery stammen;
+- der strikte `fresh_context`-Vorbehalt bei beobachteten Plugins sowie der nicht verfügbare B2-Writable-Pfad für GT-13 bleiben als separate Evidence-/Capability-Gaps bestehen.
+
 ### Golden-Task Behavioral Blindness Hardening
 
 - `golden_task_execution_view.py` gibt `id`, `title`, `goal` und `sources_of_truth` nicht mehr an den Runner weiter; diese Felder hatten im ersten Fresh-Agent-Lauf konkrete Routing-Hinweise verraten;

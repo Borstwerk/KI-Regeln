@@ -139,6 +139,18 @@ role:
 
 Fixture-Rollen werden nicht aus Dateinamen geraten. Bis zur Kuratierung gilt `unknown`.
 
+## Read-only Discovery
+
+Der Claude-Code-Adapter darf in read-only Runs drei lokale Werkzeuge bereitstellen:
+
+- `Read` – konkrete Datei lesen;
+- `Glob` – Dateikandidaten im Paket finden;
+- `Grep` – Textkandidaten im Paket finden.
+
+`Glob` und `Grep` sind **Discovery**, keine Skill-Aktivierung. Sie werden als read-only Actions aufgezeichnet. Nur ein tatsächlich erfolgreicher `Read` einer `SKILL.md` beziehungsweise Workflow-Datei erzeugt den entsprechenden Read-Event.
+
+Webzugriff, MCP, Bash, Edit/Write und Task/Subagent bleiben im read-only Pfad gesperrt.
+
 ## Actual Route
 
 Der Harness kann folgende Skill-/Workflow-Ereignisse ablegen:
@@ -260,6 +272,15 @@ Kontrolliertes Vokabular:
 
 `partial` und `blocked` sind keine Fehlergrade. Der Harness normalisiert nur explizit gelieferte Status; er errät keinen Status aus Fließtext.
 
+## Golden-Task Routing-Modi
+
+Golden Tasks können evaluator-only zwischen zwei Messzielen unterscheiden:
+
+- `discovery-required`: erwartete Skill-Reads sind ein deterministischer Discovery-Gate;
+- `outcome-primary`: ein fehlender Skill-Read ist allein kein Fail; Outcome, Gates und unerwünschte Zusatzskills werden semantisch beurteilt.
+
+Der generische Pilot-Harness bleibt rückwärtskompatibel und behandelt fehlende Modusangabe wie `discovery-required`.
+
 ## Deterministic Gates
 
 Aktuell:
@@ -306,6 +327,8 @@ Beim Packaging werden Hashes für neun Run-Artefakte gespeichert:
 - Judge Input.
 
 `verify-run` prüft diese Byte-Hashes, die Schema-Verträge und die kanonischen View-/Manifest-Beziehungen erneut. Ein nachträglich verändertes Artefakt führt zu `HarnessError`.
+
+Für die CLI darf `--run` entweder auf das exakte Paket `<out>/<test_id>/<run_id>` oder auf einen Output-Root zeigen, unter dem **genau ein** Run Package liegt. Bei mehreren Kandidaten verlangt die CLI weiterhin den exakten Pfad statt still einen auszuwählen.
 
 ## Golden Tasks
 

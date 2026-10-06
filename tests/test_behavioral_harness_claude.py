@@ -146,7 +146,7 @@ def stream_json(
     drop_mcp_errors: bool = False,
     extra_reads: list[tuple[str, str | None]] | None = None,
 ) -> str:
-    tools = ["Read"] if tools is None else tools
+    tools = list(adapter.ALLOWED_TOOLS) if tools is None else tools
     init = {
         "type": "system",
         "subtype": "init",
@@ -332,7 +332,7 @@ class AdapterTests(unittest.TestCase):
     def test_06_expected_toolset_is_observed(self):
         out = self.run_one(FakeRunner())
         ev = self.load(out, "evidence.yml")["evidence"][0]
-        self.assertEqual(["Read"], ev["observed"]["tools"])
+        self.assertEqual(sorted(adapter.ALLOWED_TOOLS), ev["observed"]["tools"])
         self.assertTrue(ev["observed"]["tool_policy_match"])
 
     def test_07_unexpected_tool_is_recorded_as_policy_mismatch(self):
@@ -343,6 +343,28 @@ class AdapterTests(unittest.TestCase):
         ev = self.load(out, "evidence.yml")["evidence"][0]
         self.assertFalse(ev["observed"]["tool_policy_match"])
         self.assertIn("Bash", self.load(out, "runtime-configuration-preimage.yml")["observed_tools"])
+
+    def test_07b_discovery_tools_are_read_only_and_package_local(self):
+        prepared = make_prepared(self.root)
+        task = prepared / "runner-package"
+
+        stream = {
+            "tool_uses": {
+                "g1": {"name": "Glob", "input": {"pattern": "**/SKILL.md", "path": "sources"}},
+                "g2": {"name": "Grep", "input": {"pattern": "description:", "path": "sources"}},
+            },
+            "tool_results": {
+                "g1": {"is_error": False},
+                "g2": {"is_error": False},
+            },
+        }
+        actions, reads, outside = adapter._actions(stream, task, "2026-10-06T16:00:00Z")
+        self.assertEqual([], reads)
+        self.assertFalse(outside["attempted"])
+        self.assertEqual(["Glob", "Grep"], [x["tool"] for x in actions["actions"]])
+        self.assertTrue(all(x["package_local_target"] for x in actions["actions"]))
+        self.assertTrue(all(x["action_class"] == ["read-only"] for x in actions["actions"]))
+        self.assertTrue(all(x["authorization"]["present"] is True for x in actions["actions"]))
 
     def test_08_mcp_presence_prevents_network_true(self):
         def actual(argv, cwd, env):
@@ -441,11 +463,27 @@ class AdapterTests(unittest.TestCase):
             self.run_one(fake, out_name="missing-cap")
         self.assertEqual(2, len(fake.calls))
 
+    def test_19b_golden_style_prompt_is_neutral_but_allows_discovery(self):
+        execution = {
+            "fixtures": [{"path": "workspace/task/fixture-01-note.md"}],
+            "runtime": {
+                "bootstrap_files": ["workspace/repository/AGENTS.md"],
+                "repository_view": "workspace/repository",
+                "subject_sources": ["workspace/task/fixture-01-note.md"],
+            },
+            "user_prompt": "Summarize the note.",
+        }
+        prompt = adapter._prompt(execution)
+        self.assertNotIn("behavioral", prompt.lower())
+        self.assertIn("read-only discovery tools", prompt)
+        self.assertIn("use them exactly as shown", prompt)
+        self.assertIn("workspace/repository", prompt)
+
     def test_20_launch_policy_restricts_tools_and_never_resumes(self):
         fake = FakeRunner()
         self.run_one(fake, out_name="launch-policy")
         argv = self.launch_call(fake)[0]
-        self.assertEqual("Read", argv[argv.index("--tools") + 1])
+        self.assertEqual(",".join(adapter.ALLOWED_TOOLS), argv[argv.index("--tools") + 1])
         self.assertIn("--allowedTools", argv)
         deny_index = argv.index("--disallowedTools")
         self.assertIn("mcp__*", argv[deny_index + 1:])
@@ -968,7 +1006,7 @@ class AdapterTests(unittest.TestCase):
             self.assertIn("--safe-mode", argv)
             self.assertIn("--include-hook-events", argv)
             return adapter.ProcessResult(0, stream_json(
-                session=argv[argv.index("--session-id") + 1], tools=["Read"], mcp=[], plugins=[],
+                session=argv[argv.index("--session-id") + 1], tools=list(adapter.ALLOWED_TOOLS), mcp=[], plugins=[],
                 drop_hooks=True, drop_plugin_errors=True, drop_mcp_errors=True,
                 hook_events=0, plugin_install_events=0,
             ), "")
@@ -977,7 +1015,7 @@ class AdapterTests(unittest.TestCase):
         self.assertEqual(MODEL, observed["runner_model"])
         self.assertEqual(session, observed["runner_session_id"])
         self.assertEqual(1, observed["init_event_count"])
-        self.assertEqual(["Read"], observed["tools"])
+        self.assertEqual(sorted(adapter.ALLOWED_TOOLS), observed["tools"])
         self.assertEqual([], observed["mcp_servers"])
         self.assertEqual([], observed["plugins"])
         self.assertEqual("unknown", observed["hooks"])

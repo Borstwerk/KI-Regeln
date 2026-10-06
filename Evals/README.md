@@ -134,7 +134,7 @@ Phase 2 ergänzt gezielt elf systemisch wirksame Evalpacks mit je fünf Fällen,
 
 Zusätzlich besteht unter `Golden-Tasks/` eine getrennte systemweite Suite mit 17 lokalen, reproduzierbaren End-to-End-Aufgaben (`GT-01` bis `GT-17`). Der Repo-Validator prüft deren Struktur, nicht das Modellverhalten.
 
-Für Behavioral-Smokes wird eine blinde Runner-View reproduzierbar aus `task.yml` projiziert. Der Runner sieht den Nutzerauftrag und neutral materialisierte Fixtures, aber weder `title`/`goal` noch Routing-/Skill-Erwartungen, Statusvorgaben, Forbidden-Kriterien oder Rubrik. Für reale Runs erzeugt `tools/golden_task_behavioral_harness.py` zusätzlich einen kuratierten Repository-View ohne `Evals/**` und evaluator-nahe Metadokumente. Erst anschließend bewertet die Judge View gegen die vollständige Taskdefinition. Details stehen in `Golden-Tasks/README.md`.
+Für Behavioral-Smokes wird eine blinde Runner-View reproduzierbar aus `task.yml` projiziert. Der Runner sieht den Nutzerauftrag und neutral materialisierte Fixtures, aber weder `title`/`goal` noch Routing-/Skill-Erwartungen, `behavioral_routing_mode`, Statusvorgaben, Forbidden-Kriterien oder Rubrik. Für reale Runs erzeugt `tools/golden_task_behavioral_harness.py` zusätzlich einen kuratierten Repository-View ohne `Evals/**` und evaluator-nahe Metadokumente. Read-only Runner können darin kontrolliert mit `Read`, `Glob` und `Grep` entdecken. Erst anschließend bewertet die Judge View gegen die vollständige Taskdefinition. Details stehen in `Golden-Tasks/README.md`.
 
 `GT-04` erwartet bewusst `partial`, weil die Fixture keine bestätigte Root Cause beweist. Dieser Status ist dort epistemisch korrektes Zielverhalten, kein automatischer Golden-Task-Fehlschlag.
 

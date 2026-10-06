@@ -180,6 +180,9 @@ def compile_task(task_path: Path, repo_root: Path, repo_commit: str) -> dict[str
     required = [str(x) for x in task.get("required_skills") or []]
     optional = [str(x) for x in task.get("allowed_optional_skills") or []]
     forbidden = [str(x) for x in task.get("forbidden_skills") or []]
+    routing_mode = str(task.get("behavioral_routing_mode") or "discovery-required")
+    if routing_mode not in {"discovery-required", "outcome-primary"}:
+        raise HarnessError(f"unsupported behavioral_routing_mode: {routing_mode!r}")
 
     execution = {
         "schema_version": SCHEMA_VERSION,
@@ -191,7 +194,7 @@ def compile_task(task_path: Path, repo_root: Path, repo_commit: str) -> dict[str
         "sources": [],
         "runtime": {
             "fresh_runner_context_required": True,
-            "allowed_tools": "normal-runner-tools",
+            "allowed_tools": "read-only-discovery",
             "runner_adapter_required": True,
             "bootstrap_files": ["workspace/repository/AGENTS.md"],
             "repository_view": "workspace/repository",
@@ -212,6 +215,15 @@ def compile_task(task_path: Path, repo_root: Path, repo_commit: str) -> dict[str
         "expected_primary_skill": required[0] if required else "none/direct-response",
         "required_skills": required,
         "allowed_skills": optional,
+        "routing_evaluation": {
+            "mode": routing_mode,
+            "required_skill_read_enforced": routing_mode == "discovery-required",
+            "note": (
+                "Skill discovery is part of the behavioral contract."
+                if routing_mode == "discovery-required"
+                else "Judge outcome and boundaries first; a missing skill-file read alone is not a routing failure."
+            ),
+        },
         "forbidden_skills": forbidden,
         "expected_workflow": normalize_workflow(task),
         "expected_status": task.get("expected_status"),

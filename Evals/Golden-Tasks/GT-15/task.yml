@@ -2,6 +2,7 @@ schema_version: 1
 id: GT-15
 title: Kurze lokale Zusammenfassung ohne Skill
 goal: Prüfen, ob ein frischer Agent eine triviale lokale Zusammenfassung trotz vorhandener Fixture direkt und ohne Skill-Bloat erledigt.
+behavioral_routing_mode: outcome-primary
 assignment: "Fass note.md in einem einzigen Satz zusammen."
 fixtures:
   - Evals/Golden-Tasks/GT-15/note.md

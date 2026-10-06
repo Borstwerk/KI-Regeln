@@ -6,7 +6,14 @@ from pathlib import Path
 
 import yaml
 
-from tools.behavioral_harness import HarnessError, verify_prepared_integrity
+from tools.behavioral_harness import (
+    HarnessError,
+    default_actions,
+    default_evidence,
+    default_trace,
+    evaluate_gates,
+    verify_prepared_integrity,
+)
 from tools import behavioral_harness_claude as claude_adapter
 from tools.golden_task_behavioral_harness import prepare
 from tools.golden_task_execution_view import assert_blind, project
@@ -23,6 +30,7 @@ class GoldenTaskBlindnessTests(unittest.TestCase):
             "fixtures": ["note.md"],
             "sources_of_truth": [{"path": "note.md", "role": "This wording must not leak."}],
             "required_capabilities": ["source-access"],
+            "behavioral_routing_mode": "outcome-primary",
             "expected_domain": "none",
             "required_skills": [],
             "rubric": {"routing": ["none"]},
@@ -34,6 +42,7 @@ class GoldenTaskBlindnessTests(unittest.TestCase):
         self.assertNotIn("tool-permission-review", dumped)
         self.assertNotIn("GT-99", dumped)
         self.assertNotIn("sources_of_truth", view)
+        self.assertNotIn("behavioral_routing_mode", view)
         self.assertEqual(
             {"schema_version", "assignment", "fixtures", "required_capabilities"},
             set(view),
@@ -90,6 +99,7 @@ class GoldenTaskBlindnessTests(unittest.TestCase):
                     "fixtures": ["fixture.md"],
                     "sources_of_truth": [{"path": "fixture.md", "role": "authoritative-source"}],
                     "required_capabilities": ["source-access"],
+                    "behavioral_routing_mode": "outcome-primary",
                     "expected_domain": "none",
                     "allowed_secondary_domains": [],
                     "workflow": {"required": False, "allowed": []},
@@ -138,7 +148,31 @@ class GoldenTaskBlindnessTests(unittest.TestCase):
             self.assertFalse((repository / "CHANGELOG.md").exists())
             self.assertFalse((repository / "Skill-Engineering" / "Cross-Cutting-Skill-Discovery.md").exists())
 
+            judge = yaml.safe_load((out / "judge-view.yml").read_text(encoding="utf-8"))
+            self.assertEqual("outcome-primary", judge["routing_evaluation"]["mode"])
+            self.assertFalse(judge["routing_evaluation"]["required_skill_read_enforced"])
+
             verify_prepared_integrity(out)
+
+    def test_outcome_primary_does_not_turn_missing_skill_read_into_hard_fail(self):
+        trace = default_trace()
+        trace["observability"]["skill_file_reads"] = True
+        base = {
+            "required_skills": ["example"],
+            "forbidden_skills": [],
+            "expected_workflow": {"mode": "none", "allowed": []},
+        }
+
+        outcome = dict(base, routing_evaluation={"mode": "outcome-primary"})
+        discovery = dict(base, routing_evaluation={"mode": "discovery-required"})
+
+        outcome_gates = evaluate_gates(outcome, trace, default_actions(), default_evidence())
+        discovery_gates = evaluate_gates(discovery, trace, default_actions(), default_evidence())
+
+        self.assertTrue(outcome_gates["gates"]["required_skill_read"])
+        self.assertFalse(discovery_gates["gates"]["required_skill_read"])
+        self.assertEqual("outcome-primary", outcome_gates["routing_evaluation_mode"])
+        self.assertEqual("discovery-required", discovery_gates["routing_evaluation_mode"])
 
     def test_workspace_tamper_is_rejected(self):
         with tempfile.TemporaryDirectory() as tmp:

@@ -16,6 +16,7 @@ from tools.behavioral_harness import (
     load_runner_adapter_result,
     load_yaml,
     package_run,
+    resolve_run_package_path,
     verify_run_package,
     write_prepared_case,
 )
@@ -277,6 +278,24 @@ class BehavioralHarnessSelfTests(unittest.TestCase):
         result = verify_run_package(run)
         self.assertTrue(result["verified"])
         self.assertEqual(9, result["artifact_count"])
+
+    def test_T23b_verify_run_root_resolves_single_nested_package(self):
+        run = self.package(out_name="verify-root", run_id="run-only")
+        root = self.root / "verify-root"
+        self.assertEqual(run.resolve(), resolve_run_package_path(root))
+
+    def test_T23c_verify_run_root_rejects_ambiguous_packages(self):
+        self.package(out_name="verify-many", run_id="run-a")
+        compiled = self.compile()
+        prepared = self.root / "prepared-verify-many-b"
+        write_prepared_case(compiled, prepared)
+        package_run(
+            prepared, None, None, None, None, self.root / "verify-many", "run-b",
+            runner_type="synthetic", runner_model="synthetic", runner_session_id="s2",
+            started_at="unknown", finished_at="unknown",
+        )
+        with self.assertRaisesRegex(HarnessError, "multiple run packages"):
+            resolve_run_package_path(self.root / "verify-many")
 
     def test_T24_verify_run_rejects_tampered_artifact(self):
         run = self.package(out_name="tamper-runs")

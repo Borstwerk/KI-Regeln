@@ -2,6 +2,7 @@ schema_version: 1
 id: GT-11
 title: Kommunikationsowner statt Rewrite-Bloat
 goal: Einen konkreten Priorisierungskonflikt adressatengerecht formulieren und dabei den spezifischen Kommunikationsskill als Owner wählen.
+behavioral_routing_mode: discovery-required
 assignment: "Formuliere anhand von communication-context.md eine kurze Nachricht an die Führungskraft, die den Kapazitätskonflikt erklärt und eine klare Priorisierungsentscheidung anfordert."
 fixtures:
   - Evals/Golden-Tasks/GT-11/communication-context.md
