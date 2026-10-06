@@ -70,6 +70,8 @@ Wartungs- und Driftregeln festlegen
 - `Navigation-und-Informationsarchitektur.md` – Inhalte auffindbar und logisch strukturieren;
 - `Docs-as-Code-und-Wartbarkeit.md` – Git, Review, Tests, Ownership und Aktualisierung;
 - `Dokumentationsreview-und-Drift.md` – unabhängiger Audit auf Fehler, Veraltung und Lücken;
+- `Visuelle-Antworten-und-HTML-Artefakte.md` – komplexe Antworten auf schnelle menschliche Erfassbarkeit, visuelle Hierarchie und rendererunabhängige Artefakterzeugung ausrichten;
+- `Visual-Answer-Explorativer-AB-Test-2026-10-06.md` – explorative Human-Evidence aus drei Markdown-vs.-HTML-Vergleichen;
 - `Quellen-und-Inspirationen.md` – externe Grundlagen und mutable Upstream-Skills;
 - `Vorlagen/` – kleine Ausgangspunkte für häufige Artefakttypen;
 - `Skills/` – operative Agenten-Skills.
@@ -85,7 +87,8 @@ Wartungs- und Driftregeln festlegen
 - `explanation-docs` – Hintergründe, Zusammenhänge und Trade-offs erklären;
 - `adr` – Architekturentscheidungen mit Kontext und Alternativen dokumentieren;
 - `runbook` – operative Abläufe unter realen Störungsbedingungen dokumentieren;
-- `docs-review` – Korrektheit, Struktur, Beispiele, Links und Drift unabhängig prüfen.
+- `docs-review` – Korrektheit, Struktur, Beispiele, Links und Drift unabhängig prüfen;
+- `visual-answer` – komplexe Antworten als schnell erfassbares visuelles Artefakt oder strukturierten Fallback aufbereiten, ohne fachlichen Inhalt oder Unsicherheit zu verlieren.
 
 ## Abgrenzung
 

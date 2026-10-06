@@ -59,6 +59,14 @@ Nach jeder Generierung wird zwischen Keeper, lokalem Feinschliff, kontrolliertem
 
 Siehe `Bildpruefung-und-Freigabe.md`.
 
+### Logo-Design
+
+Für Logo, Wordmark, Monogramm, Brand Mark, App Icon/Favicon oder Logo-Refresh gibt es eine eigene Fachgrundlage.
+
+Siehe `Logo-Design.md` und den Skill `logo-design`.
+
+Der Prozess trennt günstige Ideenfindung, belastbare Formprüfung und den Konzept-Checkpoint vom späteren vollständigen Logo-Kit.
+
 ### Prompt-Shortcuts
 
 Für schnelle Bedienkürzel existiert zusätzlich `../Dokumentation/Bild-und-Medien-Prompt-Shortcuts.md`.
@@ -123,6 +131,7 @@ Unter `Skills/` liegen kompakte Arbeitsdisziplinen:
 - `bild-prebrief` – ein einzelnes Bild vor der Generierung sauber definieren;
 - `entitaetsbibel` – stabile Referenzregeln für wiederkehrende Figuren, Objekte oder Orte aufbauen;
 - `serien-kontinuitaetscheck` – mehrere Bilder auf Zustands-, Identitäts- und Stildrift prüfen;
-- `bildreview` – entscheiden, ob ein Bild behalten, lokal korrigiert oder neu gebaut werden sollte.
+- `bildreview` – entscheiden, ob ein Bild behalten, lokal korrigiert oder neu gebaut werden sollte;
+- `logo-design` – Logos/Brand Marks vom Brief über drei geprüfte Richtungen bis zum freigegebenen Logo-Kit entwickeln oder kritisch prüfen.
 
 Projektkonkrete Figurenmerkmale, Weltregeln und Kanon bleiben im jeweiligen Projekt.

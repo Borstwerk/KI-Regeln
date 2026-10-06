@@ -1,6 +1,6 @@
 schema_version: 2
 source_registry: Dokumentation/upstream-sources.yml
-last_reviewed: '2026-10-04'
+last_reviewed: '2026-10-06'
 sources:
 - source_id: guillaumemeyer-watermarks-remover-remove-ai-marks
   reviewed_at: 2026-10-04
@@ -2330,4 +2330,355 @@ sources:
     source_path: skills/motion-graphics/SKILL.md
     observed_ref: main
     observed_blob_sha: 59ec607875ea7a14df5f3ee7207730fd01063e0f
+
+- source_id: graygnat-mcp-audit-secrets
+  reviewed_at: '2026-10-06'
+  repository_commit: 94fec3bd11cd7c122f2f417130c090729ecce0cf
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence:
+  - Used only as methodological evidence for deterministic detection of secret-like values and sensitive environment forwarding in MCP configuration.
+  - Local rules independently frame scanner findings as review evidence, never as complete admission or authorization.
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: MIT
+  license_source: https://github.com/graygnatconsole/mcp-audit-tool/blob/94fec3bd11cd7c122f2f417130c090729ecce0cf/LICENSE
+  license_source_commit_or_ref: 94fec3bd11cd7c122f2f417130c090729ecce0cf
+  license_path: LICENSE
+  license_blob_sha: 04d6951d584c1af5fdb6133a32ed9e76de4979d1
+  path_specific_license_notes:
+  - Root MIT license was verified at the same reviewed repository commit; local use is concepts/methods-only and redistribution permission is not relied on.
+  license_status_at_observation: verified-at-snapshot
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence:
+    artifact_declarations: []
+    same_state_files:
+    - path: LICENSE
+      blob_sha: 04d6951d584c1af5fdb6133a32ed9e76de4979d1
+      spdx: MIT
+    notes:
+    - Reviewed artifact and root LICENSE were observed at repository commit 94fec3bd11cd7c122f2f417130c090729ecce0cf.
+  source_snapshot:
+    repository: graygnatconsole/mcp-audit-tool
+    source_path: src/mcp_audit_tool/rules/secrets.py
+    observed_ref: main
+    observed_blob_sha: 05c86dcd117b14cd93afa87764307ae4bb7de119
+
+- source_id: graygnat-mcp-audit-supply-chain
+  reviewed_at: '2026-10-06'
+  repository_commit: 94fec3bd11cd7c122f2f417130c090729ecce0cf
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence:
+  - Used as methodological evidence for flagging unpinned package runners and pipe-to-shell launch patterns before MCP activation.
+  - Concrete regexes, severities and remediation wording are not copied or treated as universal policy.
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: MIT
+  license_source: https://github.com/graygnatconsole/mcp-audit-tool/blob/94fec3bd11cd7c122f2f417130c090729ecce0cf/LICENSE
+  license_source_commit_or_ref: 94fec3bd11cd7c122f2f417130c090729ecce0cf
+  license_path: LICENSE
+  license_blob_sha: 04d6951d584c1af5fdb6133a32ed9e76de4979d1
+  path_specific_license_notes:
+  - Root MIT license was verified at the same reviewed repository commit; local use is concepts/methods-only and redistribution permission is not relied on.
+  license_status_at_observation: verified-at-snapshot
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence:
+    artifact_declarations: []
+    same_state_files:
+    - path: LICENSE
+      blob_sha: 04d6951d584c1af5fdb6133a32ed9e76de4979d1
+      spdx: MIT
+    notes:
+    - Reviewed artifact and root LICENSE were observed at repository commit 94fec3bd11cd7c122f2f417130c090729ecce0cf.
+  source_snapshot:
+    repository: graygnatconsole/mcp-audit-tool
+    source_path: src/mcp_audit_tool/rules/supply_chain.py
+    observed_ref: main
+    observed_blob_sha: 76382ba404874a7f6ffd08f83c614865f663a7f4
+
+- source_id: graygnat-mcp-audit-metadata
+  reviewed_at: '2026-10-06'
+  repository_commit: 94fec3bd11cd7c122f2f417130c090729ecce0cf
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence:
+  - Used as methodological evidence for reviewing risky auto-approval, wildcard permissions and suspicious instruction patterns in MCP metadata.
+  - Local rules explicitly downgrade regex-based poisoning matches to signals requiring semantic review rather than proof of maliciousness.
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: MIT
+  license_source: https://github.com/graygnatconsole/mcp-audit-tool/blob/94fec3bd11cd7c122f2f417130c090729ecce0cf/LICENSE
+  license_source_commit_or_ref: 94fec3bd11cd7c122f2f417130c090729ecce0cf
+  license_path: LICENSE
+  license_blob_sha: 04d6951d584c1af5fdb6133a32ed9e76de4979d1
+  path_specific_license_notes:
+  - Root MIT license was verified at the same reviewed repository commit; local use is concepts/methods-only and redistribution permission is not relied on.
+  license_status_at_observation: verified-at-snapshot
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence:
+    artifact_declarations: []
+    same_state_files:
+    - path: LICENSE
+      blob_sha: 04d6951d584c1af5fdb6133a32ed9e76de4979d1
+      spdx: MIT
+    notes:
+    - Reviewed artifact and root LICENSE were observed at repository commit 94fec3bd11cd7c122f2f417130c090729ecce0cf.
+  source_snapshot:
+    repository: graygnatconsole/mcp-audit-tool
+    source_path: src/mcp_audit_tool/rules/metadata.py
+    observed_ref: main
+    observed_blob_sha: e4c7f1a108c7af2ecdb65cc1f42bb7b5c72bf3ed
+
+- source_id: kaankiziltug-logo-design-skill
+  reviewed_at: '2026-10-06'
+  repository_commit: 0ecf52e9a4b3ac92b714f7cc6e3148ab8c774134
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence:
+  - Methodological input includes brief-first design, category-cliche review, cheap concept generation, black-first construction, small-size testing and a concept checkpoint before expensive kit production.
+  - KI-Regeln independently defines a smaller provider-neutral logo-design skill and does not redistribute upstream scripts, templates, logo assets or skill prose.
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: MIT
+  license_source: https://github.com/kaankiziltug/logo-design-skill/blob/0ecf52e9a4b3ac92b714f7cc6e3148ab8c774134/LICENSE
+  license_source_commit_or_ref: 0ecf52e9a4b3ac92b714f7cc6e3148ab8c774134
+  license_path: LICENSE
+  license_blob_sha: 293aac6d8b54118d8ba4dcae40f7c36d18796764
+  path_specific_license_notes:
+  - Root MIT license was verified at the same reviewed repository commit; local use is concepts/methods-only and redistribution permission is not relied on.
+  license_status_at_observation: verified-at-snapshot
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence:
+    artifact_declarations: []
+    same_state_files:
+    - path: LICENSE
+      blob_sha: 293aac6d8b54118d8ba4dcae40f7c36d18796764
+      spdx: MIT
+    notes:
+    - Reviewed artifact and root LICENSE were observed at repository commit 0ecf52e9a4b3ac92b714f7cc6e3148ab8c774134.
+  source_snapshot:
+    repository: kaankiziltug/logo-design-skill
+    source_path: skills/logo-design/SKILL.md
+    observed_ref: main
+    observed_blob_sha: 6762d2849ef14ff35d579b4cb38dc9144a97febf
+
+- source_id: kaankiziltug-logo-design-trademarks
+  reviewed_at: '2026-10-06'
+  repository_commit: 0ecf52e9a4b3ac92b714f7cc6e3148ab8c774134
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence:
+  - Used to preserve the upstream's explicit boundary that its bundled real-world logo library contains third-party trademarks outside the repository's MIT grant.
+  - KI-Regeln does not copy or vendor those trademark assets and treats reference marks only as analysis material, not reusable design stock.
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: MIT
+  license_source: https://github.com/kaankiziltug/logo-design-skill/blob/0ecf52e9a4b3ac92b714f7cc6e3148ab8c774134/LICENSE
+  license_source_commit_or_ref: 0ecf52e9a4b3ac92b714f7cc6e3148ab8c774134
+  license_path: LICENSE
+  license_blob_sha: 293aac6d8b54118d8ba4dcae40f7c36d18796764
+  path_specific_license_notes:
+  - Root MIT license was verified at the same reviewed repository commit; local use is concepts/methods-only and redistribution permission is not relied on.
+  license_status_at_observation: verified-at-snapshot
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence:
+    artifact_declarations: []
+    same_state_files:
+    - path: LICENSE
+      blob_sha: 293aac6d8b54118d8ba4dcae40f7c36d18796764
+      spdx: MIT
+    notes:
+    - Reviewed artifact and root LICENSE were observed at repository commit 0ecf52e9a4b3ac92b714f7cc6e3148ab8c774134.
+  source_snapshot:
+    repository: kaankiziltug/logo-design-skill
+    source_path: TRADEMARKS.md
+    observed_ref: main
+    observed_blob_sha: 8eb23307ccb77ce38bc97219b33a655b70287ffd
+
+- source_id: bootloops-acceptance-gate
+  reviewed_at: '2026-10-06'
+  repository_commit: ca892277dcf0468d995f0036f3bd6d753a8afe7d
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence:
+  - Methodological input is limited to falsifiable acceptance gates, positive/negative controls, held-out checks and honest open verdicts.
+  - Math-specific digit counts, oracle requirements, terminology and protocol text are not generalized as universal KI-Regeln requirements.
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: MIT
+  license_source: https://github.com/BootLoops-ai/skills/blob/ca892277dcf0468d995f0036f3bd6d753a8afe7d/LICENSE
+  license_source_commit_or_ref: ca892277dcf0468d995f0036f3bd6d753a8afe7d
+  license_path: LICENSE
+  license_blob_sha: a9509033426a137dcc8f5bafe70c01546774f139
+  path_specific_license_notes:
+  - Root MIT license was verified at the same reviewed repository commit; local use is concepts/methods-only and redistribution permission is not relied on.
+  license_status_at_observation: verified-at-snapshot
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence:
+    artifact_declarations: []
+    same_state_files:
+    - path: LICENSE
+      blob_sha: a9509033426a137dcc8f5bafe70c01546774f139
+      spdx: MIT
+    notes:
+    - Reviewed artifact and root LICENSE were observed at repository commit ca892277dcf0468d995f0036f3bd6d753a8afe7d.
+  source_snapshot:
+    repository: BootLoops-ai/skills
+    source_path: skills/acceptance-gate/SKILL.md
+    observed_ref: main
+    observed_blob_sha: 220beabcdf214546eb2c9a992d64e7792070d418
+
+- source_id: bootloops-independence-bookkeeping
+  reviewed_at: '2026-10-06'
+  repository_commit: ca892277dcf0468d995f0036f3bd6d753a8afe7d
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence:
+  - Methodological input is the distinction between apparently separate checks and genuinely independent evidence with disjoint production/tuning lineage.
+  - Local rules use a lightweight contamination question and shared-dependency disclosure rather than reproducing the upstream ledger protocol.
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: MIT
+  license_source: https://github.com/BootLoops-ai/skills/blob/ca892277dcf0468d995f0036f3bd6d753a8afe7d/LICENSE
+  license_source_commit_or_ref: ca892277dcf0468d995f0036f3bd6d753a8afe7d
+  license_path: LICENSE
+  license_blob_sha: a9509033426a137dcc8f5bafe70c01546774f139
+  path_specific_license_notes:
+  - Root MIT license was verified at the same reviewed repository commit; local use is concepts/methods-only and redistribution permission is not relied on.
+  license_status_at_observation: verified-at-snapshot
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence:
+    artifact_declarations: []
+    same_state_files:
+    - path: LICENSE
+      blob_sha: a9509033426a137dcc8f5bafe70c01546774f139
+      spdx: MIT
+    notes:
+    - Reviewed artifact and root LICENSE were observed at repository commit ca892277dcf0468d995f0036f3bd6d753a8afe7d.
+  source_snapshot:
+    repository: BootLoops-ai/skills
+    source_path: skills/independence-bookkeeping/SKILL.md
+    observed_ref: main
+    observed_blob_sha: e4bca31655ec85b122c261d3b448b19aebfa8b65
+
+- source_id: bootloops-planted-truth
+  reviewed_at: '2026-10-06'
+  repository_commit: ca892277dcf0468d995f0036f3bd6d753a8afe7d
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence:
+  - Methodological input is that an evaluation harness should be exercised on known-good and intentionally wrong cases before its green output is trusted.
+  - Domain-specific planted-truth mathematics and concrete thresholds are not copied into the general verification loop.
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: MIT
+  license_source: https://github.com/BootLoops-ai/skills/blob/ca892277dcf0468d995f0036f3bd6d753a8afe7d/LICENSE
+  license_source_commit_or_ref: ca892277dcf0468d995f0036f3bd6d753a8afe7d
+  license_path: LICENSE
+  license_blob_sha: a9509033426a137dcc8f5bafe70c01546774f139
+  path_specific_license_notes:
+  - Root MIT license was verified at the same reviewed repository commit; local use is concepts/methods-only and redistribution permission is not relied on.
+  license_status_at_observation: verified-at-snapshot
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence:
+    artifact_declarations: []
+    same_state_files:
+    - path: LICENSE
+      blob_sha: a9509033426a137dcc8f5bafe70c01546774f139
+      spdx: MIT
+    notes:
+    - Reviewed artifact and root LICENSE were observed at repository commit ca892277dcf0468d995f0036f3bd6d753a8afe7d.
+  source_snapshot:
+    repository: BootLoops-ai/skills
+    source_path: skills/planted-truth/SKILL.md
+    observed_ref: main
+    observed_blob_sha: b7ee9ab297077704cd4a933c87762a1ac9fd500a
+
+- source_id: multimodal-product-discovery-readme
+  reviewed_at: '2026-10-06'
+  repository_commit: bd87cd091d804e7336a81fc133b303ddb518e7c1
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence:
+  - Used as a concrete architecture example that separates candidate retrieval from downstream reranking and evaluates the stages with different metrics.
+  - CLIP, FAISS, framework choices, dataset-specific results and fixed weighting formulas are not adopted as general KI-Regeln guidance.
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: MIT
+  license_source: https://github.com/Jiarui-0410/multimodal-product-discovery/blob/bd87cd091d804e7336a81fc133b303ddb518e7c1/LICENSE
+  license_source_commit_or_ref: bd87cd091d804e7336a81fc133b303ddb518e7c1
+  license_path: LICENSE
+  license_blob_sha: 5a5f5d0f0716aeff226463e81810f8a4a769da8d
+  path_specific_license_notes:
+  - Root MIT license was verified at the same reviewed repository commit; local use is concepts/methods-only and redistribution permission is not relied on.
+  license_status_at_observation: verified-at-snapshot
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence:
+    artifact_declarations: []
+    same_state_files:
+    - path: LICENSE
+      blob_sha: 5a5f5d0f0716aeff226463e81810f8a4a769da8d
+      spdx: MIT
+    notes:
+    - Reviewed artifact and root LICENSE were observed at repository commit bd87cd091d804e7336a81fc133b303ddb518e7c1.
+  source_snapshot:
+    repository: Jiarui-0410/multimodal-product-discovery
+    source_path: README.md
+    observed_ref: main
+    observed_blob_sha: f1d49b04169e4735f88ed29cef062bb2788ad4f7
+
+- source_id: qingyuna-answer-me-with-html-skill
+  reviewed_at: '2026-10-06'
+  repository_commit: f3082c912c1637d7eff38e7a4c356545b756c75f
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence:
+  - The upstream contributes the method of choosing visual output by information shape, keeping simple answers plain, writing structured content first and delegating layout/diagram geometry to a renderer.
+  - KI-Regeln independently generalizes these ideas into a provider- and renderer-neutral visual-answer skill focused on time-to-signal, semantic hierarchy, content fidelity and runtime fallback.
+  - Upstream CLI code, component syntax, themes, always-on rule and benchmark claims are not copied or required at runtime.
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: MIT
+  license_source: https://github.com/QingYunA/answer-me-with-html/blob/f3082c912c1637d7eff38e7a4c356545b756c75f/LICENSE
+  license_source_commit_or_ref: f3082c912c1637d7eff38e7a4c356545b756c75f
+  license_path: LICENSE
+  license_blob_sha: 17eca290eefa4fa9d5594edcad845be8df899eb0
+  path_specific_license_notes:
+  - Root MIT license was verified at the same reviewed repository commit; local use is concepts/methods-only and redistribution permission is not relied on.
+  license_status_at_observation: verified-at-snapshot
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence:
+    artifact_declarations: []
+    same_state_files:
+    - path: LICENSE
+      blob_sha: 17eca290eefa4fa9d5594edcad845be8df899eb0
+      spdx: MIT
+    notes:
+    - Reviewed skill blob 54a48115184f6c8625c633890a0bb5c004cbf90a and root LICENSE were observed at repository commit f3082c912c1637d7eff38e7a4c356545b756c75f.
+  source_snapshot:
+    repository: QingYunA/answer-me-with-html
+    source_path: skills/answer-me-with-html/SKILL.md
+    observed_ref: main
+    observed_blob_sha: 54a48115184f6c8625c633890a0bb5c004cbf90a
 

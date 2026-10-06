@@ -47,6 +47,57 @@ Das reduziert Context Bloat, ohne Evidence zu verlieren.
 
 Für den vollständigen Ablauf von der Kandidatenauswahl bis zum kleinen aktiven Kontextpaket gilt `Workflow-Grosse-Wissensbasen.md`.
 
+## Candidate Generation und Reranking getrennt bewerten
+
+Mehrstufige Suche kann zwei unterschiedliche Qualitätsprobleme besitzen:
+
+```text
+Query
+→ Candidate Generation
+→ Kandidatenpool
+→ Reranking
+→ Top-K
+```
+
+### Candidate Generation
+
+Die erste Stufe soll relevante Kandidaten überhaupt in Reichweite bringen.
+
+Geeignete Evidence kann sein:
+
+- Candidate Recall / Recall@K;
+- Coverage relevanter Dokumente;
+- Anteil von Queries, bei denen mindestens ein brauchbarer Kandidat im Pool liegt.
+
+### Reranking
+
+Die zweite Stufe ordnet bereits gefundene Kandidaten nach Relevanz, Kontext oder Nutzer-/Aufgabenmerkmalen neu.
+
+Geeignete Evidence kann sein:
+
+- NDCG;
+- MRR;
+- Precision@K;
+- pairwise Ranking-Vergleiche;
+- taskbezogene Outcome-Metriken.
+
+Wichtige Grenze:
+
+> Ein Reranker kann einen fehlenden Kandidaten nicht zurückholen.
+
+Ein schlechter Endwert kann daher aus:
+
+- schwacher Candidate Generation;
+- schwachem Reranking;
+- ungeeigneter Relevanzdefinition;
+- oder mehreren dieser Ursachen
+
+entstehen.
+
+Deshalb die Stufen getrennt evaluieren, bevor Gewichte oder Modelle im Reranker weiter optimiert werden.
+
+Konkrete Embeddingmodelle, Vektordatenbanken, Gewichtungen oder Candidate-Pool-Größen sind Implementierungsdetails und werden nicht universalisiert.
+
 ## RAG und Vektorstores
 
 Chunking, Embeddings, Vektorstores und Ranking sind technische Retrievalmechanismen.

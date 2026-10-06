@@ -8,6 +8,35 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Visual Answer und HTML-Artefakte
+
+- neuen experimentellen Skill `Dokumentationserstellung/Skills/visual-answer/SKILL.md` ergänzt; Ziel ist **Time-to-Signal** bei komplexen Antworten, nicht dekoratives HTML;
+- neue Fachgrundlage `Dokumentationserstellung/Visuelle-Antworten-und-HTML-Artefakte.md`: Trigger für Architektur/Flows, Mehrkriterien-Vergleiche, Hierarchien/Timelines, komplexe Pläne und Multi-Finding-Reviews; kurze Faktenantworten, Smalltalk, reine Command-Ausgabe und Plain-Text-Wünsche bleiben Near-Misses;
+- visueller Kern provider- und rendererneutral modelliert: erst Informationsform und semantische Hierarchie, danach native HTML-/Artefakterzeugung, spezialisierter Renderer, Plugin/App oder strukturierter Markdown-Fallback;
+- Qualitätsgates ergänzt: Kernaussage zuerst, eine Informationsaufgabe pro Panel, Status nicht nur über Farbe, progressive Detailtiefe, keine dekorative Wiederholung und **keine Content-Verluste durch Layout**;
+- direkte HTML-Ausgabe bevorzugt selbständig, responsiv und ohne unnötige Remote-/Tracking-Abhängigkeiten; `HTML erzeugt ≠ HTML visuell geprüft`;
+- drei Zero-Install-A/B-Vergleiche vom 2026-10-06 als explorative Human-Evidence dokumentiert: Architektur/Überblick, Mehrkriterien-Entscheidung und Review mit 14 Findings; die HTML-Fassung wurde in allen drei Fällen vom menschlichen Reviewer bevorzugt, insbesondere wegen schnellerer Erfassbarkeit des Wichtigen;
+- A/B-Evidence bewusst begrenzt: ein Reviewer, nicht verblindet, keine Zeit-/Recall-Messung, kein Token-/Kostenbenchmark und kein Test des originalen Renderers; daher keine Hochstufung über `experimental`;
+- acht `visual-answer`-Evalfälle definiert: Architektur, Entscheidung, Multi-Finding-Review, kurze Faktenantwort, Plain-Text-Wunsch, Visual-Overkill, Content-Fidelity und fehlende Renderer-Capability; alle **DEFINED / NOT RUN**;
+- `QingYunA/answer-me-with-html` am Commit `f3082c912c1637d7eff38e7a4c356545b756c75f` als Methodenquelle geprüft und vom Discovery-Radar zum monatlichen `exact-sha` Upstream promoted; genutzt werden nur Konzepte/Methoden, nicht CLI-Code, Theme-/Komponentensyntax, Always-on-Regel oder Benchmarkclaims;
+- Skill-Katalog auf **152** zentrale Skills / **11** Dokumentationserstellungs-Skills aktualisiert; `visual-answer` startet `experimental` mit `partial` Evalabdeckung.
+
+### HypeRadar Opportunity-Hardening: MCP, Verifikation, Retrieval und Logo-Design
+
+- `graygnatconsole/mcp-audit-tool` source-spezifisch gegen Commit `94fec3bd11cd7c122f2f417130c090729ecce0cf` geprüft; konkrete Rule-Dateien zu Secrets, Supply Chain und Tool-Metadaten als `reference/inspiration` registriert;
+- MCP-Regeln um einen deterministischen Config-Preflight ergänzt: hart codierte Secrets, sensitive Env-Weitergabe, ungepinnte Package Runner, Pipe-to-Shell, überbreiter Filesystem-Scope, unsicherer Transport/Auth, riskantes Auto-Approve und Wildcard-Rechte; maschinenlesbare Findings/SARIF sind mögliche Evidence, kein vollständiger Sicherheitsbeweis;
+- Tool-Poisoning-Regexe ausdrücklich als Review-Signal statt Angriffsnachweis abgegrenzt und zwei neue `skill-security-review`-Evalfälle definiert;
+- `BootLoops-ai/skills` am Commit `ca892277dcf0468d995f0036f3bd6d753a8afe7d` über `acceptance-gate`, `independence-bookkeeping` und `planted-truth` ausgewertet; `verification-loop` fordert bei wichtigen deterministischen Claims nun nach Möglichkeit einen Prüfpfad, der sichtbar scheitern kann, positive/negative Kontrollen, held-out beziehungsweise nicht zum Tuning verwendete Evidence und ehrliche Null-/Open-Ergebnisse;
+- mathematische Spezialregeln wie feste Digit-Anzahlen oder konkrete Oracles werden nicht universalisiert; drei zusätzliche Verification-Evals sind **DEFINED / NOT RUN**;
+- `multimodal-product-discovery` am Commit `bd87cd091d804e7336a81fc133b303ddb518e7c1` als Retrieval-Architekturreferenz aufgenommen; Knowledge Query trennt nun Candidate Generation und Reranking und behandelt Candidate Recall als vorgelagerten Bottleneck, den kein nachgelagerter Reranker reparieren kann;
+- CLIP, FAISS, konkrete Gewichte und Fashion-Dataset bleiben Implementierungsdetails; zwei neue `knowledge-query`-Evalfälle sind **DEFINED / NOT RUN**;
+- neuen experimentellen Bildarbeit-Skill `logo-design` samt Fachgrundlage und vier Evalfällen ergänzt: Brief → Kategorie/Klischees → viele günstige Ideen → drei unterschiedliche Richtungen → Schwarz-/Small-size-/Reversed-/Shelf-Prüfung → Konzept-Checkpoint → erst nach Freigabe kompletter Logo-Kit;
+- `kaankiziltug/logo-design-skill` am Commit `0ecf52e9a4b3ac92b714f7cc6e3148ab8c774134` als Methodenquelle dokumentiert; dessen Bibliothek realer Fremdlogos wird **nicht** übernommen oder redistribuiert, da der Upstream selbst sie ausdrücklich von seiner MIT-Lizenz ausnimmt;
+- Skill-Katalog auf **151** zentrale Skills / **5** Bildarbeit-Skills aktualisiert; `logo-design` startet `experimental` mit `partial` Evalabdeckung;
+- `answer-me-with-html` wurde in diesem ersten Opportunity-Review zunächst als Testkandidat behandelt und nach drei positiven Zero-Install-A/B-Vergleichen in der nachfolgenden Visual-Answer-Erweiterung als Methoden-Upstream promoted; `strands-decider` bleibt im wöchentlichen Radar für kleine Decision Models mit lokaler Kalibrierung/Abstention;
+- alle neun konkret übernommenen GitHub-Artefakte als monatliche `exact-sha` Upstreams registriert und mit Provenance-/Lizenzsnapshot gebunden; Discovery bleibt getrennt von Adoption;
+- `dots` und `Chat_UI` erzeugen aus diesem Review keine lokale Regeländerung.
+
 ### Plugin-, App- und Capability-Routing
 
 - neue Fachgrundlage `Skill-Engineering/Plugin-App-und-Capability-Routing.md`: fachlichen Job zuerst bestimmen, danach native Capability, verbundene Plugin-/App-Runtime, Plugin-Discovery und erst anschließend manuellen Fallback wählen;

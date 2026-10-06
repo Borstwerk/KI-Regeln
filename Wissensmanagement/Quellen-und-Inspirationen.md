@@ -100,6 +100,33 @@ Quelle:
 
 https://github.com/cogni-work/insight-wave
 
+## Multimodale Product Discovery als Retrieval-Architekturreferenz
+
+Quelle:
+
+https://github.com/Jiarui-0410/multimodal-product-discovery
+
+Geprüfter Repository-Stand:
+
+`bd87cd091d804e7336a81fc133b303ddb518e7c1`
+
+Das Projekt trennt explizit schnelle Kandidatensuche von einem nachgelagerten personalisierten Reranker und evaluiert beide Ebenen mit Retrieval-/Rankingmetriken.
+
+Für KI-Regeln relevant ist das allgemeine Muster:
+
+```text
+Candidate Generation
+→ Kandidatenpool
+→ Reranking
+→ Top-K
+```
+
+und die daraus folgende Diagnosegrenze:
+
+> Ein Reranker kann keine relevante Quelle retten, die die Candidate Generation nie geliefert hat.
+
+Nicht übernommen werden CLIP, FAISS, Spring Boot, konkrete Gewichte, Fashion-Dataset oder deren Offline-Ergebnisse als allgemeine Empfehlung.
+
 ## Einordnung
 
 > Toolfeatures zeigen mögliche Mechanismen. Zentrale Regeln beschreiben den langlebigeren Wissens-Lifecycle dahinter.

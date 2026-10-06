@@ -16,6 +16,7 @@ Dieses Ergänzungsblatt erklärt die Skills aus `Dokumentationserstellung/` für
 | eine Architekturentscheidung dokumentieren | `adr` |
 | einen Betriebs-/Störungsfall dokumentieren | `runbook` |
 | vorhandene Doku kritisch prüfen | `docs-review` |
+| eine komplexe Erklärung, Entscheidung oder Review schneller erfassbar visualisieren | `visual-answer` |
 
 ## `docs-plan`
 
@@ -180,6 +181,36 @@ fachliche Korrektheit
 ```
 
 Der Review ist nicht automatisch ein Rewrite.
+
+## `visual-answer`
+
+**Was ist das?**  
+Ein Skill für komplexe Antworten, bei denen visuelle Hierarchie die **Time-to-Signal** verkürzen kann.
+
+**Typische Trigger:**
+
+- Architektur / Flow;
+- mehrere zusammenhängende Konzepte;
+- Vergleich über mehrere Kriterien;
+- Hierarchie / Timeline;
+- Review mit vielen Findings;
+- Plan mit Phasen, Status oder Abhängigkeiten.
+
+**Kein Trigger:**
+
+- kurze Faktenantwort;
+- Smalltalk;
+- reine Command-Ausgabe;
+- Plain-Text-Wunsch;
+- dekorative Karten ohne Informationsgewinn.
+
+Der Skill ist rendererunabhängig. HTML ist eine mögliche Ausgabe. Fehlt eine geeignete Artifact-/Renderer-Capability, bleibt ein strukturierter Markdown-Fallback zulässig.
+
+Wichtig:
+
+> Visuelle Struktur darf Information ordnen, aber keine Claims, Unsicherheit oder Gegenargumente wegdesignen.
+
+---
 
 ## Typische Kombinationen
 
