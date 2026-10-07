@@ -42,6 +42,7 @@ Runner Output + Trace + Actions + Evidence
 → Deterministic Gate Engine             │
 → Run Package + Artifact Hashes ───────┘
 → verify-run
+→ optional: replay-run (modellfreier Audit Replay)
 → späterer semantischer Judge
 ```
 
@@ -262,7 +263,8 @@ Nach Erzeugung werden validiert:
 
 - `manifest`;
 - `deterministic-gates`;
-- `judge-input`.
+- `judge-input`;
+- `replay-report`, wenn `replay-run` verwendet wird.
 
 Strukturell ungültige Dokumente führen zu `HarnessError`; der CLI-Prozess endet ungleich `0`. Eine ungültige Telemetrie wird nicht still toleriert oder als `unknown` umgedeutet.
 
@@ -335,6 +337,34 @@ Beim Packaging werden Hashes für neun Run-Artefakte gespeichert:
 `verify-run` prüft diese Byte-Hashes, die Schema-Verträge und die kanonischen View-/Manifest-Beziehungen erneut. Ein nachträglich verändertes Artefakt führt zu `HarnessError`.
 
 Für die CLI darf `--run` entweder auf das exakte Paket `<out>/<test_id>/<run_id>` oder auf einen Output-Root zeigen, unter dem **genau ein** Run Package liegt. Bei mehreren Kandidaten verlangt die CLI weiterhin den exakten Pfad statt still einen auszuwählen.
+
+## Audit Replay
+
+`replay-run` ist ein **modellfreier Audit Replay** eines bereits paketierten Runs.
+
+Ablauf:
+
+```text
+Run Package
+→ verify-run-Integritätsprüfung
+→ gespeicherte Manifest-/Trace-/Action-/Evidence-Daten lesen
+→ technisches Replay-Report erzeugen
+```
+
+Dabei gilt hart:
+
+- kein Modellaufruf;
+- kein Web-/Provider-/Toolaufruf;
+- keine externe Aktion;
+- keine neue Behavioral Evidence;
+- keine Hochstufung von `read` zu `selected`/`applied`;
+- keine Behauptung, ein heutiger Modelllauf würde denselben Output erzeugen.
+
+Der Report enthält unter anderem Run-Identität, Paket-Fingerprint, Integritätsstatus, beobachtete Skill-/Workflow-Reads, Action-Zusammenfassung und bekannte Grenzen.
+
+Eine neue Golden-Task-Ausführung ist dagegen eine **Fresh Re-execution**, kein Replay des alten Runs.
+
+Allgemeiner Vertrag: `../../Agentenarbeit/Run-Replay-und-Reproduzierbarkeit.md`.
 
 ## Golden Tasks
 
@@ -427,6 +457,13 @@ python tools/behavioral_harness.py verify-run \
   --run Evals/Behavioral-Harness/runs/<test-id>/<run-id>
 ```
 
+Gespeicherten Run modellfrei als Audit Replay inspizieren:
+
+```bash
+python tools/behavioral_harness.py replay-run \
+  --run Evals/Behavioral-Harness/runs/<test-id>/<run-id>
+```
+
 Technische Selbsttests:
 
 ```bash
@@ -465,7 +502,9 @@ Ergänzte Fixrunden-Tests:
 - T21 manipulierte Execution View
 - T22 manipulierte Judge View
 - T23 unverändertes Run Package / `verify-run` positiv
+- T23d modellfreier, deterministischer Audit Replay
 - T24 manipuliertes Run-Artefakt / `verify-run` negativ
+- T24b Audit Replay lehnt manipuliertes Run Package ab
 - T25 valider generischer Runner-Adapter-Vertrag im Packaging-Pfad
 
 Keiner dieser Tests führt einen realen `WK-*`-Behavioral-Case aus. Die synthetischen Tests verwenden `WK-T01`; `WK-001`, `WK-004`, `WK-006` und `WK-047` werden dadurch nicht ausgeführt.

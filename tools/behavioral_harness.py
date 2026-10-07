@@ -354,6 +354,89 @@ def resolve_run_package_path(raw: Path) -> Path:
     )
 
 
+def build_audit_replay_report(run_dir: Path) -> dict[str, Any]:
+    """Reconstruct technical facts from one immutable run package without executing anything."""
+    run_dir = resolve_run_package_path(run_dir)
+    verified = verify_run_package(run_dir)
+
+    manifest = load_yaml(run_dir / "manifest.yml")
+    hashes = load_yaml(run_dir / "hashes.yml")
+    trace = load_yaml(run_dir / "trace.yml")
+    actions = load_yaml(run_dir / "actions.yml")
+    evidence = load_yaml(run_dir / "evidence.yml")
+    gates = load_yaml(run_dir / "deterministic-gates.yml")
+
+    skill_reads = [
+        {
+            "skill_id": str(event.get("skill_id")),
+            "artifact_ref": event.get("artifact_ref"),
+            "action_id": event.get("action_id"),
+            "sequence": event.get("sequence"),
+        }
+        for event in trace.get("skill_events", []) or []
+        if isinstance(event, dict) and event.get("event") == "read"
+    ]
+    workflow_reads = [
+        {
+            "workflow": str(event.get("workflow")),
+            "artifact_ref": event.get("artifact_ref"),
+            "action_id": event.get("action_id"),
+            "sequence": event.get("sequence"),
+        }
+        for event in trace.get("workflow_events", []) or []
+        if isinstance(event, dict) and event.get("event") == "read"
+    ]
+
+    action_rows = [row for row in (actions.get("actions") or []) if isinstance(row, dict)]
+    tools = sorted({str(row.get("tool")) for row in action_rows if row.get("tool")})
+    failed_actions = sum(1 for row in action_rows if row.get("executed") is False or row.get("result") not in {None, "success"})
+
+    report = {
+        "schema_version": 1,
+        "replay_class": "audit-replay",
+        "model_invoked": False,
+        "external_tools_invoked": False,
+        "source_run": {
+            "run_id": str(manifest.get("run_id", "unknown")),
+            "test_id": str(manifest.get("test_id", "unknown")),
+            "repo_commit": str(manifest.get("repo_commit", "unknown")),
+            "runner_type": str(manifest.get("runner_type", "unknown")),
+            "runner_model": str(manifest.get("runner_model", "unknown")),
+            "status": str(manifest.get("status", "unknown")),
+        },
+        "package_fingerprint": hash_object(hashes),
+        "integrity": {
+            "verified": bool(verified.get("verified")),
+            "artifact_count": verified.get("artifact_count", 0),
+            "workspace_export_verified": bool(verified.get("workspace_export_verified")),
+            "workspace_export_files": verified.get("workspace_export_files", 0),
+        },
+        "observed": {
+            "skill_reads": skill_reads,
+            "workflow_reads": workflow_reads,
+            "action_count": len(action_rows),
+            "tools": tools,
+            "failed_or_unexecuted_actions": failed_actions,
+            "trace_observability": trace.get("observability") or {},
+            "evidence_count": len(evidence.get("evidence") or []),
+            "deterministic_gates": gates.get("gates") or {},
+        },
+        "limitations": [
+            "Audit replay reads stored artifacts only and does not reproduce model behavior.",
+            "No selected/applied/refined/checkpoint claim is added unless it already exists as reliable stored telemetry.",
+            "External state is not refreshed and external actions are never repeated.",
+        ],
+    }
+    validate_document(report, "replay-report", "audit replay report")
+    return report
+
+
+def cli_replay_run(args: argparse.Namespace) -> int:
+    report = build_audit_replay_report(Path(args.run))
+    print(yaml.safe_dump(report, allow_unicode=True, sort_keys=False), end="")
+    return 0
+
+
 def cli_verify_run(args: argparse.Namespace) -> int:
     result = verify_run_package(resolve_run_package_path(Path(args.run)))
     print(yaml.safe_dump(result, allow_unicode=True, sort_keys=False), end="")
@@ -404,6 +487,10 @@ def build_parser() -> argparse.ArgumentParser:
     verify = sub.add_parser("verify-run", help="Verify packaged run artifact hashes and schema contracts")
     verify.add_argument("--run", required=True)
     verify.set_defaults(func=cli_verify_run)
+
+    replay = sub.add_parser("replay-run", help="Audit-replay one stored run package without model or tool execution")
+    replay.add_argument("--run", required=True)
+    replay.set_defaults(func=cli_replay_run)
 
     selftest = sub.add_parser("selftest", help="Run synthetic/replay harness self-tests only")
     selftest.set_defaults(func=cli_selftest)

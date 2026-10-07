@@ -130,6 +130,20 @@ Bei wiederholten Agentenloops sollte erkennbar sein:
 
 Damit lässt sich unterscheiden zwischen produktiver Iteration und Endlosschleife.
 
+## Replay und spätere Prüfung
+
+Nachvollziehbarkeit kann später als Audit Replay genutzt werden, wenn die relevanten Run-Artefakte unverändert referenzierbar bleiben.
+
+Dabei unterscheiden:
+
+- Audit Replay: gespeicherte Artefakte erneut prüfen, ohne Modell-/Tool-Neuausführung;
+- State Replay: gespeicherten Zustand wiederherstellen;
+- Fresh Re-execution: neuen Lauf starten und Verhalten erneut messen.
+
+Ein neuer Modelllauf ist kein Beweis dafür, dass der alte Lauf exakt reproduziert wurde.
+
+Details: `Run-Replay-und-Reproduzierbarkeit.md`.
+
 ## Observability für Multi-Agent-Systeme
 
 Bei mehreren Agenten zusätzlich nachvollziehbar machen:

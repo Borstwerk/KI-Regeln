@@ -8,6 +8,20 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Trustworthy Runtime Contracts
+
+- Audit von BootLoops, trustworthy-agent-simulation, catbus und HyperFrames gegen vorhandene KI-Regeln: keine neuen Vendor-Skills, sondern zwei allgemeine Lücken identifiziert – **Agent-Tool-Verträge** und **Run-Replay-Verträge**;
+- neuer `Skill-Engineering/Agent-Tool-Vertraege.md` plus `agent-tool-contract.schema.yml`: Selection, READ/WRITE/ACTION-Wirkung, maschinenlesbare Outputs, stabile Fehler-/Retry-Semantik, Chaining, Determinismusbedingungen und Acceptance-/Self-Test-Evidence werden als gemeinsamer Toolvertrag beschrieben;
+- BootLoops-Muster generalisiert: Tooloutput ist erst nach passender Acceptance Evidence belastbar; Known-answer-/Negative-Control-/Independent-Route-Prüfungen werden als Verification-Klassen eingeordnet, ohne mathematische Spezialregeln zu übernehmen;
+- catbus-Muster generalisiert: stabile Fehlercodes, Recovery-Hints, Capability Registry, maschinenlesbare Envelopes und explizite Action-Gates; Social-/Account-Automation selbst wird nicht übernommen;
+- neuer `Agentenarbeit/Run-Replay-und-Reproduzierbarkeit.md` plus `run-replay-manifest.schema.yml`: Audit Replay, State Replay und Fresh Re-execution werden strikt getrennt;
+- Trace-Datenmodell um Replay-/State-/Request-/Response-Referenzen und Replay-Ereignisse erweitert;
+- Behavioral Harness `1.2.0` erhält `replay-run`: ein modellfreier Audit Replay verifiziert zuerst das immutable Run Package und rekonstruiert anschließend nur gespeicherte technische Evidence; keine Modell-/Toolcalls, keine neue Behavioral Evidence;
+- neues `replay-report.schema.json` und synthetische Tests für deterministischen Audit Replay sowie Tamper-Rejection;
+- HyperFrames-Audit in den bestehenden frameworkneutralen Motion-Workflow integriert: Runtime-/Plugin-/Skill-Snapshot getrennt betrachten, mutable Auto-Updates bei Reproduzierbarkeitsclaims vermeiden, Lint/Check/Snapshot/Preview/Render als mögliche Runtime-Evidence behandeln; keine 21 Upstream-Skills importiert;
+- Quellenstände und Lizenzen dokumentiert: BootLoops Toolkit `66b680c` / Skills `ca89227` (MIT), trustworthy-agent-simulation `5c504f5` (Apache-2.0), catbus `8c09a0c` (MIT), HyperFrames `1e711b0` (Apache-2.0);
+- `hello-agent-system` wurde am Commit `857823c` (MIT) als breite Produktions-/Lerncheckliste geprüft, lieferte gegenüber bestehenden Bereichen Reliability, Security, Evals, Context, Release und Observability aber keinen ausreichend neuen zentralen Vertrag; daher keine zusätzliche lokale Abstraktion.
+
 ### Deterministic Bootstrap Routing + Discovery Result Evidence
 
 - Behavioral Rerun #4 zeigte: der Discovery-Gate aus PR #66 verbessert Suchverhalten, bindet aber nicht zuverlässig. `routing-overlays.yml` wurde in keinem der zwölf Läufe gelesen; `visual-answer`, `citation-audit` und die Voice-Composition blieben dadurch instabil oder vollständig unentdeckt;

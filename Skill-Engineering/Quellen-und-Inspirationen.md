@@ -238,6 +238,55 @@ Ergänzende aktuelle Arbeiten zu Skill-Evolution bestätigen außerdem das Risik
 
 Diese Paper sind datierte Forschungsquellen und werden nicht künstlich als mutable Upstream-Dependencies registriert.
 
+## BootLoops – Tool Stewardship und Acceptance-Verträge
+
+Repositories:
+
+https://github.com/BootLoops-ai/bootloops
+
+https://github.com/BootLoops-ai/skills
+
+Geprüfter Stand:
+
+- Toolkit-Commit: `66b680ce742e654cfe86da4f072a69061fe182b1`;
+- Skills-Commit: `ca892277dcf0468d995f0036f3bd6d753a8afe7d`;
+- Code/Skills-Lizenz: MIT.
+
+Für Skill-/Tool-Engineering besonders relevant:
+
+- Capability-Index vor Neubau konsultieren;
+- Kandidat vollständig gegen Einsatzgrenze und Acceptance lesen;
+- neues Tool zuerst an einem kleinen Known-answer-Fall prüfen;
+- `use as-is → patch/extend → wrap → new` als Stewardship-Leiter;
+- Tooldoku beantwortet Zweck, Einsatzgrenze, Outputbedeutung und Acceptance-Test;
+- Erfolg des Berechnungsschritts ist nicht identisch mit bestandenem Acceptance Gate.
+
+Nicht übernommen werden wissenschafts- und mathematikspezifische Digit-/Oracle-/Fitting-Regeln als allgemeine Toolpflicht.
+
+## catbus – agentenfreundliche CLI-Verträge
+
+Repository:
+
+https://github.com/cv-cat/catbus
+
+Geprüfter Stand:
+
+- Commit: `8c09a0c540dc69bb0ef4a45100063623cfaf2f66`;
+- Lizenz: MIT.
+
+Methodisch relevant sind insbesondere:
+
+- ein konsistentes maschinenlesbares Output-Envelope;
+- stabile Fehlercodes und Exitcodes;
+- `hint` als strukturierter Recovery-Hinweis;
+- explizite Unterscheidung zwischen `NOT_IMPLEMENTED`, `UNSUPPORTED`, Auth-, Risk-Control- und Netzwerkfehlern;
+- Registry-generierte Capability-Matrix statt mehrfach gepflegter widersprüchlicher Listen;
+- stabile IDs/URLs für Tool-Chaining;
+- gefährliche Aktionen benötigen explizite Bestätigung;
+- Risk-Control wird gestoppt statt automatisch aggressiv wiederholt.
+
+KI-Regeln übernimmt **nicht** catbus' Plattformautomation, Credentialmodell, Scraping-/Browser-Fingerprinting oder konkrete Social-Plattform-Kommandos. Verallgemeinert wird nur der Agent-Tool-Vertrag in `Agent-Tool-Vertraege.md`.
+
 ## Eigene Synthese
 
 Dieses Repository ergänzt die reine Dateiformatfrage bewusst um:

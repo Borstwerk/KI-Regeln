@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Behavioral Harness Audit Replay Report",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "replay_class",
+    "model_invoked",
+    "external_tools_invoked",
+    "source_run",
+    "package_fingerprint",
+    "integrity",
+    "observed",
+    "limitations"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "replay_class": {
+      "const": "audit-replay"
+    },
+    "model_invoked": {
+      "const": false
+    },
+    "external_tools_invoked": {
+      "const": false
+    },
+    "source_run": {
+      "type": "object",
+      "required": [
+        "run_id",
+        "test_id",
+        "repo_commit",
+        "runner_type",
+        "runner_model",
+        "status"
+      ],
+      "properties": {
+        "run_id": {
+          "type": "string"
+        },
+        "test_id": {
+          "type": "string"
+        },
+        "repo_commit": {
+          "type": "string"
+        },
+        "runner_type": {
+          "type": "string"
+        },
+        "runner_model": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "package_fingerprint": {
+      "type": "string"
+    },
+    "integrity": {
+      "type": "object"
+    },
+    "observed": {
+      "type": "object"
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": false
+}

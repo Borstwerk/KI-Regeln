@@ -192,6 +192,18 @@ betroffene Evals bestimmen
 
 Bei Context-/Compaction-Evals ist ein besonders starker Outcome-Test die Fortsetzung derselben Aufgabe aus dem kompakten beziehungsweise übergebenen Zustand.
 
+## Replay-Begriffe
+
+Für gespeicherte Eval-Runs unterscheiden:
+
+- **Audit Replay** – gespeicherte Run-Evidence ohne Modell-/Tool-Neuausführung prüfen;
+- **State Replay** – einen ausreichend gespeicherten Zustand wiederherstellen;
+- **Fresh Re-execution** – denselben Test neu laufen lassen.
+
+Eine Fresh Re-execution ist die richtige Evidence für Behavioral-Stabilität, aber kein Beweis, dass der historische Run exakt reproduziert wurde.
+
+Der Behavioral Harness bietet dafür `replay-run` als modellfreien Audit Replay.
+
 ## Leitgedanke
 
 > Ein Eval soll eine konkrete Fehlermöglichkeit sichtbar machen – nicht nur bestätigen, dass der Skill im Happy Path nett aussieht.

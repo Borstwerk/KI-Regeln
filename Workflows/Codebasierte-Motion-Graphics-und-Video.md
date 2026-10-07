@@ -136,9 +136,30 @@ Runtime-Vertrag zuerst prüfen:
 - Medienkontrolle;
 - Renderpfad;
 - benötigte Browser-/Runtime-/Codec-/Font-Abhängigkeiten;
-- deterministische Bedingungen, falls Reproduzierbarkeit behauptet wird.
+- deterministische Bedingungen, falls Reproduzierbarkeit behauptet wird;
+- Agent-Tool-Vertrag für Status, Fehler, Acceptance und relevante Runtime-Versionen, soweit die Runtime maschinenlesbar gesteuert wird.
 
 `motion-implementation` kann für die konkrete browserbasierte Animationsmechanik komponiert werden. Der Skill übernimmt dadurch **nicht** automatisch Script, Asset-Sourcing, Audio, Claim-Recherche oder Gesamtvideoproduktion.
+
+### Optionales Runtime-Profil: HyperFrames
+
+Wenn HyperFrames als konkrete Runtime gewählt wird, bleibt der Workflow oben führend. Die Upstream-Skills werden nicht pauschal in KI-Regeln dupliziert.
+
+Für einen reproduzierbaren Lauf zusätzlich festhalten:
+
+- konkrete HyperFrames-/CLI-Version;
+- verwendeter Plugin-/Skill-Snapshot oder Release-Ref;
+- Node-/FFmpeg-Version, soweit relevant;
+- lokal eingefrorene Medien-/Asset-Refs;
+- ob Auto-Update beziehungsweise ein veränderlicher Branch aktiv war.
+
+Wichtig:
+
+> Eine gepinnte CLI-Version beweist nicht automatisch einen gepinnten Skill-Inhalt, wenn der Host Skills oder Marketplace-Inhalte separat aktualisiert.
+
+Wenn reproduzierbare Varianten wichtig sind, einen Release-/Archivstand oder anderweitig unveränderlichen Skill-Snapshot bevorzugen und automatische Aktualisierung während des reproduzierbaren Runs vermeiden.
+
+HyperFrames stellt unter anderem Lint-/Check-/Snapshot-/Preview-/Render-Schritte bereit. Welche davon im konkreten Projekt als Acceptance Evidence gelten, wird vor dem finalen Render festgelegt; bloß erfolgreiches Rendern ersetzt weder Frame- noch Playback-Prüfung.
 
 Änderungen lokal halten und bereits freigegebene Bereiche nicht unnötig neu bauen.
 
