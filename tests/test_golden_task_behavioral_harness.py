@@ -86,6 +86,9 @@ class GoldenTaskBlindnessTests(unittest.TestCase):
         (excluded / "Cross-Cutting-Skill-Discovery.md").write_text(
             "GT-09 must never reach the runner.\n", encoding="utf-8"
         )
+        (excluded / "Quellen-und-Inspirationen.md").write_text(
+            "Human/eval inspiration must never reach the runner.\n", encoding="utf-8"
+        )
 
         evals = root / "Evals"
         evals.mkdir()
@@ -155,6 +158,7 @@ class GoldenTaskBlindnessTests(unittest.TestCase):
             self.assertFalse((repository / "Evals").exists())
             self.assertFalse((repository / "CHANGELOG.md").exists())
             self.assertFalse((repository / "Skill-Engineering" / "Cross-Cutting-Skill-Discovery.md").exists())
+            self.assertFalse((repository / "Skill-Engineering" / "Quellen-und-Inspirationen.md").exists())
             self.assertFalse(
                 (repository / "Dokumentationserstellung" / "Visual-Answer-Explorativer-AB-Test-2026-10-06.md").exists()
             )
@@ -192,6 +196,31 @@ class GoldenTaskBlindnessTests(unittest.TestCase):
             self.assertIn("writable task requires", readiness["blocker"])
             self.assertEqual("writable", judge["execution_requirements"]["mode"])
             self.assertFalse(judge["execution_requirements"]["default_read_only_adapter_compatible"])
+
+    def test_repository_bootstrap_contract_names_mandatory_router_reads(self):
+        repo_root = Path(__file__).resolve().parents[1]
+        agents = (repo_root / "AGENTS.md").read_text(encoding="utf-8")
+        handbook = (repo_root / "Dokumentation" / "Skill-Handbuch.md").read_text(encoding="utf-8")
+        workflow = (repo_root / "Workflows" / "Architekturentscheidung-und-Tradeoff.md").read_text(encoding="utf-8")
+        visual_runtime = (
+            repo_root / "Dokumentationserstellung" / "Visuelle-Antworten-und-HTML-Artefakte.md"
+        ).read_text(encoding="utf-8")
+
+        for required in (
+            "Dokumentation/Skill-Handbuch.md",
+            "skill-catalog.yml",
+            "routing-overlays.yml",
+        ):
+            self.assertIn(required, agents)
+
+        self.assertIn("verbindlicher Bootstrap-Read-Vertrag", agents)
+        self.assertIn("im aktuellen Lauf tatsächlich öffnen", agents)
+        self.assertIn("Workflow einen Skill ausdrücklich als **Kern**", agents)
+        self.assertIn("Skill-Handbuch öffnen", handbook)
+        self.assertIn("routing-overlays.yml öffnen", handbook)
+        self.assertIn("architecture-tradeoff-analysis", workflow)
+        self.assertIn("verpflichtend zu prüfende Kernkandidat", workflow)
+        self.assertNotIn("HTML wurde in allen drei Fällen bevorzugt", visual_runtime)
 
     def test_outcome_primary_does_not_turn_missing_skill_read_into_hard_fail(self):
         trace = default_trace()

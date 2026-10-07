@@ -25,6 +25,12 @@ Eine schwer umkehrbare Architekturentscheidung mit mehreren ernsthaften Optionen
 - `architecture-review` für unabhängigen Gegencheck;
 - `adr` für dauerhafte Entscheidungsdokumentation.
 
+### Routing-Vertrag
+
+Wenn dieser Workflow gewählt wird, ist `architecture-tradeoff-analysis` der verpflichtend zu prüfende Kernkandidat. Seine `SKILL.md` muss gelesen werden, bevor ein generischer Entscheidungs- oder Vergleichsskill an seine Stelle tritt.
+
+Ein benachbarter Skill darf den Kern nur ersetzen, wenn die kanonische Description oder Near-Miss-Grenze von `architecture-tradeoff-analysis` den konkreten Auftrag ausschließt. Ein bloß allgemeineres „Optionen vergleichen“ ist kein ausreichender Ersatzgrund.
+
 ## Regeln
 
 - Keine Alternativen erfinden, die Requirements bereits ausschließen.

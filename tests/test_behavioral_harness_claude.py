@@ -44,6 +44,7 @@ Usage: claude [options]
 """
 DOCTOR_NO_POLICY = "Claude Code doctor\nManaged settings (remote): none configured for this organization\n"
 DOCTOR_WITH_POLICY = "Claude Code doctor\nManaged settings (remote): policy from acme-corp\n"
+DOCTOR_PENDING_POLICY = "Claude Code doctor\nManaged settings (remote): checking… (fetch in progress)\n"
 DOCTOR_SILENT = "Claude Code doctor\nRunning: native (2.1.251)\n"
 
 
@@ -348,14 +349,23 @@ class AdapterTests(unittest.TestCase):
         prepared = make_prepared(self.root)
         task = prepared / "runner-package"
 
+        catalog = task / "workspace" / "repository" / "skill-catalog.yml"
+        catalog.parent.mkdir(parents=True)
+        catalog.write_text(
+            "skills:\n  - {id: visual-answer, path: Dokumentationserstellung/Skills/visual-answer/SKILL.md}\n",
+            encoding="utf-8",
+        )
         stream = {
             "tool_uses": {
                 "g1": {"name": "Glob", "input": {"pattern": "**/SKILL.md", "path": "sources"}, "sequence": 7},
-                "g2": {"name": "Grep", "input": {"pattern": "description:", "path": "sources"}, "sequence": 11},
+                "g2": {"name": "Grep", "input": {"pattern": "description:", "path": "workspace/repository"}, "sequence": 11},
             },
             "tool_results": {
-                "g1": {"is_error": False},
-                "g2": {"is_error": False},
+                "g1": {"is_error": False, "content": "sources/01-source.md\n"},
+                "g2": {
+                    "is_error": False,
+                    "content": "workspace/repository/skill-catalog.yml:  - {id: visual-answer, path: Dokumentationserstellung/Skills/visual-answer/SKILL.md}\n",
+                },
             },
         }
         actions, reads, outside = adapter._actions(stream, task, "2026-10-06T16:00:00Z")
@@ -367,6 +377,19 @@ class AdapterTests(unittest.TestCase):
         self.assertTrue(all(x["authorization"]["present"] is True for x in actions["actions"]))
         self.assertEqual(["**/SKILL.md", "description:"], [x["discovery_expression"] for x in actions["actions"]])
         self.assertEqual([7, 11], [x["sequence"] for x in actions["actions"]])
+        self.assertEqual(
+            ["sources/01-source.md"],
+            actions["actions"][0]["discovery_result"]["paths"],
+        )
+        self.assertEqual(
+            ["workspace/repository/skill-catalog.yml"],
+            actions["actions"][1]["discovery_result"]["paths"],
+        )
+        self.assertEqual(
+            ["visual-answer"],
+            actions["actions"][1]["discovery_result"]["skill_ids"],
+        )
+        self.assertTrue(actions["observability"]["discovery_results"])
 
     def test_07c_execution_mode_mismatch_is_rejected_before_launch(self):
         self.assertEqual(
@@ -612,7 +635,7 @@ class AdapterTests(unittest.TestCase):
         runtime = self.load(out, "runtime-configuration-preimage.yml")
         self.assertNotIn("--bare", runtime["cli_argv_normalized"])
         self.assertIn("--safe-mode", runtime["cli_argv_normalized"])
-        self.assertEqual("0.3.1", runtime["adapter_version"])
+        self.assertEqual("0.3.2", runtime["adapter_version"])
 
     def test_27_complete_evidence_yields_fresh_context_true(self):
         out = self.run_one(FakeRunner(), out_name="fresh-true")
@@ -690,8 +713,11 @@ class AdapterTests(unittest.TestCase):
 
     def test_35_unreadable_managed_policy_status_stays_unknown(self):
         prepared = self.shared_prepared()
-        for fake, name in ((FakeRunner(doctor_text=DOCTOR_SILENT), "managed-silent"),
-                           (FakeRunner(doctor_rc=1), "managed-failed")):
+        for fake, name in (
+            (FakeRunner(doctor_text=DOCTOR_SILENT), "managed-silent"),
+            (FakeRunner(doctor_text=DOCTOR_PENDING_POLICY), "managed-pending"),
+            (FakeRunner(doctor_rc=1), "managed-failed"),
+        ):
             out = self.run_one(fake, prepared=prepared, out_name=name)
             method = self.load(out, "method-evidence.yml")
             self.assertEqual("unknown", method["fresh_context"])

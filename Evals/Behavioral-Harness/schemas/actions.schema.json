@@ -120,6 +120,67 @@
           },
           "discovery_expression": {
             "type": "string"
+          },
+          "discovery_result": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "observed": {
+                    "type": "boolean"
+                  },
+                  "content_sha256": {
+                    "type": "string"
+                  },
+                  "content_chars": {
+                    "oneOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      {
+                        "const": "unknown"
+                      }
+                    ]
+                  },
+                  "line_count": {
+                    "oneOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      {
+                        "const": "unknown"
+                      }
+                    ]
+                  },
+                  "paths": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "uniqueItems": true
+                  },
+                  "skill_ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "uniqueItems": true
+                  },
+                  "paths_truncated": {
+                    "type": "boolean"
+                  },
+                  "skill_ids_truncated": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": true
+              }
+            ]
           }
         },
         "additionalProperties": true

@@ -8,6 +8,11 @@ schema_version: 2
 #
 # checkpoints steuern nur, WANN ein Kandidat erneut geprüft werden soll.
 # Sie sind keine zweite Triggerwahrheit.
+#
+# Bootstrap-Vertrag:
+# AGENTS.md verlangt bei nichttrivialen Aufgaben, diese Registry im aktuellen
+# Lauf tatsächlich zu öffnen. Der Eintrag hier macht einen Skill nur zum
+# Kandidaten; die Aktivierung entscheidet weiterhin ausschließlich SKILL.md.
 overlays:
   - skill: visual-answer
     phase: presentation
