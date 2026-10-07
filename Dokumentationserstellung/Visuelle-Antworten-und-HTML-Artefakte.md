@@ -357,31 +357,15 @@ HTML visuell geprüft
 
 Ohne Render-/Inspection-Evidence darf kein vollständiger Visual-Pass behauptet werden.
 
-## Explorative A/B-Evidence vom 2026-10-06
+## Human-Evidence und Blindrunner-Grenze
 
-Drei manuelle Zero-Install-Vergleiche wurden mit inhaltlich parallelen Markdown- und HTML-Ausgaben durchgeführt:
+Explorative Human-Evidence zu visuellen Antwortformen wird getrennt von dieser operativen Runtime-Dokumentation gepflegt und nicht in Golden-Task-Blindrunner-Snapshots übernommen.
 
-1. **Architektur / Überblick** – HypeRadar-Funde und KI-Regeln-Einordnung;
-2. **Mehrkriterien-Entscheidung** – drei Optionen für den Umgang mit visuellen Antworten;
-3. **Review / Findings** – 14 synthetische Findings mit mehreren Severity-Stufen.
+Für die operative Regel gilt nur:
 
-Beobachtung des menschlichen Reviewers:
-
-- HTML wurde in allen drei Fällen bevorzugt;
-- besonders genannt wurde, dass wichtige Informationen **auf den ersten Blick innerhalb kurzer Zeit** erfasst werden konnten;
-- der wahrgenommene Vorteil lag in visueller Struktur, Gruppierung und Priorisierung, nicht in neuem fachlichem Inhalt.
-
-Grenzen dieser Evidence:
-
-- ein Reviewer;
-- nicht verblindet;
-- keine randomisierte Reihenfolge;
-- keine gemessene Lesedauer;
-- keine Recall-/Fehlerquote;
-- die HTML-Seiten wurden direkt erzeugt und nicht mit dem originalen `answer-me-with-html`-Renderer gerendert;
-- daraus folgt keine Token-, Kosten- oder Speed-Benchmark.
-
-Die Evidence rechtfertigt deshalb einen **experimentellen** lokalen Skill, aber keine Maturity-Hochstufung.
+- visuelle Struktur muss einen konkreten Time-to-Signal-Nutzen haben;
+- Inhaltstreue und Default-Verständlichkeit bleiben Pflicht;
+- ein Human-Preference-Test ist kein Triggerbeweis und keine Maturity-Evidence.
 
 ## Leitgedanke
 

@@ -8,6 +8,19 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Deterministic Bootstrap Routing + Discovery Result Evidence
+
+- Behavioral Rerun #4 zeigte: der Discovery-Gate aus PR #66 verbessert Suchverhalten, bindet aber nicht zuverlässig. `routing-overlays.yml` wurde in keinem der zwölf Läufe gelesen; `visual-answer`, `citation-audit` und die Voice-Composition blieben dadurch instabil oder vollständig unentdeckt;
+- `AGENTS.md` erhält deshalb einen frühen und später wiederholten **Bootstrap-Read-Vertrag**: bei nichttrivialen Aufgaben müssen `Dokumentation/Skill-Handbuch.md`, `skill-catalog.yml` und `routing-overlays.yml` im aktuellen Lauf tatsächlich geöffnet beziehungsweise gezielt durchsucht werden; bei plausiblem mehrphasigem Prozess zusätzlich `workflow-index.yml` und der passende Workflow;
+- der triviale Direktpfad bleibt unverändert, damit Faktenfragen und enge Ein-Satz-Zusammenfassungen weiterhin ohne künstliche Skill-Suche zu `none` routen können;
+- Workflow-Kernowner werden geschützt: nennt ein geladener Workflow einen Skill ausdrücklich als Kern/Primary/zwingenden Schritt, muss dessen `SKILL.md` vor einem generischeren Ersatzkandidaten gelesen werden. Der Architektur-Tradeoff-Workflow konkretisiert dies für `architecture-tradeoff-analysis`;
+- vor einer Ein-Skill-Entscheidung müssen explizit getrennte Jobs als getrennte Kandidaten geprüft werden, wenn sie tatsächlich eigenständige Ownership besitzen; damit bleibt Composition job-basiert statt related-basiert;
+- die explorative Visual-A/B-Evidence wurde aus der operativen Visual-Runtime-Doku entfernt; `Skill-Engineering/Quellen-und-Inspirationen.md` wird zusätzlich aus Golden-Task-Runner-Snapshots ausgeschlossen;
+- Claude-Adapter `0.3.2`: Glob/Grep-Evidence enthält jetzt einen Hash des beobachteten Resultats, Größe, erkannte package-lokale Pfade und erkennbare Skill-IDs; Suchausdruck und Sequenz bleiben erhalten;
+- temporäre Managed-Policy-Doctor-Zustände wie `checking… (fetch in progress)` werden als `unknown` statt als vorhandene Remote-Policy klassifiziert;
+- Regressionstests sichern Bootstrap-Read-Vertrag, Workflow-Kernowner, Discovery-Result-Evidence, Pending-Managed-Policy und die zusätzliche Blindrunner-Exclusion ab;
+- einzelne Skill-Descriptions und die Golden-Task-Routing-Erwartungen bleiben unverändert. Der nächste Rerun soll zeigen, ob der mechanische Router-Floor GT-09/11/12/16 stabilisiert, ohne GT-10/15 in Over-Routing zu kippen.
+
 ### Bootstrap Discovery + Harness Evidence Hygiene
 
 - Rerun #3 zeigte bei allen vier `discovery-required`-Golden-Tasks trotz verfügbarer Read/Glob/Grep-Discovery keinen Skill-Read; fachliche Outputs blieben überwiegend gut. Das wird als belastbares Under-Routing-Signal für den Bootstrap behandelt, nicht als Anlass, einzelne Skills triggerfreudiger zu machen;

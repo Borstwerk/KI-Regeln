@@ -84,6 +84,7 @@ RUNTIME_EXCLUDED_RELATIVE = {
     "Agentenarbeit/Agent-Evals.md",
     "Dokumentationserstellung/Visual-Answer-Explorativer-AB-Test-2026-10-06.md",
     "Skill-Engineering/Cross-Cutting-Skill-Discovery.md",
+    "Skill-Engineering/Quellen-und-Inspirationen.md",
     "Skill-Engineering/Skill-Review-und-Evals.md",
 }
 
@@ -418,6 +419,7 @@ def write_prepared_case(compiled: dict[str, Any], task_path: Path, repo_root: Pa
             "Agentenarbeit/Agent-Evals.md",
             "Dokumentationserstellung/Visual-Answer-Explorativer-AB-Test-2026-10-06.md",
             "Skill-Engineering/Cross-Cutting-Skill-Discovery.md",
+            "Skill-Engineering/Quellen-und-Inspirationen.md",
             "Skill-Engineering/Skill-Review-und-Evals.md",
         ],
     }

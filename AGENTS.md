@@ -2,6 +2,17 @@
 
 Diese Datei ist der kleinste Einstiegspunkt für einen frischen KI-Agenten. Lade nicht pauschal README, alle Skills oder das vollständige Handbuch in den Kontext.
 
+## Pflicht vor nichttrivialer Arbeit
+
+Bevor bei einer **nichttrivialen** Aufgabe ein erster Lösungsentwurf entsteht, müssen im aktuellen Lauf die zentralen Router tatsächlich benutzt werden:
+
+1. `Dokumentation/Skill-Handbuch.md` öffnen;
+2. `skill-catalog.yml` öffnen oder gezielt durchsuchen;
+3. `routing-overlays.yml` öffnen;
+4. bei einem plausiblen mehrphasigen Prozess zusätzlich `workflow-index.yml` und den passenden Workflow öffnen.
+
+Erst danach Primärowner, mögliche Composition und `none` festlegen. Diese Pflicht gilt nicht für den unten definierten trivialen Direktpfad.
+
 ## Problem-first Routing
 
 Der Nutzer muss keine Skill-Namen, Domänen oder Workflows kennen. Ein Auftrag darf vollständig in Alltagssprache formuliert sein.
@@ -37,12 +48,15 @@ Bei **nichttrivialen** Aufgaben sind die Routing-Schritte 3–5 echte Arbeitspha
 
 Als nichttrivial gelten insbesondere Aufträge mit mehreren Kriterien oder Trade-offs, adressaten- oder voice-spezifischer Kommunikation, publikationsreifer Synthese, mehreren eigenständigen Arbeitsjobs, Security-/Admission-/Permission-Fragen, Toolnutzung, Mutation oder mehreren Arbeitsschritten.
 
-Dafür gilt vor der eigentlichen Ausführung:
+Dafür gilt vor der eigentlichen Ausführung ein **verbindlicher Bootstrap-Read-Vertrag**:
 
-- den passenden Routingraum beziehungsweise vorhandenen Workflow zielgerichtet prüfen;
-- im Katalog die plausiblen fachlichen Owner gegen ihre Description prüfen;
-- die für den aktuellen Checkpoint registrierten Cross-Cutting-Kandidaten prüfen;
-- erst danach mit dem kleinsten ausreichenden Skill-Satz – einschließlich `none`, falls nach der Prüfung wirklich kein Skill nötig ist – ausführen.
+1. `Dokumentation/Skill-Handbuch.md` tatsächlich öffnen und den passenden Routingraum bestimmen;
+2. `workflow-index.yml` prüfen, wenn die Aufgabe mehrere Phasen verbindet oder ein vorhandener Workflow plausibel ist; einen passenden Workflow dann tatsächlich öffnen;
+3. `skill-catalog.yml` tatsächlich öffnen oder gezielt darin suchen und die plausiblen fachlichen Owner gegen ihre Description prüfen;
+4. `routing-overlays.yml` tatsächlich öffnen und die Kandidaten für den aktuellen Checkpoint bestimmen;
+5. erst danach mit dem kleinsten ausreichenden Skill-Satz – einschließlich `none`, falls nach dieser Prüfung wirklich kein Skill nötig ist – ausführen.
+
+Ein bloßer Verweis aus `AGENTS.md` auf diese Dateien zählt nicht als Discovery. Für nichttriviale Aufgaben müssen die relevanten Router-Artefakte im aktuellen Lauf wirklich gelesen oder gezielt durchsucht worden sein.
 
 **Trivialer Direktpfad:** Eine kurze Faktenklärung, eine mechanische Kleintransformation oder eine eng begrenzte Ein-Satz-Zusammenfassung ohne Risiko, Außenwirkung oder Spezialanforderung darf nach Auftrag + lokaler Wahrheit direkt beantwortet werden. Dafür muss kein künstlicher Skill gesucht werden.
 
@@ -50,10 +64,10 @@ Kurz: `none` ist ein gültiges Routing-Ergebnis, aber bei nichttrivialen Aufgabe
 
 1. **Nutzerauftrag lesen.** Problem, gewünschtes Ergebnis, Scope, Grenzen und explizite Autorisierung festhalten. Fehlende Skill-Namen sind kein fehlender Input.
 2. **Lokale Wahrheit zuerst.** Projektregeln, lokale Sources of Truth, vorhandene Artefakte und Nutzerangaben schlagen allgemeine Repository-Regeln. Allgemeine Arbeitsweise ist zentral; konkrete Wahrheit bleibt lokal.
-3. **Aufgabe einordnen.** Aus dem realen Problem geeignete Domäne(n) und vorhandene Workflows ableiten. Nutze `Dokumentation/Skill-Handbuch.md` als Master-Router und `workflow-index.yml` für vorhandene Workflows. Bei nichttrivialen Aufgaben diesen Schritt tatsächlich durchführen; eine plausible Direktantwort ersetzt ihn nicht.
-4. **Primären Skill-Satz wählen.** Nutze `skill-catalog.yml`; lade nur die fachlich tatsächlich benötigten `SKILL.md`-Dateien und deren zwingende Abhängigkeiten. `related` ist ein Routinghinweis, kein Ladebefehl. Bei nichttrivialen Aufgaben mindestens die plausiblen Owner gezielt gegen ihre Description prüfen, bevor `none` gewählt wird.
-5. **Cross-Cutting-Checkpoints anwenden.** Nutze `routing-overlays.yml` nicht als einmaligen Pass, sondern nur an den dort genannten Checkpoints. Prüfe jeweils ausschließlich die kanonische Description der Kandidaten, deren Checkpoint erreicht ist. Ein Cross-Cutting-Check darf nicht allein deshalb entfallen, weil der fachliche Inhalt schon formulierbar wäre.
-6. **Primary verfeinern statt aufblasen.** Wenn ein Overlay-Kandidat laut eigener Description der spezifischere Primärowner für den Auftrag ist, darf er einen vorläufig gewählten generischen Skill ersetzen. Beide bleiben nur aktiv, wenn jeder einen eigenen notwendigen Job besitzt.
+3. **Aufgabe einordnen.** Aus dem realen Problem geeignete Domäne(n) und vorhandene Workflows ableiten. Nutze `Dokumentation/Skill-Handbuch.md` als Master-Router und `workflow-index.yml` für vorhandene Workflows. Bei nichttrivialen Aufgaben den Master-Router im aktuellen Lauf tatsächlich öffnen; wenn ein Workflow plausibel ist, den Index und anschließend den Workflow öffnen.
+4. **Primären Skill-Satz wählen.** Nutze `skill-catalog.yml`; lade nur die fachlich tatsächlich benötigten `SKILL.md`-Dateien und deren zwingende Abhängigkeiten. `related` ist ein Routinghinweis, kein Ladebefehl. Bei nichttrivialen Aufgaben den Katalog im aktuellen Lauf tatsächlich öffnen oder gezielt durchsuchen und mindestens die plausiblen Owner gegen ihre Description prüfen, bevor `none` gewählt wird. Nennt ein geladener Workflow einen Skill ausdrücklich als **Kern**, **Primary Owner** oder zwingenden Schritt, muss dessen `SKILL.md` vor einem generischeren Ersatzkandidaten gelesen werden. Ein Ersatz ist nur zulässig, wenn die kanonische Description oder Near-Miss-Grenze den Kernskill für den konkreten Auftrag ausschließt.
+5. **Cross-Cutting-Checkpoints anwenden.** `routing-overlays.yml` ist bei nichttrivialen Aufgaben im aktuellen Lauf tatsächlich zu öffnen. Prüfe an den dort genannten Checkpoints ausschließlich die kanonische Description der registrierten Kandidaten. Ein Cross-Cutting-Check darf nicht allein deshalb entfallen, weil der fachliche Inhalt schon formulierbar wäre. Für `pre-completion` und `pre-output` die Registry erneut konsultieren; wenn seit dem ersten Pass kein relevanter Overlay-Kandidat gelesen wurde, die Datei erneut öffnen statt sich auf eine implizite Erinnerung zu verlassen.
+6. **Primary verfeinern statt aufblasen.** Wenn ein Overlay-Kandidat laut eigener Description der spezifischere Primärowner für den Auftrag ist, darf er einen vorläufig gewählten generischen Skill ersetzen. Beide bleiben nur aktiv, wenn jeder einen eigenen notwendigen Job besitzt. Vor dem Zusammenfallen auf genau einen Skill die expliziten Teiljobs des Auftrags kurz trennen: besitzt ein zweiter Kandidat einen eigenständigen, im Auftrag tatsächlich vorhandenen Job, muss auch dessen Description geprüft werden. Das gilt besonders, wenn fachliche Wirkung und Form/Voice, Synthese und Assurance oder Inhalt und Darstellung getrennte Anforderungen sind.
 7. **Nur notwendige Lücken klären.** Frage nach Informationen, die für eine belastbare Bearbeitung wirklich fehlen. Wenn eine Nutzerantwort, ein Toolergebnis, eine gefundene Datei, eine Scope-Änderung oder ein Fehlschlag einen für eine bereits geprüfte Skill-Description relevanten Sachverhalt materiell ändert, prüfe genau diesen Kandidaten erneut. Dieses ereignisgesteuerte Re-Entry ist kein zusätzlicher globaler Checkpoint und kein Anlass für einen vollständigen Katalogscan.
 8. **Vor Ausführung prüfen.** `maturity`, `eval_coverage`, `capabilities` und `related` im Katalog sowie die Skill-Frontmatter beachten. Toolverfügbarkeit ist keine Autorisierung.
 9. **Capability-Runtime wählen.** Wenn eine externe App, ein Account oder ein Dienst materiell helfen würde, zuerst native Capabilities und bereits verbundene Plugins/Apps prüfen. READ, WRITE und extern sichtbare ACTIONS getrennt behandeln.
@@ -78,10 +92,10 @@ Typischer Startkontext:
 
 - `AGENTS.md`;
 - relevante lokale Projektregeln / Sources of Truth;
-- `Dokumentation/Skill-Handbuch.md` nur zum Primärrouting;
-- passende Einträge aus `skill-catalog.yml`;
-- `routing-overlays.yml` als kleine globale Checkpoint-Liste;
+- bei **nichttrivialen** Aufgaben als kleiner obligatorischer Router-Satz: `Dokumentation/Skill-Handbuch.md`, passende Nutzung von `workflow-index.yml`, `skill-catalog.yml` und `routing-overlays.yml`;
 - danach nur die tatsächlich ausgewählten Skills bzw. Workflows.
+
+Der obligatorische Router-Satz bedeutet **nicht**, alle Skills zu laden. Er soll gerade verhindern, dass ein Agent ohne Discovery direkt aus der Fixture antwortet oder zufällig einen benachbarten Owner auswählt.
 
 Nicht erforderlich: komplettes Repository, alle katalogisierten Skills, vollständige Nutzungsdokumentation oder alle Fachhandbücher.
 
@@ -107,5 +121,5 @@ Die vorhandenen Python-Validatoren bleiben kanonische Prüflogik hinter dem Harn
 - Keine externen Quellen automatisch synchronisieren.
 - Keine produktiven Writes, Deployments, Veröffentlichungen oder sonstigen Außenaktionen aus bloßer Tool-, Plugin- oder App-Verfügbarkeit ableiten.
 - Eine vorhandene Plugin-/App-Verbindung erweitert Capability, nicht automatisch Autorisierung.
-- Bei nichttrivialen Aufgaben Routing-Schritte 3–5 nicht nur deshalb überspringen, weil ohne weitere Discovery bereits eine plausible Antwort formulierbar ist.
+- Bei nichttrivialen Aufgaben Routing-Schritte 3–5 nicht nur deshalb überspringen, weil ohne weitere Discovery bereits eine plausible Antwort formulierbar ist; Master-Router, Katalog und Overlay-Registry müssen im aktuellen Lauf tatsächlich gelesen oder gezielt durchsucht werden.
 - Externe Skills nur entsprechend dokumentierter Provenance und Lizenzlage übernehmen oder weiterverteilen.

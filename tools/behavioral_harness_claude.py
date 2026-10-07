@@ -29,7 +29,7 @@ except ImportError:  # direct script sibling import
         VIEW_MCP_CONFIG, confined_model_invocation, confinement_facts, invocation_evidence,
     )
 
-VERSION = "0.3.1"
+VERSION = "0.3.2"
 RUNNER_TYPE = "claude-code"
 METHOD_CONTRACT = "behavioral-paired-run-method-evidence/v1"
 UNKNOWN = "unknown"
@@ -136,6 +136,7 @@ FAILURE_CATEGORIES = {
 FAILURE_KEYS = ("error", "error_type", "subtype")
 REMOTE_MANAGED_PREFIX = "Managed settings (remote):"
 REMOTE_MANAGED_NONE = "none configured"
+REMOTE_MANAGED_PENDING = ("checking", "fetch in progress", "loading", "pending")
 HOOK_LIFECYCLE_EVENTS = {"hook_started", "hook_progress", "hook_response"}
 # Flags that would re-open a context source the paired method assumes closed.
 CONTEXT_EXTENDING_FLAGS = {"--add-dir", "--plugin-dir", "--plugin-url", "--agents", "--settings", "--fallback-model"}
@@ -413,6 +414,17 @@ def _generation(policy: Mapping[str, Any], key: str) -> str:
     return str(effective.get(key, "not_exposed"))
 
 
+def _remote_managed_state(status: str) -> Any:
+    value = str(status).strip().lower()
+    if not value:
+        return UNKNOWN
+    if value.startswith(REMOTE_MANAGED_NONE):
+        return False
+    if any(marker in value for marker in REMOTE_MANAGED_PENDING):
+        return UNKNOWN
+    return True
+
+
 def _managed_policy(binary: str, env: Mapping[str, str], cwd: Path, runner: ProcessRunner) -> dict[str, Any]:
     """Observe managed-policy sources locally. No model task; unproven means unknown."""
     paths = MANAGED_POLICY_PATHS.get(sys.platform)
@@ -429,7 +441,7 @@ def _managed_policy(binary: str, env: Mapping[str, str], cwd: Path, runner: Proc
             text = raw.strip()
             if text.startswith(REMOTE_MANAGED_PREFIX):
                 line = text
-                remote = not text[len(REMOTE_MANAGED_PREFIX):].strip().lower().startswith(REMOTE_MANAGED_NONE)
+                remote = _remote_managed_state(text[len(REMOTE_MANAGED_PREFIX):])
                 break
     absent: Any = UNKNOWN if UNKNOWN in (local_present, remote) else (local_present is False and remote is False)
     return {
@@ -666,6 +678,79 @@ def _discovery_expression(tool_input: Any, tool_name: str) -> str:
     return UNKNOWN
 
 
+def _tool_result_text(result: Any) -> str:
+    if not isinstance(result, dict):
+        return ""
+    content = result.get("content")
+    if isinstance(content, str):
+        return content
+    if isinstance(content, list):
+        parts: list[str] = []
+        for item in content:
+            if isinstance(item, str):
+                parts.append(item)
+            elif isinstance(item, dict) and isinstance(item.get("text"), str):
+                parts.append(item["text"])
+        return "\n".join(parts)
+    return ""
+
+
+def _discovery_result_evidence(result: Any, task: Path) -> dict[str, Any]:
+    if not isinstance(result, dict):
+        return {
+            "observed": False,
+            "content_sha256": UNKNOWN,
+            "content_chars": UNKNOWN,
+            "line_count": UNKNOWN,
+            "paths": [],
+            "skill_ids": [],
+        }
+
+    text = _tool_result_text(result)
+    paths: list[str] = []
+    skill_ids: list[str] = []
+
+    def add_path(raw: str) -> None:
+        value = raw.strip().strip("'\"")
+        if not value:
+            return
+        candidate = Path(value)
+        try:
+            resolved = candidate.resolve() if candidate.is_absolute() else (task / candidate).resolve()
+            rel = resolved.relative_to(task.resolve()).as_posix()
+        except (OSError, ValueError):
+            return
+        if resolved.exists() and rel not in paths:
+            paths.append(rel)
+
+    for line in text.splitlines():
+        stripped = line.strip()
+        add_path(stripped)
+        if ":" in stripped:
+            add_path(stripped.split(":", 1)[0])
+        for match in re.finditer(r"([A-Za-z0-9_.\-/]+(?:SKILL\.md|\.md|\.ya?ml))", stripped):
+            add_path(match.group(1))
+        for match in re.finditer(r"\b(?:id|skill):\s*([a-z0-9][a-z0-9-]*)", stripped, re.IGNORECASE):
+            skill_id = match.group(1)
+            if skill_id not in skill_ids:
+                skill_ids.append(skill_id)
+        for match in re.finditer(r"/Skills/([a-z0-9][a-z0-9-]*)/SKILL\.md", stripped, re.IGNORECASE):
+            skill_id = match.group(1)
+            if skill_id not in skill_ids:
+                skill_ids.append(skill_id)
+
+    return {
+        "observed": True,
+        "content_sha256": _hash_text(text),
+        "content_chars": len(text),
+        "line_count": len(text.splitlines()),
+        "paths": paths[:100],
+        "skill_ids": skill_ids[:100],
+        "paths_truncated": len(paths) > 100,
+        "skill_ids_truncated": len(skill_ids) > 100,
+    }
+
+
 def _event_timestamp(event: Mapping[str, Any]) -> str:
     for key in ("timestamp", "created_at", "createdAt"):
         value = event.get(key)
@@ -756,6 +841,11 @@ def _actions(stream: Mapping[str, Any], task: Path, timestamp: str):
         target = _target(item.get("input"), name)
         discovery_expression = _discovery_expression(item.get("input"), name)
         result = stream["tool_results"].get(tool_id); error = bool(result.get("is_error")) if isinstance(result, dict) else False
+        discovery_result = (
+            _discovery_result_evidence(result, task)
+            if name in {"Glob", "Grep"}
+            else None
+        )
         executed = result is not None and not error
         local = _local_target(target, task) if name in {"Read", "Glob", "Grep", "Write", "Edit", "NotebookEdit"} else UNKNOWN
         if local is False:
@@ -769,6 +859,7 @@ def _actions(stream: Mapping[str, Any], task: Path, timestamp: str):
             "action_id": f"A-{i:03d}", "tool": name, "operation": "tool-call", "target": target,
             "sequence": int(item.get("sequence") or i),
             "discovery_expression": discovery_expression,
+            "discovery_result": discovery_result,
             "environment": "claude-code-ephemeral-runtime", "attempted": True, "executed": executed,
             "result": "success" if executed else "tool-error" if error else "result-not-observed",
             "timestamp": event_timestamp if isinstance(event_timestamp, str) and event_timestamp != UNKNOWN else timestamp,
@@ -784,7 +875,11 @@ def _actions(stream: Mapping[str, Any], task: Path, timestamp: str):
         }
         rows.append(row)
         if name == "Read" and executed and local is True: reads.append(row)
-    observability = {"actions_complete": True, "outside_package": dict(outside)}
+    observability = {
+        "actions_complete": True,
+        "discovery_results": True,
+        "outside_package": dict(outside),
+    }
     return {"schema_version": 1, "observability": observability, "actions": rows}, reads, outside
 
 

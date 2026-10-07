@@ -29,6 +29,19 @@ Nicht vom Werkzeugnamen ausgehen, sondern von der zu erledigenden Arbeit.
 
 Für nichttriviale Aufgaben ist Routing-Discovery Teil der Arbeit: Primärdomäne/Workflow, plausible Katalog-Owner und aktuelle Cross-Cutting-Kandidaten werden zielgerichtet geprüft, **bevor** die eigentliche Ausführung beginnt. Dass sich aus der lokalen Quelle bereits eine plausible Antwort formulieren ließe, ist kein Ersatz für diese Prüfung.
 
+Der Agent soll dabei nicht nur wissen, dass Router-Dateien existieren, sondern sie im aktuellen Lauf tatsächlich nutzen:
+
+```text
+Skill-Handbuch öffnen
+→ bei plausiblem Workflow workflow-index.yml + Workflow öffnen
+→ skill-catalog.yml öffnen/gezielt durchsuchen
+→ routing-overlays.yml öffnen
+→ Kandidaten-Descriptions lesen
+→ kleinsten ausreichenden Skill-Satz festlegen
+```
+
+Diese vier Router-Artefakte sind klein genug, um bei nichttrivialen Aufgaben als Discovery-Floor zu dienen. Der Floor lädt **keine** 152 Skills; er verhindert nur ungeprüftes Direkt-Routing.
+
 Das gilt besonders bei Mehrkriterienentscheidungen, adressaten- oder voice-spezifischer Kommunikation, publikationsreifer Synthese, mehreren eigenständigen Jobs, Security-/Permission-Fragen, Toolnutzung, Mutation oder mehrstufiger Arbeit.
 
 Der Direktpfad bleibt bewusst erhalten: triviale Faktenfragen, mechanische Kleintransformationen und eng begrenzte Kurz-Zusammenfassungen ohne Spezialanforderung dürfen ohne künstliche Skill-Suche beantwortet werden.
@@ -90,7 +103,9 @@ Details: `../Skill-Engineering/Cross-Cutting-Skill-Discovery.md`.
 - Der Nutzer muss keine Skill-Namen kennen. Fehlende Skill-Auswahl ist Aufgabe des Routers, nicht automatisch eine Rückfrage an den Nutzer.
 - Nicht alle Skills laden. Im Katalog nach `purpose`, `area`, `capabilities` und `related` primär routen und nur die benötigten `SKILL.md`-Dateien öffnen.
 - Bei nichttrivialen Aufgaben diesen Routing-Schritt nicht überspringen, nur weil Nutzertext oder Fixture schon genug Material für eine plausible Direktantwort enthalten.
-- `routing-overlays.yml` an den angegebenen Checkpoints prüfen; die dort gelisteten Skills nur bei passender eigener Skill-Description aktivieren und redundante generische Skills bei spezifischerem Ownership-Signal entfernen.
+- `routing-overlays.yml` bei nichttrivialen Aufgaben im aktuellen Lauf tatsächlich öffnen und an den angegebenen Checkpoints prüfen; die dort gelisteten Skills nur bei passender eigener Skill-Description aktivieren und redundante generische Skills bei spezifischerem Ownership-Signal entfernen.
+- Wenn ein geladener Workflow einen Skill ausdrücklich als Kern oder zwingenden Schritt nennt, dessen `SKILL.md` vor einem generischeren Ersatz lesen. Einen benachbarten Skill nur dann vorziehen, wenn die kanonische Description/Near-Miss-Grenze den Workflow-Kern für den konkreten Auftrag ausschließt.
+- Vor einer Ein-Skill-Entscheidung die expliziten Teiljobs des Auftrags trennen. Zwei verwandte Skills sind nur dann gemeinsam nötig, wenn jeder einen eigenständigen Job besitzt; bei tatsächlich vorhandenen getrennten Jobs müssen beide Kandidaten wenigstens gegen ihre Description geprüft werden.
 - Vor einer Rückfrage prüfen, ob Auftrag, lokale Quellen oder vorhandene Artefakte die Information bereits liefern.
 - Nur Informationen erfragen, die für die konkrete Aufgabe materiell fehlen; keine unnötige Vollerhebung oder sensible Datensammlung.
 - `maturity` ist Reifeinformation, keine Autorisierung.

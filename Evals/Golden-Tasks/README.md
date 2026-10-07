@@ -94,11 +94,13 @@ Das Runner-Paket enthält:
 - einen operativen `runtime.execution_mode`, der aus der Judge-seitigen Capability-Anforderung abgeleitet wird;
 - Fixtures unter neutralen Pfaden wie `workspace/task/fixture-01-options.md`;
 - `workspace/repository/AGENTS.md`, Katalog, Overlay-Registry, Workflow-Index und die operativen Domain-/Skill-/Workflow-Dateien;
-- **nicht**: `Evals/**`, `.git/**`, `.github/**`, `tests/**`, `tools/**`, Root-Changelog/README sowie bekannte eval-beschreibende Metadokumente.
+- **nicht**: `Evals/**`, `.git/**`, `.github/**`, `tests/**`, `tools/**`, Root-Changelog/README sowie bekannte eval-beschreibende Metadokumente und Human-/Inspirationsevidence wie `Skill-Engineering/Quellen-und-Inspirationen.md`.
 
 Der Workspace wird dateiweise gehasht. `verify_prepared_integrity` lehnt einen vor dem Run veränderten Runner-Workspace ab.
 
 Der vorhandene Claude-Code-Adapter stellt für read-only Runs `Read`, `Glob` und `Grep` bereit. `Glob`/`Grep` dienen ausschließlich der kontrollierten Discovery innerhalb des vorbereiteten Pakets; Web, MCP, Bash und Mutation bleiben gesperrt. Ein als `writable` deklarierter Golden Task wird vom normalen read-only Pfad vor dem Modellstart abgewiesen und in `readiness.yml` als nicht bereit für diesen Runner markiert.
+
+Für nichttriviale Aufgaben gilt der operative Bootstrap-Vertrag aus `AGENTS.md`: Master-Router, Katalog und Overlay-Registry müssen im aktuellen Lauf tatsächlich benutzt werden. Der Golden-Task-Harness erfindet dafür keine erwarteten Skillnamen im Runner-Prompt; er stellt nur die kuratierte Repository-Sicht und Read/Glob/Grep bereit.
 
 Aus erfolgreichen `Read`-Toolereignissen erzeugt der Adapter objektive `skill_events: read` und `workflow_events: read`. `Glob`/`Grep` werden als read-only Actions protokolliert, aber ein Suchtreffer wird **nicht** als Skill-Read hochgestuft. Der Adapter leitet außerdem **nicht** `selected`, `applied`, `CANDIDATE_REJECTED`, Refinement oder Checkpoint-Reihenfolge aus Reads oder Modellprosa ab.
 
