@@ -25,6 +25,16 @@ Für Menschen ohne Repository-Vorkenntnisse beginnt der Einstieg in `../START-HI
 
 Nicht vom Werkzeugnamen ausgehen, sondern von der zu erledigenden Arbeit.
 
+### Minimal-Discovery vor nichttrivialer Ausführung
+
+Für nichttriviale Aufgaben ist Routing-Discovery Teil der Arbeit: Primärdomäne/Workflow, plausible Katalog-Owner und aktuelle Cross-Cutting-Kandidaten werden zielgerichtet geprüft, **bevor** die eigentliche Ausführung beginnt. Dass sich aus der lokalen Quelle bereits eine plausible Antwort formulieren ließe, ist kein Ersatz für diese Prüfung.
+
+Das gilt besonders bei Mehrkriterienentscheidungen, adressaten- oder voice-spezifischer Kommunikation, publikationsreifer Synthese, mehreren eigenständigen Jobs, Security-/Permission-Fragen, Toolnutzung, Mutation oder mehrstufiger Arbeit.
+
+Der Direktpfad bleibt bewusst erhalten: triviale Faktenfragen, mechanische Kleintransformationen und eng begrenzte Kurz-Zusammenfassungen ohne Spezialanforderung dürfen ohne künstliche Skill-Suche beantwortet werden.
+
+Damit ist `none` weiterhin ein erstklassiges Ergebnis – bei nichttrivialen Aufgaben aber **nach** zielgerichteter Discovery statt als ungeprüfter Bypass.
+
 | Beispielhafter Auftrag | Typischer erster Routingraum |
 |---|---|
 | „Prüfe, ob diese Behauptung stimmt.“ | Recherche |
@@ -79,6 +89,7 @@ Details: `../Skill-Engineering/Cross-Cutting-Skill-Discovery.md`.
 - Allgemeine Arbeitsweise zentral, konkrete Wahrheit lokal.
 - Der Nutzer muss keine Skill-Namen kennen. Fehlende Skill-Auswahl ist Aufgabe des Routers, nicht automatisch eine Rückfrage an den Nutzer.
 - Nicht alle Skills laden. Im Katalog nach `purpose`, `area`, `capabilities` und `related` primär routen und nur die benötigten `SKILL.md`-Dateien öffnen.
+- Bei nichttrivialen Aufgaben diesen Routing-Schritt nicht überspringen, nur weil Nutzertext oder Fixture schon genug Material für eine plausible Direktantwort enthalten.
 - `routing-overlays.yml` an den angegebenen Checkpoints prüfen; die dort gelisteten Skills nur bei passender eigener Skill-Description aktivieren und redundante generische Skills bei spezifischerem Ownership-Signal entfernen.
 - Vor einer Rückfrage prüfen, ob Auftrag, lokale Quellen oder vorhandene Artefakte die Information bereits liefern.
 - Nur Informationen erfragen, die für die konkrete Aufgabe materiell fehlen; keine unnötige Vollerhebung oder sensible Datensammlung.

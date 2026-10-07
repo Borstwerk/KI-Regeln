@@ -220,6 +220,12 @@
         "discovery-required",
         "outcome-primary"
       ]
+    },
+    "behavioral_execution_mode": {
+      "enum": [
+        "read-only",
+        "writable"
+      ]
     }
   },
   "$defs": {

@@ -4,6 +4,8 @@ Datum: 2026-10-06
 
 Status: **explorative Human-Evidence, kein Behavioral Benchmark**
 
+> **Eval-Isolation:** Dieses Dokument beschreibt Human-Evidence und konkrete frühere Testformen. Es gehört deshalb nicht in kuratierte Blindrunner-Repository-Views für Golden-Task-Behavioral-Runs.
+
 ## Fragestellung
 
 Verbessert eine visuell strukturierte HTML-Antwort gegenüber einer inhaltlich parallelen Markdown-Fassung die schnelle menschliche Erfassbarkeit komplexer Informationen?

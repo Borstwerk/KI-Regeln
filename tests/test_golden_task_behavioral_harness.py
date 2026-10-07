@@ -31,6 +31,7 @@ class GoldenTaskBlindnessTests(unittest.TestCase):
             "sources_of_truth": [{"path": "note.md", "role": "This wording must not leak."}],
             "required_capabilities": ["source-access"],
             "behavioral_routing_mode": "outcome-primary",
+            "behavioral_execution_mode": "writable",
             "expected_domain": "none",
             "required_skills": [],
             "rubric": {"routing": ["none"]},
@@ -43,6 +44,7 @@ class GoldenTaskBlindnessTests(unittest.TestCase):
         self.assertNotIn("GT-99", dumped)
         self.assertNotIn("sources_of_truth", view)
         self.assertNotIn("behavioral_routing_mode", view)
+        self.assertNotIn("behavioral_execution_mode", view)
         self.assertEqual(
             {"schema_version", "assignment", "fixtures", "required_capabilities"},
             set(view),
@@ -61,6 +63,12 @@ class GoldenTaskBlindnessTests(unittest.TestCase):
 
         (root / "Dokumentation").mkdir()
         (root / "Dokumentation" / "Skill-Handbuch.md").write_text("# Router\n", encoding="utf-8")
+
+        visual_docs = root / "Dokumentationserstellung"
+        visual_docs.mkdir()
+        (visual_docs / "Visual-Answer-Explorativer-AB-Test-2026-10-06.md").write_text(
+            "# Human A/B note\nThree options; HTML preferred.\n", encoding="utf-8"
+        )
 
         skill = root / "Recherche" / "Skills" / "example"
         skill.mkdir(parents=True)
@@ -147,12 +155,43 @@ class GoldenTaskBlindnessTests(unittest.TestCase):
             self.assertFalse((repository / "Evals").exists())
             self.assertFalse((repository / "CHANGELOG.md").exists())
             self.assertFalse((repository / "Skill-Engineering" / "Cross-Cutting-Skill-Discovery.md").exists())
+            self.assertFalse(
+                (repository / "Dokumentationserstellung" / "Visual-Answer-Explorativer-AB-Test-2026-10-06.md").exists()
+            )
 
             judge = yaml.safe_load((out / "judge-view.yml").read_text(encoding="utf-8"))
             self.assertEqual("outcome-primary", judge["routing_evaluation"]["mode"])
             self.assertFalse(judge["routing_evaluation"]["required_skill_read_enforced"])
+            self.assertEqual("read-only", judge["execution_requirements"]["mode"])
+
+            readiness = yaml.safe_load((out / "readiness.yml").read_text(encoding="utf-8"))
+            self.assertTrue(readiness["ready_for_behavioral_execution"])
+            self.assertTrue(readiness["default_read_only_runner_compatible"])
 
             verify_prepared_integrity(out)
+
+    def test_writable_task_is_not_ready_for_default_read_only_runner(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = self._repo(Path(tmp) / "repo")
+            task = self._task(root)
+            data = yaml.safe_load(task.read_text(encoding="utf-8"))
+            data["behavioral_execution_mode"] = "writable"
+            task.write_text(yaml.safe_dump(data, allow_unicode=True, sort_keys=False), encoding="utf-8")
+
+            out = Path(tmp) / "prepared-writable"
+            prepare(task, root, "abc123", out)
+
+            execution = yaml.safe_load((out / "execution-view.yml").read_text(encoding="utf-8"))
+            readiness = yaml.safe_load((out / "readiness.yml").read_text(encoding="utf-8"))
+            judge = yaml.safe_load((out / "judge-view.yml").read_text(encoding="utf-8"))
+
+            self.assertEqual("writable", execution["runtime"]["execution_mode"])
+            self.assertEqual("writable-isolated-runner-required", execution["runtime"]["allowed_tools"])
+            self.assertFalse(readiness["ready_for_behavioral_execution"])
+            self.assertFalse(readiness["default_read_only_runner_compatible"])
+            self.assertIn("writable task requires", readiness["blocker"])
+            self.assertEqual("writable", judge["execution_requirements"]["mode"])
+            self.assertFalse(judge["execution_requirements"]["default_read_only_adapter_compatible"])
 
     def test_outcome_primary_does_not_turn_missing_skill_read_into_hard_fail(self):
         trace = default_trace()

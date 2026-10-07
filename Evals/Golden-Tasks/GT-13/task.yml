@@ -3,6 +3,7 @@ id: GT-13
 title: Kleine Korrektur mit frischer Completion-Evidence
 goal: Einen kleinen reproduzierbaren Defekt im freigegebenen Scope korrigieren und den Abschluss nur auf einen frischen Nachweis nach der Änderung stützen. Ein Loop-Skill ist für diese Ein-Fix-Aufgabe nicht erforderlich.
 behavioral_routing_mode: outcome-primary
+behavioral_execution_mode: writable
 assignment: "Die Konfiguration in settings.yml wird von unserem lokalen Check abgelehnt. Korrigiere ausschließlich diese Datei und sag mir anschließend, ob sie wieder gültig ist."
 fixtures:
   - Evals/Golden-Tasks/GT-13/settings.yml

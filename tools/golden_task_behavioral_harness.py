@@ -82,6 +82,7 @@ EXTRA_RUNTIME_FILES = (
 # These files describe eval architecture/results rather than the operational runtime.
 RUNTIME_EXCLUDED_RELATIVE = {
     "Agentenarbeit/Agent-Evals.md",
+    "Dokumentationserstellung/Visual-Answer-Explorativer-AB-Test-2026-10-06.md",
     "Skill-Engineering/Cross-Cutting-Skill-Discovery.md",
     "Skill-Engineering/Skill-Review-und-Evals.md",
 }
@@ -183,6 +184,9 @@ def compile_task(task_path: Path, repo_root: Path, repo_commit: str) -> dict[str
     routing_mode = str(task.get("behavioral_routing_mode") or "discovery-required")
     if routing_mode not in {"discovery-required", "outcome-primary"}:
         raise HarnessError(f"unsupported behavioral_routing_mode: {routing_mode!r}")
+    execution_mode = str(task.get("behavioral_execution_mode") or "read-only")
+    if execution_mode not in {"read-only", "writable"}:
+        raise HarnessError(f"unsupported behavioral_execution_mode: {execution_mode!r}")
 
     execution = {
         "schema_version": SCHEMA_VERSION,
@@ -194,7 +198,12 @@ def compile_task(task_path: Path, repo_root: Path, repo_commit: str) -> dict[str
         "sources": [],
         "runtime": {
             "fresh_runner_context_required": True,
-            "allowed_tools": "read-only-discovery",
+            "execution_mode": execution_mode,
+            "allowed_tools": (
+                "read-only-discovery"
+                if execution_mode == "read-only"
+                else "writable-isolated-runner-required"
+            ),
             "runner_adapter_required": True,
             "bootstrap_files": ["workspace/repository/AGENTS.md"],
             "repository_view": "workspace/repository",
@@ -223,6 +232,10 @@ def compile_task(task_path: Path, repo_root: Path, repo_commit: str) -> dict[str
                 if routing_mode == "discovery-required"
                 else "Judge outcome and boundaries first; a missing skill-file read alone is not a routing failure."
             ),
+        },
+        "execution_requirements": {
+            "mode": execution_mode,
+            "default_read_only_adapter_compatible": execution_mode == "read-only",
         },
         "forbidden_skills": forbidden,
         "expected_workflow": normalize_workflow(task),
@@ -403,11 +416,14 @@ def write_prepared_case(compiled: dict[str, Any], task_path: Path, repo_root: Pa
             "README.md",
             "Dokumentation/Skill-Katalog.md",
             "Agentenarbeit/Agent-Evals.md",
+            "Dokumentationserstellung/Visual-Answer-Explorativer-AB-Test-2026-10-06.md",
             "Skill-Engineering/Cross-Cutting-Skill-Discovery.md",
             "Skill-Engineering/Skill-Review-und-Evals.md",
         ],
     }
 
+    execution_mode = str((execution.get("runtime") or {}).get("execution_mode") or "read-only")
+    default_compatible = execution_mode == "read-only"
     readiness = {
         "schema_version": 1,
         "task_id": execution["test_id"],
@@ -415,7 +431,14 @@ def write_prepared_case(compiled: dict[str, Any], task_path: Path, repo_root: Pa
         "blind_execution_view": True,
         "curated_repository_view": True,
         "evaluator_tree_excluded": True,
-        "ready_for_behavioral_execution": True,
+        "required_execution_mode": execution_mode,
+        "default_read_only_runner_compatible": default_compatible,
+        "ready_for_behavioral_execution": default_compatible,
+        "blocker": (
+            None
+            if default_compatible
+            else "writable task requires an admitted isolated writable runner; the default Claude adapter is read-only"
+        ),
     }
     dump_yaml(hashes, out_dir / "hashes.yml")
     dump_yaml(readiness, out_dir / "readiness.yml")
