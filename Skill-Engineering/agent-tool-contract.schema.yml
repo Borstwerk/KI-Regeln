@@ -1,0 +1,89 @@
+schema_version: 1
+
+purpose: "Minimaler maschinenlesbarer Vertrag für wiederverwendbare agentenorientierte Tools und Runtime-Adapter."
+
+required:
+  - tool_id
+  - purpose
+  - capability
+  - action_class
+  - input_contract
+  - output_contract
+  - failure_contract
+  - verification
+
+action_class:
+  allowed:
+    - READ
+    - WRITE
+    - ACTION
+
+optional:
+  - version
+  - use_when
+  - near_miss
+  - dependencies
+  - mutating
+  - idempotency
+  - authorization
+  - cost
+  - network
+  - secrets
+  - chaining
+  - determinism
+  - provenance
+  - runtime
+
+output_contract:
+  recommended_envelope:
+    - ok
+    - status
+    - data
+    - evidence
+    - error
+  rule: "machine-readable semantics preferred over free-text-only output"
+
+failure_contract:
+  recommended_error_fields:
+    - code
+    - message
+    - retry
+    - hint
+    - detail
+  retry_allowed:
+    - never
+    - safe
+    - conditional
+    - human-required
+    - unsupported
+
+verification:
+  classes:
+    - schema
+    - known-answer
+    - negative-control
+    - independent-route
+    - bounded-numeric
+    - contract-test
+    - external-state
+    - human-review
+    - none
+  recommended:
+    - acceptance_gate
+    - self_test
+    - evidence_ref
+
+determinism:
+  does_not_imply_correctness: true
+  recommended:
+    - input_hash
+    - tool_version
+    - runtime_version
+    - seed
+    - external_input_refs
+
+hard_rules:
+  - "tool availability MUST NOT imply authorization"
+  - "WRITE/ACTION effects MUST remain visible"
+  - "unsupported or human-required failures MUST NOT be hidden behind automatic retry"
+  - "an acceptance gate SHOULD NOT be weakened merely to make the current result pass"

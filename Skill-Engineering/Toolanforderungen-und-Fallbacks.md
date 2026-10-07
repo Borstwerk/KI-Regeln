@@ -23,6 +23,23 @@ Vor der Ausführung unterscheiden:
 - **optional** – verbessert den Workflow;
 - **forbidden unless approved** – riskante Fähigkeit, die nicht automatisch genutzt werden darf.
 
+## Agent-Tool-Vertrag
+
+Wenn eine Capability durch ein wiederverwendbares Tool, CLI, Script, Plugin oder einen Runtime-Adapter bereitgestellt wird, reicht `Tool vorhanden` nicht als Vertrag.
+
+Für agentenorientierte Tools zusätzlich möglichst explizit machen:
+
+- `use_when` und Near-Miss-Grenze;
+- READ / WRITE / ACTION;
+- Input-/Output-Semantik;
+- stabile Fehlercodes;
+- Retry-/Recovery-Semantik;
+- Human Gates;
+- Acceptance-/Verification-Klasse;
+- relevante Tool-/Runtime-Version.
+
+Details und neutrales Schema: `Agent-Tool-Vertraege.md` und `agent-tool-contract.schema.yml`.
+
 ## Typische Capabilities
 
 Beispiele:
@@ -101,6 +118,22 @@ Beispiele:
 - kein Browser → visuelle Verifikation ausdrücklich als nicht durchgeführt markieren;
 - kein ausführbarer Test → keine bestandene Verifikation behaupten;
 - kein GitHub-Schreibzugriff → Patch/Änderungsvorschlag liefern statt Commit behaupten.
+
+## Acceptance vor Vertrauen
+
+Ein erfolgreich beendeter Toolcall ist nicht automatisch ein fachlich belastbares Ergebnis.
+
+Wo ein Tooloutput eine relevante Entscheidung oder Claim trägt:
+
+```text
+Toolcall erfolgreich
+→ Output Contract erfüllt?
+→ Acceptance Gate / passender Validator ausgeführt?
+→ Evidence vorhanden?
+→ erst dann Ergebnis als verified behandeln
+```
+
+Known-answer-Fälle, negative Kontrollen oder ausreichend unabhängige Prüfwege können die Aussagekraft erhöhen.
 
 ## Kein Capability-Theater
 

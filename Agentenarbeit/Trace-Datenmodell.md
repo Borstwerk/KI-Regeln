@@ -32,7 +32,12 @@ Wo technische Observability genutzt wird, helfen stabile Referenzen:
 - `checkpoint_id` – erreichter Routing-Checkpoint (`post-primary`, `pre-execution`, `pre-completion`, `pre-output`);
 - `candidate_skill_id` – geprüfter, aber nicht zwingend aktivierter Skill;
 - `replaced_skill_id` – bei `ROUTING_REFINED` der ersetzte Skill (`skill_id` ist dann der neue Owner);
-- `trigger_ref` – Verweis auf das Ereignis, das ein Re-Entry ausgelöst hat (Nutzerantwort, Tool-/Dateifund, Scope-Wechsel).
+- `trigger_ref` – Verweis auf das Ereignis, das ein Re-Entry ausgelöst hat (Nutzerantwort, Tool-/Dateifund, Scope-Wechsel);
+- `source_run_id` – Ausgangslauf für Replay-/Vergleichsevidence;
+- `replay_class` – `audit-replay`, `state-replay` oder `fresh-reexecution`;
+- `checkpoint_ref` / `state_ref` – referenzierbarer gespeicherter Zustand;
+- `config_ref` / `runtime_ref` – eingefrorene Konfigurations-/Runtime-Evidence;
+- `request_hash` / `response_hash` – Bindung wiederverwendeter Tool-/Providerantworten ohne Rohinhaltspflicht.
 
 ## Ereignistypen
 
@@ -63,6 +68,9 @@ FALLBACK_USED
 TASK_BLOCKED
 TASK_COMPLETED
 TASK_FAILED
+REPLAY_STARTED
+REPLAY_VERIFIED
+REPLAY_BLOCKED
 ```
 
 Projekte dürfen ergänzen.
@@ -159,6 +167,26 @@ Insbesondere passen dazu Konzepte wie:
 - optionale Inhaltsaufzeichnung.
 
 Die konkrete Benennung und Stabilität externer Semantic Conventions bleibt deren Upstream vorbehalten.
+
+## Replay
+
+Ein Trace kann einen Replay stützen, aber nicht allein definieren.
+
+```text
+Audit Replay
+→ gespeicherte Trace-/Action-/Evidence-Artefakte prüfen
+→ kein Modell- oder externer Toolcall
+
+State Replay
+→ zusätzlich gespeicherten Zustand / Checkpoint benötigen
+
+Fresh Re-execution
+→ neuer Run; eigener run_id; nicht als Replay des alten Verhaltens ausgeben
+```
+
+Bei Replay-Evidence bevorzugt Hashes und Referenzen auf gespeicherte Artefakte statt vollständiger sensitiver Inhalte.
+
+Details: `Run-Replay-und-Reproduzierbarkeit.md`.
 
 ## Verhältnis zu Projektwahrheit
 

@@ -326,6 +326,28 @@ Nicht übernommen:
 
 KI-Regeln generalisiert daraus **Visual Fidelity**: korrekte Daten müssen auch proportional, nachvollziehbar und nicht irreführend dargestellt werden.
 
+## HeyGen HyperFrames – agentenorientierte deterministische Video-Runtime
+
+Repository:
+
+https://github.com/heygen-com/hyperframes
+
+Geprüfter Stand:
+
+- Commit: `1e711b087dca254fa021f0c16006197c138d1884`;
+- Lizenz: Apache-2.0.
+
+Methodisch relevant für den bestehenden Workflow `../Workflows/Codebasierte-Motion-Graphics-und-Video.md`:
+
+- HTML/CSS/Media plus seekbare Animationen als codebasierte Composition;
+- getrennte Schritte für Lint, Check, Snapshot, Preview und Render;
+- Router-/Workflow-Skills werden on demand geladen statt alle Domain-Skills permanent in den Kontext zu legen;
+- Plugin-/CLI-Version und Skill-Snapshot können getrennte Updatepfade besitzen;
+- Auto-Refresh eines Branches schwächt Reproduzierbarkeit, wenn nur die CLI-Version gepinnt ist;
+- für wiederholbare Installationen sind Release-/Archivstände und explizite Updatekontrolle stärker als ein mutable Branch.
+
+KI-Regeln übernimmt **keine** 21 HyperFrames-Skills, keinen Marketplace-Installationszwang und keine HyperFrames-spezifische Videoarchitektur als universellen Standard. HyperFrames bleibt eine mögliche Runtime hinter dem frameworkneutralen Motion-Workflow.
+
 ## Eigene Synthese
 
 Aus der Recherche wurde insbesondere diese Trennung entwickelt:

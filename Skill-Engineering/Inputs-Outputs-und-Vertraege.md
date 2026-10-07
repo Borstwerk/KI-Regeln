@@ -57,6 +57,21 @@ conflicting
 
 Die genauen Namen dürfen fachlich variieren.
 
+## Maschinenlesbare Tooloutputs
+
+Wenn ein Skill ein wiederverwendbares Tool steuert, soll dessen Resultat nicht nur als Fließtext interpretierbar sein.
+
+Sinnvoll sind je nach Runtime:
+
+- stabiler Status;
+- strukturierte Daten;
+- Evidence-/Artefakt-Referenzen;
+- maschinenlesbarer Fehlercode;
+- Retry-/Recovery-Hinweis;
+- klare Trennung zwischen erfolgreichem Toolcall und bestandenem Acceptance Gate.
+
+Details: `Agent-Tool-Vertraege.md`.
+
 ## Akzeptanzbedingungen
 
 Vor allem bei agentischer Ausführung sollen Akzeptanzbedingungen möglichst vor der Arbeit feststehen.

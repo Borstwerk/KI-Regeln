@@ -1,0 +1,72 @@
+schema_version: 1
+
+purpose: >
+  Minimaler providerneutraler Vertrag für referenzierbare Run-/Replay-Evidence.
+  Dies ist kein universelles Serialisierungsformat und keine Pflicht, sensible Inhalte
+  vollständig zu speichern.
+
+required:
+  - run_id
+  - task_id
+  - replay_class
+  - source_run_ref
+  - status
+  - artifact_hashes
+
+replay_class:
+  allowed:
+    - audit-replay
+    - state-replay
+    - fresh-reexecution
+  semantics:
+    audit-replay: "liest nur gespeicherte Run-Artefakte; keine Modell-/Tool-Neuausführung"
+    state-replay: "stellt gespeicherten Zustand wieder her; neue externe Entscheidungen separat markieren"
+    fresh-reexecution: "neue Ausführung; kein Replay des alten Verhaltens"
+
+optional:
+  - repo_commit
+  - config_ref
+  - config_hash
+  - fixture_hashes
+  - runner_type
+  - runner_version
+  - requested_model_id
+  - observed_model_id
+  - harness_version
+  - runtime_fingerprint
+  - trace_ref
+  - actions_ref
+  - evidence_ref
+  - checkpoint_ref
+  - state_ref
+  - random_state_ref
+  - tool_contract_refs
+  - request_response_refs
+  - missingness
+  - started_at
+  - finished_at
+  - note
+
+artifact_hashes:
+  hash_algorithm: sha256
+  content_not_required_when_hash_and_reference_suffice: true
+
+request_response_ref:
+  recommended:
+    - request_hash
+    - response_hash
+    - provider_or_tool
+    - status
+    - reusable_for_replay
+
+privacy:
+  secrets: forbidden
+  raw_prompt_or_tool_content: opt-in-only
+  personal_data: minimize
+  metadata_first: true
+
+hard_rules:
+  - "audit-replay MUST NOT call a model"
+  - "audit-replay MUST NOT repeat external actions"
+  - "fresh-reexecution MUST NOT be labeled replay evidence for the original run"
+  - "missing runtime state MUST remain explicit instead of being guessed"

@@ -34,6 +34,14 @@ optional:
   - candidate_skill_id
   - replaced_skill_id
   - trigger_ref
+  - source_run_id
+  - replay_class
+  - checkpoint_ref
+  - state_ref
+  - config_ref
+  - runtime_ref
+  - request_hash
+  - response_hash
   - error_code
   - note
 
@@ -71,6 +79,9 @@ recommended_event_types:
   - TASK_BLOCKED
   - TASK_COMPLETED
   - TASK_FAILED
+  - REPLAY_STARTED
+  - REPLAY_VERIFIED
+  - REPLAY_BLOCKED
 
 usage_rules:
   provider_reported_tokens_preferred: true
@@ -95,3 +106,12 @@ example:
   compaction_ratio: 0.18
   context_ref: "artifact://context/compacted-7"
   evidence_ref: "eval://handoff-continuation/7"
+
+replay:
+  allowed_class:
+    - audit-replay
+    - state-replay
+    - fresh-reexecution
+  audit_replay_model_calls: forbidden
+  audit_replay_external_actions: forbidden
+  fresh_reexecution_is_original_run_replay: false

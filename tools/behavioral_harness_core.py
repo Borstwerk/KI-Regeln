@@ -27,7 +27,7 @@ HARNESS_DIR = ROOT / "Evals" / "Behavioral-Harness"
 SCHEMA_DIR = HARNESS_DIR / "schemas"
 PILOT_SOURCE_LOCK = HARNESS_DIR / "pilot-source-lock.yml"
 DEFAULT_FIXTURE_ROLES = HARNESS_DIR / "fixture-role-overrides.yml"
-HARNESS_VERSION = "1.1.0"
+HARNESS_VERSION = "1.2.0"
 SCHEMA_VERSION = 1
 TRI_UNKNOWN = "unknown"
 STATUS_VALUES = {"pass", "partial", "blocked", "fail", "unverifiable"}
@@ -45,6 +45,7 @@ SCHEMA_FILES = {
     "deterministic-gates": "deterministic-gates.schema.json",
     "judge-input": "judge-input.schema.json",
     "runner-adapter": "runner-adapter.schema.json",
+    "replay-report": "replay-report.schema.json",
 }
 EVALUATOR_ONLY_EXECUTION_KEYS = {
     "route_kind",

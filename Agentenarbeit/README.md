@@ -102,7 +102,24 @@ Die Session erklärt den Weg, ersetzt aber keine kanonische Projektdokumentation
 
 Für Context Engineering können – soweit verfügbar – Input-/Output-Tokens, Cache-Signale, Tooloutput-Größen, Latenz und Compaction-/Handoff-Ereignisse als zusätzliche Metadaten beobachtet werden. Vollständige Inhalte bleiben datenschutzsensitiv und optional.
 
-Siehe `Observability-und-Traceability.md`.
+Siehe `Observability-und-Traceability.md`, `Trace-Datenmodell.md` und `Run-Replay-und-Reproduzierbarkeit.md`.
+
+### Run Replay und Reproduzierbarkeit
+
+Gespeicherte Agentenläufe werden in drei unterschiedliche Fälle getrennt:
+
+```text
+Audit Replay
+→ gespeicherte Evidence prüfen, ohne Modell-/Tool-Neuausführung
+
+State Replay
+→ eingefrorenen Zustand wiederherstellen
+
+Fresh Re-execution
+→ Aufgabe neu ausführen; wichtig für Behavioral Evals, aber kein Replay des alten Runs
+```
+
+Diese Trennung verhindert, dass ein neuer Modelllauf fälschlich als reproduzierter alter Lauf bezeichnet wird.
 
 ### Human Gates
 
@@ -219,6 +236,7 @@ Ein innerer Loop darf keinen äußeren Gate überspringen.
 - Ein erfolgreich ausgeführter Agentenlauf ist noch keine Freigabe.
 - Produktqualität und Agentenprozessqualität können getrennt evaluiert werden.
 - Agentenläufe sollen nachvollziehbar sein, ohne unnötige sensible Daten zu protokollieren.
+- Audit-Replay, State-Replay und Fresh Re-execution nicht miteinander verwechseln.
 - Der Repository-Zustand prägt spätere Agentenarbeit; Drift sollte deshalb bewusst gepflegt werden.
 
 ## Skills

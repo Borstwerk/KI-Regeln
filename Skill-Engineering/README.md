@@ -25,6 +25,7 @@ Ein guter Skill soll:
 - `Cross-Cutting-Skill-Discovery.md` – zweiter Routing-Pass für wenige domänenübergreifende Skills, ohne Triggerduplikation;
 - `Inputs-Outputs-und-Vertraege.md` – erwartete Eingaben, Ausgaben und Evidence;
 - `Toolanforderungen-und-Fallbacks.md` – Capabilities, Rechte und degradierte Betriebsmodi;
+- `Agent-Tool-Vertraege.md` – maschinenlesbare Auswahl-, Output-, Failure-, Retry- und Acceptance-Verträge für wiederverwendbare Agententools;
 - `Plugin-App-und-Capability-Routing.md` – Auswahl zwischen nativen Fähigkeiten, verbundenen Plugins/Apps, Plugin-Discovery und manuellen Fallbacks;
 - `Portabler-Skill-Kern-und-Runtime-Adapter.md` – Trennung fachlicher Skilllogik von client-/modell-/runtime-spezifischer Konfiguration;
 - `Skill-Komposition-und-Abhaengigkeiten.md` – Beziehungen zwischen Skills;
@@ -44,6 +45,7 @@ Bedarf erkennen
 → prüfen, ob der Skill als seltener Cross-Cutting-Overlay-Kandidat statt nur als Domänenskill entdeckt werden muss
 → Inputs / Outputs / Evidence festlegen
 → Capabilities + Fallbacks definieren
+→ bei wiederverwendbaren Tools Auswahl-, Output-, Failure- und Verification-Vertrag definieren
 → mögliche native / Plugin- / App-Runtime getrennt vom fachlichen Kern routen
 → Freiheitsgrad je wesentlichem Schritt nach Fragilität und Variabilität wählen
 → SKILL.md kompakt schreiben

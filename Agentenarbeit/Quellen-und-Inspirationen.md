@@ -280,7 +280,8 @@ Methodisch ausgewertet wurden insbesondere:
 
 - `acceptance-gate`;
 - `independence-bookkeeping`;
-- `planted-truth`.
+- `planted-truth`;
+- `tool-stewardship`.
 
 Für KI-Regeln übernommen beziehungsweise verallgemeinert werden:
 
@@ -288,9 +289,50 @@ Für KI-Regeln übernommen beziehungsweise verallgemeinert werden:
 - Positive-/Known-good- und Negative-/Known-bad-Kontrollen erhöhen die Aussagekraft eines Validators;
 - held-out beziehungsweise nicht zur Konstruktion verwendete Evidence ist stärker als dieselbe Evidence nach Tuning;
 - ein zweiter Prüfweg ist nur so unabhängig wie seine tatsächlichen Daten-, Code- und Library-Abhängigkeiten;
-- ein ehrlicher Null-/Open-Befund ist besser als eine erfundene geschlossene Antwort.
+- ein ehrlicher Null-/Open-Befund ist besser als eine erfundene geschlossene Antwort;
+- wiederverwendbare Tools sollen erklären, wann sie passen, was ihr Output bedeutet und welchen Test das Ergebnis vor Vertrauen bestehen muss;
+- ein kleiner Known-answer-Selbsttest vor dem ersten realen Einsatz ist ein starkes, aber begrenztes Installations-/Interface-Signal.
 
 Nicht universalisiert werden mathematische Spezialregeln wie feste Digit-Anzahlen, PSLQ-/Ringparameter, physikspezifische Oracles oder konkrete Toolchains.
+
+## Trustworthy Agent Simulation – Replay und persistenter Laufzustand
+
+Repository:
+
+https://github.com/apromisedland/trustworthy-agent-simulation
+
+Geprüfter Stand:
+
+- Commit: `5c504f5bd9faf380dd7ace97d72899f92d16d132`;
+- Lizenz: Apache-2.0.
+
+Methodisch relevant sind insbesondere:
+
+- Beobachtungen vor Entscheidungen und Entscheidungen vor Settlement persistent journalen;
+- fachlichen Zustand und Metrics an einer klaren Commit-Grenze gemeinsam persistieren;
+- Konfiguration und relevante Zufallszustände in Checkpoints aufnehmen;
+- bereits gespeicherte Entscheidungen bei Recovery wiederverwenden, statt sie still neu vom Modell erzeugen zu lassen;
+- Replay aus committed Snapshots durchführen, ohne erneut ein Modell aufzurufen;
+- eine frische Modell-Ausführung klar von Replay unterscheiden;
+- Provider-/Toolantworten nur bei exakt passendem gespeicherten Request wiederverwenden;
+- Offline-, Framework-Integrations- und Real-Model-Behavioral-Validation als unterschiedliche Claims behandeln.
+
+KI-Regeln übernimmt daraus keinen Simulationsstack, kein AgentScope/Mesa-Modell und keine SQLite-Pflicht. Verallgemeinert wird nur der Run-/Replay-Vertrag in `Run-Replay-und-Reproduzierbarkeit.md`.
+
+## hello-agent-system – Produktionscheckliste als Gegenprüfung
+
+Repository:
+
+https://github.com/heaven999b/hello-agent-system
+
+Geprüfter Stand:
+
+- Commit: `857823c11d790be44509300e6c333d3fcf226ffa`;
+- Lizenz: MIT.
+
+Der öffentliche Lehr-/Referenzstack deckt unter anderem Tooldesign, Context/Memory, Orchestration, Reliability, Security, Observability, Evals, verteilte Ausführung, Kosten, RAG und Release Ops ab.
+
+Der Vergleich wurde als Gap-Check genutzt. Für KI-Regeln ergab sich daraus **keine** neue zentrale Abstraktion, die nicht bereits in Agentenarbeit, Reliability, Sicherheit, Testing/Evals, Context Engineering oder Release-/Runtime-Regeln vorhanden ist. Deshalb wird das Repo als breite Checkliste dokumentiert, aber nicht als zusätzliche Skill-/Framework-Dependency übernommen.
 
 ## Einordnung
 

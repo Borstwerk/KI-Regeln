@@ -7,6 +7,7 @@ from pathlib import Path
 from tools.behavioral_harness import (
     HarnessError,
     TRI_UNKNOWN,
+    build_audit_replay_report,
     compile_case,
     default_actions,
     default_evidence,
@@ -297,12 +298,34 @@ class BehavioralHarnessSelfTests(unittest.TestCase):
         with self.assertRaisesRegex(HarnessError, "multiple run packages"):
             resolve_run_package_path(self.root / "verify-many")
 
+    def test_T23d_audit_replay_is_model_free_and_deterministic(self):
+        run = self.package(out_name="replay-runs", run_id="replay-source")
+        first = build_audit_replay_report(run)
+        second = build_audit_replay_report(run)
+
+        self.assertEqual(first, second)
+        self.assertEqual("audit-replay", first["replay_class"])
+        self.assertFalse(first["model_invoked"])
+        self.assertFalse(first["external_tools_invoked"])
+        self.assertTrue(first["integrity"]["verified"])
+        self.assertEqual("replay-source", first["source_run"]["run_id"])
+        self.assertEqual("WK-T01", first["source_run"]["test_id"])
+        self.assertEqual([], first["observed"]["skill_reads"])
+        self.assertTrue(first["package_fingerprint"])
+
     def test_T24_verify_run_rejects_tampered_artifact(self):
         run = self.package(out_name="tamper-runs")
         with (run / "runner-output.md").open("a", encoding="utf-8") as fh:
             fh.write("tampered\n")
         with self.assertRaises(HarnessError):
             verify_run_package(run)
+
+    def test_T24b_audit_replay_rejects_tampered_package(self):
+        run = self.package(out_name="replay-tamper")
+        with (run / "runner-output.md").open("a", encoding="utf-8") as fh:
+            fh.write("tampered\n")
+        with self.assertRaises(HarnessError):
+            build_audit_replay_report(run)
 
     def test_T25_valid_runner_adapter_is_schema_checked_and_processed(self):
         compiled = self.compile()

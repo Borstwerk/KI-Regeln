@@ -37,6 +37,25 @@ Nicht automatisch:
 → Modell soll selbst filtern
 ```
 
+## Strukturierte Toolverträge bevorzugen
+
+Bei wiederverwendbaren agentenorientierten Tools ist ein kleiner strukturierter Output oft stärker als ein großer freier Logblock.
+
+Beispielsweise:
+
+```text
+status + data + error code + retry semantics + evidence refs
+```
+
+statt:
+
+```text
+mehrseitiger Freitext
+→ Agent muss Status, IDs und Recovery selbst erraten
+```
+
+Das genaue Envelope bleibt projektspezifisch. Siehe `../Skill-Engineering/Agent-Tool-Vertraege.md`.
+
 ## Evidence erhalten
 
 Offloading darf Nachvollziehbarkeit nicht zerstören.
