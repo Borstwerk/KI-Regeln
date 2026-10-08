@@ -63,6 +63,7 @@ Die allgemeinen Regeln helfen beim **Wie**. Das konkrete Projekt bestimmt weiter
 | Bilder oder konsistente Bildserien entwickeln und prüfen | Bildarbeit |
 | Websites gestalten, umsetzen oder reviewen | Webentwicklung |
 | Code entwickeln oder Fehler diagnostizieren | Programmieren |
+| Kompilierte EXE, DLL, Firmware oder Unity-Builds ohne Quellcode verstehen | Reverse Engineering und Binäranalyse |
 | Datenbanken analysieren oder ändern | Datenbanken |
 | eine Datenbanktabelle oder andere technische Artefakte dokumentieren | Dokumentationserstellung + zuständiger Fachbereich |
 | Anforderungen klären und spezifizieren | Requirements und Spezifikations-Engineering |

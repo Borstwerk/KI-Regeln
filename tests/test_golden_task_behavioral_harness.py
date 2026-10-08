@@ -174,6 +174,28 @@ class GoldenTaskBlindnessTests(unittest.TestCase):
 
             verify_prepared_integrity(out)
 
+    def test_reverse_engineering_skills_are_in_curated_runner_view(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = self._repo(Path(tmp) / "repo")
+            for skill_name in ("binary-triage", "binary-analysis"):
+                skill = root / "Reverse-Engineering-und-Binaeranalyse" / "Skills" / skill_name
+                skill.mkdir(parents=True)
+                (skill / "SKILL.md").write_text(
+                    "---\nname: " + skill_name
+                    + "\ndescription: Verwenden zur autorisierten Analyse kompilierter Artefakte.\n---\n",
+                    encoding="utf-8",
+                )
+            out = Path(tmp) / "prepared"
+            prepare(self._task(root), root, "abc123", out)
+            repository = out / "runner-package" / "workspace" / "repository"
+            for skill_name in ("binary-triage", "binary-analysis"):
+                self.assertTrue(
+                    (repository / "Reverse-Engineering-und-Binaeranalyse" / "Skills"
+                     / skill_name / "SKILL.md").is_file()
+                )
+            self.assertFalse((repository / "Evals").exists())
+            verify_prepared_integrity(out)
+
     def test_writable_task_is_not_ready_for_default_read_only_runner(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = self._repo(Path(tmp) / "repo")

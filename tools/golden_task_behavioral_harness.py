@@ -60,6 +60,7 @@ RUNTIME_DIRS = (
     "Infrastruktur-und-DevOps",
     "Programmieren",
     "Recherche",
+    "Reverse-Engineering-und-Binaeranalyse",
     "Reliability-und-System-Observability",
     "Requirements-und-Spezifikations-Engineering",
     "Schnittstellen-und-Vertraege",
@@ -96,7 +97,7 @@ FORBIDDEN_RUNNER_ROOT_FILES = {
     "SECURITY.md",
     "START-HIER.md",
 }
-CONTAMINATION_PATTERN = re.compile(r"\bGT-(?:0[1-9]|1[0-7])\b|Evals/Golden-Tasks|Golden Tasks", re.IGNORECASE)
+CONTAMINATION_PATTERN = re.compile(r"\bGT-(?:0[1-9]|1[0-8])\b|Evals/Golden-Tasks|Golden Tasks", re.IGNORECASE)
 
 
 def load_yaml(path: Path) -> dict[str, Any]:

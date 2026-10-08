@@ -147,6 +147,7 @@ Es gibt keine opaque Gesamtnote. Findings bleiben pro Dimension sichtbar.
 - `GT-15` – zweite No-Skill-Control: lokale Kurz-Zusammenfassung trotz Fixture;
 - `GT-16` – Add-Zweig: `adressatengerechte-kommunikation + natuerliches-schreiben` bei eigenständiger Voice-Evidence;
 - `GT-17` – positiver `tool-permission-review`-Fall ohne Skill-Bundle.
+- `GT-18` – read-only Binäranalyse eines synthetischen Auszugs: Native-Format ist bereits bekannt, Import/URL-String beweisen keine Ausführung, Resource-Text bleibt untrusted. Erwartete Discovery: `binary-analysis`, ohne redundante `binary-triage`.
 
 Golden Tasks dürfen bewusst `required_skills: []`, leere Fixtures/Sources und `expected_domain: none` verwenden, wenn ein **No-Skill-Routing** das gewünschte Verhalten ist. Das ist ein Regressionstest gegen Skill-Bloat, kein unvollständiger Task.
 

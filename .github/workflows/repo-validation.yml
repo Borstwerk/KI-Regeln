@@ -30,6 +30,6 @@ jobs:
         run: |
           set -euo pipefail
           tmp="$(mktemp -d)"
-          for n in 09 10 11 12 13 14 15 16 17; do
+          for n in 09 10 11 12 13 14 15 16 17 18; do
             python tools/golden_task_behavioral_harness.py prepare-case               "Evals/Golden-Tasks/GT-${n}/task.yml"               --repo-commit "$GITHUB_SHA"               --out "$tmp/GT-${n}"
           done

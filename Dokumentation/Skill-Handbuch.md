@@ -40,7 +40,7 @@ Skill-Handbuch öffnen
 → kleinsten ausreichenden Skill-Satz festlegen
 ```
 
-Diese vier Router-Artefakte sind klein genug, um bei nichttrivialen Aufgaben als Discovery-Floor zu dienen. Der Floor lädt **keine** 152 Skills; er verhindert nur ungeprüftes Direkt-Routing.
+Diese vier Router-Artefakte sind klein genug, um bei nichttrivialen Aufgaben als Discovery-Floor zu dienen. Der Floor lädt **nicht den vollständigen Skill-Katalog**; er verhindert nur ungeprüftes Direkt-Routing.
 
 Das gilt besonders bei Mehrkriterienentscheidungen, adressaten- oder voice-spezifischer Kommunikation, publikationsreifer Synthese, mehreren eigenständigen Jobs, Security-/Permission-Fragen, Toolnutzung, Mutation oder mehrstufiger Arbeit.
 
@@ -61,6 +61,7 @@ Damit ist `none` weiterhin ein erstklassiges Ergebnis – bei nichttrivialen Auf
 | „Entwickle, kritisiere oder überarbeite ein Logo / Brand Mark.“ | Bildarbeit → `logo-design` |
 | „Baue oder prüfe diese Website.“ | Webentwicklung |
 | „Finde die Ursache dieses Fehlers.“ | Programmieren / Diagnose, je nach System weitere Fachdomänen |
+| „Was steckt in dieser kompilierten EXE/DLL ohne Quellcode?“ | Reverse Engineering und Binäranalyse → `binary-triage` für unbekannten Typ, `binary-analysis` für konkrete Verhaltensfragen |
 | „Dokumentiere diese Datenbanktabelle.“ | Dokumentationserstellung + Datenbanken |
 | „Mach diese komplexe Erklärung, Entscheidung oder Review auf einen Blick erfassbar.“ | Dokumentationserstellung → `visual-answer` |
 | „Kläre, was dieses Feature eigentlich können soll.“ | Requirements und Spezifikations-Engineering |

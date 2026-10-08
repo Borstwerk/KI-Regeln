@@ -6,6 +6,7 @@ workflows:
   - Workflows/Architekturentscheidung-und-Tradeoff.md
   - Workflows/Backfill-und-Reprocessing.md
   - Workflows/Bestehende-Website-Review.md
+  - Workflows/Binaerdatei-verstehen.md
   - Workflows/Bildserie.md
   - Workflows/Bugdiagnose.md
   - Workflows/Build-Deploy-und-Promotion.md

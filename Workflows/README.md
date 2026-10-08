@@ -32,6 +32,7 @@ Ein Workflow ist deshalb **kein neuer Mega-Skill**.
 - `Bestehende-Website-Review.md`
 - `Software-Feature.md`
 - `Bugdiagnose.md`
+- `Binaerdatei-verstehen.md`
 - `Bildserie.md`
 - `Datenbank-Aenderung.md`
 - `Teststrategie-und-QA.md`

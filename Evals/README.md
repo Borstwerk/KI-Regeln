@@ -82,6 +82,8 @@ Für jeden der acht Reliability-Skills sind sechs Startfälle definiert, insgesa
 
 Die Data-Engineering-Fälle prüfen unter anderem Source of Truth/Grain, CDC/Replay, Backfill-Semantik, Data Quality/Freshness, Contracts, Lineage und produktive Datenänderungs-Gates.
 
+Für die beiden experimentellen Reverse-Engineering-Skills sind 15 Startfälle definiert, darunter Near-Misses zu Quellcode-Review, Format-Only-Triage, Unity-IL2CPP, instruktionsartige Binary-Strings und fehlende Ausführungsrechte. Die Fälle sind **nur definiert, nicht behavioral ausgeführt**.
+
 Für jeden der neun Data-Engineering-Skills sind sechs Startfälle definiert, insgesamt 54. Diese 54 Fälle sind **definiert, aber noch nicht ausgeführt oder bestanden**.
 
 Die Software-Architecture-/System-Design-Fälle prüfen unter anderem Architecture Baseline, ADR-/Code-Konflikte, Microservice-/Teamgrößen-/Shared-DB-Dogmen, fehlende Quality-/Capacity-Evidence, künstliche Kandidaten, Big-Bang-Migrationen, Conformance und Ausführungsgates.
@@ -132,7 +134,7 @@ Die One-Sided-Signale sind Review-Hinweise und keine Pass-/Fail-Regeln. Insbeson
 
 Phase 2 ergänzt gezielt elf systemisch wirksame Evalpacks mit je fünf Fällen, insgesamt 55 neue Cases: `task-graph`, `verification-loop`, `delegation-contract`, `agent-eval`, `docs-plan`, `technical-writing`, `reference-docs`, `web-search`, `research-plan`, `claim-verification` und `skill-review`. Diese Skills wechseln dadurch ausschließlich von `none` auf `partial`; Maturity bleibt unverändert. Die Priorisierung ist in `Coverage-Audit-2026-08-25.md` dokumentiert.
 
-Zusätzlich besteht unter `Golden-Tasks/` eine getrennte systemweite Suite mit 17 lokalen, reproduzierbaren End-to-End-Aufgaben (`GT-01` bis `GT-17`). Der Repo-Validator prüft deren Struktur, nicht das Modellverhalten.
+Zusätzlich besteht unter `Golden-Tasks/` eine getrennte systemweite Suite mit 18 lokalen, reproduzierbaren End-to-End-Aufgaben (`GT-01` bis `GT-18`). Der Repo-Validator prüft deren Struktur, nicht das Modellverhalten.
 
 Für Behavioral-Smokes wird eine blinde Runner-View reproduzierbar aus `task.yml` projiziert. Der Runner sieht den Nutzerauftrag und neutral materialisierte Fixtures, aber weder `title`/`goal` noch Routing-/Skill-Erwartungen, `behavioral_routing_mode`, `behavioral_execution_mode`, Statusvorgaben, Forbidden-Kriterien oder Rubrik. Für reale Runs erzeugt `tools/golden_task_behavioral_harness.py` zusätzlich einen kuratierten Repository-View ohne `Evals/**` und evaluator-nahe Metadokumente. Read-only Runner können darin kontrolliert mit `Read`, `Glob` und `Grep` entdecken. Mutierende Golden Tasks werden als `writable` markiert und nicht als ausführbar für den normalen read-only Runner ausgegeben. Erst anschließend bewertet die Judge View gegen die vollständige Taskdefinition. Details stehen in `Golden-Tasks/README.md`.
 
@@ -140,7 +142,7 @@ Für Behavioral-Smokes wird eine blinde Runner-View reproduzierbar aus `task.yml
 
 Die Existenz der 55 neuen Skill-Cases und 17 Golden Tasks ist kein Behavioral-Pass-Nachweis. Ausgeführte Smokes werden separat dokumentiert.
 
-Cross-Cutting-Systemtests: `GT-09` bis `GT-17` prüfen Presentation-Discovery, No-Skill-Routing, Primary Refinement, den Add-Zweig bei eigenständiger Voice-Evidence, späte Assurance-Trigger, frische Verification Evidence sowie Security-Deduplizierung und positives Permission-Routing. Diese Golden Tasks sind **definiert, aber noch nicht behavioral ausgeführt oder bestanden**.
+Cross-Cutting-Systemtests: `GT-09` bis `GT-17` prüfen Presentation-Discovery, No-Skill-Routing, Primary Refinement, den Add-Zweig bei eigenständiger Voice-Evidence, späte Assurance-Trigger, frische Verification Evidence sowie Security-Deduplizierung und positives Permission-Routing. Diese Golden Tasks sind **definiert, aber noch nicht behavioral ausgeführt oder bestanden**. `GT-18` ergänzt getrennt eine read-only Binäranalyse-Fallstudie mit synthetischer Fixture, untrusted Resource-Instruktion und klarer Pseudocode-/Reachability-Beweisgrenze; ebenfalls **noch nicht behavioral ausgeführt**.
 
 ## Fallstruktur
 
