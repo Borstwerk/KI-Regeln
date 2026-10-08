@@ -40,7 +40,7 @@ Skill-Handbuch öffnen
 → kleinsten ausreichenden Skill-Satz festlegen
 ```
 
-Diese vier Router-Artefakte sind klein genug, um bei nichttrivialen Aufgaben als Discovery-Floor zu dienen. Der Floor lädt **keine** 152 Skills; er verhindert nur ungeprüftes Direkt-Routing.
+Diese vier Router-Artefakte sind klein genug, um bei nichttrivialen Aufgaben als Discovery-Floor zu dienen. Der Floor lädt **nicht den vollständigen Skill-Katalog**; er verhindert nur ungeprüftes Direkt-Routing.
 
 Das gilt besonders bei Mehrkriterienentscheidungen, adressaten- oder voice-spezifischer Kommunikation, publikationsreifer Synthese, mehreren eigenständigen Jobs, Security-/Permission-Fragen, Toolnutzung, Mutation oder mehrstufiger Arbeit.
 
