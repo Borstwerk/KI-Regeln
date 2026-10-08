@@ -8,6 +8,17 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Reverse Engineering und Binäranalyse – First Slice
+
+- Neuer, bewusst schmaler Fachbereich `Reverse-Engineering-und-Binaeranalyse/` für die Untersuchung kompilierter Artefakte ohne gesicherten Quellcode. Vermeidet Werkzeug-Skills und doppelte Ownership mit `diagnose`/`code-review`.
+- Zwei experimentelle Skills: `binary-triage` (Format, Runtime, sichere Capability-Wahl) und `binary-analysis` (Verhalten, Referenzen, Daten-/Kontrollfluss, Binär-Diffs und Evidence-Chain), jeweils mit Near-Miss- und Stop-Grenzen.
+- Neuer Workflow `Binaerdatei-verstehen.md`; Dokumente zu Binary-Formatpfaden, Decompiler-Evidence, Isolation/Rechten und einer herstellerneutralen Runtime-Capability-Matrix für Ghidra, GhidraMCP, IDA MCP, ILSpyCmd, Cpp2IL sowie ergänzend BinDiff, capa, FLOSS, angr.
+- Sicherheit: Unbekannte Binaries nicht ungefragt ausführen; getrennte READ / Analyseprojekt-WRITE / Binary-Patch-WRITE / dynamische ACTION-Grenzen; Binary-Strings und Tooloutput bleiben untrusted Daten.
+- Upstream-Entscheidung in `Dokumentation/Upstream-Audit-2026-10-08-Reverse-Engineering.md`: Quellenstände und Lizenzen, keine Plugininstallation und keine automatische Übernahme externer Skills.
+- Zwei Evalpacks mit insgesamt **15 definierten** Positiv-/Negativ-/Near-Miss-Fällen. `GT-18` ist ein separater verblindbarer, read-only Golden Task mit synthetischem Auszug und ausdrücklicher Verifikationsgrenze.
+- Katalog, Master-Router, Workflow-Index, menschlicher Katalog und Repo-Einstieg synchronisiert; Blindrunner-Whitelist und CI-Package-Loop um den neuen Bereich/GT-18 erweitert; Regressionstest für die kuratierte Runner-Sicht.
+- **Behavioral-Status:** Evals/GT-18 sind definiert, **NOT RUN**, keine Maturity-Hochstufung. Validator-PASS, sofern durch CI nachgewiesen, ist nur Struktur-/Paket-Evidence.
+
 ### Trustworthy Runtime Contracts
 
 - Audit von BootLoops, trustworthy-agent-simulation, catbus und HyperFrames gegen vorhandene KI-Regeln: keine neuen Vendor-Skills, sondern zwei allgemeine Lücken identifiziert – **Agent-Tool-Verträge** und **Run-Replay-Verträge**;

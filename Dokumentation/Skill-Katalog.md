@@ -14,7 +14,7 @@ Der Skill-Katalog beantwortet zusätzlich:
 
 ## Aktueller Bestand
 
-Der Katalog enthält aktuell 152 zentrale Skills:
+Der Katalog enthält aktuell 154 zentrale Skills:
 
 - Arbeitsweisen: 3;
 - Agentenarbeit: 8;
@@ -23,6 +23,7 @@ Der Katalog enthält aktuell 152 zentrale Skills:
 - Finanzen: 9;
 - Bildarbeit: 5;
 - Programmieren: 4;
+- Reverse Engineering und Binäranalyse: 2;
 - Webentwicklung: 11;
 - Recherche: 7;
 - Wissensmanagement: 7;

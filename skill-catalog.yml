@@ -1,5 +1,5 @@
 schema_version: 2
-last_updated: 2026-10-06
+last_updated: 2026-10-08
 
 maturity_levels: [experimental, candidate, stable, deprecated, retired]
 eval_coverage_levels: [none, partial, core, broad]
@@ -41,6 +41,8 @@ skills:
   - {id: serien-kontinuitaetscheck, area: Bildarbeit, path: Bildarbeit/Skills/serien-kontinuitaetscheck/SKILL.md, maturity: candidate, eval_coverage: none, purpose: "Bildserien auf Identitäts-, Stil-, Struktur- und Zustandsdrift prüfen.", capabilities: [image-inspection]}
   - {id: bildreview, area: Bildarbeit, path: Bildarbeit/Skills/bildreview/SKILL.md, maturity: candidate, eval_coverage: none, purpose: "Ein Bild unabhängig auf Keeper, Feinschliff oder Neubau prüfen.", capabilities: [image-inspection]}
   - {id: logo-design, area: Bildarbeit, path: Bildarbeit/Skills/logo-design/SKILL.md, maturity: experimental, eval_coverage: partial, purpose: "Logos und Brand Marks vom Brief über unterschiedliche getestete Konzepte bis zum freigegebenen Logo-Kit entwickeln oder prüfen.", related: [bild-prebrief, bildreview]}
+  - {id: binary-triage, area: Reverse-Engineering-und-Binaeranalyse, path: Reverse-Engineering-und-Binaeranalyse/Skills/binary-triage/SKILL.md, maturity: experimental, eval_coverage: partial, purpose: "Kompilierte Artefakte ohne Quellcode nach Format, Architektur, Runtime und sicheren Analysefähigkeiten einordnen.", capabilities: [artifact-read-preferred], related: [binary-analysis]}
+  - {id: binary-analysis, area: Reverse-Engineering-und-Binaeranalyse, path: Reverse-Engineering-und-Binaeranalyse/Skills/binary-analysis/SKILL.md, maturity: experimental, eval_coverage: partial, purpose: "Verhalten und Versionsunterschiede kompilierter Programme anhand konkreter Disassembly-, Decompiler- und Datenfluss-Evidence untersuchen.", capabilities: [artifact-read-preferred, disassembler-read-preferred], related: [binary-triage]}
   - {id: code-review, area: Programmieren, path: Programmieren/Skills/code-review/SKILL.md, maturity: candidate, eval_coverage: partial, purpose: "Konkrete Codeänderungen gegen Anforderungen und Standards prüfen.", capabilities: [repository-read]}
   - {id: diagnose, area: Programmieren, path: Programmieren/Skills/diagnose/SKILL.md, maturity: candidate, eval_coverage: partial, purpose: "Bugs und Performanceprobleme reproduzierbar bis zur Ursache diagnostizieren.", capabilities: [repository-read, code-execution-preferred]}
   - {id: domain-modeling, area: Programmieren, path: Programmieren/Skills/domain-modeling/SKILL.md, maturity: candidate, eval_coverage: none, purpose: "Domänenbegriffe, Grenzen und Modelle präzisieren.", capabilities: [repository-read-preferred]}
