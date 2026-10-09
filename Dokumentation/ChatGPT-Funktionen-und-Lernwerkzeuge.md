@@ -1,6 +1,6 @@
 # ChatGPT-Befehle, Lernwerkzeuge und interaktive Funktionen
 
-Stand: 2026-10-05
+Stand: 2026-10-09
 
 ## Zweck
 
@@ -64,6 +64,10 @@ Diese Werkzeuge sind besonders interessant für Schule, Studium, Weiterbildung u
 | `/sketchnodes` | Sketchnotes | Thema als visuelle Notizen mit Struktur | `UI-OBSERVED` |
 | `/mindmaps` | Mindmap | Beziehungen und Hierarchien verstehen | `UI-OBSERVED` |
 | `/comicnodes` | Lerncomic | Ablauf oder Konzept bildhaft erzählen | `UI-OBSERVED` |
+| `/lernzettel` | Lernzettel | bereitgestellten Lernstoff gezielt und quellentreu zum Lernen verdichten | `PROMPT-SHORTCUT` |
+| `/tafelbild` | Tafelbild | einen Zusammenhang als didaktisch aufgebautes Text-/Diagramm-/Bildschema darstellen | `PROMPT-SHORTCUT` |
+| `/probearbeit` | Probearbeit | Übungsprüfung mit Punkten, Zeit, Aufgabenmix und getrennten Lösungen | `PROMPT-SHORTCUT` |
+| `/merkbild` | Merkbild | eine zentrale Information mit einem fachlich korrekten visuellen Anker verknüpfen | `PROMPT-SHORTCUT` |
 | `@study` | Lernmodus | schrittweise lernen statt Antwort bekommen | `DOCUMENTED` |
 | `@Visualize` | interaktive Visualisierung | Diagramme, Maps, Rechner, Simulationen | `CONDITIONAL` |
 | `@MindMap` | MindMap-Plugin | interaktive, zoombare Mindmaps | `PLUGIN` |
@@ -261,6 +265,116 @@ Als UI-/Skill-Shortcut beobachtet; derzeit keine öffentliche OpenAI-Dokumentati
 
 ---
 
+## Vier ergänzende Lern-Prompt-Shortcuts
+
+**Status:** `/lernzettel`, `/tafelbild`, `/probearbeit` und `/merkbild` sind in KI-Regeln als **`PROMPT-SHORTCUT`** definiert. Sie sind keine nachgewiesenen, in jedem ChatGPT-Account verfügbaren Produkt-Slash-Befehle. Das Modell kann die ausgeschriebene Absicht verstehen; falls die Oberfläche einen nicht unterstützten Slash-Aufruf nicht annimmt, die Beschreibung ohne `/` formulieren.
+
+Diese vier Kürzel bezeichnen **Ausgabe- und Lernaufgaben**, keine neu installierten KI-Regeln-Skills. Sie ändern weder Quellenpriorität noch Berechtigungen noch die normalen Evidence-Regeln.
+
+### /lernzettel — quellentreuer Lernüberblick
+
+**Zweck:** Lernstoff aus Unterlagen so verdichten, dass die prüfungsrelevanten Aussagen, Begriffe, Regeln, kurze Beispiele und typische Fehler sichtbar bleiben.
+
+**Beispiel:**
+
+```text
+/lernzettel
+Erstelle aus meinen hochgeladenen Biologienotizen einen Lernzettel für Klasse 7.
+Behalte Fachbegriffe und Reihenfolge der behandelten Themen bei.
+Kennzeichne, was aus den Notizen nicht hervorgeht.
+```
+
+**Qualitätsvertrag:**
+
+- Zuerst den wirklich vorliegenden Stoff auswerten; zentrale Punkte nicht aus Platzgründen still streichen.
+- Fachbegriffe, Zahlen, Definitionen und Beispiele nicht umdeuten.
+- Fehlende Lösungen oder Inhalte offen markieren; externe Ergänzungen nur auf Wunsch und getrennt als Zusatzwissen kennzeichnen.
+- Abschnitte scanbar gestalten; keine scheingenaue Behauptung „vollständig“, wenn nur ein Auszug vorliegt.
+
+**Abgrenzung zu `/cheatsheet`:** `/cheatsheet` ist die knappe Referenz; `/lernzettel` soll verständliches Lernen aus einem Stoffumfang unterstützen, auch mit Beispielen und Verständnisfallen.
+
+### /tafelbild — didaktische Darstellung eines Zusammenhangs
+
+**Zweck:** Stoff in der Reihenfolge aufbauen, wie er auf einer übersichtlichen Unterrichtstafel erklärt würde: Ausgangsfrage → Begriffe → Beziehungen/Ablauf → Ergebnis/Merksatz.
+
+**Beispiel:**
+
+```text
+/tafelbild
+Erkläre den Wasserkreislauf für Klasse 4 mit kurzer Überschrift,
+Pfeilen für die Abläufe, knappen Beschriftungen und einem Merksatz.
+```
+
+**Qualitätsvertrag:**
+
+- Erst einen fachlich korrekten Aufbau planen; Pfeile müssen in die richtige Richtung zeigen.
+- Klare Hierarchie, wenige Begriffe pro Bereich, auf den Lernstand zugeschnitten.
+- Standardmäßig als gut lesbares Textschema oder Diagramm liefern; HTML, interaktive Grafik oder Bild nur, wenn die Aufgabe/die gewünschte Ausgabeform das rechtfertigt.
+- Kein dekoratives Element verwenden, das eine fachlich falsche Beziehung suggeriert.
+
+**Abgrenzung zu `/mindmaps` und `/sketchnodes`:** Das Tafelbild ist eher ein geführter Erklärpfad als ein offenes Begriffsnetz oder freie Notizfläche.
+
+### /probearbeit — Prüfungssimulation mit separatem Lösungsteil
+
+**Zweck:** Eine realistische Probe-Klassenarbeit oder Übungsprüfung erstellen, die nicht bloß Multiple-Choice-Fragen aneinanderreiht.
+
+**Beispiel:**
+
+```text
+/probearbeit
+Baue aus diesen Matheübungen eine 30-Minuten-Probearbeit für Klasse 5,
+mit 30 Punkten, einfachen Aufgaben, Rechenaufgaben und einer Transferfrage.
+Zeige mir zuerst nur das Aufgabenblatt. Lösungen und Bewertungsraster separat,
+erst wenn ich danach frage.
+```
+
+**Qualitätsvertrag:**
+
+- Lernstand, Stoffumfang und gewünschte Dauer/Punktzahl beachten; bei fehlenden Angaben Annahmen offenlegen oder gezielt nachfragen.
+- Aufgaben müssen zur Quelle passen, lösbar und eindeutig bewertet sein; Punkte müssen rechnerisch zur angegebenen Summe passen.
+- Verschiedene Kompetenzstufen sinnvoll verteilen; anspruchsvollere Aufgaben nicht ohne Grundlage in den Stoff hineinmogeln.
+- **Aufgabenblatt und Lösungsschlüssel trennen**; bei Prüfungssimulation keine Antworten vorwegnehmen.
+- Musterlösungen, Punkteschlüssel und Erwartungshorizont später unabhängig gegen die Aufgaben prüfen.
+- Nicht behaupten, dies sei eine offizielle oder echte frühere Schul-/Prüfungsarbeit.
+
+**Abgrenzung zu `/quiz`:** Ein Quiz übt häufig einzelne Abrufe. Eine Probearbeit prüft einen Stoffbereich unter zusammenhängenden, bewertbaren Aufgabenbedingungen.
+
+### /merkbild — ein bewusst gewählter Erinnerungsanker
+
+**Zweck:** Eine konkrete Regel, Reihenfolge oder Beziehung mit einem merkfähigen Bildmotiv verbinden, ohne den fachlichen Zusammenhang zu verfälschen.
+
+**Beispiel:**
+
+```text
+/merkbild
+Entwickle einen visuellen Merkhaken für die vier Stationen des
+Wasserkreislaufs. Verwende ein Hauptmotiv, richtige Pfeilrichtungen
+und nur kurze, gut lesbare Beschriftungen.
+```
+
+**Qualitätsvertrag:**
+
+- Eine bestimmte Zielinformation pro Merkbild; bei vielen unabhängigen Fakten ggf. mehrere Motive.
+- Zuerst Zielaussage und Bildmetapher abgleichen; keine falschen Analogien oder erfundenen Fachbeziehungen.
+- Gedächtnisstütze klar von realer wissenschaftlicher Darstellung trennen.
+- Wenn ein **tatsächliches Bild** gewünscht ist, den passenden Bild-/Visualisierungsworkflow verwenden; ein textuell beschriebenes Bildmotiv nicht als gerendertes Bild ausgeben.
+- Lesbarkeit, Fachbegriffe und etwaige Pfeile/Beschriftungen in der Ausgabe prüfen.
+
+**Abgrenzung zu `/comicnodes`:** Merkbild = ein konzentrierter Anker; Lerncomic = eine Folge von Szenen zum Verstehen eines Ablaufs.
+
+### Gemeinsame Negativtests
+
+| Test | Erwartete Grenze |
+|---|---|
+| Quellenauszug enthält keine Formel | Lernzettel ergänzt sie nicht still aus Allgemeinwissen |
+| Tafelbild zeigt Ursache und Wirkung | Pfeile dürfen Ursache/Wirkung nicht umkehren |
+| 25-Punkte-Probearbeit wird verlangt | Aufgabenpunkte müssen tatsächlich 25 ergeben |
+| Nur Aufgabenblatt erbeten | Keine Musterlösung oder versteckten Antwort-Hinweise ausgeben |
+| Merkbild nutzt eine einprägsame Metapher | Fachlich falsche Metapher wird verworfen oder korrigiert |
+
+Diese Fälle sind **Qualitätskriterien und manuelle Testideen**, keine durchgeführten Behavioral-Evals.
+
+---
 ## @study — Lernmodus
 
 **Status:** `DOCUMENTED`
@@ -894,13 +1008,13 @@ Für komplexere oder sensible Texte bleibt `natuerliches-schreiben` beziehungswe
 
 ---
 
-## Allgemeine 100er-Prompt-Shortcuts
+## Allgemeine Prompt-Shortcuts (100 + 4 Lern-Ergänzungen)
 
 Für allgemeine Kurzbefehle existiert jetzt ein eigener kuratierter Katalog:
 
 `Allgemeine-Prompt-Shortcuts.md`
 
-Er enthält **100** als `PROMPT-SHORTCUT` klassifizierte Kürzel für:
+Er enthält die **100 ursprünglichen** als `PROMPT-SHORTCUT` klassifizierten Kürzel sowie die vier zusätzlich aufgenommenen Lernkürzel `/lernzettel`, `/tafelbild`, `/probearbeit` und `/merkbild` für:
 
 - Priorisieren und Prompting;
 - Schreiben und Ton;
@@ -1009,11 +1123,15 @@ eingebaute ChatGPT-Funktion
 | Ziel | Werkzeug |
 |---|---|
 | Stoff erstmal begreifen | `@study` |
+| Lernunterlagen zum Nachlesen aufbereiten | `/lernzettel` |
+| Zusammenhänge wie an der Schultafel erklären | `/tafelbild` |
+| eine einzelne Information bildhaft behalten | `/merkbild` |
 | Gesamtstruktur erkennen | `/mindmaps` |
 | visuell und locker verstehen | `/sketchnodes` |
 | Ablauf/Geschichte einprägen | `/comicnodes` |
 | einzelne Fakten behalten | `/flashcards` |
 | Wissenslücken finden | Quiz |
+| unter Prüfungsbedingungen üben | `/probearbeit` |
 | Zusammenhänge interaktiv erkunden | `@Visualize` |
 | editierbare Mindmap erzeugen | `@MindMap` |
 | langen Lernchat entlasten | `/compact` |
@@ -1023,7 +1141,7 @@ eingebaute ChatGPT-Funktion
 
 # 7. Empfohlener Lernworkflow
 
-## Phase 1 – Orientierung
+## Phase 1 – Orientierung und Lernzettel
 
 ```text
 @study
@@ -1031,7 +1149,7 @@ oder
 /mindmaps
 ```
 
-Ziel: Stoffstruktur verstehen.
+Ziel: Stoffstruktur verstehen. Aus vorhandenen Unterlagen kann `/lernzettel` anschließend ein quellentreues Nachschlageblatt erstellen.
 
 ## Phase 2 – visuelle Verankerung
 
@@ -1041,7 +1159,7 @@ oder
 /comicnodes
 ```
 
-Ziel: zusätzliche Bilder, Beziehungen und Geschichten im Gedächtnis erzeugen.
+Ziel: zusätzliche Bilder, Beziehungen und Geschichten im Gedächtnis erzeugen. `/tafelbild` passt zu geführten Zusammenhängen, `/merkbild` zu einem einzelnen Erinnerungsanker.
 
 ## Phase 3 – Abruftraining
 
@@ -1057,7 +1175,7 @@ Ziel: einzelne Informationen aktiv erinnern.
 Quiz mich.
 ```
 
-Ziel: echte Wissenslücken sichtbar machen.
+Ziel: echte Wissenslücken sichtbar machen. Für eine zusammenhängende Prüfungssimulation mit separater Korrektur eignet sich `/probearbeit`.
 
 ## Phase 5 – Reparatur
 

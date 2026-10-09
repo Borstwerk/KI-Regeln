@@ -1,10 +1,10 @@
 # Allgemeine Prompt-Shortcuts
 
-Stand: 2026-10-05
+Stand: 2026-10-09
 
 ## Zweck
 
-Diese Seite sammelt **100 kompakte Prompt-Shortcuts** für Schreiben, Lernen, Formatierung, Content, Entscheidungen, Denksysteme, Kreativität, Coding und Alltag.
+Diese Seite sammelt die **100 ursprünglichen Prompt-Shortcuts** für Schreiben, Lernen, Formatierung, Content, Entscheidungen, Denksysteme, Kreativität, Coding und Alltag sowie **vier eigenständig ergänzte Lern-Shortcuts** (`/lernzettel`, `/tafelbild`, `/probearbeit`, `/merkbild`). Damit sind 104 Kürzel dokumentiert; die ursprüngliche 100er-Liste bleibt unverändert.
 
 Alle Einträge sind:
 
@@ -22,7 +22,7 @@ Methodische Ausgangsreferenz war die vom Nutzer bereitgestellte statische PDF:
 
 > Christian · @KI.GLATZE · „100 ChatGPT-Codes“ · Ausgabe 2026
 
-Die PDF selbst wird **nicht** in diesem Repository redistribuiert.
+Die PDF selbst wird **nicht** in diesem Repository redistribuiert. Die vier neuen Lern-Ergänzungen stammen nicht aus dieser 100er-PDF; sie wurden anhand einer später vom Nutzer genannten Kurzbefehlsliste als eigenständige, quellenkritische Bedienformen formuliert.
 
 Für KI-Regeln wurden:
 
@@ -76,6 +76,15 @@ Bereits vorhanden. Die lokale Bedeutung wird bewusst **breiter** gefasst:
 
 - bei Lernstoff → Wissenslücken;
 - bei Plänen → fehlende Aufgaben, Rollen, Voraussetzungen oder Risiken.
+
+### Lern-Shortcuts gegenüber bestehenden Formen
+
+- `/lernzettel` erweitert `/cheatsheet`: lernorientierte Quellensynthese statt reine Kurzreferenz.
+- `/tafelbild` ergänzt `/mindmap` und `/sketchnodes`: geführter didaktischer Zusammenhang statt Begriffsnetz.
+- `/probearbeit` ergänzt Quiz: Punkte, Zeit, Aufgabenmix und separater Lösungsteil.
+- `/merkbild` ergänzt `/mnemonic` und `/comicnodes`: ein präziser visueller Erinnerungsanker statt bloßer Merksatz oder Panel-Folge.
+
+Alle vier sind `PROMPT-SHORTCUT`, keine nachgewiesenen offiziellen Slash-Befehle. Die ausführlichen Beispiele und Qualitätsgrenzen stehen in `ChatGPT-Funktionen-und-Lernwerkzeuge.md`.
 
 ### `/mindmap` vs. `/mindmaps`
 
@@ -210,6 +219,16 @@ Bei `/travel`, `/convert` für Währungen, Produkt-/Preisfragen oder anderen zei
 | `/roadmap` | Baue einen Lernpfad von Grundlagen zu fortgeschrittenen Fähigkeiten mit sinnvollen Meilensteinen und Übungsnachweisen. |
 | `/teachback` | Lass den Nutzer ein Konzept in eigenen Worten erklären, prüfe die Erklärung und korrigiere nur konkrete Lücken oder Fehlannahmen. |
 
+### Vier ergänzende Lern-Shortcuts (zusätzlich zur ursprünglichen 100er-Liste)
+
+| Shortcut | KI-Regeln-Lesart |
+|---|---|
+| `/lernzettel` | Fasse bereitgestellte Lernunterlagen lernorientiert zusammen: Kernbegriffe, Regeln, prüfungsrelevante Inhalte, kurze Beispiele und typische Fehler. Fehlende Quelleninhalte markieren statt still ergänzen. |
+| `/tafelbild` | Baue einen Zusammenhang wie an einer Tafel schrittweise auf: Frage, Begriffe, richtige Pfeile/Beziehungen, Ergebnis und Merksatz. Standardmäßig lesbares Schema; Bild/HTML nur bei entsprechender Aufgabe. |
+| `/probearbeit` | Erzeuge eine alters-/niveaugerechte Übungsprüfung mit passender Bearbeitungszeit, Aufgabenmix, konsistenter Punkteverteilung und **separatem** Lösungsschlüssel samt Erwartungshorizont. Keine offiziellen Prüfungsunterlagen vortäuschen. |
+| `/merkbild` | Verankere genau eine Zielinformation in einem merkfähigen Bildmotiv. Prüfe Metapher, Pfeile und Beschriftung fachlich; einen Bildentwurf nicht mit einem tatsächlich gerenderten Bild verwechseln. |
+
+Diese Kürzel sind **keine neue Skill-Routing-Wahrheit**. Ein verständlicher Slash-Prompt ist noch keine produktseitig verfügbare Funktion. Die vier Kriterien sind zunächst dokumentiert, nicht als eigenständige Behavioral-Tests bestanden.
 ## Format und Ausgabe
 
 | Shortcut | KI-Regeln-Lesart |
