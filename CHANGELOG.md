@@ -8,6 +8,13 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Lern-Prompt-Shortcuts – vier Ergänzungen
+
+- `/lernzettel`, `/tafelbild`, `/probearbeit` und `/merkbild` als vier **eigene Prompt-Shortcuts** in `Dokumentation/ChatGPT-Funktionen-und-Lernwerkzeuge.md` und `Dokumentation/Allgemeine-Prompt-Shortcuts.md` ergänzt; nicht als universelle/offizielle ChatGPT-Kommandos dargestellt.
+- Die ursprüngliche kuratierte 100er-Shortcut-Liste bleibt in Herkunft und Zählung abgegrenzt; die vier zusätzlichen Lernformate ergeben **100 + 4** dokumentierte allgemeine Kürzel.
+- Lernzettel sichert Quellennähe und prüfungsrelevante Vollständigkeit; Tafelbild ordnet Beziehungen didaktisch mit fachlich korrekten Pfeilen; Probearbeit trennt Aufgabenblatt, Zeit/Punkte und späteren Lösungsschlüssel; Merkbild bietet einen fachlich geprüften visuellen Erinnerungsanker.
+- Konkrete Promptbeispiele, Abgrenzungen zu `/cheatsheet`, `/mindmaps`, Quiz, `/mnemonic` und `/comicnodes` sowie fünf Negativtest-Ideen ergänzt.
+- Kein zusätzlicher Skill, Plugin, Kommando-Registrierung oder Fremdtool. Qualitätskriterien sind dokumentiert, **nicht behavioral getestet**.
 ### Reverse Engineering und Binäranalyse – First Slice
 
 - Neuer, bewusst schmaler Fachbereich `Reverse-Engineering-und-Binaeranalyse/` für die Untersuchung kompilierter Artefakte ohne gesicherten Quellcode. Vermeidet Werkzeug-Skills und doppelte Ownership mit `diagnose`/`code-review`.
