@@ -26,6 +26,7 @@ Ein guter Skill soll:
 - `Inputs-Outputs-und-Vertraege.md` – erwartete Eingaben, Ausgaben und Evidence;
 - `Toolanforderungen-und-Fallbacks.md` – Capabilities, Rechte und degradierte Betriebsmodi;
 - `Agent-Tool-Vertraege.md` – maschinenlesbare Auswahl-, Output-, Failure-, Retry- und Acceptance-Verträge für wiederverwendbare Agententools;
+- `Skill-Redundanz-und-Kontextkosten.md` – report-only Wort-/Absatz-Duplikatkandidaten plus semantischer Review ohne automatisches Kürzen;
 - `Plugin-App-und-Capability-Routing.md` – Auswahl zwischen nativen Fähigkeiten, verbundenen Plugins/Apps, Plugin-Discovery und manuellen Fallbacks;
 - `Portabler-Skill-Kern-und-Runtime-Adapter.md` – Trennung fachlicher Skilllogik von client-/modell-/runtime-spezifischer Konfiguration;
 - `Skill-Komposition-und-Abhaengigkeiten.md` – Beziehungen zwischen Skills;

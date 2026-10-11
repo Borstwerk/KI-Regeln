@@ -33,6 +33,20 @@ Mögliche Gegenchecks:
 
 Doppelte Aussage desselben Decompilers ist keine unabhängige Prüfung.
 
+## Referenzvergleich und Oracle
+
+Für Rekonstruktion oder behauptete semantische Äquivalenz einen von Worker-Änderungen unabhängigen Prüfpfad bevorzugen. Unterschiedliche Nachweisstufen (Plausibilität, Build, Testverhalten, differentialer Vergleich, kontrollierter relocation-/symbolbewusster Bytevergleich) sind **nicht austauschbar**.
+
+Der separate Vertrag `Binary-Verification-Oracle.md` beschreibt:
+
+- Version/Hash von Original und Kandidat;
+- Compiler-/ABI-/Relocation-Bedingungen;
+- Schutz von Referenz und Prüfskript;
+- echte `PASS / FAIL / INCONCLUSIVE / NOT RUN`-Evidence;
+- separate Reviewfreigabe für Änderungen an der Prüflogik.
+
+Ohne Originalartefakt oder geeignete Toolchain keine Äquivalenz behaupten.
+
 ## Decompiler-Fallen
 
 - optimierter/inline/entfernter Code und dead code;

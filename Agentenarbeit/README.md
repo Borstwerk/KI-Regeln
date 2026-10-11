@@ -104,6 +104,12 @@ Für Context Engineering können – soweit verfügbar – Input-/Output-Tokens,
 
 Siehe `Observability-und-Traceability.md`, `Trace-Datenmodell.md` und `Run-Replay-und-Reproduzierbarkeit.md`.
 
+### Strukturierte Aktionsoberflächen und Delivery Evidence
+
+Bei agentisch bedienten zustandsbehafteten Tools das Muster `Observation → Allowed Actions → Toolreceipt → neue Observation → Acceptance` verwenden, wenn es die Steuerung tatsächlich robuster macht. Technische Verfügbarkeit ist keine Berechtigung. Siehe `Agenten-Aktionsoberflaechen.md`.
+
+Erfolg von Coding-Agenten an ausgelieferter, akzeptierter Wirkung messen und Kosten, Reviewrunden, Rework und Wartezeit transparent halten. Codezeilen/PR-Zahl allein genügen nicht. Siehe `Delivery-und-Review-Metriken.md`.
+
 ### Run Replay und Reproduzierbarkeit
 
 Gespeicherte Agentenläufe werden in drei unterschiedliche Fälle getrennt:

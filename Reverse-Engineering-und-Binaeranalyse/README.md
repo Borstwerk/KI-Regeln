@@ -29,6 +29,7 @@ Workflow `../Workflows/Binaerdatei-verstehen.md` benutzen, wenn Triage, Untersuc
 
 - `Binaerformate-und-Analysepfade.md` – Native / Managed .NET / Unity IL2CPP.
 - `Decompiler-Evidence-und-Hypothesen.md` – Herkunft, Sicherheit der Aussage, Widersprüche.
+- `Binary-Verification-Oracle.md` – unabhängige Stufen für explizite Rekonstruktions-/Äquivalenzaufträge, kein Pflichtschritt bei einfacher Auszugsanalyse.
 - `Tool-Scopes-und-Isolation.md` – Autorisierung, READ/WRITE/ACTION, Sandbox und untrusted Samples.
 - `Runtime-Capability-Matrix.md` – Optionen und Grenzen der externen Laufzeiten, **keine Installationsanweisung**.
 

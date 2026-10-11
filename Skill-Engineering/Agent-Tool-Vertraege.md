@@ -92,6 +92,25 @@ Zusätzlich sinnvoll:
 
 Ein Tool darf seine Wirkung nicht hinter einem harmlosen Namen verstecken.
 
+## Observation / Allowed Action / Outcome (bei zustandsbehafteten Tools)
+
+Wenn ein Agent ein veränderliches System steuert, kann ein begrenztes Aktionsinterface Fehler durch freie Befehlsspekulation reduzieren:
+
+```text
+Observation (Version, Quelle, Unsicherheit)
+→ zulässige Aktionskandidaten samt Preconditions
+→ separate Autorisierungsprüfung
+→ Toolcall + Receipt
+→ neue Observation
+→ Acceptance Evidence
+```
+
+**Angeboten ≠ autorisiert:** `allowed_actions` beschreibt technische Möglichkeiten unter gegebenem Zustand. Es ersetzt weder Credentials noch den READ/WRITE/ACTION-Scope oder Human Gate.
+
+Für Tools mit wiederholten Zustandsübergängen möglichst State-/Version-Referenzen und Precondition-Mismatch statt stiller Aktion auf veralteter Observation verwenden. Kein universelles Action Panel für jede kleine Lesefrage erzwingen.
+
+Details: `../Agentenarbeit/Agenten-Aktionsoberflaechen.md`.
+
 ## Machine-readable Output
 
 Agentenwerkzeuge profitieren von einem stabilen, maschinenlesbaren Ergebnisvertrag.

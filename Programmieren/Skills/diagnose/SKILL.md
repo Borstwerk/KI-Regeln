@@ -63,7 +63,15 @@ Wenn eine geeignete Testgrenze existiert:
 
 Existiert keine sinnvolle Testgrenze, diese Nachweisgrenze ausdrücklich dokumentieren statt einen wertlosen Test gegen Interna zu erzwingen.
 
-## 6. Fix-Regeln
+## 6. Reparaturplan bei risikoreichen Änderungen
+
+Bei Daten-/Security-/Produktionswirkung, unklarer Ursache, breiten Änderungen oder Vertrags-/Architekturwirkung **vor dem Fix** einen überprüfbaren Plan festhalten: Repro, Root-Cause-Evidence, begrenzte Änderung, Regressionstest, Risiken, Backout, offene Fragen.
+
+Ein unabhängiger Planreview kann fehlerhafte Ursachenannahmen entdecken, bevor sie implementiert werden. Wo der lokale Prozess eine Freigabe verlangt, **kein WRITE vor dem tatsächlichen Plan-Gate**. Same-Model-Review nicht als unabhängige Prüfung ausgeben.
+
+Bei minimalem risikoarmem Fix genügt die proportionale Planung; **keine pauschale Pflicht zur Multi-Agent-Delegation**. Wesentliche neue Diagnose-/Scope-Fakten machen den alten Plan prüfbedürftig.
+
+## 7. Fix-Regeln
 
 - Ursache beheben, nicht Symptom verdecken.
 - Keine Validierung abschalten.
@@ -71,7 +79,13 @@ Existiert keine sinnvolle Testgrenze, diese Nachweisgrenze ausdrücklich dokumen
 - Keine fremden Bereiche refactoren.
 - Führt die Diagnose zu einer größeren Verhaltens- oder Architekturänderung, zurück in die Planungsphase.
 
-## 7. Brechprobe und Abschluss
+## 8. Stagnation und Circuit Breaker
+
+Bei wiederholt gleichem substanziellem Review-Finding, fehlender Konvergenz oder neuen gleich schweren Fehlern die Wiederholung stoppen. Statt „noch einmal raten“: Repro und Hypothesen prüfen, fokussierten Handoff erstellen und gegebenenfalls neuen Planreview/Human Gate einholen. Bereits ab einem kritischen Risiko kann sofortiger Stopp nötig sein. Zwei erfolglose materielle Runden sind eine Heuristik, keine starre globale Zahl.
+
+Nicht die Test- oder Oracle-Definition ändern, um den aktuellen Fix passend zu machen. Ein begründeter Testfehler benötigt unabhängigen Review.
+
+## 9. Brechprobe und Abschluss
 
 Bei kritischen Regressionen den Fix oder Schutz probeweise wieder entfernen und bestätigen, dass der Regressionstest rot wird.
 

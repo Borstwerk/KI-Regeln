@@ -144,6 +144,12 @@ Ein neuer Modelllauf ist kein Beweis dafür, dass der alte Lauf exakt reproduzie
 
 Details: `Run-Replay-und-Reproduzierbarkeit.md`.
 
+## Review-/Delivery-Outcome
+
+Bei Coding-Agenten die reine Ausgabemenge (Commits, PRs, LOC) nicht als Lieferwirkung deklarieren. Wo der Prozess eine Auswertung rechtfertigt: angenommene vs. akzeptierte Aufgaben, vollständige Lead Time, Reviewrunden, Rückläufer, Reverts, Gate-Evidence, Reviewwartezeit und Gesamtkosten getrennt betrachten.
+
+Definitionen und Nenner vor Vergleichsberechnungen festlegen. Siehe `Delivery-und-Review-Metriken.md`.
+
 ## Observability für Multi-Agent-Systeme
 
 Bei mehreren Agenten zusätzlich nachvollziehbar machen:

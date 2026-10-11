@@ -25,6 +25,10 @@ jobs:
         run: python tools/repo_validator.py
       - name: Behavioral harness unit tests
         run: python -m unittest tests.test_behavioral_harness tests.test_golden_task_behavioral_harness tests.test_behavioral_harness_claude
+      - name: Skill redundancy audit unit tests
+        run: python -m unittest tests.test_skill_redundancy_audit
+      - name: Skill redundancy candidates (informational, no quality gate)
+        run: python tools/skill_redundancy_audit.py --repo . --limit 10
       - name: Prepare blind Golden Task packages
         shell: bash
         run: |

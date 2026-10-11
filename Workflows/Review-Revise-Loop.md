@@ -201,6 +201,8 @@ Strategie neu bewerten, wenn:
 
 Dann je nach Fall:
 
+- bei Coding-Fixes den risikobasierten Plan-Gate und `../Workflows/Bugdiagnose.md` erneut prüfen;
+- gleiche substanzielle Kritik oder zwei erfolglose materielle Versuche als **Stagnationssignal**, nicht als neue automatische Schreibgenehmigung behandeln;
 - Ursache neu diagnostizieren;
 - Scope oder Ansatz vereinfachen;
 - frühere Version wiederherstellen;
