@@ -77,6 +77,12 @@ Eine gezielte manuelle Brechprobe kann denselben Grundgedanken im Kleinen anwend
 - kritische Risiken haben explizite Evidence;
 - Tests erkennen tatsächliche Vertragsverletzungen.
 
+## Geschützte Prüfbedingungen
+
+Bei agentisch erzeugten Fixes oder rekonstruiertem Code dürfen Acceptance-Scripte, Test-Thresholds, bekannte Negativfälle und Oracle-Baselines nicht still durch denselben Worker geändert werden, dessen Output geprüft wird.
+
+Ist eine Prüfdefinition wirklich falsch, benötigt ihre Korrektur einen eigenständigen, nachvollziehbaren Review; die neue Definition wird danach an negativen Kontrollen überprüft. Siehe `../Reverse-Engineering-und-Binaeranalyse/Binary-Verification-Oracle.md` für den spezifischen Binary-Fall.
+
 ## Leitgedanke
 
 > Gute Tests maximieren nicht Metriken. Sie erhöhen die Wahrscheinlichkeit, relevante Fehler früh und zuverlässig zu erkennen.

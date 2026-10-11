@@ -8,6 +8,18 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Evidence-first Agent Delivery Hardening
+
+- HypeRadar-Audit am 11.10.2026 gegen Cockroach Labs/MOLT Sinai, ein Langzeit-Shooter-Decompilation-Experiment, BinceQu/RoboHarness und die Harvard-/Jellyfish-Untersuchung: nur übertragbare Vertragsmuster übernommen, kein neuer Fachskill/Plugin.
+- `Bugdiagnose.md` und `diagnose/SKILL.md`: risikobasierter **Plan-Review vor WRITE**, mit Root-Cause-Evidence, Diff-/Testscope, Backout und realem Gate; kleiner, risikoarmer Fix bleibt ohne obligatorische Mehragentenzeremonie.
+- Circuit Breaker bei wiederholter substantieller Ablehnung oder fehlender Konvergenz: STOP/Neudiagnose/Handoff statt Review- oder Testgrenzen zu schwächen; „zwei Runden“ ist eine Heuristik, kein globales Limit.
+- `Binary-Verification-Oracle.md`: L0–L4 getrennte Evidence-Klassen, kontrollierte Toolchain, symbol-/relocationbewusster Bytevergleich, unabhängige Referenz-/Oracle-Grenzen und explizite `NOT RUN`-/`INCONCLUSIVE`-Zustände. In RE-Workflow, Fachskill und QA-Regeln referenziert.
+- `Agenten-Aktionsoberflaechen.md`: Observation → begrenzte Aktion → neue Observation → Acceptance; angebotene Capability ist keine Autorisierung. In bestehendem Agent-Tool-Vertrag verankert.
+- `Delivery-und-Review-Metriken.md`: akzeptierte Issues, Review-/Wartezeit, Rework, Reverts, vollständige Kosten und nachweisbare Gates anstatt LOC/PR-Zählung als Erfolg.
+- `Skill-Redundanz-und-Kontextkosten.md` plus `tools/skill_redundancy_audit.py`: read-only, report-only Absatz-Duplikatkandidaten über `SKILL.md`, ohne semantische Konflikt- oder automatische Einsparungsbehauptung; synthetische Unit Tests und rein informeller CI-Lauf.
+- `Evals/Programmieren/diagnose/cases.yml` und `Evals/Reverse-Engineering-und-Binaeranalyse/binary-analysis/cases.yml`: je drei neue definierte Positiv-/Negativ-/Near-Miss-Verhaltenstests; Behavioral-Status **DEFINED / NOT RUN**.
+- Audit-Entscheidungen in `Dokumentation/Upstream-Audit-2026-10-11-Agent-Delivery.md`; kein Routing-/Catalog-/Overlay-Ausbau und keine Plugininstallation.
+
 ### Lern-Prompt-Shortcuts – vier Ergänzungen
 
 - `/lernzettel`, `/tafelbild`, `/probearbeit` und `/merkbild` als vier **eigene Prompt-Shortcuts** in `Dokumentation/ChatGPT-Funktionen-und-Lernwerkzeuge.md` und `Dokumentation/Allgemeine-Prompt-Shortcuts.md` ergänzt; nicht als universelle/offizielle ChatGPT-Kommandos dargestellt.
