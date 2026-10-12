@@ -12,6 +12,7 @@
 - 6. Verbessern heißt nicht nur hinzufügen
 - 7. Eval und Quality Floor schützen
 - 8. Review und Adoption
+- Entscheidungshistorie für wiederkehrende Fälle
 - Stop
 - Leitgedanke
 
@@ -150,6 +151,12 @@ Vor Übernahme:
 - relevante Evidence und Grenzen dokumentieren;
 - Maturity nur anhand tatsächlicher Praxis und Evalabdeckung bewerten;
 - Changelog aktualisieren.
+
+## Entscheidungshistorie für wiederkehrende Fälle
+
+Bei substanziellen oder wiederkehrenden Fehlern vor dem nächsten Änderungsvorschlag nach früheren Diagnosen und Entscheidungen zur selben Ursache suchen. Angenommene, verworfene und vertagte Vorschläge samt Begründung, Snapshot und Evidence-Verweisen wiederauffindbar halten. Das schützt vor wiederholten Sackgassen und verhindert, dass ein späterer Agent eine alte Ablehnung fälschlich als unentschiedenen Fund interpretiert.
+
+Der operative Minimalnachweis und seine risikobasierte Einsatzgrenze stehen im bestehenden Workflow `../Workflows/Skill-Verbesserung-aus-Evals-und-Fehlern.md`. Vorhandene Issues, PRs oder Reviews bevorzugen; kein eigenständiges Tracking-System und keine Pflicht zur Dokumentation jedes Einzelfehlers einführen. Ein gespeicherter Entscheid ersetzt weder unabhängige Evaluation noch ein erneutes Human Gate bei neuer Sachlage.
 
 ## Stop
 
