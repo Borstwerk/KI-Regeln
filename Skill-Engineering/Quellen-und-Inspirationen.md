@@ -11,6 +11,7 @@
 - Bestehende Skill-Sammlungen dieses Repositories
 - Addy Osmani Agent Skills – Portabilität und Eval-Ratcheting
 - Evidence-getriebene Skill-Evolution
+- SkillHone – persistente Fehler- und Entscheidungshistorie
 - Eigene Synthese
 - Leitgedanke
 
@@ -286,6 +287,21 @@ Methodisch relevant sind insbesondere:
 - Risk-Control wird gestoppt statt automatisch aggressiv wiederholt.
 
 KI-Regeln übernimmt **nicht** catbus' Plattformautomation, Credentialmodell, Scraping-/Browser-Fingerprinting oder konkrete Social-Plattform-Kommandos. Verallgemeinert wird nur der Agent-Tool-Vertrag in `Agent-Tool-Vertraege.md`.
+
+## SkillHone – persistente Fehler- und Entscheidungshistorie
+
+Primärquelle: https://github.com/Tencent/SkillHone
+
+Geprüfter Stand am 2026-10-12:
+
+- Repository-Commit: `c613aa99193079383c7a3ad81df1df005685e6af`;
+- `skills/skillhone-auto-optimization/SKILL.md`-Blob: `6d0ad8f295d6fdb043ea2e12c07a83da46165c84`;
+- MIT-Lizenz am geprüften Stand (`LICENSE`-Blob: `3c70e98339da04c92792e0afe906f684b1f14cd7`);
+- Nutzungsart: **methodische Inspiration**, keine Übernahme von Code, Skilltext, Runtime oder automatischer Reparaturlogik.
+
+Für den vorhandenen Workflow `../Workflows/Skill-Verbesserung-aus-Evals-und-Fehlern.md` relevant ist die **verlinkte, persistente Entscheidungshistorie**: einen reproduzierbaren Fehler, seine Ursache, den geprüften Kandidaten, die Test-Evidence sowie angenommene und verworfene Entscheidungen auch für spätere Bearbeitung auffindbar halten.
+
+Die bereits vorhandenen lokalen Regeln zu Ursachenprüfung, Evals und Human Gates bleiben maßgeblich. Bewusst nicht übernommen werden automatische Aufgabenunterbrechung bei Defekten, autonome Reparatur/Adoption, SkillHones lokaler Issue-/PR-Backendvertrag oder dessen DeepSeek-Harness-/Node.js-Abhängigkeiten. Kleine Einzelfehler begründen keine allgemeine Aufzeichnungspflicht.
 
 ## Eigene Synthese
 
