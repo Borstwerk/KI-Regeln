@@ -8,6 +8,12 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Skill-Failure Decision History (12.10.2026)
+
+- `Workflows/Skill-Verbesserung-aus-Evals-und-Fehlern.md`: vor relevanten Reparaturen frühere gleichartige Fälle prüfen; für substanzielle/wiederkehrende Fehler Entscheidung, Ursachenbelege, geprüfte Kandidaten, Tests und verworfene Alternativen dauerhaft über bestehende Issues/PRs/Reviews verlinken.
+- `Skill-Engineering/Evidence-getriebene-Skill-Verbesserung.md`: wiederauffindbare Entscheidungen als kleine Lifecycle-Methode ohne neue Datenbank, Skill oder zusätzliche Pflicht für triviale Einzelfehler.
+- SkillHone als datierte methodische Inspiration dokumentiert; keine externe Runtime, autonome Reparatur, Skillübernahme, neue Rechte oder automatische Adoption.
+
 ### Evidence-first Agent Delivery Hardening
 
 - HypeRadar-Audit am 11.10.2026 gegen Cockroach Labs/MOLT Sinai, ein Langzeit-Shooter-Decompilation-Experiment, BinceQu/RoboHarness und die Harvard-/Jellyfish-Untersuchung: nur übertragbare Vertragsmuster übernommen, kein neuer Fachskill/Plugin.

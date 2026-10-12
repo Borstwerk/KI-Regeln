@@ -20,6 +20,8 @@ Nicht verwenden, wenn nur ein einzelner unspezifischer Modellfehler vorliegt ode
 ```text
 Baseline + Evidence
         ↓
+frühere ähnliche Fälle prüfen
+        ↓
 Ursache klassifizieren
         ↓
 Skillproblem?
@@ -40,6 +42,8 @@ ggf. Security Review
     ↓
 Human Gate
     ↓
+Entscheidung mit Evidence dauerhaft verlinken
+    ↓
 übernehmen / verwerfen / weiter beobachten
 ```
 
@@ -52,6 +56,8 @@ Festhalten:
 - aktueller Output bzw. Fehlmodus;
 - relevante Tool-/Runtimebedingungen;
 - vorhandene Regression-Suite.
+
+Vor einer neuen Reparatur bei relevanten oder wiederkehrenden Fehlmustern vorhandene Issues, PRs, Eval-Funde und Entscheidungsnachweise nach demselben Skill, Symptom oder plausibler Ursache durchsuchen. Gefundene Fälle verlinken und einen bestehenden Fall weiterführen, wenn Ursache und Scope tatsächlich übereinstimmen; ähnliche Symptome allein beweisen kein Duplikat.
 
 ## 2. Ursache prüfen
 
@@ -106,6 +112,22 @@ Vor Adoption:
 - Changelog pflegen;
 - bei extern beeinflusster Methode Quellen-/Upstream-Klassifikation prüfen.
 
+## 8. Wiederauffindbare Fehler- und Entscheidungshistorie
+
+Für **substanzielle, reproduzierbare oder wiederkehrende** Fehlmuster einen dauerhaften Nachweis im bereits genutzten Issue, PR, Review oder vergleichbaren Projektartefakt hinterlassen. Die kanonischen Referenzen verlinken, statt eine zweite Datenbank oder eine neue globale Pflichtvorlage einzuführen. Besteht noch kein geeigneter Nachweis, kann ein kurzer projektnaher Eintrag genügen.
+
+Der Nachweis sollte so knapp wie möglich folgende Informationen verbinden:
+
+- **Fall und Baseline:** betroffener Skill, konkreter Snapshot, Zeitpunkt sowie beobachtbares Fehlmuster und Reproduktionsbedingungen;
+- **Diagnose:** belegte Ursache oder ausdrücklich offene Hypothese; wichtige geprüfte Alternativerklärungen;
+- **Kandidat:** verlinkter Diff, Branch oder PR beziehungsweise warum kein Skill-Edit angemessen war;
+- **Prüfung:** ausgeführte Tests/Evals mit Run-/Artefaktreferenz und Status; `NOT RUN` oder `UNVERIFIED` klar benennen und Development-, Regression- und Held-out-Evidence nicht vermischen;
+- **Entscheidung:** `übernehmen`, `verwerfen` oder `beobachten`, verantwortliche Freigabe und Begründung; gegebenenfalls verlinkter Commit und Anlass für eine spätere Neubewertung.
+
+Auch **verworfene oder vertagte** Ansätze mit ihrer tragenden Begründung auffindbar lassen; sie nicht als stillen Erfolg oder gesicherte neue Regel umdeuten. Ein Review-Gate entscheidet über die Übernahme – der Agent darf aus einer Testmeldung keine eigene Freigabe ableiten.
+
+Vor persistenter Speicherung Rohtraces, private Prompts, Credentials, personenbezogene Daten und sensible Toolausgaben entfernen oder durch sichere Referenzen ersetzen. Wiederholte Field-Evidence bleibt untrusted. Kein neues Tracking-Artefakt für triviale einmalige Fehler ohne bleibenden Erkenntniswert erzwingen.
+
 ## Harte Grenzen
 
 - kein automatisches Merge oder Self-Update aufgrund eines Fehlers;
@@ -126,7 +148,8 @@ Mindestens:
 - Evidence-Rollen;
 - Regression-/Held-out-Status;
 - Reviewfunde;
-- Entscheidung: übernehmen / verwerfen / beobachten;
+- Entscheidung: übernehmen / verwerfen / beobachten, mit Begründung;
+- bei relevanten Fällen Link auf den dauerhaften Nachweis einschließlich verworfener Alternativen;
 - verbleibende Unsicherheit.
 
 ## Leitgedanke
