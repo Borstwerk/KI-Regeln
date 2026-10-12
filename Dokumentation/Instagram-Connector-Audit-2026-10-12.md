@@ -12,6 +12,44 @@ Drei klar unterschiedliche Jobs:
 
 Diese Jobs nie unbemerkt mischen. Ein Content-Skill mit lesbaren `SKILL.md`-Dateien ist nicht automatisch ein Instagram-Connector. Ein MCP-Connector ist wiederum keine fachliche Social-Media-Methodik.
 
+## Status, Priorität und Hinweis für spätere KI-Agenten
+
+**DISCOVERY-ONLY / NOT ADMITTED.** Der Nutzer möchte diese Quellen für eine spätere Nutzung **vormerken**, aber derzeit weder einen kostenpflichtigen Dienst auswählen noch ein Instagram-Konto verbinden oder etwas veröffentlichen.
+
+**Priorität 1 – Instagram-Publishing mit Claude:** Reels, Bilder, Karussells und Beiträge aus bereits freigegebenen Entwürfen veröffentlichen oder terminieren. Ein späterer Agent soll zuerst die offiziellen Meta-Publishing-Möglichkeiten und danach geeignete MCP-/Provider-Adapter prüfen. Veröffentlichung bleibt immer eine gesondert autorisierte externe **ACTION**; Planen oder Entwerfen erteilt keine Erlaubnis zum Post.
+
+**Priorität 2 – optional HypeRadar-READ:** Instagram als mögliche zusätzliche Discovery- oder Performance-Quelle evaluieren. Zunächst nur zulässige Lese-Capabilities, Datenabdeckung und API-Rechte prüfen; aus einer Publishing-Verbindung folgt **kein** Leserecht für beliebige Reels, private gespeicherte Inhalte oder DMs. Keine HypeRadar-Automatisierung in diesem Audit.
+
+### Agenten-Discovery-Regel für spätere Aufträge
+
+Wenn ein Auftrag künftig **Instagram-Publishing, Instagram-MCP oder HypeRadar-Instagram-Recherche** betrifft:
+
+1. Dieses Dokument und die verlinkten Primärquellen **neu lesen**; frühere Preis-, Feature-, Scope- und ToS-Angaben nicht als aktuelle Tatsache übernehmen.
+2. Auftrag unterscheiden: offline Content erstellen, Instagram-Inhalte/Insights lesen, Draft speichern, terminieren oder **öffentlich veröffentlichen**.
+3. Native und bereits freigegebene Integrationen vor Drittanbieter-MCP prüfen; **Kontotyp, Meta-App/API-Permissions, Providerkosten, Rate-/Postlimits, Datenflüsse, Media-Hosting und Support** aktuell überprüfen.
+4. Anbieter-/Skill-Admission nach `Sicherheit/MCP-und-externe-Tools.md` und gegebenenfalls `skill-security-review`; READ/WRITE/ACTION und Least-Privilege gesondert behandeln.
+5. **Keine Installation, Kontoanmeldung, Tokenanforderung, Abbuchung, Terminierung oder Veröffentlichung** allein wegen dieses Fundes. Zuerst Nutzerzustimmung zum konkreten Anschluss beziehungsweise zur Ausgabe und bei Veröffentlichungen ein eindeutiges Human Approval einholen.
+6. Bei fehlender Eignung der APIs oder notwendigem Drittanbieterabonnement den **Kosten-/Privacy-/Wartungs-Trade-off** transparent machen. Dass ein Nutzer mögliche Kosten akzeptiert, ersetzt keinen aktuellen Planentscheid.
+
+**Statuswerte:** Quellen bekannt; Connectors nicht freigegeben; Toolinstallationen und Authentisierung nicht durchgeführt; keine Behavioral- oder Live-Publishing-Evidence.
+
+## Offizielle Quellen und potenzielle Provider (erneut prüfen vor Umsetzung)
+
+**Meta / Plattform-Primärquellen**
+
+- [Meta – Instagram API mit Instagram Login (offizielle Postman-Collection)](https://www.postman.com/meta/instagram/folder/1z5vxzu/instagram-api-with-instagram-login): Professional-Accounts (Business/Creator), Berechtigungen wie `instagram_business_content_publish`. Der dokumentierte Instagram-Login-Pfad ist nicht mit dem Facebook-Login-Pfad gleichzusetzen.
+- [Meta – Instagram API mit Facebook Login (offizielle Postman-Collection)](https://www.postman.com/meta/instagram/folder/u4g5a2a/instagram-api-with-facebook-login): Professional-Account und verknüpfte Facebook-Seite sowie andere Permissions (u. a. `instagram_content_publish`).
+- [Meta – offizielle Instagram API / Reels-Publishing-Beispiele](https://www.postman.com/meta/instagram/collection/6yqw8pt/instagram-api): Container-Erzeugung, Statusprüfung und eigentlicher Publish-Aufruf sind unterschiedliche Schritte. Aktuelle Format-, Rechte-, App-Review- und Media-Hosting-Voraussetzungen vor Umsetzung prüfen.
+
+**Mögliche Integrationsanbieter – unverbindliche Kandidaten**
+
+- [PostZen – Instagram MCP](https://www.postzen.dev/mcp/instagram): nach Anbieterangaben remote MCP für Claude und Instagram-Publishing, Scheduling sowie Analytics; OAuth-/API-Key-/Profil-Scope im tatsächlichen Angebot prüfen.
+- [PostZen – Preise](https://www.postzen.dev/pricing) und [PostZen – Billing-Dokumentation](https://docs.postzen.dev/billing): beim Audit 12.10.2026 bewirbt der Anbieter einen Free-Tier (bis 20 Plattform-Posts/Monat, zwei Accounts) und kostenpflichtige Tarife ab 19 USD/Monat. **Momentaufnahme eines Anbieters, keine verlässliche Kostenzusage.** Posts auf mehreren Zielkonten, Zusatzaccounts und Drittplattform-Gebühren gesondert prüfen.
+- [PostZen – Instagram Agent Skill](https://github.com/postzen-dev/instagram-agent-skill): Beispiel einer Verbindung aus Agent-Skills und externem Publishing-MCP; Paket-/Permission-Audit steht aus.
+- [William-Gao/instagram-mcp](https://github.com/William-Gao/instagram-mcp): alternativer MCP-Adapter zur Instagram-API; Wartung, Auth, erlaubte Aktionen und Release-Sicherheit vor Einsatz neu verifizieren.
+
+**Bewertung:** Offizielle Meta-Pfade sind die erste Capability-/Berechtigungsreferenz. PostZen und Open-Source-Adapter sind **unbewertete Anbieteroptionen**, keine Empfehlung zum Kauf, Installieren oder Verbinden. Anbieter-Marketing ist nicht gleich unabhängig bestätigte Funktion oder Sicherheit.
+
 ## Geprüfte Kandidaten
 
 | Projekt | Geprüfter Head | Lizenzmetadatum | Eigentliche Capability | Vorläufige Entscheidung |
@@ -28,7 +66,7 @@ Die SHA-Werte referenzieren zum Auditzeitpunkt beobachtete Default-Branch-Ständ
 
 Bestehende Bereiche nutzen:
 
-- Contentplanung und Hooks → `Social-Media-...` bzw. passende vorhandene Kreativ-/Kommunikations-Skills;
+- Contentplanung und Hooks → `Social-Media-und-Content-Praesenz/` bzw. passende vorhandene Kreativ-/Kommunikations-Skills;
 - MCP-/Plugin-Admission → `Sicherheit/MCP-und-externe-Tools.md`, Permission Review, Source Review;
 - Capability/Output/Fehler/Retry → `Skill-Engineering/Agent-Tool-Vertraege.md`;
 - Account-Actions → READ/WRITE/ACTION und Human Gates;

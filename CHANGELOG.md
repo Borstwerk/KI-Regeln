@@ -10,6 +10,9 @@ Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunäch
 
 ### Visuelle Prompt-Shortcuts und Claude-Instagram-Connector-Audit
 
+- Instagram-Anbindung wird auf Wunsch zunächst **nur als später untersuchbare Quelle** geführt: Publishing mit Claude als Priorität, optional Instagram-READ für HypeRadar. Offizielle Meta-Postman-API-Quellen, PostZen MCP/Pricing/Billing und Open-Source-Adapter im Audit ergänzt; Anbieterpreise als veränderliche Momentaufnahme markiert.
+- Ein kurzer Discovery-Hinweis in Social-Media-Publishing-Gates und Social-Media-Skill-Handbuch führt zukünftige KI-Agenten zur Quelle. **Keine Installation, Kontoanmeldung, Kostenfreigabe, Terminauslösung oder Publikation**; Admission und aktueller Kosten-/Rechtevergleich ausdrücklich offen.
+
 - Vier Instagram-Reel-Kürzel bewertet: `/visual explain` wird für den eigenen Katalog zu `/visual-explain` normalisiert; `/vorundnachteile` und `/flowchart` ergänzt; `/cheatsheet` ist bereits vorhanden und wird nicht doppelt gezählt.
 - Allgemeiner Prompt-Katalog: 100 ursprüngliche Kürzel + 4 Lern-Ergänzungen + 3 Visual-/Vergleichsergänzungen = **107 eindeutige dokumentierte Shortcuts**. Explizite Quality Gates gegen falsche Pfeile, unsaubere Pros/Cons und unnötige Flowchart-Entscheidungen; **Tests nur definiert, nicht behavioral ausgeführt**.
 - `ChatGPT-Funktionen-und-Lernwerkzeuge.md` mit Beispielprompts und `PROMPT-SHORTCUT`-Kennzeichnung ergänzt. Kein offizieller Produkt-Slash-Command wird behauptet, keine neuen Skills oder Routing-Overlays.
