@@ -8,6 +8,17 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Visuelle Prompt-Shortcuts und Claude-Instagram-Connector-Audit
+
+- Instagram-Anbindung wird auf Wunsch zunächst **nur als später untersuchbare Quelle** geführt: Publishing mit Claude als Priorität, optional Instagram-READ für HypeRadar. Offizielle Meta-Postman-API-Quellen, PostZen MCP/Pricing/Billing und Open-Source-Adapter im Audit ergänzt; Anbieterpreise als veränderliche Momentaufnahme markiert.
+- Ein kurzer Discovery-Hinweis in Social-Media-Publishing-Gates und Social-Media-Skill-Handbuch führt zukünftige KI-Agenten zur Quelle. **Keine Installation, Kontoanmeldung, Kostenfreigabe, Terminauslösung oder Publikation**; Admission und aktueller Kosten-/Rechtevergleich ausdrücklich offen.
+
+- Vier Instagram-Reel-Kürzel bewertet: `/visual explain` wird für den eigenen Katalog zu `/visual-explain` normalisiert; `/vorundnachteile` und `/flowchart` ergänzt; `/cheatsheet` ist bereits vorhanden und wird nicht doppelt gezählt.
+- Allgemeiner Prompt-Katalog: 100 ursprüngliche Kürzel + 4 Lern-Ergänzungen + 3 Visual-/Vergleichsergänzungen = **107 eindeutige dokumentierte Shortcuts**. Explizite Quality Gates gegen falsche Pfeile, unsaubere Pros/Cons und unnötige Flowchart-Entscheidungen; **Tests nur definiert, nicht behavioral ausgeführt**.
+- `ChatGPT-Funktionen-und-Lernwerkzeuge.md` mit Beispielprompts und `PROMPT-SHORTCUT`-Kennzeichnung ergänzt. Kein offizieller Produkt-Slash-Command wird behauptet, keine neuen Skills oder Routing-Overlays.
+- `Dokumentation/Instagram-Connector-Audit-2026-10-12.md` trennt Content-only-Skills, Private-Web-/Browser-Zugriff und offizielle Instagram-API-/MCP-Connectoren; fünf konkrete Projekte mit beobachteten Upstream-Commitständen, Daten-/Permission-/Publish-Risiken und Test-/Admission-Gates bewertet.
+- Kein Instagram-Konto verbunden, keine Drittanbieter-Skills oder MCP-Server installiert, keine Access Tokens angefordert oder übertragen. Browser-/private-API-Ansatz bleibt bis zur gesonderten Sicherheitsprüfung ausdrücklich **NOT ADMITTED**.
+
 ### Skill-Failure Decision History (12.10.2026)
 
 - `Workflows/Skill-Verbesserung-aus-Evals-und-Fehlern.md`: vor relevanten Reparaturen frühere gleichartige Fälle prüfen; für substanzielle/wiederkehrende Fehler Entscheidung, Ursachenbelege, geprüfte Kandidaten, Tests und verworfene Alternativen dauerhaft über bestehende Issues/PRs/Reviews verlinken.

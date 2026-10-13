@@ -54,6 +54,10 @@ Für reale Plattformmetriken und Lernhypothesen. Metrikdefinition, Zeitraum und 
 
 Für den unabhängigen breiten Audit. Findings statt Auto-Fixes; `READY_FOR_LOCAL_GATE` ist keine Publishing-Freigabe.
 
+## Externe Publishing-Capabilities entdecken
+
+Bei Aufträgen, Social-Content über **Claude tatsächlich auf Instagram zu veröffentlichen**, zunächst den vorhandenen Publishing-Gate-Vertrag `../Social-Media-und-Content-Praesenz/Publishing-Scheduling-und-Execution-Gates.md` lesen. Er verweist auf den **Discovery-only-Audit** `Instagram-Connector-Audit-2026-10-12.md` mit möglichen Meta-API-/MCP-Quellen. Keine automatische Installation oder Freigabe. Für HypeRadar nur bei eigenständiger Anfrage READ-only prüfen.
+
 ## Wichtige Near-Misses
 
 | Aufgabe | Stattdessen |

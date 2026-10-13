@@ -1,6 +1,6 @@
 # ChatGPT-Befehle, Lernwerkzeuge und interaktive Funktionen
 
-Stand: 2026-10-09
+Stand: 2026-10-12
 
 ## Zweck
 
@@ -415,6 +415,49 @@ Frag zuerst mein Vorwissen ab.
 Erkläre dann nur die Lücken.
 Gib mir anschließend 5 Aufgaben.
 ```
+
+---
+
+## Visuelle Erklärung, Vor-/Nachteile, Cheatsheet und Flowchart
+
+Im Oktober 2026 wurden vier weitere im Instagram-Reel gezeigte Textkürzel bewertet. Ihre Schreibweise im Video beweist **keinen offiziellen ChatGPT-Produktcommand**.
+
+| Kurzform | Interpretation |
+|---|---|
+| `/visual explain` | als `/visual-explain` normalisiert; Wissen über eine geeignete grafische Struktur erklären |
+| `/vorundnachteile` | Pro und Contra mit sachlichen Entscheidungskriterien und Unsicherheiten darstellen |
+| `/cheatsheet` | bereits dokumentierter kompakter Referenzzettel; kein weiterer Eintrag |
+| `/flowchart` | gerichteter Ablauf oder Entscheidungsbaum mit korrekter Knoten-/Kantenlogik |
+
+**Beispiele:**
+
+```text
+/visual-explain
+Erkläre, warum eine Wärmepumpe Wärme aus der Umgebung gewinnen kann.
+Zeige die Stationen als verständliches, fachlich korrektes Schema.
+```
+
+```text
+/vorundnachteile
+Vergleiche Vor- und Nachteile von Wärmepumpe und Gasheizung
+anhand Kosten, Wartung, Emissionen und Voraussetzungen.
+Trenne belegte Fakten von Annahmen.
+```
+
+```text
+/cheatsheet
+Fasse die wichtigsten SQL-JOINs aus meinen Notizen
+mit Syntax, Beispiel und typischen Fehlern zusammen.
+```
+
+```text
+/flowchart
+Zeige den Ablauf einer Ticketeskalation vom Eingang
+über die Priorisierung bis zum Abschluss.
+Beschrifte Entscheidungsknoten mit eindeutigen Bedingungen.
+```
+
+Diagramm-/Textdarstellung nicht mit einem tatsächlich erzeugten Bild verwechseln. Keine Visualisierung erzwingen, wenn eine knappe Antwort informativer ist. Verbindliche Zuordnung, Near-Misses und definierte Negativtests: `Allgemeine-Prompt-Shortcuts.md`.
 
 ---
 
@@ -1008,7 +1051,7 @@ Für komplexere oder sensible Texte bleibt `natuerliches-schreiben` beziehungswe
 
 ---
 
-## Allgemeine Prompt-Shortcuts (100 + 4 Lern-Ergänzungen)
+## Allgemeine Prompt-Shortcuts (100 + 4 Lern- + 3 Visual-/Vergleichsergänzungen)
 
 Für allgemeine Kurzbefehle existiert jetzt ein eigener kuratierter Katalog:
 

@@ -1,10 +1,10 @@
 # Allgemeine Prompt-Shortcuts
 
-Stand: 2026-10-09
+Stand: 2026-10-12
 
 ## Zweck
 
-Diese Seite sammelt die **100 ursprünglichen Prompt-Shortcuts** für Schreiben, Lernen, Formatierung, Content, Entscheidungen, Denksysteme, Kreativität, Coding und Alltag sowie **vier eigenständig ergänzte Lern-Shortcuts** (`/lernzettel`, `/tafelbild`, `/probearbeit`, `/merkbild`). Damit sind 104 Kürzel dokumentiert; die ursprüngliche 100er-Liste bleibt unverändert.
+Diese Seite sammelt die **100 ursprünglichen Prompt-Shortcuts** für Schreiben, Lernen, Formatierung, Content, Entscheidungen, Denksysteme, Kreativität, Coding und Alltag sowie **vier eigenständig ergänzte Lern-Shortcuts** (`/lernzettel`, `/tafelbild`, `/probearbeit`, `/merkbild`) und **drei ergänzte Visual-/Vergleichs-Kürzel** (`/visual-explain`, `/vorundnachteile`, `/flowchart`). Damit sind 107 eindeutige Kürzel dokumentiert; die ursprüngliche 100er-Liste bleibt unverändert. `/cheatsheet` ist darin bereits enthalten und wird nicht erneut gezählt.
 
 Alle Einträge sind:
 
@@ -229,6 +229,28 @@ Bei `/travel`, `/convert` für Währungen, Produkt-/Preisfragen oder anderen zei
 | `/merkbild` | Verankere genau eine Zielinformation in einem merkfähigen Bildmotiv. Prüfe Metapher, Pfeile und Beschriftung fachlich; einen Bildentwurf nicht mit einem tatsächlich gerenderten Bild verwechseln. |
 
 Diese Kürzel sind **keine neue Skill-Routing-Wahrheit**. Ein verständlicher Slash-Prompt ist noch keine produktseitig verfügbare Funktion. Die vier Kriterien sind zunächst dokumentiert, nicht als eigenständige Behavioral-Tests bestanden.
+### Weitere Instagram-Reel-Kürzel (keine neuen Produktbefehle)
+
+Im geteilten Reel waren vier Kürzel zu sehen. `/cheatsheet` existiert bereits in der ursprünglichen 100er-Liste. Die anderen drei werden hier als zusätzliche `PROMPT-SHORTCUT`-Aliase präzisiert:
+
+| Gesehen | Normiertes Kürzel | Bedeutung / Quality Gate |
+|---|---|---|
+| `/visual explain` | `/visual-explain` | Thema mit einer passenden visuellen Struktur **erklären**, nicht nur verschönern. Text-/Mermaid-Diagramm oder tatsächliches Bild je nach Auftrag; Beziehungen, Labels und fachliche Richtung prüfen. |
+| `/vorundnachteile` | `/vorundnachteile` | Pro und Contra einer konkreten Option **unter gleichem Vergleichsrahmen** aufstellen; Fakten von Annahmen unterscheiden, fehlende Informationen und Entscheidungskriterien nennen. |
+| `/cheatsheet` | `/cheatsheet` | Schon vorhanden: kompakte Referenz zu Definitionen, Regeln, Beispielen und Fehlerfallen. **Kein neuer Eintrag.** |
+| `/flowchart` | `/flowchart` | Ablauf oder Entscheidung als gerichteten Flowchart darstellen; Start/Ende, echte Entscheidungsknoten und Ja-/Nein-Zweige eindeutig bezeichnen. Mermaid optional, nicht jedes Thema zwanghaft als Flowchart darstellen. |
+
+**Syntax-Hinweis:** Der Screenshot zeigt `/visual explain` mit Leerzeichen; das ist nicht zuverlässig ein einziger Slash-Command. Für den eigenen Shortcut-Katalog wird daher `/visual-explain` verwendet. Auch die anderen Kürzel sind **Promptkonventionen**, keine offiziell bestätigten ChatGPT-Befehle.
+
+**Kleine Testfälle (DEFINED / NOT RUN):**
+
+- Visuelle Erklärung darf keine fehlerhaften Verbindungen oder Pfeile erfinden.
+- Pro/Contra darf Marketingbehauptungen nicht als Tatsachen übernehmen.
+- Flowchart braucht bei bedingter Verzweigung beide notwendigen Ausgänge; bei einem linearen Ablauf keine künstliche Entscheidung erfinden.
+- Cheatsheet darf fehlende Quellinformationen nicht unbemerkt vervollständigen.
+
+**Abgrenzung:** `/visual-explain` nutzt bei passender Aufgabe den bestehenden `visual-answer`-Ansatz, `/vorundnachteile` liegt nahe an `/compare` und `/tradeoffs`, und `/flowchart` ist ein konkreter Diagrammtyp neben `/mermaid`. Das sind keine neuen fachlichen Skills.
+
 ## Format und Ausgabe
 
 | Shortcut | KI-Regeln-Lesart |
