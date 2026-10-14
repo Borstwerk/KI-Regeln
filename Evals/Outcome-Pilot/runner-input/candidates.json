@@ -1,0 +1,82 @@
+{
+  "case_id": "HYPE-SYNTH-01",
+  "snapshot": "2026-10-13 synthetic / no live feed",
+  "already_delivered": [
+    "agent-chrome-relay",
+    "ff-tracking"
+  ],
+  "candidates": [
+    {
+      "id": "outcome-grader",
+      "aliases": [
+        "outcome-checker"
+      ],
+      "summary": "Open-source bench evaluates deployed agent output on replayed cases and separates result metrics from process checks.",
+      "sources": [
+        "https://example.invalid/outcome-grader/README"
+      ]
+    },
+    {
+      "id": "scoped-agent-access",
+      "aliases": [
+        "access-by-agent"
+      ],
+      "summary": "Demonstrates connection-level action grants per agent, evaluated at request time with audit events.",
+      "sources": [
+        "https://example.invalid/scoped-agent-access/spec"
+      ]
+    },
+    {
+      "id": "browser-relay-redux",
+      "aliases": [
+        "agent-chrome-relay"
+      ],
+      "summary": "Browser relay update with a renamed package, otherwise already delivered.",
+      "sources": [
+        "https://example.invalid/browser-relay-redux"
+      ]
+    },
+    {
+      "id": "tracking-next",
+      "aliases": [
+        "ff-tracking"
+      ],
+      "summary": "An already delivered tracking library published under a new display name.",
+      "sources": [
+        "https://example.invalid/tracking-next"
+      ]
+    },
+    {
+      "id": "keyword-skill-guide",
+      "aliases": [],
+      "summary": "Tutorial claims keywords in SKILL.md always improve selection, without reproducible data or negative controls.",
+      "sources": [
+        "https://example.invalid/keyword-guide"
+      ]
+    },
+    {
+      "id": "viral-ai-wallpaper",
+      "aliases": [],
+      "summary": "Popular image wallpaper gallery with many downloads and no agent workflow or engineering method.",
+      "sources": [
+        "https://example.invalid/wallpaper"
+      ]
+    },
+    {
+      "id": "omnipotent-tool",
+      "aliases": [],
+      "summary": "Tool gateway recommends default admin permissions on all connections for ease of integration.",
+      "sources": [
+        "https://example.invalid/omnipotent-tool"
+      ]
+    },
+    {
+      "id": "mystery-agent",
+      "aliases": [],
+      "summary": "Announces a secret agent breakthrough, without implementation details or reproducible evaluation.",
+      "sources": [
+        "https://example.invalid/mystery-agent"
+      ]
+    }
+  ]
+}
