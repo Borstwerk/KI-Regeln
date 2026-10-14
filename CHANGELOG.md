@@ -8,6 +8,24 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### HypeRadar-Outcome-Pilot und Agentenrechte (14.10.2026)
+
+- Synthetischen Offline-Outcome-Pilot unter `Evals/Outcome-Pilot/` ergänzt:
+  deterministischer F1-Ergebnisgrader, harte Dubletten-/Evidence-Blocker,
+  getrennte Runner-/Judge-Rollen und ausführbare positive/negative Kontrollen.
+  **Keine produktiven HypeRadar-Daten, keine realen Agentenläufe und kein
+  unabhängiger Held-out-Qualitätsnachweis.** Der vorhandene Behavioral Harness
+  bleibt allein für Prozess-, Scope- und Autorisierungsevidence zuständig.
+- `tool-permission-review` minimal um die Unterscheidung zwischen
+  Provider-Scope, effektivem Runtime-Enforcement und auftragsbezogener
+  Freigabe ergänzt; zwei entsprechende Evalfälle nur **definiert**, nicht
+  behavioral ausgeführt. MCP-Selbstauskünfte und Auditlogs sind keine
+  automatisch vertrauenswürdige Durchsetzungsevidence.
+- Methodische Quellen:
+  [fde-gym](https://github.com/deeplethe/fde-gym) und
+  [personalagentproxy](https://github.com/personalagentproxy/proxy),
+  ohne Übernahme von Upstream-Code oder Runtime-Integration.
+
 ### Visuelle Prompt-Shortcuts und Claude-Instagram-Connector-Audit
 
 - Instagram-Anbindung wird auf Wunsch zunächst **nur als später untersuchbare Quelle** geführt: Publishing mit Claude als Priorität, optional Instagram-READ für HypeRadar. Offizielle Meta-Postman-API-Quellen, PostZen MCP/Pricing/Billing und Open-Source-Adapter im Audit ergänzt; Anbieterpreise als veränderliche Momentaufnahme markiert.
