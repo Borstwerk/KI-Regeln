@@ -16,6 +16,15 @@ Evals sollen insbesondere Regressionen erkennen bei:
 - Outputqualität;
 - Sicherheitsgrenzen.
 
+## Outcome-Pilot (synthetisch)
+
+Ein kleiner [HypeRadar-Outcome-Pilot](Outcome-Pilot/README.md) ergänzt das
+bestehende Behavioral Harness um einen **offline** ausführbaren Outcome-Grader
+mit synthetischen Entwicklungslabels, Nullbaseline, Referenzabgabe und
+kontrollierten Negativfällen. Er führt keine Agentenläufe aus und erzeugt
+keinen Prozess-PASS; Judge-Dateien müssen für echte Runner-Isolation
+physisch getrennt bereitgestellt werden.
+
 ## Eval-Klassen
 
 ### Trigger
