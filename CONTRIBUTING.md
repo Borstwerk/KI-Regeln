@@ -69,3 +69,7 @@ Ein PR sollte knapp nennen:
 - bei Fachtextänderungen die betroffenen Skills/Regeln.
 
 Kein CLA wird durch dieses Dokument eingeführt.
+
+## Öffentliche Einstiege und Übersetzungen
+
+Für Änderungen an der GitHub-Startseite oder an deutschen/englischen Quickstarts gilt [`Dokumentation/Public-Entrypoints-und-Sprachpflege.md`](Dokumentation/Public-Entrypoints-und-Sprachpflege.md). Agentenregeln bleiben ausschließlich in `AGENTS.md` und den kanonischen Fachdateien. Übersetzungsänderungen benötigen einen inhaltlichen DE/EN-Abgleich; automatisierte Linktests prüfen **keine** semantische Gleichwertigkeit.

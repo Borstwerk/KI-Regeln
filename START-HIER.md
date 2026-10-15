@@ -1,119 +1,53 @@
 # KI-Regeln – Start hier
 
-## Du bringst die Aufgabe. KI-Regeln hilft bei der passenden Arbeitsweise.
+**Sprache:** Deutsch · [English](START-HERE.md) · [Projektübersicht](README.md)
 
-KI-Regeln richtet sich an Menschen, die generative KI für reale Aufgaben einsetzen möchten, ohne sich zuerst tief in Prompt Engineering, Agentensysteme oder einzelne KI-Werkzeuge einarbeiten zu müssen.
+> **Du bringst die Aufgabe. Die KI hilft dir, die passende Arbeitsweise zu finden.**
 
-Der Einstieg ist deshalb **nicht**: „Welchen Skill soll ich verwenden?“
+KI-Regeln ist für Menschen gedacht, die mit generativer KI **etwas Konkretes erledigen** möchten, ohne vorher Skill-Namen oder Agentenarchitektur lernen zu müssen. Starte mit deinem Ziel, nicht mit dem Werkzeugkasten.
 
-Der Einstieg ist:
+## 1. Beschreibe dein Ziel
 
-> **Was möchtest du erreichen?**
+Zum Beispiel: „Ich möchte ein PowerShell-Skript sicher erweitern“, „Prüfe diese Behauptung anhand guter Quellen“ oder „Hilf mir, eine Geschichte konsistent zu überarbeiten“.
 
-Beschreibe deine Aufgabe in normaler Sprache, nenne die Informationen oder Dateien, die dafür relevant sind, und lass die KI im Repository nach den passenden Regeln, Skills und Workflows suchen.
+Für einen ersten Auftrag genügt beispielsweise:
 
-## So benutzt du KI-Regeln
+> Ich möchte **[Aufgabe]** lösen. Du darfst dafür die Dateien des KI-Regeln-Repositories lesen. Prüfe, welche Regeln, Skills oder Workflows sinnvoll sind, wähle nur die tatsächlich benötigten und erkläre kurz deine Auswahl. Nutze meine Projektinformationen als konkrete Wahrheit und sage ehrlich, was du nicht prüfen konntest. Frage nach einer Freigabe, bevor du riskante oder externe Aktionen ausführst.
 
-```text
-konkretes Problem oder Ziel beschreiben
-→ vorhandene Informationen / Dateien / Projektregeln bereitstellen
-→ KI ordnet die Aufgabe ein
-→ KI wählt den kleinsten fachlichen Skill-/Workflow-Satz
-→ KI prüft zusätzlich wenige domänenübergreifende Fähigkeiten am passenden Arbeitszeitpunkt
-→ fehlende, wirklich notwendige Informationen klären
-→ Aufgabe bearbeiten
-→ vor Abschluss und Darstellung späte Trigger erneut prüfen
-→ Ergebnis gegen Quellen, Regeln und Auftrag prüfen
-→ Human Gate, wenn eine reale Entscheidung oder Außenwirkung es erfordert
-```
+Das ist **ein Beispiel, kein Pflichtprompt**.
 
-Du musst dafür weder die Namen der Skills kennen noch den kompletten Werkzeugkasten verstehen. Du musst auch keine Skills manuell „aktivieren“: Die Auswahl ist Teil der Arbeit.
+## 2. Gib der KI Zugang zu den relevanten Informationen
 
-Wenn du ausdrücklich wissen möchtest, welche zusätzlichen Möglichkeiten der Werkzeugkasten für deine Aufgabe sieht, kannst du einfach fragen:
+- Stelle deiner KI das Repository, die benötigten Dateien oder einen verfügbaren Repository-Zugriff bereit. **Ein bloßer Link garantiert nicht**, dass das Modell die Dateien tatsächlich gelesen hat.
+- Teile die Aufgabenstellung, vorhandene Projektregeln und passende Quellen. Private Daten und Zugangsdaten nur über dafür geeignete, autorisierte Wege verwenden.
+- KI-Regeln ist **keine automatisch installierte ChatGPT- oder Codex-Funktion**. Ob ein Skill gelesen, ein Tool verwendet oder ein Test ausgeführt werden kann, hängt vom konkreten Zugriff und der Laufzeit ab.
 
-> Welche Fähigkeiten könnten hier zusätzlich helfen, die ich wahrscheinlich nicht kenne?
-
-Die KI soll dann nur konkrete relevante Möglichkeiten nennen – nicht den gesamten Skill-Katalog auskippen.
-
-## Beispiel für einen Startauftrag
-
-Du kannst einer KI zum Beispiel schreiben:
-
-> Ich möchte folgende Aufgabe lösen: **[Aufgabe beschreiben]**. Prüfe in diesem Repository, welche Regeln, Skills oder Workflows dafür tatsächlich passen. Wähle zuerst den kleinsten fachlich ausreichenden Satz und prüfe domänenübergreifende Fähigkeiten aus dem Routing-Overlay an ihren vorgesehenen Checkpoints und nur dann, wenn sie das Ergebnis materiell verbessern, absichern oder das Primärrouting präzisieren. Erkläre die Auswahl kurz und arbeite dann damit. Nutze meine Projektinformationen und vorhandenen Quellen als konkrete Wahrheit. Frage nur nach Informationen, die für die Aufgabe wirklich fehlen. Erfinde fehlende Fakten nicht und mache notwendige menschliche Freigaben sichtbar.
-
-Das ist nur ein Einstiegsmuster, kein Pflichtprompt.
-
-## Typische Aufgaben
-
-| Wenn du zum Beispiel … | Dann kann KI-Regeln typischerweise in diesen Bereichen routen |
-|---|---|
-| etwas recherchieren oder eine Behauptung prüfen möchtest | Recherche |
-| einen Text schreiben, überarbeiten oder adressatengerecht formulieren möchtest | Schreiben |
-| eine Geschichte, Figuren, Welt oder einen längeren Erzählbogen entwickeln möchtest | Storyentwicklung und Fiktion |
-| deine finanzielle Ausgangslage, Rücklagen, Schulden oder Anlagen analysieren möchtest | Finanzen |
-| Bilder oder eine konsistente Bildserie entwickeln möchtest | Bildarbeit |
-| eine Website bauen oder prüfen möchtest | Webentwicklung |
-| Code entwickeln oder einen Fehler diagnostizieren möchtest | Programmieren |
-| eine Datenbank dokumentieren, analysieren oder ändern möchtest | Datenbanken / Dokumentationserstellung |
-| Anforderungen klären oder spezifizieren möchtest | Requirements und Spezifikations-Engineering |
-| technische Dokumentation erstellen möchtest | Dokumentationserstellung |
-| Wissen über längere Zeit strukturiert pflegen möchtest | Wissensmanagement |
-| Infrastruktur, Deployments oder Betriebsprobleme bearbeiten möchtest | Infrastruktur / Reliability |
-
-Diese Tabelle ist **nur Orientierung**. Ein reales Problem kann mehrere Bereiche berühren, und oft genügt ein einzelner Skill. Die KI soll nicht möglichst viele Skills laden, sondern nur die tatsächlich notwendigen.
-
-## Was du nicht lernen musst
-
-Für die normale Nutzung musst du nicht zuerst verstehen:
-
-- wie `skill-catalog.yml` aufgebaut ist;
-- welche Maturity-Stufen existieren;
-- wie Evalpacks intern funktionieren;
-- wie Agenten- oder Tool-Routing technisch umgesetzt wird;
-- wie viele Skills das Repository enthält;
-- welche Prompt-Formulierung angeblich „perfekt“ ist.
-
-Diese Mechanismen existieren, damit der Werkzeugkasten kontrollierbarer und nachvollziehbarer wird. Sie sind nicht die Eintrittskarte für seine Nutzung.
-
-## Was trotzdem bei dir beziehungsweise im Projekt bleibt
-
-KI-Regeln liefert allgemeine Arbeitsweisen. Es kennt nicht automatisch deine konkrete Projektwahrheit.
-
-Dazu gehören je nach Aufgabe zum Beispiel:
-
-- reale Anforderungen und Ziele;
-- vorhandene Dateien, Daten und Quellen;
-- gültige Projektentscheidungen;
-- fachliche oder visuelle Vorgaben;
-- tatsächliche System-, Datenbank- oder Toolzustände;
-- persönliche Präferenzen, soweit sie für die Aufgabe relevant sind;
-- Freigaben für Veröffentlichungen, Käufe, Deployments oder andere Außenaktionen.
-
-Grundregel:
-
-> **Allgemeine Arbeitsweise zentral, konkrete Wahrheit lokal.**
-
-## Warum gibt es KI-Regeln?
-
-KI-Regeln entstand aus dem Wunsch, Menschen im eigenen Umfeld einen praktikablen Zugang zu KI-gestützter Arbeit zu geben – auch dann, wenn sie sich nicht zuerst selbst tief mit KI-Systemen beschäftigen möchten.
-
-Aus einzelnen Regeln und Arbeitsweisen entstand deshalb schrittweise ein allgemeiner Werkzeugkasten. Er soll diese Lücke schließen: Eine KI kann von einem **konkreten Problem** zu den passenden Methoden routen, während Quellen, Unsicherheit, Prüfungen und menschliche Entscheidungen sichtbar bleiben.
-
-Das Ziel ist deshalb nicht, für jede denkbare Aufgabe einen fertigen Prompt anzubieten. Das Ziel ist ein belastbares Arbeitsmodell:
+## 3. Was die KI mit KI-Regeln machen soll
 
 ```text
-Problem
-→ passende Werkzeuge
-→ kontrollierte Bearbeitung
-→ überprüfbares Ergebnis
+Deine Aufgabe und die vorhandenen Projektinformationen
+→ lokale Wahrheit und Anforderungen verstehen
+→ passende Skills / Workflows gezielt entdecken
+→ mit geeigneten Werkzeugen arbeiten
+→ tatsächliche Ergebnisse und Prüfgrenzen offenlegen
+→ erforderliche Freigaben einholen
 ```
 
-## Wenn du mehr wissen möchtest
+Sie soll nicht den kompletten Katalog laden oder dich zuerst nach Skill-Namen fragen. Manchmal ist **kein** besonderer Skill nötig. Wenn du neue Möglichkeiten kennenlernen möchtest, frage: *„Welche zusätzlichen Fähigkeiten könnten für diese Aufgabe wirklich hilfreich sein?“*
 
-- Reale Beispiele: [`PRAXISBEISPIELE.md`](PRAXISBEISPIELE.md)
-- Ausführlichere Nutzung: [`Dokumentation/Nutzung-des-Repositories.md`](Dokumentation/Nutzung-des-Repositories.md)
-- Wie die Skill-Auswahl funktioniert: [`Dokumentation/Skill-Handbuch.md`](Dokumentation/Skill-Handbuch.md)
-- Reife und Evalabdeckung: [`Dokumentation/Skill-Katalog.md`](Dokumentation/Skill-Katalog.md)
-- Technischer Einstieg für Agenten: [`AGENTS.md`](AGENTS.md)
+## 4. Was bleibt beim Menschen beziehungsweise Projekt?
 
-> **Der Skill-Katalog ist der Werkzeugschrank. Dein Problem ist der Startpunkt.**
+KI-Regeln liefert allgemeine Methoden, aber **keine automatische Kenntnis deiner Projektwahrheit**. Anforderungen, Dateien, Systeme, aktuelle Fakten, Testdaten, persönliche Vorgaben und Berechtigungen kommen weiterhin aus deinem konkreten Kontext.
+
+Ein definierter Test ist kein ausgeführter Test; eine grüne Strukturprüfung ist kein unabhängiger Qualitätsnachweis. Reale Freigaben für Veröffentlichungen, Änderungen an produktiven Daten oder Deployments bleiben menschliche beziehungsweise projektspezifische Entscheidungen.
+
+## 5. Und wenn du tiefer einsteigen willst?
+
+- [Praxisbeispiele](PRAXISBEISPIELE.md) – echte Arbeitsabläufe einschließlich Grenzen und Korrekturen.
+- [Ausführliche Nutzung](Dokumentation/Nutzung-des-Repositories.md) – Projektintegration und Arbeitsmodell.
+- [Skill-Handbuch](Dokumentation/Skill-Handbuch.md) – wie die Werkzeugauswahl funktioniert.
+- [Skill-Katalog und Reife](Dokumentation/Skill-Katalog.md) – Skills, Maturity und Evalabdeckung.
+- [AGENTS.md](AGENTS.md) – verbindlicher technischer Einstieg für KI-Agenten (nicht der menschliche Schnellstart).
+- [CONTRIBUTING.md](CONTRIBUTING.md) – mithelfen und Änderungen einbringen.
+
+**Grundprinzip:** Allgemeine Arbeitsweise zentral, konkrete Wahrheit lokal.

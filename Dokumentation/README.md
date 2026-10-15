@@ -93,26 +93,13 @@ Dabei gilt:
 
 ## Für Einsteiger
 
-Wer das Repository zum ersten Mal verwendet, sollte in dieser Reihenfolge lesen:
+Der kürzeste Weg ist der [deutsche Schnellstart](../START-HIER.md) oder der [englische Quickstart](../START-HERE.md). Danach nur die für deine Aufgabe relevanten Quellen lesen. Die folgende Fachdateiliste weiter oben ist **Nachschlagewerk, keine 19-Schritte-Pflichtlektüre**.
 
-1. `../README.md`
-2. `../PRAXISBEISPIELE.md` für einen konkreten Arbeitsablauf
-3. `Nutzung-des-Repositories.md`
-4. `Skill-Handbuch.md`
-5. bei Auswahl oder Bewertung von Skills `Skill-Katalog.md`
-6. bei längerer Agentenarbeit oder Context-/Tokenfragen zusätzlich `Skill-Handbuch-Context-und-Long-Horizon.md`
-7. bei persistenter Wissensarbeit zusätzlich `Skill-Handbuch-Wissensmanagement.md`
-8. bei Schnittstellen-/API-/Contract-Arbeit zusätzlich `Skill-Handbuch-Schnittstellen-und-Vertraege.md`
-9. bei Infrastruktur-/DevOps-/IaC-Arbeit zusätzlich `Skill-Handbuch-Infrastruktur-und-DevOps.md`
-10. bei Reliability-/Observability-/SRE-Arbeit zusätzlich `Skill-Handbuch-Reliability-und-System-Observability.md`
-11. bei Data-Engineering-/ETL-/CDC-/Warehouse-Arbeit zusätzlich `Skill-Handbuch-Data-Engineering.md`
-12. bei Software-Architecture-/System-Design-Arbeit zusätzlich `Skill-Handbuch-Software-Architecture-und-System-Design.md`
-13. bei Requirements-/Specification-Arbeit zusätzlich `Skill-Handbuch-Requirements-und-Spezifikations-Engineering.md`
-14. bei Social-Media-/Content-Präsenz-Arbeit zusätzlich `Skill-Handbuch-Social-Media-und-Content-Praesenz.md`
-15. bei Dokumentationsarbeit zusätzlich `Skill-Handbuch-Dokumentationserstellung.md`
-16. bei Datenbankarbeit zusätzlich `Skill-Handbuch-Datenbanken.md`
-17. bei Testing-/QA-Arbeit zusätzlich `Skill-Handbuch-Testing-und-QA.md`
-18. bei Skill-/Security-Arbeit zusätzlich `Skill-Handbuch-Meta-und-Sicherheit.md`
-19. erst danach die für das eigene Vorhaben relevanten Regel-, Skill- und Workflow-Dateien.
+Empfohlene Reihenfolge:
 
-Nicht das komplette Repository muss für jede Aufgabe geladen oder übernommen werden. Gute Nutzung bedeutet gezielte Auswahl.
+1. [Praxisbeispiele](../PRAXISBEISPIELE.md) für konkrete Situationen.
+2. [Nutzung des Repositories](Nutzung-des-Repositories.md), wenn du es in ein Projekt integrieren willst.
+3. [Skill-Handbuch](Skill-Handbuch.md) für fachliches Routing; [Skill-Katalog](Skill-Katalog.md) für Reife und Evalabdeckung.
+4. Danach **nur den passenden Fachbereich** aus der obigen Liste öffnen.
+
+Für die Pflege der internationalen Einstiege gilt [Public-Entrypoints-und-Sprachpflege.md](Public-Entrypoints-und-Sprachpflege.md).
