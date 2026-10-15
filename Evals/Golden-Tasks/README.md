@@ -161,6 +161,11 @@ Alle Fixtures sind lokal und selbst erzeugt. Die Suite hängt nicht von aktuelle
 
 Die Definition einer Golden Task ist **kein Pass-Nachweis**. Behavioral Runs werden separat unter `runs/` dokumentiert und müssen Modell, Commit, Sichtbarkeit der Rubrik sowie Selbst-/Fremdbewertung offenlegen.
 
+Ein [begrenzter GT-01-Codex-Produktvergleich](GT-01/Codex-Product-Pilot-2026-10-15.md)
+speichert zwei fertige Tabellenreferenzen ohne beziehungsweise mit fest vorgegebenem
+Skill-Bundle. Er prüft Produktqualität anhand der vorhandenen Fixtures und zählt
+ausdrücklich nicht als vollständiger Golden-Task-Routing-/Behavioral-Pass.
+
 ### Routing-Trace für Behavioral Runs
 
 Ein Routing-Urteil darf nicht nur auf einer vom ausführenden Modell formulierten Zeile wie „Selected route“ beruhen.

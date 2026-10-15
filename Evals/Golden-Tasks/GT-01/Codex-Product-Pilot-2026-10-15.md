@@ -75,5 +75,56 @@ Abrechnung oder Aussage zum verbleibenden Abo-Kontingent.
 
 ## Ergebnisse
 
-Noch nicht ausgeführt. Kriterien und Eingaben werden vor den zwei Modellaufrufen
-committed; die vollständigen Antworten und die Bewertung werden danach ergänzt.
+Kriterien, Eingaben und Treiber waren vor den Modellaufrufen in
+`6c8e015353150bd74887925d28fe59ad42bcac83` committed und veröffentlicht.
+Die [vollständige Evidence](Codex-Product-Pilot-2026-10-15.json) bindet diesen Stand
+einschließlich der ursprünglichen Protokollbeschreibung und enthält alle neun
+Einzelbewertungen pro Antwort. Beide Dokumente bleiben unbearbeitet erhalten:
+[Baseline](Codex-Product-Pilot-2026-10-15-baseline.md) und
+[mit Skill-Bundle](Codex-Product-Pilot-2026-10-15-skill.md).
+
+| Bedingung | C1–C5 | C6: Nutzung ohne zusätzliche Geschäftsregel | C7 | C8: Quellen und Abgleich | C9 | Produkturteil |
+| --- | --- | --- | --- | --- | --- | --- |
+| Baseline | pass | fail | pass | partial | pass | fail |
+| Mit zwei Skills | pass | pass | pass | pass | pass | pass |
+
+Beide Dokumente geben alle sechs Spalten, Nullability, expliziten Defaults,
+Primary Key, benannten Check und Indexreihenfolge korrekt wieder. Beide lassen
+Foreign Keys und Retention offen.
+
+Die Baseline ergänzt bei `archived_at`: „bei nicht archivierten Einträgen `NULL`“.
+Die Usage-Fixture bestätigt nur, dass archivierte Einträge ihren Datensatz behalten
+und `archived_at` erhalten. Sie belegt keine allgemeine Regel für alle nicht
+archivierten Einträge. Das nullable DDL ersetzt diesen fachlichen Nachweis nicht.
+Damit verletzt die Baseline das vorher festgelegte C6 („Keine zusätzlichen
+Geschäftsregeln“). Das ist eine unbelegte Verstärkung, kein Nachweis einer tatsächlich
+falschen Datenbankbelegung. Außerdem fehlt die konkrete Bestätigung eines eigenen
+Fixture-Abgleichs (C8 `partial`). Die Skill-Antwort vermeidet die Umkehrregel,
+ordnet Quellen abschnittsweise zu und bestätigt den Abgleich ausdrücklich.
+Der sichtbare Text und unser Quellenvergleich belegen Produkt und Aussage;
+der interne Arbeitsprozess wird daraus nicht rekonstruiert.
+
+Zusätzlicher Provenienzvorbehalt zur Baseline: „B-Tree, impliziter PostgreSQL-Standard“
+setzt einen konkreten Enginekontext voraus, den die Fixtures nicht ausdrücklich
+festlegen. Das wird nicht als weiterer C5-Fehler oder als falsche PostgreSQL-Aussage
+gezählt. Es gibt keinen zusätzlichen Web- oder Datenbanknachweis.
+
+| Aufwand laut CLI | Baseline | Mit zwei Skills |
+| --- | --- | --- |
+| Laufzeit | 25,95 s | 33,31 s |
+| Input-Tokens | 12.280 | 12.968 |
+| Output-Tokens | 996 | 1.131 |
+| Reasoning-Output-Tokens (CLI-Feld) | 141 | 462 |
+
+CLI-Version: `0.162.0-alpha.17.2`. Beide Aufrufe endeten mit Exit 0. Native Events
+enthielten eine beziehungsweise zwei `agent_message`-Items und keine Tool-Items.
+Insgesamt 59,26 Sekunden, 25.248 Input- und 2.127 Output-Tokens.
+Die Modellidentität ist nur als angefordertes Modell gebunden, nicht unabhängig
+serverseitig attestiert.
+
+**Entscheidung:** Die Skill-Antwort bleibt in diesem Paar enger an den Quellen und
+erfüllt die vorab festgelegte Produktrubrik. Das ist ein beobachteter Unterschied,
+kein belastbarer allgemeiner oder kausaler Skill-Lift. Die Skills verbieten das
+Erfinden von Fakten bereits; aus diesem Einzelpaar folgt keine zusätzliche
+Regelverschärfung. Keine Skilländerung, Maturity-Hochstufung oder B2-Freigabe.
+Natürliche Discovery und vollständige Golden-Task-Prozessqualität bleiben `NOT RUN`.

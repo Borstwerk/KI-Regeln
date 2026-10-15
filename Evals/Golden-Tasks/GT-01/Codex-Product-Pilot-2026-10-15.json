@@ -1,0 +1,353 @@
+{
+  "scope": "One GT-01 documentation product pair; inline sources, forced skill treatment",
+  "protocol": {
+    "scope": "GT-01 documentation product pilot; one fresh response per arm",
+    "input_binding": "Exact pinned Git blobs; current working-tree input files are not substituted",
+    "model_requested": "gpt-6.1-sol",
+    "reasoning_requested": "high",
+    "max_cli_sessions": 2,
+    "timeout_seconds_per_session": 90,
+    "retry_or_fallback": false,
+    "repetitions": 1,
+    "public_repository": "https://github.com/Borstwerk/KI-Regeln",
+    "public_git_blobs": {
+      "Dokumentationserstellung/Skills/reference-docs/SKILL.md": "90d996c975eabfdf3d8fe9f7649ad48fec021219",
+      "Dokumentationserstellung/Skills/technical-writing/SKILL.md": "50d05f2757b9b99eb521006c11fd36229c9778a4",
+      "Evals/Golden-Tasks/GT-01/table-schema.sql": "b998eb71857b65d8c8b975efed6f9e7ed23d8f27",
+      "Evals/Golden-Tasks/GT-01/usage.md": "74c13539dfea2d319c23a4afc6427919685c0ebb",
+      "Evals/Golden-Tasks/GT-01/task.yml": "9e0eea41989ed14cae4d68845d62663d5f925fa3"
+    },
+    "source_sha256": {
+      "Dokumentationserstellung/Skills/reference-docs/SKILL.md": "d4ccc71851e11c5346e9ffe4fa07f43a95e2170b58e4ec8f702b593687cb3ec7",
+      "Dokumentationserstellung/Skills/technical-writing/SKILL.md": "c8debea3d9136f0e1c669429db375932de26f89334f415adede45141905de0e8",
+      "Evals/Golden-Tasks/GT-01/table-schema.sql": "73f3d2f95525079cd4807519dfe12d96e7f4957d951d7ec5558252a5a02a489e",
+      "Evals/Golden-Tasks/GT-01/usage.md": "aa82cc6fd8cb365f8cb24cc71a5eeb44825916d9efd479f94063b0e994cc6260",
+      "Evals/Golden-Tasks/GT-01/task.yml": "1ed9c39264ec7e804a867b4fec0cef499b89c2d54d8af756189f7c8219cf9421"
+    },
+    "script_sha256": "2b1fa7fd421b2202d34496db39f156b83e5785f87c63863f25fe46ea88a88577",
+    "source_commit": "6c8e015353150bd74887925d28fe59ad42bcac83",
+    "grading": "Use the predeclared GT-01 product rubric in Codex-Product-Pilot-2026-10-15.md; non-blind parent-agent review",
+    "limits": [
+      "Forced two-skill instruction bundle; no natural discovery measured",
+      "Inline fixtures; no file-read or database-execution evidence claimed",
+      "No independent/held-out benchmark, Golden-Task routing pass or maturity promotion"
+    ],
+    "cases": [
+      {
+        "id": "GT-01",
+        "input": "Erstelle aus den bereitgestellten Fixtures eine technische Referenzdokumentation für die Tabelle customer_note. Dokumentiere den Iststand; ändere oder redesigniere das Schema nicht.\n\n<fixture name=\"table-schema.sql\">\nCREATE TABLE customer_note (\n    id BIGINT PRIMARY KEY,\n    customer_id BIGINT NOT NULL,\n    body TEXT NOT NULL,\n    visibility VARCHAR(16) NOT NULL DEFAULT 'internal',\n    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),\n    archived_at TIMESTAMPTZ NULL,\n    CONSTRAINT ck_customer_note_visibility\n        CHECK (visibility IN ('internal', 'shared'))\n);\n\nCREATE INDEX ix_customer_note_customer_created\n    ON customer_note (customer_id, created_at DESC);\n\n</fixture>\n\n<fixture name=\"usage.md\">\n# Bestätigte Nutzung\n\n- `customer_note` speichert textuelle Hinweise zu einem Kundenkontext.\n- `visibility = internal` ist der Standard; `shared` ist der zweite erlaubte Wert.\n- Archivierte Einträge behalten ihren Datensatz und erhalten `archived_at`.\n- Eine Foreign-Key-Beziehung zu einer anderen Tabelle ist in der bereitgestellten Source of Truth **nicht** definiert.\n- Retention- und Löschfristen sind für diese Fixture bewusst unbekannt.\n\n</fixture>",
+        "judge_only": {
+          "schema_version": 1,
+          "id": "GT-01",
+          "title": "Datenbanktabelle dokumentieren",
+          "goal": "Eine belastbare technische Referenz einer bestehenden Tabelle aus lokaler Schema-Evidence erstellen.",
+          "assignment": "Erstelle aus den bereitgestellten Fixtures eine technische Referenzdokumentation für die Tabelle customer_note. Dokumentiere den Iststand; ändere oder redesigniere das Schema nicht.",
+          "fixtures": [
+            "Evals/Golden-Tasks/GT-01/table-schema.sql",
+            "Evals/Golden-Tasks/GT-01/usage.md"
+          ],
+          "sources_of_truth": [
+            {
+              "path": "Evals/Golden-Tasks/GT-01/table-schema.sql",
+              "role": "Kanonische Quelle für Spalten, Typen, Defaults, Constraints und Index."
+            },
+            {
+              "path": "Evals/Golden-Tasks/GT-01/usage.md",
+              "role": "Bestätigte fachliche Nutzungshinweise und explizite Wissenslücken."
+            }
+          ],
+          "required_capabilities": [
+            "source-of-truth-access"
+          ],
+          "expected_domain": "Dokumentationserstellung",
+          "allowed_secondary_domains": [
+            "Datenbanken"
+          ],
+          "workflow": {
+            "required": false,
+            "allowed": [
+              "Workflows/Technische-Dokumentation.md"
+            ]
+          },
+          "required_skills": [
+            "reference-docs",
+            "technical-writing"
+          ],
+          "allowed_optional_skills": [
+            "docs-plan",
+            "verification-loop"
+          ],
+          "forbidden_skills": [
+            "database-design",
+            "schema-migration"
+          ],
+          "expected_evidence": [
+            "Jede dokumentierte Spalte und jeder Constraint ist auf das DDL zurückführbar.",
+            "Nutzungshinweise werden nur aus usage.md übernommen und als solche von Schemafakten getrennt."
+          ],
+          "expected_artifacts": [
+            "Nachschlagbare Tabellenreferenz mit Spalten, Typen, Nullability, Defaults, Constraints und Index.",
+            "Sichtbare Kennzeichnung nicht belegter Semantik oder unbekannter Retention."
+          ],
+          "expected_verification": [
+            "Dokumentierte Schemaelemente werden gegen table-schema.sql gegengeprüft.",
+            "Es wird bestätigt, dass keine zusätzlichen Spalten oder Constraints erfunden wurden."
+          ],
+          "allowed_uncertainty": [
+            "Eine Foreign-Key-Beziehung zu customer ist nicht belegt.",
+            "Retention und Löschfristen sind unbekannt."
+          ],
+          "expected_status": "pass",
+          "forbidden_behaviors": [
+            "Erfundene Foreign Keys, Spalten, Defaults oder Constraints.",
+            "Schema-Redesign oder Migration als Teil des Dokumentationsauftrags.",
+            "Unbekannte Retention als bestätigte Regel darstellen."
+          ],
+          "rubric": {
+            "routing": [
+              "Dokumentationserstellung ist Primärdomäne; Datenbankwissen bleibt unterstützend.",
+              "Reference- und Writing-Skills reichen aus; kein Datenbankdesign wird aktiviert."
+            ],
+            "grounding": [
+              "DDL ist Source of Truth für Schemafakten.",
+              "usage.md wird nicht über seinen bestätigten Inhalt hinaus extrapoliert."
+            ],
+            "scope": [
+              "Ergebnis dokumentiert den Iststand und verändert das Datenmodell nicht."
+            ],
+            "gates": [
+              "Keine externe oder produktive Mutation wird vorgenommen."
+            ],
+            "verification": [
+              "Referenz wird konkret gegen DDL und Usage-Fixture gegengeprüft."
+            ],
+            "result_quality": [
+              "Ein Entwickler kann die Tabelle schnell und präzise nachschlagen."
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "protocol_sha256": "4bd131b525df5c2700ab41f7c5e4cf5ee51c106cd1ca9b07a992fe993182a695",
+  "frozen_pre_execution_sha256": {
+    "Evals/Agentenarbeit/verification-loop/codex_instruction_pilot.py": "2b1fa7fd421b2202d34496db39f156b83e5785f87c63863f25fe46ea88a88577",
+    "Evals/Golden-Tasks/GT-01/Codex-Product-Pilot-2026-10-15.md": "43a5215423454cce58cb4802497a58489f7d75f9f3bc6edabd643055c687c127"
+  },
+  "cli_version_observed": "0.162.0-alpha.17.2",
+  "invocation_started_utc": "2026-10-15 17:44:21 UTC",
+  "reviewer": "Current parent agent; knows both conditions; no independent/blind model judge",
+  "responses": [
+    {
+      "case": "GT-01",
+      "arm": "baseline",
+      "prompt_sha256": "95c55728f6f043b000b55b63ade735c5214869f27a348354c97a2f37d8a0a93c",
+      "status": "RESPONSE_RECORDED",
+      "exit_code": 0,
+      "elapsed_seconds": 25.95,
+      "response": {
+        "answer": "# Technische Referenz: `customer_note`\n\n## Zweck\n\nDie Tabelle `customer_note` speichert textuelle Hinweise zu einem Kundenkontext. Archivierte Einträge bleiben als Datensätze erhalten und werden über `archived_at` gekennzeichnet.\n\n## Spalten\n\n| Spalte | Datentyp | NULL erlaubt | Standardwert | Bedeutung |\n|---|---|---|---|---|\n| `id` | `BIGINT` | Nein | Keiner | Primärschlüssel des Hinweises. Eine automatische ID-Vergabe ist im bereitgestellten Schema nicht definiert. |\n| `customer_id` | `BIGINT` | Nein | Keiner | Kennung des Kundenkontexts. Eine Foreign-Key-Beziehung ist nicht definiert. |\n| `body` | `TEXT` | Nein | Keiner | Text des Hinweises. |\n| `visibility` | `VARCHAR(16)` | Nein | `'internal'` | Sichtbarkeitswert; erlaubt sind ausschließlich `internal` und `shared`. |\n| `created_at` | `TIMESTAMPTZ` | Nein | `now()` | Erstellungszeitpunkt; wird beim Einfügen standardmäßig durch die Datenbank gesetzt. |\n| `archived_at` | `TIMESTAMPTZ` | Ja | Keiner | Zeitpunkt der Archivierung; bei nicht archivierten Einträgen `NULL`. |\n\nEin Standardwert wird verwendet, wenn die betreffende Spalte beim Einfügen ausgelassen wird. Er ersetzt keinen ausdrücklich übergebenen `NULL`-Wert.\n\n## Integritätsregeln\n\n- **Primärschlüssel:** `id` ist eindeutig und darf nicht `NULL` sein.\n- **Pflichtfelder:** `customer_id`, `body`, `visibility` und `created_at` dürfen nicht `NULL` sein.\n- **Sichtbarkeit:** Der Check-Constraint `ck_customer_note_visibility` erzwingt `visibility IN ('internal', 'shared')`.\n- **Textinhalt:** Für `body` ist keine zusätzliche Inhaltsprüfung definiert. Insbesondere verhindert `NOT NULL` keine leere Zeichenfolge.\n- **Beziehungen:** Für `customer_id` ist kein Foreign Key definiert. Das bereitgestellte Schema erzwingt daher keine referenzielle Integrität zu einer anderen Tabelle.\n- **Zeitpunkte:** Eine Prüfung der zeitlichen Reihenfolge von `created_at` und `archived_at` ist nicht definiert.\n\n## Index\n\n| Name | Spalten und Reihenfolge | Typ | Eindeutig |\n|---|---|---|---|\n| `ix_customer_note_customer_created` | `customer_id ASC`, `created_at DESC` | B-Tree, impliziter PostgreSQL-Standard | Nein |\n\nDer zusammengesetzte Index unterstützt insbesondere Abfragen nach `customer_id` mit absteigender Sortierung nach `created_at`. Eine garantierte Ergebnisreihenfolge erfordert weiterhin ein ausdrückliches `ORDER BY`.\n\n## Sichtbarkeit und Archivierung\n\n`internal` ist der Standardwert für die Sichtbarkeit; `shared` ist der zweite zulässige Wert. Konkrete Zugriffsrechte oder Freigabemechanismen sind in den bereitgestellten Quellen nicht beschrieben.\n\nBei der Archivierung bleibt der Datensatz bestehen und erhält einen Wert in `archived_at`. Ein automatischer Archivierungsmechanismus ist im bereitgestellten Schema nicht definiert.\n\n## Nicht festgelegte Eigenschaften\n\nRetention- und Löschfristen sind ausdrücklich unbekannt. Aus den Quellen ergeben sich keine Vorgaben für eine automatische Löschung oder eine Aufbewahrungsdauer.\n\n## Quellen\n\n- `table-schema.sql`: Tabellendefinition, Constraints, Standardwerte und Index.\n- `usage.md`: bestätigter Verwendungszweck, Sichtbarkeitswerte, Archivierungsverhalten sowie Angaben zu Beziehungen und Aufbewahrungsfristen."
+      },
+      "event_types": {
+        "thread.started": 1,
+        "turn.started": 1,
+        "item.completed": 1,
+        "turn.completed": 1
+      },
+      "item_types": {
+        "agent_message": 1
+      },
+      "usage": [
+        {
+          "input_tokens": 12280,
+          "cached_input_tokens": 0,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 996,
+          "reasoning_output_tokens": 141
+        }
+      ],
+      "model_identity": "Requested model recorded; no independent server model attestation",
+      "artifact": "Codex-Product-Pilot-2026-10-15-baseline.md",
+      "artifact_sha256": "070c6900c9b1ed043d777935f0de503d37bf01d38c56ed323ef60a85493e91c9",
+      "review": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "verdict": "pass",
+            "basis": "Spaltentabelle enthält genau die sechs vorgegebenen Namen und Typen einschließlich VARCHAR(16)."
+          },
+          {
+            "id": "C2",
+            "verdict": "pass",
+            "basis": "NULL erlaubt: fünfmal Nein, nur archived_at Ja; Primary-Key-Nullability korrekt."
+          },
+          {
+            "id": "C3",
+            "verdict": "pass",
+            "basis": "visibility: internal, created_at: now(); alle anderen ohne definierten Default, keine automatische ID-Vergabe behauptet."
+          },
+          {
+            "id": "C4",
+            "verdict": "pass",
+            "basis": "Integritätsregeln nennen id als Primary Key sowie ck_customer_note_visibility mit genau internal/shared; keine zusätzlichen Constraints."
+          },
+          {
+            "id": "C5",
+            "verdict": "pass",
+            "basis": "Indexname und customer_id ASC, created_at DESC korrekt; die ergänzte B-Tree-Angabe setzt PostgreSQL voraus, siehe separates Finding F2."
+          },
+          {
+            "id": "C6",
+            "verdict": "fail",
+            "basis": "Archivierung erhält Datensatz und setzt archived_at korrekt. Zusätzlich steht bei archived_at: „bei nicht archivierten Einträgen NULL“. Weder DDL noch usage.md belegen diese allgemeine Regel. Die Nullable-Eigenschaft ist kein Nachweis der Geschäftssemantik."
+          },
+          {
+            "id": "C7",
+            "verdict": "pass",
+            "basis": "Kein Foreign Key definiert; Retention und Löschfristen ausdrücklich unbekannt; keine erfundene Frist oder Beziehung."
+          },
+          {
+            "id": "C8",
+            "verdict": "partial",
+            "basis": "Quellenabschnitt trennt DDL und Nutzung auf Artefaktebene. Ein konkreter eigener Abgleich wird nicht bestätigt; außerdem reichen einzelne Ergänzungen über die Fixture-Evidence hinaus."
+          },
+          {
+            "id": "C9",
+            "verdict": "pass",
+            "basis": "Nachschlagbare Tabellen und Abschnitte; kein Redesign, keine Migration und keine behauptete SQL-Ausführung."
+          }
+        ]
+      }
+    },
+    {
+      "case": "GT-01",
+      "arm": "skill",
+      "prompt_sha256": "8184d2fed3a68a087b93a373cb8b41a6846bfeb4e0e56a0cea6a42d99f66de51",
+      "status": "RESPONSE_RECORDED",
+      "exit_code": 0,
+      "elapsed_seconds": 33.31,
+      "response": {
+        "answer": "**`customer_note` – Tabellenreferenz**\n\n`customer_note` speichert textuelle Hinweise zu einem Kundenkontext.\n\nDie Struktur ist durch `table-schema.sql` definiert. Die bestätigte Nutzung stammt aus `usage.md`. Eine Schema- oder Produktversion ist nicht angegeben.\n\n**Spalten**\n\nQuelle: `table-schema.sql`. „Nicht angegeben“ bedeutet, dass die Spaltendefinition keinen expliziten Default enthält.\n\n| Spalte | SQL-Typ | NULL erlaubt | Default | Bedeutung / Eigenschaft |\n|---|---|---|---|---|\n| `id` | `BIGINT` | Nein | Nicht angegeben | Primärschlüssel; keine automatische ID-Erzeugung definiert. |\n| `customer_id` | `BIGINT` | Nein | Nicht angegeben | Zuordnung zum Kundenkontext; kein Foreign Key definiert. |\n| `body` | `TEXT` | Nein | Nicht angegeben | Text des Hinweises. |\n| `visibility` | `VARCHAR(16)` | Nein | `'internal'` | Erlaubte Werte: `internal`, `shared`. |\n| `created_at` | `TIMESTAMPTZ` | Nein | `now()` | Erstellungszeitpunkt. |\n| `archived_at` | `TIMESTAMPTZ` | Ja | Nicht angegeben | Archivierungszeitpunkt. |\n\n**Constraints**\n\nQuelle: `table-schema.sql`.\n\n| Constraint | Definition | Wirkung |\n|---|---|---|\n| Primärschlüssel; Name nicht explizit angegeben | `PRIMARY KEY (id)` | `id` ist eindeutig und darf nicht `NULL` sein. |\n| `ck_customer_note_visibility` | `CHECK (visibility IN ('internal', 'shared'))` | Beschränkt `visibility` auf die beiden angegebenen Werte. Zusätzlich gilt `NOT NULL`. |\n\nFür `customer_id` ist in der bereitgestellten Source of Truth keine Foreign-Key-Beziehung zu einer anderen Tabelle definiert.\n\n**Index**\n\nQuelle: `table-schema.sql`.\n\n| Name | Spaltenreihenfolge | Eindeutig |\n|---|---|---|\n| `ix_customer_note_customer_created` | `customer_id`, anschließend `created_at DESC` | Nein |\n\n**Bestätigte Nutzung und offene Angaben**\n\nQuelle: `usage.md`.\n\n- `internal` ist die Standardsichtbarkeit; `shared` ist der zweite erlaubte Wert. Weitere Zugriffs- oder Freigabesemantiken sind nicht beschrieben.\n- Bei der Archivierung bleibt der Datensatz erhalten und erhält einen Wert in `archived_at`.\n- Retention- und Löschfristen sind unbekannt.\n\nDie Dokumentation wurde mit den eingebetteten Fixtures abgeglichen. Das SQL wurde nicht ausgeführt."
+      },
+      "event_types": {
+        "thread.started": 1,
+        "turn.started": 1,
+        "item.completed": 2,
+        "turn.completed": 1
+      },
+      "item_types": {
+        "agent_message": 2
+      },
+      "usage": [
+        {
+          "input_tokens": 12968,
+          "cached_input_tokens": 0,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1131,
+          "reasoning_output_tokens": 462
+        }
+      ],
+      "model_identity": "Requested model recorded; no independent server model attestation",
+      "artifact": "Codex-Product-Pilot-2026-10-15-skill.md",
+      "artifact_sha256": "2ff0c42d577f0401dfaf4d98ee6bff017d337a5a049c001e0f2181922cedab16",
+      "review": {
+        "verdict": "pass",
+        "criteria": [
+          {
+            "id": "C1",
+            "verdict": "pass",
+            "basis": "Spaltentabelle enthält genau die sechs vorgegebenen Namen und Typen einschließlich VARCHAR(16)."
+          },
+          {
+            "id": "C2",
+            "verdict": "pass",
+            "basis": "NULL erlaubt: fünfmal Nein, archived_at Ja; Primary-Key-Wirkung zusätzlich erklärt."
+          },
+          {
+            "id": "C3",
+            "verdict": "pass",
+            "basis": "visibility: internal, created_at: now(); „Nicht angegeben“ ausdrücklich als fehlender expliziter Default definiert; keine ID-Automatik."
+          },
+          {
+            "id": "C4",
+            "verdict": "pass",
+            "basis": "Primary Key auf id und benannter Check mit internal/shared korrekt; keine zusätzlichen Constraints."
+          },
+          {
+            "id": "C5",
+            "verdict": "pass",
+            "basis": "ix_customer_note_customer_created mit customer_id, anschließend created_at DESC; keine zusätzliche Indexmethode behauptet."
+          },
+          {
+            "id": "C6",
+            "verdict": "pass",
+            "basis": "Kundenkontext sowie Datensatzerhalt und Wertsetzung bei Archivierung korrekt; keine Umkehrregel für nicht archivierte Einträge."
+          },
+          {
+            "id": "C7",
+            "verdict": "pass",
+            "basis": "Nicht definierter Foreign Key und unbekannte Retention/Löschfristen ausdrücklich genannt."
+          },
+          {
+            "id": "C8",
+            "verdict": "pass",
+            "basis": "Schemaabschnitte einzeln auf table-schema.sql bezogen, Nutzung auf usage.md. Abschlusssatz bestätigt Fixture-Abgleich; das Artefakt stimmt bei allen Spalten/Constraints mit dem DDL überein. Dies belegt eine Aussage und den sichtbaren Abgleich des Produkts, keinen internen Denkprozess."
+          },
+          {
+            "id": "C9",
+            "verdict": "pass",
+            "basis": "Scanbare Tabellenreferenz; kein Redesign und keine Migration; SQL-Ausführung ausdrücklich verneint."
+          }
+        ]
+      }
+    }
+  ],
+  "findings": [
+    {
+      "id": "F1",
+      "arm": "baseline",
+      "criterion": "C6",
+      "classification": "UNSUPPORTED_BUSINESS_RULE",
+      "quote": "bei nicht archivierten Einträgen `NULL`",
+      "basis": "usage.md only states archived entries retain their record and receive archived_at. DDL permits NULL but does not enforce a relation to an independently defined archive state. The converse business rule is unproved, not demonstrated false in a running database."
+    },
+    {
+      "id": "F2",
+      "arm": "baseline",
+      "classification": "UNVERIFIED_ENGINE_ASSUMPTION",
+      "quote": "B-Tree, impliziter PostgreSQL-Standard",
+      "basis": "The fixture does not specify an engine/version or USING method. The text assumes PostgreSQL semantics for the concrete index. This is a provenance caveat, not proof that B-Tree would be incorrect on PostgreSQL; not an additional failed C5 criterion."
+    }
+  ],
+  "summary": {
+    "sessions": 2,
+    "repetitions_per_arm": 1,
+    "baseline_product_verdict": "fail",
+    "skill_product_verdict": "pass",
+    "baseline_criteria": {
+      "pass": 7,
+      "partial": 1,
+      "fail": 1
+    },
+    "skill_criteria": {
+      "pass": 9,
+      "partial": 0,
+      "fail": 0
+    },
+    "total_cli_seconds": 59.26,
+    "usage": {
+      "input_tokens": 25248,
+      "cached_input_tokens": 0,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2127,
+      "reasoning_output_tokens": 603
+    },
+    "general_skill_effect": "NOT_ESTABLISHED",
+    "natural_discovery": "NOT RUN",
+    "database_execution": "NOT RUN",
+    "full_golden_task_behavioral_pass": "NOT CLAIMED",
+    "maturity_or_admission_change": false
+  },
+  "decision": "Observed treatment document is more tightly grounded in this pair. Keep skill instructions unchanged: they already prohibit invention. No general causal/statistical lift or rule-hardening conclusion from one pair; preserve both unedited artifacts and rubric."
+}
