@@ -8,6 +8,12 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Begrenzter Codex-Instruktionspilot und Einfachheits-Leitplanke (15.10.2026)
+
+- Testinfrastruktur auf reproduzierbare Qualitätsnachweise für KI-Regeln begrenzt; vorhandene CLI-Abos bevorzugt, direkte Claude-/ChatGPT-APIs und echte API-Schlüssel für unsere Tests ausgeschlossen.
+- Vier bestehende verification-loop-Textszenarien jeweils mit und ohne öffentliches Anweisungsbundle über das bestehende Codex-Abo ausgeführt; acht Antworten, Quell-/Prompthashes und kriteriumsweise Bewertung dokumentiert.
+- Einen einzelnen positiven Unterschied bei Guard-Änderungen und eine unvollständige Evidence-Gap-Testanregung festgehalten. Keine Skill-/Maturity-/Admission-Änderung und kein allgemeiner Wirksamkeitsclaim.
+
 ### Begrenzter Auth-Messplan als Reviewvorlage (15.10.2026)
 
 - Nicht ausführbaren Messplan für höchstens zwei toolfreie CLI-Sitzungen mit Invalid-Kontrolle vor einer bedingten Positivprobe dokumentiert; Modell, Zeit-, Turn- und vorgeschlagene Schätzbudgetgrenzen konkretisiert.

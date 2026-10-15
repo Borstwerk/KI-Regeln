@@ -19,6 +19,11 @@ unsere Tests einplanen. Offene Spezialnachweise bleiben sichtbar offen und begr�
 keinen automatischen Ausbau einer allgemeinen Auth-, Orchestrierungs- oder Runtime-
 Plattform. Bestehende Akzeptanzkriterien d체rfen dadurch nicht abgeschw채cht werden.
 
+Ein begrenzter [Codex-Instruktionspilot f체r verification-loop](Agentenarbeit/verification-loop/Codex-Instruction-Pilot-2026-10-15.md)
+enth채lt acht echte Abo-CLI-Antworten mit und ohne zus채tzliches Anweisungsbundle.
+Er dokumentiert einen einzelnen positiven Unterschied und eine L체cke der Testanregung;
+keinen unabh채ngigen Benchmark oder gesicherten Skill-Lift.
+
 Evals sollen insbesondere Regressionen erkennen bei:
 
 - Triggerung und Nichttriggerung;
