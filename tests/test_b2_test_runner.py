@@ -34,5 +34,7 @@ class RunnerClaimTests(unittest.TestCase):
                 self.assertEqual(code, 1)
                 report = json.loads(output.getvalue())
                 self.assertEqual(report["status"], "FAIL")
+                self.assertEqual(report["skip_details"],
+                                 [{"test": str(test), "reason": reason} for test, reason in skipped])
                 self.assertEqual(report["server_authentication"], "NOT RUN")
                 self.assertEqual(report["credential_subprocess_and_read_enforcement"], "NOT RUN")

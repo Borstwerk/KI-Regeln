@@ -91,7 +91,9 @@ def main(argv: list[str] | None = None) -> int:
         success = result.wasSuccessful() and result.testsRun > 0 and not result.skipped
         report.update(status="PASS" if success else "FAIL", tests=result.testsRun,
                       failures=len(result.failures), errors=len(result.errors),
-                      skipped=len(result.skipped))
+                      skipped=len(result.skipped),
+                      skip_details=[{"test": str(test), "reason": reason}
+                                    for test, reason in result.skipped])
         if args.integration:
             report["real_cli_and_boundary_tests"] = "PASS" if success else "UNVERIFIED"
         code = 0 if success else 1

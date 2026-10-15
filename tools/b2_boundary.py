@@ -11,9 +11,12 @@ find the trust root, write outside the workspace.
 So agent-controlled code runs inside a view that *does not contain* those things. Not
 unreadable, not chmodded: absent.
 
-Provider: an unprivileged-capable Linux namespace built with `unshare`, into which a minimal
+Provider: a Linux namespace built with `unshare`, into which a minimal
 root is assembled by bind mount and entered with `pivot_root`. The view carries a read-only
 runtime, a fresh `/proc`, and the writable workspace copy. Nothing else exists in it.
+The current invocation requires mount privileges in the caller's namespace; it does not
+create a user namespace or grant those privileges. An unprivileged WSL user may therefore
+be refused even when an unrelated user-namespace probe succeeds.
 
 This is a boundary for *this* purpose — keeping evaluation artifacts out of reach of code
 the eval itself placed there. It is not a security sandbox against a determined attacker,
