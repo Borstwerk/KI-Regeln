@@ -8,6 +8,12 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Native Verification Pilot für PowerShell und .NET (15.10.2026)
+
+- Tatsächliche native Prüfungen für kleine PowerShell- und C#-Fixtures, mit Source-Digest, Exitcode und beobachtbarem Prozessmarker; kein allgemeiner Test-Runner.
+- Absichtlich fehlendes Tool liefert kontrolliert `NOT_RUN`, keine Erfolgsmeldung; real fehlende Laufzeiten blockieren native Prüfungen.
+- Windows-/Linux-CI validiert die Reports gegen Schema/Evidence und erzeugt Offline-HTML. Kein B2-/Modellpilot und keine produktiven Ressourcen.
+
 ### Optionaler Offline-HTML-Verification-Report – PR B (15.10.2026)
 
 - Renderer für lokale `.validation/latest.json`-Berichte und portable `verification-run`-v1-Reports ergänzt. Keine neuen Prüfwerkzeuge, kein Testlauf und keine globale Python-Pflicht in Fremdprojekten.
