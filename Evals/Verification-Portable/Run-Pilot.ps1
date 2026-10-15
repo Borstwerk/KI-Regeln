@@ -32,7 +32,11 @@ $sourceFiles = @{
 function Get-SourceLines {
     param([string[]]$RelativePaths)
     $result = @()
-    foreach ($rel in @($RelativePaths | Sort-Object)) {
+    # Ordinal case-sensitive sorting: PowerShell's culture sorting differs from
+    # Python sorted() for the uppercase Run-Pilot.ps1 versus lowercase fixtures.
+    [string[]]$paths = @($RelativePaths)
+    [Array]::Sort($paths, [StringComparer]::Ordinal)
+    foreach ($rel in $paths) {
         $absolute = Join-Path $root $rel
         if (-not (Test-Path -LiteralPath $absolute -PathType Leaf)) {
             throw "Cannot bind the fixture source: $rel"
@@ -43,7 +47,6 @@ function Get-SourceLines {
     return $result
 }
 $manifestLines = @(Get-SourceLines -RelativePaths $sourceFiles[$Scenario])
-$manifestText = ($manifestLines -join "\n") + "\n"
 # The manifest is UTF-8 with LF separators, regardless of the host OS.
 $manifestText = ($manifestLines -join [string][char]10) + [string][char]10
 $sha = [System.Security.Cryptography.SHA256]::Create()
