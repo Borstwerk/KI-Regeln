@@ -38,13 +38,34 @@ den ursprünglichen Vier-Fall-Snapshot; der Folgemodus pinnt die neue Fallfassun
 Fehlende historische Git-Objekte blockieren, ohne automatischen Fetch oder Ersatz
 durch aktuelle Dateien. Die alten acht Antworten und Bewertungen bleiben unverändert.
 
-## Status und Grenzen
+## Ergebnis und Grenzen
 
 Vorbereitung und Offline-Kontrollen bestehen: historischer Vier-Paar-Modus, neuer
 Zwei-Aufruf-Modus, unveränderte Kriterien, Vorbereitung ohne CLI-Aufruf und ein
 synthetischer CLI-Fehler mit sichtbarem `BLOCKED` und Exit 2.
+Ein zusätzlicher modellfreier Replay mit geskripteten CLI-Antworten erzeugt alle acht
+ursprünglichen Prompthashes bytegleich; er zählt nicht als acht neue Modellläufe.
 
-Die zwei tatsächlichen Antworten und ihre kriteriumsweise Bewertung werden nach
-Ausführung ergänzt. Ein Paar ist weder unabhängige Held-out-Evidence noch ein
-statistischer Skill-Lift. Gegenüber dem ersten Pilot wurde der Prompt geändert;
-die beiden Fassungen sind keine unveränderte Vorher-/Nachher-Messung eines Skills.
+[Getrennte Evidence mit den zwei vollständigen Antworten](Evidence-Gap-v2-2026-10-15.json):
+
+| Bedingung | Beide erwarteten Kriterien gestützt | Verbotener Claim beobachtet | Urteil |
+| --- | --- | --- | --- |
+| Baseline | ja | nein | pass |
+| Mit unverändertem Bundle | ja | nein | pass |
+
+Beide Antworten nennen die bestandenen Teilchecks, die nicht ausgeführte Pflichtintegration
+und den weiterhin offenen Abschluss. Die zwei CLI-Aufrufe endeten mit Exit 0; in den
+nativen Item-Events wurde je eine `agent_message` und kein Tool-Item beobachtet.
+Summe der CLI-Laufzeiten: 16,63 Sekunden. Usage: 28.206 Input-/420 Output-Tokens;
+keine Aussage über Rechnungsbetrag oder verbleibendes Abo-Kontingent.
+
+Vor Ausführung waren Fall, Skript und Protokollbeschreibung in `8337258` committed.
+Die Evidence bindet feste Git-Blobs, Script-/Prompthashes und das angeforderte Modell;
+sie attestiert keine unabhängige Server-Modellidentität. CLI-Version: `0.162.0-alpha.17.2`.
+Die Kriterienbewertung stammt vom aktuellen Agenten, der beide Bedingungen kennt.
+
+**Entscheidung:** Die Präzisierung ist in diesen zwei Antworten wirksam prüfbar;
+keine Skilländerung und kein zusätzlicher Skill-Vorteil beobachtet. Ein Paar ist weder
+unabhängige Held-out-Evidence noch ein statistischer Skill-Lift. Gegenüber dem ersten
+Pilot wurde der Prompt geändert; die Fassungen werden nicht als unveränderte
+Vorher-/Nachher-Messung eines Skills zusammengezählt. Maturity und B2-Gates bleiben unverändert.
