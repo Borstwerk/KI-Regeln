@@ -11,6 +11,23 @@ Die Parameter und die nicht ausführbare Argv-Vorlage stehen in
 keine Runtime-Konfiguration, kein Freigabetoken und keine Admission-Evidence. Es gibt
 keinen produktiven Reader dafür. Änderungen seiner Felder können keine Gates öffnen.
 
+## Verbindlicher Testzugang
+
+Operatorvorgabe vom 15.10.2026: **keine direkte Claude- oder ChatGPT-API und keine
+API-Schlüssel für unsere Tests einplanen oder verwenden.** Vorhandene CLI-Abos sind
+als Zugang zulässig. Für die hier beschriebene B2-Auth-Messung müssen zusätzlich die
+Eintrittsgates erfüllt und der konkrete Lauf freigegeben sein. Kein direkter HTTP-/
+API-Aufruf als Fallback; Netzwerkverkehr, den die zugelassene Subscription-CLI intern
+benötigt, ist davon zu unterscheiden. Der B2-Auth-Pfad bleibt ohne echte Credentials
+und Modellrequests. Separate read-only Regel-Evals über Codex geben keine B2-Gates frei.
+
+Die [Leitplanke für die Testinfrastruktur](../../README.md#leitplanke-für-die-testinfrastruktur)
+begrenzt auch diesen Plan: Offene Eintrittsgates sind kein automatischer Auftrag zum
+Bau eines Auth-Controllers oder einer allgemeinen Agentenplattform. Weitere Umsetzung
+nur, wenn ein konkreter Qualitäts-Eval sie benötigt und der vorhandene CLI-/Runner-Pfad
+nicht ausreicht. Bis dahin bleiben betroffene Spezialnachweise offen; kein Gate wird
+zur Vereinfachung als bestanden umgedeutet.
+
 ## Zweck und Abgrenzung
 
 Zu klären ist, ob genau der vorgesehene Subscription-OAuth-Pfad in einer frisch gebundenen
