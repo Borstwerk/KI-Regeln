@@ -25,6 +25,7 @@ BASE_TESTS = [
     "tests.test_b2_preflight_controls",
     "tests.test_b2_test_runner",
     "tests.test_b2_auth_bootstrap",
+    "tests.test_b2_separated_runtime",
 ]
 PORTABLE = [
     *BASE_TESTS,
@@ -89,7 +90,8 @@ def main(argv: list[str] | None = None) -> int:
         report.update(status="BLOCKED", reasons=missing)
         code = 2
     else:
-        names = (BASE_TESTS + [B2_TESTS, "tests.test_b2_bootstrap_runtime"]) if args.integration else PORTABLE
+        names = (BASE_TESTS + [B2_TESTS, "tests.test_b2_bootstrap_runtime",
+                               "tests.test_b2_separation_runtime"]) if args.integration else PORTABLE
         suite = unittest.defaultTestLoader.loadTestsFromNames(names)
         result = unittest.TextTestRunner(verbosity=1).run(suite)
         success = result.wasSuccessful() and result.testsRun > 0 and not result.skipped

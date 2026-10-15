@@ -85,14 +85,18 @@ def assess_identity(value: Any) -> tuple[dict[str, Any] | None, list[str]]:
     return {key: list(row) if isinstance(row, list) else row for key, row in value.items()}, blockers
 
 
-def _measure_identity(binary: str, env: Mapping[str, str]) -> Any:
+def _measure_identity(binary: str, env: Mapping[str, str], *, separated_runtime: bool = False) -> Any:
     if sys.platform != "linux":
         raise PreparationError("linux_runtime_required")
     with tempfile.TemporaryDirectory(prefix="b2-bootstrap-view-") as tmp:
         task = Path(tmp)
         workspace = task / "workspace"
         workspace.mkdir()
-        with confined_model_invocation(
+        builder = confined_model_invocation
+        if separated_runtime:
+            from tools.b2_separated_runtime import separated_model_invocation
+            builder = separated_model_invocation
+        with builder(
             ["/usr/bin/python3", "-I", "-c", IDENTITY_PROBE], task_root=task,
             workspace=workspace, env=env, claude_binary=binary, timeout=30,
         ) as invocation:
@@ -112,7 +116,8 @@ def _measure_identity(binary: str, env: Mapping[str, str]) -> Any:
                 raise PreparationError("identity_probe_invalid_json") from None
 
 
-def prepare(*, claude_binary: str = "claude", base_env: Mapping[str, str] | None = None) -> dict[str, Any]:
+def prepare(*, claude_binary: str = "claude", base_env: Mapping[str, str] | None = None,
+            separated_runtime: bool = False) -> dict[str, Any]:
     report: dict[str, Any] = {
         "contract": CONTRACT, "status": "BLOCKED", "blockers": [],
         "may_start_authentication": False, "may_start_model_pilot": False,
@@ -123,7 +128,12 @@ def prepare(*, claude_binary: str = "claude", base_env: Mapping[str, str] | None
         "network_namespace_unshared": False,
         "requested_tool_policy": effective_tool_policy(True),
         "report_is_admission": False,
+        "runtime_contract": "classic-unshare-view",
     }
+    if separated_runtime:
+        from tools.b2_separated_runtime import RUNTIME_CONTRACT
+        report["runtime_contract"] = RUNTIME_CONTRACT
+        report["scope"] = "credential-free separated view identity; no Claude execution or pilot admission"
     supplied = base_env if base_env is not None else {}
     present = sorted(name for name in CREDENTIAL_NAMES if os.environ.get(name) or supplied.get(name))
     if present:
@@ -142,12 +152,16 @@ def prepare(*, claude_binary: str = "claude", base_env: Mapping[str, str] | None
             "cli_binary": hash_file(Path(binary)),
             "note": "diagnostic source/binary binding only; not an authenticated launch context",
         }
+        if separated_runtime:
+            report["binding"]["separated_runtime_code"] = hash_file(ROOT / "tools/b2_separated_runtime.py")
         with tempfile.TemporaryDirectory(prefix="b2-bootstrap-env-") as tmp:
             # No ambient proxy, provider, endpoint, transport file or arbitrary user control
             # reaches the child. Use the adapter's central controls without a second policy.
             env, _ = _child_env(MINIMAL_ENV, Path(tmp) / "config", B2_CONTROL_ENV)
             report["child_environment_names"] = sorted(env)
-            observation, blockers = assess_identity(_measure_identity(binary, env))
+            measured = (_measure_identity(binary, env, separated_runtime=True) if separated_runtime
+                        else _measure_identity(binary, env))
+            observation, blockers = assess_identity(measured)
         report["identity_observation"] = observation
         report["blockers"] = blockers
         report["status"] = "BLOCKED" if blockers else "PREPARED_ONLY"
@@ -162,11 +176,12 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__, allow_abbrev=False)
     parser.add_argument("--prepare-only", action="store_true", required=True)
     parser.add_argument("--claude-binary", default="claude")
+    parser.add_argument("--separated-runtime", action="store_true")
     parser.add_argument("--report", type=Path)
     args, unsupported = parser.parse_known_args(argv)
     if unsupported:
         parser.error("unsupported arguments; credential and execution arguments are not accepted")
-    report = prepare(claude_binary=args.claude_binary)
+    report = prepare(claude_binary=args.claude_binary, separated_runtime=args.separated_runtime)
     encoded = json.dumps(report, indent=2) + "\n"
     if args.report:
         args.report.parent.mkdir(parents=True, exist_ok=True)

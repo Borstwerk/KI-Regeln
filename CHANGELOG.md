@@ -8,6 +8,14 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Explizite credentialfreie B2-Privilegtrennung (15.10.2026)
+
+- Einen Opt-in-Runtime-Pfad mit privilegiertem View-Aufbau und tatsächlich unprivilegiertem Payload ergänzt: feste UID/GID 1000, keine Zusatzgruppen/Capabilities, `NoNewPrivs=1`.
+- Verschachtelte feste `check`-Aufrufe verwenden eigene unprivilegierte User-/PID-/Netzwerkgrenzen ohne schwächeren Fallback. Ein leerer privater `/tmp`-Mountpunkt bindet kein Host-Verzeichnis ein.
+- Private Workspace-Kopien werden descriptorbasiert erstellt; Link-/Spezialdateien und beobachtete Austauschrennen werden verweigert. Ownership und Inhalt des Originals bleiben erhalten.
+- Portable Negativkontrollen, reale Rot-/Grün-, Schreib-, Canary-, Netzwerk- und Startup-Kontrollen ergänzt; Grenzen und verbleibender Secret-Transport in `RUNTIME-SEPARATION.md` dokumentiert.
+- Classic-Default, Pilot-Admission, Auth-Gate und Trust-Pins bleiben unverändert. Der neue Vorbereitungsschalter autorisiert keine Credentials oder Modellaufrufe.
+
 ### Öffentliche Einstiege: Englisch/Deutsch und agentengerechte Pflege (15.10.2026)
 
 - Englische Root-README als kurze internationale Projektvisitenkarte; vorhandenen deutschen Schnellstart gekürzt, englischen Quickstart hinzugefügt.

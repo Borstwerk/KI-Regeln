@@ -51,9 +51,9 @@ TEMPLATE = '''#!/usr/bin/env python3
 import sys
 
 sys.path.insert(0, {tools!r})
-from b2_check_launcher import launch  # noqa: E402
+from b2_check_launcher import {entry}  # noqa: E402
 
-raise SystemExit(launch({workspace!r}, sys.argv[1:]))
+raise SystemExit({entry}({workspace!r}, sys.argv[1:]))
 '''
 
 
@@ -82,6 +82,25 @@ def launch(workspace: str, argv: list[str]) -> int:
     return result.returncode
 
 
+def launch_separated(workspace: str, argv: list[str]) -> int:
+    """Fixed unprivileged nested check; never falls back to the privileged provider."""
+    if argv or workspace != "/workspace":
+        print("separated check accepts only the fixed workspace and no arguments", file=sys.stderr)
+        return EXIT_MISUSE
+    try:
+        try:
+            from .b2_boundary import run_unprivileged_check
+        except ImportError:
+            from b2_boundary import run_unprivileged_check
+        result = run_unprivileged_check()
+    except BoundaryError:
+        print("CHECK_BOUNDARY_ERROR: unprivileged boundary unavailable", file=sys.stderr)
+        return EXIT_BOUNDARY
+    sys.stdout.write(result.stdout)
+    sys.stderr.write(result.stderr)
+    return result.returncode
+
+
 def stage_trusted_runtime(destination: Path, source: Path | None = None) -> Path:
     """Copy exactly the modules the launcher imports, and nothing that sits beside them."""
     source = source or Path(__file__).resolve().parent
@@ -95,7 +114,7 @@ def stage_trusted_runtime(destination: Path, source: Path | None = None) -> Path
 
 
 def materialize(task_root: Path, workspace: Path, tools_dir: Path | None = None,
-                staging: Path | None = None) -> Path:
+                staging: Path | None = None, *, separated: bool = False) -> Path:
     """Write `bin/check` into the runner package, outside the writable workspace.
 
     `workspace` and `tools_dir` are embedded verbatim, so the caller decides whether the
@@ -109,7 +128,8 @@ def materialize(task_root: Path, workspace: Path, tools_dir: Path | None = None,
     bin_dir = task_root / BIN_DIR
     bin_dir.mkdir(parents=True, exist_ok=True)
     launcher = bin_dir / LAUNCHER_NAME
-    launcher.write_text(TEMPLATE.format(tools=tools, workspace=str(workspace)), encoding="utf-8")
+    launcher.write_text(TEMPLATE.format(tools=tools, workspace=str(workspace),
+                                       entry="launch_separated" if separated else "launch"), encoding="utf-8")
     launcher.chmod(stat.S_IRUSR | stat.S_IXUSR | stat.S_IRGRP | stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH)
     return launcher
 
