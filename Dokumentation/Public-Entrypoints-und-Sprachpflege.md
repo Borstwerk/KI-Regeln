@@ -46,6 +46,10 @@ Eine menschliche Übersetzung darf **niemals** als Ersatz für `AGENTS.md`, Kata
 | Lizenz, Provenance, Media-Reuse verändert | maßgebliche Lizenz-/Readiness-Dateien; öffentliche Kurzbeschreibung |
 | Neuer Skill, Eval oder Workflow | kanonische Registry / betroffene Fachreferenz; Quickstarts nur bei tatsächlich verändertem Nutzerweg |
 
+## Kaltlese-Regressionsprüfung
+
+Bei wesentlichen Änderungen am öffentlichen Einstieg den begrenzten [Onboarding-Kaltlesetest](../Evals/Onboarding/README.md) als Review-Protokoll verwenden. Automatische Link- und Strukturtests sind wichtig, ersetzen aber weder einen unvoreingenommenen Menschen noch einen tatsächlich isolierten frischen Modelllauf. Statische Dokumentenprüfung und Live-Erprobung müssen separat ausgewiesen werden.
+
 ## Pflegeprinzip
 
 > **Eine technische Wahrheit; zwei menschliche Sprachen; möglichst wenig doppelt gepflegter Text.**
