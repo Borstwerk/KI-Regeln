@@ -52,7 +52,7 @@ See the [skill maturity and evaluation catalog (German)](Dokumentation/Skill-Kat
 
 ## Contributing, licensing and reuse
 
-We welcome careful reviews, bug reports and contributions. Read [CONTRIBUTING.md](CONTRIBUTING.md), the [security policy](SECURITY.md) and the [documentation index](Dokumentation/README.md). The canonical agent instructions remain in [AGENTS.md](AGENTS.md); translations of the human introduction never override them.
+We welcome careful reviews, bug reports and contributions. For a first contribution, describe a concrete issue or open a focused pull request with evidence of the checks you actually ran. The detailed process is in [CONTRIBUTING.md (German)](CONTRIBUTING.md); also see the [security policy](SECURITY.md) and [documentation index (German)](Dokumentation/README.md). The canonical agent instructions remain in [AGENTS.md](AGENTS.md); translations of the human introduction never override them.
 
 The root [MIT license](LICENSE) covers KI-Regeln-owned material unless a file states otherwise; **it does not relicense third-party material**. Six explicitly listed generated media assets are **excluded from MIT** and documented separately under **CC BY-SA 4.0** to the extent licensable rights exist. Before reusing any media or adapted material, consult [ASSET-LICENSES.md](ASSET-LICENSES.md), [REUSE.toml](REUSE.toml) and [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md). A root license is not itself a publication authorization; current public-release gates are recorded in [open-source-readiness.yml](Dokumentation/open-source-readiness.yml).
 

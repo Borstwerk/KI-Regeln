@@ -8,6 +8,12 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Onboarding-Kaltlese und Zugriffs-Fallbacks (15.10.2026)
+
+- Statischen Kaltlese-Audit für deutsche/englische Erstnutzer, englische Contributors und den kanonischen Agenten-Bootstrap dokumentiert; **keine** unabhängigen Human-/LLM-Testläufe behauptet.
+- DE/EN-Quickstarts um explizite Zugriffsprüfung und Fallback für unerreichbare Repository-Dateien ergänzt, englischen Contributor-Erstschritt konkretisiert.
+- Kleines wiederverwendbares Aufgaben-/Bewertungsprotokoll aufgenommen, bestehende strukturelle Dokumentationstests bleiben maßgeblich.
+
 ### Credentialfreie Vorbereitung eines B2-Environment-Transports (15.10.2026)
 
 - Der getrennte Diagnosepfad übergibt dynamische Umgebungswerte über einen begrenzten, versiegelten Linux-memfd statt über die Setup-Kommandozeile. Der Deskriptor wird vor dem Payload-Exec geschlossen; Classic-Default und Writable-Adapter bleiben unverändert.

@@ -22,6 +22,14 @@ Das ist **ein Beispiel, kein Pflichtprompt**.
 - Teile die Aufgabenstellung, vorhandene Projektregeln und passende Quellen. Private Daten und Zugangsdaten nur über dafür geeignete, autorisierte Wege verwenden.
 - KI-Regeln ist **keine automatisch installierte ChatGPT- oder Codex-Funktion**. Ob ein Skill gelesen, ein Tool verwendet oder ein Test ausgeführt werden kann, hängt vom konkreten Zugriff und der Laufzeit ab.
 
+### Wenn die KI das Repository nicht öffnen kann
+
+1. Lass dir **die KI-Regeln-Dateien nennen, die die KI tatsächlich geöffnet hat**. Ein eingefügter GitHub-Link oder eine überzeugende Zusammenfassung beweist noch keinen Dateizugriff.
+2. Fehlt der Zugriff, stelle die benötigten Dateien über einen erlaubten Upload, lokalen Checkout oder passenden Repository-Connector bereit. Für agentengesteuerte Arbeit beginne mit [`AGENTS.md`](AGENTS.md); bei nichttrivialen Aufgaben muss der Agent zusätzlich auf die dort genannten relevanten Routing-Dateien zugreifen können. **Nicht** pauschal das ganze Repository hochladen.
+3. Sind notwendige Dateien oder Werkzeuge weiter unerreichbar, bleibt dieser Arbeitsschritt **NOT RUN / UNVERIFIED**. Keine Regelanwendung oder Testausführung behaupten, die nicht stattgefunden hat.
+
+**Einfacher Kontrollsatz:** *„Welche KI-Regeln-Dateien hast du für meinen Auftrag tatsächlich geöffnet, und worauf hattest du keinen Zugriff?“*
+
 ## 3. Was die KI mit KI-Regeln machen soll
 
 ```text

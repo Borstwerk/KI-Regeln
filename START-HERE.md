@@ -22,6 +22,14 @@ An initial request can be as simple as:
 - Share your task, project instructions and relevant sources. Use appropriately authorized channels for private data and credentials.
 - KI-Regeln is **not an automatically installed ChatGPT or Codex feature**. Whether a skill can be read, a tool used or a test run depends on the actual environment and permissions.
 
+### If the AI cannot access the repository
+
+1. Ask it to **name which KI-Regeln files it actually opened**. A pasted GitHub URL or a confident summary is not evidence of file access.
+2. If access is unavailable, share the necessary files through an authorized upload, local checkout or supported repository connector. Start with [`AGENTS.md`](AGENTS.md) for agent-led work; for nontrivial tasks the agent must also access the relevant router files that `AGENTS.md` names. Share only task-relevant material, **not** the entire repository by default.
+3. If the required files or tools still cannot be accessed, stop that part of the workflow and mark it **NOT RUN / UNVERIFIED**. Do not claim the repository's rules or tests were applied.
+
+**Quick check:** *“Which KI-Regeln files did you open for this task, and what could you not access or execute?”*
+
 ## 3. What the assistant should do
 
 ```text
