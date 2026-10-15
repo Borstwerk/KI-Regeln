@@ -31,23 +31,188 @@ from typing import Any, Mapping
 try:
     from .b2_model_confinement import (
         BIN_MOUNT, CONFIG_MOUNT, MODEL_RUNTIME_BINDS, RUNTIME_MOUNT, VIEW_MCP_CONFIG,
-        ConfinementError, _node_runtime, model_view, mount_contract, view_environment,
+        ConfinementError, _node_runtime, model_view, mount_contract, transport_path_plan,
+        view_environment,
     )
     from .b2_boundary import SCRATCH_MOUNT, WORKSPACE_MOUNT, BoundaryError
     from .behavioral_harness_claude import (
-        AdapterError, WritableLaunchContext, _argv, prepare_writable_launch,
+        AUTH_SUBSCRIPTION_OAUTH, SUBPROCESS_SCRUB_ENV, SUBSCRIPTION_OAUTH_ENV, AdapterError,
+        WritableLaunchContext, _argv, credential_channels, effective_auth_mode,
+        prepare_writable_launch,
     )
 except ImportError:  # direct script sibling import
     from b2_model_confinement import (
         BIN_MOUNT, CONFIG_MOUNT, MODEL_RUNTIME_BINDS, RUNTIME_MOUNT, VIEW_MCP_CONFIG,
-        ConfinementError, _node_runtime, model_view, mount_contract, view_environment,
+        ConfinementError, _node_runtime, model_view, mount_contract, transport_path_plan,
+        view_environment,
     )
     from b2_boundary import SCRATCH_MOUNT, WORKSPACE_MOUNT, BoundaryError
     from behavioral_harness_claude import (
-        AdapterError, WritableLaunchContext, _argv, prepare_writable_launch,
+        AUTH_SUBSCRIPTION_OAUTH, SUBPROCESS_SCRUB_ENV, SUBSCRIPTION_OAUTH_ENV, AdapterError,
+        WritableLaunchContext, _argv, credential_channels, effective_auth_mode,
+        prepare_writable_launch,
     )
 
 PREFLIGHT_CONTRACT = "verification-governance-b2-launch-preflight/v1"
+DENY_PROC_RULE = "Read(//proc/**)"
+# Tri-state, matching the harness convention elsewhere: an observation nobody has made is not
+# a negative result. It blocks exactly like `false`, and says something different.
+UNKNOWN_OBSERVATION = "unknown"
+# Managed settings reach the confined process: `/etc` is bind-mounted read-only into the view,
+# `--restricted` loads managed settings, and `--safe-mode` closes user customization without
+# lifting managed policy. These are the Linux paths the runtime reads.
+MANAGED_SETTINGS_PATHS = ("/etc/claude-code/managed-settings.json",
+                          "/etc/claude-code/managed-settings.d",
+                          "/etc/claude-code/managed-mcp.json")
+# Settings keys through which managed policy can supply or redirect a credential. Names taken
+# from the installed runtime's own strings, not from memory.
+MANAGED_CREDENTIAL_KEYS = ("apiKeyHelper", "awsAuthRefresh", "awsCredentialExport",
+                           "forceLoginMethod")
+# Environment names a managed `env` block could set to hand the runtime a credential.
+MANAGED_CREDENTIAL_ENV_KEYS = ("ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN",
+                               "CLAUDE_CODE_USE_BEDROCK", "CLAUDE_CODE_USE_VERTEX",
+                               SUBSCRIPTION_OAUTH_ENV, "CLAUDE_CODE_OAUTH_TOKEN_FILE",
+                               "CLAUDE_CODE_OAUTH_TOKEN_FILE_DESCRIPTOR")
+REMOTE_MANAGED_PREFIX = "Managed settings (remote):"
+REMOTE_MANAGED_NONE = "none configured"
+MANAGED_VERDICT_CLEAR = "no-managed-credential-provider"
+MANAGED_VERDICT_PROVIDER = "managed-credential-provider-present"
+MANAGED_VERDICT_UNKNOWN = "managed-credential-provider-undetermined"
+
+
+def _managed_credential_keys(text: str) -> list[str]:
+    """Which credential-provider keys a managed settings document carries. Names only.
+
+    A document that does not parse yields `None`, which the caller turns into a refusal: an
+    unreadable credential policy is not an absent one.
+    """
+    document = json.loads(text)
+    if not isinstance(document, dict):
+        raise ValueError("managed settings document is not an object")
+    found = [k for k in MANAGED_CREDENTIAL_KEYS if k in document]
+    block = document.get("env")
+    if isinstance(block, dict):
+        found += [f"env.{k}" for k in MANAGED_CREDENTIAL_ENV_KEYS if k in block]
+    return sorted(found)
+
+
+def managed_credential_provider(run, claude_binary: str) -> dict[str, Any]:
+    """Could managed policy supply a credential ahead of the OAuth token? Measured in the view.
+
+    Two sources, both read from inside the confinement rather than from the host: the managed
+    settings files the view actually carries, and what `claude doctor` says about a remote
+    managed settings source. Only "no provider, and the remote source is known to be absent"
+    clears the path; everything else -- a provider key, a document that does not parse, a
+    remote source that could not be checked -- is a refusal. An unknown credential policy is
+    not an absent one.
+
+    No value, no helper output and no document content is returned; key names only.
+    """
+    reads = "\n".join([
+        "set +e",
+        *[f'echo "=== {path}"; if [ -d {shlex.quote(path)} ]; then echo "@DIR"; '
+          f'ls -1 {shlex.quote(path)} 2>/dev/null || echo "@UNREADABLE"; elif [ -e {shlex.quote(path)} ]; then '
+          f'cat {shlex.quote(path)} 2>/dev/null || echo "@UNREADABLE"; else echo "@ABSENT"; fi'
+          for path in MANAGED_SETTINGS_PATHS],
+        'echo "=== end"',
+    ])
+    listing = _run_in_view(run, ["/bin/sh", "-c", reads], timeout=120)
+    sections: dict[str, str] = {}
+    current = None
+    markers = []
+    for line in (listing["stdout_tail"] or "").splitlines():
+        if line.startswith("=== "):
+            current = line[4:].strip()
+            markers.append(current)
+            if current != "end":
+                sections[current] = ""
+            continue
+        if current and current in sections:
+            sections[current] += line + "\n"
+
+    files: dict[str, Any] = {}
+    provider_keys: list[str] = []
+    # _run_in_view deliberately bounds output. A missing/truncated section is unknown,
+    # never evidence that a file is absent. Require the whole successful protocol.
+    listing_complete = (
+        listing["returncode"] == 0 and listing["payload_started"] is True
+        and not listing["timed_out"]
+        and markers == [*MANAGED_SETTINGS_PATHS, "end"]
+        and listing["stdout_tail"].rstrip().endswith("=== end")
+    )
+    unreadable: list[str] = [] if listing_complete else list(MANAGED_SETTINGS_PATHS)
+    for path in MANAGED_SETTINGS_PATHS:
+        body = sections.get(path, "").strip()
+        if not body:
+            files[path] = {"present": "unknown", "readable": False}
+            unreadable.append(path)
+            continue
+        if body == "@ABSENT":
+            files[path] = {"present": False}
+            continue
+        if body.startswith("@DIR"):
+            entries = [e for e in body.splitlines()[1:] if e.strip()]
+            files[path] = {"present": True, "kind": "directory", "entry_count": len(entries)}
+            if entries:
+                # A drop-in directory with content is a policy this check cannot read in one
+                # pass. Refuse rather than assume its contents are harmless.
+                unreadable.append(path)
+            continue
+        if body == "@UNREADABLE":
+            files[path] = {"present": True, "readable": False}
+            unreadable.append(path)
+            continue
+        try:
+            keys = _managed_credential_keys(body)
+        except (ValueError, TypeError):
+            files[path] = {"present": True, "readable": True, "parsed": False}
+            unreadable.append(path)
+            continue
+        files[path] = {"present": True, "readable": True, "parsed": True,
+                       "credential_provider_keys": keys}
+        provider_keys += keys
+
+    doctor = _run_in_view(run, [claude_binary, "doctor"], timeout=180)
+    remote_line = ""
+    for raw in ((doctor["stdout_tail"] or "") + "\n" + (doctor["stderr_tail"] or "")).splitlines():
+        if raw.strip().startswith(REMOTE_MANAGED_PREFIX):
+            remote_line = raw.strip()
+            break
+    remainder = remote_line[len(REMOTE_MANAGED_PREFIX):].strip().lower()
+    doctor_complete = (doctor["returncode"] == 0 and doctor["payload_started"] is True
+                       and not doctor["timed_out"])
+    if doctor_complete and remote_line and remainder.startswith(REMOTE_MANAGED_NONE):
+        remote = "absent"
+    elif remote_line:
+        # "not fetched -- no usable credentials for the settings fetch" lands here, which is
+        # the honest answer: without a credential the runtime cannot tell us, so neither can we.
+        remote = "undetermined"
+    else:
+        remote = "undetermined"
+
+    if provider_keys:
+        verdict = MANAGED_VERDICT_PROVIDER
+    elif unreadable or remote != "absent":
+        verdict = MANAGED_VERDICT_UNKNOWN
+    else:
+        verdict = MANAGED_VERDICT_CLEAR
+    return {
+        "verdict": verdict,
+        "files": files,
+        "credential_provider_keys": sorted(set(provider_keys)),
+        "undetermined_sources": sorted(set(unreadable)),
+        "remote_managed_settings": remote,
+        "remote_status_observed": bool(remote_line),
+        "measured_in": "the confined view, where /etc is bound read-only and managed policy applies",
+        # What was executed to get here, so a reader can see it reaches no model. The file
+        # listing's stdout is deliberately not kept: it is managed policy content.
+        "commands": [
+            {k: v for k, v in listing.items() if k not in {"stdout_tail", "stderr_tail"}},
+            {k: v for k, v in doctor.items() if k not in {"stdout_tail", "stderr_tail"}},
+        ],
+        "note": ("--safe-mode closes user customization but does not lift managed settings "
+                 "policy, and --restricted loads it, so this is read where the launch reads it"),
+    }
 ROOT = Path(__file__).resolve().parents[1]
 # The model id does not influence any of the three questions -- no request is made -- but a
 # placeholder is still recorded, so nobody reads the report as covering a particular model.
@@ -57,6 +222,41 @@ PATH_VALUE_FLAGS = (
     "--mcp-config", "--settings", "--add-dir", "--plugin-dir", "--agents",
     "--append-system-prompt-file", "--system-prompt-file", "--ide",
 )
+
+
+# Literal permission-rule forms the installed runtime carries in its own material. Finding
+# them is evidence about the *syntax* -- that `//` addresses the filesystem while a single
+# leading slash is workspace-rooted -- and nothing more. Whether a deny rule actually stops a
+# Read is a vendor contract: no model-free command on this runtime evaluates permission rules,
+# and demonstrating the block needs a running model process, which this phase does not start.
+RULE_SYNTAX_LITERALS = ("(//proc/**)", "Edit(//etc/*)", "Read(~/**)")
+
+
+def rule_syntax_evidence(claude_binary: str = "claude") -> dict[str, Any]:
+    """Which absolute-path rule forms appear in the installed runtime. Measured, not recalled."""
+    import shutil as _shutil
+    import subprocess
+
+    resolved = _shutil.which(claude_binary) or claude_binary
+    real = str(Path(resolved).resolve())
+    found, error = {}, None
+    for literal in RULE_SYNTAX_LITERALS:
+        try:
+            done = subprocess.run(["grep", "-a", "-m1", "-F", "-q", literal, real],
+                                  capture_output=True, timeout=120, check=False)
+            found[literal] = done.returncode == 0
+        except (OSError, subprocess.SubprocessError) as exc:  # noqa: PERF203
+            error = f"{type(exc).__name__}: {exc}"
+            found[literal] = None
+    return {
+        "binary": real,
+        "literals_present": found,
+        "error": error,
+        "supports": ("the `//`-prefixed filesystem-absolute rule form used by "
+                     f"{DENY_PROC_RULE!r}"),
+        "does_not_support": ("that the rule blocks a Read; that is a vendor contract until a "
+                             "model process demonstrates it"),
+    }
 
 
 def _view_prefixes(claude_binary: str = "claude") -> tuple[str, ...]:
@@ -141,6 +341,41 @@ def _context_for(context: Any, claude_binary: str, base_env: Mapping[str, str] |
                                       config_dir=Path(tmp) / "claude-config")
 
 
+def invalid_credential_canary() -> str:
+    """A synthetic value for the negative control. Built fresh, never stored anywhere.
+
+    Deliberately shaped like a subscription OAuth token. The installed runtime turns out not
+    to care -- measured, any non-blank value is accepted and only whitespace is not -- but a
+    later runtime that did validate could reject a malformed value on *shape*, and a control
+    rejected for the wrong reason would read as "this runtime validates" and let mere presence
+    turn the criterion green. A shape-plausible canary can only be rejected for its value.
+    """
+    import uuid
+    return f"sk-ant-oat01-B2-INVALID-CREDENTIAL-CONTROL-{uuid.uuid4().hex}{uuid.uuid4().hex}"
+
+
+def _auth_probe(run, claude_binary: str, *, timeout: int = 180) -> dict[str, Any]:
+    """`claude auth status` inside a view. No prompt, no -p, no request of any kind."""
+    result = _run_in_view(run, [claude_binary, "auth", "status"], timeout=timeout)
+    try:
+        parsed = json.loads(result["stdout_tail"])
+    except (ValueError, TypeError):
+        parsed = None
+    if not isinstance(parsed, dict):
+        parsed = {}
+    # Interpret only the documented status fields. Raw diagnostics or extra JSON fields
+    # can echo credentials; they are not evidence that may be persisted in a run package.
+    parsed = {k: v for k, v in parsed.items()
+              if k in {"loggedIn", "authMethod", "apiProvider", "configDirectory"}}
+    return {
+        "result": {k: v for k, v in result.items() if k not in {"stdout_tail", "stderr_tail"}},
+        "parsed": parsed,
+        "logged_in": parsed.get("loggedIn") is True,
+        "accepted": (result["returncode"] == 0 and result["payload_started"] is True
+                     and not result["timed_out"] and parsed.get("loggedIn") is True),
+    }
+
+
 def _run_in_view(run, argv: list[str], *, timeout: int | None = None) -> dict[str, Any]:
     out = run(argv, view_timeout=timeout)
     return {"argv": argv, "returncode": out["returncode"], "payload_started": out["payload_started"],
@@ -185,11 +420,17 @@ def _preflight(context: Any, model: str) -> dict[str, Any]:
             "missing": missing, "detail": present,
         }
 
-        # 2a. The runtime is executable in the view at all.
+        # 2a. The runtime is executable in the view at all -- with the credential-scrub
+        # control in force, which is not free: this build refuses to start with the control
+        # set unless bubblewrap is available to it, so this is also where a missing bwrap in
+        # the view surfaces, as a startup failure rather than as a silent downgrade.
         version = _run_in_view(run, [claude_binary, "--version"], timeout=180)
+        stderr = (version["stderr_tail"] or "")
         checks["runtime_executable_in_view"] = {
             "ok": version["returncode"] == 0,
             "version": (version["stdout_tail"] or "").strip().splitlines()[:1],
+            "subprocess_credential_scrub_requested": env.get(SUBPROCESS_SCRUB_ENV) == "1",
+            "bubblewrap_missing": "bubblewrap is required" in stderr,
             "detail": version,
         }
 
@@ -207,23 +448,149 @@ def _preflight(context: Any, model: str) -> dict[str, Any]:
             "detail": {"accepted": accepted, "rejected": rejected},
         }
 
-        # 3. The authentication path, in exactly this view and this environment.
-        auth = _run_in_view(run, [claude_binary, "auth", "status"], timeout=180)
-        parsed: Any = None
-        try:
-            parsed = json.loads(auth["stdout_tail"])
-        except (ValueError, TypeError):
-            parsed = None
-        logged_in = bool(isinstance(parsed, dict) and parsed.get("loggedIn") is True)
-        checks["authenticated_in_view"] = {
-            "ok": auth["returncode"] == 0 and logged_in,
-            "logged_in": logged_in,
-            # Method and provider only. No token, no value, nothing that could be replayed.
-            "auth_method": (parsed or {}).get("authMethod") if isinstance(parsed, dict) else None,
-            "api_provider": (parsed or {}).get("apiProvider") if isinstance(parsed, dict) else None,
-            "config_directory": (parsed or {}).get("configDirectory") if isinstance(parsed, dict) else None,
-            "detail": auth,
+        # 2c. Path-valued transport variables. A value that names nothing inside the view is
+        # not a boundary leak, but it is a real transport mismatch: the runtime logs a load
+        # failure and carries on with a trust store the launch did not intend. Each one is
+        # planned, then the plan's result is tested for real inside the view.
+        view_env = view_environment(env, claude_binary)
+        transport = transport_path_plan(env)
+        expected = {}
+        for name, entry in transport.items():
+            if entry["action"] == "keep":
+                expected[name] = env[name].strip()
+            elif entry["action"] == "stage":
+                expected[name] = entry["view_path"]
+        script = "\n".join([
+            "set +e", "rc=0",
+            *[f'if [ -e {shlex.quote(path)} ]; then echo "PRESENT {name}"; '
+              f'else echo "MISSING {name}"; rc=1; fi' for name, path in expected.items()],
+            'exit "$rc"',
+        ])
+        present_transport = _run_in_view(run, ["/bin/sh", "-c", script], timeout=120)
+        unreachable = [l.split(" ", 1)[1] for l in present_transport["stdout_tail"].splitlines()
+                       if l.startswith("MISSING ")]
+        rejected = sorted(n for n, e in transport.items() if e["action"] == "reject")
+        # A dropped or rejected variable must be gone from the view environment, not merely
+        # planned away.
+        still_present = sorted(n for n, e in transport.items()
+                               if e["action"] in ("drop", "reject") and n in view_env)
+        checks["transport_paths_resolve_in_view"] = {
+            "ok": not unreachable and not rejected and not still_present,
+            "unreachable_in_view": unreachable,
+            "rejected": rejected,
+            "removed_but_still_in_view_environment": still_present,
+            "detail": present_transport,
         }
+
+        # 2d. Which credential path this launch would actually take. The environment half is
+        # settled before any view exists; the managed-policy half can only be read where the
+        # launch reads it, so it is read here.
+        managed = managed_credential_provider(run, claude_binary)
+
+        # 3. The authentication path, in exactly this view and this environment.
+        actual = _auth_probe(run, claude_binary)
+
+    # 4. The negative control, in a second view built from the same contract: same binary,
+    # same provider, same mounts, same filtered environment and the same controls, with only
+    # the credential replaced by a synthetic invalid one. Whether `auth status` reports
+    # anything about *validity* is a property of the runtime, so it is measured on the runtime
+    # rather than assumed -- and re-measured on every evaluation, so a build that starts
+    # validating is recognised instead of being locked out by a constant.
+    control_env = dict(env)
+    control_env[SUBSCRIPTION_OAUTH_ENV] = invalid_credential_canary()
+    # The control has to be answered by the canary and by nothing else. If the environment
+    # offers another credential channel, an acceptance could be that channel's doing, and the
+    # control would silently measure the wrong thing.
+    control_mode = effective_auth_mode(control_env)
+    # And a managed credential provider could answer for the canary just as easily as a second
+    # environment channel could, so the same verdict gates the control.
+    control_answerable = (control_mode == AUTH_SUBSCRIPTION_OAUTH
+                          and managed["verdict"] == MANAGED_VERDICT_CLEAR)
+    with model_view(claude_binary=claude_binary, env=control_env) as control_run:
+        control = _auth_probe(control_run, claude_binary)
+    # What the control actually answers: does `auth status` on this runtime tell the supplied
+    # credential apart from a synthetic invalid one? That is discrimination, and it is a
+    # property of the local CLI -- a refusal could come from syntax, length, character set,
+    # internal token structure, a checksum or any other local parser rule, and nothing proves
+    # the canary is parser-equivalent to a real `claude setup-token` credential.
+    discriminates = (control_answerable and actual["accepted"] and not control["accepted"])
+    # What the control does NOT answer: whether the real credential is valid at the service.
+    # Only an operation that actually authenticates server-side can show that, and this phase
+    # performs none. Never derived from `auth status`, in either direction.
+    server_validity: Any = UNKNOWN_OBSERVATION
+    if not actual["accepted"]:
+        state = "no-credential-accepted"
+    elif control["accepted"]:
+        state = "credential-accepted-but-runtime-accepts-an-invalid-one"
+    else:
+        state = "credential-accepted-and-invalid-control-refused"
+    parsed = actual["parsed"]
+    checks["authenticated_in_view"] = {
+        # Green needs both: the intended credential path recognised locally, and a server-side
+        # authenticated operation that used it. The second is out of scope for this phase, so
+        # this sub-check is red by construction here -- and for a reason that names the gap
+        # rather than the host's missing token.
+        "ok": actual["accepted"] and server_validity is True,
+        "state": state,
+        "credential_accepted_by_cli": actual["accepted"],
+        "logged_in": actual["logged_in"],
+        "invalid_control_accepted_by_cli": control["accepted"],
+        "auth_status_discriminates_invalid_control": discriminates,
+        "server_credential_validity_observed": server_validity,
+        "discrimination_rule": ("auth_status_discriminates_invalid_control = "
+                                "credential_accepted_by_cli AND NOT "
+                                "invalid_control_accepted_by_cli"),
+        "server_validity_rule": ("server_credential_validity_observed is set only by an "
+                                 "operation that authenticates against the service. It is "
+                                 "never derived from `auth status`: a local acceptance or "
+                                 "refusal can rest on syntax, length, character set, token "
+                                 "structure or a checksum, and the canary is not demonstrably "
+                                 "parser-equivalent to a real setup-token credential."),
+        # Names and classifications only. No token, no canary, no value, no hash of a value.
+        "auth_method": parsed.get("authMethod"),
+        "api_provider": parsed.get("apiProvider"),
+        "config_directory": parsed.get("configDirectory"),
+        "subscription_token_supplied": SUBSCRIPTION_OAUTH_ENV in env,
+        "effective_auth_mode": effective_auth_mode(env),
+        "credential_channels_active": sorted(n for n, on in credential_channels(env).items() if on),
+        "detail": actual["result"],
+    }
+    env_mode = effective_auth_mode(env)
+    checks["oauth_path_is_the_effective_credential_path"] = {
+        # Only meaningful once a token is supplied, and stated that way rather than passing
+        # silently: without one the environment path is managed auth, which is not the path
+        # this pilot is for.
+        "ok": (env_mode == AUTH_SUBSCRIPTION_OAUTH
+               and managed["verdict"] == MANAGED_VERDICT_CLEAR),
+        "environment_auth_mode": env_mode,
+        "managed_policy_verdict": managed["verdict"],
+        "why": ("`apiKeyHelper` and the other managed credential keys are ahead of "
+                f"{SUBSCRIPTION_OAUTH_ENV} in the runtime's credential order, and managed "
+                "settings survive --safe-mode, so a B2 subscription-OAuth pilot may only be "
+                "prepared when no managed credential provider can be in effect"),
+        "detail": managed,
+    }
+    invalid_credential_control = {
+        "executed": True,
+        "model_involved": False,
+        "credential_accepted_by_cli": control["accepted"],
+        "logged_in": control["logged_in"],
+        "returncode": control["result"]["returncode"],
+        "answerable_by_the_canary_alone": control_answerable,
+        "control_effective_auth_mode": control_mode,
+        "auth_method": control["parsed"].get("authMethod"),
+        "variable": SUBSCRIPTION_OAUTH_ENV,
+        "canary_persisted": False,
+        "what_it_decides": ("whether `auth status` on this runtime discriminates the supplied "
+                            "credential from a synthetic invalid one at all"),
+        "what_it_does_not_decide": ("whether a real credential is valid at the service: a "
+                                    "local refusal could be about syntax or structure, so "
+                                    "server validity needs its own observation"),
+        "same_as_the_measured_launch": ["claude_binary", "confinement provider", "mount contract",
+                                        "filtered child environment", "controls including "
+                                        + SUBPROCESS_SCRUB_ENV],
+        "detail": {k: v for k, v in control["result"].items() if k != "stdout_tail"},
+    }
 
     ok = audit["ok"] and all(c["ok"] for c in checks.values())
     return {
@@ -243,13 +610,42 @@ def _preflight(context: Any, model: str) -> dict[str, Any]:
             "removed_other_count": context.env_policy.get("removed_other_count"),
         },
         "view_environment_names": sorted(view_environment(env, claude_binary)),
+        "transport_path_environment": transport,
+        "managed_credential_policy": managed,
+        "invalid_credential_control": invalid_credential_control,
+        "permission_rule_syntax": rule_syntax_evidence(claude_binary),
+        "process_environment_read_rule": {
+            "rule": DENY_PROC_RULE,
+            "in_requested_deny_rules": DENY_PROC_RULE in list(controls["requested_deny_rules"]),
+            "why": ("the credential-scrub control protects Bash subprocesses, hooks and stdio "
+                    "MCP processes; the built-in Read tool is none of those and runs inside "
+                    "the parent, which is the process holding the token"),
+            "pseudo_filesystems_in_the_view": ["/proc", "/dev"],
+            "not_restricted": {"/dev": "carries no process environments; no threat path, so no rule"},
+            "measured_here": "that the rule is in the deny list the launch requests",
+            "not_measured_here": ("that the runtime refuses the Read; demonstrating that needs "
+                                  "a model process"),
+        },
         "normalized_inner_argv": list(controls["normalized_argv"]),
         "argv_audit": audit,
         "checks": checks,
         "ok": ok,
-        "note": ("Model-free. No request was made; `--help` and `auth status` never reach a "
-                 "model. A false `authenticated_in_view` is a pilot blocker, not a reason to "
-                 "widen the view."),
+        "note": ("Model-free. No request was made; `--version`, `--help` and `auth status` "
+                 "never reach a model. A false `authenticated_in_view` is a pilot blocker, not "
+                 "a reason to widen the view."),
+        "subprocess_credential_scrub": {
+            "variable": SUBPROCESS_SCRUB_ENV,
+            "requested": env.get(SUBPROCESS_SCRUB_ENV) == "1",
+            "vendor_contract": ("the Claude Code parent keeps its provider credentials while "
+                                "Bash tool subprocesses, hooks and stdio MCP processes do not "
+                                "inherit them; on Linux those subprocesses additionally run in "
+                                "their own PID namespace and cannot read the parent's "
+                                "environment through /proc"),
+            "measured_here": ("that the control is in the child environment, and that the "
+                              "runtime starts inside the view with it in force"),
+            "not_measured_here": ("that a subprocess actually fails to see the credential; "
+                                  "that requires a running model process and is out of scope"),
+        },
     }
 
 
@@ -269,11 +665,43 @@ def launchable(context: Any = None) -> tuple[bool, str]:
         failures.append("--strict-mcp-config is not requested")
     for name, check in report["checks"].items():
         if not check["ok"]:
-            failures.append(f"{name} failed")
+            if name == "authenticated_in_view":
+                # The server-validity gap is what stands even on a host that supplies a
+                # perfectly good token, so it is named first and the local state follows it.
+                if check["server_credential_validity_observed"] is not True:
+                    failures.append(
+                        "authenticated_in_view: server credential validity not yet observed "
+                        f"(local state: {check['state']}; auth_status_discriminates_invalid_"
+                        f"control={check['auth_status_discriminates_invalid_control']})")
+                else:
+                    failures.append(f"authenticated_in_view: {check['state']}")
+            elif name == "oauth_path_is_the_effective_credential_path":
+                failures.append(
+                    "oauth_path_is_the_effective_credential_path: environment mode "
+                    f"{check['environment_auth_mode']}, managed policy "
+                    f"{check['managed_policy_verdict']}")
+            elif name == "transport_paths_resolve_in_view":
+                failures.append(
+                    "transport_paths_resolve_in_view: "
+                    + "; ".join(filter(None, [
+                        f"unreachable in the view: {check['unreachable_in_view']}"
+                        if check["unreachable_in_view"] else "",
+                        f"needs a decision: {check['rejected']}" if check["rejected"] else "",
+                        f"removed but still passed on: "
+                        f"{check['removed_but_still_in_view_environment']}"
+                        if check["removed_but_still_in_view_environment"] else ""])))
+            elif name == "runtime_executable_in_view" and check.get("bubblewrap_missing"):
+                failures.append("runtime_executable_in_view: the runtime refuses to start with "
+                                "the mandatory credential scrub because bubblewrap is not in "
+                                "the view")
+            else:
+                failures.append(f"{name} failed")
     if failures:
         return False, "; ".join(failures)
     return True, ("the writable argv is view-local, the runtime starts and parses the writable "
-                  "flags inside the view, and the view's auth path reports logged in")
+                  "flags inside the view, the intended credential path is the one this launch "
+                  "would select, and the credential was used in a server-side authenticated "
+                  "operation rather than merely recognised locally")
 
 
 EVIDENCE_CONTRACT = "verification-governance-b2-launch-preflight-evidence/v1"

@@ -2,3 +2,8 @@
 # whitespace check would flag every one of them. Stripping it would corrupt the diff,
 # which the pair harness reconstructs and compares byte-for-byte at prepare time.
 Evals/Behavioral-Harness/experiments/**/fixtures/**/*.diff -whitespace
+
+# These artifacts are pinned by byte digest. A Windows checkout must preserve the
+# reviewed LF bytes rather than turning an intact fixture into an integrity failure.
+Evals/Verification-Surface/** text eol=lf
+tools/b2_*.py text eol=lf

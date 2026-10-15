@@ -1,5 +1,9 @@
 # Phase 4.2C / B2 — what was built
 
+Current integration and reproducible validation scopes:
+[`INTEGRATION.md`](INTEGRATION.md). The probe records below remain historical,
+code-bound evidence; the Windows integration does not claim a new Linux/model run.
+
 Companion to [`DESIGN.md`](DESIGN.md), which stays the reviewed design. This records the
 implementation: the provider that carries the boundary, what the probes actually observed,
 and which components are now load-bearing.
@@ -316,6 +320,194 @@ launch. The adapter now passes its probe in, and the preparation refuses a probe
 describes a *different* binary — reuse is an optimisation, never a way to vouch for something
 else. `require_capabilities()` holds the two capability preconditions in one place.
 
+## An authentication path for the confined runtime
+
+The confined view carries no host home, so the runtime cannot read a credential from a file —
+which is why criterion 22 has been red. `CLAUDE_CODE_OAUTH_TOKEN`, produced by
+`claude setup-token` and documented for non-interactive use, is the one channel that can reach
+the process without reopening the filesystem boundary: it is a value in the environment the
+launch already builds, not a path back into the host.
+
+**The reclassification is narrow.** The variable sat in `HOST_ONLY_AUTH_ENV`, which was
+conservative rather than correct. `CLAUDE_CODE_OAUTH_TOKEN_FILE_DESCRIPTOR` and
+`CLAUDE_CODE_OAUTH_TOKEN_FILE` stay there: a descriptor inherited from the parent and a path
+to a file the view does not carry are both bridges to the host. The token itself moves into
+`SECRET_ENV`, which is the allowlist *and* the secret handling — presence and name are
+recorded, the value never is, and no hash of it either, because a hash of a credential is
+still a durable identifier for it. `CLAUDE_CODE_*` as a class stays closed; exactly one
+variable moved, and a test pins the resulting allowlist exactly.
+
+**The credential scrub is mandatory, and it is not free.** A writable run that can carry a
+credential sets `CLAUDE_CODE_SUBPROCESS_ENV_SCRUB=1`; `prepare_writable_launch` refuses the
+launch if it is missing or disabled, with no best-effort form. It applies to writable B2 only
+— the read-only path 4.2A and 4.2B use is untouched — and it goes through `_child_env` as an
+extra control rather than being set beside it, so the environment contract still has one
+implementation and the policy report still names it.
+
+Measured on this host: **this build refuses to start at all with the control set unless
+bubblewrap is available to it** (`bubblewrap is required for subprocess env scrubbing and
+isolation`, exit 1, even for `claude auth status`). That makes bwrap a real precondition of
+the confined launch. It is installed here and reaches the view through the read-only `/usr`
+bind; on a host without it, the preflight's runtime check fails and names it, rather than the
+run silently proceeding without the scrub.
+
+Three levels, kept apart:
+
+| | What |
+| --- | --- |
+| Vendor contract | The parent keeps its provider credentials; Bash tool subprocesses, hooks and stdio MCP processes do not inherit them; on Linux those subprocesses run in their own PID namespace and cannot read the parent's environment through `/proc`. |
+| Measured here | The control is in the child environment, and the runtime starts inside the view with it in force. |
+| Not measured here | That a subprocess actually fails to see the credential. That needs a running model process. |
+
+**The Read tool is not a subprocess.** The scrub protects what the agent *spawns*; the
+built-in Read tool runs inside the parent, which is the process holding the token. So
+`Read(//proc/**)` joins the writable deny rules. The double slash is the runtime's own
+filesystem-absolute form — a single leading slash is workspace-rooted, as its settings
+examples show (`Edit(//etc/*)`), and both that literal and `(//proc/**)` are present in the
+installed binary, which `rule_syntax_evidence()` checks rather than recalls. `/proc` is the
+only pseudo-filesystem in the view that carries process environments; `/dev` is present and
+carries none, so it gets no rule. What is asserted is that the rule is in the deny list the
+launch requests. That the runtime refuses the Read is vendor contract: nothing model-free on
+this runtime evaluates a permission rule, and demonstrating the block needs a model process.
+
+### `auth status` reports presence, not validity
+
+The intended acceptance rule for criterion 22 was: run `claude auth status` inside the view,
+and let the auth sub-check go green when it reports `loggedIn: true`. Measured inside that
+very view, a deliberately invalid `CLAUDE_CODE_OAUTH_TOKEN` produces exactly that:
+
+```
+{ "loggedIn": true, "authMethod": "oauth_token", "apiProvider": "firstParty",
+  "configDirectory": "/scratch/claude-config" }      exit 0
+```
+
+The command does not contact the service. So `loggedIn: true` is credential *presence and
+shape*, and accepting it as the criterion's evidence would mean a junk token turns the pilot
+gate green — the green-by-construction shape this whole phase exists to catch, arriving
+through the acceptance rule itself.
+
+The first version drew the right conclusion the wrong way: it set
+`credential_validity_observed = False` as a constant, with the finding recorded in a comment.
+That made the gate correct today and wrong later — a runtime that started validating would
+have stayed locked out by a hard-coded answer — and it left the finding resting on a test that
+stubbed `auth status` and so proved only how our own logic reacts, not what the runtime does.
+
+The semantics are now **measured, on every evaluation**, by a second auth probe: same binary,
+same confinement provider, same mount contract, same filtered environment, same controls
+including the credential scrub, with only the credential replaced by a synthetic invalid one.
+`claude auth status` and nothing else — no prompt, no `-p`, no request.
+
+```
+auth_status_discriminates_invalid_control = credential_accepted_by_cli
+                                            AND NOT invalid_control_accepted_by_cli
+```
+
+That is the question the control can answer, and it is strictly a question about the **local
+CLI**. A first version made it answer more than that — it treated a refused canary as evidence
+that the *real* credential is valid — and that inference does not hold. A refusal can come
+from syntax, length, character set, internal token structure, a checksum, a signature format
+or any other local parser rule, and nothing demonstrates the canary is parser-equivalent to a
+real `claude setup-token` credential. So the two questions are now two fields:
+
+| Field | Set by |
+| --- | --- |
+| `auth_status_discriminates_invalid_control` | the control, on every evaluation |
+| `server_credential_validity_observed` | only an operation that authenticates at the service — never derived from `auth status`, in either direction |
+
+The auth sub-check is green only when the intended credential path is recognised locally
+**and** a server-side authenticated operation has used it. This phase performs none, so the
+field is `unknown` — a tri-state that blocks like `false` and says something different.
+
+On Claude Code 2.1.270 the control reproduces the false positive
+(`invalid_control_accepted_by_cli: true`, exit 0), so the runtime does not even discriminate
+locally. On a build that refused the canary, `auth_status_discriminates_invalid_control` would
+turn true by itself — no build is written into the rule — and the criterion would still wait
+for the server-side observation.
+
+The control also has to be answerable by the canary *alone*. If the environment offers another
+credential channel, an acceptance could be that channel's doing, so the control records
+`answerable_by_the_canary_alone` and a control that is not stops counting as discrimination.
+
+The canary is built fresh per run, carries `B2-INVALID-CREDENTIAL-CONTROL` in plain sight so
+no transcript reader mistakes it for a credential, and is shaped like a subscription token on
+purpose: a malformed value could be refused for its *shape*, and a control refused for the
+wrong reason would read as "this runtime validates" and hand the criterion back to mere
+presence. (Measured separately: this runtime accepts any non-blank value and refuses only
+whitespace, so the shape is not load-bearing today — it is insurance against the build that
+changes.) Neither the canary nor any credential, and no hash of either, reaches an artifact.
+
+Consequence for this phase: **criterion 22 cannot be turned green by supplying a real token
+alone**, and the reason that remains is not this host's missing token but the missing
+server-side observation — the one that would still be missing on a host with a perfect
+credential.
+
+### Which credential path this launch would take
+
+A B2 pilot is meant to exercise the subscription OAuth path specifically, and "the variable is
+set" does not establish that. Claude Code takes credentials from several channels, and
+`auth status` does not always reveal which one won: measured on 2.1.270 inside the view,
+`CLAUDE_CODE_OAUTH_TOKEN` and `ANTHROPIC_AUTH_TOKEN` are *both* reported as
+`authMethod: oauth_token`, while an active Bedrock or Vertex selection overrides both.
+
+So there is no priority table in this repository to fall out of sync with the vendor. There is
+a refusal: when the OAuth token is set alongside any other credential channel — an active
+cloud-provider selection, `ANTHROPIC_AUTH_TOKEN`, or `ANTHROPIC_API_KEY` — the launch fails
+closed with `oauth-path-shadowed-by-higher-priority-credential`. Channel *names* only; no
+value of any channel is read, logged or persisted. `ANTHROPIC_AUTH_TOKEN` also gained its own
+mode, `anthropic-auth-token`: it was allowlisted as a secret but never classified, so a run
+carrying it reported as managed auth, which says something else entirely. Its rank was wrong
+too — it sat behind `ANTHROPIC_API_KEY`; measured with both set, the runtime reports the
+auth-token path, and the order now matches.
+
+**The environment is only half of it.** Managed settings can supply a credential through
+`apiKeyHelper`, `awsAuthRefresh`, `awsCredentialExport`, `forceLoginMethod` or an `env` block,
+and they sit ahead of the OAuth token. They also reach the confined process: `/etc` is
+bind-mounted read-only into the view, `--restricted` loads managed settings, and `--safe-mode`
+closes user customization without lifting managed policy. So "the variable is set" is not yet
+"OAuth is the path this launch takes".
+
+The check reads both sources from inside the view, where the launch reads them: the managed
+settings files the view carries, and what `claude doctor` says about a remote managed source.
+Only one combination clears the path — no credential-provider key anywhere, and a remote
+source *known* to be absent. A provider key, a document that does not parse, a drop-in
+directory with content, or a remote source that could not be checked all refuse. An unknown
+credential policy is not an absent one.
+
+Measured here: no managed settings files exist in the view, and `doctor` reports
+`Managed settings (remote): not fetched — no usable credentials for the settings fetch`. That
+is honestly undetermined rather than absent, so the check is red — and it resolves by itself
+once a credential is supplied, because the runtime can then fetch and answer. Key names travel
+into the evidence; no document content, no helper command and no value does.
+
+The negative control is gated by the same verdict: a managed `apiKeyHelper` could answer for
+the canary exactly as a second environment channel could.
+
+### Path-valued transport variables
+
+The recorded evidence showed `NODE_EXTRA_CA_CERTS=/root/.ccr/ca-bundle.crt` handed to a view
+that deliberately has no `/root`, and the runtime answering `load failed: No such file or
+directory`. Not a boundary leak — the opposite: the boundary held and the launch was
+misconfigured across it. But a run would then have proceeded with a trust store it did not
+intend.
+
+Each path-valued transport variable now gets a plan, and the plan's result is tested inside
+the view:
+
+| Action | When | What happens |
+| --- | --- | --- |
+| `keep` | already under a view-visible prefix | passed through unchanged |
+| `stage` | a readable host **file** | copied read-only into `/b2-config/transport/<NAME>`, variable rewritten |
+| `drop` | names nothing on the host | removed — it was already inert |
+| `reject` | a **directory** outside the view | preflight fails closed; copying a trust-store directory silently is a trust decision, not a mechanical fix |
+
+No host mount, no `/root`, no host home. The staged file is one more read-only entry in the
+configuration view that already exists, and `stage_config` still refuses anything that is not
+on its allowlist. Evidence records `configured`, `accessible_in_view` and `action` — never the
+host path.
+
+On this host the three configured CA variables are staged, and the `load failed` line is gone
+from both the startup and the auth probe.
+
 
 ## Held-out oracle
 
@@ -340,6 +532,11 @@ input shape and nothing else. P4 confirms the separation by trying.
 | confinement evidence | telling a confined run from an unconfined one, afterwards | let the artifacts describe a run that did not happen | `ConfinementInTheRunEvidenceTests`: a real outer boundary, a synthetic payload, no model |
 | launch preflight | the confined runtime's launchability | let a pilot be admitted that cannot start, or start against a host path | criterion 22, `ViewLocalLaunchArgvTests`, `ConfinedLaunchPreflightTests` |
 | shared launch preparation | that the gate and the launch mean the same run | let the criterion pass on an environment or a binary the process never gets | `SharedLaunchPreparationTests`: host-only auth channel, allowed credential, binary identity |
+| subscription OAuth path | the one credential a confined run may carry | leak the token value, or let its mere presence count as authentication | `SubscriptionOAuthAuthPathTests`: canary token in no artifact, mandatory scrub, fail-closed launch, presence never green |
+| invalid-credential control | that "logged in" means something locally | let a runtime that accepts any value satisfy the criterion | a real `auth status` run in the real view with a synthetic invalid token, plus the four-combination rule test |
+| credential-path refusal | that the pilot exercises the OAuth path | let a second credential channel answer for it | `A22`–`A25`: shadowed mode, fail-closed launch, channel names without values |
+| managed credential policy | that no managed provider outranks the token | let an `apiKeyHelper` decide the path unnoticed | `ManagedCredentialPolicyTests`: provider keys, unreadable policy, empty drop-in, both halves of the check |
+| transport path plan | that the launch's transport is the intended one | pass a host path the confined process cannot open | `TransportPathEnvironmentTests`: keep / stage / drop / reject, plus the in-view resolution check |
 | boundary lifecycle marker | telling a failed sandbox from a failing payload | let an instrumentation failure read as a red product | setup broken on purpose before `exec`: `BoundaryError`, payload never ran, oracle `not-run` |
 | check launcher (`bin/check`) | the one allowed Bash invocation | let `check` reach something other than the boundary | `CheckLauncherTests`: real PATH, real cwd, arguments refused, impostor not shadowing |
 | B2 model runner admission | the pilot gate | let a writable run start without passing the criteria | five refusal tests with a runner that fails if invoked |
@@ -372,11 +569,17 @@ and does nothing except hand a path the adapter chose to the boundary.
 - Two entry criteria are genuinely not applicable: there is no judge to fix a schema for, and
   nothing to unblind at one condition. They are labelled `applicable: false` with their
   antecedent measured, rather than dressed up as measurements that passed.
-- **Criterion 22 is currently unmet, and the pilot is therefore blocked.** The Claude Code
-  runtime authenticates from a credential under a host home directory. The outer view does
-  not carry that directory, and mounting it back would undo the boundary this phase exists to
-  establish, so `claude auth status` inside the view reports `loggedIn: false`. Everything
-  else — argv locality, runtime startup, flag parsing, the confinement itself — is measured
-  and met. A pilot needs an authentication path that works inside the view, named as the
-  pilot's auth path and confirmed model-free before it is used. There is no such path on this
-  host today, and the readiness artifact says `NOT_READY_FOR_MODEL_PILOT`.
+- **Criterion 22 is currently unmet, and the pilot is therefore blocked.** There is now a
+  credential channel that works without reopening the boundary — an explicitly supplied
+  `CLAUDE_CODE_OAUTH_TOKEN` — and it is wired through the environment contract, the auth
+  classification and the preflight. Two things still stand between that and a green criterion.
+  First, no such token is supplied on this host, so `claude auth status` inside the view
+  reports `loggedIn: false`. Second, and more importantly, supplying one would not be enough:
+  that command does not validate the credential, so its `loggedIn: true` cannot carry the
+  criterion. Everything else — argv locality, runtime startup with the mandatory credential
+  scrub, flag parsing, the confinement itself — is measured and met.
+- **The credential scrub's isolation property is a vendor contract here, not a measurement.**
+  What is measured is that the control is set and that the runtime starts with it. Whether a
+  subprocess is actually denied the credential needs a running model process.
+- **The `Read(//proc/**)` deny rule is configuration, not a demonstrated block.** The syntax
+  is verified against the installed runtime; the refusal is not, for the same reason.
