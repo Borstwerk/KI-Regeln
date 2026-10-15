@@ -101,8 +101,12 @@ def _measure_identity(binary: str, env: Mapping[str, str], *, separated_runtime:
             workspace=workspace, env=env, claude_binary=binary, timeout=30,
         ) as invocation:
             try:
-                result = subprocess.run(invocation.argv, env=invocation.env, cwd="/",
-                                        capture_output=True, text=True, timeout=30, check=False)
+                if separated_runtime:
+                    from tools.b2_separated_runtime import run_separated_invocation
+                    result = run_separated_invocation(invocation, timeout=30)
+                else:
+                    result = subprocess.run(invocation.argv, env=invocation.env, cwd="/",
+                                            capture_output=True, text=True, timeout=30, check=False)
             except subprocess.TimeoutExpired:
                 raise PreparationError("identity_probe_timed_out") from None
             if not invocation.payload_started():
@@ -154,6 +158,7 @@ def prepare(*, claude_binary: str = "claude", base_env: Mapping[str, str] | None
         }
         if separated_runtime:
             report["binding"]["separated_runtime_code"] = hash_file(ROOT / "tools/b2_separated_runtime.py")
+            report["binding"]["environment_transport_code"] = hash_file(ROOT / "tools/b2_environment_transport.py")
         with tempfile.TemporaryDirectory(prefix="b2-bootstrap-env-") as tmp:
             # No ambient proxy, provider, endpoint, transport file or arbitrary user control
             # reaches the child. Use the adapter's central controls without a second policy.

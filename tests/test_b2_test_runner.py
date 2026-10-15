@@ -20,6 +20,7 @@ class RunnerClaimTests(unittest.TestCase):
             "tests.test_verification_surface", "tests.test_verification_surface_b2_design",
             "tests.test_b2_preflight_controls", "tests.test_b2_test_runner", "tests.test_b2_auth_bootstrap",
             "tests.test_b2_separated_runtime",
+            "tests.test_b2_environment_transport",
             "tests.test_verification_surface_b2_implementation", "tests.test_b2_bootstrap_runtime",
             "tests.test_b2_separation_runtime",
         ])

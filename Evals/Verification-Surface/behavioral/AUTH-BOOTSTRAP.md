@@ -5,6 +5,8 @@ Scope: a model-free diagnostic prefix and a reviewed measurement contract. It do
 implement authentication, launch a model, change admission or consume credentials.
 The subsequent explicit credential-free runtime option and its measured limits are in
 [RUNTIME-SEPARATION.md](RUNTIME-SEPARATION.md); the classic diagnostic below is retained.
+Its subsequent credential-free descriptor handoff is described in
+[ENVIRONMENT-TRANSPORT.md](ENVIRONMENT-TRANSPORT.md); live authentication remains unadmitted.
 
 ## Runtime decision before credentials
 

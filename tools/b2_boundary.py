@@ -274,6 +274,7 @@ class ConfinedInvocation:
     env: dict[str, str]
     marker: Path
     provider: str = PROVIDER
+    pass_fds: tuple[int, ...] = ()
 
     def payload_started(self) -> bool:
         try:

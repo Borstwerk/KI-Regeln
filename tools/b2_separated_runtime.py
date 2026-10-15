@@ -8,6 +8,8 @@ from __future__ import annotations
 import errno
 import os
 import stat
+import signal
+import subprocess
 import sys
 import tempfile
 from contextlib import contextmanager
@@ -17,6 +19,8 @@ from pathlib import Path
 from .behavioral_harness_claude import SECRET_ENV, HOST_ONLY_AUTH_ENV, CREDENTIAL_CHANNEL_NAMES
 from .b2_boundary import BoundaryError, confined_invocation
 from .b2_model_confinement import model_view_spec
+from .b2_boundary import VIEW_ENV
+from .b2_environment_transport import environment_exec_argv, sealed_environment
 
 PAYLOAD_IDENTITY = (1000, 1000)
 RUNTIME_CONTRACT = "nonroot-unshare-view+userns-check/v1"
@@ -154,6 +158,49 @@ def separated_model_invocation(argv, *, task_root: Path, workspace: Path, env,
         snapshot = snapshot_workspace(workspace, Path(tmp) / "workspace")
         spec = model_view_spec(argv, task_root=task_root, workspace=snapshot, env=env,
                                claude_binary=claude_binary, timeout=timeout, separated_check=True)
-        spec = replace(spec, payload_identity=PAYLOAD_IDENTITY, private_tmp_mountpoint=True)
-        with confined_invocation(spec) as invocation:
-            yield invocation
+        with sealed_environment(spec.env) as fd:
+            spec = replace(spec, payload_identity=PAYLOAD_IDENTITY, private_tmp_mountpoint=True,
+                           env=VIEW_ENV, argv=environment_exec_argv(fd, spec.argv))
+            with confined_invocation(spec) as invocation:
+                yield replace(invocation, pass_fds=(fd,))
+
+
+def run_separated_invocation(invocation, *, timeout: float = 30):
+    """Run the fixed preparation controls in their own session; bound cancellation.
+
+    This is not a general supervisor for arbitrary model processes that deliberately
+    detach their namespace init from the session. Such runs remain unadmitted.
+    """
+    if not invocation.pass_fds:
+        raise SeparationError("separated_runtime_descriptor_required")
+    try:
+        process = subprocess.Popen(invocation.argv, env=invocation.env, cwd="/",
+                                   stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
+                                   start_new_session=True, pass_fds=invocation.pass_fds)
+    except OSError:
+        raise SeparationError("separated_runtime_start_failed") from None
+    try:
+        stdout, stderr = process.communicate(timeout=timeout)
+    except BaseException as failure:
+        # Only our successfully created session group is signalled. In particular,
+        # setpriv's identity change cannot disable a host evaluator's killpg.
+        try:
+            os.killpg(process.pid, signal.SIGKILL)
+        except ProcessLookupError:
+            pass
+        except OSError:
+            raise SeparationError("separated_runtime_cleanup_failed") from None
+        try:
+            process.communicate(timeout=5)
+        except subprocess.TimeoutExpired:
+            process.stdout.close()
+            process.stderr.close()
+            raise SeparationError("separated_runtime_cleanup_unverified") from None
+        except (OSError, ValueError, UnicodeError):
+            raise SeparationError("separated_runtime_cleanup_unverified") from None
+        if isinstance(failure, (KeyboardInterrupt, SystemExit)):
+            raise
+        code = ("separated_runtime_timed_out" if isinstance(failure, subprocess.TimeoutExpired)
+                else "separated_runtime_execution_failed")
+        raise SeparationError(code) from None
+    return subprocess.CompletedProcess(invocation.argv, process.returncode, stdout, stderr)
