@@ -8,6 +8,15 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### B2-Auth-Integration und reproduzierbare Prüfstände (15.10.2026)
+
+- Die vier offenen Auth-Pfad-Commits mit dem aktuellen `main` integriert; die frühere B2-Implementierung war bereits über PR #43 enthalten.
+- LF-Vertrag für byteweise gepinnte Verification-Surface-Artefakte und B2-Komponenten ergänzt; keine Trust-Pins oder Case-Semantik geändert.
+- Überholte Read-only-Testannahmen auf die bereits geltende Discovery-Policy `Read,Glob,Grep` gebracht; unvollständige Toolbeobachtung bleibt rot. Den neuen OAuth-Token auf den expliziten writable-B2-Modus begrenzt.
+- Managed-Policy-Prüfung gegen fehlende/abgeschnittene Ausgabe, leere Dateien und fehlgeschlagene Prozesse geschlossen; rohe Policy-/Auth-Diagnosen werden nicht als Evidence persistiert. Synthetische Negativkontrollen reproduzieren die Defekte vor dem Fix.
+- Portable B1/B2-Checks in CI ergänzt; ein eigener vollständiger Integrationsmodus verlangt reale Linux-/CLI-Voraussetzungen und verweigert PASS bei Skips. Alle bisherigen Integrationschecks bleiben erhalten.
+- Auth-/Schutz-Bootstrap und verbleibende Gates in `Evals/Verification-Surface/behavioral/INTEGRATION.md` festgehalten. Linux-Probes, Serverauth und Modell-Tool-Enforcement bleiben hier `NOT RUN`; Pilot weiterhin nicht freigegeben.
+
 ### HypeRadar-Outcome-Pilot und Agentenrechte (14.10.2026)
 
 - Synthetischen Offline-Outcome-Pilot unter `Evals/Outcome-Pilot/` ergänzt:

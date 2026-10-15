@@ -70,7 +70,9 @@ MANAGED_CREDENTIAL_KEYS = ("apiKeyHelper", "awsAuthRefresh", "awsCredentialExpor
                            "forceLoginMethod")
 # Environment names a managed `env` block could set to hand the runtime a credential.
 MANAGED_CREDENTIAL_ENV_KEYS = ("ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN",
-                               "CLAUDE_CODE_USE_BEDROCK", "CLAUDE_CODE_USE_VERTEX")
+                               "CLAUDE_CODE_USE_BEDROCK", "CLAUDE_CODE_USE_VERTEX",
+                               SUBSCRIPTION_OAUTH_ENV, "CLAUDE_CODE_OAUTH_TOKEN_FILE",
+                               "CLAUDE_CODE_OAUTH_TOKEN_FILE_DESCRIPTOR")
 REMOTE_MANAGED_PREFIX = "Managed settings (remote):"
 REMOTE_MANAGED_NONE = "none configured"
 MANAGED_VERDICT_CLEAR = "no-managed-credential-provider"
@@ -109,7 +111,7 @@ def managed_credential_provider(run, claude_binary: str) -> dict[str, Any]:
     reads = "\n".join([
         "set +e",
         *[f'echo "=== {path}"; if [ -d {shlex.quote(path)} ]; then echo "@DIR"; '
-          f'ls -1 {shlex.quote(path)} 2>/dev/null; elif [ -e {shlex.quote(path)} ]; then '
+          f'ls -1 {shlex.quote(path)} 2>/dev/null || echo "@UNREADABLE"; elif [ -e {shlex.quote(path)} ]; then '
           f'cat {shlex.quote(path)} 2>/dev/null || echo "@UNREADABLE"; else echo "@ABSENT"; fi'
           for path in MANAGED_SETTINGS_PATHS],
         'echo "=== end"',
@@ -117,9 +119,11 @@ def managed_credential_provider(run, claude_binary: str) -> dict[str, Any]:
     listing = _run_in_view(run, ["/bin/sh", "-c", reads], timeout=120)
     sections: dict[str, str] = {}
     current = None
+    markers = []
     for line in (listing["stdout_tail"] or "").splitlines():
         if line.startswith("=== "):
             current = line[4:].strip()
+            markers.append(current)
             if current != "end":
                 sections[current] = ""
             continue
@@ -128,10 +132,22 @@ def managed_credential_provider(run, claude_binary: str) -> dict[str, Any]:
 
     files: dict[str, Any] = {}
     provider_keys: list[str] = []
-    unreadable: list[str] = []
+    # _run_in_view deliberately bounds output. A missing/truncated section is unknown,
+    # never evidence that a file is absent. Require the whole successful protocol.
+    listing_complete = (
+        listing["returncode"] == 0 and listing["payload_started"] is True
+        and not listing["timed_out"]
+        and markers == [*MANAGED_SETTINGS_PATHS, "end"]
+        and listing["stdout_tail"].rstrip().endswith("=== end")
+    )
+    unreadable: list[str] = [] if listing_complete else list(MANAGED_SETTINGS_PATHS)
     for path in MANAGED_SETTINGS_PATHS:
         body = sections.get(path, "").strip()
-        if not body or body == "@ABSENT":
+        if not body:
+            files[path] = {"present": "unknown", "readable": False}
+            unreadable.append(path)
+            continue
+        if body == "@ABSENT":
             files[path] = {"present": False}
             continue
         if body.startswith("@DIR"):
@@ -163,7 +179,9 @@ def managed_credential_provider(run, claude_binary: str) -> dict[str, Any]:
             remote_line = raw.strip()
             break
     remainder = remote_line[len(REMOTE_MANAGED_PREFIX):].strip().lower()
-    if remote_line and remainder.startswith(REMOTE_MANAGED_NONE):
+    doctor_complete = (doctor["returncode"] == 0 and doctor["payload_started"] is True
+                       and not doctor["timed_out"])
+    if doctor_complete and remote_line and remainder.startswith(REMOTE_MANAGED_NONE):
         remote = "absent"
     elif remote_line:
         # "not fetched -- no usable credentials for the settings fetch" lands here, which is
@@ -184,13 +202,13 @@ def managed_credential_provider(run, claude_binary: str) -> dict[str, Any]:
         "credential_provider_keys": sorted(set(provider_keys)),
         "undetermined_sources": sorted(set(unreadable)),
         "remote_managed_settings": remote,
-        "remote_status_line": remote_line,
+        "remote_status_observed": bool(remote_line),
         "measured_in": "the confined view, where /etc is bound read-only and managed policy applies",
         # What was executed to get here, so a reader can see it reaches no model. The file
         # listing's stdout is deliberately not kept: it is managed policy content.
         "commands": [
-            {k: v for k, v in listing.items() if k != "stdout_tail"},
-            {k: v for k, v in doctor.items() if k != "stdout_tail"},
+            {k: v for k, v in listing.items() if k not in {"stdout_tail", "stderr_tail"}},
+            {k: v for k, v in doctor.items() if k not in {"stdout_tail", "stderr_tail"}},
         ],
         "note": ("--safe-mode closes user customization but does not lift managed settings "
                  "policy, and --restricted loads it, so this is read where the launch reads it"),
@@ -345,11 +363,16 @@ def _auth_probe(run, claude_binary: str, *, timeout: int = 180) -> dict[str, Any
         parsed = None
     if not isinstance(parsed, dict):
         parsed = {}
+    # Interpret only the documented status fields. Raw diagnostics or extra JSON fields
+    # can echo credentials; they are not evidence that may be persisted in a run package.
+    parsed = {k: v for k, v in parsed.items()
+              if k in {"loggedIn", "authMethod", "apiProvider", "configDirectory"}}
     return {
-        "result": result,
+        "result": {k: v for k, v in result.items() if k not in {"stdout_tail", "stderr_tail"}},
         "parsed": parsed,
         "logged_in": parsed.get("loggedIn") is True,
-        "accepted": result["returncode"] == 0 and parsed.get("loggedIn") is True,
+        "accepted": (result["returncode"] == 0 and result["payload_started"] is True
+                     and not result["timed_out"] and parsed.get("loggedIn") is True),
     }
 
 

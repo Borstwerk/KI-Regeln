@@ -427,19 +427,23 @@ def _agent_env(name: str) -> bool:
 
 
 def _child_env(base: Mapping[str, str], config_dir: Path,
-               extra_controls: Mapping[str, str] | None = None) -> tuple[dict[str, str], dict[str, Any]]:
+               extra_controls: Mapping[str, str] | None = None, *,
+               allow_subscription_oauth: bool = False) -> tuple[dict[str, str], dict[str, Any]]:
     """Build the child environment from an explicit allowlist instead of inheriting os.environ.
 
     `extra_controls` carries controls that apply to one launch mode rather than to every run.
     They go through this function rather than being set beside it, so the environment contract
     still has exactly one implementation and the policy report still names everything applied.
     """
-    inherited = {k: v for k, v in base.items() if k in ENV_ALLOWLIST}
+    # The new credential channel belongs to the confined writable mode. Merely adding
+    # it to SECRET_ENV must not widen the established read-only environment contract.
+    allowed = ENV_ALLOWLIST if allow_subscription_oauth else ENV_ALLOWLIST - {SUBSCRIPTION_OAUTH_ENV}
+    inherited = {k: v for k, v in base.items() if k in allowed}
     env = dict(inherited)
     env.update(CONTROL_ENV)
     env.update(extra_controls or {})
     env["CLAUDE_CONFIG_DIR"] = str(config_dir)
-    dropped = [k for k in base if k not in ENV_ALLOWLIST]
+    dropped = [k for k in base if k not in allowed]
     effective_generation = {k: env[k] for k in GENERATION_ENV if k in env}
     report = {
         "schema_version": 1, "policy": "explicit-allowlist",
@@ -1378,7 +1382,7 @@ def prepare_writable_launch(*, claude_binary: str, base_env: Mapping[str, str] |
     require_capabilities(probe)
     base = base_env if base_env is not None else os.environ
     config_dir.mkdir(parents=True, exist_ok=True)
-    env, env_policy = _child_env(base, config_dir, B2_CONTROL_ENV)
+    env, env_policy = _child_env(base, config_dir, B2_CONTROL_ENV, allow_subscription_oauth=True)
     mode = effective_auth_mode(env)
     if mode == AUTH_OAUTH_SHADOWED:
         # Fail closed. A pilot meant to exercise the subscription OAuth path cannot be run

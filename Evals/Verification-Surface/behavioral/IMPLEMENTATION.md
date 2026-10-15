@@ -1,5 +1,9 @@
 # Phase 4.2C / B2 — what was built
 
+Current integration and reproducible validation scopes:
+[`INTEGRATION.md`](INTEGRATION.md). The probe records below remain historical,
+code-bound evidence; the Windows integration does not claim a new Linux/model run.
+
 Companion to [`DESIGN.md`](DESIGN.md), which stays the reviewed design. This records the
 implementation: the provider that carries the boundary, what the probes actually observed,
 and which components are now load-bearing.

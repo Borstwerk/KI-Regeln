@@ -545,7 +545,7 @@ class AdapterCompatibilityTests(unittest.TestCase):
     """The writable mode is additive. The path 4.2A and 4.2B ran under is untouched."""
 
     def test_A1_the_read_only_tool_policy_is_unchanged(self):
-        self.assertEqual(ALLOWED_TOOLS, ("Read",))
+        self.assertEqual(ALLOWED_TOOLS, ("Read", "Glob", "Grep"))
         for tool in ("Bash", "Edit", "Write", "WebSearch", "WebFetch", "NotebookEdit", "Task"):
             self.assertIn(tool, DENIED_TOOLS)
 
@@ -558,7 +558,7 @@ class AdapterCompatibilityTests(unittest.TestCase):
     def test_A2_the_default_argv_is_still_read_only(self):
         caps = {"verbose": False, "system_prompt": False, "session_id": False}
         argv, controls = _argv("claude", "m", "p", "s", caps, Path("/tmp/empty.json"))
-        self.assertEqual(self._allowed(argv), ["Read"])
+        self.assertEqual(self._allowed(argv), ["Read", "Glob", "Grep"])
         for denied in ("Bash", "Edit", "Write"):
             self.assertIn(denied, argv[argv.index("--disallowedTools"):])
         self.assertFalse(controls["writable_workspace_mode"])
@@ -947,10 +947,10 @@ class WritableMethodEvidenceTests(unittest.TestCase):
         return _method("R-1", stream, actions, outside, controls, "fp-m", "fp-r", True, policy), policy
 
     def test_M2_a_read_only_run_matching_its_policy_reports_a_match(self):
-        method, policy = self._method_for(["Read"], False)
+        method, policy = self._method_for(["Read", "Glob", "Grep"], False)
         self.assertIs(method["observed_tools_match_requested_visible_tools"], True)
         self.assertEqual(method["tool_policy_mode"], "read-only-package")
-        self.assertEqual(policy["visible_tools"], ["Read"])
+        self.assertEqual(policy["visible_tools"], ["Read", "Glob", "Grep"])
 
     def test_M3_a_writable_run_names_the_b2_policy_and_matches_it(self):
         from tools.behavioral_harness_claude import B2_ALLOW_RULES, B2_VISIBLE_TOOLS
@@ -1029,7 +1029,8 @@ class WritableMethodEvidenceTests(unittest.TestCase):
         # against the read-only tuple would not, which is the defect this closes.
         self.assertIs(match(sorted(B2_VISIBLE_TOOLS), True), True)
         self.assertIs(match(["Read"], True), False)
-        self.assertIs(match(["Read"], False), True)
+        self.assertIs(match(["Read", "Glob", "Grep"], False), True)
+        self.assertIs(match(["Read"], False), False)
         self.assertIs(match(sorted(B2_VISIBLE_TOOLS), False), False)
 
 
@@ -1609,8 +1610,8 @@ class ToolNamesVersusPermissionRulesTests(unittest.TestCase):
     def test_T7_the_read_only_argv_is_unchanged(self):
         """4.2A and 4.2B ran under this exact form; it gains no permission mode."""
         argv, controls = _argv("claude", "m", "p", "s", self.CAPS, Path("/tmp/e.json"))
-        self.assertEqual(argv[argv.index("--tools") + 1], "Read")
-        self.assertEqual(argv[argv.index("--allowedTools") + 1:argv.index("--disallowedTools")], ["Read"])
+        self.assertEqual(argv[argv.index("--tools") + 1], "Read,Glob,Grep")
+        self.assertEqual(argv[argv.index("--allowedTools") + 1:argv.index("--disallowedTools")], ["Read", "Glob", "Grep"])
         self.assertNotIn("--permission-mode", argv)
         self.assertIsNone(controls["requested_permission_mode"])
 
