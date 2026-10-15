@@ -1,7 +1,7 @@
 """Fixed instruction pilots through an existing Codex ChatGPT login.
 
 Prepare only by default. --run consumes at most eight CLI sessions; the fixed
---evidence-gap-v2 and --gt01 pilots each consume at most two. Historical inputs stay pinned.
+--evidence-gap-v2, --gt01 and --gt04 pilots each consume at most two. Historical inputs stay pinned.
 This records responses; semantic grading is a separate, visible review.
 """
 import argparse
@@ -36,6 +36,12 @@ GT01_BLOBS = {
     'Evals/Golden-Tasks/GT-01/usage.md': '74c13539dfea2d319c23a4afc6427919685c0ebb',
     'Evals/Golden-Tasks/GT-01/task.yml': '9e0eea41989ed14cae4d68845d62663d5f925fa3',
 }
+GT04_BLOBS = {
+    'Reliability-und-System-Observability/Skills/incident-response/SKILL.md': 'a2cea95640ad2313e424ed5c885ebd010776b87e',
+    'Programmieren/Skills/diagnose/SKILL.md': '1596e6b9157ab5fed7bee1094f20a242616d8cb0',
+    'Evals/Golden-Tasks/GT-04/incident-evidence.md': 'c35d686dde29ca28cc22bfffeabe55b4758fafe9',
+    'Evals/Golden-Tasks/GT-04/task.yml': 'c4b2f6af35fdfc370d789e828b530ff59e0c7594',
+}
 MODEL, EFFORT = 'gpt-6.1-sol', 'high'  # Existing user settings, held constant in both arms.
 
 
@@ -49,6 +55,7 @@ def main():
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument('--evidence-gap-v2', action='store_true')
     mode.add_argument('--gt01', action='store_true')
+    mode.add_argument('--gt04', action='store_true')
     args = parser.parse_args()
     blobs = dict(PUBLIC_BLOBS)
     out = OUT
@@ -60,17 +67,21 @@ def main():
     if args.gt01:
         blobs = GT01_BLOBS
         out = OUT.with_name('codex-gt01-pilot-20261015')
+    if args.gt04:
+        blobs = GT04_BLOBS
+        out = OUT.with_name('codex-gt04-pilot-20261015')
     try:
         sources = {name: subprocess.check_output(['git', 'cat-file', 'blob', blob], cwd=ROOT)
                    for name, blob in blobs.items()}
     except subprocess.CalledProcessError:
         raise SystemExit('Pinned input blob unavailable; review repository history. No automatic fetch or fallback.') from None
     out.mkdir(exist_ok=True)
-    if args.gt01:
-        task = yaml.safe_load(sources['Evals/Golden-Tasks/GT-01/task.yml'].decode('utf-8'))
+    if args.gt01 or args.gt04:
+        task_path = 'Evals/Golden-Tasks/GT-04/task.yml' if args.gt04 else 'Evals/Golden-Tasks/GT-01/task.yml'
+        task = yaml.safe_load(sources[task_path].decode('utf-8'))
         fixtures = '\n\n'.join(f'<fixture name="{Path(name).name}">\n'
                                 + sources[name].decode('utf-8') + '\n</fixture>' for name in task['fixtures'])
-        selected = [{'id': 'GT-01', 'input': task['assignment'] + '\n\n' + fixtures,
+        selected = [{'id': task['id'], 'input': task['assignment'] + '\n\n' + fixtures,
                      'judge_only': task}]
     else:
         cases = yaml.safe_load(sources[CASES_PATH].decode('utf-8'))['cases']
@@ -96,11 +107,17 @@ def main():
                                 'Inline fixtures; no file-read or database-execution evidence claimed',
                                 'No independent/held-out benchmark, Golden-Task routing pass or maturity promotion'],
                         grading='Use the predeclared GT-01 product rubric in Codex-Product-Pilot-2026-10-15.md; non-blind parent-agent review')
+    if args.gt04:
+        protocol.update(scope='GT-04 incident product pilot; one fresh response per arm',
+                        limits=['Forced incident-response plus diagnose instructions; no natural discovery measured',
+                                'Inline fixture; no network, tool, production or incident execution evidence',
+                                'Correct incident status is PARTIAL; product quality is graded separately'],
+                        grading='Apply predeclared GT-04 product criteria in Codex-Product-Protocol-2026-10-15.md; never change rubric after seeing responses')
     protocol_path = out / 'protocol.json'
     if (out / 'responses.json').exists():
         raise SystemExit('Existing responses retained; this fixed batch does not overwrite or retry runs.')
-    if args.gt01 and (out / 'started.json').exists():
-        raise SystemExit('GT-01 batch already started; inspect partial evidence. No automatic retry.')
+    if (args.gt01 or args.gt04) and (out / 'started.json').exists():
+        raise SystemExit('Golden-Task batch already started; inspect partial evidence. No automatic retry.')
     protocol_path.write_text(json.dumps(protocol, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     if not args.run:
         print(f'Prepared {len(selected)} pairs; no model call. Protocol: ' + str(protocol_path))
@@ -118,8 +135,8 @@ def main():
               'required': ['answer'], 'additionalProperties': False}
     schema_path = out / 'response-schema.json'
     schema_path.write_text(json.dumps(schema), encoding='utf-8')
-    bundle = '\n\n'.join(sources[name].decode('utf-8') for name in list(blobs)[:2 if args.gt01 else 3])
-    if args.gt01:
+    bundle = '\n\n'.join(sources[name].decode('utf-8') for name in list(blobs)[:2 if (args.gt01 or args.gt04) else 3])
+    if args.gt01 or args.gt04:
         with (out / 'started.json').open('x', encoding='utf-8') as handle:
             json.dump({'max_cli_sessions': 2, 'script_sha256': digest(Path(__file__))}, handle)
     rows = []
@@ -131,6 +148,10 @@ def main():
                 prompt = ('Erstelle die fertige Dokumentation auf Deutsch als Markdown in deiner Antwort. '
                           'Die unten eingebetteten Fixtures sind die bereitgestellten Quellen. '
                           'Keine Tools, Dateioperationen, weiteren Agenten oder Webrecherche.\n\n')
+            if args.gt04:
+                prompt = ('Schreibe eine strukturierte Incidentanalyse auf Deutsch als Markdown in deiner Antwort. '
+                          'Die eingebettete Fixture ist die gesamte bereitgestellte Evidence. '
+                          'Keine Tools, Dateioperationen, Produktionsaktionen, weiteren Agenten oder Webrecherche.\n\n')
             if arm == 'skill':
                 prompt += '<instructions>\n' + bundle + '\n</instructions>\n\n'
             prompt += 'Auftrag: ' + case['input']

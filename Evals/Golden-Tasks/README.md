@@ -157,6 +157,12 @@ Alle Fixtures sind lokal und selbst erzeugt. Die Suite hängt nicht von aktuelle
 
 `GT-14` erwartet bewusst `blocked`: Ein ungepinnter externer Skill mit mutablem Remote-Nachladen erhält ohne vollständigen prüfbaren Snapshot keine Admission.
 
+## Begrenzte Produkt-Piloten und Review-Grenzen
+
+- GT-01: [Text-Produktvergleich](GT-01/Codex-Product-Pilot-2026-10-15.md) aus zwei echten Modellantworten. Die [armverblindete Zweitbewertung](GT-01/Blind-Review-Handoff.md) ist **vorbereitet, NOT RUN**.
+- GT-04: [festgelegter Incident-Produktvergleich](GT-04/Codex-Product-Protocol-2026-10-15.md) für höchstens zwei separate Abo-Läufe, derzeit **NOT RUN**.
+- Forced-Bundle-Produktläufe ersetzen weder natürliche Skill-Discovery noch einen kompletten Golden-Task-Prozess. Ein korrekt als unaufgelöst markierter Incident hat den epistemischen Incident-Status `partial`, kann aber sämtliche Anforderungen an die Qualität seiner Dokumentation erfüllen.
+
 ## Ausführung
 
 Die Definition einer Golden Task ist **kein Pass-Nachweis**. Behavioral Runs werden separat unter `runs/` dokumentiert und müssen Modell, Commit, Sichtbarkeit der Rubrik sowie Selbst-/Fremdbewertung offenlegen.
