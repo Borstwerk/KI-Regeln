@@ -73,9 +73,10 @@ context and remains blocked on this host. Normal-user evaluator setup remains un
 
 Known credential/provider variables in either the host or supplied environment are
 refused before tool checks or view construction. This does not audit credentials in
-on-disk managed policy. The underlying boundary currently serializes payload environment
-values into the setup command's argv. It is **not a secret transport** and must not be
-used for real credentials. Secret transport, managed-policy admission, authenticated
+on-disk managed policy. The classic boundary serializes payload environment values into
+the setup command's argv. The separated diagnostic's subsequent credential-free
+descriptor preparation is documented in [ENVIRONMENT-TRANSPORT.md](ENVIRONMENT-TRANSPORT.md).
+Neither path is admitted for real credentials. Secret intake, managed-policy admission, authenticated
 context binding and a bounded supported service request remain separate blockers.
 
 The new command runs only a fixed trusted Python identity probe. Separate tests exercise

@@ -26,6 +26,7 @@ BASE_TESTS = [
     "tests.test_b2_test_runner",
     "tests.test_b2_auth_bootstrap",
     "tests.test_b2_separated_runtime",
+    "tests.test_b2_environment_transport",
 ]
 PORTABLE = [
     *BASE_TESTS,

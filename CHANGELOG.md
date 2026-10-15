@@ -8,6 +8,13 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Credentialfreie Vorbereitung eines B2-Environment-Transports (15.10.2026)
+
+- Der getrennte Diagnosepfad übergibt dynamische Umgebungswerte über einen begrenzten, versiegelten Linux-memfd statt über die Setup-Kommandozeile. Der Deskriptor wird vor dem Payload-Exec geschlossen; Classic-Default und Writable-Adapter bleiben unverändert.
+- Eigener Executor für feste Vorbereitungskontrollen mit expliziter FD-Weitergabe, eigener Prozessgruppe und begrenztem Timeout-/Interrupt-Cleanup; keine allgemeine Cancellation-Freigabe für künftige Modellprozesse.
+- Portable Negativkontrollen sowie reale Seal-, Schema-, Canary-, FD- und Timeout-Probes ergänzt. Bekannte echte Credential-Kanäle bleiben früh verweigert; Auth, Modellpilot und Admission werden nicht freigegeben.
+- Vertrag, Nachweisgrenzen und offene Auth-/Lifecycle-Jobs in `ENVIRONMENT-TRANSPORT.md` dokumentiert.
+
 ### Explizite credentialfreie B2-Privilegtrennung (15.10.2026)
 
 - Einen Opt-in-Runtime-Pfad mit privilegiertem View-Aufbau und tatsächlich unprivilegiertem Payload ergänzt: feste UID/GID 1000, keine Zusatzgruppen/Capabilities, `NoNewPrivs=1`.
