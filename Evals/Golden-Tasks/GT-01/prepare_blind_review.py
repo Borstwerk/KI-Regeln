@@ -71,7 +71,7 @@ def prepare(root, reviewer_dir, operator_dir, flip=False):
         "pass = complete; partial = missing but not contradicted; fail = false or forbidden claim;",
         "unverified = no usable response. Any fail => overall fail; otherwise partial if any",
         "criterion is partial; all nine pass => overall pass. Explain any ambiguities.",
-        "Do not infer tool use, file reads, SQL execution or natural skill discovery.",
+        "Do not infer tool use, file reads, SQL execution or automatic method selection.",
         "Do not guess the arm mapping. This package does not itself prove independent review.", "",
     ]
     (reviewer_dir / "REVIEW-INSTRUCTIONS.md").write_text("\n".join(rubric_doc), encoding="utf-8")
