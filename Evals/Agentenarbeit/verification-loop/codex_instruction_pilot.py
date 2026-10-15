@@ -1,6 +1,7 @@
-"""Fixed four-case instruction pilot through an existing Codex ChatGPT login.
+"""Fixed instruction pilots through an existing Codex ChatGPT login.
 
-Prepare only by default. --run explicitly consumes at most eight CLI sessions.
+Prepare only by default. --run consumes at most eight CLI sessions; the fixed
+--evidence-gap-v2 follow-up consumes at most two. Historical inputs stay pinned.
 This records responses; semantic grading is a separate, visible review.
 """
 import argparse
@@ -26,6 +27,8 @@ PUBLIC_BLOBS = {
 }
 CASE_IDS = ('explain-existing-result-near-miss', 'validator-cannot-run',
             'do-not-weaken-check', 'checker-must-demonstrate-failure')
+CASES_PATH = 'Evals/Agentenarbeit/verification-loop/cases.yml'
+EVIDENCE_GAP_V2_BLOB = 'b5b96950b09e8deb8970e7cbfef6602f428289e8'
 MODEL, EFFORT = 'gpt-6.1-sol', 'high'  # Existing user settings, held constant in both arms.
 
 
@@ -36,21 +39,31 @@ def digest(path):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--run', action='store_true')
+    parser.add_argument('--evidence-gap-v2', action='store_true')
     args = parser.parse_args()
-    for name, expected in PUBLIC_BLOBS.items():
-        actual = subprocess.check_output(['git', 'hash-object', name], cwd=ROOT, text=True).strip()
-        if actual != expected:
-            raise SystemExit('Source changed; review public provenance and protocol before rerunning: ' + name)
-    OUT.mkdir(exist_ok=True)
-    cases = yaml.safe_load((ROOT / next(reversed(PUBLIC_BLOBS))).read_text(encoding='utf-8'))['cases']
-    selected = [next(case for case in cases if case['id'] == name) for name in CASE_IDS]
-    protocol = {'scope': 'Four paired text-scenario probes; one fresh response per arm/case',
+    blobs = dict(PUBLIC_BLOBS)
+    out = OUT
+    ids = CASE_IDS
+    if args.evidence_gap_v2:
+        blobs[CASES_PATH] = EVIDENCE_GAP_V2_BLOB
+        out = OUT.with_name('codex-evidence-gap-v2-20261015')
+        ids = ('validator-cannot-run',)
+    try:
+        sources = {name: subprocess.check_output(['git', 'cat-file', 'blob', blob], cwd=ROOT)
+                   for name, blob in blobs.items()}
+    except subprocess.CalledProcessError:
+        raise SystemExit('Pinned input blob unavailable; review repository history. No automatic fetch or fallback.') from None
+    out.mkdir(exist_ok=True)
+    cases = yaml.safe_load(sources[CASES_PATH].decode('utf-8'))['cases']
+    selected = [next(case for case in cases if case['id'] == name) for name in ids]
+    protocol = {'scope': f'{len(selected)} paired text-scenario probes; one fresh response per arm/case',
+                'input_binding': 'Exact pinned Git blobs; current working-tree input files are not substituted',
                 'model_requested': MODEL, 'reasoning_requested': EFFORT,
-                'max_cli_sessions': 8, 'timeout_seconds_per_session': 90,
+                'max_cli_sessions': 2 * len(selected), 'timeout_seconds_per_session': 90,
                 'retry_or_fallback': False, 'repetitions': 1,
                 'public_repository': 'https://github.com/Borstwerk/KI-Regeln',
-                'public_git_blobs': PUBLIC_BLOBS,
-                'source_sha256': {name: digest(ROOT / name) for name in PUBLIC_BLOBS},
+                'public_git_blobs': blobs,
+                'source_sha256': {name: hashlib.sha256(body).hexdigest() for name, body in sources.items()},
                 'script_sha256': digest(Path(__file__)),
                 'source_commit': subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip(),
                 'grading': 'Review every expected/forbidden criterion, not keyword matching. No invented execution evidence.',
@@ -58,12 +71,12 @@ def main():
                            'No natural routing, real code repair or B2 admission measured',
                            'No independent/held-out benchmark or maturity promotion'],
                 'cases': selected}
-    protocol_path = OUT / 'protocol.json'
-    if (OUT / 'responses.json').exists():
+    protocol_path = out / 'protocol.json'
+    if (out / 'responses.json').exists():
         raise SystemExit('Existing responses retained; this fixed batch does not overwrite or retry runs.')
     protocol_path.write_text(json.dumps(protocol, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     if not args.run:
-        print('Prepared four pairs; no model call. Protocol: ' + str(protocol_path))
+        print(f'Prepared {len(selected)} pairs; no model call. Protocol: ' + str(protocol_path))
         return
     cli = shutil.which('codex')
     if not cli:
@@ -76,9 +89,9 @@ def main():
         raise SystemExit('Existing ChatGPT login required; no login/key fallback')
     schema = {'type': 'object', 'properties': {'answer': {'type': 'string'}},
               'required': ['answer'], 'additionalProperties': False}
-    schema_path = OUT / 'response-schema.json'
+    schema_path = out / 'response-schema.json'
     schema_path.write_text(json.dumps(schema), encoding='utf-8')
-    bundle = '\n\n'.join((ROOT / name).read_text(encoding='utf-8') for name in list(PUBLIC_BLOBS)[:3])
+    bundle = '\n\n'.join(sources[name].decode('utf-8') for name in list(blobs)[:3])
     rows = []
     for index, case in enumerate(selected):
         for arm in (('baseline', 'skill') if index % 2 == 0 else ('skill', 'baseline')):
@@ -89,9 +102,9 @@ def main():
             prompt += 'Auftrag: ' + case['input']
             if case['id'] == CASE_IDS[0]:
                 prompt += '\nVorliegendes Log: validator failed: JSON syntax error at line 3. Exit code: 1.'
-            prompt_path = OUT / f"{index + 1}-{arm}-prompt.txt"
+            prompt_path = out / f"{index + 1}-{arm}-prompt.txt"
             prompt_path.write_text(prompt, encoding='utf-8')
-            response_path = OUT / f"{index + 1}-{arm}-response.json"
+            response_path = out / f"{index + 1}-{arm}-response.json"
             row = {'case': case['id'], 'arm': arm, 'prompt_sha256': digest(prompt_path), 'status': 'NOT_RUN'}
             with tempfile.TemporaryDirectory(prefix='ki-regeln-codex-case-') as workspace:
                 argv = [cli, 'exec', '--ignore-user-config', '--ephemeral', '--sandbox', 'read-only',
@@ -122,10 +135,10 @@ def main():
                     except subprocess.TimeoutExpired: process.kill()
                     row.update(status='BLOCKED', reason='90s deadline; batch stopped without retry')
             rows.append(row)
-            (OUT / 'responses.json').write_text(json.dumps(rows, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+            (out / 'responses.json').write_text(json.dumps(rows, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
             print(json.dumps({k: row[k] for k in ('case', 'arm', 'status')}) , flush=True)
             if row['status'] != 'RESPONSE_RECORDED':
-                return
+                raise SystemExit(2)
 
 
 if __name__ == '__main__':

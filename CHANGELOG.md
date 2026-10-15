@@ -8,6 +8,12 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Evidence-Gap-Eval gezielt präzisiert (15.10.2026)
+
+- Im vorhandenen Fall `validator-cannot-run` frische grüne Lint-/Unit-Tests und eine weiterhin nicht ausgeführte verpflichtende Integration ergänzt; erwartete Kriterien und Skillregeln unverändert gelassen.
+- Genau zwei neue Codex-Abo-Antworten separat dokumentiert. Beide trennen Teilchecks vom offenen Gesamtabschluss; kein zusätzlicher Skill-Lift und keine Maturity-/Admission-Änderung abgeleitet.
+- Den ursprünglichen Pilot über feste Git-Blobs reproduzierbar gehalten; einen festen Zwei-Aufruf-Folgemodus und nichtnull Exit bei CLI-Fehler ergänzt. Keine neue Runtime oder API-Integration.
+
 ### Begrenzter Codex-Instruktionspilot und Einfachheits-Leitplanke (15.10.2026)
 
 - Testinfrastruktur auf reproduzierbare Qualitätsnachweise für KI-Regeln begrenzt; vorhandene CLI-Abos bevorzugt, direkte Claude-/ChatGPT-APIs und echte API-Schlüssel für unsere Tests ausgeschlossen.
