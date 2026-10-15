@@ -8,6 +8,12 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Begrenzter Auth-Messplan als Reviewvorlage (15.10.2026)
+
+- Nicht ausführbaren Messplan für höchstens zwei toolfreie CLI-Sitzungen mit Invalid-Kontrolle vor einer bedingten Positivprobe dokumentiert; Modell, Zeit-, Turn- und vorgeschlagene Schätzbudgetgrenzen konkretisiert.
+- Geschätzten CLI-Cap von harter Kosten-/Quota-Freigabe und CLI-Starts von physischen HTTP-Requests getrennt. Managed-Commands, Secret-Intake, Live-Cancellation, Collector und aktuelle Context-Bindung bleiben Eintrittsgates.
+- Maschinenlesbare Reviewvorlage und tatsächlich vorhandene credentialfreie Operator-Befehle ergänzt. Keine Runtime-/Admission-Änderung, kein Token- oder Serviceaufruf und kein Wirksamkeitsclaim.
+
 ### Onboarding-Kaltlese und Zugriffs-Fallbacks (15.10.2026)
 
 - Statischen Kaltlese-Audit für deutsche/englische Erstnutzer, englische Contributors und den kanonischen Agenten-Bootstrap dokumentiert; **keine** unabhängigen Human-/LLM-Testläufe behauptet.

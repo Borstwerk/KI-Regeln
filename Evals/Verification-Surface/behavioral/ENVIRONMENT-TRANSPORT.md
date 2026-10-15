@@ -90,6 +90,8 @@ Actual secret intake, managed-policy admission, service authentication and inval
 rejection, supported request/budget review, authenticated-context binding, general model
 cancellation, real tool subprocess/Read controls and workspace export/adoption remain
 separate jobs. No real credential or service/model request is used for this slice.
+The next proposed auth-only stages, limits and unresolved entry gates are described in
+[AUTH-MEASUREMENT-PLAN.md](AUTH-MEASUREMENT-PLAN.md), without enabling a live controller.
 
 Rollback removes the new separated environment handoff and executor, restores that
 diagnostic's preceding construction and removes its added controls. Classic invocation,
