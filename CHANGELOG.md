@@ -8,6 +8,13 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### B2-Runtime- und Auth-Bootstrap-Vorbereitung (15.10.2026)
+
+- Separaten modellfreien `--prepare-only`-Pfad ergänzt: bekannte Credential-Kanäle stoppen vor jedem Subprozess; die Claude-Datei wird nur gebunden, nicht ausgeführt.
+- Eine feste Python-Probe misst Identität, Capabilities und `NoNewPrivs` im bestehenden Model-View. Root-/Capability-Rechte und unvollständige Beobachtungen bleiben blockiert; auch `PREPARED_ONLY` autorisiert keinen Auth-/Modellaufruf.
+- Portablen Kontrollen und eine echte Namespace-Identitätsprüfung in die vorhandenen Runner aufgenommen. Bestehende Admission, Trust-Pins, historische Evidence und der echte OAuth-Skip bleiben unverändert.
+- Rollenmodell, Grenzen der Diagnose und spätere Auth-/Toolschutz-Messjobs in `Evals/Verification-Surface/behavioral/AUTH-BOOTSTRAP.md` dokumentiert; echte Credentials und Modellaufrufe bleiben `NOT RUN`.
+
 ### B2-Linux-Integration und aktuelle Probe-Evidence (15.10.2026)
 
 - Writable-Testpakete deklarieren ihren Modus ausdrücklich; ein neuer Paket-Negativtest schützt weiterhin vor Read-only-Eskalation.
