@@ -86,6 +86,10 @@ Die interne Werkzeugauswahl soll dem Nutzer helfen, nicht zusätzliche Bedienlas
 - Keine lange Skill-Liste als Selbstzweck ausgeben.
 - Wenn kein Skill erforderlich ist, die Aufgabe direkt und innerhalb der allgemeinen Regeln bearbeiten.
 
+## Öffentliche Einstiege und Sprachpflege
+
+Bei Änderungen an README, deutschen/englischen Quickstarts oder öffentlichen Lizenz-/Fähigkeitsaussagen die Pflegegrenzen in `Dokumentation/Public-Entrypoints-und-Sprachpflege.md` beachten. Englische Startseiten sind **nur menschliche Orientierung**; sie duplizieren oder ersetzen **keine** Agentengates, Router oder Skill-Verträge. Keine Vollübersetzung des Repositories als Nebenwirkung einer kleinen Änderung.
+
 ## Minimaler Kontext
 
 Typischer Startkontext:
