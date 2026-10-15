@@ -8,6 +8,13 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Optionaler Offline-HTML-Verification-Report – PR B (15.10.2026)
+
+- Renderer für lokale `.validation/latest.json`-Berichte und portable `verification-run`-v1-Reports ergänzt. Keine neuen Prüfwerkzeuge, kein Testlauf und keine globale Python-Pflicht in Fremdprojekten.
+- Status und bestehende Evidence-Grenzen beibehalten; keinen globalen PASS aus Einzelprüfungen ableiten. Ausführliche Meldungen und Pfade nur nach bewusstem Opt-in anzeigen.
+- Rein statisches, eigenständiges responsives HTML; synthetische Positiv-/Negativtests mit CI-Anbindung. Browser-Visualprüfung und echte Projekttests bleiben separat.
+
+
 ### B2-Runtime- und Auth-Bootstrap-Vorbereitung (15.10.2026)
 
 - Separaten modellfreien `--prepare-only`-Pfad ergänzt: bekannte Credential-Kanäle stoppen vor jedem Subprozess; die Claude-Datei wird nur gebunden, nicht ausgeführt.
