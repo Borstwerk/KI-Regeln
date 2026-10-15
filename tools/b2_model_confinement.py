@@ -59,6 +59,20 @@ EMPTY_MCP_FILENAME = "empty-mcp.json"
 VIEW_MCP_CONFIG = f"{CONFIG_MOUNT}/{EMPTY_MCP_FILENAME}"
 EMPTY_MCP_JSON = '{"mcpServers": {}}\n'
 CONFIG_DIR = "b2-config"
+# Transport variables whose value is a *file* path. Left as host paths they name something the
+# confined process cannot open -- the runtime then logs `load failed: No such file or
+# directory` and proceeds with a trust store the launch did not intend. A readable host file
+# is therefore staged read-only into the configuration view and the variable is rewritten to
+# its in-view path; a missing one is dropped rather than passed on inert.
+TRANSPORT_FILE_ENV = ("NODE_EXTRA_CA_CERTS", "SSL_CERT_FILE", "REQUESTS_CA_BUNDLE",
+                      "AWS_CA_BUNDLE")
+# Directory-valued ones. A directory outside the view is not staged: copying a trust-store
+# directory silently is a decision about transport trust, not a mechanical fix, so the
+# preflight refuses and a human decides.
+TRANSPORT_DIR_ENV = ("SSL_CERT_DIR",)
+TRANSPORT_STAGE_DIR = "transport"
+# Anything already under one of these is reachable in the view as it stands.
+VIEW_VISIBLE_PREFIXES = (WORKSPACE_MOUNT, SCRATCH_MOUNT, RUNTIME_MOUNT, BIN_MOUNT, CONFIG_MOUNT)
 # Read-only host paths the Claude Code runtime needs beyond the boundary's own defaults.
 # `/etc` carries TLS roots and resolver configuration and holds no evaluator material.
 MODEL_RUNTIME_BINDS = ("/usr", "/bin", "/sbin", "/lib", "/lib64", "/etc")
@@ -108,12 +122,72 @@ def view_path(claude_binary: str = "claude") -> str:
     return f"{BIN_MOUNT}:{directory}:/usr/local/bin:/usr/bin:/bin"
 
 
-def stage_config(task_root: Path) -> Path:
-    """Materialise the read-only configuration view. Exactly one file, written by us."""
+def _under(value: str, prefixes) -> bool:
+    return any(value == p or value.startswith(p.rstrip("/") + "/") for p in prefixes)
+
+
+def transport_path_plan(env: Mapping[str, str]) -> dict[str, dict[str, Any]]:
+    """What becomes of each path-valued transport variable inside the view.
+
+    Four outcomes, each with a reason: `keep` when the path is already reachable, `stage` when
+    a readable host file can be mounted read-only and the variable rewritten, `drop` when the
+    path does not exist on the host and was already inert, and `reject` when the value is a
+    directory outside the view, which is a trust decision rather than a mechanical fix.
+
+    No host path is returned. Callers that need one take it from `env` themselves.
+    """
+    plan: dict[str, dict[str, Any]] = {}
+    reachable = (*VIEW_VISIBLE_PREFIXES, *MODEL_RUNTIME_BINDS)
+    for name in (*TRANSPORT_FILE_ENV, *TRANSPORT_DIR_ENV):
+        value = (env.get(name) or "").strip()
+        if not value:
+            continue
+        directory_valued = name in TRANSPORT_DIR_ENV
+        if _under(value, reachable):
+            action, reason = "keep", "already reachable inside the view"
+        elif directory_valued:
+            action, reason = "reject", ("a trust-store directory outside the view is not "
+                                        "staged automatically; it needs a decision")
+        elif Path(value).is_file():
+            action, reason = "stage", "readable host file, mounted read-only into the config view"
+        else:
+            action, reason = "drop", ("names nothing on the host, so it was already inert and "
+                                      "is removed rather than passed on")
+        entry: dict[str, Any] = {
+            "configured": True,
+            "kind": "directory" if directory_valued else "file",
+            "accessible_in_view": action == "keep",
+            "action": action,
+            "reason": reason,
+        }
+        if action == "stage":
+            entry["view_path"] = f"{CONFIG_MOUNT}/{TRANSPORT_STAGE_DIR}/{name}"
+        plan[name] = entry
+    return plan
+
+
+def stage_config(task_root: Path, env: Mapping[str, str] | None = None) -> Path:
+    """Materialise the read-only configuration view: the empty MCP file, plus staged CA files.
+
+    Nothing else may land here. The allowlist is checked after writing rather than assumed,
+    so a future caller that copies something extra fails instead of widening the view.
+    """
     directory = task_root / CONFIG_DIR
     directory.mkdir(parents=True, exist_ok=True)
     (directory / EMPTY_MCP_FILENAME).write_text(EMPTY_MCP_JSON, encoding="utf-8")
-    stray = sorted(p.name for p in directory.iterdir() if p.name != EMPTY_MCP_FILENAME)
+    expected = {EMPTY_MCP_FILENAME}
+    plan = transport_path_plan(env or {})
+    staged = {name: entry for name, entry in plan.items() if entry["action"] == "stage"}
+    if staged:
+        stage = directory / TRANSPORT_STAGE_DIR
+        stage.mkdir(exist_ok=True)
+        expected.add(TRANSPORT_STAGE_DIR)
+        for name in staged:
+            shutil.copyfile((env or {})[name].strip(), stage / name)
+        extra = sorted(p.name for p in stage.iterdir() if p.name not in staged)
+        if extra:
+            raise ConfinementError(f"the staged transport directory carries {extra}")
+    stray = sorted(p.name for p in directory.iterdir() if p.name not in expected)
     if stray:
         raise ConfinementError(f"the configuration view carries unexpected files: {stray}")
     return directory
@@ -143,6 +217,14 @@ def view_environment(base: Mapping[str, str], claude_binary: str = "claude") -> 
         "TMPDIR": SCRATCH_MOUNT,
         "CLAUDE_CONFIG_DIR": f"{SCRATCH_MOUNT}/claude-config",
     })
+    # Path-valued transport variables follow their plan. A host path that survives here names
+    # a file the confined process cannot open, which is how a CA bundle came to be passed on
+    # as `/root/.ccr/ca-bundle.crt` into a view with no `/root`.
+    for name, entry in transport_path_plan(base).items():
+        if entry["action"] == "stage":
+            env[name] = entry["view_path"]
+        elif entry["action"] in ("drop", "reject"):
+            env.pop(name, None)
     return env
 
 
@@ -168,7 +250,7 @@ def confined_model_invocation(argv: list[str], *, task_root: Path, workspace: Pa
     extra_ro: list[tuple[str, Path]] = [
         (RUNTIME_MOUNT, staging),
         (BIN_MOUNT, task_root / BIN_DIR),
-        (CONFIG_MOUNT, stage_config(task_root)),
+        (CONFIG_MOUNT, stage_config(task_root, env)),
     ]
     node = _node_runtime(claude_binary)
     if node is not None:

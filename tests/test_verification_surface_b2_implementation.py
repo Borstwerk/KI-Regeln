@@ -2126,7 +2126,9 @@ class ConfinedLaunchPreflightTests(unittest.TestCase):
         self.assertIs(stored["model_involved"], False)
         self.assertEqual(sorted(stored["checks"]),
                          ["argv_paths_exist_in_view", "authenticated_in_view",
-                          "runtime_executable_in_view", "writable_flags_parse_in_view"])
+                          "oauth_path_is_the_effective_credential_path",
+                          "runtime_executable_in_view", "transport_paths_resolve_in_view",
+                          "writable_flags_parse_in_view"])
 
     def test_G2_the_recorded_preflight_never_reached_a_model(self):
         """Every recorded command is one that cannot reach a model.
@@ -2136,11 +2138,20 @@ class ConfinedLaunchPreflightTests(unittest.TestCase):
         any request. That is the one place `-p` may appear, and only in that company.
         """
         stored = load_yaml(B2 / "evidence/launch-preflight.yml")
-        detail = []
-        for name, check in stored["checks"].items():
-            entries = check["detail"]
-            detail.extend([(name, entries)] if "argv" in entries
-                          else [(f"{name}.{k}", v) for k, v in entries.items()])
+
+        def commands(node, path):
+            """Every recorded invocation, wherever in the report it sits."""
+            if isinstance(node, dict):
+                if isinstance(node.get("argv"), list):
+                    yield path, node
+                    return
+                for key, value in node.items():
+                    yield from commands(value, f"{path}.{key}")
+            elif isinstance(node, list):
+                for i, value in enumerate(node):
+                    yield from commands(value, f"{path}[{i}]")
+
+        detail = list(commands(stored, "report"))
         self.assertTrue(detail)
         for name, entry in detail:
             with self.subTest(check=name):
@@ -2152,7 +2163,8 @@ class ConfinedLaunchPreflightTests(unittest.TestCase):
                                      "print mode is only acceptable when --help ends it")
                 else:
                     self.assertTrue(
-                        argv[:1] == ["/bin/sh"] or argv[1] in ("--version", "auth", "--permission-mode"),
+                        argv[:1] == ["/bin/sh"]
+                        or argv[1] in ("--version", "auth", "--permission-mode", "doctor"),
                         f"unexpected preflight command: {argv}")
 
     def test_G3_the_argv_paths_and_the_runtime_were_verified_in_the_view(self):
@@ -2203,8 +2215,11 @@ class SharedLaunchPreparationTests(unittest.TestCase):
     process would never inherit.
     """
 
-    HOST_ONLY = "CLAUDE_CODE_OAUTH_TOKEN"
-    HOST_ONLY_VALUE = "b2-test-host-only-auth-channel-value"
+    # A credential bridge that still reaches back into the host: a path to a file the
+    # confined view does not carry. The token variable itself was the canary here until it
+    # became a supported, explicitly supplied credential; this one has not moved.
+    HOST_ONLY = "CLAUDE_CODE_OAUTH_TOKEN_FILE"
+    HOST_ONLY_VALUE = "/nonexistent/host/only/.oauth_token"
     ALLOWED_KEY = "ANTHROPIC_API_KEY"
     ALLOWED_VALUE = "b2-test-allowed-transport-credential-value"
 
@@ -2453,3 +2468,801 @@ class SharedLaunchPreparationTests(unittest.TestCase):
                 prepare_writable_launch(claude_binary="/some/other/claude", base_env={},
                                         config_dir=Path(tmp) / "cfg", probe=probe)
         self.assertIn("not the binary this launch would start", str(caught.exception))
+
+
+class SubscriptionOAuthAuthPathTests(unittest.TestCase):
+    """The one credential channel a confined B2 run may carry, and its guard rails.
+
+    The confined view has no host home, so the runtime cannot read a credential from a file.
+    `CLAUDE_CODE_OAUTH_TOKEN` — produced by `claude setup-token` and documented for
+    non-interactive use — is therefore the only way a confined run can be authenticated at
+    all. It used to sit in `HOST_ONLY_AUTH_ENV`, which was conservative rather than correct:
+    the file and descriptor bridges reach back into the host, an explicitly supplied
+    environment variable does not.
+
+    Every value below is a canary. No real token is read, written, printed or asserted on.
+    """
+
+    FAKE_TOKEN = "sk-ant-oat01-B2-CANARY-NOT-A-REAL-TOKEN-0000"
+    FAKE_TOKEN_FILE = "/nonexistent/host/only/.oauth_token"
+
+    def raw_env(self, **overrides):
+        from tools.behavioral_harness_claude import SUBSCRIPTION_OAUTH_ENV
+        env = {
+            "PATH": os.environ.get("PATH", "/usr/bin:/bin"), "HOME": "/nonexistent-host-home",
+            "TERM": "dumb",
+            SUBSCRIPTION_OAUTH_ENV: self.FAKE_TOKEN,
+            "CLAUDE_CODE_OAUTH_TOKEN_FILE": self.FAKE_TOKEN_FILE,
+            "CLAUDE_CODE_OAUTH_TOKEN_FILE_DESCRIPTOR": "7",
+        }
+        env.update(overrides)
+        return env
+
+    def context(self, env=None, claude_binary="claude"):
+        from tools.behavioral_harness_claude import prepare_writable_launch
+        with tempfile.TemporaryDirectory() as tmp:
+            return prepare_writable_launch(claude_binary=claude_binary,
+                                           base_env=env if env is not None else self.raw_env(),
+                                           config_dir=Path(tmp) / "claude-config")
+
+    # 1 / 2 -- what the environment contract lets through and what it removes
+    def test_A1_the_subscription_oauth_token_reaches_the_child_environment(self):
+        from tools.behavioral_harness_claude import SUBSCRIPTION_OAUTH_ENV
+        context = self.context()
+        self.assertIn(SUBSCRIPTION_OAUTH_ENV, context.child_env)
+        self.assertEqual(context.child_env[SUBSCRIPTION_OAUTH_ENV], self.FAKE_TOKEN)
+
+    def test_A2_the_host_only_token_bridges_are_still_removed(self):
+        from tools.behavioral_harness_claude import HOST_ONLY_AUTH_ENV, SUBSCRIPTION_OAUTH_ENV
+        self.assertNotIn(SUBSCRIPTION_OAUTH_ENV, HOST_ONLY_AUTH_ENV,
+                         "the explicitly supplied token is no longer a host-only channel")
+        self.assertEqual(sorted(HOST_ONLY_AUTH_ENV),
+                         ["CLAUDE_CODE_OAUTH_TOKEN_FILE", "CLAUDE_CODE_OAUTH_TOKEN_FILE_DESCRIPTOR"])
+        context = self.context()
+        for name in HOST_ONLY_AUTH_ENV:
+            with self.subTest(channel=name):
+                self.assertNotIn(name, context.child_env)
+
+    def test_A3_the_reclassification_did_not_open_the_claude_prefix(self):
+        """Only this one variable moved. `CLAUDE_CODE_*` as a class is still dropped."""
+        from tools.behavioral_harness_claude import ENV_ALLOWLIST
+        opened = sorted(n for n in ENV_ALLOWLIST if n.startswith("CLAUDE_CODE_"))
+        # The two transport switches were already allowlisted and carry no credential; the
+        # token is the only addition this change makes.
+        self.assertEqual(opened, ["CLAUDE_CODE_OAUTH_TOKEN", "CLAUDE_CODE_USE_BEDROCK",
+                                  "CLAUDE_CODE_USE_VERTEX"])
+        context = self.context(self.raw_env(CLAUDE_CODE_MESSAGING_TOKEN="canary",
+                                            CLAUDE_CODE_ACCOUNT_UUID="canary"))
+        self.assertNotIn("CLAUDE_CODE_MESSAGING_TOKEN", context.child_env)
+        self.assertNotIn("CLAUDE_CODE_ACCOUNT_UUID", context.child_env)
+
+    # 4 / 5 -- the mandatory credential scrub
+    def test_A4_the_subprocess_credential_scrub_is_in_the_parent_environment(self):
+        from tools.behavioral_harness_claude import SUBPROCESS_SCRUB_ENV
+        context = self.context()
+        self.assertEqual(context.child_env[SUBPROCESS_SCRUB_ENV], "1")
+        self.assertIn(SUBPROCESS_SCRUB_ENV, context.env_policy["controls_applied"])
+        self.assertIn(SUBPROCESS_SCRUB_ENV, context.env_policy["extra_controls_applied"])
+
+    def test_A5_the_read_only_path_does_not_carry_the_b2_control(self):
+        """It is a writable-B2 requirement, not a global one: 4.2A/4.2B are untouched."""
+        from tools.behavioral_harness_claude import CONTROL_ENV, SUBPROCESS_SCRUB_ENV, _child_env
+        self.assertNotIn(SUBPROCESS_SCRUB_ENV, CONTROL_ENV)
+        with tempfile.TemporaryDirectory() as tmp:
+            env, policy = _child_env(self.raw_env(), Path(tmp))
+        self.assertNotIn(SUBPROCESS_SCRUB_ENV, env)
+        self.assertEqual(policy["extra_controls_applied"], [])
+
+    def test_A6_a_writable_launch_without_the_scrub_fails_closed(self):
+        """No best-effort fallback: the preparation refuses rather than downgrading."""
+        from tools import behavioral_harness_claude as adapter
+
+        original = adapter.B2_CONTROL_ENV
+        for disabled in ({}, {adapter.SUBPROCESS_SCRUB_ENV: "0"}):
+            with self.subTest(control=disabled or "removed"):
+                try:
+                    adapter.B2_CONTROL_ENV = disabled
+                    with self.assertRaises(adapter.AdapterError) as caught:
+                        self.context()
+                finally:
+                    adapter.B2_CONTROL_ENV = original
+                self.assertIn(adapter.SUBPROCESS_SCRUB_ENV, str(caught.exception))
+                self.assertIn("no best-effort fallback", str(caught.exception).lower())
+
+    def test_A7_a_launch_whose_scrub_is_disabled_never_reaches_the_process_runner(self):
+        from tools import behavioral_harness_claude as adapter
+
+        calls = []
+
+        def never(argv, **kwargs):
+            from tools.behavioral_harness_claude import _run
+            if len(argv) == 2 and argv[1] in ("--version", "--help"):
+                return _run(argv, **kwargs)
+            calls.append(argv)
+            raise AssertionError("no model process may be started")
+
+        original = adapter.B2_CONTROL_ENV
+        try:
+            adapter.B2_CONTROL_ENV = {}
+            with tempfile.TemporaryDirectory() as tmp:
+                prepared = prepared_b2_package(Path(tmp))
+                with self.assertRaises(adapter.AdapterError) as caught:
+                    adapter.execute_prepared_response(
+                        prepared, model="claude-haiku-4-5-20251001", out_dir=Path(tmp) / "out",
+                        base_env=self.raw_env(), process_runner=never, writable_workspace=True)
+        finally:
+            adapter.B2_CONTROL_ENV = original
+        self.assertIn(adapter.SUBPROCESS_SCRUB_ENV, str(caught.exception))
+        self.assertEqual(calls, [])
+
+    # 6 / 7 / 8 -- the process-environment read rule
+    def test_A8_the_proc_read_rule_is_requested_in_the_writable_deny_list(self):
+        """Configuration, named as such.
+
+        The runtime offers no model-free way to evaluate a permission rule, and demonstrating
+        that a Read is refused needs a running model process. So what this asserts is that the
+        rule is in the deny list the launch actually requests — not that the block happened.
+        """
+        from tools.behavioral_harness_claude import B2_DENY_RULES, effective_tool_policy
+        from tools.b2_launch_preflight import DENY_PROC_RULE
+
+        self.assertIn(DENY_PROC_RULE, B2_DENY_RULES)
+        argv, controls = _argv("claude", "m", "p", "s", ViewLocalLaunchArgvTests.CAPS,
+                               Path("/tmp/e.json"), writable=True)
+        denied = argv[argv.index("--disallowedTools") + 1:]
+        self.assertIn(DENY_PROC_RULE, denied)
+        self.assertIn(DENY_PROC_RULE, controls["requested_deny_rules"])
+        self.assertIn(DENY_PROC_RULE, effective_tool_policy(True)["deny_rules"])
+
+    def test_A9_the_rule_uses_the_absolute_form_the_installed_runtime_carries(self):
+        """Measured against the installed binary rather than recalled from documentation."""
+        from tools.b2_launch_preflight import DENY_PROC_RULE, rule_syntax_evidence
+
+        self.assertTrue(DENY_PROC_RULE.startswith("Read(//"),
+                        "a single leading slash is workspace-rooted in this runtime")
+        evidence = rule_syntax_evidence()
+        self.assertIsNone(evidence["error"])
+        # `Edit(//etc/*)` is the runtime's own settings example for a filesystem-absolute rule.
+        self.assertIs(evidence["literals_present"]["Edit(//etc/*)"], True)
+        self.assertIs(evidence["literals_present"]["(//proc/**)"], True)
+
+    def test_A10_both_named_process_environment_paths_fall_under_the_rule(self):
+        """The glob has to cover what it is there for, and not the workspace."""
+        import fnmatch
+
+        from tools.b2_launch_preflight import DENY_PROC_RULE
+
+        pattern = DENY_PROC_RULE[len("Read("):-1].lstrip("/")
+        for path in ("proc/self/environ", "proc/1/environ", "proc/42/cmdline"):
+            with self.subTest(path=path):
+                self.assertTrue(fnmatch.fnmatch(path, pattern))
+        for path in ("workspace/product/discount.py", "workspace/checks/validate.py",
+                     "workspace/report.yml"):
+            with self.subTest(path=path):
+                self.assertFalse(fnmatch.fnmatch(path, pattern))
+
+    def test_A11_the_workspace_stays_readable_and_writable(self):
+        """The hardening must not cost the experiment its own surface."""
+        from tools.behavioral_harness_claude import (
+            B2_ALLOW_RULES, B2_DENY_RULES, B2_VISIBLE_TOOLS,
+        )
+        self.assertIn("Read", B2_VISIBLE_TOOLS)
+        self.assertIn("Read", B2_ALLOW_RULES)
+        self.assertIn("Edit", B2_ALLOW_RULES)
+        self.assertIn("Write", B2_ALLOW_RULES)
+        self.assertEqual([r for r in B2_DENY_RULES if r.startswith("Read(")],
+                         ["Read(//proc/**)"],
+                         "only the process-environment path is denied to Read")
+
+    # 9 / 10 -- classification and what presence does not prove
+    def test_A12_the_oauth_token_is_classified_as_its_own_auth_mode(self):
+        from tools.behavioral_harness_claude import (
+            AUTH_CLAUDE_MANAGED, AUTH_SUBSCRIPTION_OAUTH, SUBSCRIPTION_OAUTH_ENV, _auth,
+        )
+        raw = self.raw_env()
+        context = self.context(raw)
+        auth = _auth(context.child_env, raw, bare_requested=False)
+        self.assertEqual(auth["mode"], AUTH_SUBSCRIPTION_OAUTH)
+        self.assertNotEqual(auth["mode"], AUTH_CLAUDE_MANAGED)
+        self.assertIs(auth["credential_present"], True)
+        self.assertTrue(auth["subprocess_credential_scrub_requested"])
+        self.assertEqual(auth["host_only_channels_ignored"],
+                         ["CLAUDE_CODE_OAUTH_TOKEN_FILE", "CLAUDE_CODE_OAUTH_TOKEN_FILE_DESCRIPTOR"])
+        # And the other modes stay distinguishable from it.
+        without = {k: v for k, v in context.child_env.items() if k != SUBSCRIPTION_OAUTH_ENV}
+        self.assertEqual(_auth(without, raw, bare_requested=False)["mode"], AUTH_CLAUDE_MANAGED)
+        self.assertEqual(
+            _auth(dict(without, ANTHROPIC_API_KEY="x"), raw, bare_requested=False)["mode"],
+            "anthropic-api-key")
+
+    def test_A13_a_present_token_never_means_an_authenticated_runtime(self):
+        from tools.behavioral_harness_claude import _auth
+        raw = self.raw_env()
+        auth = _auth(self.context(raw).child_env, raw, bare_requested=False)
+        self.assertEqual(auth["runtime_authenticated"], "unknown")
+        self.assertIsNot(auth["runtime_authenticated"], True)
+
+    # 3 -- the value never travels
+    def test_A14_the_token_value_reaches_no_artifact_the_adapter_produces(self):
+        """Presence and name may be recorded. The value may not, and neither may a hash of it."""
+        from tools.behavioral_harness_claude import (
+            SUBSCRIPTION_OAUTH_ENV, _auth, _environment, _hash_text,
+        )
+        raw = self.raw_env()
+        context = self.context(raw)
+        auth = _auth(context.child_env, raw, bare_requested=False)
+        evidence = _environment(context.child_env, context.env_policy, auth)
+        blob = json.dumps({"auth": auth, "environment": evidence, "policy": context.env_policy},
+                          default=str)
+        self.assertNotIn(self.FAKE_TOKEN, blob)
+        self.assertNotIn(_hash_text(self.FAKE_TOKEN), blob,
+                         "a hash of a credential is still a durable identifier for it")
+        # Presence is what the artifact carries.
+        self.assertEqual(evidence["auth_presence"][SUBSCRIPTION_OAUTH_ENV], {"present": True})
+
+    def test_A15_the_preflight_report_carries_the_name_and_not_the_value(self):
+        from tools.behavioral_harness_claude import SUBSCRIPTION_OAUTH_ENV
+        from tools import b2_launch_preflight as preflight_module
+
+        report, seen = SharedLaunchPreparationTests.captured_preflight(
+            SharedLaunchPreparationTests(), self.context())
+        self.assertIn(SUBSCRIPTION_OAUTH_ENV, seen["env"], "the view must receive the token")
+        self.assertIn(SUBSCRIPTION_OAUTH_ENV, report["child_environment_names"])
+        self.assertIn(SUBSCRIPTION_OAUTH_ENV, report["view_environment_names"])
+        self.assertNotIn(self.FAKE_TOKEN, json.dumps(report, default=str))
+        self.assertTrue(report["subprocess_credential_scrub"]["requested"])
+        self.assertIs(report["process_environment_read_rule"]["in_requested_deny_rules"], True)
+        del preflight_module
+
+    # 11 -- the negative control, measured on the runtime rather than assumed
+    @requires_boundary
+    def test_A16_the_runtimes_auth_semantics_are_measured_not_assumed(self):
+        """Does `claude auth status` discriminate a valid credential from an invalid one?
+
+        This is a property of the installed runtime, so it is measured on the installed
+        runtime: a synthetic invalid token, the real confinement provider, the real mount
+        contract, `auth status` and nothing else. No prompt, no `-p`, no model request.
+
+        The assertion is deliberately not pinned to any build. Whatever this runtime does is
+        what the gate then does — a build that starts validating is recognised rather than
+        locked out by a constant, and a build that does not is reported rather than believed.
+        """
+        from tools.b2_model_confinement import model_view
+        from tools.behavioral_harness_claude import SUBSCRIPTION_OAUTH_ENV
+        from tools.b2_launch_preflight import _auth_probe, invalid_credential_canary
+
+        context = self.context()
+        env = dict(context.child_env)
+        env[SUBSCRIPTION_OAUTH_ENV] = invalid_credential_canary()
+        with model_view(claude_binary=context.claude_binary, env=env, timeout=300) as run:
+            probe = _auth_probe(run, context.claude_binary)
+
+        self.assertIn(probe["accepted"], (True, False))
+        self.assertIsNotNone(probe["result"]["returncode"], "the control has to have run")
+        if probe["accepted"]:
+            # What this runtime does today: acceptance means "a value is set". Recorded as the
+            # measurement it is, not as a constant somewhere in the source.
+            self.assertTrue(probe["logged_in"])
+            self.assertEqual(probe["result"]["returncode"], 0)
+        else:
+            self.assertFalse(probe["logged_in"])
+
+    def test_A17_the_control_answers_discrimination_and_not_server_validity(self):
+        """Two different questions, reported as two fields.
+
+        A refusal of the canary could come from syntax, length, character set, token structure
+        or a checksum — all local. Nothing shows the canary is parser-equivalent to a real
+        `setup-token` credential, so even a discriminating runtime says nothing about whether
+        the real credential is valid at the service.
+        """
+        from tools import b2_launch_preflight as preflight_module
+
+        cases = [
+            (False, False, False, "no-credential-accepted"),
+            (False, True, False, "no-credential-accepted"),
+            (True, True, False, "credential-accepted-but-runtime-accepts-an-invalid-one"),
+            (True, False, True, "credential-accepted-and-invalid-control-refused"),
+        ]
+        for actual, control, discriminates, state in cases:
+            with self.subTest(actual=actual, invalid_control=control):
+                report = self._preflight_with_auth(preflight_module, actual, control)
+                check = report["checks"]["authenticated_in_view"]
+                self.assertIs(check["auth_status_discriminates_invalid_control"], discriminates)
+                self.assertEqual(check["credential_accepted_by_cli"], actual)
+                self.assertEqual(check["invalid_control_accepted_by_cli"], control)
+                self.assertEqual(check["state"], state)
+                # Server validity is never derived from `auth status`, in either direction.
+                self.assertIsNot(check["server_credential_validity_observed"], True)
+                self.assertEqual(check["server_credential_validity_observed"], "unknown")
+                self.assertFalse(check["ok"], "no combination of local signals turns it green")
+                self.assertIs(report["invalid_credential_control"]["executed"], True)
+                self.assertIs(report["invalid_credential_control"]["model_involved"], False)
+
+    def test_A18_criterion_22_stays_red_until_a_server_side_operation_says_otherwise(self):
+        """And the reason names the gap that would remain on a host with a perfect token."""
+        from tools import b2_launch_preflight as preflight_module
+
+        for actual, control in ((False, False), (False, True), (True, True), (True, False)):
+            with self.subTest(actual=actual, invalid_control=control):
+                report = self._preflight_with_auth(preflight_module, actual, control)
+                original = preflight_module.preflight
+                try:
+                    preflight_module.preflight = lambda context=None, **kw: report
+                    ok, reason = preflight_module.launchable(None)
+                finally:
+                    preflight_module.preflight = original
+                self.assertFalse(ok)
+                self.assertIn("server credential validity not yet observed", reason)
+
+    def test_A21_a_control_a_second_credential_could_answer_never_counts(self):
+        """The canary has to be what the control measures, or it measures the wrong thing."""
+        from tools import b2_launch_preflight as preflight_module
+
+        report = self._preflight_with_auth(preflight_module, True, False,
+                                           extra_env={"ANTHROPIC_API_KEY": "canary-api-key"})
+        control = report["invalid_credential_control"]
+        self.assertIs(control["answerable_by_the_canary_alone"], False)
+        self.assertEqual(control["control_effective_auth_mode"],
+                         "oauth-path-shadowed-by-higher-priority-credential")
+        self.assertIs(
+            report["checks"]["authenticated_in_view"]["auth_status_discriminates_invalid_control"],
+            False, "a refusal that another channel could explain is not discrimination")
+
+    def _preflight_with_auth(self, preflight_module, actual: bool, invalid_control: bool,
+                             extra_env: dict | None = None, context=None,
+                             managed_verdict: str | None = None):
+        """The real preflight, with both views' commands answered from a script.
+
+        The two views are told apart the way they actually differ: the control view is the one
+        whose environment carries the synthetic canary.
+        """
+        from contextlib import contextmanager as _cm
+
+        from tools.behavioral_harness_claude import SUBSCRIPTION_OAUTH_ENV
+
+        def payload(logged_in):
+            return json.dumps({
+                "loggedIn": logged_in, "authMethod": "oauth_token" if logged_in else "none",
+                "apiProvider": "firstParty", "configDirectory": "/scratch/claude-config",
+            })
+
+        @_cm
+        def fake_view(claude_binary="claude", env=None, timeout=300):
+            token = (env or {}).get(SUBSCRIPTION_OAUTH_ENV, "")
+            is_control = "B2-INVALID-CREDENTIAL-CONTROL" in token
+            logged_in = invalid_control if is_control else actual
+
+            def run(argv, view_timeout=None):
+                if argv[1:3] == ["auth", "status"]:
+                    return {"returncode": 0 if logged_in else 1, "stdout": payload(logged_in),
+                            "stderr": "", "payload_started": True, "timed_out": False}
+                if argv[1:2] == ["--permission-mode"]:
+                    return {"returncode": 1, "stdout": "", "stderr": "",
+                            "payload_started": True, "timed_out": False}
+                return {"returncode": 0, "stdout": "2.1.270 (Claude Code)", "stderr": "",
+                        "payload_started": True, "timed_out": False}
+            yield run
+
+        context = context if context is not None else self.context()
+        if extra_env:
+            # A second channel is added *after* the context was prepared: preparing one with
+            # it would be refused outright, which is a different test (A23).
+            context = context.__class__(
+                claude_binary=context.claude_binary,
+                child_env={**context.child_env, **extra_env},
+                env_policy=context.env_policy, capabilities=context.capabilities,
+                probe=context.probe)
+        original = preflight_module.model_view
+        original_managed = preflight_module.managed_credential_provider
+        verdict = managed_verdict or preflight_module.MANAGED_VERDICT_CLEAR
+        try:
+            preflight_module.model_view = fake_view
+            # The managed-policy reading needs a real view to mean anything; these tests are
+            # about the auth rule, so it is supplied as a stated premise instead.
+            preflight_module.managed_credential_provider = lambda run, binary: {
+                "verdict": verdict, "files": {}, "credential_provider_keys": [],
+                "undetermined_sources": [], "remote_managed_settings": "absent",
+                "remote_status_line": "", "measured_in": "stubbed for this test", "note": "",
+            }
+            return preflight_module.preflight(context)
+        finally:
+            preflight_module.model_view = original
+            preflight_module.managed_credential_provider = original_managed
+
+    def test_A19_the_canary_is_synthetic_fresh_and_never_persisted(self):
+        from tools.b2_launch_preflight import invalid_credential_canary
+
+        first, second = invalid_credential_canary(), invalid_credential_canary()
+        self.assertNotEqual(first, second, "built fresh, so there is nothing to store")
+        self.assertIn("B2-INVALID-CREDENTIAL-CONTROL", first,
+                      "a reader of any transcript must see at once that it is not a credential")
+        self.assertTrue(first.startswith("sk-ant-oat01-"),
+                        "shape-plausible, so a refusal can only be about the value")
+        for path in sorted(B2.glob("evidence/*.yml")):
+            with self.subTest(evidence=path.name):
+                text = path.read_text(encoding="utf-8")
+                self.assertNotIn("B2-INVALID-CREDENTIAL-CONTROL", text)
+                self.assertNotIn("sk-ant-oat01-", text)
+
+    # 12 -- the real-token stage, only when the operator supplied one
+    def test_A20_a_real_token_is_exercised_only_when_the_operator_supplied_one(self):
+        """Stage B. Skipped unless a real token is in this host's environment.
+
+        When it is, the only thing run is `claude auth status` inside the real confined view.
+        No prompt, no `-p`, no model request, and the value is never read into an assertion.
+        """
+        from tools.behavioral_harness_claude import SUBSCRIPTION_OAUTH_ENV
+        from tools.b2_launch_preflight import preflight
+
+        if not os.environ.get(SUBSCRIPTION_OAUTH_ENV):
+            self.skipTest(f"no {SUBSCRIPTION_OAUTH_ENV} supplied on this host")
+        if not BOUNDARY_AVAILABLE:
+            self.skipTest(f"no boundary provider: {BOUNDARY_REASON}")
+        self.assert_supplied_token_report(preflight(), os.environ[SUBSCRIPTION_OAUTH_ENV])
+
+    def assert_supplied_token_report(self, report, token_value: str | None):
+        """What a run with a real token must show — and what it still must not claim."""
+        from tools.behavioral_harness_claude import AUTH_SUBSCRIPTION_OAUTH
+
+        check = report["checks"]["authenticated_in_view"]
+        self.assertIs(check["credential_accepted_by_cli"], True,
+                      "a supplied token must at least be accepted inside the view")
+        self.assertEqual(check["auth_method"], "oauth_token")
+        self.assertEqual(check["effective_auth_mode"], AUTH_SUBSCRIPTION_OAUTH)
+        self.assertEqual(check["config_directory"], "/scratch/claude-config")
+        # Server validity is never inferred from a real token any more than from a fake one.
+        self.assertEqual(check["server_credential_validity_observed"], "unknown")
+        self.assertFalse(check["ok"])
+        # Discrimination follows the control that actually ran, whichever way it went.
+        control = report["invalid_credential_control"]
+        self.assertIs(check["invalid_control_accepted_by_cli"],
+                      control["credential_accepted_by_cli"])
+        self.assertIs(check["auth_status_discriminates_invalid_control"],
+                      bool(control["answerable_by_the_canary_alone"]
+                           and not control["credential_accepted_by_cli"]))
+        blob = json.dumps(report, default=str)
+        if token_value:
+            from tools.behavioral_harness_claude import _hash_text
+            self.assertNotIn(token_value, blob)
+            self.assertNotIn(_hash_text(token_value), blob,
+                             "a hash of a credential is still a durable identifier for it")
+
+    def test_A20b_the_supplied_token_path_is_exercised_without_a_real_token(self):
+        """The non-skipping shape of A20, driven through a local seam.
+
+        A20 skips on a host with no credential, which is every host so far — so the assertions
+        it would make have never run. Here they do, against the real preflight with the view's
+        commands scripted and a canary standing in for the supplied token.
+        """
+        from tools import b2_launch_preflight as preflight_module
+        from tools.behavioral_harness_claude import SUBSCRIPTION_OAUTH_ENV
+
+        supplied = "sk-ant-oat01-B2-SUPPLIED-TOKEN-SEAM-0000"
+        report = self._preflight_with_auth(
+            preflight_module, True, True,
+            context=self.context(self.raw_env(**{SUBSCRIPTION_OAUTH_ENV: supplied})))
+        self.assert_supplied_token_report(report, supplied)
+
+    # 2 -- the OAuth path has to be the path this launch would actually take
+    def test_A22_a_lone_oauth_token_is_the_effective_credential_path(self):
+        from tools.behavioral_harness_claude import (
+            AUTH_SUBSCRIPTION_OAUTH, SUBSCRIPTION_OAUTH_ENV, effective_auth_mode,
+        )
+        self.assertEqual(effective_auth_mode({SUBSCRIPTION_OAUTH_ENV: self.FAKE_TOKEN}),
+                         AUTH_SUBSCRIPTION_OAUTH)
+        self.assertEqual(effective_auth_mode(self.context().child_env), AUTH_SUBSCRIPTION_OAUTH)
+
+    def test_A23_a_competing_credential_channel_fails_the_launch_closed(self):
+        """Not a priority table we would have to keep in sync — a refusal.
+
+        Which channel the runtime picks is not this repository's to assume, and `auth status`
+        cannot always say: measured on 2.1.270, CLAUDE_CODE_OAUTH_TOKEN and
+        ANTHROPIC_AUTH_TOKEN are both reported as `oauth_token`. A pilot meant to exercise one
+        named path does not run against an environment offering two.
+        """
+        from tools.behavioral_harness_claude import (
+            AUTH_OAUTH_SHADOWED, AdapterError, SUBSCRIPTION_OAUTH_ENV, effective_auth_mode,
+        )
+        competitors = {
+            "ANTHROPIC_API_KEY": "canary-api-key",
+            "ANTHROPIC_AUTH_TOKEN": "canary-auth-token",
+            "CLAUDE_CODE_USE_BEDROCK": "1",
+            "CLAUDE_CODE_USE_VERTEX": "1",
+        }
+        for name, value in competitors.items():
+            with self.subTest(competitor=name):
+                env = self.raw_env(**{name: value})
+                self.assertEqual(effective_auth_mode({SUBSCRIPTION_OAUTH_ENV: self.FAKE_TOKEN,
+                                                      name: value}), AUTH_OAUTH_SHADOWED)
+                with self.assertRaises(AdapterError) as caught:
+                    self.context(env)
+                self.assertIn(AUTH_OAUTH_SHADOWED, str(caught.exception))
+                self.assertIn(name, str(caught.exception))
+                self.assertNotIn(value, str(caught.exception),
+                                 "the refusal names channels, never their values")
+                self.assertNotIn(self.FAKE_TOKEN, str(caught.exception))
+
+    def test_A24_the_auth_token_channel_is_classified_rather_than_called_managed(self):
+        """It sat in SECRET_ENV but was never classified, so a run carrying it read as managed."""
+        from tools.behavioral_harness_claude import (
+            AUTH_ANTHROPIC_AUTH_TOKEN, AUTH_CLAUDE_MANAGED, effective_auth_mode,
+        )
+        self.assertEqual(effective_auth_mode({"ANTHROPIC_AUTH_TOKEN": "canary-auth-token"}),
+                         AUTH_ANTHROPIC_AUTH_TOKEN)
+        self.assertEqual(effective_auth_mode({}), AUTH_CLAUDE_MANAGED)
+        self.assertEqual(effective_auth_mode({"ANTHROPIC_API_KEY": "canary"}), "anthropic-api-key")
+        self.assertEqual(effective_auth_mode({"CLAUDE_CODE_USE_BEDROCK": "1"}), "bedrock")
+        self.assertEqual(effective_auth_mode({"CLAUDE_CODE_USE_VERTEX": "1"}), "vertex")
+
+    def test_A25_no_credential_value_reaches_the_channel_report(self):
+        from tools.behavioral_harness_claude import _auth
+        raw = self.raw_env(ANTHROPIC_AUTH_TOKEN="canary-auth-token")
+        env = {k: v for k, v in raw.items() if k != "CLAUDE_CODE_OAUTH_TOKEN_FILE"}
+        auth = _auth(env, raw, bare_requested=False)
+        blob = json.dumps(auth, default=str)
+        self.assertIn("ANTHROPIC_AUTH_TOKEN", auth["credential_channels_active"])
+        for value in (self.FAKE_TOKEN, "canary-auth-token"):
+            with self.subTest(value=value[:12]):
+                self.assertNotIn(value, blob)
+
+
+class TransportPathEnvironmentTests(unittest.TestCase):
+    """A path-valued transport variable must name something the confined process can open.
+
+    The evidence showed `NODE_EXTRA_CA_CERTS=/root/.ccr/ca-bundle.crt` handed to a view with
+    no `/root`. Not a boundary leak — but the runtime logged `load failed: No such file or
+    directory` and carried on with a trust store the launch had not intended.
+    """
+
+    def plan(self, env):
+        from tools.b2_model_confinement import transport_path_plan
+        return transport_path_plan(env)
+
+    def test_T1_a_path_already_inside_the_view_is_kept(self):
+        plan = self.plan({"SSL_CERT_FILE": "/etc/ssl/certs/ca-certificates.crt"})
+        self.assertEqual(plan["SSL_CERT_FILE"]["action"], "keep")
+        self.assertIs(plan["SSL_CERT_FILE"]["accessible_in_view"], True)
+
+    def test_T2_a_readable_host_file_is_staged_and_rewritten(self):
+        from tools.b2_model_confinement import CONFIG_MOUNT, view_environment
+
+        with tempfile.TemporaryDirectory() as tmp:
+            bundle = Path(tmp) / "ca-bundle.crt"
+            bundle.write_text("# canary bundle\n", encoding="utf-8")
+            env = {"NODE_EXTRA_CA_CERTS": str(bundle)}
+            plan = self.plan(env)
+            self.assertEqual(plan["NODE_EXTRA_CA_CERTS"]["action"], "stage")
+            self.assertIs(plan["NODE_EXTRA_CA_CERTS"]["accessible_in_view"], False)
+            view = view_environment(env)
+            self.assertEqual(view["NODE_EXTRA_CA_CERTS"],
+                             f"{CONFIG_MOUNT}/transport/NODE_EXTRA_CA_CERTS")
+            self.assertNotIn(str(bundle), json.dumps(view))
+
+    def test_T3_a_path_that_names_nothing_is_removed_rather_than_passed_on(self):
+        """The variable was already inert; passing it on only produced a load failure."""
+        from tools.b2_model_confinement import view_environment
+        env = {"REQUESTS_CA_BUNDLE": "/nonexistent/host/only/ca-bundle.crt"}
+        plan = self.plan(env)
+        self.assertEqual(plan["REQUESTS_CA_BUNDLE"]["action"], "drop")
+        self.assertNotIn("REQUESTS_CA_BUNDLE", view_environment(env))
+
+    def test_T3b_the_case_the_review_found_is_staged_on_this_host(self):
+        """`/root/.ccr/ca-bundle.crt` exists and is readable, so it is staged, not dropped.
+
+        Either branch fixes the reported defect — what must never happen again is the value
+        travelling unchanged into a view with no `/root`.
+        """
+        import os
+
+        from tools.b2_model_confinement import CONFIG_MOUNT, view_environment
+
+        configured = os.environ.get("NODE_EXTRA_CA_CERTS")
+        if not configured:
+            self.skipTest("no NODE_EXTRA_CA_CERTS configured on this host")
+        plan = self.plan({"NODE_EXTRA_CA_CERTS": configured})
+        entry = plan["NODE_EXTRA_CA_CERTS"]
+        self.assertIn(entry["action"], ("keep", "stage"))
+        view = view_environment({"NODE_EXTRA_CA_CERTS": configured})
+        if entry["action"] == "stage":
+            self.assertTrue(view["NODE_EXTRA_CA_CERTS"].startswith(CONFIG_MOUNT + "/"))
+            self.assertNotEqual(view["NODE_EXTRA_CA_CERTS"], configured)
+
+    def test_T4_a_trust_store_directory_outside_the_view_is_refused_not_guessed(self):
+        from tools.b2_model_confinement import view_environment
+        with tempfile.TemporaryDirectory() as tmp:
+            env = {"SSL_CERT_DIR": tmp}
+            plan = self.plan(env)
+            self.assertEqual(plan["SSL_CERT_DIR"]["action"], "reject")
+            self.assertNotIn("SSL_CERT_DIR", view_environment(env))
+
+    def test_T5_the_staged_file_lands_in_the_configuration_view_and_nothing_else_does(self):
+        from tools.b2_model_confinement import (
+            EMPTY_MCP_FILENAME, TRANSPORT_STAGE_DIR, ConfinementError, stage_config,
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            bundle = Path(tmp) / "ca-bundle.crt"
+            bundle.write_text("# canary bundle\n", encoding="utf-8")
+            task = Path(tmp) / "task"
+            staged = stage_config(task, {"SSL_CERT_FILE": str(bundle)})
+            self.assertEqual(sorted(p.name for p in staged.iterdir()),
+                             sorted([EMPTY_MCP_FILENAME, TRANSPORT_STAGE_DIR]))
+            copied = staged / TRANSPORT_STAGE_DIR / "SSL_CERT_FILE"
+            self.assertEqual(copied.read_text(encoding="utf-8"), "# canary bundle\n")
+            (staged / TRANSPORT_STAGE_DIR / "smuggled.pem").write_text("x", encoding="utf-8")
+            with self.assertRaises(ConfinementError):
+                stage_config(task, {"SSL_CERT_FILE": str(bundle)})
+
+    @requires_boundary
+    def test_T6_the_recorded_preflight_resolved_every_transport_path_in_the_view(self):
+        stored = load_yaml(B2 / "evidence/launch-preflight.yml")
+        check = stored["checks"]["transport_paths_resolve_in_view"]
+        self.assertTrue(check["ok"])
+        self.assertEqual(check["unreachable_in_view"], [])
+        self.assertEqual(check["rejected"], [])
+        self.assertEqual(check["removed_but_still_in_view_environment"], [])
+        for name, entry in stored["transport_path_environment"].items():
+            with self.subTest(variable=name):
+                self.assertIn(entry["action"], ("keep", "stage", "drop", "reject"))
+                self.assertNotIn("/root/", json.dumps(entry),
+                                 "no raw host path belongs in the evidence")
+
+    @requires_boundary
+    def test_T7_the_runtime_no_longer_reports_a_failed_ca_bundle_load(self):
+        stored = load_yaml(B2 / "evidence/launch-preflight.yml")
+        for name in ("runtime_executable_in_view", "authenticated_in_view"):
+            with self.subTest(check=name):
+                stderr = stored["checks"][name]["detail"]["stderr_tail"] or ""
+                self.assertNotIn("load failed", stderr)
+                self.assertNotIn("No such file or directory", stderr)
+
+
+class ManagedCredentialPolicyTests(unittest.TestCase):
+    """Managed settings sit ahead of the OAuth token in the runtime's credential order.
+
+    `--safe-mode` closes user customization but does not lift managed policy, `--restricted`
+    loads it, and `/etc` is bind-mounted read-only into the view — so a managed `apiKeyHelper`
+    would reach the confined process and decide the credential path instead of the token the
+    pilot is meant to exercise. "The variable is set" is therefore not the same claim as
+    "OAuth is the path this launch takes".
+    """
+
+    def read_with(self, documents, remote_line, claude_binary="claude"):
+        """Run the real reader against a scripted view. Nothing here is a reimplementation."""
+        from tools.b2_launch_preflight import MANAGED_SETTINGS_PATHS, managed_credential_provider
+
+        def run(argv, view_timeout=None):
+            if argv[0] == "/bin/sh":
+                out = []
+                for path in MANAGED_SETTINGS_PATHS:
+                    out.append(f"=== {path}")
+                    out.append(documents.get(path, "@ABSENT"))
+                out.append("=== end")
+                return {"returncode": 0, "stdout": "\n".join(out) + "\n", "stderr": "",
+                        "payload_started": True, "timed_out": False}
+            return {"returncode": 0, "stdout": f"Claude Code doctor\n{remote_line}\n",
+                    "stderr": "", "payload_started": True, "timed_out": False}
+
+        return managed_credential_provider(run, claude_binary)
+
+    NONE = "Managed settings (remote): none configured for this organization"
+    UNFETCHED = ("Managed settings (remote): not fetched — no usable credentials for the "
+                 "settings fetch")
+
+    def test_P1_no_managed_policy_and_a_known_absent_remote_source_clears_the_path(self):
+        from tools.b2_launch_preflight import MANAGED_VERDICT_CLEAR
+        report = self.read_with({}, self.NONE)
+        self.assertEqual(report["verdict"], MANAGED_VERDICT_CLEAR)
+        self.assertEqual(report["remote_managed_settings"], "absent")
+        self.assertEqual(report["credential_provider_keys"], [])
+
+    def test_P2_a_managed_api_key_helper_fails_the_path_closed(self):
+        from tools.b2_launch_preflight import MANAGED_VERDICT_PROVIDER
+        for document, expected in (
+            ('{"apiKeyHelper": "/opt/org/get-key.sh"}', ["apiKeyHelper"]),
+            ('{"awsAuthRefresh": "aws sso login"}', ["awsAuthRefresh"]),
+            ('{"awsCredentialExport": "/opt/org/export.sh"}', ["awsCredentialExport"]),
+            ('{"forceLoginMethod": "console"}', ["forceLoginMethod"]),
+            ('{"env": {"ANTHROPIC_API_KEY": "sk-ant-canary"}}', ["env.ANTHROPIC_API_KEY"]),
+            ('{"env": {"ANTHROPIC_AUTH_TOKEN": "canary"}}', ["env.ANTHROPIC_AUTH_TOKEN"]),
+        ):
+            with self.subTest(document=document[:40]):
+                report = self.read_with(
+                    {"/etc/claude-code/managed-settings.json": document}, self.NONE)
+                self.assertEqual(report["verdict"], MANAGED_VERDICT_PROVIDER)
+                self.assertEqual(report["credential_provider_keys"], expected)
+                # Key names travel; values and helper commands do not.
+                blob = json.dumps(report, default=str)
+                for secret in ("/opt/org/get-key.sh", "sk-ant-canary", "aws sso login",
+                               "/opt/org/export.sh"):
+                    self.assertNotIn(secret, blob)
+
+    def test_P3_a_managed_policy_without_a_credential_provider_does_not_block(self):
+        """Managed settings are common. Only a credential provider is the problem."""
+        from tools.b2_launch_preflight import MANAGED_VERDICT_CLEAR
+        document = '{"permissions": {"deny": ["Bash(curl *)"]}, "env": {"NO_COLOR": "1"}}'
+        report = self.read_with({"/etc/claude-code/managed-settings.json": document}, self.NONE)
+        self.assertEqual(report["verdict"], MANAGED_VERDICT_CLEAR)
+        self.assertEqual(report["credential_provider_keys"], [])
+        self.assertIs(report["files"]["/etc/claude-code/managed-settings.json"]["parsed"], True)
+
+    def test_P4_an_unreadable_or_ambiguous_policy_fails_closed(self):
+        """An unknown credential policy is not an absent one."""
+        from tools.b2_launch_preflight import MANAGED_VERDICT_UNKNOWN
+        cases = {
+            "unparsable": ({"/etc/claude-code/managed-settings.json": "{not json"}, self.NONE),
+            "unreadable": ({"/etc/claude-code/managed-settings.json": "@UNREADABLE"}, self.NONE),
+            "drop-in directory with content": (
+                {"/etc/claude-code/managed-settings.d": "@DIR\n10-org.json\n"}, self.NONE),
+            "remote source not fetched": ({}, self.UNFETCHED),
+            "no remote line at all": ({}, ""),
+        }
+        for label, (documents, remote) in cases.items():
+            with self.subTest(case=label):
+                report = self.read_with(documents, remote)
+                self.assertEqual(report["verdict"], MANAGED_VERDICT_UNKNOWN)
+
+    def test_P5_an_empty_drop_in_directory_is_not_treated_as_a_policy(self):
+        from tools.b2_launch_preflight import MANAGED_VERDICT_CLEAR
+        report = self.read_with({"/etc/claude-code/managed-settings.d": "@DIR\n"}, self.NONE)
+        self.assertEqual(report["verdict"], MANAGED_VERDICT_CLEAR)
+
+    def test_P6_the_preflight_check_follows_both_halves(self):
+        """Environment mode and managed verdict both have to be right, or it is red."""
+        from tools import b2_launch_preflight as preflight_module
+        from tools.behavioral_harness_claude import SUBSCRIPTION_OAUTH_ENV
+
+        auth_tests = SubscriptionOAuthAuthPathTests()
+        supplied = self.id()  # any non-empty synthetic value; never read as a credential
+        with_token = auth_tests.context(auth_tests.raw_env(**{SUBSCRIPTION_OAUTH_ENV: supplied}))
+        for verdict, expected in ((preflight_module.MANAGED_VERDICT_CLEAR, True),
+                                  (preflight_module.MANAGED_VERDICT_PROVIDER, False),
+                                  (preflight_module.MANAGED_VERDICT_UNKNOWN, False)):
+            with self.subTest(managed=verdict):
+                report = auth_tests._preflight_with_auth(
+                    preflight_module, True, False, context=with_token, managed_verdict=verdict)
+                check = report["checks"]["oauth_path_is_the_effective_credential_path"]
+                self.assertIs(check["ok"], expected)
+                self.assertEqual(check["managed_policy_verdict"], verdict)
+                # And the negative control is gated by the same verdict.
+                answerable = report["invalid_credential_control"]["answerable_by_the_canary_alone"]
+                self.assertIs(answerable, expected)
+
+    def test_P7_without_a_token_the_check_is_red_for_the_environment_half(self):
+        from tools import b2_launch_preflight as preflight_module
+        from tools.behavioral_harness_claude import AUTH_CLAUDE_MANAGED
+
+        auth_tests = SubscriptionOAuthAuthPathTests()
+        raw = {k: v for k, v in auth_tests.raw_env().items()
+               if k != "CLAUDE_CODE_OAUTH_TOKEN"}
+        report = auth_tests._preflight_with_auth(
+            preflight_module, False, True, context=auth_tests.context(raw))
+        check = report["checks"]["oauth_path_is_the_effective_credential_path"]
+        self.assertFalse(check["ok"])
+        self.assertEqual(check["environment_auth_mode"], AUTH_CLAUDE_MANAGED)
+
+    @requires_boundary
+    def test_P8_the_recorded_preflight_read_the_policy_inside_the_view(self):
+        stored = load_yaml(B2 / "evidence/launch-preflight.yml")
+        managed = stored["managed_credential_policy"]
+        self.assertIn(managed["verdict"],
+                      ["no-managed-credential-provider", "managed-credential-provider-present",
+                       "managed-credential-provider-undetermined"])
+        self.assertIn("confined view", managed["measured_in"])
+        for path, entry in managed["files"].items():
+            with self.subTest(path=path):
+                self.assertIn("present", entry)
+                self.assertNotIn("content", entry)
+        blob = json.dumps(managed, default=str)
+        for marker in ("sk-ant-", "/root/", "BEGIN "):
+            with self.subTest(marker=marker):
+                self.assertNotIn(marker, blob)
+
+    def test_P9_the_auth_token_channel_outranks_the_api_key(self):
+        """Corrected after measuring: with both set the runtime reports the auth-token path."""
+        from tools.behavioral_harness_claude import (
+            AUTH_ANTHROPIC_AUTH_TOKEN, effective_auth_mode,
+        )
+        self.assertEqual(
+            effective_auth_mode({"ANTHROPIC_API_KEY": "canary", "ANTHROPIC_AUTH_TOKEN": "canary"}),
+            AUTH_ANTHROPIC_AUTH_TOKEN)
+        self.assertEqual(effective_auth_mode({"ANTHROPIC_API_KEY": "canary"}), "anthropic-api-key")
