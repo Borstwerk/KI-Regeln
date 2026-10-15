@@ -34,7 +34,8 @@ flaky-test-diagnosis
 test-suite-review
         ↓
 verification-loop
-→ relevante Nachweise frisch ausführen
+→ Verification Discovery für Projekt/OS/Toolchain und Risiko
+→ native, autorisierte Nachweise frisch ausführen
         ↓
 Release-/Quality-Evidence
         ↓
@@ -42,6 +43,12 @@ lokales Projekt-/Human-Gate
 ```
 
 Nicht jeder Schritt ist für jede Änderung nötig.
+
+## Native Ausführung und Reportübergabe
+
+Vor der Testausführung die projektlokalen Vorgaben, Sprache/Framework, OS-/Runtime-Capabilities und Ausführungsrechte ermitteln. Die Regeln in `../Testing-und-QA/Umgebungsabhaengige-Verifikation-und-Reports.md` führen zur kleinsten geeigneten Prüfung. Fehlende Umgebungen und übersprungene Tests bleiben sichtbar, statt durch grüne Teilchecks kompensiert zu werden.
+
+Ein gemeinsamer `verification-run`-Report ist für CI, lokale Ausführung und Agentenumgebungen **optional**; er ersetzt weder native Tests noch Release-/Human-Gates. HTML kann später dieselben Daten ohne neue Bewertung darstellen.
 
 ## Handoff-Evidence
 

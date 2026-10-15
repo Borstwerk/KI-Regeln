@@ -1,0 +1,370 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Borstwerk/KI-Regeln/blob/main/Schemas/verification-run.schema.json",
+  "title": "KI-Regeln portable verification run — reporting contract v1",
+  "description": "Data exchange for observed native checks, not a test runner or release admission.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "project",
+    "task",
+    "source_state",
+    "environment",
+    "checks"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "project": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "repository": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "task": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "git-clean",
+            "git-dirty",
+            "snapshot",
+            "unavailable"
+          ]
+        },
+        "revision": {
+          "type": "string",
+          "minLength": 1
+        },
+        "content_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "digest_scope": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "oneOf": [
+        {
+          "properties": {
+            "kind": {
+              "const": "git-clean"
+            }
+          },
+          "required": [
+            "revision"
+          ]
+        },
+        {
+          "properties": {
+            "kind": {
+              "const": "git-dirty"
+            }
+          },
+          "required": [
+            "revision",
+            "content_sha256",
+            "digest_scope"
+          ]
+        },
+        {
+          "properties": {
+            "kind": {
+              "const": "snapshot"
+            }
+          },
+          "required": [
+            "content_sha256",
+            "digest_scope"
+          ]
+        },
+        {
+          "properties": {
+            "kind": {
+              "const": "unavailable"
+            }
+          },
+          "required": [
+            "reason"
+          ]
+        }
+      ]
+    },
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "location",
+        "os",
+        "runtime"
+      ],
+      "properties": {
+        "location": {
+          "enum": [
+            "local",
+            "ci",
+            "cloud-agent",
+            "other"
+          ]
+        },
+        "os": {
+          "type": "string",
+          "minLength": 1
+        },
+        "runtime": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "checks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "type",
+          "required_for_claim",
+          "selection",
+          "tool",
+          "status",
+          "exit_code",
+          "skipped",
+          "evidence_refs"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "type": {
+            "enum": [
+              "build",
+              "syntax",
+              "static-analysis",
+              "unit",
+              "integration",
+              "e2e",
+              "security",
+              "manual",
+              "other"
+            ]
+          },
+          "required_for_claim": {
+            "type": "boolean"
+          },
+          "selection": {
+            "enum": [
+              "project-prescribed",
+              "user-specified",
+              "discovered"
+            ]
+          },
+          "tool": {
+            "type": "string",
+            "minLength": 1
+          },
+          "command_display": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "enum": [
+              "PASS",
+              "FAIL",
+              "BLOCKED",
+              "NOT_RUN",
+              "UNVERIFIED"
+            ]
+          },
+          "exit_code": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "skipped": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "evidence_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "observed_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "const": "PASS"
+                }
+              },
+              "required": [
+                "status"
+              ]
+            },
+            "then": {
+              "required": [
+                "observed_at"
+              ],
+              "properties": {
+                "exit_code": {
+                  "const": 0
+                },
+                "skipped": {
+                  "const": 0
+                },
+                "evidence_refs": {
+                  "minItems": 1
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "const": "FAIL"
+                }
+              },
+              "required": [
+                "status"
+              ]
+            },
+            "then": {
+              "required": [
+                "observed_at",
+                "reason"
+              ]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "enum": [
+                    "BLOCKED",
+                    "NOT_RUN"
+                  ]
+                }
+              },
+              "required": [
+                "status"
+              ]
+            },
+            "then": {
+              "required": [
+                "reason"
+              ],
+              "properties": {
+                "exit_code": {
+                  "type": "null"
+                },
+                "evidence_refs": {
+                  "maxItems": 0
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "const": "UNVERIFIED"
+                }
+              },
+              "required": [
+                "status"
+              ]
+            },
+            "then": {
+              "required": [
+                "reason"
+              ]
+            }
+          }
+        ]
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "source_state": {
+            "properties": {
+              "kind": {
+                "const": "unavailable"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          }
+        },
+        "required": [
+          "source_state"
+        ]
+      },
+      "then": {
+        "properties": {
+          "checks": {
+            "items": {
+              "not": {
+                "properties": {
+                  "status": {
+                    "const": "PASS"
+                  }
+                },
+                "required": [
+                  "status"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

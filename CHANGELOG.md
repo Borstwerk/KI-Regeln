@@ -8,6 +8,13 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### Umgebungsabhängige Verifikation – PR A (15.10.2026)
+
+- Software-Feature- und QA-Workflow um Verification Discovery für Projektvorgaben, Sprache, OS/Runtime, Risiko und Rechte ergänzt; native Testwerkzeuge bevorzugt, keine allgemeine Python-Pflicht.
+- Portablen, optionalen `verification-run`-JSON-Vertrag (Draft 2020-12) und synthetische Positiv-/Negativtests eingeführt. Kein pauschaler Gesamt-PASS, keine automatische Ausführung und kein Ersatz vorhandener projektspezifischer Reports.
+- Vertragskontrollen in CI ergänzt; kein B2-/Behavioral-Harness-Umbau und noch kein HTML-Renderer.
+
+
 ### B2-Linux-Integration und aktuelle Probe-Evidence (15.10.2026)
 
 - Writable-Testpakete deklarieren ihren Modus ausdrücklich; ein neuer Paket-Negativtest schützt weiterhin vor Read-only-Eskalation.
