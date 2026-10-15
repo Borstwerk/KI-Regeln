@@ -19,11 +19,15 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 B2_TESTS = "tests.test_verification_surface_b2_implementation"
-PORTABLE = [
+BASE_TESTS = [
     "tests.test_verification_surface",
     "tests.test_verification_surface_b2_design",
     "tests.test_b2_preflight_controls",
     "tests.test_b2_test_runner",
+    "tests.test_b2_auth_bootstrap",
+]
+PORTABLE = [
+    *BASE_TESTS,
     *[f"{B2_TESTS}.{name}" for name in (
         "SeedIntegrityTests", "SurfaceCompletenessTests", "TrustChainTests",
         "AdapterCompatibilityTests", "PilotGateTests", "NoModelRunTests",
@@ -85,7 +89,7 @@ def main(argv: list[str] | None = None) -> int:
         report.update(status="BLOCKED", reasons=missing)
         code = 2
     else:
-        names = (PORTABLE[:4] + [B2_TESTS]) if args.integration else PORTABLE
+        names = (BASE_TESTS + [B2_TESTS, "tests.test_b2_bootstrap_runtime"]) if args.integration else PORTABLE
         suite = unittest.defaultTestLoader.loadTestsFromNames(names)
         result = unittest.TextTestRunner(verbosity=1).run(suite)
         success = result.wasSuccessful() and result.testsRun > 0 and not result.skipped

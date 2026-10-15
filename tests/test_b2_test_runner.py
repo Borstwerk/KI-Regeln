@@ -10,6 +10,18 @@ from tools import b2_test_runner
 
 
 class RunnerClaimTests(unittest.TestCase):
+    def test_complete_integration_keeps_original_modules_and_adds_bootstrap_controls(self):
+        result = SimpleNamespace(testsRun=1, skipped=[], failures=[], errors=[], wasSuccessful=lambda: True)
+        with mock.patch.object(b2_test_runner, "integration_prerequisites", return_value=[]), mock.patch.object(
+                unittest.defaultTestLoader, "loadTestsFromNames") as loader, mock.patch.object(
+                unittest.TextTestRunner, "run", return_value=result), contextlib.redirect_stdout(io.StringIO()):
+            b2_test_runner.main(["--integration"])
+        self.assertEqual(loader.call_args.args[0], [
+            "tests.test_verification_surface", "tests.test_verification_surface_b2_design",
+            "tests.test_b2_preflight_controls", "tests.test_b2_test_runner", "tests.test_b2_auth_bootstrap",
+            "tests.test_verification_surface_b2_implementation", "tests.test_b2_bootstrap_runtime",
+        ])
+
     def test_missing_integration_prerequisites_stop_before_tests(self):
         output = io.StringIO()
         with mock.patch.object(b2_test_runner, "integration_prerequisites", return_value=["no Linux"]):

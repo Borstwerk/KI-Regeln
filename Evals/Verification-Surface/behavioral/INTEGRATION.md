@@ -2,6 +2,8 @@
 
 This records the PR #75 baseline. For the subsequent runnable WSL host, Linux repairs,
 fresh measurements and remaining OAuth skip, see [LINUX-INTEGRATION.md](LINUX-INTEGRATION.md).
+The next model-free preparation and unresolved runtime/auth jobs are specified in
+[AUTH-BOOTSTRAP.md](AUTH-BOOTSTRAP.md).
 
 ## Baseline and scope
 
