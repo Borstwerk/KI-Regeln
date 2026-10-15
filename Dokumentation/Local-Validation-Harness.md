@@ -277,3 +277,25 @@ Die bestehenden GitHub Actions bleiben unverändert bestehen. Eine spätere CI-U
 - Python-Paketversionen sind vollständig gepinnt; Paketartefakt-Hashes sind in dieser ersten Harness-Version noch nicht als `--require-hashes`-Set pro Plattform hinterlegt. Das uv-Binary selbst wird per SHA-256 verifiziert.
 - Online-Upstream-Überprüfungen sind absichtlich kein normaler Release-Schritt.
 - Behavioral Evals sind außerhalb dieses Harness-Scope.
+
+## Optionaler HTML-Bericht (PR B, 15.10.2026)
+
+Der lokale Harness bleibt die Source of Truth und schreibt weiterhin `.validation/latest.json`.
+Nach einem Lauf kann ein **optionaler, reiner Renderer** dieselben Daten als eigenständige HTML-Seite anzeigen:
+
+```powershell
+.\Validate-KI-Regeln.ps1 -Full
+& .\.validation\runtime\venv\Scripts\python.exe tools/verification_report_html.py --input .validation/latest.json --output .validation/report.html
+```
+
+Der zweite Befehl braucht keine global installierte Python-Runtime; er nutzt die bereits vom Harness verwaltete Umgebung. Ein Testlauf mit Fehlerstatus kann trotzdem als Bericht gerendert werden. Der Renderer **führt keine Tests aus**, reinterpretiert die lokalen `PASS/FAIL/WARN/SKIP`-Statuswerte nicht und kennzeichnet Behavioral Validation als `NOT RUN`. Ein clean wirkender Git-HEAD ist kein Fingerprint für lokale Änderungen.
+
+Auch das portable `Schemas/verification-run.schema.json` aus PR A wird unterstützt; es wird vor dem Rendern nach Draft 2020-12 validiert und erhält **keinen errechneten Gesamt-PASS**:
+
+```powershell
+& .\.validation\runtime\venv\Scripts\python.exe tools/verification_report_html.py --input .validation/mein-verification-run.json --output .validation/mein-report.html
+```
+
+Das Ergebnis ist **offline und selbständig** (eingebettetes CSS, keine externen Ressourcen, kein JavaScript). Standardmäßig werden rohe Befehle, Meldungstexte und Evidence-Pfade nicht angezeigt; mit `--include-messages` wird mehr Kontext sichtbar, der vor jeder Weitergabe auf sensible Inhalte geprüft werden muss. Es gibt **keinen** automatischen Upload oder PR-Kommentar.
+
+Diese HTML-Ansicht ist **keine** technische Test- oder Browser-Renderprüfung; die Unit-Tests prüfen nur HTML-Erzeugung, sichere Kodierung, Statusfidelity und Fehlerfälle. Das neue Skript ist optional: Native Prüfungen in fremden Projekten bleiben ihre eigene Source of Truth, und deren Laufzeit darf weiterhin PowerShell, .NET, JavaScript oder etwas anderes sein.
