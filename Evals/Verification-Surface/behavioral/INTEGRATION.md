@@ -1,5 +1,8 @@
 # B2 auth integration and verification boundary — 2026-10-15
 
+This records the PR #75 baseline. For the subsequent runnable WSL host, Linux repairs,
+fresh measurements and remaining OAuth skip, see [LINUX-INTEGRATION.md](LINUX-INTEGRATION.md).
+
 ## Baseline and scope
 
 The implementation branch was already merged through PR #43. This integration combines

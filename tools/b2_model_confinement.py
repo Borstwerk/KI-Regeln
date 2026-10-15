@@ -28,6 +28,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import shlex
 import shutil
 import sys
 from contextlib import contextmanager
@@ -79,9 +80,8 @@ MODEL_RUNTIME_BINDS = ("/usr", "/bin", "/sbin", "/lib", "/lib64", "/etc")
 BASE_VIEW_PATH = f"{BIN_MOUNT}:/usr/local/bin:/usr/bin:/bin"
 # Host directories that must never appear in the view. Asserted, not assumed.
 FORBIDDEN_IN_VIEW = ("home", "root", "tmp", "srv", "var", "media", "mnt")
-# `/opt` may exist, but only as the parent of the node runtime mount. Anything else under it
-# would be host content the view has no business carrying, so the listing is checked.
-RUNTIME_PARENTS = ("opt",)
+# Always inspect /opt, even when the runtime already lives in the standard /usr bind.
+RUNTIME_PARENTS = ("/opt",)
 
 
 class ConfinementError(RuntimeError):
@@ -412,6 +412,21 @@ def probe_confinement(evaluator_sentinel: Path, sentinel_value: str,
         launcher = materialize(task, Path(WORKSPACE_MOUNT), tools_dir=Path(RUNTIME_MOUNT),
                                staging=staging)
 
+        node = _node_runtime(claude_binary)
+        expected_parent = (str(Path(node[0]).parent), Path(node[0]).name) if node else None
+        parents = sorted(set(RUNTIME_PARENTS) | ({expected_parent[0]} if expected_parent else set()))
+        parent_probe = (
+            "import json,os,sys\n"
+            "out={}\n"
+            "for path in sys.argv[1:]:\n"
+            " try:\n"
+            "  exists=os.path.lexists(path)\n"
+            "  out[path]={'exists':exists,'entries':sorted(os.listdir(path)) if exists else [],'error':None}\n"
+            " except OSError as exc:\n"
+            "  out[path]={'exists':True,'entries':[],'error':type(exc).__name__}\n"
+            "print(json.dumps(out))\n"
+        )
+
         # The sentinel arrives as an argument, not as a literal in the script: a probe whose
         # own file contains the needle finds it and reports a leak that is its own doing.
         script = "\n".join([
@@ -420,7 +435,8 @@ def probe_confinement(evaluator_sentinel: Path, sentinel_value: str,
             'echo "--- cwd"; pwd',
             'echo "--- root listing"; ls -1 / 2>&1',
             'echo "--- cat evaluator sentinel"; cat %s 2>&1 | head -2' % evaluator_sentinel,
-            'echo "--- opt listing"; ls -1 /opt 2>&1 | head -5',
+            'echo "--- runtime parent listing"; python3 -c %s %s'
+            % (shlex.quote(parent_probe), " ".join(shlex.quote(p) for p in parents)),
             'echo "--- cat repository file"; cat %s 2>&1 | head -2' % (Path.cwd() / "tools/b2_grader.py"),
             'echo "--- find case-matrix"; find / -name "case-matrix.yml" 2>/dev/null | head -5',
             'echo "--- find expectations"; find / -name "expectations.yml" 2>/dev/null | head -5',
@@ -445,7 +461,6 @@ def probe_confinement(evaluator_sentinel: Path, sentinel_value: str,
         ])
         (workspace / "probe.sh").write_text(script, encoding="utf-8")
 
-        node = _node_runtime(claude_binary)
         extra_ro = [(RUNTIME_MOUNT, staging), (BIN_MOUNT, task / BIN_DIR),
                     (CONFIG_MOUNT, stage_config(task))]
         if node is not None:
@@ -470,9 +485,24 @@ def probe_confinement(evaluator_sentinel: Path, sentinel_value: str,
             return out
 
         listing = set(section("root listing"))
-        opt_listing = section("opt listing")
+        parent_observations = {}
+        unexpected = []
+        try:
+            parent_observations = json.loads("\n".join(section("runtime parent listing")))
+            if not isinstance(parent_observations, dict) or set(parent_observations) != set(parents):
+                raise ValueError("incomplete runtime parent observations")
+            for parent in parents:
+                observed = parent_observations[parent]
+                if not isinstance(observed, dict) or not isinstance(observed.get("entries"), list):
+                    raise ValueError("malformed runtime parent observation")
+                allowed = [expected_parent[1]] if expected_parent and parent == expected_parent[0] else []
+                if (observed["error"] is not None or observed["entries"] != allowed
+                        or observed["exists"] is not bool(allowed)):
+                    unexpected.append(parent)
+        except (ValueError, KeyError, TypeError):
+            parent_observations = {}
+            unexpected.append("runtime parent probe missing or malformed")
         wrote = [l.split(" ", 1)[1] for l in result.stdout.splitlines() if l.startswith("WROTE ")]
-        expected_runtime = runtime_parent_expectation(claude_binary)
         launcher_text = launcher.read_text(encoding="utf-8")
         host_root = str(Path.cwd())
         return {
@@ -483,9 +513,10 @@ def probe_confinement(evaluator_sentinel: Path, sentinel_value: str,
             "root_listing": sorted(listing),
             "host_dirs_in_view": sorted(listing & set(FORBIDDEN_IN_VIEW)),
             # A runtime parent is acceptable; host content under it is not.
-            "runtime_parent_listing": opt_listing,
-            "unexpected_under_runtime_parent": [
-                x for x in opt_listing if expected_runtime is None or x != expected_runtime[1]],
+            "runtime_parent_listing": [entry for row in parent_observations.values()
+                                       if isinstance(row, dict) for entry in row.get("entries", [])],
+            "runtime_parent_observations": parent_observations,
+            "unexpected_under_runtime_parent": unexpected,
             "wrote": wrote,
             "writes_outside_workspace": [w for w in wrote if not w.startswith(WORKSPACE_MOUNT)],
             "launcher_contains_host_path": host_root in launcher_text,

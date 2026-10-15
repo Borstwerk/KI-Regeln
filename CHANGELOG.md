@@ -8,6 +8,14 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
+### B2-Linux-Integration und aktuelle Probe-Evidence (15.10.2026)
+
+- Writable-Testpakete deklarieren ihren Modus ausdrücklich; ein neuer Paket-Negativtest schützt weiterhin vor Read-only-Eskalation.
+- Die Confinement-Probe misst Runtime-Verzeichnisse vollständig und unterscheidet `/usr`-Installationen von zusätzlichen `/opt`-Mounts. Eingepflanzte Nachbarverzeichnisse und fehlende Beobachtungen bleiben rot.
+- Aktuelle Boundary-/Preflight-Bindings werden aus echten neuen Läufen geprüft; historische YAML-Evidence und Trust-Pins bleiben unverändert.
+- CA-Pfad-Staging wird mit einer temporären lesbaren Datei geprüft; Integrationsberichte nennen Skip-Gründe. Der unveränderte echte OAuth-Test bleibt ohne Token offen und verhindert weiterhin PASS.
+- Den unter WSL erforderlichen privilegierten Testkontext und die verbleibenden Auth-/Pilot-Gates in `Evals/Verification-Surface/behavioral/LINUX-INTEGRATION.md` dokumentiert.
+
 ### B2-Auth-Integration und reproduzierbare Prüfstände (15.10.2026)
 
 - Die vier offenen Auth-Pfad-Commits mit dem aktuellen `main` integriert; die frühere B2-Implementierung war bereits über PR #43 enthalten.
