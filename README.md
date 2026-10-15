@@ -1,274 +1,63 @@
 # KI-Regeln
 
-> **Du bringst die Aufgabe. Der Werkzeugkasten liefert die passende Arbeitsweise.**
+> **Start with a real problem. Find the smallest useful way for AI to work on it.**
 
-KI-Regeln ist ein allgemeiner Werkzeugkasten für Menschen, die generative KI für konkrete Aufgaben einsetzen möchten, ohne sich zuerst tief in Prompt Engineering, Agentensysteme oder einzelne KI-Werkzeuge einarbeiten zu müssen.
+**Language:** English · [Deutsch / Einstieg auf Deutsch](START-HIER.md)
 
-Der Ausgangspunkt ist **nicht** ein Skill-Name.
+KI-Regeln ("AI Rules") is an **open-source, provider-agnostic toolkit** of reusable rules, agent skills, workflows and evaluation methods for working with generative AI. It is designed for people who have a task to solve—not for people who already know which skill to invoke.
 
-Der Ausgangspunkt ist ein reales Problem:
+Rather than offering one giant prompt, the repository helps an AI assistant **discover and combine relevant methods**, work within the real project's constraints, and make verification and human decisions visible.
 
-- „Ich möchte etwas recherchieren.“
-- „Ich muss einen technischen Fehler verstehen.“
-- „Ich möchte einen Text oder eine Dokumentation erstellen.“
-- „Ich möchte eine Geschichte mit konsistenten Figuren entwickeln.“
-- „Ich möchte meine Finanzen strukturierter analysieren.“
-- „Ich möchte eine Website oder eine Bildserie bauen.“
+## Choose your starting point
 
-KI-Regeln hilft der KI dabei, aus dem vorhandenen Werkzeugkasten die **kleinste ausreichende Kombination aus Regeln, Skills und Workflows** auszuwählen und kontrolliert anzuwenden.
+| I want to… | Start here |
+| --- | --- |
+| Use AI for a real task, without learning the internal architecture | **[Start here — English](START-HERE.md)** · [Deutsch](START-HIER.md) |
+| See how the toolkit is used in practice | [Real-world examples (German)](PRAXISBEISPIELE.md) |
+| Understand its scope, routing and limitations | [Usage guide (German)](Dokumentation/Nutzung-des-Repositories.md) |
+| Integrate it into an AI agent's work | **[AGENTS.md — canonical agent bootstrap (German)](AGENTS.md)** |
+| Discover available skills or workflows | [Skill catalog](skill-catalog.yml) · [Workflow index](workflow-index.yml) |
+| Contribute or review the project | [Contributing (German)](CONTRIBUTING.md) · [Security policy](SECURITY.md) |
 
-## Neu hier? Start hier.
+**Important:** These files do not automatically install or enforce anything in ChatGPT, Codex or another AI tool. The assistant needs access to the relevant repository files and an appropriate runtime; actual execution, permissions and evidence depend on the user's environment.
 
-Wenn du das Repository einfach benutzen möchtest, ohne seine interne Architektur zu lernen:
+## What you can do with KI-Regeln
 
-**→ [`START-HIER.md`](START-HIER.md)**
-
-Dort steht der problemorientierte Einstieg samt Beispielauftrag.
-
-Weitere Einstiege:
-
-- Reale Arbeitsbeispiele: [`PRAXISBEISPIELE.md`](PRAXISBEISPIELE.md)
-- Ausführlichere Nutzung: [`Dokumentation/Nutzung-des-Repositories.md`](Dokumentation/Nutzung-des-Repositories.md)
-- Technischer Einstieg für KI-Agenten: [`AGENTS.md`](AGENTS.md)
-- Skill-Routing: [`Dokumentation/Skill-Handbuch.md`](Dokumentation/Skill-Handbuch.md)
-- Reife und Evalabdeckung: [`Dokumentation/Skill-Katalog.md`](Dokumentation/Skill-Katalog.md)
-
-## KI-Regeln in 60 Sekunden
+Describe the problem in your own words. Typical areas include research, software development, testing, documentation, creative writing, image work, financial reasoning, data and infrastructure workflows. See the [domain overview (German)](Dokumentation/Skill-Handbuch.md) for the maintained routing guide.
 
 ```text
-Du beschreibst dein Problem oder Ziel
-→ vorhandene Informationen / Dateien / Projektregeln werden als lokale Wahrheit bestimmt
-→ die KI ordnet die Aufgabe ein
-→ sie wählt den kleinsten fachlich ausreichenden Workflow-/Skill-Satz
-→ sie prüft wenige domänenübergreifende Skills am jeweils passenden Arbeitszeitpunkt
-→ fehlende, wirklich notwendige Informationen werden geklärt
-→ die Aufgabe wird bearbeitet
-→ vor Abschluss und Darstellung werden späte Trigger erneut geprüft
-→ Ergebnis und Evidence werden geprüft
-→ Human Gate, wenn eine Entscheidung oder Außenwirkung es erfordert
+Your goal and project context
+  → identify the local source of truth
+  → discover the smallest suitable skill / workflow set
+  → perform the task with appropriate tools and boundaries
+  → verify what actually ran and what remains uncertain
+  → request human approval where required
 ```
 
-Du musst dafür weder die Namen der Skills kennen noch das komplette Repository in einen Prompt laden.
+**Project-specific facts stay with the project.** KI-Regeln describes general ways of working, but it cannot know your files, requirements, credentials, environment or authorization from a prompt alone.
 
-Die allgemeinen Regeln helfen beim **Wie**. Das konkrete Projekt bestimmt weiterhin das **Was**.
+## What makes this different?
 
-## Was möchtest du tun?
+- **Problem-first discovery:** Users do not need to memorize skill names. Agents consult [AGENTS.md](AGENTS.md) and the catalog to select what is relevant.
+- **Provider-independent design:** Methods are not tied to one model or vendor; platform capabilities and limitations are checked locally.
+- **Evidence before claims:** Skills, [evaluations](Evals/README.md), review gates and the [verification/reporting contract](Testing-und-QA/Umgebungsabhaengige-Verifikation-und-Reports.md) distinguish executed checks from defined or unavailable checks.
+- **Human control:** Tool availability is not permission to publish, deploy, purchase, alter production data or take other external actions.
+- **Traceable reuse:** External influences and licensing are documented rather than silently copied into the toolkit.
 
-| Beispielhafte Aufgabe | Typischer Bereich |
-|---|---|
-| recherchieren, Quellen bewerten, Behauptungen prüfen | Recherche |
-| Texte schreiben, überarbeiten oder adressatengerecht formulieren | Schreiben |
-| Figuren, Plot, Welt oder Kontinuität einer Geschichte entwickeln | Storyentwicklung und Fiktion |
-| Cashflow, Rücklagen, Schulden, Vermögensszenarien, Portfolios, Unternehmen oder Anlagen analysieren | Finanzen |
-| Bilder oder konsistente Bildserien entwickeln und prüfen | Bildarbeit |
-| Websites gestalten, umsetzen oder reviewen | Webentwicklung |
-| Code entwickeln oder Fehler diagnostizieren | Programmieren |
-| Kompilierte EXE, DLL, Firmware oder Unity-Builds ohne Quellcode verstehen | Reverse Engineering und Binäranalyse |
-| Datenbanken analysieren oder ändern | Datenbanken |
-| eine Datenbanktabelle oder andere technische Artefakte dokumentieren | Dokumentationserstellung + zuständiger Fachbereich |
-| Anforderungen klären und spezifizieren | Requirements und Spezifikations-Engineering |
-| Wissen langfristig strukturieren und pflegen | Wissensmanagement |
-| Datei auf Provenienz-/Metadatensignale prüfen oder eigene Sharing-Kopie gezielt von sensiblen Metadaten bereinigen | Sicherheit |
-| lernen, Lernkarten bauen, Wissen abfragen oder Inhalte visualisieren | ChatGPT-Funktionen & Lernwerkzeuge |
-| Datenpipelines, Architektur, Infrastruktur oder Reliability bearbeiten | jeweiliger technischer Fachbereich |
+## Maturity and verification
 
-Diese Tabelle ist Orientierung, keine starre Routingmatrix. Ein reales Problem kann mehrere Bereiche berühren, und manchmal ist gar kein spezieller Skill nötig.
+KI-Regeln is an **experimental, actively maintained project**. Skill count is an inventory metric, **not** proof of quality. Defined evaluations are not automatically executed or independently validated. A successful structural check is not evidence that a real-world model always follows the rules.
 
-## Lernen mit ChatGPT
+See the [skill maturity and evaluation catalog (German)](Dokumentation/Skill-Katalog.md) and [evaluation documentation](Evals/README.md) for actual status and limitations.
 
-Für produktseitige Lernfunktionen wie interaktive **Lernkarten**, **Quizzes**, visuelle Lernnotizen oder `@Visualize` gibt es eine eigene Übersicht:
+## Contributing, licensing and reuse
 
-**→ [`Dokumentation/ChatGPT-Funktionen-und-Lernwerkzeuge.md`](Dokumentation/ChatGPT-Funktionen-und-Lernwerkzeuge.md)**
+We welcome careful reviews, bug reports and contributions. Read [CONTRIBUTING.md](CONTRIBUTING.md), the [security policy](SECURITY.md) and the [documentation index](Dokumentation/README.md). The canonical agent instructions remain in [AGENTS.md](AGENTS.md); translations of the human introduction never override them.
 
-Diese Funktionen sind bewusst **nicht** als KI-Regeln-Skills katalogisiert. Die Doku trennt zwischen offiziell dokumentierten Produktfunktionen, UI-abhängigen Shortcuts und bloßen Community-Promptkürzeln.
+The root [MIT license](LICENSE) covers KI-Regeln-owned material unless a file states otherwise; **it does not relicense third-party material**. Six explicitly listed generated media assets are **excluded from MIT** and documented separately under **CC BY-SA 4.0** to the extent licensable rights exist. Before reusing any media or adapted material, consult [ASSET-LICENSES.md](ASSET-LICENSES.md), [REUSE.toml](REUSE.toml) and [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md). A root license is not itself a publication authorization; current public-release gates are recorded in [open-source-readiness.yml](Dokumentation/open-source-readiness.yml).
 
-## Warum gibt es KI-Regeln?
+## About BorstWerk
 
-KI-Regeln entstand aus dem Wunsch, Menschen im eigenen Umfeld – ursprünglich ganz konkret Familie und Freunden – einen praktikablen Zugang zu KI-gestützter Arbeit zu geben, auch dann, wenn sie sich nicht zuerst selbst tief mit KI-Systemen beschäftigen möchten.
+KI-Regeln is part of [BorstWerk](https://github.com/Borstwerk), a non-commercial, problem-driven collection of tools that grew from practical needs among friends and family.
 
-Die Ausgangsfrage war deshalb nicht: *Wie baut man möglichst viele Skills?*
-
-Sondern eher:
-
-> **Wie kann jemand mit einem realen Problem anfangen, ohne vorher den Werkzeugkasten verstehen zu müssen?**
-
-Aus einzelnen Regeln und Arbeitsweisen entstand deshalb schrittweise ein allgemeiner Werkzeugkasten. Statt für jede denkbare Aufgabe einen fertigen „Superprompt“ anzubieten, werden wiederverwendbare Arbeitsweisen so strukturiert, dass eine KI von einem konkreten Problem zu den passenden Werkzeugen routen kann.
-
-Das Ziel ist:
-
-```text
-Problem
-→ passende Werkzeuge
-→ kontrollierte Bearbeitung
-→ überprüfbares Ergebnis
-```
-
-Dabei bleiben Quellen, Annahmen, Unsicherheiten, Prüfungen und erforderliche menschliche Entscheidungen sichtbar.
-
-KI-Regeln ist Teil von **BorstWerk**. Die übergeordnete Idee dahinter ist dieselbe wie bei den anderen Projekten: Aus einer konkreten Aufgabe entsteht ein Werkzeug – nicht automatisch eine Plattform.
-
-## Grundprinzip
-
-> **Allgemeine Arbeitsweise zentral, konkrete Wahrheit lokal.**
-
-KI-Regeln enthält allgemeine Methoden. Es kennt nicht automatisch die Wahrheit deines Projekts.
-
-Lokal beziehungsweise beim Nutzer bleiben je nach Aufgabe zum Beispiel:
-
-- reale Anforderungen und Ziele;
-- vorhandene Dateien, Daten und interne Quellen;
-- gültige Projektentscheidungen;
-- fachliche oder visuelle Vorgaben;
-- konkrete Systeme, Versionen, Schemas und Toolzustände;
-- Zielwerte und Messdefinitionen;
-- persönliche Präferenzen, soweit sie für die Aufgabe relevant sind;
-- Freigaben für Veröffentlichungen, Käufe, Deployments oder andere Außenaktionen.
-
-Allgemeine Regeln dürfen diese konkrete Wahrheit nicht durch plausible Annahmen ersetzen.
-
-## Was passiert unter der Haube?
-
-Der Werkzeugkasten besteht aus mehreren Ebenen:
-
-- **Regeln** beschreiben allgemeine Leitplanken und Arbeitsweisen.
-- **Skills** beschreiben begrenzte, wiederverwendbare Fähigkeiten.
-- **Workflows** verbinden mehrere Skills für größere Aufgaben.
-- **Routing** hilft, vom Problem zum kleinsten fachlich ausreichenden Werkzeug-Satz zu gelangen.
-- **Routing Overlays** erinnern den Agenten an wenige domänenübergreifende Skills, die nach dem Primärrouting zusätzlich relevant sein könnten, ohne deren Trigger zu duplizieren.
-- **Evidence und Verification** machen prüfbar, worauf Ergebnisse gestützt sind.
-- **Human Gates** trennen Analyse oder Vorschlag von realen, freigabepflichtigen Aktionen.
-- **Maturity und Eval Coverage** zeigen Reife und vorhandenen Prüfstand.
-- **Provenance** dokumentiert relevante externe methodische Einflüsse und Drittmaterial.
-
-Der Skill-Katalog ist damit der **Werkzeugschrank hinter der Werkstatt**. Die normale Nutzung beginnt nicht dort, sondern beim Problem.
-
-## Reife und Anspruch
-
-KI-Regeln ist ein experimenteller, systematisch gepflegter Werkzeugkasten für kontrollierte KI-Arbeit.
-
-Die Anzahl vorhandener Skills ist **Inventar, kein Qualitätsnachweis**.
-
-Skills besitzen explizite Maturity-Level wie `experimental` oder `candidate`; daneben wird die Eval Coverage mit Stufen wie `none` oder `partial` dokumentiert.
-
-Dabei gilt ausdrücklich:
-
-```text
-definierter Evalfall
-≠ ausgeführter Test
-
-ausgeführter Test
-≠ automatisch bestanden
-
-Same-Model-Smoke
-≠ unabhängiger Benchmark
-```
-
-Maturity, Eval Coverage, Toolverfügbarkeit oder ein Review-Verdict erweitern keine Autorisierung.
-
-## Praxis statt Prompt-Magie
-
-Die Praxisbeispiele zeigen reale Arbeitsweisen und auch deren Fehler, Korrekturen und Grenzen:
-
-**→ [`PRAXISBEISPIELE.md`](PRAXISBEISPIELE.md)**
-
-Ein Praxisbeispiel ist dabei weder Benchmark noch Garantie noch Beweis, dass ein einzelner Prompt genügt.
-
-## Fach- und Methodenbereiche
-
-Der Werkzeugkasten umfasst unter anderem:
-
-```text
-Grundlagen
-Arbeitsweisen
-Agentenarbeit
-Recherche
-Wissensmanagement
-Schnittstellen und Verträge
-Infrastruktur und DevOps
-Reliability und System-Observability
-Data Engineering
-Software Architecture und System Design
-Requirements und Spezifikations-Engineering
-Social Media und Content-Präsenz
-Dokumentationserstellung
-Schreiben
-Storyentwicklung und Fiktion
-Finanzen
-Bildarbeit
-Webentwicklung
-Programmieren
-Datenbanken
-Testing und QA
-Skill Engineering
-Sicherheit
-```
-
-Die jeweils verbindliche Skill-Inventarliste liegt in [`skill-catalog.yml`](skill-catalog.yml). Bereichs-READMEs und Fachdateien enthalten die Detailregeln.
-
-## Für KI-Agenten
-
-Ein Agent soll nicht das komplette Repository laden und den Nutzer anschließend mit Skill-Namen befragen.
-
-Der technische Bootstrap steht in [`AGENTS.md`](AGENTS.md). Kernidee:
-
-```text
-Nutzerproblem
-→ lokale Wahrheit
-→ fachlich einordnen
-→ Workflow prüfen
-→ primären Skill-Satz wählen
-→ Cross-Cutting-Checkpoints
-→ nur notwendige Lücken klären / bei materiell neuen Fakten gezielt re-routen
-→ arbeiten
-→ Pre-Completion / Pre-Output prüfen
-→ verifizieren
-→ erforderliche Gates sichtbar machen
-```
-
-Der Master-Router steht in [`Dokumentation/Skill-Handbuch.md`](Dokumentation/Skill-Handbuch.md).
-
-## Für Contributors und tiefere technische Nutzung
-
-- [`Dokumentation/Skill-Katalog.md`](Dokumentation/Skill-Katalog.md) – Maturity und Eval Coverage
-- [`skill-catalog.yml`](skill-catalog.yml) – maschinenlesbares Skill-Inventar
-- [`routing-overlays.yml`](routing-overlays.yml) – kleine domänenübergreifende Zweitprüfung nach dem Primärrouting
-- [`workflow-index.yml`](workflow-index.yml) – vorhandene Workflows
-- [`Dokumentation/Quellenregister.md`](Dokumentation/Quellenregister.md) – Quellen-/Upstream-Governance
-- [`CONTRIBUTING.md`](CONTRIBUTING.md) – Beitrags- und Reviewprozess
-- [`SECURITY.md`](SECURITY.md) – Security-Policy
-
-## Public Entry Path und Lizenz
-
-Die Root-Projektlizenz ist MIT und gilt für das projekt-eigene KI-Regeln-Material, **soweit keine Datei ausdrücklich abweichend lizenziert ist**. Drittmaterial wird dadurch nicht automatisch unter MIT gestellt.
-
-Sechs Bildassets aus den dokumentierten Praxisbeispielen sind ausdrücklich von der MIT License ausgenommen und stehen – soweit daran lizenzierbare Rechte bestehen – unter **CC BY-SA 4.0**. Die Bildausgaben wurden vollständig durch OpenAI-Bildgenerierung erzeugt; Idee, Prompts, Gestaltungsvorgaben, Art Direction, Auswahl und Freigabe wurden menschlich gesteuert. Die genaue Dateiliste, Attribution und Provenienz stehen in [`ASSET-LICENSES.md`](ASSET-LICENSES.md).
-
-Die maschinenlesbare Zuordnung dieser sechs Dateien steht zusätzlich in [`REUSE.toml`](REUSE.toml).
-
-Maßgeblich sind zusätzlich:
-
-- [`ACKNOWLEDGEMENTS.md`](ACKNOWLEDGEMENTS.md) – methodische Referenzräume;
-- [`THIRD-PARTY-NOTICES.md`](THIRD-PARTY-NOTICES.md) – redistribution-relevante Drittmaterial-Notices;
-- [`ASSET-LICENSES.md`](ASSET-LICENSES.md) – separat lizenzierte Medienassets und deren KI-Provenienz;
-- [`Dokumentation/open-source-readiness.yml`](Dokumentation/open-source-readiness.yml) – maschinenlesbarer Readiness-/Release-Gate-Status;
-- [`Dokumentation/Open-Source-Readiness-2026-08-25.md`](Dokumentation/Open-Source-Readiness-2026-08-25.md) – historischer Phase-3-Auditbericht.
-
-Für die in `ASSET-LICENSES.md` aufgeführten Medienassets gilt ausdrücklich: **The MIT License does not apply to these media assets.**
-
-Eine vorhandene Root-`LICENSE` ist keine automatische Veröffentlichungsfreigabe. Der Public-Release-Status wird weiterhin ausschließlich über `Dokumentation/open-source-readiness.yml` bestimmt.
-
-## Teil von BorstWerk
-
-BorstWerk ist ein privates, nicht-kommerzielles Projekt, das aus konkreten Problemen im eigenen Alltag und im Umfeld von Familie und Freunden gewachsen ist.
-
-Die gemeinsame Idee lautet:
-
-> **Nicht jede Aufgabe braucht eine Plattform. Manchmal braucht sie einfach ein Werkzeug.**
-
-KI-Regeln ist die Variante dieser Idee für KI-gestützte Arbeit: Der Nutzer bringt das Problem; der Werkzeugkasten hilft dabei, die passende Arbeitsweise kontrolliert auszuwählen und anzuwenden.
-
-Mehr zu BorstWerk: [github.com/Borstwerk](https://github.com/Borstwerk)
-
----
-
-> **Du musst den Werkzeugkasten nicht kennen, bevor du ihn benutzen kannst. Beschreibe die Aufgabe – die Werkzeugauswahl ist Teil der Arbeit.**
+> **You don't have to know the toolbox before you can use it. Start with your task.**

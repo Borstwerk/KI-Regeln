@@ -16,6 +16,12 @@ Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunäch
 - Portable Negativkontrollen, reale Rot-/Grün-, Schreib-, Canary-, Netzwerk- und Startup-Kontrollen ergänzt; Grenzen und verbleibender Secret-Transport in `RUNTIME-SEPARATION.md` dokumentiert.
 - Classic-Default, Pilot-Admission, Auth-Gate und Trust-Pins bleiben unverändert. Der neue Vorbereitungsschalter autorisiert keine Credentials oder Modellaufrufe.
 
+### Öffentliche Einstiege: Englisch/Deutsch und agentengerechte Pflege (15.10.2026)
+
+- Englische Root-README als kurze internationale Projektvisitenkarte; vorhandenen deutschen Schnellstart gekürzt, englischen Quickstart hinzugefügt.
+- Technische Agentengates bleiben nur in `AGENTS.md` und kanonischen Fachdateien; Pflege-/Übersetzungsgrenzen und Navigation für Menschen dokumentiert.
+- Leichte, rein strukturelle Link-/Sprachpfadkontrollen mit synthetischen Negativtests in CI. Keine automatische semantische Übersetzungsprüfung, kein neues Routing oder Freigabeversprechen.
+
 ### Native Verification Pilot für PowerShell und .NET (15.10.2026)
 
 - Tatsächliche native Prüfungen für kleine PowerShell- und C#-Fixtures, mit Source-Digest, Exitcode und beobachtbarem Prozessmarker; kein allgemeiner Test-Runner.
