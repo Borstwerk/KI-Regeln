@@ -1,0 +1,17 @@
+{
+  "case_id": "HYPE-SYNTH-01",
+  "selected": [
+    {
+      "id": "outcome-grader",
+      "evidence_urls": [
+        "https://example.invalid/outcome-grader/README"
+      ]
+    },
+    {
+      "id": "browser-relay-redux",
+      "evidence_urls": [
+        "https://example.invalid/browser-relay-redux"
+      ]
+    }
+  ]
+}

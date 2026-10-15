@@ -39,6 +39,20 @@ Capability
 → Gate
 ```
 
+## Deklariert, durchgesetzt, autorisiert
+
+Bei Integrationen mit mehreren Agenten oder Accounts drei Ebenen getrennt prüfen:
+
+1. **Provider-/Credential-Scope:** Was könnte das verbundene Konto oder OAuth-Token beim Anbieter insgesamt tun? Ein feinerer UI-Schalter beim Proxy verengt diesen Ursprungsscope nicht automatisch.
+2. **Effektive Runtime-Durchsetzung:** Wird der tatsächlich freigegebene Agent-/Connection-/Action-Scope **bei jedem Toolaufruf serverseitig** geprüft – auch nach Rechteänderung, für direkte API-Pfade und für neu entdeckte Tools? Eine konfigurierte Checkbox, Toolliste oder ein Auditlog allein beweist das nicht.
+3. **Auftragsbezogene Autorisierung:** Ein technisch erlaubtes `send`, `publish` oder `delete` ist noch keine Freigabe zur konkreten Außenaktion. Das Human Gate und die aktuelle Zielidentität bleiben separat.
+
+Toolbeschreibungen und MCP-Risikoannotationen (`read-only`, `reversible`, `low risk`) sind Behauptungen der Toolquelle. Vor einem Vertrauens- oder Auto-Approve-Claim mit tatsächlicher Toolsemantik, Provider-Scope und verfügbarer Runtime-Evidence abgleichen; unbekannte Wirkung als unbestätigt behandeln.
+
+Für Audit- und Denied-Events nur notwendige Metadaten protokollieren. Protokollierte Suchbegriffe, Record-Titel und Toolargumente können vertraulich sein; das Logging selbst ist kein Ersatz für Permission Enforcement.
+
+Ist keine technische Durchsetzung beobachtbar, nicht `OK` behaupten: `ENFORCEMENT-UNVERIFIED` berichten und bei riskanten Aktionen nicht aus Dokumentation oder UI-Konfiguration auf Freigabe schließen.
+
 ## Runtime-Scope-Evidence
 
 Bei externen Writes, Deployments, Sends, Deletes, Produktionszugriffen oder vergleichbar folgenreichen Aktionen genügt eine bloße Behauptung wie „Sandbox“, „Test“, „Simulation“ oder „Staging“ nicht als starke Autorisierungsevidence.
@@ -63,7 +77,8 @@ Melden als:
 - **NO-FALLBACK** – fehlende Capability führt zu unsauberem oder vorgetäuschtem Verhalten;
 - **SCOPE-IDENTITY-UNVERIFIED** – riskante Aktion stützt sich auf angenommene statt ausreichend belegte Ziel-/Umgebungsidentität;
 - **SCOPE-IDENTITY-CONFLICT** – beobachtbare Runtime-Evidence widerspricht dem freigegebenen Ziel oder Environment;
-- **OK** – angemessen begrenzt.
+- **ENFORCEMENT-UNVERIFIED** – effektive technische Durchsetzung des deklarierten Rechtescopes nicht hinreichend überprüft.
+- **OK** – angemessen begrenzt und im überprüften Scope nachgewiesen.
 
 ## Harte Regeln
 

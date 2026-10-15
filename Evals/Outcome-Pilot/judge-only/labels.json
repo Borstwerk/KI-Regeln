@@ -1,0 +1,8 @@
+{
+  "case_id": "HYPE-SYNTH-01",
+  "relevant_ids": [
+    "outcome-grader",
+    "scoped-agent-access"
+  ],
+  "label_provenance": "Synthetic curated development fixture; not independent field or held-out evidence."
+}
