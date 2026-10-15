@@ -57,7 +57,9 @@ Keine spekulativen Erweiterungen außerhalb des freigegebenen Scopes.
 
 ## 6. Verifikation
 
-`verification-loop`
+Vor der Ausführung **Verification Discovery** gemäß `../Testing-und-QA/Umgebungsabhaengige-Verifikation-und-Reports.md`: Projektvorgaben, betroffene Technologien, Betriebssystem/Runtime, vorhandene Testbefehle, Risiken und Berechtigungen tatsächlich prüfen. Die passende native Testumgebung wählen; kein pauschaler Python- oder CI-Zwang.
+
+`verification-loop` führt die relevanten Checks frisch aus und trennt PASS, FAIL, BLOCKED, NOT_RUN und UNVERIFIED. Eine nicht vorhandene Runtime ist keine bestandene Prüfung. Ergebnisse möglichst mit Quellzustand und Evidence binden; der optionale Austauschvertrag liegt unter `../Schemas/verification-run.schema.json`.
 
 Tests, Build, statische Checks und fachliche Akzeptanz soweit passend.
 

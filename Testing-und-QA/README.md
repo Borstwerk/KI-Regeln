@@ -88,6 +88,10 @@ lokales Release- oder Freigabe-Gate
 8. **Test-Evidence ist keine automatische Release-Freigabe.** Testing berichtet Qualität, Risiken und Restunsicherheit; die Releaseentscheidung bleibt beim gültigen lokalen Gate.
 9. **Fresh Evidence vor Completion Claims.** Ein alter oder nur behaupteter Testlauf gilt nicht als aktueller Nachweis.
 
+## Projektabhängige Ausführung und Reporting
+
+`Umgebungsabhaengige-Verifikation-und-Reports.md` konkretisiert, wie ein Agent die native Projekt-Testumgebung erkennt, welche Rechte er vor der Ausführung prüfen muss und wie Ergebnisse optional technologieunabhängig nach `../Schemas/verification-run.schema.json` dokumentiert werden. Kein zusätzlicher Test-Runner und keine pauschale Python-Pflicht.
+
 ## Skills
 
 - `test-strategy`
