@@ -12,6 +12,12 @@
   "live_execution": "NOT RUN",
   "credential_intake": "NOT IMPLEMENTED",
   "operator_cost_authorization": "NOT GRANTED",
+  "test_access_policy": {
+    "direct_claude_or_chatgpt_api": "FORBIDDEN",
+    "api_key_credentials": "FORBIDDEN",
+    "existing_subscription_cli": "ALLOWED_WITH_SCOPE_SPECIFIC_GATES",
+    "direct_http_substitute": "FORBIDDEN"
+  },
   "proposed_limits": {
     "max_cli_sessions": 2,
     "max_agentic_turns_per_session": 1,

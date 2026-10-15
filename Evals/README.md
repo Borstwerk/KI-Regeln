@@ -6,6 +6,24 @@ Dieser Bereich enthält wiederholbare Testfälle für zentrale Skills.
 
 > Skillqualität wird an beobachtbarem Verhalten geprüft, nicht nur an plausiblen Anweisungen.
 
+### Leitplanke für die Testinfrastruktur
+
+Die Testinfrastruktur muss so einfach wie möglich bleiben. Ihr Zweck ist der
+reproduzierbare Nachweis der Qualität von KI-Regeln, nicht die Entwicklung einer
+eigenständigen allgemeinen Agentenplattform.
+
+Jede Erweiterung muss einen konkreten Eval oder eine dafür notwendige Sicherheits-
+oder Reproduzierbarkeitsgrenze unterstützen. Vorhandene Runner, lokale Prüfungen und
+CLI-Abos bevorzugen; keine direkten Claude-/ChatGPT-APIs oder echten API-Schlüssel für
+unsere Tests einplanen. Offene Spezialnachweise bleiben sichtbar offen und begründen
+keinen automatischen Ausbau einer allgemeinen Auth-, Orchestrierungs- oder Runtime-
+Plattform. Bestehende Akzeptanzkriterien dürfen dadurch nicht abgeschwächt werden.
+
+Ein begrenzter [Codex-Instruktionspilot für verification-loop](Agentenarbeit/verification-loop/Codex-Instruction-Pilot-2026-10-15.md)
+enthält acht echte Abo-CLI-Antworten mit und ohne zusätzliches Anweisungsbundle.
+Er dokumentiert einen einzelnen positiven Unterschied und eine Lücke der Testanregung;
+keinen unabhängigen Benchmark oder gesicherten Skill-Lift.
+
 Evals sollen insbesondere Regressionen erkennen bei:
 
 - Triggerung und Nichttriggerung;
