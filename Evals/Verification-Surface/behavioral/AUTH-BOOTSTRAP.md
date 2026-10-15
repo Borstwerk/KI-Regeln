@@ -7,6 +7,8 @@ The subsequent explicit credential-free runtime option and its measured limits a
 [RUNTIME-SEPARATION.md](RUNTIME-SEPARATION.md); the classic diagnostic below is retained.
 Its subsequent credential-free descriptor handoff is described in
 [ENVIRONMENT-TRANSPORT.md](ENVIRONMENT-TRANSPORT.md); live authentication remains unadmitted.
+The proposed request/budget limits and still-blocked operator stages are specified in
+[AUTH-MEASUREMENT-PLAN.md](AUTH-MEASUREMENT-PLAN.md); this plan grants no live permission.
 
 ## Runtime decision before credentials
 

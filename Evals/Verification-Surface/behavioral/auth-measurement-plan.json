@@ -1,0 +1,94 @@
+{
+  "contract": "verification-governance-auth-measurement-proposal/v1",
+  "status": "PLAN_ONLY",
+  "review_base_commit": "a31b8a939b5de3f582cb11ca336f1421d24b6b14",
+  "runtime_preparation_merged_in": "2ce5fdc7e7c9f93756837908d9f54cf263414029",
+  "sources_checked_on": "2026-10-15",
+  "purpose": "Review a future tool-free subscription OAuth connectivity measurement",
+  "is_executable_configuration": false,
+  "report_is_admission": false,
+  "may_start_authentication": false,
+  "may_start_model_pilot": false,
+  "live_execution": "NOT RUN",
+  "credential_intake": "NOT IMPLEMENTED",
+  "operator_cost_authorization": "NOT GRANTED",
+  "proposed_limits": {
+    "max_cli_sessions": 2,
+    "max_agentic_turns_per_session": 1,
+    "max_orchestrator_retries": 0,
+    "max_seconds_per_session": 60,
+    "max_cleanup_seconds_per_session": 5,
+    "max_seconds_for_live_stage": 150,
+    "cli_estimated_usd_per_session": "0.05",
+    "total_estimated_usd_review_allowance": "0.10",
+    "hard_financial_ceiling": "UNVERIFIED",
+    "subscription_quota_impact": "UNVERIFIED",
+    "physical_http_request_count": "UNVERIFIED",
+    "internal_cli_retries": "UNVERIFIED",
+    "model_fallback": "FORBIDDEN",
+    "resume_or_continue": "FORBIDDEN"
+  },
+  "candidate_model": {
+    "id": "claude-haiku-5-5",
+    "account_availability": "UNVERIFIED",
+    "automatic_substitution": false
+  },
+  "candidate_argv_review_only": [
+    "claude", "--print", "--safe-mode",
+    "--model", "claude-haiku-5-5",
+    "--max-turns", "1", "--max-budget-usd", "0.05",
+    "--tools", "", "--disallowedTools", "mcp__*",
+    "--permission-mode", "dontAsk",
+    "--setting-sources", "", "--settings", "{}",
+    "--strict-mcp-config", "--mcp-config", "/b2-config/empty-mcp.json",
+    "--no-session-persistence", "--output-format", "json",
+    "--system-prompt", "Return only the requested public connectivity marker.",
+    "Reply exactly B2-AUTH-OK."
+  ],
+  "credential_channel_name": "CLAUDE_CODE_OAUTH_TOKEN",
+  "sessions": [
+    {
+      "id": "invalid-control",
+      "status": "NOT RUN",
+      "credential_kind": "synthetic-invalid-control",
+      "required_result": "Trusted collector attributes authentication rejection to the intended service, not local parsing or transport failure"
+    },
+    {
+      "id": "positive-connectivity",
+      "status": "NOT RUN",
+      "credential_kind": "operator-supplied-subscription-oauth",
+      "depends_on": "invalid-control service rejection verified",
+      "required_result": "Trusted CLI completes a fresh model response in the same measured context, through the only admitted credential channel"
+    }
+  ],
+  "blocking_prerequisites": [
+    "reviewed live secret intake without argv, history, file, report or hash exposure",
+    "effective managed credential policy and all managed pre-session commands admitted in the actual CLI view",
+    "remote policy, named profiles, alternate credential providers, endpoints and inherited overrides resolved or refused",
+    "reviewed model-runtime cancellation and cleanup, including session-detach failure modes",
+    "bounded in-memory collector and reviewed service-error provenance classification",
+    "installed CLI parsing and enforcement of all mandatory limits, including hidden max-turns",
+    "reviewed financial/usage allowance and explicit operator authorization for both sessions",
+    "fresh binary, runtime, environment, endpoint, policy, settings and filesystem binding for this auth-only context"
+  ],
+  "not_measured_by_this_stage": [
+    "Claude Bash credential scrub",
+    "built-in Read enforcement",
+    "B2 writable launch-context admission",
+    "skill effectiveness"
+  ],
+  "local_capability_observation": {
+    "scope": "Credential-free separated view; version and help only",
+    "cli_version": "2.1.292 (Claude Code)",
+    "help_sha256": "550db4f88ae1d97bf7244ca96dc89554aabd3978241ceb69f79001e816c35f09",
+    "max_turns_in_main_help": false,
+    "max_turns_documented_by_vendor": true,
+    "candidate_flag_parsing_and_live_enforcement": "NOT RUN",
+    "service_authentication": "NOT RUN"
+  },
+  "sources": [
+    "https://code.claude.com/docs/en/cli-reference",
+    "https://code.claude.com/docs/en/authentication",
+    "https://platform.claude.com/docs/en/models/overview"
+  ]
+}
