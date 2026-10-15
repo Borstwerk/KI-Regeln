@@ -113,3 +113,11 @@ verblindeter oder Held-out-Benchmark. Allgemeine Modell-Instruktionen bleiben ge
 Baseline. Unterschiede erlauben keinen gesicherten Kausal- oder Generalisierungsclaim.
 Unveränderte Ergebnisse belegen keinen positiven Skill-Lift. Kein Maturity-,
 Coverage-, Security-Gate- oder Wirksamkeitsupgrade aus diesem Pilot ableiten.
+
+## Separater Folgelauf
+
+Der [Evidence-Gap-Folgelauf v2](Evidence-Gap-v2-2026-10-15.md) präzisiert später nur
+den unvollständigen Prompt. Der Standardmodus des Pilotaufrufs liest inzwischen die
+ursprünglichen festen Git-Blobs, damit dieser erste Lauf trotz aktualisierter
+`cases.yml` reproduzierbar bleibt. Seine acht Antworten und Bewertungen werden dadurch
+nicht verändert; ein neuer Lauf mit neuer Scriptversion besitzt eigene Hashbindungen.
