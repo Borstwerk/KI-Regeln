@@ -3,6 +3,8 @@
 Baseline: `1be63377bc14c6aec24157bbc4915a20ea19b193` (PR #76 merged).
 Scope: a model-free diagnostic prefix and a reviewed measurement contract. It does not
 implement authentication, launch a model, change admission or consume credentials.
+The subsequent explicit credential-free runtime option and its measured limits are in
+[RUNTIME-SEPARATION.md](RUNTIME-SEPARATION.md); the classic diagnostic below is retained.
 
 ## Runtime decision before credentials
 

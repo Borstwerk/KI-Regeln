@@ -228,11 +228,10 @@ def view_environment(base: Mapping[str, str], claude_binary: str = "claude") -> 
     return env
 
 
-@contextmanager
-def confined_model_invocation(argv: list[str], *, task_root: Path, workspace: Path,
+def model_view_spec(argv: list[str], *, task_root: Path, workspace: Path,
                               env: Mapping[str, str], claude_binary: str = "claude",
-                              timeout: int = 900):
-    """Build the confined invocation for one model process. Yields it; runs nothing.
+                              timeout: int = 900, separated_check: bool = False) -> ViewSpec:
+    """Build the shared filesystem/env specification; execute nothing.
 
     The caller still executes it through its own process runner: the confinement is in the
     argv that is actually launched, not a side channel around it. That alone does not put it
@@ -243,7 +242,7 @@ def confined_model_invocation(argv: list[str], *, task_root: Path, workspace: Pa
         raise ConfinementError(f"the B2 workspace is not a directory: {workspace}")
     staging = task_root / "b2-runtime"
     launcher = materialize(task_root, Path(WORKSPACE_MOUNT), tools_dir=Path(RUNTIME_MOUNT),
-                           staging=staging)
+                           staging=staging, separated=separated_check)
     if not launcher.is_file():
         raise ConfinementError("the check launcher was not materialised")
 
@@ -256,7 +255,7 @@ def confined_model_invocation(argv: list[str], *, task_root: Path, workspace: Pa
     if node is not None:
         extra_ro.append(node)
 
-    spec = ViewSpec(
+    return ViewSpec(
         workspace=workspace,
         argv=tuple(argv),
         extra_ro=tuple(extra_ro),
@@ -268,7 +267,15 @@ def confined_model_invocation(argv: list[str], *, task_root: Path, workspace: Pa
         runtime_binds=MODEL_RUNTIME_BINDS,
         env=view_environment(env, claude_binary),
     )
-    with confined_invocation(spec) as invocation:
+
+
+@contextmanager
+def confined_model_invocation(argv: list[str], *, task_root: Path, workspace: Path,
+                              env: Mapping[str, str], claude_binary: str = "claude",
+                              timeout: int = 900):
+    """Classic view, using the same specification builder as the separated runtime."""
+    with confined_invocation(model_view_spec(argv, task_root=task_root, workspace=workspace,
+                                            env=env, claude_binary=claude_binary, timeout=timeout)) as invocation:
         yield invocation
 
 

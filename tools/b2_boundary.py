@@ -113,8 +113,15 @@ class ViewSpec:
     unshare_net: bool = True
     runtime_binds: tuple[str, ...] = RUNTIME_BINDS
     env: Mapping[str, str] | None = None
+    payload_identity: tuple[int, int] | None = None
+    private_tmp_mountpoint: bool = False
 
     def validate(self) -> None:
+        if self.payload_identity is not None and (
+            not isinstance(self.payload_identity, tuple) or len(self.payload_identity) != 2
+            or any(type(x) is not int or not 0 < x < 2**31 for x in self.payload_identity)
+        ):
+            raise BoundaryError("payload identity requires nonzero numeric UID and GID")
         if not self.workspace.is_dir():
             raise BoundaryError(f"view workspace is not a directory: {self.workspace}")
         if not self.argv:
@@ -155,6 +162,10 @@ def _script(spec: ViewSpec) -> str:
         'mkdir -p "$R"/proc "$R"/dev "$R"/oldroot',
         f'mkdir -p "$R"{WORKSPACE_MOUNT} "$R"{SCRATCH_MOUNT}',
     ]
+    if spec.private_tmp_mountpoint:
+        # bubblewrap uses /tmp as its construction mountpoint, even with TMPDIR set.
+        # This is an empty directory in the sealed view, never a host /tmp bind.
+        lines.append('mkdir -p "$R"/tmp')
     for path in spec.runtime_binds:
         lines.append(f'if [ -e {shlex.quote(path)} ]; then mkdir -p "$R"{shlex.quote(path)}; fi')
     for mount, _ in spec.extra_ro:
@@ -182,7 +193,8 @@ def _script(spec: ViewSpec) -> str:
         'for d in null zero urandom; do : > "$R"/dev/$d; mount --bind /dev/$d "$R"/dev/$d; done',
         # Writable, and only these two.
         f'mount --bind "$B2_WORKSPACE" "$R"{WORKSPACE_MOUNT}',
-        f'mount -t tmpfs -o size=16m tmpfs "$R"{SCRATCH_MOUNT}',
+        (f'mount -t tmpfs -o size=16m,uid={spec.payload_identity[0]},gid={spec.payload_identity[1]},mode=0700 tmpfs "$R"{SCRATCH_MOUNT}'
+         if spec.payload_identity else f'mount -t tmpfs -o size=16m tmpfs "$R"{SCRATCH_MOUNT}'),
     ]
     for i, (mount, _) in enumerate(spec.extra_ro):
         lines += [
@@ -205,7 +217,10 @@ def _script(spec: ViewSpec) -> str:
         # environment and inherits nothing from the caller. Without the assignments this
         # ran with an empty environment, which silently turned bytecode caching back on and
         # let the runtime write `__pycache__` into the graded workspace.
-        "exec env -i " + " ".join(f"{k}={shlex.quote(v)}" for k, v in sorted((spec.env or VIEW_ENV).items())) + ' "$@"',
+        (f"exec /usr/bin/setpriv --reuid={spec.payload_identity[0]} --regid={spec.payload_identity[1]} "
+         "--clear-groups --inh-caps=-all --ambient-caps=-all --bounding-set=-all --no-new-privs env -i "
+         if spec.payload_identity else "exec env -i ")
+        + " ".join(f"{k}={shlex.quote(v)}" for k, v in sorted((spec.env or VIEW_ENV).items())) + ' "$@"',
     ]
     return "\n".join(lines)
 
@@ -316,6 +331,55 @@ def run_in_view(spec: ViewSpec) -> BoundaryResult:
         )
     return BoundaryResult(done.returncode, done.stdout, done.stderr,
                           network_namespace_unshared=spec.unshare_net)
+
+
+def unprivileged_check_argv() -> list[str]:
+    """One literal check in a fresh user/PID/network view, using no host privilege broker."""
+    if os.getuid() == 0 or os.getgid() == 0 or 0 in os.getgroups():
+        raise BoundaryError("unprivileged check refuses root identity")
+    try:
+        fields = dict(line.split(":", 1) for line in Path("/proc/self/status").read_text().splitlines())
+        for key in ("Uid", "Gid"):
+            ids = [int(value) for value in fields[key].split()]
+            if len(ids) != 4 or any(value <= 0 for value in ids):
+                raise BoundaryError("unprivileged check refuses privileged identity")
+        if (int(fields["NoNewPrivs"]) != 1 or any(int(fields[key], 16) != 0
+                for key in ("CapInh", "CapPrm", "CapEff", "CapAmb"))):
+            raise BoundaryError("unprivileged check requires dropped capabilities and NoNewPrivs")
+    except (OSError, ValueError, KeyError):
+        raise BoundaryError("unprivileged check identity cannot be verified") from None
+    argv = ["/usr/bin/bwrap", "--unshare-user", "--uid", str(os.getuid()), "--gid", str(os.getgid()),
+            "--unshare-pid", "--unshare-net", "--unshare-uts", "--unshare-ipc",
+            "--die-with-parent", "--new-session", "--cap-drop", "ALL", "--clearenv"]
+    for key, value in sorted(VIEW_ENV.items()):
+        argv += ["--setenv", key, value]
+    for path in RUNTIME_BINDS:
+        if Path(path).exists():
+            argv += ["--ro-bind", path, path]
+    argv += ["--bind", WORKSPACE_MOUNT, WORKSPACE_MOUNT, "--proc", "/proc", "--dir", "/dev"]
+    for device in ("null", "zero", "urandom"):
+        argv += ["--dev-bind", f"/dev/{device}", f"/dev/{device}"]
+    # /tmp is empty/read-only; bubblewrap's construction mount disappears before payload.
+    argv += ["--dir", "/tmp", "--tmpfs", SCRATCH_MOUNT, "--chdir", WORKSPACE_MOUNT,
+             "--remount-ro", "/"]
+    marker = "B2-UNPRIVILEGED-CHECK-STARTED"
+    program = ("import os,sys;print(" + repr(marker) + ",flush=True);"
+               "os.execve('/usr/bin/python3',['python3','/workspace/checks/validate.py'],"
+               + repr(VIEW_ENV) + ")")
+    return argv + ["--", "/usr/bin/python3", "-I", "-c", program]
+
+
+def run_unprivileged_check() -> BoundaryResult:
+    try:
+        result = subprocess.run(unprivileged_check_argv(), env=VIEW_ENV, cwd="/",
+                                capture_output=True, text=True, timeout=60, check=False)
+    except (OSError, subprocess.TimeoutExpired):
+        raise BoundaryError("unprivileged check could not run") from None
+    first, separator, output = result.stdout.partition("\n")
+    if not separator or first != "B2-UNPRIVILEGED-CHECK-STARTED":
+        raise BoundaryError("unprivileged check payload never started")
+    return BoundaryResult(result.returncode, output, result.stderr,
+                          provider="bubblewrap-userns-check/v1", network_namespace_unshared=True)
 
 
 def copy_workspace(source: Path, destination: Path) -> Path:
