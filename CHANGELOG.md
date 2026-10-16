@@ -6,6 +6,25 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 ## Unreleased
 
+### Externe Skillfunde: UI-Referenz-Pilot und optionale Lernschleife (16.10.2026)
+
+- Ein synthetisches A/B-Paket für `UI UX Pro Max` ergänzt
+  `Evals/Webentwicklung/UI-Reference-Pilot/`: gleiche KI-Regeln-Basis,
+  identische Aufgaben-/Fakteninputs, zusätzlicher eng begrenzter,
+  commitgebundener Design-Referenzauszug nur in B; Standardbibliothek-
+  Paketvorbereitung, Integritätsprüfung und Negativtests in CI.
+  **Keine Modellläufe, kein BM25-Suchlauf, keine Browserprüfung**.
+- Der vorhandene Workflow für evidence-getriebene Skillverbesserung
+  erhält einen **optionalen** Reibungs-Checkpoint für belegte,
+  wiederkehrende Korrekturen und Capability-Lücken, ohne Hooks,
+  automatisches Transcript-Logging oder Self-Modification.
+- Methodische Originalquellen: [UI UX Pro Max](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill)
+  (MIT) und [Task Observer](https://github.com/rebelytics/one-skill-to-rule-them-all)
+  (CC BY 4.0, Eoghan Henn und Mitwirkende). Keine Upstream-Software
+  installiert oder gestartet.
+
+
+
 Noch nicht als eigener Versionsstand veröffentlichte Änderungen werden zunächst hier gesammelt.
 
 ### Evidence-Gap-Eval gezielt präzisiert (15.10.2026)
