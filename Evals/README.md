@@ -43,6 +43,19 @@ kontrollierten Negativfällen. Er führt keine Agentenläufe aus und erzeugt
 keinen Prozess-PASS; Judge-Dateien müssen für echte Runner-Isolation
 physisch getrennt bereitgestellt werden.
 
+## UI-Referenz-A/B-Pilot (synthetisch, vorbereitet)
+
+Unter [`Webentwicklung/UI-Reference-Pilot/`](Webentwicklung/UI-Reference-Pilot/README.md)
+liegt ein zweigeteiltes Offline-Testpaket zur Frage, ob ein enger
+UI-UX-Pro-Max-Referenzauszug den KI-Regeln-Webdesign-Outcome verbessert.
+Die Pakete werden bytegleich bis auf genau **eine optionale Referenz**
+aufgebaut und gegen manipulierte Inputs geprüft. **Es gibt noch keinen
+Modelllauf, Rendernachweis oder gemessenen Qualitäts-Lift.**
+Für die Skill-Verbesserung existiert parallel ein **optionaler,
+datensparsamer Reibungs-Checkpoint** im bereits vorhandenen
+[Workflow](../Workflows/Skill-Verbesserung-aus-Evals-und-Fehlern.md);
+kein neuer Skill und keine globale Beobachtungspflicht.
+
 ## Eval-Klassen
 
 ### Trigger
