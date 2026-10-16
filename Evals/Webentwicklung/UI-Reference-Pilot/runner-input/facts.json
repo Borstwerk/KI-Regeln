@@ -1,0 +1,42 @@
+{
+  "fixture_version": 1,
+  "board_title": "Werkstatt-Tafel",
+  "scope": "synthetic offline bicycle repair board",
+  "allowed_status": [
+    "offen",
+    "in_arbeit",
+    "erledigt"
+  ],
+  "items": [
+    {
+      "id": "RAD-014",
+      "problem": "Hinterradbremse schleift",
+      "priority": "hoch",
+      "status": "offen"
+    },
+    {
+      "id": "RAD-021",
+      "problem": "Licht vorne ohne Funktion",
+      "priority": "mittel",
+      "status": "in_arbeit"
+    },
+    {
+      "id": "RAD-034",
+      "problem": "Kettenschutz locker",
+      "priority": "niedrig",
+      "status": "offen"
+    },
+    {
+      "id": "RAD-042",
+      "problem": "Reifen verliert Luft",
+      "priority": "hoch",
+      "status": "in_arbeit"
+    },
+    {
+      "id": "RAD-057",
+      "problem": "Sattelstütze nachgestellt",
+      "priority": "niedrig",
+      "status": "erledigt"
+    }
+  ]
+}
