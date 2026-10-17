@@ -6,6 +6,14 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 ## Unreleased
 
+### KG-01: Wissensgraph-Retrieval als mögliche Erweiterung (17.10.2026)
+
+- [KG-01-Pilotplan](Evals/Agentenarbeit/Graph-Retrieval-Pilot/README.md) für heutiges Routing vs. externe Graphify-Runtime vs. deterministischen eigenen KI-Regeln-Graphindex, mit Token-/Qualitäts-/Sicherheitsmetriken. **NOT RUN**.
+- [Ideenkarte](Dokumentation/Knowledge-Graph-Retrieval-Optionen.md) hält Graphify als externes Projekt und eine mögliche native Lösung mit optionalem `graph-retrieval`-Skill ausdrücklich als getrennte spätere Entscheidungen fest; noch **kein** neuer Skill, keine Katalog-/Routingänderung.
+- [Graphify-Vorprüfung](Dokumentation/Reviews/Graphify-Labs-graphify-2026-10-17.md) dokumentiert Herkunft und Grenzen der Upstream-Benchmarks sowie Install-/Hook-/MCP-/Semantic-Pass-Gates. Kein Installations-/Ausführungsfreigabe.
+
+
+
 ### Experimenteller Prompt-Engineering-Skill – eigener KI-Regeln-Entwurf (17.10.2026)
 
 - `prompt-engineering` als **expliziter Prompt-Artefakt-Skill** für Erstellen, Überarbeiten, Zerlegen, Prüfen und zielwerkzeugbezogene Adaption; kein Trigger bei unmittelbarer Fachausführung.
