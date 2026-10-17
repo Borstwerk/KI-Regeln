@@ -59,10 +59,18 @@ class UIReferencePilotTests(unittest.TestCase):
         prepare(ROOT, self.out)
         p = self.out / "manifest.json"
         data = json.loads(p.read_text(encoding="utf-8"))
-        data["files"]["A-baseline"][str(REFERENCE)] = "bogus"
+        data["files"]["A-baseline"][REFERENCE.as_posix()] = "bogus"
         p.write_text(json.dumps(data), encoding="utf-8")
         with self.assertRaisesRegex(ValueError, "Unexpected manifest paths"):
             verify(self.out)
+
+    def test_manifest_keys_are_posix_paths(self):
+        manifest = prepare(ROOT, self.out)
+        for arm in ARMS:
+            for name in manifest["files"][arm]:
+                self.assertNotIn("\\", name, f"{arm}: {name}")
+        written = json.loads((self.out / "manifest.json").read_text(encoding="utf-8"))
+        self.assertIn(REFERENCE.as_posix(), written["files"]["B-reference"])
 
     def test_nonempty_output_rejected(self):
         self.out.mkdir()
