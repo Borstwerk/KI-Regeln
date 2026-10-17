@@ -30,6 +30,11 @@ def digest(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def key(path: Path) -> str:
+    """Platform-independent manifest key (always forward slashes)."""
+    return path.as_posix()
+
+
 def within(path: Path, root: Path) -> bool:
     return path == root or path.is_relative_to(root)
 
@@ -59,9 +64,9 @@ def prepare(repo_root: Path, out: Path) -> dict:
     files = {}
     for arm in ARMS:
         target = output / arm
-        files[arm] = {str(p): _copy_file(repo, target, p) for p in COMMON}
+        files[arm] = {key(p): _copy_file(repo, target, p) for p in COMMON}
         if arm == "B-reference":
-            files[arm][str(REFERENCE)] = _copy_file(repo, target, REFERENCE)
+            files[arm][key(REFERENCE)] = _copy_file(repo, target, REFERENCE)
     manifest = {
         "schema_version": 1,
         "case": "UI-REFERENCE-SYNTH-01",
@@ -90,13 +95,13 @@ def verify(out: Path) -> dict:
         current = manifest["files"][arm]
         if not isinstance(current, dict):
             raise ValueError(f"Invalid manifest entries for {arm}")
-        expected = {str(p) for p in COMMON}
+        expected = {key(p) for p in COMMON}
         if arm == "B-reference":
-            expected.add(str(REFERENCE))
+            expected.add(key(REFERENCE))
         if set(current) != expected:
             raise ValueError(f"Unexpected manifest paths in {arm}")
         root = output / arm
-        observed = {p.relative_to(root).as_posix() for p in root.rglob("*") if p.is_file()}
+        observed = {key(p.relative_to(root)) for p in root.rglob("*") if p.is_file()}
         if observed != expected:
             raise ValueError(f"Unexpected or missing files in {arm}: {sorted(observed ^ expected)}")
         for p, recorded_hash in current.items():
@@ -104,9 +109,9 @@ def verify(out: Path) -> dict:
             if item.is_symlink() or not item.is_file() or digest(item) != recorded_hash:
                 raise ValueError(f"Integrity mismatch: {arm}/{p}")
     for p in COMMON:
-        if manifest["files"][ARMS[0]][str(p)] != manifest["files"][ARMS[1]][str(p)]:
+        if manifest["files"][ARMS[0]][key(p)] != manifest["files"][ARMS[1]][key(p)]:
             raise ValueError(f"Common input differs across arms: {p}")
-    if str(REFERENCE) in manifest["files"]["A-baseline"]:
+    if key(REFERENCE) in manifest["files"]["A-baseline"]:
         raise ValueError("Baseline arm leaked the external reference")
     return {
         "contract": "PASS",
