@@ -60,4 +60,4 @@ Ein guter Output enthält:
 - reale, nicht halluzinierte Hinweise zu unbestätigten Toolbedingungen;
 - **keinen** Claim, dass er getestet oder beim Zielmodell erfolgreich gewesen sei.
 
-**Evals und Kontrollvergleich:** [Evals/Arbeitsweisen/Prompt-Engineering-Pilot](../../../Evals/Arbeitsweisen/Prompt-Engineering-Pilot/README.md).
+**Evals und Kontrollvergleich:** [Evals/Arbeitsweisen/Prompt-Engineering-Pilot](../../../Evals/Arbeitsweisen/prompt-engineering/README.md).
