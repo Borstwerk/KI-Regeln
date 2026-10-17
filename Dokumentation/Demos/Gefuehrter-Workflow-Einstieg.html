@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>KI-Regeln · Geführter Einstieg (Demonstrator)</title>
+  <style>
+    :root{font:16px/1.55 system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:#202522;background:#f9f8f5;
+      --ink:#202522;--sub:#56615b;--line:#d6dcd5;--accent:#9d431f;--surface:#fff;--radius:16px}
+    *{box-sizing:border-box}
+    body{margin:0}
+    a{color:#7c391d;text-underline-offset:.2em}
+    button,select{font:inherit}
+    button{cursor:pointer}
+    :focus-visible{outline:3px solid #1a6e8b;outline-offset:3px}
+    .skip{position:absolute;transform:translateY(-160%);background:#fff;padding:12px;z-index:5}
+    .skip:focus{transform:none}
+    .shell{max-width:1020px;margin:auto;padding:26px clamp(18px,4vw,48px) 80px}
+    .top{display:flex;align-items:center;justify-content:space-between;gap:16px;border-bottom:1px solid var(--line);padding-bottom:18px}
+    .brand{font-weight:800;letter-spacing:-.035em;font-size:1.1rem}
+    .tag{display:inline-block;margin-left:10px;padding:3px 9px;background:#eee5dc;color:#813819;border-radius:999px;font:600 .7rem/1.6 system-ui;letter-spacing:.07em;text-transform:uppercase}
+    .small{color:var(--sub);font-size:.9rem}
+    h1{font-size:clamp(2.05rem,4.8vw,3.5rem);line-height:1.08;letter-spacing:-.05em;margin:42px 0 16px;max-width:740px}
+    .lead{font-size:1.1rem;color:var(--sub);max-width:660px;margin:0 0 30px}
+    .chooser{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:22px;display:grid;gap:8px}
+    .chooser label{font-size:.88rem;font-weight:700}
+    select{width:100%;padding:13px 14px;border-radius:10px;border:1px solid #94a59a;background:#fff;color:var(--ink);font-weight:600}
+    .meta{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 24px}
+    .pill{background:#edf0eb;border:1px solid #dce2d9;color:#365347;border-radius:999px;padding:4px 10px;font-size:.78rem;font-weight:650}
+    .intro{border-left:3px solid var(--accent);padding:4px 0 4px 18px;margin:28px 0 32px;color:var(--sub);max-width:740px}
+    .progress{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:0 0 10px}
+    .progress strong{font-size:.9rem}
+    progress{width:100%;height:9px;accent-color:#a9512f}
+    .steps{list-style:none;margin:20px 0 0;padding:0;display:grid;gap:12px}
+    .step{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:0 20px}
+    .step details{padding:15px 0}
+    .step summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:13px;font-size:1.02rem;font-weight:700}
+    .step summary::-webkit-details-marker{display:none}
+    .step summary::after{content:"+";font-size:1.4rem;color:var(--accent);margin-left:auto;font-weight:400}
+    .step details[open] summary::after{content:"−"}
+    .number{flex:none;display:grid;place-items:center;background:#f2e6dd;color:#893d20;width:31px;height:31px;border-radius:9px;font-weight:800;font-size:.83rem}
+    .detail{margin:16px 0 3px 44px;color:var(--sub)}
+    .detail p{margin:0 0 12px}
+    .promptlabel{display:block;font-size:.8rem;font-weight:750;color:var(--ink);margin:16px 0 6px}
+    .prompt{background:#f3f5f2;border:1px solid #dce3db;border-radius:10px;padding:15px;white-space:pre-wrap;word-break:break-word;color:#233329;font: .88rem/1.55 ui-monospace,"Cascadia Code",Consolas,monospace}
+    .copy{border:1px solid #b2c3b7;background:#fff;border-radius:9px;padding:9px 14px;color:#234e3a;font-weight:700;min-height:44px;margin-top:9px}
+    .check{display:flex;align-items:flex-start;gap:12px;margin:17px 0 4px;font-size:.89rem;color:var(--ink)}
+    .check input{width:19px;height:19px;accent-color:#236149;flex:none}
+    .sources{margin:40px 0 0;padding:23px;background:#f2f2ed;border-radius:var(--radius)}
+    .sources h2{font-size:1rem;margin:0 0 8px}
+    .sources ul{margin:0;padding-left:20px}
+    .warning{border-top:1px solid var(--line);margin-top:34px;padding-top:22px;color:#584b42}
+    footer{font-size:.8rem;color:var(--sub);margin-top:36px}
+    @media(max-width:570px){.shell{padding-top:18px}.top{flex-wrap:wrap}.step{padding:0 15px}.detail{margin-left:0}h1{margin-top:32px}.steps{gap:10px}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important}}
+  </style>
+</head>
+<body>
+<a class="skip" href="#guide">Zum Guide springen</a>
+<div class="shell">
+  <header class="top"><div class="brand">KI-Regeln <span class="tag">Lokaler Prototyp</span></div>
+    <a class="small" href="../../START-HIER.md">Start-HIER.md im Repository</a></header>
+  <main id="guide">
+    <h1>Du hast ein Ziel.<br>Hier ist der nächste Schritt.</h1>
+    <p class="lead">Geführte Einstiege in vorhandene KI-Regeln-Workflows. Kein Skillwissen vorausgesetzt – aber auch kein blindes „Einfach alles veröffentlichen“.</p>
+    <div class="chooser">
+      <label for="goal">Was möchtest du machen?</label>
+      <select id="goal">
+        <option value="mobile">Eine Smartphone-App entwickeln</option>
+        <option value="website">Eine Website gestalten und prüfen</option>
+        <option value="research">Ein Thema gründlich recherchieren</option>
+      </select>
+      <span class="small">Wechseln setzt nur die Häkchen dieser Ansicht zurück. Es werden keine Daten gespeichert.</span>
+    </div>
+    <div id="meta" class="meta" aria-label="Rahmenbedingungen"></div>
+    <p class="intro" id="intro"></p>
+    <div class="progress"><strong id="progressLabel">0 von 0 Schritten markiert</strong><span class="small">Dein Fortschritt bleibt lokal im Tab</span></div>
+    <progress id="progress" value="0" max="1" aria-label="Markierter Fortschritt"></progress>
+    <ol class="steps" id="steps"></ol>
+    <section class="sources" aria-labelledby="sources-title">
+      <h2 id="sources-title">Die eigentlichen Quellen im Repository</h2>
+      <p class="small">Dieser Guide ersetzt die verlinkten Workflows und Skillbeschreibungen nicht. Ein Agent liest zuerst <code>AGENTS.md</code> und routet selbst.</p>
+      <ul id="sources"></ul>
+    </section>
+    <p class="warning"><strong>Wichtige Grenze:</strong> Ein kopierter Prompt ist nur ein Arbeitsauftrag. Installationen, Zugangsdaten, Zahlungen, E-Mails, Deployments und Store-Einreichungen benötigen weiterhin gesonderte Freigaben und überprüfte Berechtigungen. „Erledigt“ ist kein Testnachweis.</p>
+  </main>
+  <footer>KI-Regeln · Offline-Demonstrator · Keine Registrierung, keine Webhooks, kein Tracking, keine Browser-Speicherung, keine externen Abhängigkeiten.</footer>
+</div>
+<script>
+"use strict";
+const guides = {
+  mobile: {
+    intro: "Vom Nutzerproblem zur überprüften App – mit echten Gerätechecks und ausdrücklicher Store-Freigabe. React Native/Expo ist ein Beispiel, keine Pflicht.",
+    tags: ["Mobile", "MVP zuerst", "iOS und Android getrennt prüfen", "Human Gate vor Submit"],
+    sources: [
+      ["Mobile-App bis Store-Freigabe", "../../Workflows/Mobile-App-bis-Store-Freigabe.md"],
+      ["Software-Feature", "../../Workflows/Software-Feature.md"],
+      ["Teststrategie und QA", "../../Workflows/Teststrategie-und-QA.md"]
+    ],
+    steps: [
+      ["Die Kernfunktion festlegen", "Formuliere Zielgruppe, wichtigste Nutzeraufgabe, Grenzen und Datenflüsse. Verzichte zunächst auf Push-Streaks, Accounts und Marketingfeatures.",
+       "Hilf mir, die kleinste testbare Version meiner App zu definieren. Frage nur nach entscheidungsrelevanten Lücken. Liefere Nutzerziel, 3 überprüfbare Akzeptanzkriterien, Datenschutz-/Datenflussrisiken und explizites Out-of-Scope. Lies vorher AGENTS.md im KI-Regeln-Repository."],
+      ["Projekt und Stack prüfen", "Vorhandenen Stack behalten. Für ein neues geeignetes Projekt Expo/React Native anhand der aktuellen Dokumentation erwägen, ohne automatisch zu installieren.",
+       "Prüfe für dieses mobile Projekt die Stack-Wahl, SDK-Kompatibilität, benötigte Berechtigungen und den kleinsten sicheren Setup-Plan. Lies AGENTS.md und den Mobile-App-Workflow. Keine Installationen, Accounts oder API-Keys ohne meine Freigabe."],
+      ["MVP in kleinen Schritten bauen", "Ein Feature umsetzen, Gerät/Build prüfen, erst danach fortfahren. Browser-Vorschau ist kein Ersatz für reale Geräte.",
+       "Implementiere nur das freigegebene MVP in kleinen, prüfbaren Schritten. Halte dich an bestehende Projektvorgaben. Berichte Tests getrennt für Android/iOS und setze nicht ausgeführte Prüfungen auf NOT_RUN."],
+      ["Gerätetests und Datenflüsse", "Touch, Navigation, Berechtigungen, Offline-Verhalten und reale SDK-Datenflüsse prüfen; keine erfundenen Testergebnisse.",
+       "Erstelle eine risikobasierte Testmatrix für iOS und Android und prüfe nur, was die aktuelle Umgebung wirklich erlaubt. Erfasse Bugs, fehlende Gerätetests, Datenflüsse und offene Risiken. Markiere nicht ausgeführte Checks als NOT_RUN."],
+      ["Store-Readiness vorbereiten", "App-Identität, Signierung, Screenshots, echte Store-Texte und Privacy-Angaben als Review-Artefakte erstellen. Kein Upload.",
+       "Bereite einen Store-Readiness-Bericht vor: Build-ID, Signierung, Screenshots auf Basis echter UI, Rechte an Assets, Privacy Policy aus belegten Datenflüssen, Store-Metadaten und offene Blocker. Keine Einreichung und keine Kontoaktionen."],
+      ["Beta prüfen und Freigabe einholen", "Signierten Release-Build auf Testgeräten/Beta-Tracks prüfen. Erst dann ausdrücklich über Einreichung entscheiden.",
+       "Prüfe den signierten Beta-Build, Testevidence, Ziel-Account und Store-Track. Trenne BUILD, UPLOAD, SUBMIT, REVIEW und RELEASE. Bereite nur die Entscheidungsvorlage vor – führe keine Außenaktion ohne meine ausdrückliche Freigabe aus."]
+    ]
+  },
+  website: {
+    intro: "Ein Webprojekt sauber gestalten und tatsächlich im Browser prüfen – ohne vor dem Inhalt mit Animationen oder Frameworks zu beginnen.",
+    tags: ["Web", "Echte Inhalte", "Accessibility", "Visueller Review"],
+    sources: [
+      ["Website-Neuentwicklung", "../../Workflows/Website-Neuentwicklung.md"],
+      ["Frontend Design", "../../Webentwicklung/Skills/frontend-design/SKILL.md"],
+      ["Visual Verification", "../../Webentwicklung/Skills/visual-verification/SKILL.md"]
+    ],
+    steps: [
+      ["Zielgruppe und Inhalt", "Sammle die echten Inhalte und die wichtigste Nutzeraufgabe. Benutze keine erfundenen Kennzahlen.",
+       "Lies AGENTS.md und den Website-Neuentwicklung-Workflow. Formuliere ein Briefing zu Zielgruppe, Kernaufgabe, echten Inhalten, technischen Grenzen und überprüfbaren Kriterien."],
+      ["Designrichtung und Struktur", "Art Direction und Informationshierarchie vor dem Komponentenbau festlegen.",
+       "Erstelle auf Basis des freigegebenen Briefings eine eigenständige Designrichtung, ein kleines Designsystem und eine Greybox. Bevorzuge nachvollziehbare Entscheidungen vor Effekten."],
+      ["Implementierung", "Bestehenden Stack respektieren, barrierearme Navigation und responsive States berücksichtigen.",
+       "Implementiere das abgestimmte Layout minimalinvasiv im bestehenden Stack. Behaupte keine ausgeführten Browser-Tests und füge keine externen Bibliotheken ohne Bedarf hinzu."],
+      ["Browser und Zugänglichkeit", "Verschiedene Viewports, Tastatur, Kontrast, echte Inhalte und Fehlerzustände überprüfen.",
+       "Prüfe die gerenderte Oberfläche auf Desktop und Mobile, Keyboard/Fokus, Kontrast, Inhaltstreue und Fehler. Liefere Evidence und markiere Ungeprüftes als NOT_RUN."],
+      ["Unabhängiger Review", "Nicht nur das eigene Design bewerten; Abweichungen gezielt beheben.",
+       "Führe einen unabhängigen Designreview gegen Brief und Browser-Evidence durch. Benenne konkrete Schwächen, notwendige Fixes und offene Punkte ohne nachträgliche Schönfärbung."]
+    ]
+  },
+  research: {
+    intro: "Von einer Fragestellung zu nachvollziehbaren Aussagen – Quellen vergleichen, Widersprüche zeigen, Unsicherheit stehen lassen.",
+    tags: ["Recherche", "Primärquellen", "Provenienz", "Keine erfundenen Belege"],
+    sources: [
+      ["Deep Research", "../../Workflows/Deep-Research.md"],
+      ["Source Evaluation", "../../Recherche/Skills/source-evaluation/SKILL.md"],
+      ["Claim Verification", "../../Recherche/Skills/claim-verification/SKILL.md"]
+    ],
+    steps: [
+      ["Frage und Scope klären", "Ergebnisformat, Zeitraum, Zielgruppe und Ausschlüsse präzisieren.",
+       "Lies AGENTS.md und den Deep-Research-Workflow. Erstelle einen knappen Rechercheplan zur Frage [THEMA] mit Quellenprioritäten, Suchwinkeln, Zeitfenster und Erfolgskriterien."],
+      ["Primärquellen sammeln", "Aktuelle Originalbelege bevorzugen und sekundäre Beiträge als Hinweise nutzen.",
+       "Recherchiere [THEMA] systematisch aus unterschiedlichen Perspektiven. Trenne Originalquellen von sekundären Zusammenfassungen und notiere Publikationsdaten und Beleggrenzen."],
+      ["Behauptungen prüfen", "Zentrale Aussagen, Gegenbelege und Widersprüche getrennt beurteilen.",
+       "Überprüfe die wichtigsten Claims gegen unabhängige Belege. Kennzeichne bestätigte Fakten, Annahmen, Konflikte und offene Fragen. Keine erfundenen Quellen."],
+      ["Nachvollziehbar aufbereiten", "Ergebnisse strukturiert und mit belastbaren Nachweisen darstellen.",
+       "Fasse die Recherche kompakt zusammen: Kernergebnisse, Belege, Unsicherheiten, Gegenargumente und mögliche nächste Entscheidungen. Gib die Quellen direkt bei den Claims an."]
+    ]
+  }
+};
+const $ = id => document.getElementById(id);
+function render(){
+  const data = guides[$("goal").value];
+  $("intro").textContent = data.intro;
+  $("meta").replaceChildren();
+  data.tags.forEach(t=>{const el=document.createElement("span");el.className="pill";el.textContent=t;$("meta").append(el)});
+  $("steps").replaceChildren();
+  data.steps.forEach(([title,desc,prompt],i)=>{
+    const li=document.createElement("li");li.className="step";
+    const details=document.createElement("details");if(i===0)details.open=true;
+    const summary=document.createElement("summary");
+    const n=document.createElement("span");n.className="number";n.textContent=String(i+1);
+    summary.append(n,document.createTextNode(title));
+    const body=document.createElement("div");body.className="detail";
+    const p=document.createElement("p");p.textContent=desc;
+    const label=document.createElement("span");label.className="promptlabel";label.textContent="Startprompt (zum Anpassen)";
+    const code=document.createElement("div");code.className="prompt";code.textContent=prompt;
+    const copy=document.createElement("button");copy.className="copy";copy.type="button";copy.textContent="Prompt kopieren";
+    copy.addEventListener("click",async()=>{try{await navigator.clipboard.writeText(prompt);copy.textContent="Kopiert";}catch(e){copy.textContent="Kopieren nicht verfügbar – Text markieren";}});
+    const wrap=document.createElement("label");wrap.className="check";
+    const box=document.createElement("input");box.type="checkbox";box.addEventListener("change",update);
+    const t=document.createElement("span");t.textContent="Schritt für mich erledigt (kein technischer PASS)";
+    wrap.append(box,t);body.append(p,label,code,copy,wrap);details.append(summary,body);li.append(details);$("steps").append(li);
+  });
+  $("sources").replaceChildren();
+  data.sources.forEach(([name,path])=>{const li=document.createElement("li");const a=document.createElement("a");a.href=path;a.textContent=name;li.append(a);$("sources").append(li)});
+  update();
+}
+function update(){const c=[...document.querySelectorAll(".check input")];const n=c.filter(x=>x.checked).length;$("progress").max=c.length;$("progress").value=n;$("progressLabel").textContent=n+" von "+c.length+" Schritten markiert";}
+$("goal").addEventListener("change",render);
+render();
+</script>
+</body>
+</html>
