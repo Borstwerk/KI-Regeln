@@ -1,5 +1,5 @@
 schema_version: 2
-last_updated: 2026-10-08
+last_updated: 2026-10-17
 
 maturity_levels: [experimental, candidate, stable, deprecated, retired]
 eval_coverage_levels: [none, partial, core, broad]
@@ -8,6 +8,7 @@ skills:
   - {id: reflektierender-dialog, area: Arbeitsweisen, path: Arbeitsweisen/Skills/reflektierender-dialog/SKILL.md, maturity: candidate, eval_coverage: none, purpose: "Erfahrungen und Gedanken reflektierend ordnen, ohne vorschnelle Diagnose."}
   - {id: entscheidungsunterstuetzung, area: Arbeitsweisen, path: Arbeitsweisen/Skills/entscheidungsunterstuetzung/SKILL.md, maturity: candidate, eval_coverage: none, purpose: "Optionen, Kriterien, Unsicherheiten und Gegenargumente für Entscheidungen sichtbar machen."}
   - {id: ziel-reflexions-loop, area: Arbeitsweisen, path: Arbeitsweisen/Skills/ziel-reflexions-loop/SKILL.md, maturity: candidate, eval_coverage: none, purpose: "Ziele in kleine Lern- und Handlungsschleifen überführen."}
+  - {id: prompt-engineering, area: Arbeitsweisen, path: Arbeitsweisen/Skills/prompt-engineering/SKILL.md, maturity: experimental, eval_coverage: partial, purpose: "Auf ausdrücklichen Auftrag KI-Prompts als Artefakt erstellen, verbessern, zerlegen, prüfen oder für ein anderes Zielwerkzeug anpassen; keine unmittelbare Fachaufgabenausführung.", related: [delegation-contract, context-engineering, session-handoff, agent-eval]}
   - {id: context-engineering, area: Agentenarbeit, path: Agentenarbeit/Skills/context-engineering/SKILL.md, maturity: candidate, eval_coverage: partial, purpose: "Den kleinsten ausreichenden, aktuellen und signalstarken Agentenkontext auswählen und Active Context, Working State sowie Sources of Truth sauber trennen.", capabilities: [context-source-access-preferred], related: [context-audit, context-compaction, session-handoff]}
   - {id: context-audit, area: Agentenarbeit, path: Agentenarbeit/Skills/context-audit/SKILL.md, maturity: experimental, eval_coverage: partial, purpose: "Context-Footprint, Signalqualität, Staleness, Duplikate, Tooloutput-Bloat und Token-/Größenverteilung auditieren.", capabilities: [context-metrics-preferred], related: [context-engineering, context-compaction]}
   - {id: context-compaction, area: Agentenarbeit, path: Agentenarbeit/Skills/context-compaction/SKILL.md, maturity: experimental, eval_coverage: partial, purpose: "Gewachsenen Agentenkontext mit hoher Fidelity verdichten und Fortsetzungsfähigkeit erhalten.", capabilities: [working-state-access-required], related: [context-engineering, session-handoff, verification-loop]}

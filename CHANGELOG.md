@@ -6,6 +6,15 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 ## Unreleased
 
+### Experimenteller Prompt-Engineering-Skill – eigener KI-Regeln-Entwurf (17.10.2026)
+
+- `prompt-engineering` als **expliziter Prompt-Artefakt-Skill** für Erstellen, Überarbeiten, Zerlegen, Prüfen und zielwerkzeugbezogene Adaption; kein Trigger bei unmittelbarer Fachausführung.
+- Drei kleine, nur bei Bedarf geladene Profile für Coding-Agenten, Chat/Recherche und Bild/Video. Keine fest verdrahteten Modell- oder API-Claims, keine Installation fremder Skills.
+- Sechs synthetische Evalfälle inklusive negativer Triggerkontrolle, fehlender Toolinformation, widersprüchlichem Fremdtext und Read-only-/Freigabeschutz; CI prüft nur statische Verträge. **Modell- und Outcome-A/B: NOT RUN**.
+- Prinzipienquelle: [nidhinjs/prompt-master](https://github.com/nidhinjs/prompt-master) (MIT); eigenständig geschrieben, kein upstream `SKILL.md` oder Templates importiert.
+
+
+
 ### Geführter Workflow-Einstieg und Mobile-App-bis-Store (17.10.2026)
 
 - Neuer **workflow-only** [Mobile-App-bis-Store](Workflows/Mobile-App-bis-Store-Freigabe.md) mit verifizierbaren Gerätetests, Datenschutz-/Berechtigungsinventar und expliziten Gates vor Upload, Submit und Release. Keine Expo-/Claude-Pflicht und keine reale Store-Aktion.
