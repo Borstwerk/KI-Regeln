@@ -10,7 +10,7 @@ Führt eine **mobile** App kontrolliert von Zieldefinition und MVP über Geräte
 
 Ausgangspunkt: `AGENTS.md` → `Dokumentation/Skill-Handbuch.md` → `skill-catalog.yml` → `routing-overlays.yml`, danach dieses Dokument. Wähle für die konkrete Aufgabe nur nötige Skills.
 
-- Produktauftrag: `requirements-elicitation`/`requirements-baseline` nach Katalog, bei größerer Systementscheidung `architecture-decision` bzw. vorhandener Architekturworkflow.
+- Produktauftrag: `requirements-elicitation`/`requirements-baseline` nach Katalog, bei größerer Systementscheidung `architecture-tradeoff-analysis` bzw. vorhandener Architekturworkflow.
 - Konkretes Feature: [Software-Feature](Software-Feature.md).
 - Risikobasierte Prüfungen: `test-strategy` und [Teststrategie und QA](Teststrategie-und-QA.md).
 - Veröffentlichung: `deployment-strategy` für kontrollierten Release; externe Actions und Rechte mit `tool-permission-review` bewerten.
