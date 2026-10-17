@@ -41,6 +41,8 @@ jobs:
         run: python -m unittest tests.test_outcome_pilot
       - name: UI reference pilot packaging and negative controls (offline, no model)
         run: python -m unittest tests.test_ui_reference_pilot
+      - name: Guided workflow offline demonstration contract checks (no browser)
+        run: python -m unittest tests.test_guided_workflow_demo
       - name: Skill redundancy audit unit tests
         run: python -m unittest tests.test_skill_redundancy_audit
       - name: Skill redundancy candidates (informational, no quality gate)
