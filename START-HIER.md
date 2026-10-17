@@ -6,6 +6,14 @@
 
 KI-Regeln ist für Menschen gedacht, die mit generativer KI **etwas Konkretes erledigen** möchten, ohne vorher Skill-Namen oder Agentenarchitektur lernen zu müssen. Starte mit deinem Ziel, nicht mit dem Werkzeugkasten.
 
+## Geführten Einstieg ausprobieren
+
+Für Menschen, die statt Markdown lieber einen kleinen interaktiven Leitfaden möchten,
+gibt es einen [lokalen HTML-Demonstrator](Dokumentation/Demos/README.md) für
+Mobile-App-Entwicklung, Websites und Recherche. Er benötigt keine Anmeldung,
+keinen Server und keine KI-Verbindung. Die eigentlichen Regeln und Human Gates
+bleiben in den verlinkten Workflows; der Guide ersetzt sie nicht.
+
 ## 1. Beschreibe dein Ziel
 
 Zum Beispiel: „Ich möchte ein PowerShell-Skript sicher erweitern“, „Prüfe diese Behauptung anhand guter Quellen“ oder „Hilf mir, eine Geschichte konsistent zu überarbeiten“.
