@@ -56,6 +56,15 @@ datensparsamer Reibungs-Checkpoint** im bereits vorhandenen
 [Workflow](../Workflows/Skill-Verbesserung-aus-Evals-und-Fehlern.md);
 kein neuer Skill und keine globale Beobachtungspflicht.
 
+## KG-01 – Geplanter Graph-Retrieval-Pilot (noch nicht ausgeführt)
+
+[KG-01](Agentenarbeit/Graph-Retrieval-Pilot/README.md) beschreibt
+einen A/B/C-Versuchsplan mit unverändertem KI-Regeln-Routing,
+optionalem externem Graphify und einem kleinen eigenen Graphindex.
+Die Entscheidung über ein mögliches eigenes `graph-retrieval`-Skill
+bleibt offen. **Keine Tools installiert, keine Graphen gebaut, keine
+Modellläufe oder Tokeneinsparungen gemessen.**
+
 ## Eval-Klassen
 
 ### Trigger

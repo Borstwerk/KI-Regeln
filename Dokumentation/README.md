@@ -12,6 +12,12 @@ Er richtet sich vor allem an Menschen, die:
 - neue externe Kandidaten und Trends systematisch beobachten möchten;
 - Reifegrad und Evalabdeckung von Skills einschätzen möchten.
 
+## Neue Architektur-/Retrieval-Kandidaten
+
+- [Wissensgraph-Retrieval: Graphify und native KI-Regeln-Lösung](Knowledge-Graph-Retrieval-Optionen.md) – zwei ausdrücklich offene Wege einschließlich möglichem eigenem Skill; nur als Idee geplant, kein Routing- oder Runtime-Change.
+- [Graphify – Read-only Vorprüfung und Admission-Grenzen](Reviews/Graphify-Labs-graphify-2026-10-17.md) – Upstream-/Sicherheits- und Benchmarksichtung, nicht installiert.
+- [KG-01 Dreifachpilot](../Evals/Agentenarbeit/Graph-Retrieval-Pilot/README.md) – kontrollierter A/B/C-Vergleich, bisher NOT RUN.
+
 ## Inhalte
 
 - `Nutzung-des-Repositories.md` – erklärt, wie das Repository in echten Projekten eingesetzt wird;
