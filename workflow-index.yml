@@ -25,6 +25,7 @@ workflows:
   - Workflows/Infrastruktur-Aenderung.md
   - Workflows/Inhaltsprovenienz-und-Metadatenhygiene.md
   - Workflows/Long-Horizon-Agentenarbeit.md
+  - Workflows/Mobile-App-bis-Store-Freigabe.md
   - Workflows/Neue-Datenquelle-und-Ingestion.md
   - Workflows/Operational-Readiness-Review.md
   - Workflows/Persoenliche-Finanzplanung.md

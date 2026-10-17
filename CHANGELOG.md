@@ -6,6 +6,15 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 ## Unreleased
 
+### Geführter Workflow-Einstieg und Mobile-App-bis-Store (17.10.2026)
+
+- Neuer **workflow-only** [Mobile-App-bis-Store](Workflows/Mobile-App-bis-Store-Freigabe.md) mit verifizierbaren Gerätetests, Datenschutz-/Berechtigungsinventar und expliziten Gates vor Upload, Submit und Release. Keine Expo-/Claude-Pflicht und keine reale Store-Aktion.
+- Kleiner [Offline-HTML-Demonstrator](Dokumentation/Demos/README.md) für drei Aufgaben, ohne Backend, Registrierung, Drittanbieter-Code oder Tracking. Bestehende Kanonquellen bleiben Owner, Prompttexte sind unverbindliche Beispiele.
+- [ASO-Screenshot-Skill-Vorprüfung](Dokumentation/Reviews/ASO-Screenshot-Skill-Admission-2026-10-17.md) dokumentiert Datenfluss- und Installationsrisiken; keine Admission/Installation.
+- Statische Regressionstests für Referenzlinks, Offline-Grenzen und Human-Gates ergänzt; keine Behauptung eines Browser-/Usability-PASS.
+
+
+
 ### Externe Skillfunde: UI-Referenz-Pilot und optionale Lernschleife (16.10.2026)
 
 - Ein synthetisches A/B-Paket für `UI UX Pro Max` ergänzt
