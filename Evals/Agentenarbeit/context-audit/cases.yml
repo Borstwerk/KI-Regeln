@@ -24,6 +24,18 @@ cases:
       - "behauptet exakte Tokenzahlen aus einer pauschalen Zeichenformel"
     expected_status: pass
 
+  - id: audit-growing-tooloutput-trigger
+    class: trigger
+    input: "Nach mehreren Toolaufrufen verdrängen wiederholte vollständige Testlogs die wichtigen Anforderungen. Der Agent verliert Fehlerstellen aus dem Blick; untersuche den Kontextverbrauch und seine Ursachen."
+    should_trigger: true
+    expected:
+      - "erkennt Context Audit als eigenständige Untersuchung trotz fehlendem Skillnamen"
+      - "prüft Tooloutput-Bloat und Signalverlust und erarbeitet einen Messplan für Kontext und Outcome"
+    forbidden:
+      - "behauptet eine konkrete Tokenersparnis ohne gemessene Vorher-/Nachher-Daten"
+      - "entfernt notwendige Fehler-Evidence allein zur Kontextverkürzung"
+    expected_status: pass
+
   - id: audit-cost-only-near-miss
     class: trigger
     input: "Rechne mir nur die API-Kosten für 12 Millionen Input-Tokens zu einem vorgegebenen Preis aus."
