@@ -6,6 +6,13 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 ## Unreleased
 
+### Context Efficiency by Default (18.10.2026)
+
+- `AGENTS.md` enthält eine kurze, providerunabhängige Kontext-Effizienzgrundregel für jeden Agentenlauf, ohne neue Pflichtdateien, globale Context-Overlays oder pauschale Skillaktivierung.
+- Vorhandene Context-Skills werden nur bei eigenständigem Bedarf über ihre kanonischen Descriptions ausgewählt; bei materieller Änderung von Tooloutput/Arbeitszustand erfolgt gezielte Re-Prüfung, nicht globales Nachladen.
+- Vier synthetische Skill-Evalfälle und die No-Skill-Kontrolle `GT-10` ergänzen positive, dynamische und negative Routing-Grenzen. **Behavioral Runs, reale Token-/Outcome-Vergleiche: NOT RUN**.
+
+
 ### KG-01: Wissensgraph-Retrieval als mögliche Erweiterung (17.10.2026)
 
 - [KG-01-Pilotplan](Evals/Agentenarbeit/Graph-Retrieval-Pilot/README.md) für heutiges Routing vs. externe Graphify-Runtime vs. deterministischen eigenen KI-Regeln-Graphindex, mit Token-/Qualitäts-/Sicherheitsmetriken. **NOT RUN**.

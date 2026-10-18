@@ -14,7 +14,7 @@ workflow:
   allowed: []
 required_skills: []
 allowed_optional_skills: []
-forbidden_skills: [web-search, deep-research, technical-writing, visual-answer, verification-loop]
+forbidden_skills: [web-search, deep-research, technical-writing, visual-answer, verification-loop, context-engineering, context-audit, context-compaction, session-handoff]
 expected_evidence:
   - Die Antwort beschränkt sich auf die stabile allgemeine Bedeutung von HTTP 404 und beansprucht keine aktuelle externe Evidence.
 expected_artifacts:

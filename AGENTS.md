@@ -40,6 +40,16 @@ Problem / Ziel des Nutzers
 → verifizieren / reviewen / gaten
 ```
 
+## Context Efficiency by Default
+
+Bei **jedem** Agentenlauf gilt: Verwende den kleinsten ausreichenden, aktuellen und belegbaren Kontext. Das ist eine leichte Arbeitsregel, **kein** Auftrag, pauschal Context-Skills zu laden oder ein zusätzliches Audit durchzuführen.
+
+- Projektregeln, kanonische Sources of Truth, erforderliche Router-Reads, Evidence und Freigabe-Gates bleiben vollständig erhalten. Kontextoptimierung darf Pflicht-Discovery oder notwendige Verifikation nicht umgehen.
+- Relevante Abschnitte gezielt nachladen, große Artefakte referenzieren statt duplizieren und umfangreiche Tool-/Test-/Logausgaben möglichst deterministisch filtern; Fundstellen und Roh-Evidence müssen bei Bedarf erreichbar bleiben.
+- Nur bei **eigenständigem, zum Auftrag passendem Bedarf** die kanonischen Descriptions prüfen und passende Skills wählen: `context-engineering` (aktiven Kontext gestalten), `context-audit` (Bloat/Token-/Qualitätsproblem untersuchen), `context-compaction` (langen Arbeitsverlauf verdichten), `session-handoff` (an eine andere Session/einen Agenten übergeben). Nicht alle vier vorsorglich aktivieren; normale kurze Aufgaben brauchen keinen Context-Skill.
+- Ändert ein Tooloutput, ein wachsender Verlauf oder ein Agentenwechsel den Kontextbedarf materiell, nur die davon betroffenen Kandidaten erneut prüfen, nicht den gesamten Katalog.
+- Eine **nachgewiesene** Einsparung verlangt passende Vorher-/Nachher-Metriken und gleichwertiges Task-Outcome; geringere Textmenge oder geschätzte Tokens allein sind kein Erfolgsnachweis.
+
 ## Routing
 
 ### Verbindlicher Minimal-Discovery-Gate
