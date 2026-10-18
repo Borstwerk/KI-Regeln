@@ -25,6 +25,44 @@ cases:
       - "schreibt den gesamten Verlauf ungefiltert in das Handoff"
     expected_status: pass
 
+  - id: context-efficiency-implicit-repository-task
+    class: trigger
+    input: "Behebe den sporadischen Importfehler im bestehenden Repository. Es gibt zahlreiche Module, veraltete Diagnoseprotokolle und eine aktuelle Testspezifikation. Nutze die Projektregeln und zeige einen nachvollziehbaren Fix."
+    should_trigger: true
+    expected:
+      - "erkennt ohne ausdrückliches Token-Stichwort den eigenständigen Bedarf an gezielter Kontextauswahl"
+      - "beachtet verpflichtende Bootstrap-Reads und aktuelle lokale Sources of Truth"
+      - "lädt nur relevante Module, aktuelle Tests und nötige Evidence gezielt nach"
+    forbidden:
+      - "überspringt kanonische Pflichtquellen unter Berufung auf Tokenersparnis"
+      - "lädt vorsorglich alle Context-Skills oder das ganze Repository"
+    expected_status: pass
+
+  - id: context-efficiency-midrun-reentry
+    class: regression
+    input: "Während der Fehlerdiagnose liefert das Testwerkzeug unerwartet 30000 Zeilen wiederholter Logs, darunter einen Fehlerblock und Referenzen auf das Rohartefakt. Der Agent muss korrekt weiterarbeiten."
+    should_trigger: true
+    expected:
+      - "erkennt das neue Tooloutput-Bloat-Signal und passt die aktive Kontextauswahl gezielt an"
+      - "filtert oder referenziert wiederholte Rohoutputs ohne den Fehlerblock und die Evidence zu verlieren"
+      - "prüft einen Context Audit nur bei eigenständigem Diagnosebedarf, nicht reflexhaft"
+    forbidden:
+      - "lädt ungefiltert alle Logzeilen in den Modellkontext"
+      - "verwechselt kürzeren Kontext mit bereits nachgewiesener Token- und Qualitätsverbesserung"
+    expected_status: pass
+
+  - id: context-efficiency-trivial-direct-near-miss
+    class: trigger
+    input: "Was bedeutet HTTP-Status 404? Antworte kurz."
+    should_trigger: false
+    expected:
+      - "beantwortet die einfache Frage direkt unter Beachtung der schlanken Grundregel"
+      - "aktiviert keinen Context-Skill ohne eigenständige Kontextgestaltungsaufgabe"
+    forbidden:
+      - "führt einen Context Audit oder eine Compaction bloß wegen der allgemeinen Effizienzregel aus"
+      - "lädt zusätzliche Skilldateien nur um einen kürzeren Output zu produzieren"
+    expected_status: pass
+
   - id: context-persistent-knowledge-near-miss
     class: trigger
     input: "Entwirf eine dauerhafte Wissensdatenbank mit Taxonomie, Provenance und gepflegten Wissensnoten."
