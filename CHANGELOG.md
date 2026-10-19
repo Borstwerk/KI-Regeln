@@ -6,6 +6,13 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 ## Unreleased
 
+### Cross-Session-Skill-Trust-Boundaries (19.10.2026)
+
+- In vorhandenen Prompt-Injection-, Skill-Security-, Handoff- und External-Action-Regeln persistierte Skill-/Agentenartefakte als **Daten mit Herkunft** statt als neue Autorisierung abgegrenzt.
+- Bei riskanten Folgeaktionen: ursprünglichen Auftrag, belegte Freigabe, aktuellen Ziel-/Runtime-Scope und kombinierte Skill-Kettenwirkung statt nur lokale Einzel-Skill-Ergebnisse prüfen; bei unbekannter Provenienz `UNVERIFIED`/Gate, keine pauschalen Read-only-Blockaden.
+- Synthetische Eval-Negativkontrollen zu gefälschten Freigaben, Evidence Poisoning und Skill-Cascades ergänzt, inklusive harmloser Kontrollfälle. Nur strukturelle CI-Validierung; **Behavioral-Sicherheitswirksamkeit: NOT RUN / UNVERIFIED**.
+- Drei unabhängige aktuelle Forschungsarbeiten als methodische Primärquellen dokumentiert; keine externen Packages, Agenten, Scanner, Permissions oder automatischen Freigaben übernommen.
+
 ### Context Efficiency by Default (18.10.2026)
 
 - `AGENTS.md` enthält eine kurze, providerunabhängige Kontext-Effizienzgrundregel für jeden Agentenlauf, ohne neue Pflichtdateien, globale Context-Overlays oder pauschale Skillaktivierung.

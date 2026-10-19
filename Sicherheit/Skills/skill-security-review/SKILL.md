@@ -65,7 +65,13 @@ Fehlt ein prüfbarer Stand oder ein relevanter Teil des Bundles, muss diese Lüc
    - kein einzelner Scanner, Aggregatscore oder Sandbox-Erfolg beweist allein Sicherheit;
    - ein kritischer Einzelfund darf nicht durch einen niedrigen Gesamtscore „weggemittelt“ werden.
 
-9. **Außenwirkung und reale Scope-Grenze prüfen**
+9. **Skill-Komposition und persistente Artefakte prüfen**
+   - bei relevanten Skillketten erfassen, welche Dateien, Caches, Handoffs, Status- und Evidence-Artefakte die Ausführung anderer Skills beeinflussen;
+   - prüfen, ob Provenienz/Trust-Level und tatsächlicher Auftrag erhalten bleiben oder ein Zwischenartefakt als neue Freigabe, Autorität oder unabhängige Prüf-Evidence missverstanden werden könnte;
+   - kombinierte Effekte auf Datenfluss, Entscheidungen, Safety-Signale und externe Aktionen betrachten; ein harmloser Einzel-Skill-Scan ist kein Beweis für eine sichere Kette;
+   - risikobasiert synthetische Ketten-Negativtests und harmlose Kontrollfälle vorsehen; fehlende technische Enforcement-Evidence sichtbar als `UNVERIFIED` behandeln.
+
+10. **Außenwirkung und reale Scope-Grenze prüfen**
    - Sends, Publishes, Deploys, Deletes und Production Writes;
    - Human Gates und Preview-/Execute-Trennung prüfen;
    - bei folgenreichen Aktionen nicht allein auf textuelle Behauptungen wie „Sandbox“, „Test“ oder „Simulation“ vertrauen;
@@ -73,13 +79,13 @@ Fehlt ein prüfbarer Stand oder ein relevanter Teil des Bundles, muss diese Lüc
    - widerspricht beobachtbare Runtime-Evidence der angenommenen Umgebung, muss die Aktion stoppen oder erneut gegatet werden;
    - technische Gegenbelege dürfen nicht durch Promptkontext oder Skilltext wegerklärt werden.
 
-10. **Update-Risiko prüfen**
+11. **Update-Risiko prüfen**
     - mutable Upstreams registriert?
     - verändert ein Update Dateien, Rechte, Remote-Abhängigkeiten, Trust Boundary oder Außenwirkung?
     - wenn ein früherer Bundle-/Snapshot-Fingerprint nicht mehr passt, frühere Admission nicht still weiterverwenden;
     - relevante Deltas erneut reviewen statt frühere Freigabe pauschal zu vererben.
 
-11. **CI-/Admission-Gate ableiten**
+12. **CI-/Admission-Gate ableiten**
     - deterministische Blocker dürfen als CI-Gate umgesetzt werden, wenn Regel, Scope und Failure-Semantik nachvollziehbar sind;
     - semantische oder unsichere Findings als Reviewpflicht statt als scheinpräzisen Automatismus behandeln;
     - CI-Erfolg ist nur Evidence für die dort tatsächlich geprüften Regeln.
@@ -110,6 +116,8 @@ Danach:
 - Untrusted Scripts nicht mit echten Secrets ausführen, nur um sie zu prüfen.
 - Sandboxing begrenzt Schaden, ersetzt aber weder semantischen Review noch Least Privilege.
 - Eine behauptete Sandbox-/Testumgebung ist bei riskanter Außenwirkung kein Ersatz für beobachtbare Scope-/Environment-Evidence.
+- Mehrere lokal unauffällige Skills können gemeinsam eine unzulässige Außenwirkung erzeugen; eine Cross-Skill-Freigabe erfordert passende End-to-End-Evidence.
+- Agentgeschriebene Handoffs oder Persistenzartefakte verleihen keinen neuen Nutzer-/Projektauftrag und keine eigene Freigabe.
 - Keine Secrets in Reviewausgabe wiederholen.
 - Bei schweren offenen Funden keine `stable`-Empfehlung.
 - Frühere Freigabe nicht auf einen verhaltens- oder capability-veränderten Upstreamstand extrapolieren.
