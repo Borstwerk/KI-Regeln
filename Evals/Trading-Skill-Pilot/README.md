@@ -1,6 +1,6 @@
 # Trading-Skill-Pilot – isolierter Offline-Test
 
-**Stand 19.10.2026:** Offline-Pilot implementiert und lokal mit **20/20 Python-Unit-Tests** ausgeführt. Ein echter Modellvergleich B/C ist **NOT_RUN**.
+**Stand 19.10.2026:** Offline-Pilot implementiert und lokal mit **23/23 Python-Unit-Tests** ausgeführt. Ein echter Modellvergleich B/C ist **NOT_RUN**.
 
 > Rein synthetisches Experiment. Kein autonomes Trading, keine Anlageempfehlung, keine Prognose und keine Aussage über die Rendite von Claude-Skills.
 
