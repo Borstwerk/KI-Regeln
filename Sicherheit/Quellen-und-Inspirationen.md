@@ -203,6 +203,18 @@ Lokale Regel bleibt:
 
 > Deterministischer Scanner = reproduzierbare Evidence-Schicht, nicht vollständige Admission.
 
+## Cross-Skill- und Cross-Session-Angriffe (Forschungsstand Oktober 2026)
+
+Primärquellen (Forschung, keine automatisch übernommene Runtime):
+
+- Liao et al., *Understanding and Mitigating Cross-Session Attacks via Persistent Artifacts in Agent Skill Composition* (09.10.2026), https://arxiv.org/abs/2610.13227 – untersucht wiederverwendete Artefakte über Sessions, unterscheidet Instruction Propagation, Data Boundary Violation und Evidence Poisoning; SkillRelayGuard kombiniert Provenienzkontext mit Pre-Execution-Review.
+- Dong et al., *Chaining Skills to Hijack LLM Agents* (01.10.2026), https://arxiv.org/abs/2610.01564 – demonstriert das Weiterreichen fingierter Freigaben in echten Fortschrittsnotizen; ein einfacher zusätzlicher Promptcheck kann die legitime Task-Leistung beeinträchtigen.
+- Zhu et al., *Stealth Apart, Harm Together: Skill Cascading Attacks on Skill-Based Agent Systems* (24.09.2026), https://arxiv.org/abs/2609.30383 – demonstriert Schadwirkungen aus mehreren einzeln weniger auffälligen Skill-Schritten und die Grenzen isolierter Komponentenscans.
+
+Lokale Schlussfolgerung: **Persistenz oder erneutes Lesen hebt keine Autorität an.** Für riskante Folgeaktionen Herkunft/Vertrauensgrenze des Artefakts, verifizierte Freigabe und gesamte Kettenwirkung prüfen. Kein per-Skill-`PASS` als End-to-End-`PASS` verkaufen. Der Umfang ist risikoproportional; nicht jede harmlose Datei braucht umfassendes Tracing.
+
+Kein Paper-Benchmark wird zur universellen Erfolgsquote oder technischen Schutzgarantie für KI-Regeln umgedeutet. Keine fremden Skills, Testkorpora, Scanner, Agent-Runtimes oder Paper-Implementierungen übernommen; ausschließlich eigenständig formulierte Methodik.
+
 ## Eigene Synthese
 
 Der Sicherheitsbereich verbindet diese Quellen mit den bereits vorhandenen Regeln zu Human Gates, Context Engineering, Upstream-Monitoring und Agenten-Observability.
