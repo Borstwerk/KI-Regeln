@@ -45,6 +45,20 @@ Damit wird verhindert, dass genau der zu prüfende Skill bereits vor dem Review 
 - kann solcher Inhalt neue Befehlsautorität vortäuschen?
 - sind Prompt-Injection-Grenzen vorhanden?
 
+### Skill-Komposition und persistente Folgeartefakte
+
+Ein paketweiser Einzel-Skill-Review ist nicht automatisch eine Prüfung der **kombinierten** Wirkungen mehrerer Skills über Task- oder Sessiongrenzen hinweg.
+
+Bei plausibler Skill-Komposition risikobasiert prüfen:
+
+- Welche Skills erzeugen Dateien, Statusnotizen, Caches, Evidence oder Konfigurationen, die spätere Skills lesen?
+- Welche Provenienz, Integritäts- und Vertrauenssignale bleiben beim Weitergeben erhalten; wo gehen sie verloren?
+- Können Zwischenartefakte unbemerkt angebliche Nutzerfreigaben, neue Tool-/Datenrechte oder fingierte Test-/Entscheidungsevidence transportieren?
+- Könnten mehrere isoliert unauffällige Schritte zusammen sicherheitsrelevante Fakten verbergen, Daten weiterreichen oder riskante Außenwirkungen erzeugen?
+- Wird vor der kritischen letzten Aktion der **End-to-End-Effekt** gegen ursprünglichen Auftrag, Daten-/Rechtegrenzen und tatsächlich bestätigte Gates bewertet?
+
+Bei erhöhtem Risiko synthetische positive und adversariale Kettenfälle prüfen. Kein allgemeiner Sicherheits-PASS allein aus einer Summe grüner Einzel-Scans. Wenn Kette, Provenienz oder reale Durchsetzung nicht prüfbar sind, die Abdeckung als `UNVERIFIED` ausweisen und vor relevanten Außenaktionen stoppen/gaten. Eine bloße Textwarnung ist keine technische Enforcement-Garantie.
+
 ### Daten
 
 - könnte der Skill Secrets oder vertrauliche Daten lesen?
