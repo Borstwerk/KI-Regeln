@@ -6,6 +6,15 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 ## Unreleased
 
+### Council-01: Ungeprüfter Multi-Model-Deliberation-Kandidat (21.10.2026)
+
+- [Ideenkarte](Dokumentation/Multi-Model-Council-Optionen.md) hält `multi-model-deliberation` als **ungeprüften, nicht registrierten Skillkandidaten** sowie Karpathys LLM-Council-App separat als externes Inspirationsprojekt fest.
+- [Quellen-Vorprüfung](Dokumentation/Reviews/Karpathy-LLM-Council-2026-10-21.md) dokumentiert beobachtetes Independent-Answer/Peer-Review/Synthesis-Prinzip, Risiko von Stimmenmehrheit statt Evidence, externe API-/Datentransfers, Kosten und ungeklärte Codeübernahmerechte. **NOT ADMITTED**.
+- [Council-01-Methodenvergleich](Evals/Agentenarbeit/Council-01-Pilot/README.md): A Einzelmodell / B zwei unabhängig + fokussierter Review / C anonyme gegenseitige Bewertung + Synthese; Fokus auf echten Outcome, Fehler, Gates und Zusatzaufwand. **PLANNED / NOT RUN**.
+- Keine Installation, keine Aktivierung, keine neuen SKILL.md, keine Katalog-/Routing-/Workflowänderung.
+
+
+
 ### Cross-Session-Skill-Trust-Boundaries (19.10.2026)
 
 - In vorhandenen Prompt-Injection-, Skill-Security-, Handoff- und External-Action-Regeln persistierte Skill-/Agentenartefakte als **Daten mit Herkunft** statt als neue Autorisierung abgegrenzt.
