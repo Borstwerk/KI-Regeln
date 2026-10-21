@@ -65,6 +65,15 @@ Die Entscheidung über ein mögliches eigenes `graph-retrieval`-Skill
 bleibt offen. **Keine Tools installiert, keine Graphen gebaut, keine
 Modellläufe oder Tokeneinsparungen gemessen.**
 
+## Council-01 – Geplanter Methodenvergleich (kein Modelllauf)
+
+[Council-01](Agentenarbeit/Council-01-Pilot/README.md) vergleicht
+das übliche Einzelmodell, zwei unabhängige Erstlösungen mit gezieltem
+Gegenreview und ein anonymisiertes Council mit Peer-Rankings und Synthese.
+Der [mögliche Skill](../Dokumentation/Multi-Model-Council-Optionen.md)
+ist **UNVERIFIED**, nicht registriert oder aktiviert.
+**Keine Runs, keine Token-/Kostenmessung, kein belegter Qualitäts-Lift.**
+
 ## Eval-Klassen
 
 ### Trigger
