@@ -12,6 +12,12 @@ Er richtet sich vor allem an Menschen, die:
 - neue externe Kandidaten und Trends systematisch beobachten möchten;
 - Reifegrad und Evalabdeckung von Skills einschätzen möchten.
 
+## Neue Methoden- und Architekturkandidaten
+
+- [LLM Council – ungeprüfter Skill-Kandidat und externe Projektoption](Multi-Model-Council-Optionen.md): `multi-model-deliberation` nur als Idee; **kein installierter oder registrierter Skill**.
+- [Karpathy LLM Council – Quell-/Risiko-Vorprüfung](Reviews/Karpathy-LLM-Council-2026-10-21.md): beobachtetes Drei-Stufen-Prinzip; **NOT ADMITTED / NOT RUN**.
+- [Council-01 Methodenvergleich](../Evals/Agentenarbeit/Council-01-Pilot/README.md): Einzelmodell vs. unabhängiger Zwei-Modell-Review vs. Council-Synthese; **PLANNED**.
+
 ## Neue Architektur-/Retrieval-Kandidaten
 
 - [Wissensgraph-Retrieval: Graphify und native KI-Regeln-Lösung](Knowledge-Graph-Retrieval-Optionen.md) – zwei ausdrücklich offene Wege einschließlich möglichem eigenem Skill; nur als Idee geplant, kein Routing- oder Runtime-Change.
