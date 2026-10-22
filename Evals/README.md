@@ -56,6 +56,14 @@ datensparsamer Reibungs-Checkpoint** im bereits vorhandenen
 [Workflow](../Workflows/Skill-Verbesserung-aus-Evals-und-Fehlern.md);
 kein neuer Skill und keine globale Beobachtungspflicht.
 
+## PB-01 – Wiederkehrende Aufgabe zum Playbook
+
+[PB-01](Agentenarbeit/Task-to-Playbook-Pilot/README.md) dokumentiert
+sechs synthetische Entwicklungsfälle zu Interview, vorhandenen
+Playbooks, Toolbox-Wiederverwendung, Near-Misses und Freigabegates.
+Offline-Strukturtests sind möglich; **Modell-/A/B-/Outcome-Läufe sind
+NOT RUN**. Ein Token- oder Qualitätsgewinn ist nicht nachgewiesen.
+
 ## KG-01 – Geplanter Graph-Retrieval-Pilot (noch nicht ausgeführt)
 
 [KG-01](Agentenarbeit/Graph-Retrieval-Pilot/README.md) beschreibt
