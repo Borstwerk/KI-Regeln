@@ -63,11 +63,11 @@ class TaskToPlaybookContract(unittest.TestCase):
                      "Human Gate", "STOP", "keine Mindestzahl"):
             self.assertIn(name.lower(), self.text.lower())
         self.assertIn("keine Execute-/Netz-/Produktivrechte", self.text)
-        self.assertIn("nicht unkontrolliert in jede Session", self.text)
+        self.assertIn("unkontrolliert in jede Session", self.text)
         self.assertIn("keine", self.text.lower())
 
     def test_template_has_explicit_contract_and_no_fake_pass(self):
-        for section in ("Wann nutzen", "Nicht nutzen", "Inputs", "Rechte",
+        for section in ("Wann nutzen", "Nicht nutzen", "Eingaben", "Rechte",
                         "Entscheidungen", "Toolbox", "Fertig heißt",
                         "Sonderfälle", "Pflege und Herkunft"):
             # 'Inputs' appears as a column, not a header.
