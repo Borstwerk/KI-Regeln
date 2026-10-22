@@ -6,6 +6,15 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 ## Unreleased
 
+### Wiederkehrende Aufgabe zum Playbook (22.10.2026)
+
+- Neuer [Task-to-Playbook-Workflow](Workflows/Wiederkehrende-Aufgabe-zum-Playbook.md): gezieltes Interview, kontrollierter Playbook-Entwurf, Search-before-Create-Toolbox, objektive Prüfungen und sichere Pflege als Composition **vorhandener** Skills.
+- [PLAYBOOK.md-Vorlage](Workflows/Vorlagen/PLAYBOOK.template.md) und [synthetisches Praxisbeispiel](Dokumentation/Praxisbeispiele/Task-to-Playbook-Synthetisch.md); kein globales Installieren, keine eigenmächtige Promotion von Playbooks in Skills, keine ungefragte Schreib-/Sendeaktion.
+- [PB-01-Pilot](Evals/Agentenarbeit/Task-to-Playbook-Pilot/README.md): sechs Dev-Fälle und statische Gegenprüfungen; echte Agenten-/Outcome-/Token-Evals **NOT RUN**.
+- Routing über `workflow-index.yml`, Workflows-Übersicht und `START-HIER.md`; bestehende Skills, `AGENTS.md` und Overlays bleiben unverändert.
+
+
+
 ### Council-01: Ungeprüfter Multi-Model-Deliberation-Kandidat (21.10.2026)
 
 - [Ideenkarte](Dokumentation/Multi-Model-Council-Optionen.md) hält `multi-model-deliberation` als **ungeprüften, nicht registrierten Skillkandidaten** sowie Karpathys LLM-Council-App separat als externes Inspirationsprojekt fest.

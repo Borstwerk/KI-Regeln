@@ -45,6 +45,7 @@ workflows:
   - Workflows/Systemgrenze-und-Dekomposition.md
   - Workflows/Technische-Dokumentation.md
   - Workflows/Teststrategie-und-QA.md
+  - Workflows/Wiederkehrende-Aufgabe-zum-Playbook.md
   - Workflows/Text-Endkontrolle.md
   - Workflows/Unternehmens-und-Investmentanalyse.md
   - Workflows/Website-Neuentwicklung.md

@@ -24,6 +24,19 @@ Für einen ersten Auftrag genügt beispielsweise:
 
 Das ist **ein Beispiel, kein Pflichtprompt**.
 
+### Wiederkehrende Aufgaben in Playbooks verwandeln
+
+Du erklärst einem Agenten jede Woche dieselben Schritte? Dafür gibt es den
+[Workflow „Wiederkehrende Aufgabe zum Playbook“](Workflows/Wiederkehrende-Aufgabe-zum-Playbook.md)
+mit [ausfüllbarer PLAYBOOK.md-Vorlage](Workflows/Vorlagen/PLAYBOOK.template.md).
+Beispielauftrag: „Hilf mir, meinen wiederkehrenden Ablauf zu dokumentieren.
+Frag nur die entscheidenden fehlenden Informationen, such zuerst nach
+vorhandenen Vorlagen, erstelle dann einen prüfbaren Playbook-Entwurf.
+Schreibe nichts und führe keine externe Aktion ohne passende Freigabe aus.“
+
+Das Playbook ist **keine** automatische globale Skillinstallation;
+prüfbare Tests und Freigaben bleiben nötig.
+
 ## 2. Gib der KI Zugang zu den relevanten Informationen
 
 - Stelle deiner KI das Repository, die benötigten Dateien oder einen verfügbaren Repository-Zugriff bereit. **Ein bloßer Link garantiert nicht**, dass das Modell die Dateien tatsächlich gelesen hat.

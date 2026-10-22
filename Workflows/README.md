@@ -37,6 +37,7 @@ Ein Workflow ist deshalb **kein neuer Mega-Skill**.
 - `Datenbank-Aenderung.md`
 - `Teststrategie-und-QA.md`
 - `Long-Horizon-Agentenarbeit.md`
+- `Wiederkehrende-Aufgabe-zum-Playbook.md` – wiederkehrende menschliche Arbeit interviewen, Toolbox wiederverwenden und objektiv verifizieren (kein neuer Skill)
 - `Wissensbasis-Aufbauen-und-Pflegen.md`
 - `Schnittstellenvertrag-Entwerfen-und-Aendern.md`
 - `Infrastruktur-Aenderung.md`
