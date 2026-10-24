@@ -64,6 +64,21 @@ Playbooks, Toolbox-Wiederverwendung, Near-Misses und Freigabegates.
 Offline-Strukturtests sind möglich; **Modell-/A/B-/Outcome-Läufe sind
 NOT RUN**. Ein Token- oder Qualitätsgewinn ist nicht nachgewiesen.
 
+## TE-01 / SQ-01 / OR-01 – Kandidaten aus externen Agenten-Toolkits
+
+- [TE-01 Token-/Output-Effizienz](Agentenarbeit/Token-Effizienz-Pilot/README.md):
+  Headroom-Offline-Kompression vs. RTK-Ausgabefilter vs. Baseline,
+  optional danach gemeinsam mit KG-01. **NOT RUN**.
+- [SQ-01 Session-Qualität](Agentenarbeit/Session-Quality-Pilot/README.md):
+  synthetischer Kanarienvogel vs. nachprüfbare Task-Drift,
+  inklusive False Positives/Negatives. **NOT RUN**.
+- [OR-01 Orchestrierung](Agentenarbeit/Orchestrierung-Pilot/README.md):
+  gstack-/ECC-Methoden jeweils gegen bestehendes KI-Regeln-Routing
+  vergleichen, **keine** Fremdbundles importieren. **NOT RUN**.
+
+Überblick und Grenzen:
+[Agenten-Tooling-Kandidaten](../Dokumentation/Agenten-Tooling-Kandidaten-2026-10-24.md).
+
 ## KG-01 – Geplanter Graph-Retrieval-Pilot (noch nicht ausgeführt)
 
 [KG-01](Agentenarbeit/Graph-Retrieval-Pilot/README.md) beschreibt
