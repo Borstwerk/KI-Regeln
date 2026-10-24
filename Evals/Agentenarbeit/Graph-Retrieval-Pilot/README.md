@@ -132,6 +132,17 @@ Eine abgeschnittene Graphantwort, die den Fehler bloß versteckt, zählt
 als Fail. Bei zu geringer Stichprobe, fehlendem Verbrauchsledger oder
 ungleichen Toolbedingungen lautet das Urteil `INCONCLUSIVE`.
 
+## Optionaler Folgeversuch mit Output-Kompression
+
+Der separate [TE-01-Pilot](../Token-Effizienz-Pilot/README.md) plant
+Headroom/RTK als **anderen Eingriffspunkt**: Output-/Kontextfilter statt
+Graph-basiertem Retrieval. **Nicht** in KG-01s ersten A/B/C-Vergleich
+mischen. Nur bei getrennt erfolgreichen, vergleichbaren Ergebnissen
+später eine kleine faktorielle Folgeprobe mit und ohne Graph und Filter
+durchführen. Gemeinsamer Recall-/Gate-Quality-Floor, realer
+Gesamt-Tokenverbrauch einschließlich zusätzlicher Retrieval-/Recall-
+Calls und Compression-Overhead. Keine addierten Werbe-Ersparquoten.
+
 ## Ablauf und Stoppunkte
 
 1. **Read-only Tool-/Security-Vorprüfung** nach
