@@ -12,6 +12,16 @@ Er richtet sich vor allem an Menschen, die:
 - neue externe Kandidaten und Trends systematisch beobachten möchten;
 - Reifegrad und Evalabdeckung von Skills einschätzen möchten.
 
+## Agenten-Tooling-Kandidaten (24.10.2026)
+
+[Headroom, RTK, Session-Kanarienvogel, gstack und ECC](Agenten-Tooling-Kandidaten-2026-10-24.md)
+sind als **ungeprüfte Integrations-/Methodenkandidaten** registriert.
+Drei getrennte geplante Vergleiche:
+[TE-01](../Evals/Agentenarbeit/Token-Effizienz-Pilot/README.md),
+[SQ-01](../Evals/Agentenarbeit/Session-Quality-Pilot/README.md),
+[OR-01](../Evals/Agentenarbeit/Orchestrierung-Pilot/README.md).
+Keine Runtime installiert und kein neuer Skill registriert.
+
 ## Neue Methoden- und Architekturkandidaten
 
 - [LLM Council – ungeprüfter Skill-Kandidat und externe Projektoption](Multi-Model-Council-Optionen.md): `multi-model-deliberation` nur als Idee; **kein installierter oder registrierter Skill**.
