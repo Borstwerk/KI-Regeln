@@ -6,6 +6,16 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 ## Unreleased
 
+### Research-Piloten TE-01, SQ-01 und OR-01 (24.10.2026)
+
+- [Kandidatenkarte](Dokumentation/Agenten-Tooling-Kandidaten-2026-10-24.md) für **Headroom**, **RTK**, Session-Kanarienvogel, **gstack** und **ECC**, mit Original-Repo-/Lizenz-/Hook-/Proxy-/Privacy-Risiken und bestehenden Skill-Ownern.
+- [TE-01](Evals/Agentenarbeit/Token-Effizienz-Pilot/README.md): Rohoutput vs. isolierte Headroom-Kompression vs. RTK-OSS-CLI-Filter; acht synthetisch geplante Fidelity-/Safety-Fälle; KG-01-Verbindung **erst** als separater Folgeversuch.
+- [SQ-01](Evals/Agentenarbeit/Session-Quality-Pilot/README.md): Canary-Alarm gegen echte Task-Fidelity, Negativkontrollen und unberechtigte Resets.
+- [OR-01](Evals/Agentenarbeit/Orchestrierung-Pilot/README.md): gezielte gstack-/ECC-Review-/Orchestrierungsmethoden vs. bestehende KI-Regeln-Workflows, ohne Mega-Bundle-Import.
+- **PLANNED / NOT RUN / NOT ADMITTED**: keine Installationen, Hooks, KI-API-Aufrufe, produktiven Skills oder Änderung des Bootstrap-/Routing-Vertrags; keine behaupteten Token- oder Outcomeverbesserungen.
+
+
+
 ### Wiederkehrende Aufgabe zum Playbook (22.10.2026)
 
 - Neuer [Task-to-Playbook-Workflow](Workflows/Wiederkehrende-Aufgabe-zum-Playbook.md): gezieltes Interview, kontrollierter Playbook-Entwurf, Search-before-Create-Toolbox, objektive Prüfungen und sichere Pflege als Composition **vorhandener** Skills.
