@@ -6,6 +6,27 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 ## Unreleased
 
+### CF-01 – Offizielle Cloudflare Skills & Agent-friendly Docs (25.10.2026)
+
+- [Ideen-/Architekturkarte](Dokumentation/Cloudflare-Hersteller-Skills-und-Docs-Option.md):
+  19 Cloudflare-Hersteller-Skills als **optionale** bedarfsgesteuerte
+  Referenzquelle, Cloudflare-`llms.txt` und `index.md`,
+  möglicher späterer Vendor-Adapter; **kein** Kopieren
+  oder Registrieren fremder Skills.
+- [Statische Vorprüfung](Dokumentation/Reviews/Cloudflare-Skills-2026-10-25.md):
+  Hersteller-Repo/Commit, Plugin-Manifeste und
+  MCP-`https://mcp.cloudflare.com/mcp`, Versions-/
+  Script-/Token-/OAuth-/Write-Grenzen; **NOT ADMITTED**.
+- [CF-01-Pilot](Evals/Agentenarbeit/Cloudflare-Skills-Pilot/README.md):
+  KI-Regeln-Baseline vs. gezieltes Cloudflare-Skill-/Docs-Retrieval
+  mit zehn geplanten Entwicklungsfällen;
+  MCP als **separater späterer** Gate-Pilot, **NOT RUN**.
+- Keine `AGENTS.md`-, Katalog-/Routing-, Skill-, CI-,
+  MCP- oder Accountänderung; keine Tool-/Modellaufrufe
+  im Cloudflare-Kontext und keine Spar-/Erfolgsbehauptung.
+
+
+
 ### Research-Piloten TE-01, SQ-01 und OR-01 (24.10.2026)
 
 - [Kandidatenkarte](Dokumentation/Agenten-Tooling-Kandidaten-2026-10-24.md) für **Headroom**, **RTK**, Session-Kanarienvogel, **gstack** und **ECC**, mit Original-Repo-/Lizenz-/Hook-/Proxy-/Privacy-Risiken und bestehenden Skill-Ownern.
