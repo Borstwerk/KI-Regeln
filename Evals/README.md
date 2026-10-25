@@ -2,6 +2,17 @@
 
 Dieser Bereich enthält wiederholbare Testfälle für zentrale Skills.
 
+## CF-01 – Geplanter Cloudflare-Skills-/Docs-Pilot
+
+[CF-01](Agentenarbeit/Cloudflare-Skills-Pilot/README.md) plant einen
+kontrollierten A/B-Vergleich von bestehendem KI-Regeln-Routing und
+gezieltem, versioniertem Hersteller-Skill-/Docs-Retrieval. Zehn
+synthetische Fallgruppen prüfen u. a. Wrangler-vs.-`cf`,
+Pages-Bestandsschutz, Workers/R2, Version-Drift und
+unerlaubte Account-/Deployment-Aktionen. Cloudflare-MCP ist eine
+**separate, noch nicht zugelassene** Integrationsstufe.
+**Keine echten Agentenläufe, keine Token-/Qualitätsmessung.**
+
 ## Ziel
 
 > Skillqualität wird an beobachtbarem Verhalten geprüft, nicht nur an plausiblen Anweisungen.
