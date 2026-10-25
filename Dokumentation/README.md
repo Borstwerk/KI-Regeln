@@ -12,6 +12,18 @@ Er richtet sich vor allem an Menschen, die:
 - neue externe Kandidaten und Trends systematisch beobachten möchten;
 - Reifegrad und Evalabdeckung von Skills einschätzen möchten.
 
+## Offizielle Hersteller-Skills als optionale Referenz (25.10.2026)
+
+- [Cloudflare-Hersteller-Skills und Agent-friendly Docs](Cloudflare-Hersteller-Skills-und-Docs-Option.md):
+  19 offizielle Skills, `llms.txt`/`index.md`, optionale Vendor-Referenzschicht;
+  **CANDIDATE**, kein Import oder globaler Skill.
+- [Cloudflare Bundle-/MCP-Vorprüfung](Reviews/Cloudflare-Skills-2026-10-25.md):
+  Trennung von Dokumentationsabruf, Skill-Bundle und Remote-MCP-
+  Kontozugriff; **NOT ADMITTED**.
+- [CF-01 Vergleichspilot](../Evals/Agentenarbeit/Cloudflare-Skills-Pilot/README.md):
+  KI-Regeln mit/ohne gezielt geladenen Hersteller-Skill,
+  MCP als separates Gate; **NOT RUN**.
+
 ## Agenten-Tooling-Kandidaten (24.10.2026)
 
 [Headroom, RTK, Session-Kanarienvogel, gstack und ECC](Agenten-Tooling-Kandidaten-2026-10-24.md)
