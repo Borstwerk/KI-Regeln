@@ -2,6 +2,19 @@
 
 Dieser Bereich enthält wiederholbare Testfälle für zentrale Skills.
 
+## PT-01 – Ponytail: Minimalismus, Diffreview, Audit und technische Schulden
+
+[PT-01](Agentenarbeit/Ponytail-Pilot/README.md) enthält **acht
+synthetische, paketierbare Entwicklungsfälle**, getrennte
+Development-Judge-Labels, einen kurzen eigenen
+[Minimalismus-Checkpoint](Agentenarbeit/Ponytail-Pilot/variants/minimal-checkpoint.md),
+[Offline-Packer und Grader](../tools/pt01_pilot.py),
+unabhängige Sandbox-Verhaltenstests für die Coding-Fälle
+und [eine konkrete Startkarte](Agentenarbeit/Ponytail-Pilot/RUN-CARD.md).
+**Keine** Agenten-/Token-/Ergebnisläufe, Ponytail
+**nicht** installiert oder aktiviert; Original-Skillarm
+bis Security Admission `BLOCKED`.
+
 ## CF-01 – Geplanter Cloudflare-Skills-/Docs-Pilot
 
 [CF-01](Agentenarbeit/Cloudflare-Skills-Pilot/README.md) plant einen
