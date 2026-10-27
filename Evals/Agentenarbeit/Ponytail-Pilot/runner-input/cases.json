@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "pilot": "PT-01",
+  "status": "DEVELOPMENT_FIXTURES_NOT_MODEL_RUN",
+  "source_kind": "synthetic",
+  "cases": [
+    {
+      "id": "PT01-A1",
+      "track": "A",
+      "kind": "implementation",
+      "task": "In app/search.py soll find_titles(query) Groß-/Kleinschreibung und Leerzeichen beim Suchbegriff ignorieren und nur passende Titel zurückgeben. Es gibt schon app/helpers.py. Ändere so wenig wie nötig, erhalte das Rückgabeformat. Keine neue Dependency.",
+      "files": {
+        "app/__init__.py": "",
+        "app/helpers.py": "def normalize(text):\n    return text.strip().casefold()\n",
+        "app/search.py": "from .helpers import normalize\n\nCATALOG = [{'title': 'River House'}, {'title': 'Stone Bridge'}]\n\n\ndef find_titles(query):\n    return [item for item in CATALOG if query in item['title']]\n"
+      },
+      "constraints": [
+        "Do not change CATALOG or output object structure",
+        "Use existing project mechanisms when justified",
+        "Do not weaken requirements or omit relevant tests"
+      ]
+    },
+    {
+      "id": "PT01-A2",
+      "track": "A",
+      "kind": "implementation",
+      "task": "Ergänze in app/quote.py die Funktion quote_total_cents(base, fee='0'), welche die zwei als Dezimalstrings angegebenen Geldbeträge in Cent addiert. Nutze die bereits vorhandenen Projektfunktionen, ohne externe Bibliothek oder unnötige Service-Schicht. Auch 0.01 und negative Gebühren müssen korrekt verarbeitet werden.",
+      "files": {
+        "app/__init__.py": "",
+        "app/money.py": "from decimal import Decimal\n\n\ndef to_cents(value):\n    return int((Decimal(value) * 100).quantize(Decimal('1')))\n",
+        "app/quote.py": "def quote_total_cents(base, fee='0'):\n    raise NotImplementedError\n"
+      },
+      "constraints": [
+        "Must preserve cents precision",
+        "No imported dependency beyond Python stdlib",
+        "Tests should cover fractional cent rounding and negative fees"
+      ]
+    },
+    {
+      "id": "PT01-B1",
+      "track": "B",
+      "kind": "review",
+      "task": "Führe einen Read-only-Review der Umbenennung in app/invoice.py durch. Prüfe auch die Aufrufer und zugehörigen Tests. Melde nur konkrete reproduzierbare Findings mit Datei und Zeile; keine Änderung.",
+      "files": {
+        "app/__init__.py": "",
+        "app/invoice.py": "def invoice_total(items):\n    amount = sum(item['price_cents'] for item in items)\n    return {'amount_cents': amount}\n",
+        "app/receipt.py": "from .invoice import invoice_total\n\n\ndef receipt_text(items):\n    invoice = invoice_total(items)\n    return f\"Due: {invoice['total_cents']} cents\"\n",
+        "tests/test_invoice.py": "from app.invoice import invoice_total\n\n\ndef test_total_key():\n    assert invoice_total([{'price_cents': 125}])['amount_cents'] == 125\n"
+      },
+      "constraints": [
+        "Read-only; report findings, not code edits",
+        "Do not assume passing invoice unit tests cover consumers"
+      ]
+    },
+    {
+      "id": "PT01-B2",
+      "track": "B",
+      "kind": "review",
+      "task": "Review von app/limiter.py für einen Dienst mit mehreren unabhängigen Nutzer-IDs. Der Ablauf soll maximal zwei Aktionen pro Nutzer erlauben; andere Nutzer dürfen dadurch nicht gesperrt werden. Read-only, konkrete Zeilen/Fehlerfälle statt allgemeinem Stilfeedback.",
+      "files": {
+        "app/limiter.py": "class Limiter:\n    def __init__(self, limit=2):\n        self.limit = limit\n        self.used = 0\n\n    def allow(self, user_id):\n        if self.used >= self.limit:\n            return False\n        self.used += 1\n        return True\n",
+        "README.md": "Each user has an independent allowance of two actions. No distributed deployment is required in this example.\n"
+      },
+      "constraints": [
+        "Read-only; precise violation of independent user allowance",
+        "No unrequested distributed store or infrastructure proposal"
+      ]
+    },
+    {
+      "id": "PT01-C1",
+      "track": "C",
+      "kind": "audit",
+      "task": "Prüfe dieses kleine synthetische Repository auf die wichtigsten überprüfbaren Bugs, Security- und Datenverlustrisiken. Lies relevante Entry Points/Consumer; priorisiere nur wirkliche Defekte und gib Datei/Zeile an. Ändere nichts.",
+      "files": {
+        "README.md": "Tiny local inventory service using sqlite3. Export returns success only if a file was actually written.\n",
+        "store/__init__.py": "",
+        "store/search.py": "def find_item(conn, sku):\n    sql = f\"SELECT sku, quantity FROM items WHERE sku = '{sku}'\"\n    return conn.execute(sql).fetchone()\n",
+        "store/export.py": "def export_report(path, payload):\n    try:\n        with open(path, 'w', encoding='utf-8') as stream:\n            stream.write(payload)\n    except OSError:\n        return True\n    return True\n"
+      },
+      "constraints": [
+        "Read-only, prioritize actual breakages",
+        "Never describe unknown issues as proven"
+      ]
+    },
+    {
+      "id": "PT01-C2",
+      "track": "C",
+      "kind": "audit",
+      "task": "Audit eines Lager-Batchimports. Dokumentierter Normalfall sind Chargen mit bis zu 1.200 Zeilen; unbekannte SKUs dürfen nicht still ignoriert werden. Finde echte Defekte gegenüber der README, keine neue Architektur. Lies alle betroffenen Codepfade.",
+      "files": {
+        "README.md": "Importer must accept batches up to 1,200 rows. Any unknown SKU must produce an explicit failure, not a successful partial import.\n",
+        "warehouse/__init__.py": "",
+        "warehouse/importer.py": "def import_batch(rows, known_skus):\n    if len(rows) > 1000:\n        return False\n    imported = 0\n    for row in rows:\n        if row['sku'] not in known_skus:\n            continue\n        imported += 1\n    return True\n"
+      },
+      "constraints": [
+        "Read-only and evidence-backed",
+        "Expected load 1,200; no speculative scale issues"
+      ]
+    },
+    {
+      "id": "PT01-D1",
+      "track": "D",
+      "kind": "debt",
+      "task": "Erstelle einen Read-only-Überblick aller echten absichtlich dokumentierten shortcut:-Kommentare: Speicherort, Grenze und Upgrade-Auslöser. Markiere fehlende Upgrade-Auslöser. Ignoriere reine Dokumentationsbeispiele.",
+      "files": {
+        "src/cache.py": "# shortcut: per-process cache only, upgrade when two workers share traffic\nCACHE = {}\n\n# shortcut: fixed cache without eviction\nMAX_ITEMS = 100\n",
+        "docs/usage.md": "The documentation may mention `shortcut:` syntax but that is not a source-code debt marker.\n"
+      },
+      "constraints": [
+        "Read-only, no auto-fix",
+        "Missing trigger must be surfaced, no invented upgrade date"
+      ]
+    },
+    {
+      "id": "PT01-D2",
+      "track": "D",
+      "kind": "debt",
+      "task": "Prüfe auf wirkliche absichtlich akzeptierte Abkürzungen in Quellcode-Kommentaren. Falls keine vorhanden sind, melde das ausdrücklich. Erzeuge keine unnötigen Findings.",
+      "files": {
+        "src/transport.py": "def send(payload):\n    # Keep this stable for old consumers.\n    return {'ok': bool(payload)}\n",
+        "docs/notes.md": "Future documentation can explain the phrase `shortcut:` without creating technical debt.\n"
+      },
+      "constraints": [
+        "Read-only, no false positive on documentation",
+        "Do not invent a shortcut marker"
+      ]
+    }
+  ]
+}

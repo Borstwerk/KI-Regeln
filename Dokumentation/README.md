@@ -12,6 +12,20 @@ Er richtet sich vor allem an Menschen, die:
 - neue externe Kandidaten und Trends systematisch beobachten möchten;
 - Reifegrad und Evalabdeckung von Skills einschätzen möchten.
 
+## Ponytail – Externe Coding-/Review-Skills (27.10.2026)
+
+- [Quell-, Benchmark- und Hook-Vorprüfung](Reviews/Ponytail-2026-10-27.md):
+  `ponytail`, `ponytail-review`, `ponytail-audit`, `ponytail-debt`;
+  **PARTIAL REVIEW / NOT ADMITTED**.
+- [PT-01 Vier-Spuren-Pilot](../Evals/Agentenarbeit/Ponytail-Pilot/README.md):
+  KI-Regeln-Baseline vs. kleiner eigener Checkpoint vs.
+  nach gesonderter Freigabe originaler Skilltext.
+  Acht synthetische Runner-Aufgaben, Offline-Grader,
+  Sandbox-Behavior-Oracles; **NOT RUN**.
+- [Startkarte für Codex/Claude](../Evals/Agentenarbeit/Ponytail-Pilot/RUN-CARD.md):
+  kleinstmöglicher kontrollierter A/B-Einstieg ohne
+  globale Plugins/Hooks.
+
 ## Offizielle Hersteller-Skills als optionale Referenz (25.10.2026)
 
 - [Cloudflare-Hersteller-Skills und Agent-friendly Docs](Cloudflare-Hersteller-Skills-und-Docs-Option.md):
