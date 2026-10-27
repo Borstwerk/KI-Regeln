@@ -94,6 +94,32 @@ sources:
       - review or refinement loops
       - progressive-disclosure patterns
 
+  - id: emil-kowalski-ui-skills
+    kind: github-repository
+    url: https://github.com/emilkowalski/skills
+    cadence: weekly
+    areas:
+      - Webentwicklung
+      - Skill-Engineering
+      - Testing-und-QA
+    purpose: >-
+      Watch 15 design engineering skills and referenced recipes for genuinely
+      new interaction, UI robustness, prototype, motion and mobile methods.
+      Initial repository main snapshot observed 2026-10-27:
+      2d228630ba1446365f614a108cb8252f1feda202.
+      Link findings to EK-01 rather than auto-importing external skills.
+    watch_for:
+      - compare main HEAD against last reviewed snapshot; report unchanged or enumerate changed paths and semantic impact
+      - changes to skills/break-ui/ and CATALOG.md affecting realistic worst-case data testing
+      - changes to skills/prototype/ and PICKER.md affecting isolated design-variant selection
+      - changes to skills/mobile-native/ impacting actual touch and mobile-web checks
+      - changes to skills/improve-animations/ and its AUDIT.md and PLAN-TEMPLATE.md
+      - changes to skills/apple-design/ and gesture, velocity, accessibility or material design guidance
+      - changes to skills/animate-expo/ and skills/write-swift/ only when a relevant native stack is in scope
+      - new or removed SKILL.md directories, dependencies, licenses, security or installation hooks
+      - compare relevant candidates with current KI-Regeln skill-catalog.yml and EK-01 outcomes before recommending changes
+      - track the already-monitored animate SKILL.md in upstream-sources.yml; do not create a duplicate upstream entry or advance its baseline without semantic review
+
   - id: github-awesome-copilot
     kind: github-repository
     url: https://github.com/github/awesome-copilot
