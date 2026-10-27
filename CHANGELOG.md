@@ -6,6 +6,31 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 ## Unreleased
 
+### PT-01 – Ponytail: überprüfbare Minimalismus-/Review-Piloten (27.10.2026)
+
+- [Ponytail-Vorprüfung](Dokumentation/Reviews/Ponytail-2026-10-27.md):
+  Offizielle sechs Skills, Herstellerbenchmark, 5.3.2-Hooks,
+  Band/Webhook-/Sessiondatengrenzen, Abgleich mit
+  `code-review`, `diagnose` und Software-Feature.
+  **PARTIAL REVIEW / NOT ADMITTED**.
+- [PT-01 Pilot](Evals/Agentenarbeit/Ponytail-Pilot/README.md):
+  vier Spuren (Minimalismus, Diffreview, Repo-Audit, Debt),
+  acht **synthetische** Tasks, isolierte
+  Runnerpakete, eigene optionale Checkpoint-
+  Variante, getrennte Judge-only-Development-Labels,
+  zwei getrennte Sandbox-Code-Oracles.
+- [Offline-Werkzeug](tools/pt01_pilot.py) mit
+  `prepare`, `grade-report` und `selftest`
+  sowie [Negativtests](tests/test_pt01_pilot.py).
+  **Keine Modellaufrufe, keine versteckten Run-Claims,
+  keine globalen Hooks/Skills, keine direkte API**.
+- Kein Eingriff in `AGENTS.md`, `skill-catalog.yml`,
+  `routing-overlays.yml` oder vorhandene
+  Qualitäts-/Testregeln. Original-Skillarm bleibt
+  bis separater Admission **BLOCKED**.
+
+
+
 ### CF-01 – Offizielle Cloudflare Skills & Agent-friendly Docs (25.10.2026)
 
 - [Ideen-/Architekturkarte](Dokumentation/Cloudflare-Hersteller-Skills-und-Docs-Option.md):
