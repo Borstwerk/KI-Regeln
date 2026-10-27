@@ -2,6 +2,19 @@
 
 Dieser Bereich enthält wiederholbare Testfälle für zentrale Skills.
 
+## EK-01 – Geplanter Vergleich mit Emil Kowalskis UI-Skills
+
+[EK-01](Webentwicklung/Emil-UI-Pilot/README.md) vergleicht
+bestehende KI-Regeln-Web-/Motion-Skills mit fünf gezielten
+Methoden (`break-ui`, `prototype`, `mobile-native`,
+`improve-animations`, `apple-design`).
+Zehn **synthetische** Fälle inklusive Near-Misses und
+Apple-Gesture-Accessibility-Gates liegen
+[in `cases.json`](Webentwicklung/Emil-UI-Pilot/cases.json).
+**MODEL/BROWSER/DEVICE NOT RUN; BUNDLE NOT ADMITTED**.
+Das Repository ist im [Discovery-Radar](../Dokumentation/radar-sources.yml)
+für spätere SHA-/Inhaltsvergleiche ergänzt.
+
 ## CF-01 – Geplanter Cloudflare-Skills-/Docs-Pilot
 
 [CF-01](Agentenarbeit/Cloudflare-Skills-Pilot/README.md) plant einen
