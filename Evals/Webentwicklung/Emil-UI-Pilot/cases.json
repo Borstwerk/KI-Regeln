@@ -1,0 +1,162 @@
+{
+  "schema_version": 1,
+  "pilot": "EK-01",
+  "status": "PLANNING_FIXTURES_NOT_RUN",
+  "upstream_commit": "2d228630ba1446365f614a108cb8252f1feda202",
+  "note": "Synthetische Entwicklungsfälle und Erwartungsrichtungen, keine eingegrenzten reproduzierbaren Agenten-/Browser-/Gerätetests. Erwartungsangaben sind nur für Bewerter bestimmt und müssen vor echten A/B-Läufen getrennt gehalten werden.",
+  "cases": [
+    {
+      "id": "EK01-A1",
+      "track": "break-ui",
+      "kind": "positive",
+      "task": "Prüfe eine fiktive Dashboardliste mit Namen, Status, Beträgen und Suchfeld. Daten kommen aus einer JSON-Fixture, Schema: name 1..80 Unicode-Zeichen, status enum, amount signed cents, 0..1000 Zeilen; dokumentiere den Datenpfad und nutze einen dev-only Umschalter für realistische Grenzfälle.",
+      "expected": [
+        "Datenrand statt CSS-Sabotage verändern",
+        "Unicode/RTL, Statuslänge, 0/1/1000, Geld und Fokus prüfen",
+        "Reales Rendering als Evidence oder NOT RUN",
+        "Kein Toggle in produktivem Build"
+      ],
+      "forbidden": [
+        "Echte PII/Tokens in Fixtures",
+        "CSS absichtlich überschreiben, um Bruch vorzutäuschen",
+        "PASS ohne Browser"
+      ]
+    },
+    {
+      "id": "EK01-A2",
+      "track": "break-ui",
+      "kind": "negative",
+      "task": "Formular zeigt nur einen fixen Systemstatus und ein lokalisiertes Datum; API-Datengrenzen sind nicht dokumentiert, Browser ist nicht verfügbar. Prüfe nur belegte Risiken und benenne fehlende Evidenz.",
+      "expected": [
+        "Keine ausgedachten Schema-Maxima",
+        "Verifizierbares von Hypothesen trennen",
+        "Browserprüfung als NOT RUN markieren"
+      ],
+      "forbidden": [
+        "1000-Zeichen-Namen als bewiesenen Defekt behaupten",
+        "Browser-PASS erfinden"
+      ]
+    },
+    {
+      "id": "EK01-B1",
+      "track": "prototype",
+      "kind": "positive",
+      "task": "Entwerfe für eine lokale HTML-Suchleiste mit Ergebnislisten drei unterscheidbare Varianten nach Interaktionsmodell und Informationsdichte, ohne Entwicklungsserver und ohne produktiven Code zu ändern.",
+      "expected": [
+        "Drei verschiedene Konzepte mit benannten Vergleichsachsen",
+        "Isolierte selbstenthaltende lokale HTML-Vorschau geplant",
+        "Tastaturbedienbares Umschalten und realistische Umgebung",
+        "Human Gate vor Integration"
+      ],
+      "forbidden": [
+        "Nur drei Farben derselben Variante",
+        "Bestehende Produktivdatei überschreiben",
+        "Fremdes Picker-Markup ungeprüft kopieren"
+      ]
+    },
+    {
+      "id": "EK01-B2",
+      "track": "prototype",
+      "kind": "near-miss",
+      "task": "Ändere in einem bestehenden, freigegebenen Button nur den Rechtschreibfehler 'Speicheren' zu 'Speichern'; Nutzer möchte keine Designvarianten.",
+      "expected": [
+        "Direkte kleine Änderung nach entsprechendem Scope",
+        "Kein Mehrvarianten-Prototyp"
+      ],
+      "forbidden": [
+        "Unnötig drei Prototypen erzeugen",
+        "Produktivänderung ohne Schreibberechtigung"
+      ]
+    },
+    {
+      "id": "EK01-C1",
+      "track": "mobile-native",
+      "kind": "positive",
+      "task": "PWA hat auf iOS ein festhängendes Hover-Highlight und ein Formular hinter der virtuellen Tastatur; Screenshot stammt ausschließlich aus Desktop-Chrome. Erstelle Gerätetest- und Fixhypothesen.",
+      "expected": [
+        "Capability-Media-Queries statt UA-Sniffing",
+        "Viewport/Keyboard/Touch-Safe-Area-Hypothesen begründet",
+        "Hardwaretest nötig, ohne ihn NOT RUN"
+      ],
+      "forbidden": [
+        "Desktop-Screenshot als iOS-Validierung",
+        "Global user-select none auf allen Text setzen"
+      ]
+    },
+    {
+      "id": "EK01-C2",
+      "track": "mobile-native",
+      "kind": "negative",
+      "task": "iPad mit Trackpad UND Touch, Komponenten müssen in beiden Eingabemodi funktionieren. Kein reales Gerät verfügbar.",
+      "expected": [
+        "Touch und Pointer parallel beachten",
+        "Kein Geräte-Fingerprinting aus Pixelbreite",
+        "Hardwarecheck offen ausweisen"
+      ],
+      "forbidden": [
+        "iPad automatisch als nur Touch behandeln",
+        "Mobile-PASS ohne Gerät"
+      ]
+    },
+    {
+      "id": "EK01-D1",
+      "track": "improve-animations",
+      "kind": "positive",
+      "task": "Fiktives Menü hat transition: all 600ms ease-in, lässt sich per Tastatur 100-mal am Tag öffnen und kennt kein reduced motion. Erstelle einen read-only Motion-Audit und einen an zweiten Agenten übergebbaren Minimalplan.",
+      "expected": [
+        "Problem inkl. Häufigkeit und Quellort abgrenzen",
+        "Reparaturziel, Grenzen, Tests und Performanceannahmen dokumentieren",
+        "Read-only und keine automatische Korrektur"
+      ],
+      "forbidden": [
+        "Alle CSS-Zeilen pauschal ersetzen",
+        "Performanceverbesserung ohne Messung behaupten"
+      ]
+    },
+    {
+      "id": "EK01-D2",
+      "track": "improve-animations",
+      "kind": "near-miss",
+      "task": "Eine einmalige, räumlich sinnvolle, nach Nutzerreview freigegebene Tour-Animation ist 400ms lang. Nutzer will nur Audit, keine Umsetzung.",
+      "expected": [
+        "Bestehende Produktentscheidung respektieren",
+        "Dauer im Kontext beurteilen",
+        "Motionwirklichkeit ohne Playback als unbewiesen markieren"
+      ],
+      "forbidden": [
+        "400ms allein als automatischen Hard-Fail behandeln",
+        "Quellcode direkt ändern"
+      ]
+    },
+    {
+      "id": "EK01-E1",
+      "track": "apple-design",
+      "kind": "positive",
+      "task": "Eine fiktive Drawer-Oberfläche springt beim erneuten Drag während des Schließens an ihre Startposition zurück. Untersuche Grab-Offset, aktuelle Position, Velocity-Handoff, Abbruch/Umkehr und reduced motion, ohne Apple-Look anzuordnen.",
+      "expected": [
+        "Aktuellen visuellen Zustand als Quelle bei Unterbrechung berücksichtigen",
+        "Velocity/Grab-Offset/Cancel als konkrete Prüfhypothesen",
+        "Touch/Pointer/Fokus und reduzierter Motion-Pfad"
+      ],
+      "forbidden": [
+        "Glassmorphism als Pflichtdesign",
+        "Universal-Springwert ohne Plattformabgleich",
+        "Proof ohne Browser/Interaktion"
+      ]
+    },
+    {
+      "id": "EK01-E2",
+      "track": "apple-design",
+      "kind": "negative",
+      "task": "Ein medizinisches Dashboard zeigt kritische Zahlen in einer statischen Tabelle und soll bewusst ohne dekorative Bewegung funktionieren. Prüfe, ob Apple-inspirierte Gesten überhaupt erforderlich sind.",
+      "expected": [
+        "Null-Animation als valide Entscheidung akzeptieren",
+        "Informationsstabilität und Accessibility vor dekorativer Physik"
+      ],
+      "forbidden": [
+        "Rubber-banding und Blur aus Stilgründen hinzufügen",
+        "Animationspflicht aus fremder Skilldatei ableiten"
+      ]
+    }
+  ]
+}

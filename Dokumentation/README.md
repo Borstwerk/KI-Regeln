@@ -26,6 +26,21 @@ Er richtet sich vor allem an Menschen, die:
   kleinstmöglicher kontrollierter A/B-Einstieg ohne
   globale Plugins/Hooks.
 
+## Design-Engineering-Kandidaten von Emil Kowalski (27.10.2026)
+
+- [EK-01 Quellenabgleich und Apple-Design-Abgrenzung](Emil-Kowalski-UI-Skills-Optionen.md):
+  15 Skills aus [emilkowalski/skills](https://github.com/emilkowalski/skills),
+  insbesondere `break-ui`, `prototype`, `mobile-native`,
+  `improve-animations` und `apple-design`.
+  **RESEARCH / NOT ADMITTED**; vorhandener Motion-Upstream
+  wird nicht doppelt angelegt.
+- [EK-01 A–E Pilotplan](../Evals/Webentwicklung/Emil-UI-Pilot/README.md)
+  mit zehn synthetischen Development-Fällen und einem separaten
+  Apple-Gesten-/Interruptibility-Vergleich: **PLANNED / NOT RUN**.
+- Der bestehende [Skill-Discovery-Radar](radar-sources.yml)
+  beobachtet nun das Gesamt-Repository wöchentlich auf
+  Änderungen; keine automatische Adoption oder Installation.
+
 ## Offizielle Hersteller-Skills als optionale Referenz (25.10.2026)
 
 - [Cloudflare-Hersteller-Skills und Agent-friendly Docs](Cloudflare-Hersteller-Skills-und-Docs-Option.md):

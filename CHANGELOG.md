@@ -31,6 +31,32 @@ Die Versionierung ist datumsbasiert. Eine Version beschreibt einen bewusst nutzb
 
 
 
+### EK-01 – Emil Kowalski UI Skills und Apple Design (27.10.2026)
+
+- [15-Skills-Quellenabgleich](Dokumentation/Emil-Kowalski-UI-Skills-Optionen.md)
+  gegen den bestehenden KI-Regeln-Web-/Motion-Bestand,
+  einschließlich `apple-design` als **Apple-inspirierter,
+  nicht offizieller Apple-Skill** sowie optionaler
+  Expo-/Swift-Kandidaten.
+- [EK-01 A–E-Pilot](Evals/Webentwicklung/Emil-UI-Pilot/README.md):
+  Worst-Case-Datentest, isolierte lokale HTML-Prototypvarianten,
+  Mobile-Web/Touch, delegierbares Motion-Audit und
+  echte Gesten-/Velocity-/Interruptibility-Evidence;
+  zehn geplante synthetische Fälle. **NOT RUN**.
+- [Discovery-Radar](Dokumentation/radar-sources.yml)
+  um das gesamte Upstream-Repository und wöchentlichen
+  Commit-/Skill-/Referenzdiff ergänzt, **ohne**
+  automatischen Import. Bestehender
+  `emil-kowalski-motion-craft`-Upstream-Eintrag
+  bleibt erhalten; abweichender `animate`-Blob
+  ist als **DRIFT / SEMANTIC REVIEW PENDING** festgehalten.
+- Keine neuen `SKILL.md`, keine Änderung an
+  `AGENTS.md`, `skill-catalog.yml`,
+  `routing-overlays.yml` oder bestehenden Skills;
+  kein Runner-/Tool-/API-/CI-Modelllauf.
+
+
+
 ### CF-01 – Offizielle Cloudflare Skills & Agent-friendly Docs (25.10.2026)
 
 - [Ideen-/Architekturkarte](Dokumentation/Cloudflare-Hersteller-Skills-und-Docs-Option.md):
