@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "pilot": "PT-01",
+  "role": "JUDGE_ONLY_DEVELOPMENT_LABELS",
+  "cases": [
+    {
+      "id": "PT01-A1",
+      "kind": "implementation",
+      "expected": [
+        "Case-insensitive search",
+        "No unrelated changes or dependencies",
+        "Relevant behavioral tests"
+      ],
+      "forbidden": [
+        "No matching due to unnormalized query",
+        "Test values or CATALOG silently changed"
+      ]
+    },
+    {
+      "id": "PT01-A2",
+      "kind": "implementation",
+      "expected": [
+        "Use existing to_cents",
+        "Correct sum for decimal strings",
+        "Tests for negative fee and decimals"
+      ],
+      "forbidden": [
+        "float-based money arithmetic",
+        "extra dependency"
+      ]
+    },
+    {
+      "id": "PT01-B1",
+      "kind": "review",
+      "findings": [
+        {
+          "path": "app/receipt.py",
+          "needle": "return f\"Due: {invoice['total_cents']} cents\"",
+          "category": "bug"
+        }
+      ],
+      "why": "Consumer expects removed total_cents field; invoice_total now returns amount_cents"
+    },
+    {
+      "id": "PT01-B2",
+      "kind": "review",
+      "findings": [
+        {
+          "path": "app/limiter.py",
+          "needle": "self.used = 0",
+          "category": "bug"
+        }
+      ],
+      "why": "Global counter shares allowance across users; one user blocks others"
+    },
+    {
+      "id": "PT01-C1",
+      "kind": "audit",
+      "findings": [
+        {
+          "path": "store/search.py",
+          "needle": "sql = f\"SELECT",
+          "category": "security"
+        },
+        {
+          "path": "store/export.py",
+          "needle": "return True",
+          "occurrence": 1,
+          "category": "data_loss"
+        }
+      ],
+      "why": "SQL interpolation allows user injection; OSError returns success"
+    },
+    {
+      "id": "PT01-C2",
+      "kind": "audit",
+      "findings": [
+        {
+          "path": "warehouse/importer.py",
+          "needle": "if len(rows) > 1000:",
+          "category": "bug"
+        },
+        {
+          "path": "warehouse/importer.py",
+          "needle": "continue",
+          "category": "data_loss"
+        }
+      ],
+      "why": "Normal load of 1200 denied; unknown SKU silently skipped and success reported"
+    },
+    {
+      "id": "PT01-D1",
+      "kind": "debt",
+      "findings": [
+        {
+          "path": "src/cache.py",
+          "needle": "# shortcut: per-process cache only",
+          "category": "tracked"
+        },
+        {
+          "path": "src/cache.py",
+          "needle": "# shortcut: fixed cache without eviction",
+          "category": "no_trigger"
+        }
+      ],
+      "why": "Two genuine code comment markers, second lacks an upgrade trigger; docs-only mention is a near-miss"
+    },
+    {
+      "id": "PT01-D2",
+      "kind": "debt",
+      "findings": [],
+      "why": "No source-code shortcut marker; docs-only mention is a near-miss"
+    }
+  ]
+}
