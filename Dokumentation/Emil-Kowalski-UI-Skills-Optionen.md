@@ -58,15 +58,11 @@ Easing-Zahlen sind **keine** allgemeinen KI-Regeln-Defaults.
 | `animation-vocabulary` | Motion-Dokumentation/Contracts | **REFERENZOPTION**: Begriffsglossar bei Bedarf, nicht global |
 | `animate-expo` | `Mobile-App-bis-Store-Freigabe` + techn. Motion-Skills | **OPTIONALE NATIVE-SPUR** bei bestätigtem Expo/React-Native-Stack |
 | `write-swift` | Allgemeine Entwicklung/Testing + Mobile-App-Workflow | **OPTIONALE SWIFT-SPUR**; Swift-/SDK-Version und Apple-Primärquellen strikt prüfen |
-| `apple-design` | siehe EK-01E | Nicht doppelt registrieren; gilt nur einmal im Upstream |
 | `pick-ui-library` | `design-system` + Architekturentscheidung/Dependencies | **RECHERCHEOPTION**: kein automatischer Library-Install; Projekt-Abhängigkeiten zuerst |
 | `animate` | `motion-design` + `motion-implementation` | **BESTEHENDER UPSTREAM**, bereits überwacht; semantischen Drift vor Baseline-Update prüfen |
 | `review-animations` | `motion-review` | **DUPLIKAT / REFERENZ**: Review-Standards dürfen lokale Evidence-Gates nicht überschreiben |
 | `emil-design-eng` | Frontend-/Motion-Skills | **DUPLIKAT**: globale autorenspezifische Persona vermeiden |
 | `ask-sonner` | libraryspezifisches Wissen nur bei Sonner | **BEDARFSQUELLE**, nicht generisch routen |
-
-Die Tabelle behandelt `apple-design` fachlich an zwei Stellen; es
-bleibt **ein einziger** Upstream-Skill, keine sechzehnte Fähigkeit.
 
 ## Apple Design: Was tatsächlich interessant ist
 
