@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "id": "ki-regeln",
+  "kind": "collection",
+  "entrypoints": {
+    "overview": "PROJECT.md",
+    "status": "README.md",
+    "plan": "Dokumentation/Pflege-und-Aktualisierung.md",
+    "contents": "START-HIER.md"
+  },
+  "search": {
+    "include": [
+      "PROJECT.md",
+      "START-HIER.md",
+      "README.md",
+      "Dokumentation/Pflege-und-Aktualisierung.md"
+    ],
+    "exclude": []
+  }
+}
