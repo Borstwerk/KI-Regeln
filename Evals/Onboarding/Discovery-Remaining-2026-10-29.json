@@ -1,0 +1,179 @@
+{
+  "scope": "Five remaining known development questions; attempted CLI batch stopped, no behavioral result",
+  "protocol": {
+    "source_commit": "cc8f8b6b945bc1cd0d5078433d67c03fb97e97d9",
+    "archive_paths": [
+      "AGENTS.md",
+      "PROJECT.md",
+      "CONTRIBUTING.md",
+      "README.md",
+      "START-HIER.md",
+      "START-HERE.md",
+      "mara-project.json",
+      "skill-catalog.yml",
+      "workflow-index.yml",
+      "routing-overlays.yml",
+      "Validate-KI-Regeln.ps1",
+      "Validate-KI-Regeln.cmd",
+      "Agentenarbeit",
+      "Dokumentation",
+      "Dokumentationserstellung",
+      "Sicherheit",
+      "Skill-Engineering",
+      "Testing-und-QA",
+      "Workflows",
+      "Vorlagen",
+      "Schemas",
+      "tools/local_validation",
+      "tools/repo_validator.py",
+      "Evals/README.md",
+      "Recherche/Skills/citation-audit/SKILL.md",
+      "Schreiben/Skills/adressatengerechte-kommunikation/SKILL.md"
+    ],
+    "excluded_prefixes": [
+      "Dokumentation/Reviews/",
+      "Dokumentation/Praxisbeispiele/",
+      "Dokumentation/Upstream-Audit-"
+    ],
+    "archive_eol": "git -c core.autocrlf=false archive; canonical LF",
+    "files": 242,
+    "bytes": 1449701,
+    "inventory_sha256": "b290d8bbfeb224c431673fdcce7ce836715828c7b44529a35b24cb17dfa86c54",
+    "overlay_descriptors_sha256": {
+      "Dokumentationserstellung/Skills/visual-answer/SKILL.md": "61ba11f9e11f8141e8492a695a885fd7d717e2c882a83058851ee405fb092982",
+      "Schreiben/Skills/adressatengerechte-kommunikation/SKILL.md": "787e86f1a02445fa9a95af6a33899aa2f9ddd3a89216e7e0914c9d84e1874c4f",
+      "Recherche/Skills/citation-audit/SKILL.md": "3dae6050d9cfcfb2a3e4a91f1d545da05b6c1c231bb256ea148ffb0588838928",
+      "Agentenarbeit/Skills/verification-loop/SKILL.md": "37824715a191c6668343358817959756dc6ac5117291e7f11675e7245f2d608f",
+      "Sicherheit/Skills/skill-security-review/SKILL.md": "14bfdf2b8764286f336ed8aabb07eea6103e3c44bb543cc6c564ba8e377a4dd8",
+      "Sicherheit/Skills/tool-permission-review/SKILL.md": "6e66c6added6308aa86124528a633d264f8902500034102973f3738e40d73eb7"
+    },
+    "model_requested": "gpt-6.1-sol",
+    "reasoning_requested": "high",
+    "max_cli_sessions": 3,
+    "deadline_seconds": [
+      180,
+      120,
+      45
+    ],
+    "retry": false,
+    "script_sha256": "b16d5bae90c1d0a040e0efb7a2bc284f0652a2d16d0b3a4c1399705cfa2e9833",
+    "execution_commit": "047b7c632a74f68ddcd63d94731da6f97c3dce33",
+    "cases": [
+      {
+        "id": "orientation",
+        "questions": [
+          "D2",
+          "D4",
+          "D6"
+        ],
+        "deadline": 180,
+        "prompt": "Du arbeitest in einem read-only Snapshot eines Regelrepositories. Beginne mit AGENTS.md und benutze die nötigen aktuellen Quellen. Lesezugriff und gezielte Suche sind erlaubt. Ändere keine Dateien, installiere nichts und führe keine Tests oder externen Aktionen aus. Starte keine weiteren Agenten und recherchiere nicht im Web.\n\nBeantworte diese drei Anfragen getrennt auf Deutsch. Nenne zu deinen Empfehlungen konkrete gelesene Dateipfade und aussagekräftige Fundstellen. Falls benötigte Quellen fehlen, sage das ausdrücklich. Gefordert ist eine knappe, belastbare Orientierung, keine Umsetzung.\n\n1. Ein bestehender Skill scheitert wiederholt. Wo finde ich den Verbesserungsweg?\n2. Brauche ich eine Teststrategie oder konkrete Grenzwertfälle?\n3. Ich möchte einen Workflow ergänzen. Welche Datei ist maßgeblich?\n",
+        "prompt_sha256": "920d40e378bebc6f92d24580509d6d4a6916b1a4b98c278cb6b6595001612f2a"
+      },
+      {
+        "id": "ambiguous",
+        "questions": [
+          "D7"
+        ],
+        "deadline": 120,
+        "prompt": "Ich möchte „Zugriffe prüfen“. Welcher Skill passt?\n",
+        "prompt_sha256": "08a7e4befecaeec0e18d13a02f1519b0ad8d593bb751d93224ac68d44bc061e5"
+      },
+      {
+        "id": "trivial",
+        "questions": [
+          "D8"
+        ],
+        "deadline": 45,
+        "prompt": "Formatiere nur diesen Text: „eins,zwei“ → „eins, zwei“.\n",
+        "prompt_sha256": "019777a54e4ad1405948ef89be45e2ef7313e2fb59e5c685d1b51a402201a92b"
+      }
+    ]
+  },
+  "protocol_sha256": "593a47c4d68de1aa79584e4b753ea1540d5e74cf0ea70e84b5108dd84422f8d9",
+  "preflight": {
+    "read_exit": 0,
+    "exact_byte_match": true,
+    "source_bytes": 20,
+    "source_sha256": "25de4d1c269233f805f8c0a01d5342102f6cab22454d17fce0936c6ec293a077",
+    "received_bytes": 20,
+    "received_sha256": "25de4d1c269233f805f8c0a01d5342102f6cab22454d17fce0936c6ec293a077",
+    "write_exit": 17,
+    "write_target_exists": false,
+    "write_permission_denied": true,
+    "write_attempt_stage": "target_write",
+    "write_error_type": "System.UnauthorizedAccessException",
+    "known_good_accepted": true,
+    "extra_lf_rejected": true,
+    "extra_crlf_rejected": true,
+    "pass": true
+  },
+  "preflight_sha256": "ee657abecdbdced706fe2a84f67e5da6733de5b1d744e9dc9f377a0942bb992f",
+  "cli_version_observed": "0.165.0-alpha.1.2",
+  "invocation_started_utc": "2026-10-29 19:03:37 UTC",
+  "failure": {
+    "case": "orientation",
+    "status": "BLOCKED",
+    "exit_code": 1,
+    "elapsed_seconds": 2.48,
+    "original_diagnostic_category": "UNKNOWN",
+    "stderr_sha256": "4e89a74b328434d5326681b9f06ec5947221a8e21b17dc65be8afb60340d12d9",
+    "observed_notice": "Startup prewarm reported a usage-limit message. No final model answer was recorded.",
+    "stdout_error_details": "Not preserved in this attempt; future collector now retains bounded redacted structured error messages.",
+    "raw_account_details": "Retained locally only; no account identities, quotas, upsell URLs or reset-time claims published"
+  },
+  "rate_limit_diagnosis": {
+    "mode": "Read-only desktop limits plus native CLI account/rateLimits/read, no model calls",
+    "observation": "Both reads reported available base capacity, contrary to the selected CLI invocation notice.",
+    "causal_status": "UNVERIFIED: account/model/bucket binding not established; do not infer the entire subscription is exhausted",
+    "actions_not_taken": [
+      "No login/account switch",
+      "No earned reset consumed",
+      "No API fallback",
+      "No alternative model",
+      "No retry"
+    ]
+  },
+  "question_status": {
+    "D2": {
+      "product": "UNVERIFIED",
+      "execution": "BLOCKED_WITHOUT_ANSWER"
+    },
+    "D4": {
+      "product": "UNVERIFIED",
+      "execution": "BLOCKED_WITHOUT_ANSWER"
+    },
+    "D6": {
+      "product": "UNVERIFIED",
+      "execution": "BLOCKED_WITHOUT_ANSWER"
+    },
+    "D7": {
+      "product": "NOT RUN",
+      "execution": "NOT STARTED"
+    },
+    "D8": {
+      "product": "NOT RUN",
+      "execution": "NOT STARTED"
+    }
+  },
+  "summary": {
+    "batch": "BLOCKED",
+    "preconditions": "PASS",
+    "cli_launches": 1,
+    "successful_answers": 0,
+    "unstarted_sessions": 2,
+    "token_usage": "UNAVAILABLE, not zero",
+    "independent_blind_benchmark": false,
+    "qmd_embeddings_mara_live_index": "NOT RUN",
+    "maturity_or_gate_change": false
+  },
+  "offline_checks": {
+    "case_split": "D2/D4/D6 together; D7 and D8 each fresh context",
+    "isolated_workspace_control": "Three scripted CLI doubles, distinct workspaces, no previous artifact carryover; not model evidence",
+    "historical_default_inputs": "Pinned original source, prompt hashes, selected files, descriptor hashes and model settings unchanged",
+    "diagnostic_fix": "Recognize RATE_LIMIT notices; preserve structured stdout errors separately so a prewarm warning cannot mask another cause; redact before truncation"
+  },
+  "decision": "Preserve this blocked attempt and its start marker. Complete no model-based verdict from offline controls. Resume only as a separately recorded new batch after the CLI access issue is resolved; no automatic retry or quota reset.",
+  "rubric_path": "Evals/Onboarding/Discovery-Remaining-2026-10-29.md",
+  "rubric_sha256": "39b9b612108e38f5c5c60fcf8695cc4efc0997c6934fe76168d8a61422450420"
+}

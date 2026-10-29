@@ -43,14 +43,31 @@ def denied_target_write(exit_code, event, target, exists):
 
 
 def failure_diagnostic(stdout, stderr):
-    text = stdout + '\n' + stderr
-    category = ('AUTH' if re.search(r'\b401\b|unauthorized|authentication|login required', text, re.I) else
+    def category(text):
+        return ('RATE_LIMIT' if re.search(r'usage limit|rate.?limit|\b429\b|UsageLimitExceeded', text, re.I) else
+                'AUTH' if re.search(r'\b401\b|\bunauthorized\b|authentication|login required', text, re.I) else
                 'CONFIG' if re.search(r'configuration|config error|toml|permission.profile|unknown (?:key|argument)', text, re.I) else
                 'TRANSPORT' if re.search(r'connection|network|timed? out|TLS|\b50[0234]\b', text, re.I) else 'UNKNOWN')
-    excerpt = stderr
-    excerpt = re.sub(r'[A-Za-z]:[\\/]+Users[\\/]+[^\\/\s]+', '<user-home>', excerpt)
-    excerpt = re.sub(r'(?i)Bearer\s+\S+|\bsk-[A-Za-z0-9_-]+', '<credential-redacted>', excerpt)
-    return {'category': category, 'stderr_present': bool(stderr), 'stderr_excerpt': excerpt[-600:]}
+    def excerpt(text):
+        text = re.sub(r'[A-Za-z]:[\\/]+Users[\\/]+[^\\/\s]+', '<user-home>', text)
+        text = re.sub(r'(?i)Bearer\s+\S+|\bsk-[A-Za-z0-9_-]+', '<credential-redacted>', text)
+        return text[-600:]
+    errors = []
+    for line in stdout.splitlines():
+        try:
+            event = json.loads(line)
+        except ValueError:
+            continue
+        if isinstance(event, dict) and event.get('type') in ('error', 'turn.failed'):
+            error = event.get('error', {})
+            message = event.get('message') or (error.get('message') if isinstance(error, dict) else None)
+            if isinstance(message, str):
+                errors.append(message)
+    stdout_category, stderr_category = category('\n'.join(errors)), category(stderr)
+    return {'category': stdout_category if stdout_category != 'UNKNOWN' else stderr_category,
+            'stderr_present': bool(stderr), 'stderr_excerpt': excerpt(stderr),
+            'stdout_error_count': len(errors), 'stdout_error_excerpt': excerpt('\n'.join(errors)),
+            'stderr_category': stderr_category}
 
 
 def check_overlays(files):

@@ -14,6 +14,10 @@ Der [korrigierte feste Discovery-Fall](Discovery-Corrected-2026-10-29.md) verbin
 einen deterministischen Byte-/Schreibschutz-Vortest mit genau einer Kaltlese von
 D1/D3/D5. Das begrenzte PASS ersetzt keine früheren Urteile oder vollständige Suite.
 
+Die [verbliebenen fünf Entwicklungsfragen](Discovery-Remaining-2026-10-29.md)
+sind in drei getrennten Kontexten vorbereitet. Der erste Live-Versuch endete
+technisch `BLOCKED`; D7/D8 wurden nicht gestartet.
+
 ## Einmalig vorbereiten
 
 - Exakten Git-SHA von `main` oder dem zu testenden Branch notieren; Rolle, Sprache, Datum, Umgebung und vorhandene Repository-/Browserrechte festhalten.

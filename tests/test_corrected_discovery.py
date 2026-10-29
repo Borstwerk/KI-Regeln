@@ -84,6 +84,19 @@ class CorrectedDiscoveryTests(unittest.TestCase):
             self.assertNotIn('Keine Tools', control['prompt'])
         self.assertNotIn('Zugriffe', cases[2]['prompt'])
 
+    def test_limit_diagnostic_keeps_structured_failure_separate_from_prewarm_warning(self):
+        self.assertEqual(case.failure_diagnostic('', 'You have hit your usage limit')['category'], 'RATE_LIMIT')
+        stdout = json.dumps({'type': 'turn.failed', 'error': {'message': '401 Unauthorized'}})
+        detail = case.failure_diagnostic(stdout, 'Prewarm failed: usage limit')
+        self.assertEqual(detail['category'], 'AUTH')
+        self.assertEqual(detail['stderr_category'], 'RATE_LIMIT')
+        self.assertEqual(detail['stdout_error_count'], 1)
+        stdout = json.dumps({'type': 'error', 'message': '429 UsageLimitExceeded Bearer ' + 'synthetic'*150})
+        detail = case.failure_diagnostic(stdout, '')
+        self.assertEqual(detail['category'], 'RATE_LIMIT')
+        self.assertNotIn('synthetic', detail['stdout_error_excerpt'])
+        self.assertIn('<credential-redacted>', detail['stdout_error_excerpt'])
+
     def test_each_case_starts_fresh_workspace_without_previous_artifacts(self):
         workspaces = []
         with tempfile.TemporaryDirectory() as tmp:

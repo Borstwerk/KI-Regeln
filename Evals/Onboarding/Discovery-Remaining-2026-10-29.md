@@ -74,4 +74,49 @@ QMD, Mara-Oberfläche und tatsächlicher Index-Refresh sind weiterhin separate J
 
 ## Ergebnis
 
-Vorabprotokoll; Antworten und Evidence folgen separat.
+Code, Trennung und Kriterien waren vor Ausführung in
+`047b7c632a74f68ddcd63d94731da6f97c3dce33` committed und veröffentlicht.
+Die [getrennte Evidence](Discovery-Remaining-2026-10-29.json) bindet Protokoll,
+Snapshot, Gates und den abgebrochenen Versuch.
+
+| Teil | Tatsächlich beobachtet | Status |
+| --- | --- | --- |
+| Export und sechs Descriptions | 242 Dateien; kanonische LF-Bytes und gebundene Quellen | vorbereitet |
+| Byte-/gezielter Schreibschutz-Vortest | exakt 20 Byte gelesen; gezielter Write verweigert, keine Zieldatei | PASS |
+| D2/D4/D6 | erster CLI-Aufruf nach 2,48 s mit Exit 1 beendet; keine finale Antwort | BLOCKED / Produkt UNVERIFIED |
+| D7 | aufgrund des Stop-Gates nicht gestartet | NOT RUN |
+| D8 | aufgrund des Stop-Gates nicht gestartet | NOT RUN |
+
+Die gespeicherte CLI-Diagnose enthält eine Usage-Limit-Meldung beim WebSocket-
+Prewarm. Eine read-only Kontingentprüfung sowohl über die App als auch direkt über
+die dokumentierte [native CLI-Schnittstelle](https://learn.chatgpt.com/docs/app-server)
+meldet dagegen verfügbare Basisgrenzen. Das erklärt den konkreten Modellaufruf
+nicht abschließend. Konto-/Modell-/Bucket-Bindung sind nicht nachgewiesen; kein
+Claim, dass das gesamte Abo ausgeschöpft sei. Private Kontodaten, Quotenstände,
+Upsell-Links und nicht eindeutig zugeordnete Reset-Zeiten bleiben aus der
+veröffentlichten Evidence heraus.
+
+Der frühere Collector stufte den Fehler als `UNKNOWN` ein und bewahrte nur die
+redigierte stderr-Diagnose. Strukturierte stdout-Fehlerdetails fehlen für diesen
+Versuch. Der bestehende Collector wurde danach für künftige Fehler korrigiert:
+Usage-Limit-Meldungen bekommen einen eigenen Typ, strukturierte Fehler werden
+getrennt vom Prewarm-Warning erhalten, Redaktion bleibt vor der Kürzung. Die alte
+Fehlerdatei wird nicht überschrieben oder nachträglich umklassifiziert.
+
+Acht Offline-Testmethoden bestehen, darunter die drei bewusst geskripteten
+CLI-Attrappen in verschiedenen Temp-Verzeichnissen und die neuen Diagnose-
+Gegenproben. Diese Attrappen sind **keine drei Modellläufe**. Eine zusätzliche
+modellfreie Kontrolle bestätigt die unveränderten historischen D1/D3/D5-
+Eingaben, Quellen-/Prompthashes und Modellparameter des Standardmodus.
+
+**Gesamtstand: BLOCKED.** Ein echter CLI-Startversuch, null aufgezeichnete
+Antworten, zwei nicht gestartete Sitzungen. Tokenusage ist nicht verfügbar und
+wird nicht als null angegeben. Kein Account-/Loginwechsel, kein Resetverbrauch,
+keine API- oder Modell-Ausweichlösung und kein Retry.
+
+Der Startmarker und alle Rohdaten bleiben erhalten. Nach geklärtem CLI-Zugriff
+eine ausdrücklich neue Batch-Aufzeichnung in einem frischen Checkout verwenden;
+nicht den alten Marker löschen oder Ergebnisse überschreiben. Die vorhandenen
+PASS-Nachweise für D1/D3/D5 bleiben unverändert; für die übrigen fünf Fragen wird
+keine bestandene Verhaltensprüfung behauptet. QMD/Mara und Index-Refresh bleiben
+separate, nicht ausgeführte Aufgaben.
