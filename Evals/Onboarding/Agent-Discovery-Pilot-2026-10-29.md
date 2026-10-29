@@ -149,3 +149,7 @@ bereitstellen. Live-Findbarkeit bleibt `UNVERIFIED`; kein Vorher-/Nachher-Lift,
 keine weiteren Modellversuche und kein Ausbau der Testplattform aus diesem Lauf.
 D2/D4/D6/D7/D8 wurden nicht live ausgeführt. Lokale QMD-/Embedding-Laufzeit,
 Mara-Oberfläche und Aktualisierung eines lokalen Suchindex bleiben `NOT RUN`.
+
+Der [separate Lese-Folgelauf](Discovery-Read-Followup-2026-10-29.md) liefert später
+beobachtete Fachquellen-Reads. Seine Abweichungen und sein `PARTIAL`-Urteil ändern
+weder die alten Antworten noch deren hier dokumentierten Status.
