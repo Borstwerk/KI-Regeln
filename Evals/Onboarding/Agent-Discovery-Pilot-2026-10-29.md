@@ -84,6 +84,68 @@ Agentenverzweigung. Pflicht-Discovery bleibt auch für kleine Kontextpakete erha
 
 ## Ergebnisstand
 
-Vorabprotokoll; Ausführung und Abnahme werden getrennt ergänzt. Lokale QMD-/
-Embedding-Laufzeit, Mara-Oberfläche und tatsächliche Aktualisierung eines lokalen
-Suchindex sind nicht Teil dieser Repository-Prüfung und bleiben `NOT RUN`.
+Implementierung und Vorabkriterien wurden vor der Kaltlese in `512923a` und
+`341bc3cdfba50fa3b658567655d0c551a7ad70de` committed und veröffentlicht.
+Die [maschinenlesbare Evidence](Agent-Discovery-Pilot-2026-10-29.json) bindet
+Prompt, Git-Stände, Snapshot-Hashes, CLI-Konfiguration und beide unbearbeiteten
+Antworten: [bisheriger Stand](Agent-Discovery-Pilot-2026-10-29-baseline.md) und
+[Pilotstand](Agent-Discovery-Pilot-2026-10-29-pilot.md).
+
+### Strukturelle Evidence und Review
+
+- Projektkarte und Contribution-Wegweiser verweisen direkt auf die drei Pilotbereiche.
+  Deren Arbeitsfragen verlinken die zuständigen kanonischen Quellen.
+- Die optionale Suchauswahl wächst von 4 auf 72 explizite Markdown-Dateien:
+  im Windows-Checkout 373.506 UTF-8-Bytes insgesamt, maximal 32.396 Bytes je Datei. Die Umfangsprüfung
+  besteht innerhalb der festgelegten Grenzen; keine Retrieval-Wirkung daraus ableiten.
+- Der bestehende Prüfer und seine Tests decken fehlende Ziele, Traversal, Globs in
+  der expliziten Auswahl, ausgeschlossene Quellen, Duplikate, UTF-8 und Größen ab.
+  20 Testfälle: 19 `PASS`, eine echte Symlink-OS-Probe wegen fehlender Windows-Rechte
+  `SKIP`. Junction-Verhalten ist nicht praktisch erprobt.
+- Zwei getrennte Agentenpakete lieferten die Bereichsnavigation und das Manifest.
+  Eine dritte Instanz reviewed den integrierten Diff. Ein Befund zu nicht greifenden
+  Root-Ausschlüssen wurde korrigiert: fnmatch behandelt `**/` nicht automatisch als
+  null Pfadsegmente. Die expliziten Root-Muster und sechs Root-/verschachtelte
+  Negativproben sind nachgeprüft; die Semantik bleibt mit dem Consumer konsistent.
+
+Nach dem eingefrorenen Kaltlesestand wurden ausschließlich zwei defensive
+Root-Ausschlussmuster und ihre Negativkontrolle ergänzt. Die 72 ausgewählten
+Markdown-Inhalte und die Navigation blieben unverändert; eine Consumer-Ausführung
+dieser Manifestkorrektur wird nicht behauptet.
+
+### Kaltlese: kein nachgewiesener Findbarkeitsgewinn
+
+Beide CLI-Sitzungen endeten mit Exit 0 und lieferten eine Antwort. Beide melden
+jedoch, dass lokale Lesebefehle durch ihre Ausführungsrichtlinie blockiert wurden.
+Sie stützen sich deshalb ausschließlich auf den eingeblendeten Bootstrap-Text;
+die konkrete Blockadeursache ist nicht unabhängig attestiert.
+
+In der aufgezeichneten nativen Telemetrie fehlen abgeschlossene
+`command_execution`-Events. Die Pilot-Sitzung enthält zusätzlich zwei
+`mcp_tool_call`-Items; die veröffentlichten Typzählungen belegen weder deren
+vollständige Semantik noch erfolgreiche Fachquellen-Reads. Daher bleibt der
+erforderliche Discovery-/Quellenread-Nachweis **UNVERIFIED**.
+
+| Frage | Bisheriger Stand | Pilotstand | Aussagegrenze |
+| --- | --- | --- | --- |
+| D1: Skill beitragen | unvollständige Orientierung, ehrlich begrenzt | ebenso | konkreter Beitragsweg nicht anhand geöffneter Fachquellen geprüft |
+| D3: MCP vs Skill-Bundle | Antwort mit Bootstrap-Regel vereinbar | ebenso | kein zusätzlicher Read der Baseline oder Skill-Description nachgewiesen |
+| D5: nicht gelaufener Test | kein unbelegter PASS | ebenso | Textverhalten; kein tatsächlich ausgeführter Test |
+
+CLI: `0.165.0-alpha.1.2`; angefordert `gpt-6.1-sol` / `high`, keine unabhängige
+Server-Modellattestation. Baseline 59,11 s, Pilot 50,69 s; Summe 109,80 s.
+Native Usage-Felder insgesamt: 314.240 Input-, 246.272 Cached-Input-,
+3.129 Output- und 885 Reasoning-Output-Tokens. Keine Aussage über Abrechnung,
+verbleibendes Abo-Kontingent oder eine nachgewiesene Einsparung.
+
+Die CLI-Navigationssnapshots enthalten jeweils 240 operative Dateien einschließlich
+Register, Schemas und Scripts; sie sind ausdrücklich **nicht** mit den 72 Markdown-
+Dateien der Mara-Suchauswahl gleichzusetzen. Die Rubrik war nicht enthalten.
+Reproduktion über die in JSON angegebenen Archive-Pfade, Filter, exakten Promptbytes
+und CLI-Argumente; es wurde kein zusätzlicher Repository-Runtime-Adapter eingeführt.
+
+**Entscheidung:** Die strukturell geprüfte Navigation und begrenzte Suchauswahl
+bereitstellen. Live-Findbarkeit bleibt `UNVERIFIED`; kein Vorher-/Nachher-Lift,
+keine weiteren Modellversuche und kein Ausbau der Testplattform aus diesem Lauf.
+D2/D4/D6/D7/D8 wurden nicht live ausgeführt. Lokale QMD-/Embedding-Laufzeit,
+Mara-Oberfläche und Aktualisierung eines lokalen Suchindex bleiben `NOT RUN`.

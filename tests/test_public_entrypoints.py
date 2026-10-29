@@ -139,12 +139,18 @@ class ProjectSearchTests(unittest.TestCase):
 
     def test_root_source_register_needs_explicit_root_exclude(self):
         # Keep fnmatch semantics aligned with the consumer: **/ needs a slash.
-        name = "Quellen-und-Inspirationen.md"
-        (self.root / name).write_text("# External source register", encoding="utf-8")
-        self.data["search"]["include"].append(name)
-        self.data["search"]["exclude"] = [name, "**/Quellen-und-Inspirationen.md"]
-        errors, _ = self.check_manifest()
-        self.assertTrue(any("excluded source selected: " + name in e for e in errors))
+        self.data["search"]["exclude"] = json.loads(
+            (ROOT / "mara-project.json").read_text(encoding="utf-8"))["search"]["exclude"]
+        for name in ("Quellen-und-Inspirationen.md", "docs/Quellen-und-Inspirationen.md",
+                     "Externe-Quellen/source.md", "docs/Externe-Quellen/source.md",
+                     "Fremdquellen/source.md", "docs/Fremdquellen/source.md"):
+            with self.subTest(name=name):
+                path = self.root / name
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text("# External source", encoding="utf-8")
+                self.data["search"]["include"] = sorted(PROJECT_CORE) + [name]
+                errors, _ = self.check_manifest()
+                self.assertTrue(any("excluded source selected: " + name in e for e in errors))
 
     def test_size_limits_detect_relevant_breakage(self):
         for index in range(4):

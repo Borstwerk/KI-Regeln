@@ -96,7 +96,9 @@
       "Dokumentation/Praxisbeispiele/**",
       "Quellen-und-Inspirationen.md",
       "**/Quellen-und-Inspirationen.md",
+      "Externe-Quellen/**",
       "**/Externe-Quellen/**",
+      "Fremdquellen/**",
       "**/Fremdquellen/**",
       "**/vendor/**",
       "**/node_modules/**"

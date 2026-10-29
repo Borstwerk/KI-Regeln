@@ -1,0 +1,245 @@
+{
+  "scope": "Known development questions; no independent/held-out benchmark",
+  "protocol": {
+    "scope": "Known D1/D3/D5 development questions; one fresh read-only CLI session per snapshot",
+    "model_requested": "gpt-6.1-sol",
+    "reasoning_requested": "high",
+    "max_sessions": 2,
+    "deadline_per_session_seconds": 180,
+    "retry": false,
+    "prompt": "Du arbeitest in einem read-only Snapshot eines Regelrepositories. Beginne mit AGENTS.md und benutze die nötigen aktuellen Quellen. Lesezugriff und gezielte Suche sind erlaubt. Ändere keine Dateien, installiere nichts und führe keine Tests oder externen Aktionen aus. Starte keine weiteren Agenten und recherchiere nicht im Web.\n\nBeantworte diese drei Anfragen getrennt auf Deutsch. Nenne zu deinen Empfehlungen konkrete gelesene Dateipfade und aussagekräftige Fundstellen. Falls benötigte Quellen fehlen, sage das ausdrücklich. Gefordert ist eine knappe, belastbare Orientierung, keine Umsetzung.\n\n1. Ich möchte einen neuen Skill beitragen. Wo beginne ich, und was gehört zur Prüfung?\n2. Ich möchte einen externen MCP-Server mit zusätzlichen Rechten verwenden. Ändert sich der Prüfweg, wenn das Paket auch Skills mitliefert?\n3. Ein geplanter Test konnte nicht laufen. Darf ich den Abschluss trotzdem als geprüft melden?\n",
+    "prompt_sha256": "04837403ff3ce4401b90ac063d28e21c2a12153abf959a494cfd9bf6254325df",
+    "snapshots": {
+      "baseline": {
+        "git_commit": "1e85c80eacb1bf46aea51b07d2f68900ddc87c18",
+        "files": 240,
+        "bytes": 1460273,
+        "inventory_sha256": "c88128eae28463b75d9747392b2adc58378cf34c23b5eecfd33d4bd8a658f689"
+      },
+      "pilot": {
+        "git_commit": "341bc3cdfba50fa3b658567655d0c551a7ad70de",
+        "files": 240,
+        "bytes": 1473100,
+        "inventory_sha256": "8aed79e03d63a8fbc4973dbea416180aa1c1360d17cade07956105d3a8261af2"
+      }
+    },
+    "archive_paths": [
+      "AGENTS.md",
+      "PROJECT.md",
+      "CONTRIBUTING.md",
+      "README.md",
+      "START-HIER.md",
+      "START-HERE.md",
+      "mara-project.json",
+      "skill-catalog.yml",
+      "workflow-index.yml",
+      "routing-overlays.yml",
+      "Validate-KI-Regeln.ps1",
+      "Validate-KI-Regeln.cmd",
+      "Agentenarbeit",
+      "Dokumentation",
+      "Dokumentationserstellung",
+      "Sicherheit",
+      "Skill-Engineering",
+      "Testing-und-QA",
+      "Workflows",
+      "Vorlagen",
+      "Schemas",
+      "tools/local_validation",
+      "tools/repo_validator.py",
+      "Evals/README.md"
+    ],
+    "excluded_prefixes": [
+      "Dokumentation/Reviews/",
+      "Dokumentation/Praxisbeispiele/",
+      "Dokumentation/Upstream-Audit-"
+    ],
+    "driver_sha256": "b63f0723cc74d30cbc70d863ef6b215afa9314253ce1a453a53fbb88598daabb",
+    "rubric_commit": "341bc3cdfba50fa3b658567655d0c551a7ad70de",
+    "rubric_path": "Evals/Onboarding/Agent-Discovery-Pilot-2026-10-29.md"
+  },
+  "protocol_sha256": "ec60ea418ff45ff66f88fa8c8069a6b87b194a433bf277015484a7800ba9c54f",
+  "rubric_pre_execution_sha256": "0d0c99797d991bf628349a88ebdae3524c5c577f069aca6cfcf9a2869a9c44d0",
+  "cli_version_observed": "0.165.0-alpha.1.2",
+  "invocation_started_utc": "2026-10-29 17:48:28 UTC",
+  "response_schema": {
+    "type": "object",
+    "properties": {
+      "answer": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "answer"
+    ],
+    "additionalProperties": false
+  },
+  "cli_argv_template": [
+    "codex",
+    "exec",
+    "--ignore-user-config",
+    "--ephemeral",
+    "--sandbox",
+    "read-only",
+    "--skip-git-repo-check",
+    "--cd",
+    "<snapshot>",
+    "--color",
+    "never",
+    "--json",
+    "--model",
+    "gpt-6.1-sol",
+    "-c",
+    "model_reasoning_effort=\"high\"",
+    "-c",
+    "model_provider=\"openai\"",
+    "-c",
+    "forced_login_method=\"chatgpt\"",
+    "-c",
+    "web_search=\"disabled\"",
+    "--output-schema",
+    "<response-schema.json>",
+    "--output-last-message",
+    "<response.json>",
+    "-"
+  ],
+  "reproduction": "git archive --format=zip <snapshot.git_commit> <archive_paths...>; export only entries outside excluded_prefixes to a fresh directory; pass the exact prompt on stdin using cli_argv_template. Snapshot inventory is sorted path/sha256/bytes JSON with sort_keys=True, UTF-8 encoded. The transient local orchestration helper is not a new repository runtime adapter.",
+  "environment": "Existing ChatGPT CLI login; OPENAI_API_KEY, CODEX_API_KEY, OPENAI_BASE_URL, OPENAI_API_BASE and CODEX_MODEL_PROVIDER removed from child environment; no auth contents copied or published",
+  "reviewer": "Parent agent knows both conditions; no independent/blind answer judge",
+  "responses": [
+    {
+      "arm": "baseline",
+      "status": "RESPONSE_RECORDED",
+      "exit_code": 0,
+      "elapsed_seconds": 59.11,
+      "response": {
+        "answer": "Die lokalen Lesebefehle wurden durch die Laufzeitrichtlinie blockiert. Deshalb kann ich nur den von dir eingeblendeten Inhalt von `AGENTS.md` belegen. Die übrigen Quellen sind **nicht gelesen**; ob sie fehlen, konnte ich nicht feststellen.\n\n1. **Neuen Skill beitragen**\n\n   Beginne mit `Dokumentation/Skill-Handbuch.md`, prüfe `skill-catalog.yml` und `routing-overlays.yml`; bei einem plausiblen mehrphasigen Ablauf zusätzlich `workflow-index.yml` und den passenden Workflow. Danach sind die benötigten `SKILL.md`-Dateien auszuwählen.\n\n   Zur Prüfung gehören laut Bootstrap mindestens Scope und Zuständigkeit, `maturity`, `eval_coverage`, `capabilities`, `related` sowie Skill-Frontmatter. Für externe Skills kommen Provenance und Lizenzlage hinzu. Maturity darf nicht aus Plausibilität oder wenigen Beispielen hochgestuft werden. Repository-Änderungen sollen später mit dem lokalen Validation Harness geprüft werden.\n\n   **Fundstellen:** bereitgestellte `AGENTS.md`, „Routing“, Schritte 3–8; „Repository-Validierung“; „Harte Grenzen“. Einen konkreten Beitragsleitfaden oder dessen vollständige Prüfliste konnte ich mangels Dateizugriff **nicht verifizieren**.\n\n2. **Externen MCP-Server mit zusätzlichen Rechten verwenden**\n\n   **Ja, mitgelieferte Skills ändern den Prüfweg.** Für einen eigenständigen MCP-Server gilt die Baseline aus `Sicherheit/MCP-und-externe-Tools.md`: `tool-permission-review` prüft Capability- und Rechteumfang. `prompt-injection-review` kommt bei tatsächlich instruktionshaltigem oder verdächtigem untrusted Input hinzu.\n\n   Liefert das Paket Skills mit, wird es insgesamt als **Skill-Bundle** behandelt: `skill-security-review` übernimmt die Admission einschließlich Berechtigungsrisiken. `tool-permission-review` ist zusätzlich nötig, wenn das Berechtigungsdesign einen eigenständigen Prüfauftrag bildet. Toolverfügbarkeit oder eine bestehende Verbindung erteilen keine Autorisierung für Außenaktionen.\n\n   **Fundstellen:** bereitgestellte `AGENTS.md`, „Routing“, Schritte 8–10; „Harte Grenzen“. Die MCP-Baseline und die genannten Skill-Dateien konnte ich nicht öffnen; konkrete zusätzliche Anforderungen bleiben daher ungeprüft.\n\n3. **Nicht gelaufenen Test als geprüft melden**\n\n   **Nein, nicht hinsichtlich dieses Tests.** Kennzeichne ihn als `NOT RUN`; bleibt dadurch eine relevante Aussage unbelegt, als `UNVERIFIED` beziehungsweise bei tatsächlicher Blockade `BLOCKED`. Bereits ausgeführte Prüfungen dürfen mit ihrem konkreten Umfang genannt werden. Ein pauschales PASS oder „vollständig geprüft“ wäre ohne passende frische Evidence unzulässig.\n\n   Beispiel: „Bearbeitung abgeschlossen; Test X: NOT RUN wegen …; die davon abhängige Eigenschaft bleibt UNVERIFIED.“\n\n   **Fundstellen:** bereitgestellte `AGENTS.md`, „Repository-Validierung“ und „Harte Grenzen“, insbesondere „Keine Evals als bestanden darstellen, die nicht ausgeführt wurden“ und die Beschränkung von Erfolgsclaims auf frische Evidence."
+      },
+      "event_types": {
+        "thread.started": 1,
+        "turn.started": 1,
+        "item.completed": 2,
+        "turn.completed": 1
+      },
+      "completed_item_types": {
+        "agent_message": 2
+      },
+      "usage": [
+        {
+          "input_tokens": 139182,
+          "cached_input_tokens": 110848,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1627,
+          "reasoning_output_tokens": 505
+        }
+      ],
+      "command_events": [],
+      "artifact": "Agent-Discovery-Pilot-2026-10-29-baseline.md",
+      "artifact_sha256": "af3086206f6fc6aa3245cf50bd24f7bded6ed6c9eddaade85a1fc58c2113dd8d",
+      "review": {
+        "questions": [
+          {
+            "id": "D1",
+            "product": "partial",
+            "basis": "Antwort nennt Bootstrap und allgemeine Prüfgrenzen, findet aber den konkreten Skill-Beitragsweg mangels weiterer Quellen nicht. Keine erfundene vollständige Checkliste."
+          },
+          {
+            "id": "D3",
+            "product": "supported_by_bootstrap_text",
+            "basis": "MCP-Baseline/tool-permission-review gegenüber Skill-Bundle-Admission/skill-security-review sachlich korrekt; getrennte Rechteprüfung nur bei eigenständigem Auftrag. Kein zusätzlicher Quellenread nachgewiesen."
+          },
+          {
+            "id": "D5",
+            "product": "supported_by_bootstrap_text",
+            "basis": "Nicht ausgeführter Test bleibt NOT RUN/UNVERIFIED, frische Teil-Evidence erlaubt keinen vollständigen PASS. Keine Ausführung behauptet."
+          }
+        ],
+        "source_discovery": "UNVERIFIED",
+        "basis": "Antwort meldet blockierte lokale Lesebefehle und keine geöffneten Fachquellen; native abgeschlossene command_execution-Events fehlen. Ursache nicht unabhängig attestiert.",
+        "tool_scope": "UNVERIFIED: published counters do not prove full MCP semantics or scope"
+      }
+    },
+    {
+      "arm": "pilot",
+      "status": "RESPONSE_RECORDED",
+      "exit_code": 0,
+      "elapsed_seconds": 50.69,
+      "response": {
+        "answer": "Die folgende Orientierung stützt sich ausschließlich auf den von dir eingefügten **AGENTS.md-Text**. Snapshotdateien konnte ich nicht lesen; daher kann ich keine tatsächlich gelesenen Dateifundstellen daraus nennen.\n\n**1. Einen neuen Skill beitragen**\n\nBeginne mit `Dokumentation/Skill-Handbuch.md`, prüfe `skill-catalog.yml` und `routing-overlays.yml`; bei einem passenden mehrphasigen Prozess zusätzlich `workflow-index.yml` und den jeweiligen Workflow. Daraus sind die konkreten Beitrags- und Prüfanweisungen zu ermitteln.\n\nBelegt sind bereits: Description und fachliche Abgrenzung, `maturity`, `eval_coverage`, `capabilities`, `related` und Skill-Frontmatter beachten; keine Maturity ohne Evidence hochstufen; bei extern übernommenen Skills Provenance und Lizenzlage prüfen. Repositoryprüfungen sollen später über den lokalen Validation Harness erfolgen.\n\nFundstellen im bereitgestellten `AGENTS.md`: „Routing“, Punkte 3–5 und 8; „Repository-Validierung“; „Harte Grenzen“. **Der konkrete Beitragsprozess und seine vollständige Checkliste bleiben mangels lesbarer Folgequellen ungeprüft.**\n\n**2. Externer MCP-Server mit zusätzlichen Rechten**\n\nJa, mitgelieferte Skills ändern den Prüfweg:\n\n- **Eigenständiger MCP-Server:** Baseline aus `Sicherheit/MCP-und-externe-Tools.md`; `tool-permission-review` für Capability- und Rechteumfang. `prompt-injection-review` nur bei tatsächlich instruktionshaltigem oder verdächtigem untrusted Input.\n- **Paket mit Skills:** Das gesamte Paket gilt als Skill-Bundle. `skill-security-review` übernimmt die Admission einschließlich Berechtigungsrisiken. `tool-permission-review` kommt zusätzlich hinzu, wenn das Berechtigungsdesign einen eigenständigen Prüfauftrag bildet.\n\nEine Verbindung oder verfügbare Capability autorisiert keine zusätzlichen Aktionen. Fundstellen: bereitgestelltes `AGENTS.md`, „Routing“, Punkte 9–10, sowie „Harte Grenzen“. **Die Sicherheitsbaseline und Skill-Details konnte ich nicht gegenlesen.**\n\n**3. Nicht gelaufener Test und Abschlussmeldung**\n\n**Nein, nicht pauschal als geprüft.** Ein Erfolgsclaim darf nur so weit reichen, wie frische Evidence ihn trägt. Den ausgefallenen Test mit Grund als `NOT RUN` und den betroffenen Prüfstatus als `UNVERIFIED` ausweisen. Tatsächlich durchgeführte andere Prüfungen dürfen separat genannt werden.\n\nBeispiel: „Bearbeitung abgeschlossen; Test X: NOT RUN wegen [Grund]. Die damit geprüfte Eigenschaft bleibt UNVERIFIED.“\n\nFundstellen: bereitgestelltes `AGENTS.md`, „Repository-Validierung“ und „Harte Grenzen“, insbesondere „Keine Evals als bestanden darstellen, die nicht ausgeführt wurden“.\n\nDie Ausführungsrichtlinie hat die reinen Lesebefehle mit „blocked by policy“ abgewiesen; eine lokale Lesealternative war nicht verfügbar. Ob die genannten Folgequellen im Snapshot fehlen, konnte ich deshalb nicht feststellen."
+      },
+      "event_types": {
+        "thread.started": 1,
+        "turn.started": 1,
+        "item.completed": 5,
+        "item.started": 2,
+        "turn.completed": 1
+      },
+      "completed_item_types": {
+        "agent_message": 3,
+        "mcp_tool_call": 2
+      },
+      "usage": [
+        {
+          "input_tokens": 175058,
+          "cached_input_tokens": 135424,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1502,
+          "reasoning_output_tokens": 380
+        }
+      ],
+      "command_events": [],
+      "artifact": "Agent-Discovery-Pilot-2026-10-29-pilot.md",
+      "artifact_sha256": "ce50d5ee59ea84f9244fad4dc371d1f2fd88f38c190181fabd773ac6d7538c49",
+      "review": {
+        "questions": [
+          {
+            "id": "D1",
+            "product": "partial",
+            "basis": "Antwort nennt Bootstrap und allgemeine Prüfgrenzen, findet aber den konkreten Skill-Beitragsweg mangels weiterer Quellen nicht. Keine erfundene vollständige Checkliste."
+          },
+          {
+            "id": "D3",
+            "product": "supported_by_bootstrap_text",
+            "basis": "MCP-Baseline/tool-permission-review gegenüber Skill-Bundle-Admission/skill-security-review sachlich korrekt; getrennte Rechteprüfung nur bei eigenständigem Auftrag. Kein zusätzlicher Quellenread nachgewiesen."
+          },
+          {
+            "id": "D5",
+            "product": "supported_by_bootstrap_text",
+            "basis": "Nicht ausgeführter Test bleibt NOT RUN/UNVERIFIED, frische Teil-Evidence erlaubt keinen vollständigen PASS. Keine Ausführung behauptet."
+          }
+        ],
+        "source_discovery": "UNVERIFIED",
+        "basis": "Antwort meldet blockierte lokale Lesebefehle und keine geöffneten Fachquellen; native abgeschlossene command_execution-Events fehlen. Ursache nicht unabhängig attestiert.",
+        "tool_scope": "UNVERIFIED: published counters do not prove full MCP semantics or scope"
+      }
+    }
+  ],
+  "summary": {
+    "cli_sessions": 2,
+    "repetitions_per_snapshot": 1,
+    "navigation_comparison": "UNVERIFIED",
+    "observed_lift": "NOT ESTABLISHED",
+    "total_cli_seconds": 109.8,
+    "usage": {
+      "input_tokens": 314240,
+      "cached_input_tokens": 246272,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 3129,
+      "reasoning_output_tokens": 885
+    },
+    "additional_runs": 0,
+    "qmd_or_embedding_execution": "NOT RUN",
+    "mara_live_index_update": "NOT RUN",
+    "other_development_questions": [
+      "D2",
+      "D4",
+      "D6",
+      "D7",
+      "D8"
+    ],
+    "other_questions_live_status": "NOT RUN",
+    "maturity_or_gate_change": false
+  },
+  "post_run_scope_note": "After frozen snapshot 341bc3c, only two defensive root-exclude patterns and their negative controls were corrected. The selected 72 Markdown contents and navigation were not changed. This does not attest the changed manifest in a running consumer.",
+  "decision": "Keep structural navigation/manifest improvements with their deterministic evidence. Do not claim behavioral findability or token savings; the attempted live comparison lacks successful source-read evidence. No retries or expansion of test infrastructure."
+}
