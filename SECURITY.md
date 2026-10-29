@@ -15,11 +15,19 @@ Reine fachliche Meinungsverschiedenheiten oder normale Qualitätsbugs sind keine
 
 Veröffentliche keine echten Secrets und keine unnötigen sensiblen Exploitdetails in öffentlichen Issues, Pull Requests oder Diskussionen.
 
-Für den aktuellen privaten Projektstand ist **noch kein belastbar dokumentierter privater Security-Meldekanal festgelegt**. GitHub Private Vulnerability Reporting ist für öffentliche Repositories vorgesehen und wird deshalb nicht als im privaten Vorbereitungszustand bereits aktivierbares Pflicht-Setting behandelt.
+**Das Repository ist öffentlich (verifiziert am 29.10.2026).** Ob GitHub **Private Vulnerability Reporting** tatsächlich aktiviert ist, konnte anhand der derzeit verfügbaren GitHub-Berechtigungen **nicht verifiziert** werden. Das Fehlen einer Bestätigung ist weder ein Nachweis, dass die Funktion deaktiviert ist, noch ein Beleg, dass sie aktiv ist.
 
-Verbindlicher Phase-4-Release-Schritt: Nach dem Visibility-Wechsel Private Vulnerability Reporting aktivieren, praktisch prüfen, dass ein privater Reportweg funktioniert, und anschließend diese `SECURITY.md`-Anleitung bestätigen beziehungsweise ergänzen. Falls vor dem Visibility-Wechsel ein anderer autorisierter privater Meldekanal festgelegt und dokumentiert wird, kann das Gate entsprechend früher geschlossen werden.
+- Falls GitHub bei [Repository-Sicherheitsmeldungen](https://github.com/Borstwerk/KI-Regeln/security/advisories) **„Report a vulnerability“** anbietet, nutze diesen GitHub-internen privaten Meldeweg.
+- Falls dieser private Meldeweg **nicht** verfügbar ist, übermittle dort und in öffentlichen Issues/PRs **keine Schwachstellendetails oder Secrets**. Ein öffentliches Issue darf allenfalls **ohne technische Details** nach einem vertraulichen Kontaktweg fragen. Es ist aktuell kein anderer verifizierter privater Sicherheitskontakt dokumentiert.
+- Die Maintainer müssen den realen Meldeweg separat bestätigen und diese Anleitung erst **nach erfolgreicher Prüfung** als vollständig markieren. Bis dahin bleibt das dokumentierte Security-Reporting-Gate offen.
 
-Bis ein privater Meldeweg tatsächlich eingerichtet und verifiziert ist, bleibt die Public-Release-Readiness im Bereich Security Reporting blockiert.
+## Maintainer-Check für Private Vulnerability Reporting
+
+1. Mit berechtigtem GitHub-Konto: **Settings → Security and quality → Advanced Security → Private vulnerability reporting** prüfen; falls noch aus, aktivieren. [GitHub-Anleitung](https://docs.github.com/en/code-security/how-tos/report-and-fix-vulnerabilities/configure-vulnerability-reporting/configure-for-a-repository).
+2. Anschließend aus Sicht eines externen Meldeberechtigten kontrollieren, ob **„Report a vulnerability“** tatsächlich erreichbar ist. Keine echten Secrets und keinen künstlichen öffentlichen Exploitbericht für die Prüfung verwenden.
+3. Verifizierten Status, Datum und eine geeignete **nicht-sensitive** Evidence in `Dokumentation/open-source-readiness.yml` dokumentieren. Erst dann `security_reporting` und den verbleibenden Audit-Gate-Status aktualisieren.
+
+Die GitHub-Sichtbarkeit `public` ist **nicht** gleichbedeutend mit einer abgenommenen Security-Reporting-Konfiguration.
 
 ## Umgang mit Secrets
 
