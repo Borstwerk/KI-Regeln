@@ -63,10 +63,13 @@ Test-Skillliste ersetzt. Keine technische Gesamtisolation wird attestiert.
 Die Snapshots werden mit `git archive <SHA>` erzeugt, nicht aus einem veränderlichen
 Arbeitsbaum. In beiden dieselbe Auswahl: Root-Dateien `AGENTS.md`, `PROJECT.md`,
 `CONTRIBUTING.md`, `README.md`, `START-HIER.md`, `START-HERE.md`, `mara-project.json`,
-`skill-catalog.yml`, `workflow-index.yml`, `routing-overlays.yml`, `ki-regeln.yml`;
+`skill-catalog.yml`, `workflow-index.yml`, `routing-overlays.yml`,
+`Validate-KI-Regeln.ps1`, `Validate-KI-Regeln.cmd`;
 die operativen Ordner `Agentenarbeit`, `Dokumentation`, `Dokumentationserstellung`,
-`Sicherheit`, `Skill-Engineering`, `Testing-und-QA`, `Workflows` sowie
-`Evals/README.md`. Sonstige Evals, diese Rubrik, Antworten, Tests, `.git` und lokale
+`Sicherheit`, `Skill-Engineering`, `Testing-und-QA`, `Workflows`, `Vorlagen`, `Schemas`,
+`tools/local_validation` sowie `tools/repo_validator.py` und `Evals/README.md`.
+Historische Dokumentations-Reviews, Praxisbeispielpakete und Upstream-Audits werden
+aus dieser Auswahl entfernt. Sonstige Evals, diese Rubrik, Antworten, Tests, `.git` und lokale
 Arbeitsdaten werden nicht exportiert. Das ist ein begrenzter Navigationssnapshot,
 kein vollständiger Repository-/Runtime-Test.
 
