@@ -15,6 +15,7 @@ KI-Regeln trennt öffentliche Orientierung für Menschen von verbindlichen Agent
 | [Skill-Handbuch.md](Skill-Handbuch.md) + [skill-catalog.yml](../skill-catalog.yml) | Agenten / Fachnutzer | konkrete Skill-Auswahl, Reife, Capabilities und Routing |
 | [workflow-index.yml](../workflow-index.yml) + [routing-overlays.yml](../routing-overlays.yml) | Agenten | Workflow-Inventar bzw. Cross-Cutting-Discovery |
 | [CONTRIBUTING.md](../CONTRIBUTING.md) | Maintainer | Beitrags- und Reviewprozesse |
+| [PROJECT.md](../PROJECT.md) + [mara-project.json](../mara-project.json) | lokale Projektübersichten / Suchanbindung | Wegweiser und explizite Auswahl; keine zusätzliche Regel- oder Statuswahrheit |
 | [ASSET-LICENSES.md](../ASSET-LICENSES.md) + [open-source-readiness.yml](open-source-readiness.yml) | Wiederverwendung / Release | Ausnahmen, Assets und Release-Gates |
 
 Eine menschliche Übersetzung darf **niemals** als Ersatz für `AGENTS.md`, Katalog, Workflow-Index oder projektspezifische Quellen ausgegeben werden. Deutsch ist derzeit die technische Dokumentationssprache. Nicht alle Fachdateien sind übersetzt; englische Einstiege verlinken deswegen ausdrücklich auf deutsche Detaildokumente.
@@ -47,6 +48,30 @@ Eine menschliche Übersetzung darf **niemals** als Ersatz für `AGENTS.md`, Kata
 | Neuer Skill, Eval oder Workflow | kanonische Registry / betroffene Fachreferenz; Quickstarts nur bei tatsächlich verändertem Nutzerweg |
 
 ## Kaltlese-Regressionsprüfung
+
+### Begrenzte Projekt-Suchauswahl
+
+`mara-project.json` enthält im Pilot ausschließlich explizite repository-relative
+Markdown-Dateien. Einstiegspfade und Suchziele müssen existieren; Symlinks,
+versteckte Pfade, Roh-/Eval-Bestände und Quellenarchive gehören nicht in diese
+Auswahl. Neue Bereiche werden nach einem konkreten Suchbedarf ergänzt.
+YAML-Register wie `skill-catalog.yml` bleiben direkt gelesene Sources of Truth.
+Ihre Inhalte nicht in eine zusätzliche Markdown-Registry kopieren.
+
+Der bestehende Prüfer `tools/check_public_entrypoints.py` kontrolliert zusätzlich
+Manifeststruktur, sichere Dateipfade, eindeutige Auswahl und Umfang: höchstens
+200 Dokumente, 256 KiB pro Datei und 1 MiB UTF-8-Text insgesamt. Das sind
+Kompatibilitätsgrenzen des verwendeten Suchvertrags, keine Tokenbudgets.
+Die gezielte Positiv-/Negativprüfung bleibt in `tests.test_public_entrypoints`.
+Beide Befehle mit der vorhandenen Harness-Python-Umgebung ausführen.
+
+Dateiexistenz und Umfang belegen weder Ranking noch richtige Agentenantworten.
+Ein lokaler Suchindex muss nach freigegebener Snapshot-/Revisionsänderung bewusst
+aktualisiert werden; es gibt keinen automatischen Sync durch dieses Manifest.
+Entwicklungsfragen und separat ausgewiesene Kaltlese-Evidence stehen im
+[Auffindbarkeits-Pilot](../Evals/Onboarding/Agent-Discovery-Pilot-2026-10-29.md).
+
+### Menschliche und agentische Kaltlese
 
 Bei wesentlichen Änderungen am öffentlichen Einstieg den begrenzten [Onboarding-Kaltlesetest](../Evals/Onboarding/README.md) als Review-Protokoll verwenden. Automatische Link- und Strukturtests sind wichtig, ersetzen aber weder einen unvoreingenommenen Menschen noch einen tatsächlich isolierten frischen Modelllauf. Statische Dokumentenprüfung und Live-Erprobung müssen separat ausgewiesen werden.
 

@@ -2,6 +2,10 @@
 
 **Kein zusätzlicher Skill und keine neue LLM-Testengine.** Dieses Verzeichnis hält die überprüfbaren Aufgaben für Human-/Agenten-Onboarding bereit, ohne Testdurchführung vorzutäuschen.
 
+Der [Auffindbarkeits-Pilot für drei Bereiche](Agent-Discovery-Pilot-2026-10-29.md)
+ergänzt bekannte Entwicklungsfragen, Manifest-/Linkchecks und gesondert
+ausgewiesene Kaltlese-Evidence. Er ist kein unabhängiger Retrieval-Benchmark.
+
 ## Einmalig vorbereiten
 
 - Exakten Git-SHA von `main` oder dem zu testenden Branch notieren; Rolle, Sprache, Datum, Umgebung und vorhandene Repository-/Browserrechte festhalten.
