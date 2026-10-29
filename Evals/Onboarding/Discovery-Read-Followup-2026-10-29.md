@@ -143,3 +143,7 @@ Die Windows-Archive wurden mit lokalem `core.autocrlf=true` erzeugt. Die Descrip
 Hashes binden die tatsächlich exportierten CRLF-Bytes; kanonische Git-Blob-Hashes
 sind separat erfasst. Zur Reproduktion dieselbe Option nur am Archive-Aufruf setzen
 (`git -c core.autocrlf=true archive`), keine globale Git-Konfiguration ändern.
+
+Der [separat ausgeführte korrigierte Fall](Discovery-Corrected-2026-10-29.md)
+liefert später begrenzte PASS-Evidence. Das hier dokumentierte `PARTIAL` und die
+alte Canary-Antwort werden dadurch nicht umbewertet.

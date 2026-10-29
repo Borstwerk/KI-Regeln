@@ -1,0 +1,313 @@
+{
+  "scope": "Corrected fixed D1/D3/D5 source-discovery check; one session, known development questions",
+  "protocol": {
+    "source_commit": "211048868a4fc713710450c3c4d3ff17a0923698",
+    "archive_paths": [
+      "AGENTS.md",
+      "PROJECT.md",
+      "CONTRIBUTING.md",
+      "README.md",
+      "START-HIER.md",
+      "START-HERE.md",
+      "mara-project.json",
+      "skill-catalog.yml",
+      "workflow-index.yml",
+      "routing-overlays.yml",
+      "Validate-KI-Regeln.ps1",
+      "Validate-KI-Regeln.cmd",
+      "Agentenarbeit",
+      "Dokumentation",
+      "Dokumentationserstellung",
+      "Sicherheit",
+      "Skill-Engineering",
+      "Testing-und-QA",
+      "Workflows",
+      "Vorlagen",
+      "Schemas",
+      "tools/local_validation",
+      "tools/repo_validator.py",
+      "Evals/README.md",
+      "Recherche/Skills/citation-audit/SKILL.md",
+      "Schreiben/Skills/adressatengerechte-kommunikation/SKILL.md"
+    ],
+    "excluded_prefixes": [
+      "Dokumentation/Reviews/",
+      "Dokumentation/Praxisbeispiele/",
+      "Dokumentation/Upstream-Audit-"
+    ],
+    "archive_eol": "git -c core.autocrlf=false archive; canonical LF",
+    "files": 242,
+    "bytes": 1449701,
+    "inventory_sha256": "b290d8bbfeb224c431673fdcce7ce836715828c7b44529a35b24cb17dfa86c54",
+    "overlay_descriptors_sha256": {
+      "Dokumentationserstellung/Skills/visual-answer/SKILL.md": "61ba11f9e11f8141e8492a695a885fd7d717e2c882a83058851ee405fb092982",
+      "Schreiben/Skills/adressatengerechte-kommunikation/SKILL.md": "787e86f1a02445fa9a95af6a33899aa2f9ddd3a89216e7e0914c9d84e1874c4f",
+      "Recherche/Skills/citation-audit/SKILL.md": "3dae6050d9cfcfb2a3e4a91f1d545da05b6c1c231bb256ea148ffb0588838928",
+      "Agentenarbeit/Skills/verification-loop/SKILL.md": "37824715a191c6668343358817959756dc6ac5117291e7f11675e7245f2d608f",
+      "Sicherheit/Skills/skill-security-review/SKILL.md": "14bfdf2b8764286f336ed8aabb07eea6103e3c44bb543cc6c564ba8e377a4dd8",
+      "Sicherheit/Skills/tool-permission-review/SKILL.md": "6e66c6added6308aa86124528a633d264f8902500034102973f3738e40d73eb7"
+    },
+    "prompt": "Du arbeitest in einem read-only Snapshot eines Regelrepositories. Beginne mit AGENTS.md und benutze die nötigen aktuellen Quellen. Lesezugriff und gezielte Suche sind erlaubt. Ändere keine Dateien, installiere nichts und führe keine Tests oder externen Aktionen aus. Starte keine weiteren Agenten und recherchiere nicht im Web.\n\nBeantworte diese drei Anfragen getrennt auf Deutsch. Nenne zu deinen Empfehlungen konkrete gelesene Dateipfade und aussagekräftige Fundstellen. Falls benötigte Quellen fehlen, sage das ausdrücklich. Gefordert ist eine knappe, belastbare Orientierung, keine Umsetzung.\n\n1. Ich möchte einen neuen Skill beitragen. Wo beginne ich, und was gehört zur Prüfung?\n2. Ich möchte einen externen MCP-Server mit zusätzlichen Rechten verwenden. Ändert sich der Prüfweg, wenn das Paket auch Skills mitliefert?\n3. Ein geplanter Test konnte nicht laufen. Darf ich den Abschluss trotzdem als geprüft melden?\n",
+    "prompt_sha256": "04837403ff3ce4401b90ac063d28e21c2a12153abf959a494cfd9bf6254325df",
+    "model_requested": "gpt-6.1-sol",
+    "reasoning_requested": "high",
+    "max_cli_sessions": 1,
+    "deadline_seconds": 180,
+    "retry": false,
+    "script_sha256": "b254f58bebc821910df1d7e938d094168d970e786391f5c8e803f764c84b9d4f",
+    "execution_commit": "8ec3aa1aa15c1f29ca18c18a471e7046e01e7f10"
+  },
+  "protocol_sha256": "e9a81e990170e716dc99ccf2f8aa5806814ae4d5e84e092efb95aa7ba779d0fe",
+  "preflight": {
+    "read_exit": 0,
+    "exact_byte_match": true,
+    "source_bytes": 20,
+    "source_sha256": "25de4d1c269233f805f8c0a01d5342102f6cab22454d17fce0936c6ec293a077",
+    "received_bytes": 20,
+    "received_sha256": "25de4d1c269233f805f8c0a01d5342102f6cab22454d17fce0936c6ec293a077",
+    "write_exit": 17,
+    "write_target_exists": false,
+    "write_permission_denied": true,
+    "write_attempt_stage": "target_write",
+    "write_error_type": "System.UnauthorizedAccessException",
+    "known_good_accepted": true,
+    "extra_lf_rejected": true,
+    "extra_crlf_rejected": true,
+    "pass": true
+  },
+  "preflight_sha256": "ee657abecdbdced706fe2a84f67e5da6733de5b1d744e9dc9f377a0942bb992f",
+  "cli_version_observed": "0.165.0-alpha.1.2",
+  "invocation_started_utc": "2026-10-29 18:37:26 UTC",
+  "response": {
+    "answer": "**1. Einen neuen Skill beitragen**\n\nBeginne bei [CONTRIBUTING.md, „Skills, Workflows und Evals“, Z. 30](https://github.com/Borstwerk/KI-Regeln/blob/211048868a4fc713710450c3c4d3ff17a0923698/CONTRIBUTING.md#L30) und [Skill-Engineering/README.md, „Einstieg nach Arbeitsfrage“, Z. 5](https://github.com/Borstwerk/KI-Regeln/blob/211048868a4fc713710450c3c4d3ff17a0923698/Skill-Engineering/README.md#L5). Kläre zuerst den wiederverwendbaren Bedarf und ob ein vorhandener Skill bereits genügt.\n\nZur Prüfung gehören:\n\n- klare Verantwortung, Description, positive Trigger und Near-Misses;\n- Inputs, Outputs, Evidence, Stop-Regeln, minimale Rechte und Fallbacks;\n- unabhängiger fachlicher Review sowie Trigger-, Behavior-, Outcome- und Regression-Evals; bei Sicherheitswirkung zusätzlich Security-Review;\n- konsistenter Katalog-/Evalstand, belegte Maturity und bei Fremdmaterial geklärte Provenance und Lizenz.\n\nFundstellen: [skill-authoring/SKILL.md, Ablauf ab Z. 12](https://github.com/Borstwerk/KI-Regeln/blob/211048868a4fc713710450c3c4d3ff17a0923698/Skill-Engineering/Skills/skill-authoring/SKILL.md#L12), [Skill-Review-und-Evals.md, Review-Achsen und Eval-Klassen ab Z. 22](https://github.com/Borstwerk/KI-Regeln/blob/211048868a4fc713710450c3c4d3ff17a0923698/Skill-Engineering/Skill-Review-und-Evals.md#L22). Neue Skills starten standardmäßig `experimental`. Der Beitragsweg führt über einen engen Branch, passende lokale Validierung und einen PR nach `main`; siehe [CONTRIBUTING.md, Z. 5](https://github.com/Borstwerk/KI-Regeln/blob/211048868a4fc713710450c3c4d3ff17a0923698/CONTRIBUTING.md#L5). Das Validation Harness führt **keine Behavioral Evals** aus: [Local-Validation-Harness.md, Z. 27](https://github.com/Borstwerk/KI-Regeln/blob/211048868a4fc713710450c3c4d3ff17a0923698/Dokumentation/Local-Validation-Harness.md#L27).\n\n**2. Externen MCP-Server mit zusätzlichen Rechten verwenden**\n\n**Ja, mitgelieferte Skills ändern den Prüfweg.**\n\n- **Ohne Skills:** Die Baseline aus [Sicherheit/MCP-und-externe-Tools.md, „Ownership nach Objekttyp“, Z. 7](https://github.com/Borstwerk/KI-Regeln/blob/211048868a4fc713710450c3c4d3ff17a0923698/Sicherheit/MCP-und-externe-Tools.md#L7) gilt; `tool-permission-review` prüft die zusätzlichen Rechte. Dazu gehören Zweck, minimale Rechte, Datenfluss, Außenwirkung, Fallbacks und Gates. Deklarierte Rechte, technische Durchsetzung und konkrete Autorisierung sind getrennt zu bewerten: [tool-permission-review/SKILL.md, Z. 42](https://github.com/Borstwerk/KI-Regeln/blob/211048868a4fc713710450c3c4d3ff17a0923698/Sicherheit/Skills/tool-permission-review/SKILL.md#L42).\n- **Mit mindestens einer `SKILL.md`:** Das gesamte Paket gilt als Skill-Bundle. `skill-security-review` übernimmt die Admission einschließlich MCP-, Hook- und Script-Dateien sowie Berechtigungsrisiken. Ein zusätzlicher Permission-Review ist nur für einen eigenständigen Prüfauftrag zum Berechtigungsdesign nötig: [AGENTS.md, Routing-Schritt 10, Z. 84](https://github.com/Borstwerk/KI-Regeln/blob/211048868a4fc713710450c3c4d3ff17a0923698/AGENTS.md#L84).\n\n`prompt-injection-review` kommt bei einer tatsächlich vorhandenen verdächtigen beziehungsweise instruktionshaltigen Quelle als eigenständigem Prüfjob hinzu. Toolverfügbarkeit oder bestehende Verbindung autorisieren keine Außenaktion.\n\n**3. Nicht gelaufenen Test als geprüft melden**\n\n**Nein, soweit der Abschlussclaim diesen Test voraussetzt.** Melde `NOT RUN` mit Grund, bei fehlenden Voraussetzungen gegebenenfalls `BLOCKED`; nicht belastbare Ergebnisse bleiben `UNVERIFIED`. Tatsächlich bestandene Teilprüfungen darfst du einzeln nennen, aber nicht zur Gesamtfreigabe hochrechnen.\n\nBelege: [AGENTS.md, „Harte Grenzen“, Z. 134](https://github.com/Borstwerk/KI-Regeln/blob/211048868a4fc713710450c3c4d3ff17a0923698/AGENTS.md#L134) verlangt frische Evidence für genau den behaupteten Zustand; [Umgebungsabhaengige-Verifikation-und-Reports.md, Statussemantik ab Z. 30](https://github.com/Borstwerk/KI-Regeln/blob/211048868a4fc713710450c3c4d3ff17a0923698/Testing-und-QA/Umgebungsabhaengige-Verifikation-und-Reports.md#L30) untersagt die Hochrechnung fehlender Pflichtchecks. Passende Formulierung: „Bearbeitung abgeschlossen; Test X: NOT RUN wegen Y; die betroffene Eigenschaft bleibt unverifiziert.“\n\nDie benötigten Regelquellen waren vorhanden. Für diese Orientierung wurden ausschließlich Dateien gelesen und gezielt durchsucht.",
+    "raw_answer_sha256": "768e05af2e178594265b2ea708fca6f6c4e62791a54897792a3084dce7e0db81",
+    "published_answer_sha256": "1acb8a4325a327c0883bf794c51d1b9b334287eb62d963f7a5d2e6d2592000f8",
+    "artifact": "Discovery-Corrected-2026-10-29-answer.md",
+    "publication": "Only ephemeral absolute link destinations replaced with pinned source URLs; original retained locally",
+    "status": "RESPONSE_RECORDED",
+    "exit_code": 0,
+    "elapsed_seconds": 72.14,
+    "event_types": {
+      "thread.started": 1,
+      "turn.started": 1,
+      "item.completed": 12,
+      "item.started": 9,
+      "turn.completed": 1
+    },
+    "completed_item_types": {
+      "agent_message": 3,
+      "command_execution": 9
+    },
+    "usage": [
+      {
+        "input_tokens": 217845,
+        "cached_input_tokens": 160896,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 2991,
+        "reasoning_output_tokens": 468
+      }
+    ],
+    "command_events": [
+      {
+        "command": "\"<powershell>\" -Command 'Get-Content -LiteralPath AGENTS.md; Get-Content -LiteralPath Dokumentation/Skill-Handbuch.md; Get-Content -LiteralPath routing-overlays.yml; Get-Content -LiteralPath workflow-index.yml'",
+        "exit_code": 0,
+        "status": "completed",
+        "output_utf8_bytes": 31479,
+        "output_sha256": "1bcdc9de5fc7cac4a9f3b6a9583fb4d6b60f9ca2f08e60e9754d1d34b378c199",
+        "output_excerpt": "# KI-Regeln – Agent Bootstrap\r\n\r\nDiese Datei ist der kleinste Einstiegspunkt für einen frischen KI-Agenten. Lade nicht pauschal README, alle Skills oder das vollständige Handbuch in den Kontext.\r\n\r\n## Pflicht vor nichttrivialer Arbeit\r\n\r\nBe"
+      },
+      {
+        "command": "\"<powershell>\" -Command \"rg --files -g '*CONTRIB*' -g '*Skill*' -g '*MCP*' -g '*Validation*' -g '*Completion*' -g '*Verif*'; rg -n 'neuen Skill|beitragen|Contribution|Beitr.g|Completion|NOT RUN|frische Evidence' Skill-Engineering Sicherheit Dokumentation -g '*.md'\"",
+        "exit_code": 0,
+        "status": "completed",
+        "output_utf8_bytes": 8476,
+        "output_sha256": "f0b100d597796d8f42702870a3884ac44cb2795f7bfc1293701df29750f31fe3",
+        "output_excerpt": "Workflows\\Skill-Verbesserung-aus-Evals-und-Fehlern.md\nTesting-und-QA\\Umgebungsabhaengige-Verifikation-und-Reports.md\nCONTRIBUTING.md\nDokumentationserstellung\\Beispiele-Code-und-Verifikation.md\nSicherheit\\Security-Review-fuer-Skills.md\nSiche"
+      },
+      {
+        "command": "\"<powershell>\" -Command \"Get-Content -LiteralPath Dokumentation/Skill-Handbuch-Meta-und-Sicherheit.md; Get-Content -LiteralPath Workflows/Skill-Verbesserung-aus-Evals-und-Fehlern.md; rg -n -A 17 -B 2 'id: (skill|eval|tool-permission|prompt-injection|verification-loop|citation-audit|visual-answer|adressatengerechte)' skill-catalog.yml\"",
+        "exit_code": 0,
+        "status": "completed",
+        "output_utf8_bytes": 41336,
+        "output_sha256": "4d1e8bc12c195d5333da4f11a17f696e728305797e1047dd42a07513ec459707",
+        "output_excerpt": "# Skill-Handbuch – Skill Engineering und Sicherheit\r\n\r\nDiese Ergänzung erklärt die Meta- und Security-Skills in verständlicher Form.\r\n\r\n## `skill-authoring`\r\n\r\n**Kurz gesagt:** Baut einen neuen Skill nach unseren zentralen Qualitätsregeln.\r"
+      },
+      {
+        "command": "\"<powershell>\" -Command '$paths = @('\"'Skill-Engineering/Skills/skill-authoring/SKILL.md','Skill-Engineering/Skills/skill-review/SKILL.md','Sicherheit/Skills/skill-security-review/SKILL.md','Sicherheit/Skills/tool-permission-review/SKILL.md','Sicherheit/Skills/prompt-injection-review/SKILL.md','Agentenarbeit/Skills/verification-loop/SKILL.md','Recherche/Skills/citation-audit/SKILL.md','Dokumentationserstellung/Skills/visual-answer/SKILL.md','Schreiben/Skills/adressatengerechte-kommunikation/SKILL.md'); foreach (\"'$p in $paths) { Write-Output $p; Get-Content -LiteralPath $p -TotalCount 16 }'",
+        "exit_code": 0,
+        "status": "completed",
+        "output_utf8_bytes": 7087,
+        "output_sha256": "8d331cb79ce3e89fd9e162397b7b0d2adb2a7973473acbd986d08989c0c25a5d",
+        "output_excerpt": "Skill-Engineering/Skills/skill-authoring/SKILL.md\r\n---\r\nname: skill-authoring\r\ndescription: Entwirft oder überarbeitet einen wiederverwendbaren Agent-Skill mit klarer Verantwortung, Triggerlogik, Inputs/Outputs, Capabilities, Fallbacks und "
+      },
+      {
+        "command": "\"<powershell>\" -Command \"Get-Content -LiteralPath CONTRIBUTING.md; Get-Content -LiteralPath Sicherheit/MCP-und-externe-Tools.md; Get-Content -LiteralPath Testing-und-QA/Umgebungsabhaengige-Verifikation-und-Reports.md; rg -n 'id: (skill-authoring|skill-review|skill-security-review|tool-permission-review|prompt-injection-review|verification-loop|citation-audit|visual-answer|adressatengerechte-kommunikation),' skill-catalog.yml\"",
+        "exit_code": 0,
+        "status": "completed",
+        "output_utf8_bytes": 22620,
+        "output_sha256": "9d2184a0a79ddc53e1ed51dfe1a682d20bf29899c0d11e8adfc561dbe666e89c",
+        "output_excerpt": "# Contributing\r\n\r\nKI-Regeln wird evidence-basiert gepflegt: allgemeine Arbeitsweise ist zentral, konkrete fachliche Wahrheit bleibt lokal.\r\n\r\n## Änderungen einbringen\r\n\r\n1. Von einem aktuellen `main` einen thematisch engen Branch erstellen."
+      },
+      {
+        "command": "\"<powershell>\" -Command 'Get-Content -LiteralPath Skill-Engineering/README.md; Get-Content -LiteralPath Skill-Engineering/Skills/skill-authoring/SKILL.md; Get-Content -LiteralPath Skill-Engineering/Skill-Review-und-Evals.md; Get-Content -LiteralPath Skill-Engineering/Skills/skill-review/SKILL.md'",
+        "exit_code": 0,
+        "status": "completed",
+        "output_utf8_bytes": 22336,
+        "output_sha256": "444b612aa6632c418d404367ba405ef28d6ddbfc47d714e8b59c0e6ed07f1b76",
+        "output_excerpt": "# Skill Engineering\r\n\r\nDieser Bereich beschreibt, wie wiederverwendbare KI-Skills entworfen, strukturiert, geprüft, kombiniert und über ihren Lebenszyklus gepflegt werden.\r\n\r\n## Einstieg nach Arbeitsfrage\r\n\r\n| Typische Frage | Passender Ein"
+      },
+      {
+        "command": "\"<powershell>\" -Command \"Get-Content -LiteralPath Sicherheit/Skills/tool-permission-review/SKILL.md; Get-Content -LiteralPath Sicherheit/Skills/skill-security-review/SKILL.md; Get-Content -LiteralPath Dokumentation/Local-Validation-Harness.md -TotalCount 110; rg -n '\"'^#|NOT RUN|UNVERIFIED|Behavioral|Quick|Full|Release'\"' Dokumentation/Local-Validation-Harness.md\"",
+        "exit_code": 0,
+        "status": "completed",
+        "output_utf8_bytes": 24380,
+        "output_sha256": "d34a0b4125038312296250b76be29ac74e7064dad8ed8890a5f154a95211ddd0",
+        "output_excerpt": "---\r\nname: tool-permission-review\r\ndescription: Prüft die für einen Agenten, Skill, Workflow oder eine eigenständige externe Integration vorgesehenen Tool- und Berechtigungsrechte gegen Least Privilege, Fallbacks und Human Gates. Verwenden "
+      },
+      {
+        "command": "\"<powershell>\" -Command 'Get-Content -LiteralPath routing-overlays.yml; Get-Content -LiteralPath Skill-Engineering/Skills/skill-review/SKILL.md | Select-Object -Skip 78 -First 65; Get-Content -LiteralPath Recherche/Skills/citation-audit/SKILL.md -TotalCount 5; Get-Content -LiteralPath Dokumentationserstellung/Skills/visual-answer/SKILL.md -TotalCount 5'",
+        "exit_code": 0,
+        "status": "completed",
+        "output_utf8_bytes": 4664,
+        "output_sha256": "b224c1be148ed0a0add678229e654381bcd6982c74b8ed9138e0502976b4781d",
+        "output_excerpt": "schema_version: 2\r\n\r\n# Kleine globale \"don't forget\"-Liste für domänenübergreifende Skills.\r\n#\r\n# Diese Datei definiert KEINE Triggerlogik. Ob ein Overlay wirklich passt,\r\n# entscheidet weiterhin ausschließlich die Description / Near-Miss-G"
+      },
+      {
+        "command": "\"<powershell>\" -Command \"rg -n '\"'^##|''^###|experimental|Trigger-Positives|Near-Miss|Review|Lizenz|Quick|NOT RUN|frische Evidence|Eigenständiger|Gemischte|zusätzlich|Toolverfügbarkeit'\"' CONTRIBUTING.md Skill-Engineering/README.md Skill-Engineering/Skills/skill-authoring/SKILL.md Skill-Engineering/Skill-Review-und-Evals.md Sicherheit/MCP-und-externe-Tools.md Sicherheit/Skills/tool-permission-review/SKILL.md AGENTS.md Testing-und-QA/Umgebungsabhaengige-Verifikation-und-Reports.md; Get-Content -LiteralPath Evals/README.md -TotalCount 105; Get-Content -LiteralPath Sicherheit/Skills/tool-permission-review/SKILL.md\"",
+        "exit_code": 0,
+        "status": "completed",
+        "output_utf8_bytes": 25941,
+        "output_sha256": "6d2b54310b29abcd3eec40022aa3394095948e67f50f458a617d9e7be3735100",
+        "output_excerpt": "Testing-und-QA/Umgebungsabhaengige-Verifikation-und-Reports.md:3:## Zweck und Scope\nTesting-und-QA/Umgebungsabhaengige-Verifikation-und-Reports.md:5:Bei Softwareänderungen folgt die Verifikation dem **konkreten Projekt**, nicht der Sprache "
+      }
+    ]
+  },
+  "source_read_evidence": {
+    "core_commands": {
+      "AGENTS.md": [
+        0,
+        8
+      ],
+      "Dokumentation/Skill-Handbuch.md": [
+        0
+      ],
+      "routing-overlays.yml": [
+        0,
+        7
+      ],
+      "workflow-index.yml": [
+        0
+      ],
+      "skill-catalog.yml": [
+        2,
+        4
+      ],
+      "Workflows/Skill-Verbesserung-aus-Evals-und-Fehlern.md": [
+        2
+      ]
+    },
+    "overlay_descriptors": [
+      {
+        "path": "Dokumentationserstellung/Skills/visual-answer/SKILL.md",
+        "source_sha256": "61ba11f9e11f8141e8492a695a885fd7d717e2c882a83058851ee405fb092982",
+        "command_event_index": 3,
+        "exit_code": 0,
+        "observed_frontmatter_owner": "visual-answer",
+        "description_observed": true
+      },
+      {
+        "path": "Schreiben/Skills/adressatengerechte-kommunikation/SKILL.md",
+        "source_sha256": "787e86f1a02445fa9a95af6a33899aa2f9ddd3a89216e7e0914c9d84e1874c4f",
+        "command_event_index": 3,
+        "exit_code": 0,
+        "observed_frontmatter_owner": "adressatengerechte-kommunikation",
+        "description_observed": true
+      },
+      {
+        "path": "Recherche/Skills/citation-audit/SKILL.md",
+        "source_sha256": "3dae6050d9cfcfb2a3e4a91f1d545da05b6c1c231bb256ea148ffb0588838928",
+        "command_event_index": 3,
+        "exit_code": 0,
+        "observed_frontmatter_owner": "citation-audit",
+        "description_observed": true
+      },
+      {
+        "path": "Agentenarbeit/Skills/verification-loop/SKILL.md",
+        "source_sha256": "37824715a191c6668343358817959756dc6ac5117291e7f11675e7245f2d608f",
+        "command_event_index": 3,
+        "exit_code": 0,
+        "observed_frontmatter_owner": "verification-loop",
+        "description_observed": true
+      },
+      {
+        "path": "Sicherheit/Skills/skill-security-review/SKILL.md",
+        "source_sha256": "14bfdf2b8764286f336ed8aabb07eea6103e3c44bb543cc6c564ba8e377a4dd8",
+        "command_event_index": 3,
+        "exit_code": 0,
+        "observed_frontmatter_owner": "skill-security-review",
+        "description_observed": true
+      },
+      {
+        "path": "Sicherheit/Skills/tool-permission-review/SKILL.md",
+        "source_sha256": "6e66c6added6308aa86124528a633d264f8902500034102973f3738e40d73eb7",
+        "command_event_index": 3,
+        "exit_code": 0,
+        "observed_frontmatter_owner": "tool-permission-review",
+        "description_observed": true
+      }
+    ],
+    "limit": "Grouped commands plus observed frontmatter support source reads, not every internal checkpoint or actual skill application"
+  },
+  "review": {
+    "reviewer": "Current coordinating agent; knows task and criteria; not a blind/independent benchmark",
+    "D1": {
+      "verdict": "pass",
+      "basis": "Contribution and skill-authoring/review sources read; describes need, catalogue, evals, maturity, licensing and local validation without claiming execution."
+    },
+    "D3": {
+      "verdict": "pass",
+      "basis": "Read MCP baseline and permission/admission descriptions; correctly distinguishes packages with/without skills and separately commissioned permission design."
+    },
+    "D5": {
+      "verdict": "pass",
+      "basis": "Read actual completion/status rules; refuses full verification from a non-executed test, reports NOT RUN/UNVERIFIED and bounded partial checks."
+    },
+    "observable_discovery": "pass",
+    "byte_and_write_preconditions": "pass",
+    "bounded_overall": "pass",
+    "unverified": "Internal checkpoint timing, broader skill behavior, statistically comparable lift, general filesystem/network isolation"
+  },
+  "summary": {
+    "preconditions": "PASS",
+    "D1": "PASS",
+    "D3": "PASS",
+    "D5": "PASS",
+    "bounded_discovery": "PASS",
+    "model_sessions": 1,
+    "retry": false,
+    "native_commands": 9,
+    "command_failures": 0,
+    "overlay_descriptors_observed": 6,
+    "missing_required_snapshot_sources": 0,
+    "elapsed_seconds": 72.14,
+    "usage": [
+      {
+        "input_tokens": 217845,
+        "cached_input_tokens": 160896,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 2991,
+        "reasoning_output_tokens": 468
+      }
+    ],
+    "qmd_embeddings_mara_live_index": "NOT RUN",
+    "maturity_or_gate_change": false,
+    "comparative_lift": "NOT ESTABLISHED"
+  },
+  "method_change": "Byte gate is deterministic native byte I/O, not an LLM response-format test; previous failed LLM Canary and partial runs remain unchanged.",
+  "artifact_review": {
+    "mode": "Separate delegated read-only review after execution; no new model CLI sessions",
+    "scope": "Raw/protocol/preflight hashes, answer destination-only redaction, nine output hashes, six descriptors, core reads and bounded claims",
+    "result": "No P1/P2 findings; not an independent/blind benchmark judge"
+  },
+  "decision": "The corrected bounded source-discovery case passes. Preserve limited scope; do not certify all skills or claim token savings."
+}

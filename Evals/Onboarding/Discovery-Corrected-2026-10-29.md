@@ -77,4 +77,55 @@ QMD, Mara-Oberfläche und tatsächlicher lokaler Index-Refresh bleiben separat.
 
 ## Ergebnis
 
-Vorabprotokoll; Ausführung wird getrennt ergänzt.
+Vorabkriterien, fester Fallaufruf und Offline-Kontrollen waren vor dem Modellstart
+in `8ec3aa1aa15c1f29ca18c18a471e7046e01e7f10` committed und veröffentlicht.
+Die [gebundene Evidence](Discovery-Corrected-2026-10-29.json) enthält Protokoll,
+Preflight, native Zählungen, einzelne Quellenread-Belege und Kriterienbewertung.
+Die [Antwort-Lesefassung](Discovery-Corrected-2026-10-29-answer.md) ersetzt nur
+temporäre absolute Linkziele durch Quellenlinks zum selben Git-Commit.
+Raw- und Publikationshashes sind getrennt erfasst; das Original bleibt lokal.
+
+| Nachweis | Beobachtung | Urteil im begrenzten Scope |
+| --- | --- | --- |
+| Byte-Gate | 20 Quellbytes = 20 gelesene Bytes, SHA-256 identisch; zusätzliche LF/CRLF abgewiesen | PASS |
+| Gezielt verweigerter Schreibversuch | strukturierter Status `target_write`, Exit 17, `UnauthorizedAccessException`, exakter Zielbezug, keine Zieldatei | PASS |
+| Snapshot | 242 operative Dateien mit LF-Bytes, alle sechs kanonischen Overlay-Descriptions vorhanden | PASS |
+| D1: neuen Skill beitragen | Beitragsweg, Authoring/Review, Katalog/Evals und Verifikation mit Fundstellen | PASS |
+| D3: MCP vs Skill-Bundle | fachlich korrekte Trennung von Rechteprüfung und Bundle-Admission | PASS |
+| D5: nicht ausgeführter Test | kein unbelegter Gesamt-PASS; Status und Teil-Evidence sauber getrennt | PASS |
+| Beobachtbare Discovery | zentrale Router und Workflow-Kandidat geöffnet, alle sechs Descriptions tatsächlich gelesen | PASS |
+
+Die native Telemetrie enthält neun abgeschlossene Shell-Befehle, alle mit Exit 0.
+Ein Befehl öffnet unter anderem die neun fachlichen/Kandidaten-Descriptors; in
+seiner Ausgabe sind Name und Description für alle sechs registrierten Overlays
+einzeln nachgewiesen. Keine erforderliche Snapshot-Quelle fehlte. Beobachtet
+wurden ausschließlich `command_execution`- und `agent_message`-Items.
+Die Befehle lesen/suchen; sie behaupten keine echte Testausführung.
+
+Gruppierte Befehle und Descriptor-Reads belegen weder die vollständige interne
+Checkpoint-Reihenfolge noch, dass ein Skill tatsächlich angewendet wurde. Das
+Produkturteil stammt vom koordinierenden Agenten mit Kenntnis von Aufgabe und
+Kriterien; kein unabhängiger/blinder Judge und kein Held-out-Benchmark.
+
+Die Offline-Kontrollen enthalten fünf Testmethoden samt relevanter Gegenproben:
+strenge Bytes, historischer Canary-Fehler, fehlende/falsche Descriptions,
+zielgebundene Schreibverweigerung und redigierte Fehlerdiagnosen. Im getrennten
+Review gefundene Fehlerpfade wurden **vor** dem Modelllauf korrigiert und geprüft:
+Setup-Fehler dürfen keinen Schreibschutz-PASS erzeugen; Redaktion muss vor Kürzung
+stattfinden. Die bestehende CI führt diese Kontrollen modellfrei aus.
+
+Ein getrenntes read-only Artefaktreview nach Ausführung bestätigte Hashbindungen,
+Antwortredaktion, Core-Reads und alle sechs Descriptions ohne P1/P2-Befund. Das ist
+eine Prüfung der Evidence und Aussagegrenzen, kein unabhängiger Behavioral-Benchmark.
+
+Laufzeit der einzigen Modellsitzung: 72,14 Sekunden. Native Usage-Felder:
+217.845 Input-, 160.896 Cached-Input-, 2.991 Output- und 468 Reasoning-Output-Tokens.
+Angefordertes Modell dokumentiert, keine unabhängige Server-Modellattestation.
+Keine Aussage zu Abrechnung, Abo-Restbudget oder kausaler Einsparung.
+
+**Gesamturteil: PASS für diesen begrenzten korrigierten Discovery-Fall.**
+Der alte LLM-Canary bleibt FAIL; die früheren Kaltlesen bleiben unverändert
+`UNVERIFIED` beziehungsweise `PARTIAL`. Der hier offengelegte deterministische
+Byte-Vortest ist ein anderer Prüfweg. D2/D4/D6/D7/D8, QMD/Embeddings, Mara-Oberfläche
+und tatsächlicher lokaler Index-Refresh wurden nicht ausgeführt. Keine
+Maturity-/Gate-Hochstufung und keine Zertifizierung aller Repository-Skills.
