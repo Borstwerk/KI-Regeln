@@ -77,4 +77,68 @@ QMD/Mara und tatsächlicher Index-Refresh bleiben getrennte Aufgaben.
 
 ## Ergebnis
 
-Vorabprotokoll; noch keine Qualitätsantworten dieses Folgebatches.
+Der Qualitätsbatch lief am vorab veröffentlichten Commit
+`b72e66da066c01b62b0b4aaf960d7ed6e10fa1d4` mit unverändertem `cc8f8b6`-Snapshot.
+[Evidence](Discovery-Remaining-Followup-2026-10-29.json) und
+[Antworten](Discovery-Remaining-Followup-2026-10-29-answers.md) sind getrennt.
+Bei den veröffentlichten Antworten sind ausschließlich temporäre absolute
+Snapshot-Links auf den unveränderlichen `cc8f8b6`-Quellenstand mit gleicher
+Zeilenangabe gepinnt.
+
+| Frage | Produkt | Beobachtung |
+| --- | --- | --- |
+| D2 | pass | Verbesserungsworkflow, Ursachenprüfung, Evidence und menschliche Freigabe gefunden |
+| D4 | pass | Strategie und konkrete Fälle unterschieden; keine Grenzwerte ohne Fachanforderung erfunden |
+| D6 | partial | Workflow-Datei und Index gefunden; Validierungs- und PR-/Reviewweg in der Antwort fehlen |
+| D7 | pass | bedingte Empfehlung und gezielte Klärung des Prüfobjekts |
+| D8 | pass | exakt `eins, zwei`; keine beobachteten Tool-Items |
+
+Alle drei CLI-Sitzungen lieferten mit Exit 0 Antworten: Orientierung 54,34 s,
+Mehrdeutigkeit 33,88 s und trivialer Fall 6,22 s. Der getrennte Zugriffs-Repro
+ist zusätzlich zu diesen drei Qualitätssitzungen zu zählen, insgesamt vier neue
+Modellsitzungen. Kein Retry; keine direkte API oder Account-/Konfigurationsänderung.
+
+Der getrennte Prozessreview bestätigt die beobachtbaren Router-, Workflow- und
+Description-Reads. In der Orientierung gab es trotz Shell-Exit 0 vier Teilfehler:
+einen falschen Skill-Pfad, ein nicht aufgelöstes `*.md` und zwei nicht vorhandene
+allgemeine Regeldateien. Die tatsächlich erforderlichen Quellen wurden gelesen;
+der kanonische `verification-loop`-Pfad wurde später korrekt nachgeladen. Die
+Evidence benennt diese Fehler ausdrücklich. D7 enthält keinen zusätzlichen nativen
+`AGENTS.md`-Read; bereitgestellter Bootstrap wird nicht als Tool-Read umgedeutet.
+D8 hat ein `agent_message` und keine anderen Tool-Items. Interne Entscheidungen
+oder vollständige Filesystem-Isolation werden damit nicht zertifiziert.
+
+Produkt und Prozess wurden getrennt durch Subagenten mit bekannter Rubrik
+geprüft (Same-Model-Review). Kein Blindbenchmark und keine statistische
+Erfolgsquote. Die fünf Dateien des alten blockierten Batches samt Marker sind
+in Namen und SHA-256 unverändert. Frühere Urteile bleiben erhalten.
+
+## Gezielte Nachprüfung von D6 – Vorabprotokoll
+
+D6 bleibt nach der unveränderten Rubrik `partial`. Die Antwort las
+`CONTRIBUTING.md`, verwies jedoch nur auf Bedarf/Indexregistrierung und ließ
+dessen Validierungs-/PR-Schritte weg. Das beweist keine alleinige Ursache.
+Ein konkreter Navigationsbefund ist aber überprüfbar: Im ebenfalls gelesenen
+`Workflows/README.md` fehlte ein direkter Beitrags-/Validierungseinstieg.
+
+Die kleine Änderung ergänzt dort ausschließlich Links auf den kanonischen
+Index, `CONTRIBUTING.md` und den Local Validation Harness sowie den vorhandenen
+`-Quick`-Befehl und PR-/Reviewweg. Keine Skill-, Gate-, Prompt- oder Rubrikänderung.
+Für diese Navigation dienen `readme` und `technical-writing`; `docs-review`
+prüft Quellen und Links.
+
+Vor der Nachprüfung werden Änderung und dieses Protokoll committed und
+veröffentlicht. Der Ausführungscommit ist zugleich der neue geprüfte Quellenstand.
+Eine einzelne frische Orientierungssitzung wiederholt **denselben D2/D4/D6-Prompt**
+und dieselben drei Kriterien, nicht eine um Validierungshinweise erweiterte Frage.
+Gleicher vorhandener `prepare`/`run_one`-Pfad, Modell/Reasoning, erlaubte Aktionen,
+neues Byte-/Write-Gate, 180 s Deadline, maximal ein Start, kein Retry.
+Nur `Workflows/README.md` darf zwischen den beiden operativen Snapshots abweichen;
+die Differenz wird vor Start geprüft. Neue Rohdaten liegen separat unter
+`.validation/discovery-d6-recheck-20261029/`.
+
+Ein möglicher Pass wäre eine gezielte Entwicklungsgegenprobe nach Kenntnis des
+Fehlers. Er ersetzt das ursprüngliche `partial` nicht und belegt weder allgemeinen
+Lift noch Wiederholungsstabilität. D7/D8 werden damit nicht erneut am neuen
+Quellenstand geprüft. Bei erneut unvollständiger Antwort bleibt der Befund offen;
+keine weitere Reparatur-/Testschleife in diesem Paket.

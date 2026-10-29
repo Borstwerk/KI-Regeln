@@ -18,6 +18,11 @@ Die [verbliebenen fünf Entwicklungsfragen](Discovery-Remaining-2026-10-29.md)
 sind in drei getrennten Kontexten vorbereitet. Der erste Live-Versuch endete
 technisch `BLOCKED`; D7/D8 wurden nicht gestartet.
 
+Der [separate Folgelauf](Discovery-Remaining-Followup-2026-10-29.md) führte alle
+fünf Fragen aus: vier Produkturteile `pass`, D6 `partial` wegen des fehlenden
+Validierungs-/PR-Wegs. Eine kleine Navigationsergänzung wird getrennt nachgeprüft;
+das frühere Urteil bleibt erhalten.
+
 ## Einmalig vorbereiten
 
 - Exakten Git-SHA von `main` oder dem zu testenden Branch notieren; Rolle, Sprache, Datum, Umgebung und vorhandene Repository-/Browserrechte festhalten.

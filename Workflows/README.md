@@ -14,6 +14,20 @@ Workflow
 
 Ein Workflow ist deshalb **kein neuer Mega-Skill**.
 
+## Workflow beitragen
+
+Prüfe zuerst im [Workflow-Index](../workflow-index.yml), ob ein vorhandener Ablauf
+den Bedarf bereits abdeckt. Für einen neuen Workflow:
+
+1. Den Ablauf in einer Markdown-Datei unter `Workflows/` beschreiben.
+2. Diese Datei im [Workflow-Index](../workflow-index.yml) registrieren.
+3. Vom Repository-Root `.\Validate-KI-Regeln.ps1 -Quick` ausführen;
+   Details und breitere Prüfstände stehen im [Local Validation Harness](../Dokumentation/Local-Validation-Harness.md).
+4. Einen Pull Request nach `main` mit den ausgeführten Nachweisen erstellen und
+   den fachlichen Review abwarten.
+
+Der verbindliche Beitrags- und Reviewweg steht in [CONTRIBUTING.md](../CONTRIBUTING.md).
+
 ## Grundregeln
 
 - lokale Projektanforderungen bleiben Source of Truth;
