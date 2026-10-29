@@ -2,7 +2,10 @@
 import importlib.util
 import json
 from pathlib import Path
+from types import SimpleNamespace
+import tempfile
 import unittest
+from unittest import mock
 
 ROOT = Path(__file__).resolve().parents[1]
 spec = importlib.util.spec_from_file_location('corrected_discovery', ROOT / 'Evals/Onboarding/run_corrected_discovery.py')
@@ -70,6 +73,37 @@ class CorrectedDiscoveryTests(unittest.TestCase):
             detail = case.failure_diagnostic('', '401 ' + prefix + secret)
             self.assertNotIn('synthetic', detail['stderr_excerpt'])
             self.assertIn('<credential-redacted>', detail['stderr_excerpt'])
+
+    def test_remaining_questions_use_separate_prompts_without_judge_hints(self):
+        base = json.loads((ROOT / 'Evals/Onboarding/Discovery-Corrected-2026-10-29.json').read_text(encoding='utf-8'))['protocol']['prompt']
+        cases = case.remaining_cases(base)
+        self.assertEqual([c['questions'] for c in cases], [['D2', 'D4', 'D6'], ['D7'], ['D8']])
+        for control in cases[1:]:
+            self.assertNotIn('Beginne mit AGENTS.md', control['prompt'])
+            self.assertNotIn('tool-permission-review', control['prompt'])
+            self.assertNotIn('Keine Tools', control['prompt'])
+        self.assertNotIn('Zugriffe', cases[2]['prompt'])
+
+    def test_each_case_starts_fresh_workspace_without_previous_artifacts(self):
+        workspaces = []
+        with tempfile.TemporaryDirectory() as tmp:
+            out = Path(tmp)
+            def start(argv, **kwargs):
+                workspace = Path(argv[argv.index('--cd') + 1])
+                workspaces.append(str(workspace))
+                self.assertEqual((workspace / 'AGENTS.md').read_text(encoding='utf-8'), '# Synthetic bootstrap')
+                self.assertFalse((workspace / 'prior-session.txt').exists())
+                (workspace / 'prior-session.txt').write_text('must not reach next session', encoding='utf-8')
+                target = Path(argv[argv.index('--output-last-message') + 1])
+                def communicate(prompt, timeout):
+                    target.write_text(json.dumps({'answer': 'offline control'}), encoding='utf-8')
+                    return json.dumps({'type': 'item.completed', 'item': {'type': 'agent_message'}}), ''
+                return SimpleNamespace(returncode=0, communicate=communicate)
+            with mock.patch.object(case.subprocess, 'Popen', side_effect=start):
+                for item in case.remaining_cases('Header\n\n1. old'):
+                    case.run_one('synthetic-cli', {}, {'AGENTS.md': b'# Synthetic bootstrap'},
+                                 item['prompt'], out, prefix=item['id']+'-', deadline=item['deadline'])
+        self.assertEqual(len(set(workspaces)), 3)
 
 
 if __name__ == '__main__':

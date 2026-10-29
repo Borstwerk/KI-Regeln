@@ -1,4 +1,4 @@
-"""Fixed D1/D3/D5 discovery check. Default: prepare only; --run: one CLI session."""
+"""Fixed discovery checks. Prepare only by default; --remaining selects three fresh cases."""
 import argparse
 import base64
 from collections import Counter
@@ -18,6 +18,7 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[2]
 SOURCE = '211048868a4fc713710450c3c4d3ff17a0923698'
+REMAINING_SOURCE = 'cc8f8b6b945bc1cd0d5078433d67c03fb97e97d9'
 OUT = ROOT / '.validation/discovery-corrected-20261029'
 EXTRA = ('Recherche/Skills/citation-audit/SKILL.md',
          'Schreiben/Skills/adressatengerechte-kommunikation/SKILL.md')
@@ -70,11 +71,11 @@ def check_overlays(files):
     return selected
 
 
-def prepare():
+def prepare(source=SOURCE):
     old = json.loads(subprocess.check_output(
-        ['git', 'show', SOURCE + ':Evals/Onboarding/Agent-Discovery-Pilot-2026-10-29.json'], cwd=ROOT))['protocol']
+        ['git', 'show', source + ':Evals/Onboarding/Agent-Discovery-Pilot-2026-10-29.json'], cwd=ROOT))['protocol']
     paths = old['archive_paths'] + list(EXTRA)
-    archive = subprocess.check_output(['git', '-c', 'core.autocrlf=false', 'archive', '--format=zip', SOURCE, *paths], cwd=ROOT)
+    archive = subprocess.check_output(['git', '-c', 'core.autocrlf=false', 'archive', '--format=zip', source, *paths], cwd=ROOT)
     with zipfile.ZipFile(io.BytesIO(archive)) as zipped:
         files = {i.filename: zipped.read(i) for i in zipped.infolist()
                  if not i.is_dir() and not i.filename.startswith(tuple(old['excluded_prefixes']))}
@@ -82,7 +83,7 @@ def prepare():
         raise ValueError('Evaluator payload in snapshot')
     descriptors = check_overlays(files)
     inventory = [(n, digest(b), len(b)) for n, b in sorted(files.items())]
-    protocol = {'source_commit': SOURCE, 'archive_paths': paths, 'excluded_prefixes': old['excluded_prefixes'],
+    protocol = {'source_commit': source, 'archive_paths': paths, 'excluded_prefixes': old['excluded_prefixes'],
                 'archive_eol': 'git -c core.autocrlf=false archive; canonical LF',
                 'files': len(files), 'bytes': sum(map(len, files.values())),
                 'inventory_sha256': digest(json.dumps(inventory).encode('utf-8')),
@@ -93,6 +94,20 @@ def prepare():
                 'script_sha256': digest(Path(__file__).read_bytes()),
                 'execution_commit': subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip()}
     return files, protocol
+
+
+def remaining_cases(base_prompt):
+    header = base_prompt.split('1. ', 1)[0]
+    return [
+        {'id': 'orientation', 'questions': ['D2', 'D4', 'D6'], 'deadline': 180,
+         'prompt': header + '1. Ein bestehender Skill scheitert wiederholt. Wo finde ich den Verbesserungsweg?\n'
+                   '2. Brauche ich eine Teststrategie oder konkrete Grenzwertfälle?\n'
+                   '3. Ich möchte einen Workflow ergänzen. Welche Datei ist maßgeblich?\n'},
+        {'id': 'ambiguous', 'questions': ['D7'], 'deadline': 120,
+         'prompt': 'Ich möchte „Zugriffe prüfen“. Welcher Skill passt?\n'},
+        {'id': 'trivial', 'questions': ['D8'], 'deadline': 45,
+         'prompt': 'Formatiere nur diesen Text: „eins,zwei“ → „eins, zwei“.\n'},
+    ]
 
 
 def dump(path, value):
@@ -143,35 +158,8 @@ def byte_preflight(cli, env):
     return result
 
 
-def main():
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--run', action='store_true')
-    args = parser.parse_args()
-    if (OUT / 'started.json').exists() or (OUT / 'response.json').exists():
-        raise SystemExit('Existing batch retained; no retry or overwrite')
-    files, protocol = prepare()
-    OUT.mkdir(parents=True, exist_ok=True)
-    dump(OUT / 'protocol.json', protocol)
-    if not args.run:
-        print(f"Prepared only: {len(files)} files, {len(protocol['overlay_descriptors_sha256'])} descriptors; no model call")
-        return
-    cli = shutil.which('codex')
-    if not cli or os.name != 'nt':
-        raise SystemExit('Fixed live check needs existing Windows Codex CLI; no installation/fallback')
-    env = os.environ.copy()
-    for key in ('OPENAI_API_KEY', 'CODEX_API_KEY', 'OPENAI_BASE_URL', 'OPENAI_API_BASE', 'CODEX_MODEL_PROVIDER'):
-        env.pop(key, None)
-    auth = subprocess.run([cli, 'login', 'status'], env=env, capture_output=True, text=True)
-    if auth.returncode or 'Logged in using ChatGPT' not in auth.stdout + auth.stderr:
-        raise SystemExit('Existing ChatGPT login required; no fallback')
-    with (OUT / 'started.json').open('x', encoding='utf-8') as handle:
-        json.dump({'max_sessions': 1, 'protocol_sha256': digest((OUT / 'protocol.json').read_bytes())}, handle)
-    controls = byte_preflight(cli, env)
-    dump(OUT / 'preflight.json', controls)
-    if not controls['pass']:
-        raise SystemExit('Byte/read-only gate failed; model NOT RUN')
-    schema = OUT / 'answer-schema.json'
-    dump(schema, {'type': 'object', 'properties': {'answer': {'type': 'string'}}, 'required': ['answer'], 'additionalProperties': False})
+def run_one(cli, env, files, prompt, out, prefix='', deadline=180):
+    schema = out / 'answer-schema.json'
     with tempfile.TemporaryDirectory(prefix='ki-regeln-corrected-discovery-') as tmp:
         workspace = Path(tmp)
         for name, body in files.items():
@@ -185,34 +173,79 @@ def main():
                 '-c', 'model_reasoning_effort="high"', '-c', 'default_permissions=":read-only"',
                 '-c', 'windows.sandbox="elevated"', '-c', 'model_provider="openai"',
                 '-c', 'forced_login_method="chatgpt"', '-c', 'web_search="disabled"',
-                '--output-schema', str(schema), '--output-last-message', str(OUT / 'answer.json'), '-']
+                '--output-schema', str(schema), '--output-last-message', str(out / (prefix + 'answer.json')), '-']
         start = time.monotonic()
         process = subprocess.Popen(argv, env=env, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                                    stderr=subprocess.PIPE, text=True, encoding='utf-8')
         try:
-            stdout, stderr = process.communicate(protocol['prompt'], timeout=180)
+            stdout, stderr = process.communicate(prompt, timeout=deadline)
             row = {'exit_code': process.returncode, 'elapsed_seconds': round(time.monotonic() - start, 2)}
             if process.returncode:
-                dump(OUT / 'response.json', dict(row, status='BLOCKED', diagnostic=failure_diagnostic(stdout, stderr)))
+                dump(out / (prefix + 'response.json'), dict(row, status='BLOCKED', diagnostic=failure_diagnostic(stdout, stderr)))
                 raise SystemExit(2)
             events = [json.loads(line) for line in stdout.splitlines() if line.strip()]
             items = [e['item'] for e in events if e.get('type') == 'item.completed' and 'item' in e]
             # Local raw tool outputs, not reasoning or thread identifiers. Publish a reviewed subset.
             commands = [{k: i[k] for k in ('type', 'command', 'exit_code', 'status', 'aggregated_output') if k in i}
                         for i in items if i.get('type') == 'command_execution']
-            row.update(status='RESPONSE_RECORDED', answer=json.loads((OUT / 'answer.json').read_text(encoding='utf-8'))['answer'],
+            row.update(status='RESPONSE_RECORDED', answer=json.loads((out / (prefix + 'answer.json')).read_text(encoding='utf-8'))['answer'],
                        completed_item_types=dict(Counter(i.get('type') for i in items)), command_events=commands,
                        event_types=dict(Counter(e.get('type') for e in events)), usage=[e['usage'] for e in events if 'usage' in e])
-            dump(OUT / 'response.json', row)
-            print(json.dumps({k: row[k] for k in ('status', 'elapsed_seconds')}), flush=True)
+            dump(out / (prefix + 'response.json'), row)
+            print(json.dumps(dict(case=prefix or 'D1-D3-D5', **{k: row[k] for k in ('status', 'elapsed_seconds')})), flush=True)
+            return row
         except subprocess.TimeoutExpired:
             subprocess.run(['taskkill', '/PID', str(process.pid), '/T', '/F'], capture_output=True)
             try:
                 process.communicate(timeout=5)
             except subprocess.TimeoutExpired:
                 process.kill()
-            dump(OUT / 'response.json', {'status': 'BLOCKED', 'reason': '180s deadline; no retry'})
+            dump(out / (prefix + 'response.json'), {'status': 'BLOCKED', 'reason': f'{deadline}s deadline; no retry'})
             raise SystemExit(2)
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--run', action='store_true')
+    parser.add_argument('--remaining', action='store_true')
+    args = parser.parse_args()
+    out = OUT.with_name('discovery-remaining-20261029') if args.remaining else OUT
+    if (out / 'started.json').exists() or (out / 'response.json').exists():
+        raise SystemExit('Existing batch retained; no retry or overwrite')
+    files, protocol = prepare(REMAINING_SOURCE if args.remaining else SOURCE)
+    cases = remaining_cases(protocol['prompt']) if args.remaining else [
+        {'id': '', 'questions': ['D1', 'D3', 'D5'], 'prompt': protocol['prompt'], 'deadline': 180}]
+    if args.remaining:
+        protocol.pop('prompt')
+        protocol.pop('prompt_sha256')
+        protocol.update(cases=cases, max_cli_sessions=3, deadline_seconds=[c['deadline'] for c in cases])
+        for case in cases:
+            case['prompt_sha256'] = digest(case['prompt'].encode('utf-8'))
+    out.mkdir(parents=True, exist_ok=True)
+    dump(out / 'protocol.json', protocol)
+    if not args.run:
+        print(f"Prepared only: {len(files)} files, {len(protocol['overlay_descriptors_sha256'])} descriptors, {len(cases)} sessions; no model call")
+        return
+    cli = shutil.which('codex')
+    if not cli or os.name != 'nt':
+        raise SystemExit('Fixed live check needs existing Windows Codex CLI; no installation/fallback')
+    env = os.environ.copy()
+    for key in ('OPENAI_API_KEY', 'CODEX_API_KEY', 'OPENAI_BASE_URL', 'OPENAI_API_BASE', 'CODEX_MODEL_PROVIDER'):
+        env.pop(key, None)
+    auth = subprocess.run([cli, 'login', 'status'], env=env, capture_output=True, text=True)
+    if auth.returncode or 'Logged in using ChatGPT' not in auth.stdout + auth.stderr:
+        raise SystemExit('Existing ChatGPT login required; no fallback')
+    with (out / 'started.json').open('x', encoding='utf-8') as handle:
+        json.dump({'max_sessions': len(cases), 'protocol_sha256': digest((out / 'protocol.json').read_bytes())}, handle)
+    controls = byte_preflight(cli, env)
+    dump(out / 'preflight.json', controls)
+    if not controls['pass']:
+        raise SystemExit('Byte/read-only gate failed; model NOT RUN')
+    dump(out / 'answer-schema.json', {'type': 'object', 'properties': {'answer': {'type': 'string'}},
+                                    'required': ['answer'], 'additionalProperties': False})
+    for case in cases:
+        run_one(cli, env, files, case['prompt'], out,
+                prefix=case['id'] + '-' if args.remaining else '', deadline=case['deadline'])
 
 
 if __name__ == '__main__':
