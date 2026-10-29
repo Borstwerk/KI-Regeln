@@ -10,6 +10,10 @@ Der [Lese-Folgelauf](Discovery-Read-Followup-2026-10-29.md) dokumentiert echte
 Quellenreads, einen zu schwachen Canary-Startcheck und zwei fehlende Snapshot-
 Descriptors getrennt. Sein Gesamturteil bleibt `PARTIAL`.
 
+Der [korrigierte feste Discovery-Fall](Discovery-Corrected-2026-10-29.md) verbindet
+einen deterministischen Byte-/Schreibschutz-Vortest mit genau einer Kaltlese von
+D1/D3/D5. Das begrenzte PASS ersetzt keine früheren Urteile oder vollständige Suite.
+
 ## Einmalig vorbereiten
 
 - Exakten Git-SHA von `main` oder dem zu testenden Branch notieren; Rolle, Sprache, Datum, Umgebung und vorhandene Repository-/Browserrechte festhalten.
