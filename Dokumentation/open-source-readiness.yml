@@ -1,3 +1,8 @@
+# Historischer Readiness-Audit (urspruenglich 2026-08-26 am unten genannten base_commit).
+# Security-Reporting-Grenze am 2026-10-29 auf die beobachtete PUBLIC-Sichtbarkeit
+# angepasst; das ist KEINE erneute Current-Tree-/History-Exposure-Pruefung.
+# 'release_gate' ist ein noch offenes Audit-Gate, keine Aussage ueber die
+# tatsaechliche GitHub-Sichtbarkeit. Quelle fuer aktuellen Kontext: SECURITY.md.
 schema_version: 1
 assessed_at: 2026-08-26
 base_commit: bf99fef39519e292ea2412df66b91a5f686558f9
@@ -43,10 +48,12 @@ categories:
     private_reporting_channel_configured: false
     evidence:
       - SECURITY.md requires a private vulnerability-reporting path for the public release state.
-      - GitHub Private Vulnerability Reporting is documented for public repositories, so it is not represented as an enable-now setting for the current private repository.
-      - Phase 4 must, after the visibility change, enable Private Vulnerability Reporting, verify that private reporting works, and confirm SECURITY.md; an explicitly approved alternative private channel may close this gate earlier.
+      - "Update 2026-10-29: GitHub repository visibility is PUBLIC; previous references to a private preparation state are historical, not current."
+      - "GitHub Private Vulnerability Reporting is a suitable private channel, but its actual enabled state could NOT be checked with available GitHub permissions."
+      - "The 'private_reporting_channel_configured: false' field means NOT YET VERIFIED/DOCUMENTED within this audit; it does NOT assert that the GitHub setting is disabled."
+      - SECURITY.md now instructs reporters to use the GitHub private report form only if actually offered; no unverified contact address is invented.
     blockers:
-      - Establish and verify a private reporting path as a Phase-4 release step after the visibility change, or document and verify an authorized alternative private channel earlier.
+      - Verify the actual Private Vulnerability Reporting setting with repository-admin permissions and independently check the reporter-facing form, or establish another verified confidential channel.
   repository_hygiene:
     status: ready
     evidence:
@@ -65,4 +72,4 @@ categories:
 release_gate:
   status: blocked
   blockers:
-    - A verified private vulnerability-reporting path is still required for the public release state; GitHub Private Vulnerability Reporting is a Phase-4 step after visibility change unless an authorized alternative channel is established earlier.
+    - "Unmet security-reporting audit gate on an ALREADY PUBLIC repository: confidential reporting is not yet verified/documented. Do not interpret 'blocked' as GitHub visibility still being private."

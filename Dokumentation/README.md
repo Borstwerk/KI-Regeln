@@ -12,6 +12,11 @@ Er richtet sich vor allem an Menschen, die:
 - neue externe Kandidaten und Trends systematisch beobachten möchten;
 - Reifegrad und Evalabdeckung von Skills einschätzen möchten.
 
+## Externe Auffindbarkeit: XERJ Corpus Hub (29.10.2026)
+
+- [XERJ-Kandidatenstatus, Quellen- und Lizenzprüfung](XERJ-Corpus-Hub-2026-10-29.md):
+  Eintrag `borstwerk--ki-regeln` ist **draft**, noch kein bestätigter Live-Corpus; der alte Pin meldet `NOASSERTION`. Keine neuen Skills oder automatische Runtime.
+
 ## Ponytail – Externe Coding-/Review-Skills (27.10.2026)
 
 - [Quell-, Benchmark- und Hook-Vorprüfung](Reviews/Ponytail-2026-10-27.md):
