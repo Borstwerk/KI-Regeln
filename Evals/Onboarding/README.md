@@ -6,6 +6,10 @@ Der [Auffindbarkeits-Pilot für drei Bereiche](Agent-Discovery-Pilot-2026-10-29.
 ergänzt bekannte Entwicklungsfragen, Manifest-/Linkchecks und gesondert
 ausgewiesene Kaltlese-Evidence. Er ist kein unabhängiger Retrieval-Benchmark.
 
+Der [Lese-Folgelauf](Discovery-Read-Followup-2026-10-29.md) dokumentiert echte
+Quellenreads, einen zu schwachen Canary-Startcheck und zwei fehlende Snapshot-
+Descriptors getrennt. Sein Gesamturteil bleibt `PARTIAL`.
+
 ## Einmalig vorbereiten
 
 - Exakten Git-SHA von `main` oder dem zu testenden Branch notieren; Rolle, Sprache, Datum, Umgebung und vorhandene Repository-/Browserrechte festhalten.
