@@ -2,6 +2,17 @@
 
 Dieser Bereich beschreibt, wie wiederverwendbare KI-Skills entworfen, strukturiert, geprüft, kombiniert und über ihren Lebenszyklus gepflegt werden.
 
+## Einstieg nach Arbeitsfrage
+
+| Typische Frage | Passender Einstieg | Abgrenzung |
+| --- | --- | --- |
+| „Ich möchte einen Skill neu erstellen oder strukturell überarbeiten.“ | [Skill entwerfen oder überarbeiten](Skills/skill-authoring/SKILL.md) | Wiederverwendbare Arbeitsdisziplin; nur lokal geltende Projektanweisungen bleiben im Projekt. |
+| „Ist dieser Skill klar geschnitten und überprüfbar?“ | [Unabhängiger Skill-Review](Skills/skill-review/SKILL.md) | Prüft den bestehenden Skill; ein Review ist kein automatischer Rewrite. |
+| „Ein Skill scheitert wiederholt. Wie verbessere ich ihn anhand der Evidence?“ | [Workflow: Skill-Verbesserung aus Evals und Fehlern](../Workflows/Skill-Verbesserung-aus-Evals-und-Fehlern.md) | Erst Ursache und Baseline klären; ein einzelner unspezifischer Modellfehler begründet noch keinen Skill-Edit. |
+| „Darf ein fremdes Skill-Paket verwendet werden, oder geht es um einen eigenständigen MCP-Server?“ | [Sicherheitszuständigkeit nach Objekttyp](../Sicherheit/MCP-und-externe-Tools.md#ownership-nach-objekttyp) | Skill-Bundle-Admission und eigenständiges Tool-Rechtedesign sind verschiedene Prüfaufträge. |
+
+Diese Verweise sind Orientierung. Die kanonischen Descriptions, Router und Freigaberegeln entscheiden über die konkrete Verwendung.
+
 ## Grundsatz
 
 > Ein Skill ist eine begrenzte Arbeitsdisziplin mit klarer Aktivierungslogik, klaren Grenzen und überprüfbarem Ergebnis.

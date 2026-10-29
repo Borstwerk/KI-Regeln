@@ -13,6 +13,20 @@ KI-Regeln wird evidence-basiert gepflegt: allgemeine Arbeitsweise ist zentral, k
 
 Direkte Änderungen an `main` sind für den späteren öffentlichen Betriebsmodus nicht vorgesehen.
 
+## Aufgaben und zuständige Dateien
+
+| Arbeitsfrage | Einstieg und kanonische Quellen |
+| --- | --- |
+| „Ich möchte einen Skill ergänzen oder verbessern.“ | [Skill-Engineering](Skill-Engineering/README.md); [Skill-Katalog](skill-catalog.yml) und zugehöriges [Eval-Verzeichnis](Evals/README.md) konsistent pflegen |
+| „Ich möchte einen wiederholbaren Ablauf beitragen.“ | [Workflows](Workflows/README.md); den Workflow im [Workflow-Index](workflow-index.yml) registrieren |
+| „Darf ich ein externes Skill-Paket oder einen MCP-Server anbinden?“ | [Sicherheit](Sicherheit/README.md); Objekttyp und Prüfauftrag unterscheiden, konkrete Aktionen bleiben auftragsgebunden |
+| „Welche Tests brauche ich und wie führe ich sie aus?“ | [Testing/QA](Testing-und-QA/README.md); für Repository-Checks den [Local Validation Harness](Dokumentation/Local-Validation-Harness.md) verwenden |
+| „Ich ändere öffentliche Einstiege oder die optionale Suchauswahl.“ | [Pflegegrenzen und Prüfungen](Dokumentation/Public-Entrypoints-und-Sprachpflege.md); [Projektkarte](PROJECT.md) und [Manifest](mara-project.json) bei betroffenem Nutzerweg nachführen |
+
+Das ist eine Wegweiser-Tabelle für Repository-Arbeit, keine zweite Skill-Routinglogik.
+Für die konkrete Auswahl gelten [AGENTS.md](AGENTS.md), [Master-Router](Dokumentation/Skill-Handbuch.md)
+und die kanonischen Descriptions. Navigation ändert weder Reife noch Rechte.
+
 ## Skills, Workflows und Evals
 
 Neue Skills oder Workflows brauchen einen konkreten wiederverwendbaren Bedarf. Vor einer neuen Datei prüfen, ob ein vorhandener Skill oder Workflow bereits ausreicht.

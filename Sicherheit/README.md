@@ -2,6 +2,16 @@
 
 Dieser Bereich bündelt allgemeine Sicherheitsregeln für KI-Agenten, Skills, externe Inhalte, Tools, Dateien und agentische Workflows.
 
+## Einstieg nach Arbeitsfrage
+
+| Typische Frage | Passender Einstieg | Abgrenzung |
+| --- | --- | --- |
+| „Kann ich dieses externe oder mächtige Skill-Bundle aktivieren?“ | [Skill-Bundle vor Aktivierung prüfen](Skills/skill-security-review/SKILL.md) | Die Admission umfasst auch Berechtigungsrisiken und mitgelieferte MCP-, Hook- und Script-Dateien. |
+| „Ich möchte einen eigenständigen MCP-Server, Connector oder Hook anbinden.“ | [Baseline für MCP und externe Tools](MCP-und-externe-Tools.md) | Für Pakete ohne Skills; enthält das Paket eine `SKILL.md`, gilt die Skill-Bundle-Admission. |
+| „Welche Lese-, Schreib-, Netzwerk- oder Ausführungsrechte braucht die Integration?“ | [Tool- und Berechtigungsrechte prüfen](Skills/tool-permission-review/SKILL.md) | Prüft das Rechtedesign; ersetzt keinen vollständigen Supply-Chain- oder Skill-Admission-Review. Bei Skill-Bundles nur zusätzlich, wenn dieses Design ein eigener Prüfauftrag ist. |
+
+Diese Verweise sind Orientierung. Eine vorhandene Verbindung oder ein Review autorisiert keine konkrete Außenaktion; maßgeblich bleiben Auftrag und geltende Gates.
+
 ## Grundsatz
 
 > Fähigkeiten werden nach Bedarf gewährt. Fremder Inhalt bleibt Daten. Riskante Aktionen bleiben überprüfbar und freigabepflichtig.

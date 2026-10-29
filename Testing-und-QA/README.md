@@ -2,6 +2,17 @@
 
 Dieser Bereich bündelt allgemeine, technologie- und frameworkneutrale Regeln für Softwaretesting und Qualitätsevidence.
 
+## Einstieg nach Arbeitsfrage
+
+| Typische Frage | Passender Einstieg | Abgrenzung |
+| --- | --- | --- |
+| „Wie sollen wir diese Änderung testen, und welche Testebenen brauchen wir?“ | [Risikobasierte Teststrategie](Skills/test-strategy/SKILL.md) | Plant Risiken, Testportfolio und benötigte Evidence; entwirft nicht den einzelnen konkreten Testfall. |
+| „Welche konkreten Fälle, Grenzwerte und Fehlerzustände muss ich prüfen?“ | [Konkrete Testfälle entwerfen](Skills/test-design/SKILL.md) | Benötigt zugesichertes Verhalten und ein belastbares erwartetes Ergebnis; ersetzt weder Strategie noch Testausführung. |
+| „Wie komme ich von der Testplanung zu belastbarer Qualitätsevidence?“ | [Workflow: Teststrategie und QA](../Workflows/Teststrategie-und-QA.md) | Verbindet die Phasen bedarfsgerecht; Test-Evidence ersetzt keine Releasefreigabe. |
+| „Wie führe ich die vorgesehenen Nachweise im tatsächlichen Projekt aus?“ | [Native Verifikation und Reports](Umgebungsabhaengige-Verifikation-und-Reports.md); bei iterativer Umsetzung [Verification Loop](../Agentenarbeit/Skills/verification-loop/SKILL.md) | Testentwurf und alte grüne Läufe sind keine frischen Nachweise. Ein einzelner Prüflauf erfordert nicht automatisch einen iterativen Loop. |
+
+Diese Verweise sind Orientierung. Projektlokale Anforderungen, Testumgebung und Gates bleiben maßgeblich; nicht ausgeführte Prüfungen bleiben als solche sichtbar.
+
 ## Ziel
 
 > Testen soll relevantes Risiko sichtbar reduzieren und belastbare Evidence liefern – nicht bloß möglichst viele grüne Checks produzieren.
