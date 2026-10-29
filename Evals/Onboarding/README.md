@@ -20,8 +20,9 @@ technisch `BLOCKED`; D7/D8 wurden nicht gestartet.
 
 Der [separate Folgelauf](Discovery-Remaining-Followup-2026-10-29.md) führte alle
 fünf Fragen aus: vier Produkturteile `pass`, D6 `partial` wegen des fehlenden
-Validierungs-/PR-Wegs. Eine kleine Navigationsergänzung wird getrennt nachgeprüft;
-das frühere Urteil bleibt erhalten.
+Validierungs-/PR-Wegs. Eine kleine Navigationsergänzung wurde getrennt
+nachgeprüft; D6 bleibt `partial`. Die begrenzte Schleife ist beendet, die alten
+Urteile bleiben erhalten.
 
 ## Einmalig vorbereiten
 

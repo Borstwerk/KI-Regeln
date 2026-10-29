@@ -1,0 +1,251 @@
+{
+  "scope": "One targeted development orientation recheck; historical D6 partial unchanged",
+  "protocol": {
+    "source_commit": "f0f83181d6be368399774e117fc64ba5bdd5f8b7",
+    "archive_paths": [
+      "AGENTS.md",
+      "PROJECT.md",
+      "CONTRIBUTING.md",
+      "README.md",
+      "START-HIER.md",
+      "START-HERE.md",
+      "mara-project.json",
+      "skill-catalog.yml",
+      "workflow-index.yml",
+      "routing-overlays.yml",
+      "Validate-KI-Regeln.ps1",
+      "Validate-KI-Regeln.cmd",
+      "Agentenarbeit",
+      "Dokumentation",
+      "Dokumentationserstellung",
+      "Sicherheit",
+      "Skill-Engineering",
+      "Testing-und-QA",
+      "Workflows",
+      "Vorlagen",
+      "Schemas",
+      "tools/local_validation",
+      "tools/repo_validator.py",
+      "Evals/README.md",
+      "Recherche/Skills/citation-audit/SKILL.md",
+      "Schreiben/Skills/adressatengerechte-kommunikation/SKILL.md"
+    ],
+    "excluded_prefixes": [
+      "Dokumentation/Reviews/",
+      "Dokumentation/Praxisbeispiele/",
+      "Dokumentation/Upstream-Audit-"
+    ],
+    "archive_eol": "git -c core.autocrlf=false archive; canonical LF",
+    "files": 242,
+    "bytes": 1450404,
+    "inventory_sha256": "df8dc755eaf55b35339c8ce8cff464d0ad2aeec139f364dfb80b0e96aa299dd0",
+    "overlay_descriptors_sha256": {
+      "Dokumentationserstellung/Skills/visual-answer/SKILL.md": "61ba11f9e11f8141e8492a695a885fd7d717e2c882a83058851ee405fb092982",
+      "Schreiben/Skills/adressatengerechte-kommunikation/SKILL.md": "787e86f1a02445fa9a95af6a33899aa2f9ddd3a89216e7e0914c9d84e1874c4f",
+      "Recherche/Skills/citation-audit/SKILL.md": "3dae6050d9cfcfb2a3e4a91f1d545da05b6c1c231bb256ea148ffb0588838928",
+      "Agentenarbeit/Skills/verification-loop/SKILL.md": "37824715a191c6668343358817959756dc6ac5117291e7f11675e7245f2d608f",
+      "Sicherheit/Skills/skill-security-review/SKILL.md": "14bfdf2b8764286f336ed8aabb07eea6103e3c44bb543cc6c564ba8e377a4dd8",
+      "Sicherheit/Skills/tool-permission-review/SKILL.md": "6e66c6added6308aa86124528a633d264f8902500034102973f3738e40d73eb7"
+    },
+    "model_requested": "gpt-6.1-sol",
+    "reasoning_requested": "high",
+    "max_cli_sessions": 1,
+    "deadline_seconds": [
+      180
+    ],
+    "retry": false,
+    "script_sha256": "52777e863de492d594f2ac14fc55976ff20e5c23bcf843e36adf618491d7412c",
+    "execution_commit": "f0f83181d6be368399774e117fc64ba5bdd5f8b7",
+    "cases": [
+      {
+        "id": "orientation",
+        "questions": [
+          "D2",
+          "D4",
+          "D6"
+        ],
+        "deadline": 180,
+        "prompt": "Du arbeitest in einem read-only Snapshot eines Regelrepositories. Beginne mit AGENTS.md und benutze die nötigen aktuellen Quellen. Lesezugriff und gezielte Suche sind erlaubt. Ändere keine Dateien, installiere nichts und führe keine Tests oder externen Aktionen aus. Starte keine weiteren Agenten und recherchiere nicht im Web.\n\nBeantworte diese drei Anfragen getrennt auf Deutsch. Nenne zu deinen Empfehlungen konkrete gelesene Dateipfade und aussagekräftige Fundstellen. Falls benötigte Quellen fehlen, sage das ausdrücklich. Gefordert ist eine knappe, belastbare Orientierung, keine Umsetzung.\n\n1. Ein bestehender Skill scheitert wiederholt. Wo finde ich den Verbesserungsweg?\n2. Brauche ich eine Teststrategie oder konkrete Grenzwertfälle?\n3. Ich möchte einen Workflow ergänzen. Welche Datei ist maßgeblich?\n",
+        "prompt_sha256": "920d40e378bebc6f92d24580509d6d4a6916b1a4b98c278cb6b6595001612f2a"
+      }
+    ],
+    "changed_operational_files": [
+      "Workflows/README.md"
+    ],
+    "baseline_protocol_sha256": "6315768017f2e2abc333713d20cf4595773d585ed4d13e2728f5aa49380447a4",
+    "purpose": "Targeted development recheck after D6 partial; known rubric, no general lift claim",
+    "helper_sha256": "900b0755cd4d5b86e194902b12f1f233fd46489e3dbacbeff448f989b25caf12"
+  },
+  "protocol_sha256": "05dd22e53b1162910e404b1509d03b8446f30f5c8cc7ccac5e9428dc97bd1e8d",
+  "preflight": {
+    "read_exit": 0,
+    "exact_byte_match": true,
+    "source_bytes": 20,
+    "source_sha256": "25de4d1c269233f805f8c0a01d5342102f6cab22454d17fce0936c6ec293a077",
+    "received_bytes": 20,
+    "received_sha256": "25de4d1c269233f805f8c0a01d5342102f6cab22454d17fce0936c6ec293a077",
+    "write_exit": 17,
+    "write_target_exists": false,
+    "write_permission_denied": true,
+    "write_attempt_stage": "target_write",
+    "write_error_type": "System.UnauthorizedAccessException",
+    "known_good_accepted": true,
+    "extra_lf_rejected": true,
+    "extra_crlf_rejected": true,
+    "pass": true
+  },
+  "preflight_sha256": "ee657abecdbdced706fe2a84f67e5da6733de5b1d744e9dc9f377a0942bb992f",
+  "start_marker_sha256": "afecf3917286a335cf8dbdaf5a8d90a8b8276ef26601e3f25ab7291097ac4940",
+  "pre_registration": {
+    "path": "Evals/Onboarding/Discovery-Remaining-Followup-2026-10-29.md",
+    "commit": "f0f83181d6be368399774e117fc64ba5bdd5f8b7",
+    "sha256": "c780b602ade7e003fdad85ddf109d1154f422197e7ed405698b20988341a63ae"
+  },
+  "response": {
+    "exit_code": 0,
+    "elapsed_seconds": 65.94,
+    "status": "RESPONSE_RECORDED",
+    "sha256": "0ab41f80f24507457576cfd9fc9fbe84ca05bb7bf7e37ae33dfe1202f7a29bef",
+    "answer_file_sha256": "b6a0d6e57e3866c2a330a9b0ce28b8a949f0c09de4ab9e6781c717d5688c32cd",
+    "usage": [
+      {
+        "input_tokens": 227219,
+        "cached_input_tokens": 177536,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 2145,
+        "reasoning_output_tokens": 210
+      }
+    ],
+    "completed_item_types": {
+      "agent_message": 3,
+      "command_execution": 10
+    },
+    "event_types": {
+      "thread.started": 1,
+      "turn.started": 1,
+      "item.completed": 13,
+      "item.started": 10,
+      "turn.completed": 1
+    },
+    "commands": [
+      {
+        "index": 0,
+        "command": "pwsh -Command 'Get-Content AGENTS.md'",
+        "exit_code": 0,
+        "status": "completed",
+        "local_output_sha256": "ffe8cb85d5c33913c45c85e9caa78c591092dfd6079cc54de2e503ac85830ea8"
+      },
+      {
+        "index": 1,
+        "command": "pwsh -Command 'Get-Content Dokumentation/Skill-Handbuch.md; Get-Content routing-overlays.yml; Get-Content workflow-index.yml'",
+        "exit_code": 0,
+        "status": "completed",
+        "local_output_sha256": "cfdb9e625f891c0f22c976244b28055bff017758f858db341567adfb75f5b5c1"
+      },
+      {
+        "index": 2,
+        "command": "pwsh -Command \"rg -n -i 'verbesser|scheiter|teststrateg|grenzwert|workflow|skill-improv|boundary|test-design' skill-catalog.yml\"",
+        "exit_code": 0,
+        "status": "completed",
+        "local_output_sha256": "d30de122534d2d417913ba3df13e31beed451f29eb4b3af6a609446f34ab3f98"
+      },
+      {
+        "index": 3,
+        "command": "pwsh -Command \"rg -n -i 'workflow|skill-improvement|skill-refinement|agent-eval|skill-creator|visual-answer|citation-audit|adressatengerechte-kommunikation|verification-loop|skill-security-review|tool-permission-review' skill-catalog.yml; rg -n -i 'maßgeb|source of truth|kanon|workflow-index|workflow.*(ergänz|hinzuf|neu)|neue.*workflow' Skill-Engineering Dokumentation Workflows/README.md\"",
+        "exit_code": 0,
+        "status": "completed",
+        "local_output_sha256": "424206e6c568ad88a40c4bc6761fe407114d7f84c089e581b6affbcd7823a375"
+      },
+      {
+        "index": 4,
+        "command": "pwsh -Command 'Get-Content Workflows/Skill-Verbesserung-aus-Evals-und-Fehlern.md; Get-Content Workflows/Teststrategie-und-QA.md; Get-Content Dokumentation/Skill-Handbuch-Meta-und-Sicherheit.md; Get-Content Dokumentation/Skill-Handbuch-Testing-und-QA.md'",
+        "exit_code": 0,
+        "status": "completed",
+        "local_output_sha256": "ce613ef4032fe401c4ad1eae8be75ddcf2aabe32224860e0ab459feef7d443c5"
+      },
+      {
+        "index": 5,
+        "command": "pwsh -Command 'Get-Content Workflows/README.md; Get-Content Skill-Engineering/Evidence-getriebene-Skill-Verbesserung.md; Get-Content Testing-und-QA/Skills/test-strategy/SKILL.md; Get-Content Testing-und-QA/Skills/test-design/SKILL.md'",
+        "exit_code": 0,
+        "status": "completed",
+        "local_output_sha256": "800c48e78742f27ae12fe0c1da08f2206c005d25fd6d4ef275b17fa3c65e7d17"
+      },
+      {
+        "index": 6,
+        "command": "pwsh -Command \"rg -n 'id: (skill-authoring|skill-review|agent-eval|adressatengerechte-kommunikation|citation-audit|verification-loop|visual-answer|skill-security-review|tool-permission-review)' skill-catalog.yml; rg --files -g SKILL.md | rg '(skill-authoring|skill-review|agent-eval|adressatengerechte-kommunikation|citation-audit|verification-loop|visual-answer|skill-security-review|tool-permission-review)/|\\\\\\\\(skill-authoring|skill-review|agent-eval|adressatengerechte-kommunikation|citation-audit|verification-loop|visual-answer|skill-security-review|tool-permission-review)\\\\\\\\'\"",
+        "exit_code": 0,
+        "status": "completed",
+        "local_output_sha256": "66c550c5e5ffa064883e27002716fc5834cfdaf3b41102c09d73d7e8d80cd4d4"
+      },
+      {
+        "index": 7,
+        "command": "pwsh -Command '$paths = @('\"'Skill-Engineering/Skills/skill-authoring/SKILL.md','Skill-Engineering/Skills/skill-review/SKILL.md','Agentenarbeit/Skills/agent-eval/SKILL.md','Schreiben/Skills/adressatengerechte-kommunikation/SKILL.md','Recherche/Skills/citation-audit/SKILL.md','Dokumentationserstellung/Skills/visual-answer/SKILL.md','Agentenarbeit/Skills/verification-loop/SKILL.md','Sicherheit/Skills/skill-security-review/SKILL.md','Sicherheit/Skills/tool-permission-review/SKILL.md'); foreach (\"'$path in $paths) { Write-Output $path; Get-Content -LiteralPath $path -TotalCount 5 }; Get-Content CONTRIBUTING.md'",
+        "exit_code": 0,
+        "status": "completed",
+        "local_output_sha256": "e8d55382537ccad4b70ff48c4b5b9e62dcaff666066698aaef14be76fadf712e"
+      },
+      {
+        "index": 8,
+        "command": "pwsh -Command \"rg -n '\"'^##|skill-authoring|agent-eval|skill-review|Human Gate|wiederholt'\"' Workflows/Skill-Verbesserung-aus-Evals-und-Fehlern.md; rg -n '\"'^##|Failure Evidence'\"' Skill-Engineering/Evidence-getriebene-Skill-Verbesserung.md; rg -n '\"'^description:|''^##|Erwartungswert|Grenzwerte'\"' Testing-und-QA/Skills/test-strategy/SKILL.md Testing-und-QA/Skills/test-design/SKILL.md; rg -n 'Workflow beitragen|Workflow-Index|Markdown|CONTRIBUTING|registrieren' Workflows/README.md; rg -n 'Skill-Verbesserung|Teststrategie' workflow-index.yml\"",
+        "exit_code": 0,
+        "status": "completed",
+        "local_output_sha256": "c6e33340415509c41041dabbfbeaa9f0187b11fc2f50cccf5240ea8684a65b2f"
+      },
+      {
+        "index": 9,
+        "command": "pwsh -Command \"Get-Content routing-overlays.yml; rg -n 'Änderungen einbringen|Aufgaben und zuständige Dateien|Skills, Workflows und Evals|Neue Workflows|wiederholbaren Ablauf' CONTRIBUTING.md; rg -n '\"'^##|test-strategy|test-design|Nicht jeder'\"' Workflows/Teststrategie-und-QA.md\"",
+        "exit_code": 0,
+        "status": "completed",
+        "local_output_sha256": "647e7e4beb74c0150cf58efedd3fcbd583380182f82d46c07c3da52aeb7899cb"
+      }
+    ]
+  },
+  "answer": {
+    "path": "Evals/Onboarding/Discovery-D6-Recheck-2026-10-29-answer.md",
+    "sha256": "491dee3fec0569a7b4e073d557ed40ba0113692503a9335c7a777c37db5efcd0",
+    "normalization": "Link targets only; source commit pinned, response wording unchanged"
+  },
+  "product_review": {
+    "D2": "pass",
+    "D4": "pass",
+    "D6": "partial",
+    "D6_finding": "Now points to CONTRIBUTING section 5 and Workflow beitragen section 17; still omits validation/Harness/-Quick and PR/review steps from the answer text.",
+    "source_evidence": [
+      "Workflows/README.md:24-27",
+      "CONTRIBUTING.md:10-12"
+    ],
+    "rubric_and_operationalization": "Unchanged from baseline; link label alone does not state the omitted steps"
+  },
+  "process_review": {
+    "status": "PASS on observable source discovery",
+    "core_reads": {
+      "AGENTS.md": 0,
+      "master_router_workflow_index_overlay_registry": 1,
+      "matching_workflows": 4,
+      "Workflows/README.md": 5,
+      "CONTRIBUTING.md": 7
+    },
+    "all_six_canonical_overlay_descriptions_command_index": 7,
+    "registry_recheck_command_index": 9,
+    "command_count": 10,
+    "observed_os_path_get_content_partial_errors": [],
+    "snapshot_evidence": "Reviewer independently reconstructed the 242-file inventory from clone artifacts; replacing only Workflows/README.md with its observed baseline bytes reproduces the old inventory hash and byte count.",
+    "old_baseline_answers_responses_and_original_blocked_files": "Unchanged",
+    "limits": "Observed reads and artifact bindings only, not internal routing decisions or full filesystem isolation"
+  },
+  "review_method": "Separate same-model product and process reviews with known rubric; no blinded or statistical claim",
+  "decision": "Stop the pre-registered repair/recheck loop. No further model trials or rule changes in this package. Inspect task/rubric alignment before another hardening proposal; preserve the existing partial verdict.",
+  "summary": {
+    "technical_recheck": "COMPLETED",
+    "sessions": 1,
+    "retry": false,
+    "D6": "partial",
+    "earlier_followup_sessions": 3,
+    "separate_access_repro_sessions": 1,
+    "native_cli_model_sessions_in_package": 5,
+    "general_lift_or_stability": "NOT CLAIMED",
+    "D7_D8_at_new_source": "NOT RUN",
+    "qmd_mara_live_index": "NOT RUN",
+    "maturity_or_gate_change": false
+  }
+}

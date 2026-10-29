@@ -95,8 +95,8 @@ Zeilenangabe gepinnt.
 
 Alle drei CLI-Sitzungen lieferten mit Exit 0 Antworten: Orientierung 54,34 s,
 Mehrdeutigkeit 33,88 s und trivialer Fall 6,22 s. Der getrennte Zugriffs-Repro
-ist zusätzlich zu diesen drei Qualitätssitzungen zu zählen, insgesamt vier neue
-Modellsitzungen. Kein Retry; keine direkte API oder Account-/Konfigurationsänderung.
+ist zusätzlich zu diesen drei Qualitätssitzungen zu zählen, bis zu diesem Punkt
+vier neue Modellsitzungen. Kein Retry; keine direkte API oder Account-/Konfigurationsänderung.
 
 Der getrennte Prozessreview bestätigt die beobachtbaren Router-, Workflow- und
 Description-Reads. In der Orientierung gab es trotz Shell-Exit 0 vier Teilfehler:
@@ -142,3 +142,37 @@ Fehlers. Er ersetzt das ursprüngliche `partial` nicht und belegt weder allgemei
 Lift noch Wiederholungsstabilität. D7/D8 werden damit nicht erneut am neuen
 Quellenstand geprüft. Bei erneut unvollständiger Antwort bleibt der Befund offen;
 keine weitere Reparatur-/Testschleife in diesem Paket.
+
+## Ergebnis der gezielten Nachprüfung
+
+Die [separate Evidence](Discovery-D6-Recheck-2026-10-29.json) und
+[Antwort](Discovery-D6-Recheck-2026-10-29-answer.md) binden den vorab
+veröffentlichten Quellen-/Ausführungscommit
+`f0f83181d6be368399774e117fc64ba5bdd5f8b7`. Der einzige operative Dateiunterschied
+war das Workflow-README; Prompt, Descriptions, Kriterien und Budgets blieben
+gleich. Frisches Byte-/Write-Gate PASS, ein CLI-Start, Exit 0 nach 65,94 s.
+
+Das Produktreview bestätigt D2 und D4 erneut als `pass`. **D6 bleibt `partial`:**
+Die Antwort verweist jetzt auf den tatsächlichen Beitragsabschnitt und „Workflow
+beitragen“, nennt aber weiterhin weder die Validierung noch die konkreten
+PR-/Review-Schritte. Die gelesenen Quellen enthalten diese Angaben. Der bessere
+Quellenzeiger ist beobachtet, eine vollständige Antwort oder verlässliche
+Qualitätsverbesserung ist nicht nachgewiesen. Alte Urteile werden nicht ersetzt.
+
+Der getrennte Prozessreview bestätigt zehn Commands, Core-Router, passende
+Workflows, den neuen README-Abschnitt, Contribution-Datei und alle sechs exakten
+Overlay-Descriptions sowie den späten Registry-Read. Keine protokollierten
+OS-/Pfad-/Get-Content-Teilfehler gefunden. Die operativen Inventarhashes lassen
+sich aus den Artefakten mit genau der behaupteten README-Differenz rekonstruieren.
+Die vorherigen Antworten, Responses und ursprünglichen Blocker-Dateien bleiben
+unverändert. Das ist beobachtbare Prozess-Evidence, kein interner Routingbeweis.
+
+Die vorab begrenzte Schleife endet hier. Insgesamt fünf native CLI-Modellsitzungen
+in diesem Paket: ein Zugriffs-Repro, drei erste Qualitätssitzungen und eine
+gezielte Nachprüfung. Keine weiteren Modellversuche oder Regelergänzungen.
+
+Vor einem neuen Hardening-Vorschlag das Verhältnis von Auftrag und Rubrik prüfen:
+Die natürliche D6-Frage fragt nach der maßgeblichen Datei; die feste Rubrik
+verlangt zusätzlich den Validierungsweg. Dies ist eine offene methodische Frage,
+kein Grund, die laufende Bewertung nachträglich zu lockern oder Bootstrap-/Skill-
+Regeln pauschal auszuweiten. QMD/Mara und Index-Refresh bleiben `NOT RUN`.
