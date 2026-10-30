@@ -51,4 +51,40 @@ Nicht erprobte Plattformen und semantische Pfade bleiben `NOT RUN`.
 
 ## Ergebnis
 
-Vorabprotokoll; endgültige native Evidence folgt separat.
+Der vor Ausführung veröffentlichte Quellen-/Codecommit ist
+`60dd0f7613393b40c59b5da38ade76247b0dbd5b`. Die
+[maschinenlesbare Evidence](Local-Rule-Search-2026-10-30.json) bindet ihn an
+Code-/Lockfile-Hashes, Protokoll, native Ergebnisse und Gegenproben.
+
+| Teil | Beobachtung | Status |
+| --- | --- | --- |
+| Frisches Setup | leerer Paketordner; pnpm 11.25.0, festes Lockfile, `--ignore-scripts`; QMD 2.8.3 geladen | PASS lokal Windows |
+| Nativer Index | 72 ausgewählte Dokumente; vollständige aktive Pfadmenge, keine übersprungene Datei | PASS |
+| Vier bekannte Entwicklungsfragen | jeweils erwartete Quelle unter den höchstens fünf Treffern | PASS für diese Begriffe |
+| Ausgeschlossene Canary | leere Trefferliste | PASS |
+| Unicode-Dateiname im synthetischen Repo | bekannte Quelle exakt gefunden | PASS |
+| Geänderte synthetische Quelle | `stale`, null Worker-Aufrufe, keine alten Treffer | PASS |
+| Leere ausgewählte Datei | echte QMD-Auslassung trotz `skipped: 0`; aktive Pfadmenge unvollständig, Build zurückgewiesen | PASS Gegenprobe |
+| Nach fehlgeschlagenem Neubau | Status `missing`, kein alter Index bereit | PASS |
+| Originaldateien | alle ausgewählten Rohbytes vor/nach dem Lauf unverändert | PASS |
+
+Die PowerShell-Grenzprobe `-Query '-Quick'` gelangt als Suchtext bis zur
+Engine und liefert eine gültige leere Trefferliste; sie wird nicht mehr als
+Python-Option interpretiert. Ein leerer Treffer ist kein Retrieval-Erfolg.
+
+24 Controller-Testmethoden und die benachbarten bestehenden Prüfungen ergeben
+zusammen 52 Tests: OK mit einem bestehenden Windows-Symlink-Skip. Die
+Controller-Tests verwenden echte Git-/Dateisystemgrenzen und einen injizierten
+Worker; sie sind getrennt vom oben ausgeführten QMD-Nachweis. Zwei tatsächliche
+frühe REDs (DEL-Zeichen und nicht gekapselte Worker-Exception) wurden korrigiert.
+Die beim Review gefundenen CLI-/DB-Redirect-Grenzen sind regressionsgeprüft.
+
+Zwei ausschließlich im Speicher kontrolliert entfernte Guards wurden von den
+jeweiligen Tests erkannt: Trefferbindung mit vier Assertions, vollständige aktive
+Pfadmenge mit drei Assertions. Das ist synthetische Wirksamkeitsevidence für die
+Controller-Guards; der Produktionscode wurde dafür nicht verändert.
+
+Getrennte Reviews prüften Plan, Code, Paket-/SDK-Grenzen, Provenance und das
+Fehler-Orakel. Keine offenen P1/P2 im abschließend geprüften Scope. Andere
+Plattformen, semantische Suche, allgemeines Ranking und Agentenantworten sind
+nicht durch diese Beispiele verifiziert. Maturity und Gates bleiben unverändert.

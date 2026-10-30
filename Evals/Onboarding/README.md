@@ -2,6 +2,10 @@
 
 **Kein zusätzlicher Skill und keine neue LLM-Testengine.** Dieses Verzeichnis hält die überprüfbaren Aufgaben für Human-/Agenten-Onboarding bereit, ohne Testdurchführung vorzutäuschen.
 
+Die [eigenständige lokale QMD-Suche](Local-Rule-Search-2026-10-30.md) hat einen
+separaten nativen BM25-Nachweis mit bekannten Suchbegriffen und synthetischen
+Gegenproben. Er belegt keine semantische Suche oder vollständigen Agentenantworten.
+
 Der [Auffindbarkeits-Pilot für drei Bereiche](Agent-Discovery-Pilot-2026-10-29.md)
 ergänzt bekannte Entwicklungsfragen, Manifest-/Linkchecks und gesondert
 ausgewiesene Kaltlese-Evidence. Er ist kein unabhängiger Retrieval-Benchmark.
