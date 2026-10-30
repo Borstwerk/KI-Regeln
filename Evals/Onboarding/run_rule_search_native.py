@@ -9,7 +9,7 @@ if sys.argv[1:] != ['--run']:
 (root/'.validation/tmp').mkdir(parents=True,exist_ok=True)
 out=pathlib.Path(tempfile.mkdtemp(prefix='native-rule-search-',dir=root/'.validation'))
 sha=lambda b:hashlib.sha256(b).hexdigest()
-node=shutil.which('node')
+node=search.resolve_node()
 revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip()
 protocol={'utc':datetime.now(timezone.utc).isoformat(),'source_commit':revision,'execution_commit':revision,
     'node_version':subprocess.check_output([node,'--version'],text=True).strip(),'qmd_version':'2.8.3','mode':'bm25',

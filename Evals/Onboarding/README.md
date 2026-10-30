@@ -5,6 +5,9 @@
 Die [eigenständige lokale QMD-Suche](Local-Rule-Search-2026-10-30.md) hat einen
 separaten nativen BM25-Nachweis mit bekannten Suchbegriffen und synthetischen
 Gegenproben. Er belegt keine semantische Suche oder vollständigen Agentenantworten.
+Die getrennte [Routing-Erweiterung](Local-Rule-Routing-2026-10-30.md) prüft
+den Bestand aller katalogisierten Skills und die Runtime-Erkennung; Quellenabdeckung
+ist keine Garantie vollständiger Relevanz je Suchanfrage.
 
 Der [Auffindbarkeits-Pilot für drei Bereiche](Agent-Discovery-Pilot-2026-10-29.md)
 ergänzt bekannte Entwicklungsfragen, Manifest-/Linkchecks und gesondert

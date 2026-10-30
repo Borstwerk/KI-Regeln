@@ -24,7 +24,7 @@ try {
     output = {paths: paths(), skipped: result.skipped};
   } else {
     if (JSON.stringify(paths()) !== JSON.stringify(request.paths)) throw new Error('Incomplete collection');
-    const results = await store.searchLex(request.query, {limit: 5, collection: 'ki-regeln'});
+    const results = await store.searchLex(request.query, {limit: request.limit ?? 5, collection: 'ki-regeln'});
     output = {hits: results.map(hit => {
       const prefix = 'qmd://ki-regeln/';
       if (!hit.filepath.startsWith(prefix)) throw new Error('Unexpected collection');

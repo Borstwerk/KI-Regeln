@@ -370,6 +370,75 @@ class RuleSearchTests(unittest.TestCase):
         self.assertEqual(len(self.requests), calls)
 
 
+class RuleSearchRuntimeTests(unittest.TestCase):
+    """Resolve existing paths only; fixture files are never executed."""
+
+    def setUp(self):
+        tmp_parent = ROOT / ".validation" / "tmp"
+        tmp_parent.mkdir(parents=True, exist_ok=True)
+        self.tmp = tempfile.TemporaryDirectory(prefix="rule-runtime-test-", dir=tmp_parent)
+        self.addCleanup(self.tmp.cleanup)
+        self.home = Path(self.tmp.name) / "home"
+        self.home.mkdir()
+        home = patch.object(Path, "home", return_value=self.home)
+        home.start()
+        self.addCleanup(home.stop)
+        processes = patch.object(subprocess, "Popen", side_effect=AssertionError(
+            "Runtime path resolution must not launch a process"))
+        processes.start()
+        self.addCleanup(processes.stop)
+
+    def executable(self, directory):
+        target = directory / ("node.exe" if os.name == "nt" else "node")
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(b"Synthetic executable fixture; never run")
+        target.chmod(0o755)
+        return target.resolve()
+
+    def bundled_node(self):
+        return self.executable(self.home / ".cache" / "codex-runtimes" /
+                               "codex-primary-runtime" / "dependencies" / "node" / "bin")
+
+    def test_node_on_path_is_preferred_over_existing_bundled_runtime(self):
+        self.bundled_node()
+        expected = self.executable(Path(self.tmp.name) / "path-bin")
+        with patch.dict(os.environ, {"PATH": str(expected.parent)}):
+            resolved = search_rules.resolve_node()
+        self.assertTrue(Path(resolved).is_absolute())
+        self.assertEqual(Path(resolved), expected)
+
+    def test_missing_path_node_uses_existing_bundled_runtime(self):
+        expected = self.bundled_node()
+        with patch.object(shutil, "which", return_value=None):
+            resolved = search_rules.resolve_node()
+        self.assertTrue(Path(resolved).is_absolute())
+        self.assertEqual(Path(resolved), expected)
+
+    def test_missing_explicit_node_is_never_replaced_by_available_bundle(self):
+        self.bundled_node()
+        missing = str(Path(self.tmp.name) / "missing-node.exe")
+        with patch.object(shutil, "which", return_value=None):
+            with self.assertRaises(search_rules.SearchError) as raised:
+                search_rules.resolve_node(explicit=missing)
+        self.assertEqual(raised.exception.status, "runtime-missing")
+        self.assertTrue(str(raised.exception))
+
+    def test_no_path_or_bundled_node_reports_runtime_missing(self):
+        with patch.object(shutil, "which", return_value=None):
+            with self.assertRaises(search_rules.SearchError) as raised:
+                search_rules.resolve_node()
+        self.assertEqual(raised.exception.status, "runtime-missing")
+        self.assertTrue(str(raised.exception))
+
+    def test_empty_explicit_node_does_not_select_available_path_or_bundle(self):
+        bundled = self.bundled_node()
+        with patch.object(shutil, "which", return_value=str(bundled)) as which:
+            with self.assertRaises(search_rules.SearchError) as raised:
+                search_rules.resolve_node(explicit="")
+        self.assertEqual(raised.exception.status, "runtime-missing")
+        which.assert_not_called()
+
+
 class RuleSearchCliTests(unittest.TestCase):
     def test_leading_dash_query_is_forwarded_exactly_after_option_separator(self):
         with (

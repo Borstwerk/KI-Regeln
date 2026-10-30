@@ -8,6 +8,7 @@ import io
 import json
 import math
 import os
+import re
 from pathlib import Path, PurePosixPath
 import shutil
 import stat
@@ -15,10 +16,11 @@ import subprocess
 import sys
 import tempfile
 import zipfile
+import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from tools.check_public_entrypoints import validate_project_manifest
+from tools.check_public_entrypoints import PROJECT_CORE, validate_project_manifest
 
 QMD_VERSION = '2.8.3'
 BRIDGE = Path(__file__).with_name('search_rules_qmd.mjs')
@@ -34,6 +36,20 @@ def digest(body):
     return hashlib.sha256(body).hexdigest()
 
 
+def resolve_node(explicit=None):
+    """Reuse an installed executable; never install or replace an explicit choice."""
+    found = shutil.which(explicit if explicit is not None else 'node') if explicit != '' else None
+    if not found and explicit is None:
+        executable = 'node.exe' if os.name == 'nt' else 'node'
+        bundled = Path.home() / '.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin' / executable
+        if bundled.is_file():
+            found = str(bundled)
+    if not found:
+        raise SearchError('Node.js executable not found. Supply -NodePath (or --node) for an existing Node.js 22+ runtime.',
+                          'runtime-missing')
+    return str(Path(found).resolve())
+
+
 def git(root, *args):
     try:
         return subprocess.check_output(['git', *args], cwd=root, stderr=subprocess.PIPE)
@@ -41,9 +57,9 @@ def git(root, *args):
         raise SearchError('Git source snapshot could not be read.') from exc
 
 
-def state_dir(root):
+def state_dir(root, routing=False):
     root = Path(root).resolve()
-    state = root / '.validation' / 'rule-search'
+    state = root / '.validation' / ('rule-routing' if routing else 'rule-search')
     for path in (root / '.validation', state):
         if path.is_symlink() or path.is_junction() or not path.resolve().is_relative_to(root):
             raise SearchError('Redirected search state is not allowed.')
@@ -51,24 +67,56 @@ def state_dir(root):
     return state
 
 
-def read_snapshot(root, revision=None):
+def read_snapshot(root, revision=None, routing=False):
     """Validate the exported regular Git blobs, not a different working tree."""
     root = Path(root).resolve()
     commit = git(root, 'rev-parse', '--verify', (revision or 'HEAD') + '^{commit}').decode().strip()
     manifest = git(root, 'show', commit + ':mara-project.json')
+    dependencies = {}
+    skill_entries = {}
     try:
         config = json.loads(manifest)
         selected = config['search']['include']
         entries = list(config['entrypoints'].values())
+        if routing:
+            for name in ('skill-catalog.yml', 'workflow-index.yml', 'routing-overlays.yml'):
+                dependencies[name] = git(root, 'show', commit + ':' + name)
+            catalog = yaml.safe_load(dependencies['skill-catalog.yml'])
+            workflows = yaml.safe_load(dependencies['workflow-index.yml'])
+            overlays = yaml.safe_load(dependencies['routing-overlays.yml'])
+            ids, folded_ids, folded_paths = set(), set(), set()
+            if not isinstance(catalog.get('skills'), list) or not catalog['skills']:
+                raise ValueError('missing skill catalog')
+            for item in catalog['skills']:
+                identifier, path = item['id'], item['path']
+                if (not isinstance(identifier, str) or not re.fullmatch(r'[a-z0-9][a-z0-9-]*', identifier)
+                        or not isinstance(path, str)
+                        or not path.endswith('/Skills/' + identifier + '/SKILL.md')
+                        or identifier.casefold() in folded_ids or path.casefold() in folded_paths):
+                    raise ValueError('duplicate or invalid canonical skill')
+                ids.add(identifier)
+                folded_ids.add(identifier.casefold())
+                folded_paths.add(path.casefold())
+                skill_entries[path] = item
+            if (not isinstance(workflows.get('workflows'), list)
+                    or any(not isinstance(path, str) or not path.startswith('Workflows/') or not path.endswith('.md')
+                           for path in workflows['workflows'])):
+                raise ValueError('invalid workflow index')
+            if (not isinstance(overlays.get('overlays'), list)
+                    or any(item.get('skill') not in ids for item in overlays['overlays'])):
+                raise ValueError('unknown overlay owner')
+            selected = sorted(PROJECT_CORE | {'Workflows/README.md'} | set(skill_entries))
+            # Derived selection only: no second maintained catalog or modified source manifest.
+            config = {**config, 'search': {'include': selected, 'exclude': config['search']['exclude']}}
         if not isinstance(selected, list):
             raise ValueError('not a list')
-        names = list(dict.fromkeys([*selected, *entries, 'mara-project.json']))
+        names = list(dict.fromkeys([*selected, *entries, 'mara-project.json', *dependencies]))
         for name in names:
             if (not isinstance(name, str) or not name or '\\' in name or ':' in name
                     or PurePosixPath(name).is_absolute() or '..' in PurePosixPath(name).parts
                     or any(c in name for c in '*?[]')):
                 raise ValueError('unsafe literal path')
-    except (ValueError, TypeError, KeyError, AttributeError) as exc:
+    except (ValueError, TypeError, KeyError, AttributeError, yaml.YAMLError) as exc:
         raise SearchError('Invalid explicit source manifest.') from exc
     tree = {}
     for row in git(root, 'ls-tree', '-rz', '--full-tree', commit, '--', *names).split(b'\0'):
@@ -99,12 +147,14 @@ def read_snapshot(root, revision=None):
     if set(exported) != set(names):
         raise SearchError('Source snapshot is incomplete.')
     # The existing manifest validator owns selection limits and forbidden sources.
-    with tempfile.TemporaryDirectory(prefix='validate-', dir=state_dir(root)) as temporary:
+    with tempfile.TemporaryDirectory(prefix='validate-', dir=state_dir(root, routing)) as temporary:
         snapshot = Path(temporary)
         for name, body in exported.items():
             target = snapshot / name
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_bytes(body)
+        if routing:
+            (snapshot / 'mara-project.json').write_text(json.dumps(config), encoding='utf-8')
         errors, _ = validate_project_manifest(snapshot)
         if errors:
             raise SearchError('Source selection rejected: ' + '; '.join(errors))
@@ -112,6 +162,21 @@ def read_snapshot(root, revision=None):
     metadata = {'revision': commit, 'engine': 'qmd', 'version': QMD_VERSION, 'mode': 'bm25',
                 'manifest_sha256': digest(manifest),
                 'files': {name: digest(body) for name, body in sorted(files.items())}}
+    if routing:
+        skills = {}
+        for path, entry in skill_entries.items():
+            try:
+                text = files[path].decode('utf-8')
+                front = yaml.safe_load(text.split('---', 2)[1]) if text.startswith('---\n') else None
+                if (not isinstance(front, dict) or front.get('name') != entry['id']
+                        or not isinstance(front.get('description'), str) or not front['description'].strip()):
+                    raise ValueError('invalid canonical descriptor')
+            except (UnicodeError, ValueError, IndexError, yaml.YAMLError) as exc:
+                raise SearchError('Invalid canonical skill description: ' + path) from exc
+            skills[path] = {'id': entry['id'], 'description': front['description'],
+                            'maturity': entry.get('maturity'), 'eval_coverage': entry.get('eval_coverage')}
+        metadata.update(skills=skills, routing_dependencies={name: digest(body) for name, body in dependencies.items()},
+                        routing_coverage={'skills': len(skills), 'indexed_skills': len(skills)})
     metadata['fingerprint'] = digest(json.dumps(metadata, sort_keys=True).encode())
     if revision is None:
         # Git LF blobs are canonical; ordinary Windows checkout CRLF is equivalent.
@@ -131,8 +196,8 @@ def read_snapshot(root, revision=None):
 
 
 @contextmanager
-def locked(root):
-    lock = state_dir(root) / 'search.lock'
+def locked(root, routing=False):
+    lock = state_dir(root, routing) / 'search.lock'
     try:
         handle = lock.open('x')
     except FileExistsError as exc:
@@ -146,6 +211,7 @@ def locked(root):
 
 
 def call_worker(node, request):
+    node = resolve_node(node)
     env = os.environ.copy()
     for name in tuple(env):
         if name.startswith(('OPENAI_', 'ANTHROPIC_', 'CODEX_API_')) or name in ('NODE_OPTIONS', 'NODE_PATH', 'QMD_TRUST_UPDATE_HOOKS'):
@@ -155,9 +221,15 @@ def call_worker(node, request):
                               text=True, encoding='utf-8', env=env, timeout=120)
         if done.returncode or len(done.stdout.encode()) > 1024 * 1024:
             raise SearchError('QMD runtime failed; no fallback. Check its local installation.')
-        return json.loads(done.stdout)
-    except (OSError, ValueError, subprocess.TimeoutExpired) as exc:
-        raise SearchError('QMD runtime unavailable; install the pinned optional runtime.') from exc
+        try:
+            return json.loads(done.stdout)
+        except ValueError as exc:
+            raise SearchError('QMD returned an invalid JSON response.', 'runtime-error') from exc
+    except subprocess.TimeoutExpired as exc:
+        raise SearchError('QMD exceeded its 120 second runtime limit.', 'runtime-timeout') from exc
+    except OSError as exc:
+        raise SearchError('The selected Node.js executable could not be started. Check -NodePath (or --node).',
+                          'runtime-missing') from exc
 
 
 def invoke(worker, node, request):
@@ -177,8 +249,8 @@ def plain_cache_entry(path, boundary):
         raise SearchError('Redirected cache entries are not allowed.')
 
 
-def current(root):
-    state = state_dir(root)
+def current(root, routing=False):
+    state = state_dir(root, routing)
     try:
         plain_cache_entry(state / 'current.json', state)
         pointer = json.loads((state / 'current.json').read_text(encoding='utf-8'))
@@ -197,18 +269,18 @@ def current(root):
             raise ValueError('missing corpus')
     except (OSError, ValueError, KeyError, TypeError) as exc:
         raise SearchError('No complete index. Build it explicitly first.', 'missing') from exc
-    actual, _ = read_snapshot(root)
+    actual, _ = read_snapshot(root, routing=routing)
     if metadata != actual:
         raise SearchError('Index is stale. Rebuild explicitly.', 'stale')
     return directory, metadata
 
 
-def build(root, node='node', worker=call_worker):
+def build(root, node=None, worker=call_worker, routing=False):
     root = Path(root).resolve()
-    with locked(root):
-        state = state_dir(root)
+    with locked(root, routing):
+        state = state_dir(root, routing)
         (state / 'current.json').unlink(missing_ok=True)
-        metadata, files = read_snapshot(root)
+        metadata, files = read_snapshot(root, routing=routing)
         directory = Path(tempfile.mkdtemp(prefix='build-', dir=state))
         corpus = directory / 'corpus'
         corpus.mkdir()
@@ -220,7 +292,7 @@ def build(root, node='node', worker=call_worker):
         result = invoke(worker, node, {'action': 'build', 'corpus': str(corpus), 'db': str(db), 'paths': sorted(files)})
         if (result.get('skipped') != 0 or result.get('paths') != sorted(files) or not db.is_file()):
             raise SearchError('QMD produced an incomplete index.')
-        after, _ = read_snapshot(root)
+        after, _ = read_snapshot(root, routing=routing)
         if after != metadata:
             raise SearchError('Sources changed during index build.', 'stale')
         (directory / 'snapshot.json').write_text(json.dumps(metadata, sort_keys=True), encoding='utf-8')
@@ -228,19 +300,23 @@ def build(root, node='node', worker=call_worker):
             handle.write(json.dumps({'directory': directory.name}))
             pending = Path(handle.name)
         pending.replace(state / 'current.json')
-        return {'status': 'ready', 'revision': metadata['revision'], 'documents': len(files),
-                'mode': 'bm25', 'fingerprint': metadata['fingerprint']}
+        output = {'status': 'ready', 'revision': metadata['revision'], 'documents': len(files),
+                  'mode': 'bm25', 'fingerprint': metadata['fingerprint']}
+        if routing:
+            output['routing_coverage'] = metadata['routing_coverage']
+        return output
 
 
-def search(root, query, node='node', worker=call_worker):
+def search(root, query, node=None, worker=call_worker, routing=False):
     if not isinstance(query, str) or not query.strip() or len(query) > 500 or not query.isprintable():
         raise SearchError('Query must contain 1–500 printable characters.')
-    with locked(root):
-        directory, metadata = current(root)
+    with locked(root, routing):
+        directory, metadata = current(root, routing)
+        limit = 10 if routing else 5
         result = invoke(worker, node, {'action': 'search', 'query': query, 'corpus': str(directory / 'corpus'),
-                               'db': str(directory / 'index.sqlite'), 'paths': sorted(metadata['files'])})
+                               'db': str(directory / 'index.sqlite'), 'paths': sorted(metadata['files']), 'limit': limit})
         hits = result.get('hits')
-        if not isinstance(hits, list) or len(hits) > 5:
+        if not isinstance(hits, list) or len(hits) > limit:
             raise SearchError('Invalid QMD results.')
         for hit in hits:
             if (not isinstance(hit, dict) or not isinstance(hit.get('path'), str) or hit['path'] not in metadata['files']
@@ -248,19 +324,32 @@ def search(root, query, node='node', worker=call_worker):
                     or not isinstance(hit.get('snippet'), str) or len(hit['snippet']) > 600
                     or type(hit.get('score')) not in (int, float) or not math.isfinite(hit['score'])):
                 raise SearchError('Unexpected source or content in QMD results.')
-        _, after = current(root)
+        _, after = current(root, routing)
         if metadata != after:
             raise SearchError('Sources changed during search.', 'stale')
-        return {'status': 'ready', 'revision': metadata['revision'], 'mode': 'bm25',
-                'fingerprint': metadata['fingerprint'], 'hits': hits}
+        output = {'status': 'ready', 'revision': metadata['revision'], 'mode': 'bm25',
+                  'fingerprint': metadata['fingerprint'], 'hits': hits}
+        if routing:
+            for hit in hits:
+                if hit['path'] in metadata['skills']:
+                    hit.update(kind='skill', skill=metadata['skills'][hit['path']])
+                else:
+                    hit['kind'] = 'guide'
+            output.update(candidates_only=True, routing_coverage=metadata['routing_coverage'],
+                          routing_sources={'master': 'Dokumentation/Skill-Handbuch.md', 'catalog': 'skill-catalog.yml',
+                                           'overlays': 'routing-overlays.yml', 'workflows': 'workflow-index.yml'})
+        return output
 
 
-def status(root):
+def status(root, routing=False):
     try:
-        with locked(root):
-            _, metadata = current(root)
-            return {'status': 'ready', 'revision': metadata['revision'], 'mode': 'bm25',
-                    'documents': len(metadata['files']), 'fingerprint': metadata['fingerprint']}
+        with locked(root, routing):
+            _, metadata = current(root, routing)
+            output = {'status': 'ready', 'revision': metadata['revision'], 'mode': 'bm25',
+                      'documents': len(metadata['files']), 'fingerprint': metadata['fingerprint']}
+            if routing:
+                output['routing_coverage'] = metadata['routing_coverage']
+            return output
     except SearchError as exc:
         return {'status': exc.status, 'message': str(exc)}
 
@@ -269,11 +358,13 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('action', choices=('build', 'status', 'search'))
     parser.add_argument('query', nargs='?')
-    parser.add_argument('--node', default=shutil.which('node') or 'node')
+    parser.add_argument('--node')
+    parser.add_argument('--routing', action='store_true', help='Search every catalogued canonical skill, independently of the pilot selection')
     args = parser.parse_args()
     try:
-        result = (build(ROOT, args.node) if args.action == 'build' else status(ROOT)
-                  if args.action == 'status' else search(ROOT, args.query, args.node))
+        options = {'routing': True} if args.routing else {}
+        result = (build(ROOT, args.node, **options) if args.action == 'build' else status(ROOT, **options)
+                  if args.action == 'status' else search(ROOT, args.query, args.node, **options))
     except SearchError as exc:
         result = {'status': exc.status, 'message': str(exc)}
     if hasattr(sys.stdout, 'reconfigure'):
