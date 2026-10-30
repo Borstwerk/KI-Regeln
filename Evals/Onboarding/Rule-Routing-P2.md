@@ -89,6 +89,45 @@ weiterhin höchstens zehn sichtbare Einträge in der Defaultseite. Elf gültige
 Treffer sind mit P2 ein legitimer mehrseitiger Fall, kein zu verwerfender Workerfehler.
 Das ist die explizite Vertragserweiterung aus dem freigegebenen Plan.
 
-Unabhängiger Source-/Testreview: keine offenen P1/P2. Nativer Nachweis und spätere
-Agentenauswahl: **NOT RUN** bis zur tatsächlichen Ausführung. Keine Maturity- oder
-allgemeine Recall-Hochstufung.
+Unabhängiger Source-/Testreview: keine offenen P1/P2.
+
+## Nativer Nachweis
+
+Der Vorabvertrag wurde in `1900b68`, die Implementierung in `e51a7df` fixiert.
+Der erste synthetische Fixture-Aufbau stoppte vor dem Worker: Windows hatte LF
+beim Schreiben in CRLF umgewandelt, womit das kanonische Frontmatter ungültig war.
+Seit `f23484e` schreibt der Treiber ausdrücklich LF. Produktionsguards und
+Abnahmekriterien wurden dafür nicht verändert.
+
+Der [feste Prüflauf](run_rule_routing_p2_native.py) installiert nichts:
+
+```powershell
+.validation/runtime/venv/Scripts/python.exe Evals/Onboarding/run_rule_routing_p2_native.py --run
+```
+
+Die [maschinenlesbare Evidence](Rule-Routing-P2.json) enthält den nativen Bericht,
+Code-/Case-/Protokoll-/Rohbericht-Hashes, kompakte Regressionsergebnisse und die
+kontrollierten Guard-Gegenproben. Die ausgeführten Checkoutbytes sind an die
+jeweiligen Gitfassungen gebunden; abweichende CRLF/LF-Zeilenenden sind ausdrücklich
+als äquivalent statt als bytegleich ausgewiesen. Katalogseiten speichern IDs und
+Digests ihrer vollständig geprüften Descriptor-Payloads statt erneut alle Quellen
+zu duplizieren.
+
+| Kriterium | Tatsächliches Ergebnis |
+| --- | --- |
+| `contract-pagination` | 14 echte QMD-Treffer über vier Seiten, jede Quelle genau einmal, globale Score-/Pfadordnung; tatsächlich eine Score-Gleichstandsgruppe |
+| `contract-stale` | Quellenedit ergibt stale; nach Rebuild ist der alte Cursor invalid-cursor; jeweils null Worker-Aufrufe |
+| `contract-descriptors` | 155 kanonische Beschreibungen über sieben Seiten; Node-, QMD- und Ready-Index-Aufrufe durch verbotene Stubs gesperrt, null Aufrufe |
+| Descriptions und Metadaten | unabhängig gegen YAML-Inventar und Originaldateien geprüft, Quellenhashes stimmen |
+| Originaldateien | alle vor/nach dem Lauf geprüften Rohbytes unverändert |
+| P1-Regression mit unverändertem Quellenpaket und Oracle | weiterhin 15/16 Suchfälle bestanden, keine Regression |
+
+Die drei technischen P2-Vertragsfälle bestehen. Die fünf P3-Fälle bleiben **NOT
+RUN**. Sie werden nicht mit Retrievalwerten zu einer allgemeinen Qualitätsquote
+vermischt. Der P1-Retrievalstatus bleibt **PARTIAL**: `Akzeptanzkriterien beobachtbar`
+findet weiterhin `acceptance-criteria-design` nicht. Der Skill ist in der
+vollständigen Descriptor-Ausgabe erreichbar; das ist keine Verbesserung dieses
+Suchfalls und keine bereits ausgeführte fachliche Prüfung.
+
+Natürliche Agentenauswahl und semantischer Recall bleiben **NOT RUN / UNVERIFIED**.
+Keine Maturity- oder allgemeine Recall-Hochstufung.

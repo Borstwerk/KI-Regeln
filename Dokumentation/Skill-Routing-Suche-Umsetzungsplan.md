@@ -262,7 +262,9 @@ P0 ist als Kriterien-/Quellenvertrag eingefroren. Der technische P1-Slice ist mi
 getrenntem [Vorher/Nachher-Nachweis](../Evals/Onboarding/Rule-Routing-P0-P1.md)
 geliefert: 13 → 15 von 16 Suchfällen, ohne Regression; Retrievalurteil PARTIAL.
 P2-Trefferseiten und Descriptor-Auflistung sind implementiert; der getrennte
-[P2-Nachweis](../Evals/Onboarding/Rule-Routing-P2.md) hält die tatsächlichen Prüfungen fest.
+[P2-Nachweis](../Evals/Onboarding/Rule-Routing-P2.md) belegt die drei Vertragsfälle
+mit echten QMD-Seiten und allen 155 Descriptions ohne Node/QMD. Die verbleibende
+P1-Retrievallücke bleibt PARTIAL.
 P3-Beziehungen und die verbleibenden P4/P5-Schritte sind noch **NOT
 IMPLEMENTED / NOT RUN**. Frühere Testresultate belegen ausschließlich ihren
 jeweiligen Stand; dieser Plan selbst ist kein Qualitätsnachweis.

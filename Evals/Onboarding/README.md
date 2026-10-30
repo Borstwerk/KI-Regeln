@@ -11,6 +11,9 @@ ist keine Garantie vollständiger Relevanz je Suchanfrage.
 Der anschließende [P0/P1-Vergleich](Rule-Routing-P0-P1.md) friert 24 Fälle ein,
 vergleicht zunächst 16 Suchfälle auf demselben Quellenpaket und dokumentiert
 die Wirkung zusätzlicher Katalogtexte; spätere Fälle bleiben gesondert NOT RUN.
+Der getrennte [P2-Nachweis](Rule-Routing-P2.md) belegt native Trefferseiten,
+Cursor-/Snapshotgrenzen und vollständige Descriptor-Ausgabe ohne Node/QMD.
+Die P1-Retrievallücke und noch nicht ausgeführte P3-Fälle bleiben sichtbar.
 
 Der [Auffindbarkeits-Pilot für drei Bereiche](Agent-Discovery-Pilot-2026-10-29.md)
 ergänzt bekannte Entwicklungsfragen, Manifest-/Linkchecks und gesondert

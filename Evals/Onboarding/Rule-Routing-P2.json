@@ -1,0 +1,1114 @@
+{
+  "native": {
+    "protocol": {
+      "utc": "2026-10-30T19:16:18.073837+00:00",
+      "source_commit": "f23484e70f51f5a120a51601d36d1cdfaac7fe24",
+      "code_sha256": {
+        "tools/search_rules.py": "bd45e61c966eb57609f2ce986aa3fe0b324d10a132b63bd36efc6aa945dd1aa2",
+        "tools/search_rules_qmd.mjs": "d9c4b3f9222ad7928dfcb1860fd0e975024512ab4e4dedf915820ed283737155",
+        "Search-KI-Regeln.ps1": "673b5de08720c85ee28cbf2f6c2af5599757ec278fbf4fb244d27fec81ad6ba3",
+        "tools/check_public_entrypoints.py": "65607d90c95273fcdf9088ec29005b2f6b58a90672b9449a234be1d7d43c1976",
+        "tools/local_search/pnpm-lock.yaml": "30381a3497bf589cd694665a806736e83b724be7670952f0afc2e207fc20b528",
+        "Evals/Onboarding/run_rule_routing_p2_native.py": "5ab92fc5fcc8d0e8ae63b4484fe37572ae9d58e0abb3fc1775d1f58dffcb4d91"
+      },
+      "cases_sha256": "b29da5a3e7b817dbb7d37485e7628bd38a58f89a0377a1e13414343699b123df",
+      "contracts": [
+        "contract-pagination",
+        "contract-stale",
+        "contract-descriptors"
+      ],
+      "node_version": "v24.22.1",
+      "qmd_version": "2.8.3",
+      "mode": "bm25",
+      "model_calls": 0,
+      "held_out": false,
+      "query": "zznativepaginationb8e349c2",
+      "expected_paths": [
+        "Fixture/Skills/page-00/SKILL.md",
+        "Fixture/Skills/page-01/SKILL.md",
+        "Fixture/Skills/page-02/SKILL.md",
+        "Fixture/Skills/page-03/SKILL.md",
+        "Fixture/Skills/page-04/SKILL.md",
+        "Fixture/Skills/page-05/SKILL.md",
+        "Fixture/Skills/page-06/SKILL.md",
+        "Fixture/Skills/page-07/SKILL.md",
+        "Fixture/Skills/page-08/SKILL.md",
+        "Fixture/Skills/page-09/SKILL.md",
+        "Fixture/Skills/page-10/SKILL.md",
+        "Fixture/Skills/page-11/SKILL.md",
+        "Fixture/Skills/page-12/SKILL.md",
+        "Fixture/Skills/page-13/SKILL.md"
+      ],
+      "expected_documents": 24,
+      "page_size": 4
+    },
+    "protocol_sha256": "3d04ba22d99871d544f41661ebf2895b1138252b24f46ae643eaf1ca9d13043d",
+    "native": {
+      "build": {
+        "status": "ready",
+        "revision": "d316b1738c4169e4e49e7b79b29d9ddf8a277997",
+        "documents": 24,
+        "mode": "bm25",
+        "fingerprint": "395cd30246ca3acc23737c0cf01d4606e6f3b13414dc9d549e9fa06518470549",
+        "routing_coverage": {
+          "skills": 14,
+          "indexed_skills": 14
+        }
+      },
+      "pages": [
+        {
+          "status": "ready",
+          "revision": "d316b1738c4169e4e49e7b79b29d9ddf8a277997",
+          "mode": "bm25",
+          "fingerprint": "395cd30246ca3acc23737c0cf01d4606e6f3b13414dc9d549e9fa06518470549",
+          "hits": [
+            {
+              "path": "Fixture/Skills/page-00/SKILL.md",
+              "score": 8.540097863843037e-07,
+              "snippet": "@@ -6,4 @@ (5 before, 6 after)\n# Synthetic skill\nzznativepaginationb8e349c2\n\n",
+              "content_sha256": "fe233d2719e53e062fb605e90ccfe9e9b98fccdd5be03da84e4785eb31988501",
+              "search_document_sha256": "ab293d86a4eb4263b6570a35071e372c830fcd53b4584c00940633202bfee25b",
+              "snippet_origin": "derived-search-document",
+              "sources": [
+                {
+                  "path": "Fixture/Skills/page-00/SKILL.md",
+                  "sha256": "fe233d2719e53e062fb605e90ccfe9e9b98fccdd5be03da84e4785eb31988501"
+                },
+                {
+                  "path": "skill-catalog.yml",
+                  "sha256": "1391be2dfff1afb38c0a8f3d1f8c3f436b9d235031ff4e9147ff763a1103ccec",
+                  "fields": [
+                    "skills[page-00].id",
+                    "skills[page-00].area",
+                    "skills[page-00].purpose"
+                  ]
+                }
+              ],
+              "kind": "skill",
+              "skill": {
+                "description": "Synthetic pagination skill.",
+                "eval_coverage": "none",
+                "id": "page-00",
+                "maturity": "experimental"
+              }
+            },
+            {
+              "path": "Fixture/Skills/page-01/SKILL.md",
+              "score": 8.540097863843037e-07,
+              "snippet": "@@ -6,4 @@ (5 before, 6 after)\n# Synthetic skill\nzznativepaginationb8e349c2\n\n",
+              "content_sha256": "faeca9a7ec753eec85cfcd6bcc02302c17775260a6d2fd5b60af5c137502aee4",
+              "search_document_sha256": "63adf77a5a9a37d48a751b70c971431736a8aa887171e714293c13e67fdc14b4",
+              "snippet_origin": "derived-search-document",
+              "sources": [
+                {
+                  "path": "Fixture/Skills/page-01/SKILL.md",
+                  "sha256": "faeca9a7ec753eec85cfcd6bcc02302c17775260a6d2fd5b60af5c137502aee4"
+                },
+                {
+                  "path": "skill-catalog.yml",
+                  "sha256": "1391be2dfff1afb38c0a8f3d1f8c3f436b9d235031ff4e9147ff763a1103ccec",
+                  "fields": [
+                    "skills[page-01].id",
+                    "skills[page-01].area",
+                    "skills[page-01].purpose"
+                  ]
+                }
+              ],
+              "kind": "skill",
+              "skill": {
+                "description": "Synthetic pagination skill.",
+                "eval_coverage": "none",
+                "id": "page-01",
+                "maturity": "experimental"
+              }
+            },
+            {
+              "path": "Fixture/Skills/page-02/SKILL.md",
+              "score": 8.540097863843037e-07,
+              "snippet": "@@ -6,4 @@ (5 before, 6 after)\n# Synthetic skill\nzznativepaginationb8e349c2\n\n",
+              "content_sha256": "2bdf9d3719ae86a33a0c0f11f50768ec76dbaa0eb31c6d8f6b76f48bb43a1dbc",
+              "search_document_sha256": "f0fddb96346cf3625b85d510e5173b32a08f3a4e3d9a42abb8b49ba036f5cbd6",
+              "snippet_origin": "derived-search-document",
+              "sources": [
+                {
+                  "path": "Fixture/Skills/page-02/SKILL.md",
+                  "sha256": "2bdf9d3719ae86a33a0c0f11f50768ec76dbaa0eb31c6d8f6b76f48bb43a1dbc"
+                },
+                {
+                  "path": "skill-catalog.yml",
+                  "sha256": "1391be2dfff1afb38c0a8f3d1f8c3f436b9d235031ff4e9147ff763a1103ccec",
+                  "fields": [
+                    "skills[page-02].id",
+                    "skills[page-02].area",
+                    "skills[page-02].purpose"
+                  ]
+                }
+              ],
+              "kind": "skill",
+              "skill": {
+                "description": "Synthetic pagination skill.",
+                "eval_coverage": "none",
+                "id": "page-02",
+                "maturity": "experimental"
+              }
+            },
+            {
+              "path": "Fixture/Skills/page-03/SKILL.md",
+              "score": 8.540097863843037e-07,
+              "snippet": "@@ -6,4 @@ (5 before, 6 after)\n# Synthetic skill\nzznativepaginationb8e349c2\n\n",
+              "content_sha256": "f4048e1279cacccc8a3a46addfe9d5ec6b9dcfa87407f658f7326f85bec013f8",
+              "search_document_sha256": "c1410800a0cef98859895d45b46fd703663e344542b1f5886dde302cfcc8997e",
+              "snippet_origin": "derived-search-document",
+              "sources": [
+                {
+                  "path": "Fixture/Skills/page-03/SKILL.md",
+                  "sha256": "f4048e1279cacccc8a3a46addfe9d5ec6b9dcfa87407f658f7326f85bec013f8"
+                },
+                {
+                  "path": "skill-catalog.yml",
+                  "sha256": "1391be2dfff1afb38c0a8f3d1f8c3f436b9d235031ff4e9147ff763a1103ccec",
+                  "fields": [
+                    "skills[page-03].id",
+                    "skills[page-03].area",
+                    "skills[page-03].purpose"
+                  ]
+                }
+              ],
+              "kind": "skill",
+              "skill": {
+                "description": "Synthetic pagination skill.",
+                "eval_coverage": "none",
+                "id": "page-03",
+                "maturity": "experimental"
+              }
+            }
+          ],
+          "total_matches": 14,
+          "offset": 0,
+          "page_size": 4,
+          "has_more": true,
+          "next_cursor": "eyJjaGVja3N1bSI6ImY0N2FkMzg4ODIwM2M3NmFhODRjNDQyZWRiZDQ1ZTAxYjA4MzFlZDA3ZjY4MGY2ZWJmNTg3NTg2MWY0ZGY3MTYiLCJjb250ZXh0IjoiOWJiZjI2ZjUzZmQ0MGE2NzgxNzA2Y2VkYTFkNjU4ZDljZjIzNjQ3MTIyZDIzNTNkN2M5NWE2ZTZmZWExZWNjYyIsImxpbWl0Ijo0LCJvZmZzZXQiOjQsInJlc3VsdHMiOiIxYTBhNTQwMzZlNzI1NTYyNmQ5MTQxMTQ4OGU2NzE0MmRiOTEyMjUyNGVhYTg3ZThmMzc0MDNjMjQwYzNkN2NmIiwidiI6MX0",
+          "candidates_only": true,
+          "routing_coverage": {
+            "indexed_skills": 14,
+            "skills": 14
+          },
+          "routing_sources": {
+            "master": "Dokumentation/Skill-Handbuch.md",
+            "catalog": "skill-catalog.yml",
+            "overlays": "routing-overlays.yml",
+            "workflows": "workflow-index.yml"
+          }
+        },
+        {
+          "status": "ready",
+          "revision": "d316b1738c4169e4e49e7b79b29d9ddf8a277997",
+          "mode": "bm25",
+          "fingerprint": "395cd30246ca3acc23737c0cf01d4606e6f3b13414dc9d549e9fa06518470549",
+          "hits": [
+            {
+              "path": "Fixture/Skills/page-04/SKILL.md",
+              "score": 8.540097863843037e-07,
+              "snippet": "@@ -6,4 @@ (5 before, 6 after)\n# Synthetic skill\nzznativepaginationb8e349c2\n\n",
+              "content_sha256": "a970f2b1d595e0242418c0cb3168e4a83351d62d93c5132bd09ba4e4631e3807",
+              "search_document_sha256": "b747eba8eed619b1666aed0df4c1176af10c3ced08549d4eec07b661731b521c",
+              "snippet_origin": "derived-search-document",
+              "sources": [
+                {
+                  "path": "Fixture/Skills/page-04/SKILL.md",
+                  "sha256": "a970f2b1d595e0242418c0cb3168e4a83351d62d93c5132bd09ba4e4631e3807"
+                },
+                {
+                  "path": "skill-catalog.yml",
+                  "sha256": "1391be2dfff1afb38c0a8f3d1f8c3f436b9d235031ff4e9147ff763a1103ccec",
+                  "fields": [
+                    "skills[page-04].id",
+                    "skills[page-04].area",
+                    "skills[page-04].purpose"
+                  ]
+                }
+              ],
+              "kind": "skill",
+              "skill": {
+                "description": "Synthetic pagination skill.",
+                "eval_coverage": "none",
+                "id": "page-04",
+                "maturity": "experimental"
+              }
+            },
+            {
+              "path": "Fixture/Skills/page-05/SKILL.md",
+              "score": 8.540097863843037e-07,
+              "snippet": "@@ -6,4 @@ (5 before, 6 after)\n# Synthetic skill\nzznativepaginationb8e349c2\n\n",
+              "content_sha256": "67680e3d5f12522a7a6399efd23adee79199a44fec7cba039fd9510646aac2ea",
+              "search_document_sha256": "3e0a598c67c221da728c4e876d17f09ebd613bf08d071beeddd6a5d505c5758c",
+              "snippet_origin": "derived-search-document",
+              "sources": [
+                {
+                  "path": "Fixture/Skills/page-05/SKILL.md",
+                  "sha256": "67680e3d5f12522a7a6399efd23adee79199a44fec7cba039fd9510646aac2ea"
+                },
+                {
+                  "path": "skill-catalog.yml",
+                  "sha256": "1391be2dfff1afb38c0a8f3d1f8c3f436b9d235031ff4e9147ff763a1103ccec",
+                  "fields": [
+                    "skills[page-05].id",
+                    "skills[page-05].area",
+                    "skills[page-05].purpose"
+                  ]
+                }
+              ],
+              "kind": "skill",
+              "skill": {
+                "description": "Synthetic pagination skill.",
+                "eval_coverage": "none",
+                "id": "page-05",
+                "maturity": "experimental"
+              }
+            },
+            {
+              "path": "Fixture/Skills/page-06/SKILL.md",
+              "score": 8.540097863843037e-07,
+              "snippet": "@@ -6,4 @@ (5 before, 6 after)\n# Synthetic skill\nzznativepaginationb8e349c2\n\n",
+              "content_sha256": "67e3ab1a0f991a838cdf54c34b36a457b9dd162b25de0b42708720593f4b9f52",
+              "search_document_sha256": "96aaf9c24677ab9e8beba08fe6a9cba354710e3dc64998e9e0b25997227c2d15",
+              "snippet_origin": "derived-search-document",
+              "sources": [
+                {
+                  "path": "Fixture/Skills/page-06/SKILL.md",
+                  "sha256": "67e3ab1a0f991a838cdf54c34b36a457b9dd162b25de0b42708720593f4b9f52"
+                },
+                {
+                  "path": "skill-catalog.yml",
+                  "sha256": "1391be2dfff1afb38c0a8f3d1f8c3f436b9d235031ff4e9147ff763a1103ccec",
+                  "fields": [
+                    "skills[page-06].id",
+                    "skills[page-06].area",
+                    "skills[page-06].purpose"
+                  ]
+                }
+              ],
+              "kind": "skill",
+              "skill": {
+                "description": "Synthetic pagination skill.",
+                "eval_coverage": "none",
+                "id": "page-06",
+                "maturity": "experimental"
+              }
+            },
+            {
+              "path": "Fixture/Skills/page-07/SKILL.md",
+              "score": 8.540097863843037e-07,
+              "snippet": "@@ -6,4 @@ (5 before, 6 after)\n# Synthetic skill\nzznativepaginationb8e349c2\n\n",
+              "content_sha256": "7e2ea46721398e810816e94a319c097ac1022ebd3b1c7e72e04e4f08be846970",
+              "search_document_sha256": "e671529a2da5de9dea5b7c5b9354cd751271ba8e9643bc0e4a2d4067fd1161cf",
+              "snippet_origin": "derived-search-document",
+              "sources": [
+                {
+                  "path": "Fixture/Skills/page-07/SKILL.md",
+                  "sha256": "7e2ea46721398e810816e94a319c097ac1022ebd3b1c7e72e04e4f08be846970"
+                },
+                {
+                  "path": "skill-catalog.yml",
+                  "sha256": "1391be2dfff1afb38c0a8f3d1f8c3f436b9d235031ff4e9147ff763a1103ccec",
+                  "fields": [
+                    "skills[page-07].id",
+                    "skills[page-07].area",
+                    "skills[page-07].purpose"
+                  ]
+                }
+              ],
+              "kind": "skill",
+              "skill": {
+                "description": "Synthetic pagination skill.",
+                "eval_coverage": "none",
+                "id": "page-07",
+                "maturity": "experimental"
+              }
+            }
+          ],
+          "total_matches": 14,
+          "offset": 4,
+          "page_size": 4,
+          "has_more": true,
+          "next_cursor": "eyJjaGVja3N1bSI6IjA5NTQ4MGJiNDkyOWM3MjRiNjIzOTMxYjk0NjBjNmIwMjcxNDdhMTk1YmUwZWY2ZWQzN2MxMjBlZGVmMWM2ZjAiLCJjb250ZXh0IjoiOWJiZjI2ZjUzZmQ0MGE2NzgxNzA2Y2VkYTFkNjU4ZDljZjIzNjQ3MTIyZDIzNTNkN2M5NWE2ZTZmZWExZWNjYyIsImxpbWl0Ijo0LCJvZmZzZXQiOjgsInJlc3VsdHMiOiIxYTBhNTQwMzZlNzI1NTYyNmQ5MTQxMTQ4OGU2NzE0MmRiOTEyMjUyNGVhYTg3ZThmMzc0MDNjMjQwYzNkN2NmIiwidiI6MX0",
+          "candidates_only": true,
+          "routing_coverage": {
+            "indexed_skills": 14,
+            "skills": 14
+          },
+          "routing_sources": {
+            "master": "Dokumentation/Skill-Handbuch.md",
+            "catalog": "skill-catalog.yml",
+            "overlays": "routing-overlays.yml",
+            "workflows": "workflow-index.yml"
+          }
+        },
+        {
+          "status": "ready",
+          "revision": "d316b1738c4169e4e49e7b79b29d9ddf8a277997",
+          "mode": "bm25",
+          "fingerprint": "395cd30246ca3acc23737c0cf01d4606e6f3b13414dc9d549e9fa06518470549",
+          "hits": [
+            {
+              "path": "Fixture/Skills/page-08/SKILL.md",
+              "score": 8.540097863843037e-07,
+              "snippet": "@@ -6,4 @@ (5 before, 6 after)\n# Synthetic skill\nzznativepaginationb8e349c2\n\n",
+              "content_sha256": "b305f5d4f12310f4291e5035176c66e07211afd34bc2021f3842b395c678b28a",
+              "search_document_sha256": "ed8a305943c2559f71cbd5353ff38b4bfe0eb2d5471ed00603bf568970e93b20",
+              "snippet_origin": "derived-search-document",
+              "sources": [
+                {
+                  "path": "Fixture/Skills/page-08/SKILL.md",
+                  "sha256": "b305f5d4f12310f4291e5035176c66e07211afd34bc2021f3842b395c678b28a"
+                },
+                {
+                  "path": "skill-catalog.yml",
+                  "sha256": "1391be2dfff1afb38c0a8f3d1f8c3f436b9d235031ff4e9147ff763a1103ccec",
+                  "fields": [
+                    "skills[page-08].id",
+                    "skills[page-08].area",
+                    "skills[page-08].purpose"
+                  ]
+                }
+              ],
+              "kind": "skill",
+              "skill": {
+                "description": "Synthetic pagination skill.",
+                "eval_coverage": "none",
+                "id": "page-08",
+                "maturity": "experimental"
+              }
+            },
+            {
+              "path": "Fixture/Skills/page-09/SKILL.md",
+              "score": 8.540097863843037e-07,
+              "snippet": "@@ -6,4 @@ (5 before, 6 after)\n# Synthetic skill\nzznativepaginationb8e349c2\n\n",
+              "content_sha256": "28017a7650d7fcd13beea28d568f1b70dc0691ae2c605ea170bc1cc3892e65ec",
+              "search_document_sha256": "b443f84feab127fe6e141751e30dc6604f040fb2ac8f52f18ffdaf9c880ca93f",
+              "snippet_origin": "derived-search-document",
+              "sources": [
+                {
+                  "path": "Fixture/Skills/page-09/SKILL.md",
+                  "sha256": "28017a7650d7fcd13beea28d568f1b70dc0691ae2c605ea170bc1cc3892e65ec"
+                },
+                {
+                  "path": "skill-catalog.yml",
+                  "sha256": "1391be2dfff1afb38c0a8f3d1f8c3f436b9d235031ff4e9147ff763a1103ccec",
+                  "fields": [
+                    "skills[page-09].id",
+                    "skills[page-09].area",
+                    "skills[page-09].purpose"
+                  ]
+                }
+              ],
+              "kind": "skill",
+              "skill": {
+                "description": "Synthetic pagination skill.",
+                "eval_coverage": "none",
+                "id": "page-09",
+                "maturity": "experimental"
+              }
+            },
+            {
+              "path": "Fixture/Skills/page-10/SKILL.md",
+              "score": 8.540097863843037e-07,
+              "snippet": "@@ -6,4 @@ (5 before, 6 after)\n# Synthetic skill\nzznativepaginationb8e349c2\n\n",
+              "content_sha256": "233f352ea1e2001485464c77a48eca9a7e9916216d305a53ba28c064ce10d7b0",
+              "search_document_sha256": "c543676d14fe248353efe8e0b255d5e75f7c65c44ad7f6855d72a9e381931b62",
+              "snippet_origin": "derived-search-document",
+              "sources": [
+                {
+                  "path": "Fixture/Skills/page-10/SKILL.md",
+                  "sha256": "233f352ea1e2001485464c77a48eca9a7e9916216d305a53ba28c064ce10d7b0"
+                },
+                {
+                  "path": "skill-catalog.yml",
+                  "sha256": "1391be2dfff1afb38c0a8f3d1f8c3f436b9d235031ff4e9147ff763a1103ccec",
+                  "fields": [
+                    "skills[page-10].id",
+                    "skills[page-10].area",
+                    "skills[page-10].purpose"
+                  ]
+                }
+              ],
+              "kind": "skill",
+              "skill": {
+                "description": "Synthetic pagination skill.",
+                "eval_coverage": "none",
+                "id": "page-10",
+                "maturity": "experimental"
+              }
+            },
+            {
+              "path": "Fixture/Skills/page-11/SKILL.md",
+              "score": 8.540097863843037e-07,
+              "snippet": "@@ -6,4 @@ (5 before, 6 after)\n# Synthetic skill\nzznativepaginationb8e349c2\n\n",
+              "content_sha256": "a8acb966370520a1c9e04ae11889231b502a1396ee030401a9f7f96dcccf9ae6",
+              "search_document_sha256": "a30e1d7e22eadbac2774e58d8be9a27daa72574dd00f9c36cac6d5858ed69733",
+              "snippet_origin": "derived-search-document",
+              "sources": [
+                {
+                  "path": "Fixture/Skills/page-11/SKILL.md",
+                  "sha256": "a8acb966370520a1c9e04ae11889231b502a1396ee030401a9f7f96dcccf9ae6"
+                },
+                {
+                  "path": "skill-catalog.yml",
+                  "sha256": "1391be2dfff1afb38c0a8f3d1f8c3f436b9d235031ff4e9147ff763a1103ccec",
+                  "fields": [
+                    "skills[page-11].id",
+                    "skills[page-11].area",
+                    "skills[page-11].purpose"
+                  ]
+                }
+              ],
+              "kind": "skill",
+              "skill": {
+                "description": "Synthetic pagination skill.",
+                "eval_coverage": "none",
+                "id": "page-11",
+                "maturity": "experimental"
+              }
+            }
+          ],
+          "total_matches": 14,
+          "offset": 8,
+          "page_size": 4,
+          "has_more": true,
+          "next_cursor": "eyJjaGVja3N1bSI6IjA2NDU0ZTI4ODEwOGI5ZTBiYWNmNjE1MTI1ODhmODA3M2FiM2NmNzljNjg4YTlmM2NlMDJmMmY1YWZmYTZjYmQiLCJjb250ZXh0IjoiOWJiZjI2ZjUzZmQ0MGE2NzgxNzA2Y2VkYTFkNjU4ZDljZjIzNjQ3MTIyZDIzNTNkN2M5NWE2ZTZmZWExZWNjYyIsImxpbWl0Ijo0LCJvZmZzZXQiOjEyLCJyZXN1bHRzIjoiMWEwYTU0MDM2ZTcyNTU2MjZkOTE0MTE0ODhlNjcxNDJkYjkxMjI1MjRlYWE4N2U4ZjM3NDAzYzI0MGMzZDdjZiIsInYiOjF9",
+          "candidates_only": true,
+          "routing_coverage": {
+            "indexed_skills": 14,
+            "skills": 14
+          },
+          "routing_sources": {
+            "master": "Dokumentation/Skill-Handbuch.md",
+            "catalog": "skill-catalog.yml",
+            "overlays": "routing-overlays.yml",
+            "workflows": "workflow-index.yml"
+          }
+        },
+        {
+          "status": "ready",
+          "revision": "d316b1738c4169e4e49e7b79b29d9ddf8a277997",
+          "mode": "bm25",
+          "fingerprint": "395cd30246ca3acc23737c0cf01d4606e6f3b13414dc9d549e9fa06518470549",
+          "hits": [
+            {
+              "path": "Fixture/Skills/page-12/SKILL.md",
+              "score": 8.540097863843037e-07,
+              "snippet": "@@ -6,4 @@ (5 before, 6 after)\n# Synthetic skill\nzznativepaginationb8e349c2\n\n",
+              "content_sha256": "a570b708bcaa89997842bfe06d4a3a4fbc71c6a813580c7fbdf9b7465254aada",
+              "search_document_sha256": "4c66318701123e9d36e0acc46b6252620ea39d64077c01c3c7bb51c9f8c0ae2f",
+              "snippet_origin": "derived-search-document",
+              "sources": [
+                {
+                  "path": "Fixture/Skills/page-12/SKILL.md",
+                  "sha256": "a570b708bcaa89997842bfe06d4a3a4fbc71c6a813580c7fbdf9b7465254aada"
+                },
+                {
+                  "path": "skill-catalog.yml",
+                  "sha256": "1391be2dfff1afb38c0a8f3d1f8c3f436b9d235031ff4e9147ff763a1103ccec",
+                  "fields": [
+                    "skills[page-12].id",
+                    "skills[page-12].area",
+                    "skills[page-12].purpose"
+                  ]
+                }
+              ],
+              "kind": "skill",
+              "skill": {
+                "description": "Synthetic pagination skill.",
+                "eval_coverage": "none",
+                "id": "page-12",
+                "maturity": "experimental"
+              }
+            },
+            {
+              "path": "Fixture/Skills/page-13/SKILL.md",
+              "score": 8.540097863843037e-07,
+              "snippet": "@@ -6,4 @@ (5 before, 6 after)\n# Synthetic skill\nzznativepaginationb8e349c2\n\n",
+              "content_sha256": "e00f8fe2bd22ffb01f5a1fe1fc78fc089ca6b0afb4e64af05fbca6486110ca27",
+              "search_document_sha256": "77419d9801c89effa419b4284897d59e6cb15a3fbea2b69613289e39e7ec8768",
+              "snippet_origin": "derived-search-document",
+              "sources": [
+                {
+                  "path": "Fixture/Skills/page-13/SKILL.md",
+                  "sha256": "e00f8fe2bd22ffb01f5a1fe1fc78fc089ca6b0afb4e64af05fbca6486110ca27"
+                },
+                {
+                  "path": "skill-catalog.yml",
+                  "sha256": "1391be2dfff1afb38c0a8f3d1f8c3f436b9d235031ff4e9147ff763a1103ccec",
+                  "fields": [
+                    "skills[page-13].id",
+                    "skills[page-13].area",
+                    "skills[page-13].purpose"
+                  ]
+                }
+              ],
+              "kind": "skill",
+              "skill": {
+                "description": "Synthetic pagination skill.",
+                "eval_coverage": "none",
+                "id": "page-13",
+                "maturity": "experimental"
+              }
+            }
+          ],
+          "total_matches": 14,
+          "offset": 12,
+          "page_size": 4,
+          "has_more": false,
+          "next_cursor": null,
+          "candidates_only": true,
+          "routing_coverage": {
+            "indexed_skills": 14,
+            "skills": 14
+          },
+          "routing_sources": {
+            "master": "Dokumentation/Skill-Handbuch.md",
+            "catalog": "skill-catalog.yml",
+            "overlays": "routing-overlays.yml",
+            "workflows": "workflow-index.yml"
+          }
+        }
+      ],
+      "unique_hits": 14,
+      "score_groups": 1,
+      "global_order_matches": true,
+      "source_edit": {
+        "status": "stale",
+        "message": "Commit selected source changes before building/searching."
+      },
+      "after_rebuild": {
+        "status": "invalid-cursor",
+        "message": "Cursor does not match the source snapshot, action, query or page size."
+      },
+      "stale_worker_calls": 0
+    },
+    "catalog": {
+      "pages": [
+        {
+          "revision": "f23484e70f51f5a120a51601d36d1cdfaac7fe24",
+          "fingerprint": "789143e74d431db781a10fce0fc1cd82f3ec07f93205bb7e6fe9d272c896f188",
+          "offset": 0,
+          "page_size": 25,
+          "total_skills": 155,
+          "has_more": true,
+          "next_cursor": "eyJjaGVja3N1bSI6ImI3ZGIxOTFmMDhiYmY0NDJmMDA5NzY3OTUzZGUyMzMzNjY5ZTMwYzcxZjNlNTkzNjI5YzM0ZDBmMGE1N2I5MDIiLCJjb250ZXh0IjoiMzU5YmI1YTU3N2RlNTlkYjk2YWFmOGNhMWY5YTA2Nzc2NjMyZWU1ZjVkNTM3MjFlNzY0YTUzOGEzMWM2N2YzYiIsImxpbWl0IjoyNSwib2Zmc2V0IjoyNSwicmVzdWx0cyI6Ijg4MDIzZjU1YzQyMWMyNDZmZmMxYmMyNWU4YjMxMGUwOWJmY2Y4MGZjNGQxZmMzZmZmODJjYjkzYzljNzEzZjMiLCJ2IjoxfQ",
+          "assessment_performed": false,
+          "ids": [
+            "acceptance-criteria-design",
+            "accessibility-review",
+            "adr",
+            "adressatengerechte-kommunikation",
+            "agent-eval",
+            "alert-design",
+            "analytical-data-modeling",
+            "anlagevergleich",
+            "architecture-baseline",
+            "architecture-conformance-review",
+            "architecture-decomposition",
+            "architecture-evolution",
+            "architecture-review",
+            "architecture-tradeoff-analysis",
+            "bewertungsanalyse",
+            "bild-prebrief",
+            "bildreview",
+            "binary-analysis",
+            "binary-triage",
+            "capacity-planning",
+            "ci-pipeline-design",
+            "citation-audit",
+            "claim-verification",
+            "code-review",
+            "community-engagement"
+          ],
+          "skills_sha256": "a7bd6d06adcd1865c0f55b576fadaffd320c76bb668f73e1cb702e9b5320a086"
+        },
+        {
+          "revision": "f23484e70f51f5a120a51601d36d1cdfaac7fe24",
+          "fingerprint": "789143e74d431db781a10fce0fc1cd82f3ec07f93205bb7e6fe9d272c896f188",
+          "offset": 25,
+          "page_size": 25,
+          "total_skills": 155,
+          "has_more": true,
+          "next_cursor": "eyJjaGVja3N1bSI6IjI4N2M0NzFiOTgyNjgzMTI4M2FmZjY0NzE2YzI4ZmRjMzVmM2NjNmY5M2JlZWJmODhjNjNmZTM3MGMyOGJlZmMiLCJjb250ZXh0IjoiMzU5YmI1YTU3N2RlNTlkYjk2YWFmOGNhMWY5YTA2Nzc2NjMyZWU1ZjVkNTM3MjFlNzY0YTUzOGEzMWM2N2YzYiIsImxpbWl0IjoyNSwib2Zmc2V0Ijo1MCwicmVzdWx0cyI6Ijg4MDIzZjU1YzQyMWMyNDZmZmMxYmMyNWU4YjMxMGUwOWJmY2Y4MGZjNGQxZmMzZmZmODJjYjkzYzljNzEzZjMiLCJ2IjoxfQ",
+          "assessment_performed": false,
+          "ids": [
+            "container-build",
+            "content-performance-analysis",
+            "content-presence-baseline",
+            "content-presence-review",
+            "content-repurposing",
+            "context-audit",
+            "context-compaction",
+            "context-engineering",
+            "contract-change-review",
+            "contract-testing",
+            "data-contract-design",
+            "data-engineering-review",
+            "data-ingestion-design",
+            "data-lineage-analysis",
+            "data-orchestration-design",
+            "data-pipeline-design",
+            "data-quality-design",
+            "data-transformation-design",
+            "database-design",
+            "database-operations",
+            "database-query-review",
+            "database-review",
+            "deep-research",
+            "delegation-contract",
+            "deployment-strategy"
+          ],
+          "skills_sha256": "13ffb1bbc1f0fc9a7170b95493625799663d76b3bb92d6d66ddd1409c2f5e934"
+        },
+        {
+          "revision": "f23484e70f51f5a120a51601d36d1cdfaac7fe24",
+          "fingerprint": "789143e74d431db781a10fce0fc1cd82f3ec07f93205bb7e6fe9d272c896f188",
+          "offset": 50,
+          "page_size": 25,
+          "total_skills": 155,
+          "has_more": true,
+          "next_cursor": "eyJjaGVja3N1bSI6IjExNTVkYTFhZjI5MTFmNzMwYzg4NGJjMWI0ODcyOTk0NzYzMGUyMmI1NGIzOTAzOWI5MmQ2YTdmMjE1NDM2ZmEiLCJjb250ZXh0IjoiMzU5YmI1YTU3N2RlNTlkYjk2YWFmOGNhMWY5YTA2Nzc2NjMyZWU1ZjVkNTM3MjFlNzY0YTUzOGEzMWM2N2YzYiIsImxpbWl0IjoyNSwib2Zmc2V0Ijo3NSwicmVzdWx0cyI6Ijg4MDIzZjU1YzQyMWMyNDZmZmMxYmMyNWU4YjMxMGUwOWJmY2Y4MGZjNGQxZmMzZmZmODJjYjkzYzljNzEzZjMiLCJ2IjoxfQ",
+          "assessment_performed": false,
+          "ids": [
+            "design-system",
+            "deutsche-typografie",
+            "diagnose",
+            "docs-plan",
+            "docs-review",
+            "domain-modeling",
+            "e2e-testing",
+            "editorial-planning",
+            "entitaetsbibel",
+            "entscheidungsunterstuetzung",
+            "event-contract-design",
+            "explanation-docs",
+            "exploratory-testing",
+            "failure-testing",
+            "figurenentwicklung",
+            "finanzstatus-und-cashflow",
+            "flaky-test-diagnosis",
+            "frontend-design",
+            "frontend-performance",
+            "gitops-design",
+            "greybox",
+            "how-to",
+            "http-api-design",
+            "incident-postmortem",
+            "incident-response"
+          ],
+          "skills_sha256": "1c6025118e8533994aaf6675d46649d482b3701011b50d7c27c63c4524916275"
+        },
+        {
+          "revision": "f23484e70f51f5a120a51601d36d1cdfaac7fe24",
+          "fingerprint": "789143e74d431db781a10fce0fc1cd82f3ec07f93205bb7e6fe9d272c896f188",
+          "offset": 75,
+          "page_size": 25,
+          "total_skills": 155,
+          "has_more": true,
+          "next_cursor": "eyJjaGVja3N1bSI6Ijc3MzhmZDZjY2ZkMGU2OTczYzU4MzI2NGVkOWIxMWE4MjQ0OTk4OTFhYmI3MjIzMTE2OWY1NzVmN2VkYjFkODkiLCJjb250ZXh0IjoiMzU5YmI1YTU3N2RlNTlkYjk2YWFmOGNhMWY5YTA2Nzc2NjMyZWU1ZjVkNTM3MjFlNzY0YTUzOGEzMWM2N2YzYiIsImxpbWl0IjoyNSwib2Zmc2V0IjoxMDAsInJlc3VsdHMiOiI4ODAyM2Y1NWM0MjFjMjQ2ZmZjMWJjMjVlOGIzMTBlMDliZmNmODBmYzRkMWZjM2ZmZjgyY2I5M2M5YzcxM2YzIiwidiI6MX0",
+          "assessment_performed": false,
+          "ids": [
+            "infrastructure-as-code",
+            "infrastructure-change-review",
+            "infrastructure-review",
+            "inhaltsprovenienz-review",
+            "integration-testing",
+            "interface-design",
+            "interface-review",
+            "knowledge-base-design",
+            "knowledge-base-review",
+            "knowledge-distill",
+            "knowledge-ingest",
+            "knowledge-maintenance",
+            "knowledge-query",
+            "knowledge-synthesis",
+            "korrekturlektorat",
+            "kreatives-schreiben",
+            "logo-design",
+            "metadaten-hygiene",
+            "motion-design",
+            "motion-implementation",
+            "motion-review",
+            "natuerliches-schreiben",
+            "platform-content-adaptation",
+            "plot-und-storystruktur",
+            "portfolio-rebalancing"
+          ],
+          "skills_sha256": "ffacd943f434dcb3ea3d93759c648d22a10a7d837dd01ee54499237460bf78cb"
+        },
+        {
+          "revision": "f23484e70f51f5a120a51601d36d1cdfaac7fe24",
+          "fingerprint": "789143e74d431db781a10fce0fc1cd82f3ec07f93205bb7e6fe9d272c896f188",
+          "offset": 100,
+          "page_size": 25,
+          "total_skills": 155,
+          "has_more": true,
+          "next_cursor": "eyJjaGVja3N1bSI6ImJmZDZjNjkzNjQxZTQ0MjZjNGZjZTI5ODdiZWU2MWJkODBmM2E1NmUwNGJlMThkYTA3ZGNiMWUyZWE1MmI1MjIiLCJjb250ZXh0IjoiMzU5YmI1YTU3N2RlNTlkYjk2YWFmOGNhMWY5YTA2Nzc2NjMyZWU1ZjVkNTM3MjFlNzY0YTUzOGEzMWM2N2YzYiIsImxpbWl0IjoyNSwib2Zmc2V0IjoxMjUsInJlc3VsdHMiOiI4ODAyM2Y1NWM0MjFjMjQ2ZmZjMWJjMjVlOGIzMTBlMDliZmNmODBmYzRkMWZjM2ZmZjgyY2I5M2M5YzcxM2YzIiwidiI6MX0",
+          "assessment_performed": false,
+          "ids": [
+            "portfolioanalyse",
+            "prompt-engineering",
+            "prompt-injection-review",
+            "query-performance",
+            "readme",
+            "reference-docs",
+            "reflektierender-dialog",
+            "reliability-review",
+            "requirements-baseline",
+            "requirements-change-analysis",
+            "requirements-elicitation",
+            "requirements-review",
+            "requirements-specification",
+            "requirements-traceability",
+            "requirements-validation",
+            "research-plan",
+            "research-synthesis",
+            "resilience-experiment",
+            "ruecklagenplanung",
+            "runbook",
+            "schema-migration",
+            "schuldenstrategie",
+            "serien-kontinuitaetscheck",
+            "session-handoff",
+            "skill-authoring"
+          ],
+          "skills_sha256": "09dc559c240c4a6237be9c1f84a5cb1103f2eba6a18c652ebb78dbc354dbc9c8"
+        },
+        {
+          "revision": "f23484e70f51f5a120a51601d36d1cdfaac7fe24",
+          "fingerprint": "789143e74d431db781a10fce0fc1cd82f3ec07f93205bb7e6fe9d272c896f188",
+          "offset": 125,
+          "page_size": 25,
+          "total_skills": 155,
+          "has_more": true,
+          "next_cursor": "eyJjaGVja3N1bSI6IjM4Y2E4NzM5MjM1NmIxOWEyMzM3ZTcyOGRiZDI1NTM5MDNkODY4YTkyOTQ5YTkyMjVlMjhmNzlmY2I0OTJiNjYiLCJjb250ZXh0IjoiMzU5YmI1YTU3N2RlNTlkYjk2YWFmOGNhMWY5YTA2Nzc2NjMyZWU1ZjVkNTM3MjFlNzY0YTUzOGEzMWM2N2YzYiIsImxpbWl0IjoyNSwib2Zmc2V0IjoxNTAsInJlc3VsdHMiOiI4ODAyM2Y1NWM0MjFjMjQ2ZmZjMWJjMjVlOGIzMTBlMDliZmNmODBmYzRkMWZjM2ZmZjgyY2I5M2M5YzcxM2YzIiwidiI6MX0",
+          "assessment_performed": false,
+          "ids": [
+            "skill-review",
+            "skill-security-review",
+            "slo-design",
+            "social-content-design",
+            "social-content-strategy",
+            "source-evaluation",
+            "stilreview",
+            "story-bible",
+            "story-kontinuitaet",
+            "system-design",
+            "system-observability-design",
+            "task-graph",
+            "tdd",
+            "technical-writing",
+            "test-design",
+            "test-strategy",
+            "test-suite-review",
+            "tool-permission-review",
+            "transaction-review",
+            "tutorial",
+            "unternehmensanalyse",
+            "verification-loop",
+            "vermoegensprojektion",
+            "visual-answer",
+            "visual-verification"
+          ],
+          "skills_sha256": "0c201fcea1efb91d5084f62ba915180bc01eaa1c0ed7b857df09f743ff16f301"
+        },
+        {
+          "revision": "f23484e70f51f5a120a51601d36d1cdfaac7fe24",
+          "fingerprint": "789143e74d431db781a10fce0fc1cd82f3ec07f93205bb7e6fe9d272c896f188",
+          "offset": 150,
+          "page_size": 25,
+          "total_skills": 155,
+          "has_more": false,
+          "next_cursor": null,
+          "assessment_performed": false,
+          "ids": [
+            "web-content",
+            "web-design-review",
+            "web-search",
+            "worldbuilding",
+            "ziel-reflexions-loop"
+          ],
+          "skills_sha256": "f07d0c7d8a831f64d0ab0632b760da8e09c91f36c5a4e1a2b6f47fe8cbceeb54"
+        }
+      ],
+      "descriptors_sha256": "88023f55c421c246ffc1bc25e8b310e09bfcf80fc4d1fc3fff82cb93c9c713f3",
+      "unique_skills": 155,
+      "node_calls": 0,
+      "worker_calls": 0,
+      "ready_index_calls": 0,
+      "canonical_descriptions_match": true,
+      "assessment_performed": false
+    },
+    "original_bytes_unchanged": true,
+    "contracts": {
+      "contract-pagination": "PASS",
+      "contract-stale": "PASS",
+      "contract-descriptors": "PASS"
+    },
+    "claims": {
+      "general_recall": "UNVERIFIED",
+      "agent_selection_quality": "NOT RUN",
+      "model_calls": 0
+    }
+  },
+  "p1_regression": {
+    "protocol": {
+      "utc": "2026-10-30T19:15:17.739128+00:00",
+      "label": "candidate",
+      "source_commit": "6b80949fea00a427303a8dad9a612b59d7fd04ca",
+      "source_packet_sha256": "02575304ff5a45aea1bc2ab73c0051c1894525f4dcd17655057434deb53b4be2",
+      "cases_sha256": "b29da5a3e7b817dbb7d37485e7628bd38a58f89a0377a1e13414343699b123df",
+      "qmd_version": "2.8.3",
+      "node_version": "v24.22.1",
+      "code_sha256": {
+        "tools/search_rules.py": "bd45e61c966eb57609f2ce986aa3fe0b324d10a132b63bd36efc6aa945dd1aa2",
+        "tools/search_rules_qmd.mjs": "d9c4b3f9222ad7928dfcb1860fd0e975024512ab4e4dedf915820ed283737155",
+        "tools/check_public_entrypoints.py": "65607d90c95273fcdf9088ec29005b2f6b58a90672b9449a234be1d7d43c1976",
+        "tools/local_search/pnpm-lock.yaml": "30381a3497bf589cd694665a806736e83b724be7670952f0afc2e207fc20b528",
+        "Evals/Onboarding/run_rule_routing_comparison.py": "818aafca6ca6764eafb73e5add46626afa39f0e0efd549131b328d1538d6df19"
+      },
+      "model_calls": 0,
+      "held_out": false,
+      "per_query_limit": 10
+    },
+    "protocol_sha256": "3695104b0df6f1cdd0fb38111efac12db179f6f10aae4bdb7aae67b92e41d9f5",
+    "fixture_revision": "191baec96637be68e71da79c2a02bd959f01f5ab",
+    "counts": {
+      "PASS": 15,
+      "FAIL": 1,
+      "NOT RUN": 8
+    },
+    "cases": [
+      {
+        "id": "legacy-correction",
+        "status": "PASS",
+        "missing_required": []
+      },
+      {
+        "id": "legacy-valuation",
+        "status": "PASS",
+        "missing_required": []
+      },
+      {
+        "id": "legacy-character",
+        "status": "PASS",
+        "missing_required": []
+      },
+      {
+        "id": "legacy-adr",
+        "status": "PASS",
+        "missing_required": []
+      },
+      {
+        "id": "wording-correction",
+        "status": "PASS",
+        "missing_required": []
+      },
+      {
+        "id": "wording-valuation",
+        "status": "PASS",
+        "missing_required": []
+      },
+      {
+        "id": "wording-character",
+        "status": "PASS",
+        "missing_required": []
+      },
+      {
+        "id": "wording-adr",
+        "status": "PASS",
+        "missing_required": []
+      },
+      {
+        "id": "jobs-acceptance-tests",
+        "status": "FAIL",
+        "missing_required": [
+          "acceptance-criteria-design"
+        ]
+      },
+      {
+        "id": "jobs-claim-source",
+        "status": "PASS",
+        "missing_required": []
+      },
+      {
+        "id": "jobs-provenance-hygiene",
+        "status": "PASS",
+        "missing_required": []
+      },
+      {
+        "id": "jobs-canon-character",
+        "status": "PASS",
+        "missing_required": []
+      },
+      {
+        "id": "relation-related",
+        "status": "NOT RUN",
+        "missing_required": []
+      },
+      {
+        "id": "relation-workflow",
+        "status": "NOT RUN",
+        "missing_required": []
+      },
+      {
+        "id": "relation-overlay",
+        "status": "NOT RUN",
+        "missing_required": []
+      },
+      {
+        "id": "relation-no-seed",
+        "status": "NOT RUN",
+        "missing_required": []
+      },
+      {
+        "id": "negative-absent",
+        "status": "PASS",
+        "missing_required": []
+      },
+      {
+        "id": "near-correction-only",
+        "status": "PASS",
+        "missing_required": []
+      },
+      {
+        "id": "near-source-only",
+        "status": "PASS",
+        "missing_required": []
+      },
+      {
+        "id": "near-style-alternative",
+        "status": "PASS",
+        "missing_required": []
+      },
+      {
+        "id": "contract-pagination",
+        "status": "NOT RUN",
+        "missing_required": []
+      },
+      {
+        "id": "contract-stale",
+        "status": "NOT RUN",
+        "missing_required": []
+      },
+      {
+        "id": "contract-invalid-relation",
+        "status": "NOT RUN",
+        "missing_required": []
+      },
+      {
+        "id": "contract-descriptors",
+        "status": "NOT RUN",
+        "missing_required": []
+      }
+    ],
+    "regressions": [],
+    "status": "PARTIAL",
+    "original_bytes_unchanged": true
+  },
+  "guard_probes": {
+    "production_code_sha256": "bd45e61c966eb57609f2ce986aa3fe0b324d10a132b63bd36efc6aa945dd1aa2",
+    "production_bytes_unchanged": true,
+    "mutations": "in-memory only",
+    "probes": [
+      {
+        "guard": "off-page-content-hash",
+        "test": "test_offpage_bad_hash_and_same_length_duplicates_are_rejected",
+        "detected": true,
+        "assertion_failures": 1,
+        "errors": 0
+      },
+      {
+        "guard": "request-context",
+        "test": "test_cursor_rejects_changed_query_size_corruption_and_result_set",
+        "detected": true,
+        "assertion_failures": 3,
+        "errors": 0
+      }
+    ]
+  },
+  "code_bindings": {
+    "native": {
+      "commit": "f23484e70f51f5a120a51601d36d1cdfaac7fe24",
+      "files": {
+        "tools/search_rules.py": {
+          "git_blob_sha256": "bd45e61c966eb57609f2ce986aa3fe0b324d10a132b63bd36efc6aa945dd1aa2",
+          "recorded_checkout_sha256": "bd45e61c966eb57609f2ce986aa3fe0b324d10a132b63bd36efc6aa945dd1aa2",
+          "binding": "exact Git blob"
+        },
+        "tools/search_rules_qmd.mjs": {
+          "git_blob_sha256": "d9c4b3f9222ad7928dfcb1860fd0e975024512ab4e4dedf915820ed283737155",
+          "recorded_checkout_sha256": "d9c4b3f9222ad7928dfcb1860fd0e975024512ab4e4dedf915820ed283737155",
+          "binding": "exact Git blob"
+        },
+        "Search-KI-Regeln.ps1": {
+          "git_blob_sha256": "673b5de08720c85ee28cbf2f6c2af5599757ec278fbf4fb244d27fec81ad6ba3",
+          "recorded_checkout_sha256": "673b5de08720c85ee28cbf2f6c2af5599757ec278fbf4fb244d27fec81ad6ba3",
+          "binding": "exact Git blob"
+        },
+        "tools/check_public_entrypoints.py": {
+          "git_blob_sha256": "d945c1d6a8e28e3c2bb4cf93c2c2a8255d7ee21ce35afb2d8093b71e00ddc110",
+          "recorded_checkout_sha256": "65607d90c95273fcdf9088ec29005b2f6b58a90672b9449a234be1d7d43c1976",
+          "binding": "recorded checkout; CRLF-equivalent to Git blob"
+        },
+        "tools/local_search/pnpm-lock.yaml": {
+          "git_blob_sha256": "30381a3497bf589cd694665a806736e83b724be7670952f0afc2e207fc20b528",
+          "recorded_checkout_sha256": "30381a3497bf589cd694665a806736e83b724be7670952f0afc2e207fc20b528",
+          "binding": "exact Git blob"
+        },
+        "Evals/Onboarding/run_rule_routing_p2_native.py": {
+          "git_blob_sha256": "5ab92fc5fcc8d0e8ae63b4484fe37572ae9d58e0abb3fc1775d1f58dffcb4d91",
+          "recorded_checkout_sha256": "5ab92fc5fcc8d0e8ae63b4484fe37572ae9d58e0abb3fc1775d1f58dffcb4d91",
+          "binding": "exact Git blob"
+        }
+      }
+    },
+    "regression": {
+      "commit": "e51a7df5b4d58589e99ec8c1d833cc433e961ef2",
+      "files": {
+        "tools/search_rules.py": {
+          "git_blob_sha256": "bd45e61c966eb57609f2ce986aa3fe0b324d10a132b63bd36efc6aa945dd1aa2",
+          "recorded_checkout_sha256": "bd45e61c966eb57609f2ce986aa3fe0b324d10a132b63bd36efc6aa945dd1aa2",
+          "binding": "exact Git blob"
+        },
+        "tools/search_rules_qmd.mjs": {
+          "git_blob_sha256": "d9c4b3f9222ad7928dfcb1860fd0e975024512ab4e4dedf915820ed283737155",
+          "recorded_checkout_sha256": "d9c4b3f9222ad7928dfcb1860fd0e975024512ab4e4dedf915820ed283737155",
+          "binding": "exact Git blob"
+        },
+        "tools/check_public_entrypoints.py": {
+          "git_blob_sha256": "d945c1d6a8e28e3c2bb4cf93c2c2a8255d7ee21ce35afb2d8093b71e00ddc110",
+          "recorded_checkout_sha256": "65607d90c95273fcdf9088ec29005b2f6b58a90672b9449a234be1d7d43c1976",
+          "binding": "recorded checkout; CRLF-equivalent to Git blob"
+        },
+        "tools/local_search/pnpm-lock.yaml": {
+          "git_blob_sha256": "30381a3497bf589cd694665a806736e83b724be7670952f0afc2e207fc20b528",
+          "recorded_checkout_sha256": "30381a3497bf589cd694665a806736e83b724be7670952f0afc2e207fc20b528",
+          "binding": "exact Git blob"
+        },
+        "Evals/Onboarding/run_rule_routing_comparison.py": {
+          "git_blob_sha256": "818aafca6ca6764eafb73e5add46626afa39f0e0efd549131b328d1538d6df19",
+          "recorded_checkout_sha256": "818aafca6ca6764eafb73e5add46626afa39f0e0efd549131b328d1538d6df19",
+          "binding": "exact Git blob"
+        }
+      }
+    }
+  },
+  "raw_sha256": {
+    "native": "aa7d654e8ee8d37f2dcbcdcb1517357e975d48e10d5e6bbfa3ee9f0b527ed716",
+    "regression": "2f51ec7f63a7780b95eb781f7d4e84cf40cdc268937c50305aa52622636c3bed",
+    "guard_probes": "edb709218408ac751245fff6aa42e8b15ba5fb359720885c35030ef07a5f107b"
+  },
+  "claims": {
+    "p2_contracts": "PASS",
+    "p1_retrieval": "PARTIAL",
+    "general_recall": "UNVERIFIED",
+    "agent_selection_quality": "NOT RUN",
+    "remaining_p3_cases": 5,
+    "model_calls": 0
+  }
+}
