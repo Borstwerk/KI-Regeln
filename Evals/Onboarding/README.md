@@ -8,6 +8,9 @@ Gegenproben. Er belegt keine semantische Suche oder vollständigen Agentenantwor
 Die getrennte [Routing-Erweiterung](Local-Rule-Routing-2026-10-30.md) prüft
 den Bestand aller katalogisierten Skills und die Runtime-Erkennung; Quellenabdeckung
 ist keine Garantie vollständiger Relevanz je Suchanfrage.
+Der anschließende [P0/P1-Vergleich](Rule-Routing-P0-P1.md) friert 24 Fälle ein,
+vergleicht zunächst 16 Suchfälle auf demselben Quellenpaket und dokumentiert
+die Wirkung zusätzlicher Katalogtexte; spätere Fälle bleiben gesondert NOT RUN.
 
 Der [Auffindbarkeits-Pilot für drei Bereiche](Agent-Discovery-Pilot-2026-10-29.md)
 ergänzt bekannte Entwicklungsfragen, Manifest-/Linkchecks und gesondert

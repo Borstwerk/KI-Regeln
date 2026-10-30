@@ -63,5 +63,48 @@ Baseline-Rohbericht: `.validation/rule-routing-baseline-duasujmz/result.json`.
 Quellenpaket-SHA256: `02575304ff5a45aea1bc2ab73c0051c1894525f4dcd17655057434deb53b4be2`.
 Reproduzierte Fixture-Revision: `191baec96637be68e71da79c2a02bd959f01f5ab`.
 
-Candidate: **NOT RUN** bis zur tatsächlichen Ausführung. Die Fälle werden nach
-Kenntnis der Vorher-Ergebnisse nicht umformuliert oder gelockert.
+Der Candidate-Lauf auf `055d0bb` ergab **15 PASS, 1 FAIL, 8 NOT RUN**.
+Die [maschinenlesbare Evidence](Rule-Routing-P0-P1.json) enthält beide Rohberichte,
+ihre Hashes und den fallweisen Vergleich. Der erste erfolgreiche Baseline-Lauf
+ist an `fcd4ef5` gebunden. Die Codehashes binden die ausgeführten Checkoutbytes;
+zur jeweiligen Git-Fassung ist entweder exakte Gleichheit oder dokumentierte
+CRLF/LF-Äquivalenz geprüft. Nur der Suchcontroller unterscheidet sich unter den gebundenen
+Code-/Worker-/Validator-/Lockfile-/Treiberdateien.
+
+| Nachweis | Vorher | Nachher |
+| --- | --- | --- |
+| Ausgewertete P1-Suchfälle, inklusive Leertreffer | 13/16 bestanden | 15/16 bestanden |
+| ursprüngliche ADR-Frage | FAIL | PASS |
+| Claim-/Quellenprüfung als Mehrjob-Fall | FAIL | PASS |
+| Akzeptanzkriterien als Teil eines Mehrjob-Falls | FAIL | FAIL |
+| Regression bisher bestandener Fälle | – | keine |
+| Acht spätere P2/P3-Fälle | NOT RUN | NOT RUN |
+| Kanonische ausgewählte Originalbytes | unverändert | unverändert |
+
+Die bisher erfolglose Query `Akzeptanzkriterien beobachtbar` findet weiterhin
+`acceptance-criteria-design` nicht. Der Fall wird nicht umformuliert oder durch
+nachträglich gepflegte Synonyme repariert. Die geplante vollständige Descriptor-
+Prüfung bleibt ein eigener nächster Slice.
+
+Quellenpaket, Casehash, Fixture-Revision, Node/QMD-Version und Querybudget stimmen
+zwischen den beiden Läufen exakt überein. Der Verbesserungsclaim ist auf diese
+bekannten Entwicklungsfälle begrenzt. **Gesamturteil bleibt PARTIAL**, kein
+allgemeiner Recall- oder Agentenqualitätsnachweis.
+
+## Controllerprüfung und Scope
+
+75 relevante lokale Unit-Tests bestehen mit einem bestehenden Windows-Symlink-Skip.
+Sechs zusätzliche Facet-Methoden prüfen Corpusableitung, Originalpräfix,
+Hashtrennung, konkrete Facetfehler, Metadaten-Staleness und die tatsächlichen
+Datei-/Gesamtbudgets vor dem Worker. Sie sind kein QMD-Retrievalnachweis.
+
+Zwei echte Red/Green-Schritte: fehlende Ableitungsmetadaten und fälschlich
+akzeptierter kanonischer Hash anstelle des indexierten Ableitungshashes. Die alte
+Routing-Fixture wurde an den ausdrücklich genehmigten Anhangsvertrag angepasst:
+Originalpräfix und Katalogtext werden geprüft; Guides bleiben bytegleich.
+Keine Abschwächung des eigentlichen Herkunfts-/Budgetvertrags. Unabhängiger
+Source- und Testreview: keine offenen P1/P2 im geprüften Scope.
+
+P0 und der technische P1-Slice sind geliefert. Paging, vollständige Descriptor-
+Enumeration, Beziehungsableitung und natürliche Agentenauswahl bleiben **NOT
+IMPLEMENTED / NOT RUN**; die acht späteren Fälle werden nicht als PASS gezählt.

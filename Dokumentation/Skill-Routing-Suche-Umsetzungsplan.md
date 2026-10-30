@@ -258,8 +258,9 @@ Lokale Code-/Testrechte beinhalten keinen eigenen Push, Merge oder Release.
 
 ## Aktueller Status
 
-P0 ist als Kriterien-/Quellenvertrag eingefroren. P1 wird mit getrenntem
-[Vorher/Nachher-Nachweis](../Evals/Onboarding/Rule-Routing-P0-P1.md) umgesetzt.
+P0 ist als Kriterien-/Quellenvertrag eingefroren. Der technische P1-Slice ist mit
+getrenntem [Vorher/Nachher-Nachweis](../Evals/Onboarding/Rule-Routing-P0-P1.md)
+geliefert: 13 → 15 von 16 Suchfällen, ohne Regression; Retrievalurteil PARTIAL.
 P2–P5 sowie die hier vorgeschlagenen neuen CLI-Parameter sind noch **NOT
 IMPLEMENTED / NOT RUN**. Frühere Testresultate belegen ausschließlich ihren
 jeweiligen Stand; dieser Plan selbst ist kein Qualitätsnachweis.
