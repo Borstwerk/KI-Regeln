@@ -40,6 +40,9 @@ def main():
     _, original = search.read_snapshot(ROOT, revision=SOURCE, routing=True)
     for name in ['mara-project.json', 'skill-catalog.yml', 'routing-overlays.yml', 'workflow-index.yml']:
         original[name] = search.git(ROOT, 'show', SOURCE + ':' + name)
+    for name in json.loads(original['mara-project.json'])['entrypoints'].values():
+        if name not in original:
+            original[name] = search.git(ROOT, 'show', SOURCE + ':' + name)
     workflows = set(search.yaml.safe_load(original['workflow-index.yml'])['workflows'])
     for case in cases:
         for evidence in case['evidence']:
