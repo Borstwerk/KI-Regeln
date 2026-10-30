@@ -1,5 +1,5 @@
 schema_version: 2
-last_updated: '2026-10-06'
+last_updated: '2026-10-29'
 
 # Mutable external sources whose changes may affect local rules or skills.
 # A changed upstream is a review signal, never an automatic sync instruction.
@@ -13,6 +13,28 @@ last_updated: '2026-10-06'
 #   quarterly       -> check when a quarterly review is due
 
 sources:
+  # ---------------------------------------------------------------------------
+  # Agentenarbeit / Optionale lokale Regelsuche
+  # ---------------------------------------------------------------------------
+  - id: tobi-qmd-sdk-api
+    area: Agentenarbeit
+    kind: github-file
+    repository: tobi/qmd
+    path: src/index.ts
+    ref: v2.8.3
+    monitor_mode: exact-sha
+    cadence: monthly
+    observed_sha: f5ba4a8e82392925ea45d984da022445416b45a4
+    observed_version: '2.8.3'
+    last_checked: '2026-10-29'
+    local_impact:
+      - tools/search_rules.py
+      - tools/search_rules_qmd.mjs
+      - Dokumentation/Lokale-Regelsuche.md
+    notes:
+      - Public SDK dependency @tobilu/qmd is pinned to 2.8.3; this entry tracks the API reference, not a vendored SDK.
+      - The pinned tag is checked for movement; upgrading the package or source ref requires a separate explicit review and never automatic synchronization.
+
   # ---------------------------------------------------------------------------
   # Sicherheit / Inhaltsprovenienz und Metadatenhygiene
   # ---------------------------------------------------------------------------

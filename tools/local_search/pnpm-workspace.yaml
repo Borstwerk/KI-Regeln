@@ -1,0 +1,9 @@
+# SDK dependency only. Never activate its bundled agent skills or hooks.
+allowBuilds:
+  better-sqlite3: false
+  node-llama-cpp: false
+  tree-sitter-go: false
+  tree-sitter-javascript: false
+  tree-sitter-python: false
+  tree-sitter-rust: false
+  tree-sitter-typescript: false
