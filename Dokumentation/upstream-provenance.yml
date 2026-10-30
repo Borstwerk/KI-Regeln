@@ -1,7 +1,46 @@
 schema_version: 2
 source_registry: Dokumentation/upstream-sources.yml
-last_reviewed: '2026-10-06'
+last_reviewed: '2026-10-29'
 sources:
+- source_id: tobi-qmd-sdk-api
+  reviewed_at: '2026-10-29'
+  repository_commit: facd35e01359e59d938bc9418e93fb9318addee3
+  use_class: reference/inspiration
+  review_status: assessed
+  material_scope: concepts/methods-only
+  classification_evidence:
+  - Public API reference for independently authored local adapters using createStore, update, searchLex, extractSnippet and internal.getActiveDocumentPaths from the separately installed @tobilu/qmd 2.8.3 package.
+  - The reviewed SDK source specifies lexical BM25 retrieval and collection indexing; local allowlisting, budgets and result validation belong to KI-Regeln's own adapters.
+  - This record classifies API/method reference only; no upstream SDK implementation, skill files or documentation prose are copied or vendored into KI-Regeln by this integration.
+  similarity_audit: no-signal
+  redistribution_reliance: not-relied-on
+  license_spdx: MIT
+  license_source: https://github.com/tobi/qmd/blob/facd35e01359e59d938bc9418e93fb9318addee3/LICENSE
+  license_source_commit_or_ref: facd35e01359e59d938bc9418e93fb9318addee3
+  license_path: LICENSE
+  license_blob_sha: 81652d05896680c9c78e5f4a3bf69cf719f5818c
+  path_specific_license_notes:
+  - Root MIT LICENSE and package.json license declaration were verified at the same commit as src/index.ts; the API-reference classification does not assert redistribution of the installed package.
+  - The separately installed package retains its own LICENSE; none-for-reference-only describes this reference record and does not waive notices if package contents are copied or distributed later.
+  license_status_at_observation: verified-at-snapshot
+  notice_requirement: none-for-reference-only
+  redistribution_status: not-relied-on
+  license_evidence:
+    artifact_declarations:
+    - package.json declares name @tobilu/qmd, version 2.8.3 and license MIT; blob 1c6082ab9783d0d76042f102d517b04b30e2be88 at the reviewed commit.
+    same_state_files:
+    - path: LICENSE
+      blob_sha: 81652d05896680c9c78e5f4a3bf69cf719f5818c
+      spdx: MIT
+    notes:
+    - GitHub resolved public tag v2.8.3 to facd35e01359e59d938bc9418e93fb9318addee3; src/index.ts, src/store.ts, LICENSE and package.json were then fetched again at that full commit.
+    - src/index.ts blob f5ba4a8e82392925ea45d984da022445416b45a4 exposes createStore, update, searchLex, extractSnippet and the internal store; src/store.ts blob 70f01968dc70c3859448a9168271d7e35fed9c29 defines getActiveDocumentPaths.
+  source_snapshot:
+    repository: tobi/qmd
+    source_path: src/index.ts
+    observed_ref: v2.8.3
+    observed_blob_sha: f5ba4a8e82392925ea45d984da022445416b45a4
+
 - source_id: guillaumemeyer-watermarks-remover-remove-ai-marks
   reviewed_at: 2026-10-04
   repository_commit: 1181fd4e8cc581931a5ee672697a646721e92c78

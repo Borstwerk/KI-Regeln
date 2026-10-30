@@ -31,6 +31,9 @@ jobs:
         run: |
           python -m unittest tests.test_public_entrypoints
           python -m unittest tests.test_corrected_discovery
+          python -m unittest tests.test_rule_search
+          python -m unittest tests.test_rule_search_routing
+          python -m unittest tests.test_rule_search_facets
           python tools/check_public_entrypoints.py
       - name: GT-01 blind handoff and GT-04 preparation (offline; no model)
         run: python -m unittest tests.test_gt_product_pilots

@@ -1,0 +1,735 @@
+{
+  "schema_version": 1,
+  "source_commit": "6b80949fea00a427303a8dad9a612b59d7fd04ca",
+  "development_cases": true,
+  "held_out": false,
+  "oracle_basis": "Kanonische Descriptions/Near-Misses, Katalog und explizite Workflow-/Overlayquellen; vor Engine-Läufen abgeleitet.",
+  "scoring_notes": [
+    "P1-Retrieval, spätere Beziehungsfälle und technische Vertragsfälle getrennt berichten.",
+    "unsuitable_skills sind unpassende Aktivierungen; ihr Auftreten als Suchkandidat ist Rauschen und kein automatischer Retrieval-FAIL.",
+    "one_of verlangt mindestens einen Skill jeder Alternativgruppe, nicht alle.",
+    "Bei mehreren Queries die Vereinigung innerhalb des unverändert dokumentierten Kandidatenbudgets je Query beurteilen.",
+    "Alle Fälle sind Entwicklungsfälle; bekannte historische Fragen und ADR-Follow-up sind keine Held-out-Evidence."
+  ],
+  "cases": [
+    {
+      "id": "legacy-correction",
+      "group": "legacy",
+      "phase": "P1",
+      "kind": "retrieval",
+      "development_case": true,
+      "task": "Einen fertigen Text mechanisch auf Rechtschreibung und Zeichensetzung prüfen.",
+      "queries": [
+        "Rechtschreibung Zeichensetzung"
+      ],
+      "required_skills": [
+        "korrekturlektorat"
+      ],
+      "one_of": [],
+      "unsuitable_skills": [],
+      "expect_empty": false,
+      "evidence": [
+        {
+          "skill": "korrekturlektorat",
+          "path": "Schreiben/Skills/korrekturlektorat/SKILL.md",
+          "sha256": "499b931a535d7afc386092b14193108e5c24a1eaa379b76a5b6f9fbf417d5bd8",
+          "reason": "Mechanischer Korrekturauftrag, kein Stilrewrite. Kanonische Description: Mechanisches Korrekturlektorat für fertige oder weit fortgeschrittene Texte: Rechtschreibung, Grammatik, Syntax, Zeichensetzung, Tipp-/Wortfehler und unbeabsichtigte Dopplungen prüfen oder minimal korrigieren, ohne Inhalt, Stimme oder Stil unnötig umzuschreiben. Verwenden bei Korrekturlesen, Rechtschreibprüfung, Grammatikprüfung, Komma-/Zeichensetzungsprüfung oder einem letzten sprachlichen Fehlerpass. Nicht für Stilrewrite, fachliche Faktenprüfung, Übersetzung oder Typografie als Hauptziel."
+        }
+      ]
+    },
+    {
+      "id": "legacy-valuation",
+      "group": "legacy",
+      "phase": "P1",
+      "kind": "retrieval",
+      "development_case": true,
+      "task": "Ein Unternehmen mit DCF und Comparable Companies bewerten.",
+      "queries": [
+        "DCF Comparable Companies"
+      ],
+      "required_skills": [
+        "bewertungsanalyse"
+      ],
+      "one_of": [],
+      "unsuitable_skills": [],
+      "expect_empty": false,
+      "evidence": [
+        {
+          "skill": "bewertungsanalyse",
+          "path": "Finanzen/Skills/bewertungsanalyse/SKILL.md",
+          "sha256": "f13115b7485da959104cb3e377eca916a593f1155e886d05eae546c945cc4a8d",
+          "reason": "Bewertungsmethoden und belegte Bewertungsinputs sind der konkrete Job. Kanonische Description: Bewertet Unternehmen oder Beteiligungen mit passenden Methoden wie DCF und Comparable Companies über explizite, belegte Inputs, Annahmen, Peer-Auswahl und Sensitivitäten. Verwenden bei Fair-Value-, DCF-, Multiple- oder Bewertungsfragen; nicht für reine Unternehmensqualität, automatische Investmentempfehlungen oder ungeprüfte aktuelle Marktwerte."
+        }
+      ]
+    },
+    {
+      "id": "legacy-character",
+      "group": "legacy",
+      "phase": "P1",
+      "kind": "retrieval",
+      "development_case": true,
+      "task": "Fiktionale Figuren auf Motivation und Agency entwickeln.",
+      "queries": [
+        "Figuren Motivation Agency"
+      ],
+      "required_skills": [
+        "figurenentwicklung"
+      ],
+      "one_of": [],
+      "unsuitable_skills": [],
+      "expect_empty": false,
+      "evidence": [
+        {
+          "skill": "figurenentwicklung",
+          "path": "Storyentwicklung-und-Fiktion/Skills/figurenentwicklung/SKILL.md",
+          "sha256": "0908e80908c3f5d7313e070e173c7ea9878db71c38371c78e8e55828822f2a16",
+          "reason": "Narrative Figurenmotivation und Agency, keine visuelle Referenz. Kanonische Description: Entwickelt fiktionale Figuren mit Motivation, Agency, Beziehungen, Stimme und möglichem Arc oder prüft bestehende Figuren darauf. Verwenden bei Charakterentwicklung, Figurenprofilen, Beziehungsdynamik oder Character Arcs; nicht für rein visuelle Referenzmerkmale."
+        }
+      ]
+    },
+    {
+      "id": "legacy-adr",
+      "group": "legacy",
+      "phase": "P1",
+      "kind": "retrieval",
+      "development_case": true,
+      "task": "Eine bereits getroffene Architekturentscheidung mit Alternativen und Konsequenzen dokumentieren.",
+      "queries": [
+        "Architekturentscheidungen Alternativen Konsequenzen"
+      ],
+      "required_skills": [
+        "adr"
+      ],
+      "one_of": [],
+      "unsuitable_skills": [],
+      "expect_empty": false,
+      "evidence": [
+        {
+          "skill": "adr",
+          "path": "Dokumentationserstellung/Skills/adr/SKILL.md",
+          "sha256": "5b4f69eabdeb03b51df9a1f20ecf7340341c940eafa990eef1a7d74957493720",
+          "reason": "Entscheidungsdokumentation einer getroffenen Entscheidung, nicht die Auswahl einer Architektur. Kanonische Description: Dokumentiert eine Architektur- oder technische Grundsatzentscheidung nachvollziehbar als Architecture Decision Record mit Kontext, Alternativen und Konsequenzen. Verwenden bei tatsächlich getroffenen oder klar als Proposal markierten Entscheidungen, deren Begründung und Trade-offs dauerhaft nachvollziehbar bleiben sollen."
+        }
+      ],
+      "historical_note": "Originaler fehlgeschlagener Entwicklungsfall; Query und Erwartung unverändert."
+    },
+    {
+      "id": "wording-correction",
+      "group": "wording",
+      "phase": "P1",
+      "kind": "retrieval",
+      "development_case": true,
+      "task": "Bitte prüfe den fertigen Text auf Tippfehler und versehentliche Dopplungen.",
+      "queries": [
+        "Tippfehler Dopplungen Korrekturlesen"
+      ],
+      "required_skills": [
+        "korrekturlektorat"
+      ],
+      "one_of": [],
+      "unsuitable_skills": [],
+      "expect_empty": false,
+      "evidence": [
+        {
+          "skill": "korrekturlektorat",
+          "path": "Schreiben/Skills/korrekturlektorat/SKILL.md",
+          "sha256": "499b931a535d7afc386092b14193108e5c24a1eaa379b76a5b6f9fbf417d5bd8",
+          "reason": "Die zu beurteilende Aufgabe und die Grenzen dieses Owners sind in dieser Description benannt. Kanonische Description: Mechanisches Korrekturlektorat für fertige oder weit fortgeschrittene Texte: Rechtschreibung, Grammatik, Syntax, Zeichensetzung, Tipp-/Wortfehler und unbeabsichtigte Dopplungen prüfen oder minimal korrigieren, ohne Inhalt, Stimme oder Stil unnötig umzuschreiben. Verwenden bei Korrekturlesen, Rechtschreibprüfung, Grammatikprüfung, Komma-/Zeichensetzungsprüfung oder einem letzten sprachlichen Fehlerpass. Nicht für Stilrewrite, fachliche Faktenprüfung, Übersetzung oder Typografie als Hauptziel."
+        }
+      ]
+    },
+    {
+      "id": "wording-valuation",
+      "group": "wording",
+      "phase": "P1",
+      "kind": "retrieval",
+      "development_case": true,
+      "task": "Ich benötige eine Fair-Value-Bewertung mit Sensitivitäten.",
+      "queries": [
+        "Fair-Value Sensitivitäten"
+      ],
+      "required_skills": [
+        "bewertungsanalyse"
+      ],
+      "one_of": [],
+      "unsuitable_skills": [],
+      "expect_empty": false,
+      "evidence": [
+        {
+          "skill": "bewertungsanalyse",
+          "path": "Finanzen/Skills/bewertungsanalyse/SKILL.md",
+          "sha256": "f13115b7485da959104cb3e377eca916a593f1155e886d05eae546c945cc4a8d",
+          "reason": "Die zu beurteilende Aufgabe und die Grenzen dieses Owners sind in dieser Description benannt. Kanonische Description: Bewertet Unternehmen oder Beteiligungen mit passenden Methoden wie DCF und Comparable Companies über explizite, belegte Inputs, Annahmen, Peer-Auswahl und Sensitivitäten. Verwenden bei Fair-Value-, DCF-, Multiple- oder Bewertungsfragen; nicht für reine Unternehmensqualität, automatische Investmentempfehlungen oder ungeprüfte aktuelle Marktwerte."
+        }
+      ]
+    },
+    {
+      "id": "wording-character",
+      "group": "wording",
+      "phase": "P1",
+      "kind": "retrieval",
+      "development_case": true,
+      "task": "Hilf mir bei Character Arcs und den Beziehungen meiner Romanfiguren.",
+      "queries": [
+        "Character Arcs Beziehungen"
+      ],
+      "required_skills": [
+        "figurenentwicklung"
+      ],
+      "one_of": [],
+      "unsuitable_skills": [],
+      "expect_empty": false,
+      "evidence": [
+        {
+          "skill": "figurenentwicklung",
+          "path": "Storyentwicklung-und-Fiktion/Skills/figurenentwicklung/SKILL.md",
+          "sha256": "0908e80908c3f5d7313e070e173c7ea9878db71c38371c78e8e55828822f2a16",
+          "reason": "Die zu beurteilende Aufgabe und die Grenzen dieses Owners sind in dieser Description benannt. Kanonische Description: Entwickelt fiktionale Figuren mit Motivation, Agency, Beziehungen, Stimme und möglichem Arc oder prüft bestehende Figuren darauf. Verwenden bei Charakterentwicklung, Figurenprofilen, Beziehungsdynamik oder Character Arcs; nicht für rein visuelle Referenzmerkmale."
+        }
+      ]
+    },
+    {
+      "id": "wording-adr",
+      "group": "wording",
+      "phase": "P1",
+      "kind": "retrieval",
+      "development_case": true,
+      "task": "Halte eine technische Grundsatzentscheidung als Architecture Decision Record fest.",
+      "queries": [
+        "Architecture Decision Record Alternativen"
+      ],
+      "required_skills": [
+        "adr"
+      ],
+      "one_of": [],
+      "unsuitable_skills": [],
+      "expect_empty": false,
+      "evidence": [
+        {
+          "skill": "adr",
+          "path": "Dokumentationserstellung/Skills/adr/SKILL.md",
+          "sha256": "5b4f69eabdeb03b51df9a1f20ecf7340341c940eafa990eef1a7d74957493720",
+          "reason": "Die zu beurteilende Aufgabe und die Grenzen dieses Owners sind in dieser Description benannt. Kanonische Description: Dokumentiert eine Architektur- oder technische Grundsatzentscheidung nachvollziehbar als Architecture Decision Record mit Kontext, Alternativen und Konsequenzen. Verwenden bei tatsächlich getroffenen oder klar als Proposal markierten Entscheidungen, deren Begründung und Trade-offs dauerhaft nachvollziehbar bleiben sollen."
+        }
+      ],
+      "historical_note": "Bereits bekannter nachträglicher ADR-Follow-up; kein Held-out-Fall."
+    },
+    {
+      "id": "jobs-acceptance-tests",
+      "group": "multiple_jobs",
+      "phase": "P1",
+      "kind": "retrieval",
+      "development_case": true,
+      "task": "Formuliere beobachtbare Akzeptanzkriterien und leite danach konkrete Grenztests ab.",
+      "queries": [
+        "Akzeptanzkriterien beobachtbar",
+        "Testfälle Grenzwerte"
+      ],
+      "required_skills": [
+        "acceptance-criteria-design",
+        "test-design"
+      ],
+      "one_of": [],
+      "unsuitable_skills": [],
+      "expect_empty": false,
+      "evidence": [
+        {
+          "skill": "acceptance-criteria-design",
+          "path": "Requirements-und-Spezifikations-Engineering/Skills/acceptance-criteria-design/SKILL.md",
+          "sha256": "9eebe9c721f76155a496ef7ba6af2c778a28f006b6dcc6a02581682a994bdd62",
+          "reason": "Erfüllungskriterien zuerst, getrennt von konkreten Tests. Kanonische Description: Entwirft beobachtbare Acceptance Criteria und Verification Intent für bestehende Requirements oder Szenarien, ohne bereits Testfälle oder Implementierungsdetails festzulegen. Verwenden wenn Erfüllungskriterien fehlen, vage oder unvollständig sind. Nicht als Testdesign-, E2E- oder Contract-Test-Skill verwenden."
+        },
+        {
+          "skill": "test-design",
+          "path": "Testing-und-QA/Skills/test-design/SKILL.md",
+          "sha256": "2f04848bb93221f51b609ef04fe8c824a003bff176bfa947b9d8ee3bb68639ab",
+          "reason": "Zweiter eigenständiger Job: konkrete Testfälle aus Grenzen ableiten. Kanonische Description: Entwirft konkrete Testfälle aus Anforderungen, Invarianten, Zuständen, Grenzwerten und Failure Modes. Verwenden, wenn konkrete Testfälle oder eine systematische Testfallmenge benötigt werden. Nicht als allgemeine Teststrategie oder E2E-Ausführung verwenden."
+        }
+      ]
+    },
+    {
+      "id": "jobs-claim-source",
+      "group": "multiple_jobs",
+      "phase": "P1",
+      "kind": "retrieval",
+      "development_case": true,
+      "task": "Prüfe eine konkrete Behauptung und bewerte zusätzlich die Eignung ihrer Quellen.",
+      "queries": [
+        "Behauptungen Evidenz prüfen",
+        "Quellen Autorität Aktualität"
+      ],
+      "required_skills": [
+        "claim-verification",
+        "source-evaluation"
+      ],
+      "one_of": [],
+      "unsuitable_skills": [],
+      "expect_empty": false,
+      "evidence": [
+        {
+          "skill": "claim-verification",
+          "path": "Recherche/Skills/claim-verification/SKILL.md",
+          "sha256": "bf491036efad3326d0a062212a6adcf933274feab9cea92288928be48c14e82b",
+          "reason": "Wahrheits-/Evidenzprüfung des konkreten Claims. Kanonische Description: Prüft einen bestehenden, präzisierten Claim gezielt gegen geeignete Evidenz und ordnet Unterstützung, Konflikte und verbleibende Unsicherheit ein. Verwenden bei wichtigen oder strittigen Faktenclaims, deren tatsächliche Evidenzbasis verifiziert werden soll; nicht als flächiger Citation Audit einer fertigen Synthese und nicht nur zur allgemeinen Qualitätsnote einer Quelle."
+        },
+        {
+          "skill": "source-evaluation",
+          "path": "Recherche/Skills/source-evaluation/SKILL.md",
+          "sha256": "474246da90126a2f8da18b539235c5da677e69332535c70d7fd1c25ccd854e45",
+          "reason": "Eigener Job: Stärke und Eignung konkreter Quellen, nicht bloß Claim-Urteil. Kanonische Description: Bewertet eine Quelle bezogen auf einen konkreten Claim nach Direktheit, Aktualität, Primärnähe, Fachnähe, Methodentransparenz und Unabhängigkeit. Verwenden bei Research-Claims, wenn die Eignung oder Stärke einer konkreten Quelle eingeordnet werden muss; nicht zur vollständigen Wahrheitsprüfung des Claims und nicht als Citation Audit einer fertigen Synthese."
+        }
+      ]
+    },
+    {
+      "id": "jobs-provenance-hygiene",
+      "group": "multiple_jobs",
+      "phase": "P1",
+      "kind": "retrieval",
+      "development_case": true,
+      "task": "Prüfe erst die Metadaten meiner Datei und erstelle dann eine autorisierte Sharing-Kopie ohne sensible GPS-Metadaten.",
+      "queries": [
+        "Provenienz Metadaten Geräte",
+        "GPS Sharing-Kopie Metadaten"
+      ],
+      "required_skills": [
+        "inhaltsprovenienz-review",
+        "metadaten-hygiene"
+      ],
+      "one_of": [],
+      "unsuitable_skills": [],
+      "expect_empty": false,
+      "evidence": [
+        {
+          "skill": "inhaltsprovenienz-review",
+          "path": "Sicherheit/Skills/inhaltsprovenienz-review/SKILL.md",
+          "sha256": "57f7d276cba75a38aa068ec318d0e9769c4d04c2353f96a6246e3a9065eeeee3",
+          "reason": "Erster read-only Job: vorhandene Geräte-/Herkunftssignale verstehen. Kanonische Description: Vorhandene Dateien oder Inhalte read-only auf sichtbare und maschinenlesbare Provenienzsignale, Metadaten, Content Credentials, ungewöhnliche Unicode-Artefakte und dokumentierte Herkunftshinweise prüfen. Verwenden wenn der Nutzer wissen will, welche Provenienz-, Generator-, Geräte- oder Bearbeitungshinweise in einer Datei stecken, ohne diese bereits zu entfernen oder zu verändern."
+        },
+        {
+          "skill": "metadaten-hygiene",
+          "path": "Sicherheit/Skills/metadaten-hygiene/SKILL.md",
+          "sha256": "a4177ac40e6ec39f621f01321b7f04e672428dd447893f5f8e8751afdcc6ebe4",
+          "reason": "Zweiter autorisierter Job: unnötige Metadaten kontrolliert entfernen. Kanonische Description: Eigene oder ausdrücklich autorisiert bearbeitete Dateien kontrolliert auf unnötige, sensible oder unbeabsichtigte Metadaten bereinigen, ohne erforderliche Provenienz-, Disclosure-, Rechte- oder Fachinformationen blind zu entfernen. Verwenden bei Privacy- und Datei-Hygiene vor Weitergabe; nicht für Detector-Evasion, sichtbare Fremd-Watermarks oder die Verschleierung erforderlicher Herkunftsangaben."
+        }
+      ]
+    },
+    {
+      "id": "jobs-canon-character",
+      "group": "multiple_jobs",
+      "phase": "P1",
+      "kind": "retrieval",
+      "development_case": true,
+      "task": "Pflege den bestätigten Story-Kanon und entwickle danach die Motivation einer Figur weiter.",
+      "queries": [
+        "Story-Bible Kanon offene Fragen",
+        "Figuren Motivation Agency"
+      ],
+      "required_skills": [
+        "story-bible",
+        "figurenentwicklung"
+      ],
+      "one_of": [],
+      "unsuitable_skills": [],
+      "expect_empty": false,
+      "evidence": [
+        {
+          "skill": "story-bible",
+          "path": "Storyentwicklung-und-Fiktion/Skills/story-bible/SKILL.md",
+          "sha256": "4241c970178057087087872f378c52183ce1789c2861b5ff01febbdf8e00a485",
+          "reason": "Kanonpflege und Statusunterscheidung sind ein eigener Job. Kanonische Description: Erstellt oder pflegt eine toolneutrale Story-Bible für fiktionale Projekte und trennt bestätigten Kanon, geplante Entwicklungen, Vorschläge, offene Fragen und überholte Stände. Verwenden bei Romanen, Serien oder anderen Erzählprojekten, wenn narrative Projektwahrheit über mehrere Szenen oder Sessions stabil gehalten werden muss."
+        },
+        {
+          "skill": "figurenentwicklung",
+          "path": "Storyentwicklung-und-Fiktion/Skills/figurenentwicklung/SKILL.md",
+          "sha256": "0908e80908c3f5d7313e070e173c7ea9878db71c38371c78e8e55828822f2a16",
+          "reason": "Die konkrete narrative Figurenentwicklung ist ein zusätzlicher Job. Kanonische Description: Entwickelt fiktionale Figuren mit Motivation, Agency, Beziehungen, Stimme und möglichem Arc oder prüft bestehende Figuren darauf. Verwenden bei Charakterentwicklung, Figurenprofilen, Beziehungsdynamik oder Character Arcs; nicht für rein visuelle Referenzmerkmale."
+        }
+      ]
+    },
+    {
+      "id": "relation-related",
+      "group": "relationships",
+      "phase": "P3",
+      "kind": "retrieval",
+      "development_case": true,
+      "task": "Eine Bewertung ist der Einstieg; zusätzlich soll die aktuelle Unternehmensqualität untersucht werden.",
+      "queries": [
+        "DCF Comparable Companies"
+      ],
+      "required_skills": [
+        "bewertungsanalyse",
+        "unternehmensanalyse"
+      ],
+      "one_of": [],
+      "unsuitable_skills": [],
+      "expect_empty": false,
+      "evidence": [
+        {
+          "skill": "bewertungsanalyse",
+          "path": "Finanzen/Skills/bewertungsanalyse/SKILL.md",
+          "sha256": "f13115b7485da959104cb3e377eca916a593f1155e886d05eae546c945cc4a8d",
+          "reason": "Lexikalischer Einstiegsjob: Bewertung. Kanonische Description: Bewertet Unternehmen oder Beteiligungen mit passenden Methoden wie DCF und Comparable Companies über explizite, belegte Inputs, Annahmen, Peer-Auswahl und Sensitivitäten. Verwenden bei Fair-Value-, DCF-, Multiple- oder Bewertungsfragen; nicht für reine Unternehmensqualität, automatische Investmentempfehlungen oder ungeprüfte aktuelle Marktwerte."
+        },
+        {
+          "skill": "unternehmensanalyse",
+          "path": "Finanzen/Skills/unternehmensanalyse/SKILL.md",
+          "sha256": "a70099727edd346e11ec18a9c6fd213fa852699fb1413057b0c73ba160e977eb",
+          "reason": "Zusätzlicher echter Job: Geschäftsmodell, Finanzentwicklung und Risiken statt bloßer Fair Value. Kanonische Description: Analysiert ein Unternehmen anhand aktueller Primärquellen auf Geschäftsmodell, Economics, finanzielle Entwicklung, Wettbewerb, Risiken, Kapitalallokation und eine optional falsifizierbare Investmentthese. Verwenden bei \"Analysiere Unternehmen X\", Fundamentalanalyse oder Earnings-Update; nicht für reine Fair-Value-Berechnung, Produktvergleich oder automatische Buy/Hold/Sell-Entscheidungen."
+        },
+        {
+          "skill": null,
+          "path": "skill-catalog.yml",
+          "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca",
+          "reason": "skills[id=bewertungsanalyse].related enthält unternehmensanalyse; nur Kandidatenhinweis, keine Aktivierung."
+        }
+      ],
+      "expected_behavior": "Direkten Einstieg und related-Kandidat getrennt mit belegter Herkunft ausgeben; die tatsächliche zweite Aufgabe rechtfertigt die Prüfung des Nachbarn."
+    },
+    {
+      "id": "relation-workflow",
+      "group": "relationships",
+      "phase": "P3",
+      "kind": "retrieval",
+      "development_case": true,
+      "task": "Vergleiche ernsthafte Architekturvarianten unter konkreten Quality-Szenarien und dokumentiere anschließend die Entscheidung.",
+      "queries": [
+        "Architekturentscheidung Trade-off"
+      ],
+      "required_skills": [
+        "architecture-tradeoff-analysis",
+        "adr"
+      ],
+      "one_of": [],
+      "unsuitable_skills": [],
+      "expect_empty": false,
+      "evidence": [
+        {
+          "skill": "architecture-tradeoff-analysis",
+          "path": "Software-Architecture-und-System-Design/Skills/architecture-tradeoff-analysis/SKILL.md",
+          "sha256": "155a39a7d5c37c8395b808155ae767c58bcb42d28ce5b6186753400d1384e616",
+          "reason": "Eigener Job: konkurrierende ernsthafte Architekturvarianten vergleichen. Kanonische Description: Vergleicht ernsthafte Architekturvarianten anhand konkreter Quality-Szenarien, Constraints, Failure Modes, Kosten, Operability, Migration und Sensitivity Points. Verwenden bei schwer umkehrbaren Architekturentscheidungen oder konkurrierenden Systemdesigns. Nicht als generische Pro/Contra-Liste oder Scoregenerator verwenden."
+        },
+        {
+          "skill": "adr",
+          "path": "Dokumentationserstellung/Skills/adr/SKILL.md",
+          "sha256": "5b4f69eabdeb03b51df9a1f20ecf7340341c940eafa990eef1a7d74957493720",
+          "reason": "Eigener nachgelagerter Job: getroffene Entscheidung dauerhaft dokumentieren. Kanonische Description: Dokumentiert eine Architektur- oder technische Grundsatzentscheidung nachvollziehbar als Architecture Decision Record mit Kontext, Alternativen und Konsequenzen. Verwenden bei tatsächlich getroffenen oder klar als Proposal markierten Entscheidungen, deren Begründung und Trade-offs dauerhaft nachvollziehbar bleiben sollen."
+        },
+        {
+          "skill": null,
+          "path": "Workflows/Architekturentscheidung-und-Tradeoff.md",
+          "sha256": "2190ae3c4c837b2b6ac51554384d15e2322f3b760c26cff31b230ca05b5bbdf7",
+          "reason": "Skills-Abschnitt benennt architecture-tradeoff-analysis als Kern und adr zur Entscheidungsdokumentation; keine pauschale Pflicht aus beiläufigen Nennungen."
+        }
+      ],
+      "expected_behavior": "Workflow-Verweise mit Quelle ausgeben; Kern und nachgelagerte Dokumentation gegen ihre kanonischen Descriptions prüfen."
+    },
+    {
+      "id": "relation-overlay",
+      "group": "relationships",
+      "phase": "P3",
+      "kind": "retrieval",
+      "development_case": true,
+      "task": "Führe zunächst mehrere Research-Funde zu einer strukturierten Synthese zusammen. Prüfe danach vor Abschluss den Support der wesentlichen Claims dieser fertigen Synthese durch die zitierten Quellen.",
+      "queries": [
+        "Research Findings Fakten Interpretationen"
+      ],
+      "required_skills": [
+        "research-synthesis",
+        "citation-audit"
+      ],
+      "one_of": [],
+      "unsuitable_skills": [],
+      "expect_empty": false,
+      "evidence": [
+        {
+          "skill": "research-synthesis",
+          "path": "Recherche/Skills/research-synthesis/SKILL.md",
+          "sha256": "bf739ec5452a4edd0262fdb42054dd1a002f3b099a9ac59ed6aae21f1303a7a8",
+          "reason": "Erster ausdrücklich beauftragter Job: mehrere Research-Funde zu einer strukturierten Synthese verbinden; erst danach folgt der eigenständige Support-Audit. Kanonische Description: Führt mehrere Research-Funde zu einem strukturierten, entscheidungsrelevanten Wissensbild mit sichtbaren Fakten, Interpretationen, Konflikten und Unsicherheiten zusammen. Verwenden bei mehreren Quellen oder Teilfragen, wenn Findings nach Erkenntnis statt nach Quelle synthetisiert werden sollen."
+        },
+        {
+          "skill": "citation-audit",
+          "path": "Recherche/Skills/citation-audit/SKILL.md",
+          "sha256": "3dae6050d9cfcfb2a3e4a91f1d545da05b6c1c231bb256ea148ffb0588838928",
+          "reason": "Expliziter Zusatzjob im pre-completion-Zustand: Claim-zu-Zitation-Support auditieren. Kanonische Description: Prüft fertige oder weitgehend fertige Research-Synthesen darauf, ob wesentliche Faktenclaims durch die tatsächlich zugeordneten Quellen und konkrete Evidence gestützt werden. Verwenden vor Abschluss oder Veröffentlichung, wenn Claim-zu-Zitation-Support materiell geprüft werden muss; nicht für die frühe Qualitätsbewertung einzelner Quellen oder die isolierte Verifikation eines einzelnen Claims."
+        },
+        {
+          "skill": null,
+          "path": "routing-overlays.yml",
+          "sha256": "2ab96e1b0028f3e5f6e4c2a7331ca32016517c23ebac829519275fb4ba45c224",
+          "reason": "citation-audit ist für pre-completion registriert; Registrierung allein aktiviert den Skill nicht."
+        }
+      ],
+      "expected_behavior": "Overlay-Checkpoint und Source ausgeben; fertige Synthese und expliziter Auditauftrag erfüllen die kanonische Audit-Description."
+    },
+    {
+      "id": "relation-no-seed",
+      "group": "relationships",
+      "phase": "P3",
+      "kind": "retrieval",
+      "development_case": true,
+      "task": "Ein nicht vorhandener Suchbegriff darf keine erfundenen Einstiegstreffer oder automatisch aktivierten Nachbarn erzeugen.",
+      "queries": [
+        "zzroutingnographseedf72ea4bd"
+      ],
+      "required_skills": [],
+      "one_of": [],
+      "unsuitable_skills": [],
+      "expect_empty": true,
+      "evidence": [
+        {
+          "skill": null,
+          "path": "AGENTS.md",
+          "sha256": "cf4f019199b279bc0abaca656ff69244664c870f9dc2d4cacfe072e3e36bf763",
+          "reason": "Leere oder unpassende Treffer führen zum Katalog-/Dateifallback und begründen kein none."
+        }
+      ],
+      "expected_behavior": "Leere direkte Treffer beibehalten; Graph erfindet keinen Seed. Der Agent nutzt bei einer echten Aufgabe den direkten Katalog-Fallback."
+    },
+    {
+      "id": "negative-absent",
+      "group": "near_miss",
+      "phase": "P1",
+      "kind": "retrieval",
+      "development_case": true,
+      "task": "Suche nach einem im Routingbestand nicht vorhandenen Kontrollbegriff.",
+      "queries": [
+        "zzroutingabsentf72ea4bd"
+      ],
+      "required_skills": [],
+      "one_of": [],
+      "unsuitable_skills": [],
+      "expect_empty": true,
+      "evidence": [
+        {
+          "skill": null,
+          "path": "AGENTS.md",
+          "sha256": "cf4f019199b279bc0abaca656ff69244664c870f9dc2d4cacfe072e3e36bf763",
+          "reason": "Leere Treffer sind keine Erlaubnis für ungeprüftes none; Suchergebnis und Routingentscheidung bleiben getrennt."
+        }
+      ],
+      "historical_note": "Originale Leertreffer-Gegenprobe unverändert."
+    },
+    {
+      "id": "near-correction-only",
+      "group": "near_miss",
+      "phase": "P1",
+      "kind": "retrieval",
+      "development_case": true,
+      "task": "Prüfe nur Rechtschreibung und Grammatik, ohne die bereits freigegebene Stimme umzuschreiben.",
+      "queries": [
+        "Rechtschreibung Grammatik Korrekturlesen"
+      ],
+      "required_skills": [
+        "korrekturlektorat"
+      ],
+      "one_of": [],
+      "unsuitable_skills": [
+        "stilreview",
+        "natuerliches-schreiben"
+      ],
+      "expect_empty": false,
+      "evidence": [
+        {
+          "skill": "korrekturlektorat",
+          "path": "Schreiben/Skills/korrekturlektorat/SKILL.md",
+          "sha256": "499b931a535d7afc386092b14193108e5c24a1eaa379b76a5b6f9fbf417d5bd8",
+          "reason": "Mechanische Korrektur ist ausdrücklich beauftragt. Kanonische Description: Mechanisches Korrekturlektorat für fertige oder weit fortgeschrittene Texte: Rechtschreibung, Grammatik, Syntax, Zeichensetzung, Tipp-/Wortfehler und unbeabsichtigte Dopplungen prüfen oder minimal korrigieren, ohne Inhalt, Stimme oder Stil unnötig umzuschreiben. Verwenden bei Korrekturlesen, Rechtschreibprüfung, Grammatikprüfung, Komma-/Zeichensetzungsprüfung oder einem letzten sprachlichen Fehlerpass. Nicht für Stilrewrite, fachliche Faktenprüfung, Übersetzung oder Typografie als Hauptziel."
+        },
+        {
+          "skill": "stilreview",
+          "path": "Schreiben/Skills/stilreview/SKILL.md",
+          "sha256": "0dfdcc7246168f4814c391b5c181c2e3e07b5568097543fb7ffcbaa5c8049270",
+          "reason": "Keine eigenständige Stilprüfung beauftragt. Kanonische Description: Struktureller Stilreview für längere Texte. Verwendet Muster als Fundstellen, bewertet aber immer Funktion, Zielgruppe, Stimme und Inhalt vor einer Änderung. Verwenden bei fertigen oder weit fortgeschrittenen Texten, wenn Stilprobleme, KI-typische Muster oder unnötige Glättung unabhängig geprüft werden sollen."
+        },
+        {
+          "skill": "natuerliches-schreiben",
+          "path": "Schreiben/Skills/natuerliches-schreiben/SKILL.md",
+          "sha256": "7076c50f822921972ba6d822ec63f77f75cb6d701fa1c2e596801db712290808",
+          "reason": "Ein Rewrite würde den eng begrenzten Auftrag erweitern. Kanonische Description: Allgemeiner Schreibskill für klare, glaubwürdige und natürliche sachliche oder allgemeine Texte. Verwenden zum Erzeugen neuer Texte, zum inhaltstreuen sprachlichen Überarbeiten sowie zur evidenzbasierten Annäherung an eine vorhandene Nutzerstimme, wenn natürliche Formulierungen, Quellen- und Unsicherheitstreue sowie ein sauberes Endprodukt wichtig sind."
+        }
+      ]
+    },
+    {
+      "id": "near-source-only",
+      "group": "near_miss",
+      "phase": "P1",
+      "kind": "retrieval",
+      "development_case": true,
+      "task": "Bewerte nur die Eignung dieser Quelle für den genannten Claim; führe keine vollständige Wahrheitsprüfung oder einen Synthese-Audit durch.",
+      "queries": [
+        "Quelle Aktualität Unabhängigkeit"
+      ],
+      "required_skills": [
+        "source-evaluation"
+      ],
+      "one_of": [],
+      "unsuitable_skills": [
+        "claim-verification",
+        "citation-audit"
+      ],
+      "expect_empty": false,
+      "evidence": [
+        {
+          "skill": "source-evaluation",
+          "path": "Recherche/Skills/source-evaluation/SKILL.md",
+          "sha256": "474246da90126a2f8da18b539235c5da677e69332535c70d7fd1c25ccd854e45",
+          "reason": "Quellenstärke für einen Claim ist der vollständige Auftrag. Kanonische Description: Bewertet eine Quelle bezogen auf einen konkreten Claim nach Direktheit, Aktualität, Primärnähe, Fachnähe, Methodentransparenz und Unabhängigkeit. Verwenden bei Research-Claims, wenn die Eignung oder Stärke einer konkreten Quelle eingeordnet werden muss; nicht zur vollständigen Wahrheitsprüfung des Claims und nicht als Citation Audit einer fertigen Synthese."
+        },
+        {
+          "skill": "claim-verification",
+          "path": "Recherche/Skills/claim-verification/SKILL.md",
+          "sha256": "bf491036efad3326d0a062212a6adcf933274feab9cea92288928be48c14e82b",
+          "reason": "Vollständige Claim-Wahrheitsprüfung ist ausdrücklich ausgeschlossen. Kanonische Description: Prüft einen bestehenden, präzisierten Claim gezielt gegen geeignete Evidenz und ordnet Unterstützung, Konflikte und verbleibende Unsicherheit ein. Verwenden bei wichtigen oder strittigen Faktenclaims, deren tatsächliche Evidenzbasis verifiziert werden soll; nicht als flächiger Citation Audit einer fertigen Synthese und nicht nur zur allgemeinen Qualitätsnote einer Quelle."
+        },
+        {
+          "skill": "citation-audit",
+          "path": "Recherche/Skills/citation-audit/SKILL.md",
+          "sha256": "3dae6050d9cfcfb2a3e4a91f1d545da05b6c1c231bb256ea148ffb0588838928",
+          "reason": "Es liegt keine fertige Synthese zum Citation Audit vor. Kanonische Description: Prüft fertige oder weitgehend fertige Research-Synthesen darauf, ob wesentliche Faktenclaims durch die tatsächlich zugeordneten Quellen und konkrete Evidence gestützt werden. Verwenden vor Abschluss oder Veröffentlichung, wenn Claim-zu-Zitation-Support materiell geprüft werden muss; nicht für die frühe Qualitätsbewertung einzelner Quellen oder die isolierte Verifikation eines einzelnen Claims."
+        }
+      ]
+    },
+    {
+      "id": "near-style-alternative",
+      "group": "near_miss",
+      "phase": "P1",
+      "kind": "retrieval",
+      "development_case": true,
+      "task": "Der Text wirkt mechanisch. Liefere entweder eine begründete Stildiagnose oder eine autorisierte inhaltstreue natürlichere Fassung; Rechtschreibung ist bereits geprüft.",
+      "queries": [
+        "Stil natürliche Formulierungen"
+      ],
+      "required_skills": [],
+      "one_of": [
+        [
+          "stilreview",
+          "natuerliches-schreiben"
+        ]
+      ],
+      "unsuitable_skills": [
+        "korrekturlektorat"
+      ],
+      "expect_empty": false,
+      "evidence": [
+        {
+          "skill": "stilreview",
+          "path": "Schreiben/Skills/stilreview/SKILL.md",
+          "sha256": "0dfdcc7246168f4814c391b5c181c2e3e07b5568097543fb7ffcbaa5c8049270",
+          "reason": "Eine begründete Stildiagnose erfüllt die ausdrücklich erlaubte erste Alternative. Kanonische Description: Struktureller Stilreview für längere Texte. Verwendet Muster als Fundstellen, bewertet aber immer Funktion, Zielgruppe, Stimme und Inhalt vor einer Änderung. Verwenden bei fertigen oder weit fortgeschrittenen Texten, wenn Stilprobleme, KI-typische Muster oder unnötige Glättung unabhängig geprüft werden sollen."
+        },
+        {
+          "skill": "natuerliches-schreiben",
+          "path": "Schreiben/Skills/natuerliches-schreiben/SKILL.md",
+          "sha256": "7076c50f822921972ba6d822ec63f77f75cb6d701fa1c2e596801db712290808",
+          "reason": "Eine autorisierte inhaltstreue natürliche Fassung erfüllt die ausdrücklich erlaubte zweite Alternative. Kanonische Description: Allgemeiner Schreibskill für klare, glaubwürdige und natürliche sachliche oder allgemeine Texte. Verwenden zum Erzeugen neuer Texte, zum inhaltstreuen sprachlichen Überarbeiten sowie zur evidenzbasierten Annäherung an eine vorhandene Nutzerstimme, wenn natürliche Formulierungen, Quellen- und Unsicherheitstreue sowie ein sauberes Endprodukt wichtig sind."
+        },
+        {
+          "skill": "korrekturlektorat",
+          "path": "Schreiben/Skills/korrekturlektorat/SKILL.md",
+          "sha256": "499b931a535d7afc386092b14193108e5c24a1eaa379b76a5b6f9fbf417d5bd8",
+          "reason": "Mechanische Fehler sind bereits geprüft; sie sind kein Ersatz für den Stilauftrag. Kanonische Description: Mechanisches Korrekturlektorat für fertige oder weit fortgeschrittene Texte: Rechtschreibung, Grammatik, Syntax, Zeichensetzung, Tipp-/Wortfehler und unbeabsichtigte Dopplungen prüfen oder minimal korrigieren, ohne Inhalt, Stimme oder Stil unnötig umzuschreiben. Verwenden bei Korrekturlesen, Rechtschreibprüfung, Grammatikprüfung, Komma-/Zeichensetzungsprüfung oder einem letzten sprachlichen Fehlerpass. Nicht für Stilrewrite, fachliche Faktenprüfung, Übersetzung oder Typografie als Hauptziel."
+        }
+      ]
+    },
+    {
+      "id": "contract-pagination",
+      "group": "contracts",
+      "phase": "P2",
+      "kind": "contract",
+      "development_case": true,
+      "task": "Mehr als zehn gleich oder ähnlich bewertete Treffer vollständig über Seiten abrufen.",
+      "queries": [],
+      "required_skills": [],
+      "one_of": [],
+      "unsuitable_skills": [],
+      "expect_empty": false,
+      "evidence": [
+        {
+          "skill": null,
+          "path": "AGENTS.md",
+          "sha256": "cf4f019199b279bc0abaca656ff69244664c870f9dc2d4cacfe072e3e36bf763",
+          "reason": "Die bisherige Zehnerliste ist ausdrücklich keine vollständige Relevanzmenge."
+        }
+      ],
+      "action": "Mit synthetischer Fixture über zehn Treffern bis next_cursor=null paginieren; Query und Quellenstand konstant halten.",
+      "expected_behavior": "Jeder Engine-Treffer genau einmal; globale Ordnung score absteigend und kanonischer Pfad als Tie-Breaker; konsistentes has_more und total_matches. Kein Recallclaim aus Pagination."
+    },
+    {
+      "id": "contract-stale",
+      "group": "contracts",
+      "phase": "P2",
+      "kind": "contract",
+      "development_case": true,
+      "task": "Fortsetzung nach Änderung einer gebundenen Quelle darf keine Seite aus anderem Stand liefern.",
+      "queries": [],
+      "required_skills": [],
+      "one_of": [],
+      "unsuitable_skills": [],
+      "expect_empty": false,
+      "evidence": [
+        {
+          "skill": null,
+          "path": "AGENTS.md",
+          "sha256": "cf4f019199b279bc0abaca656ff69244664c870f9dc2d4cacfe072e3e36bf763",
+          "reason": "Frische Evidence und lokale Quellen bleiben verbindlich; bestehende Suche behandelt veraltete Indizes als nicht bereit."
+        }
+      ],
+      "action": "Erste Treffer- oder Descriptor-Seite abrufen, anschließend eine gebundene Quellenänderung im isolierten Fixture herstellen und mit altem Cursor fortsetzen.",
+      "expected_behavior": "Sichtbarer stale-/Cursorfehler; kein Vermischen von Snapshots und keine alten Treffer als bereit ausgeben."
+    },
+    {
+      "id": "contract-invalid-relation",
+      "group": "contracts",
+      "phase": "P3",
+      "kind": "contract",
+      "development_case": true,
+      "task": "Eine unbekannte strukturierte Ziel-ID darf nicht als gültiger Graphnachbar erscheinen.",
+      "queries": [],
+      "required_skills": [],
+      "one_of": [],
+      "unsuitable_skills": [],
+      "expect_empty": false,
+      "evidence": [
+        {
+          "skill": null,
+          "path": "skill-catalog.yml",
+          "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca",
+          "reason": "related-Ziele beziehen sich auf kanonische Katalog-IDs; das neue Ableitungsverhalten muss diese Identität erhalten."
+        }
+      ],
+      "action": "Im isolierten Fixture eine related- oder Overlay-Ziel-ID setzen, die im selben Katalog nicht existiert, und Ableitung ausführen.",
+      "expected_behavior": "Ableitung zurückweisen, Ursache unbekannte Ziel-ID ausweisen und keinen bereiten Beziehungsstand veröffentlichen."
+    },
+    {
+      "id": "contract-descriptors",
+      "group": "contracts",
+      "phase": "P2",
+      "kind": "contract",
+      "development_case": true,
+      "task": "Alle kanonischen Beschreibungen ohne QMD-/Node-Runtime abschnittsweise auflisten.",
+      "queries": [],
+      "required_skills": [],
+      "one_of": [],
+      "unsuitable_skills": [],
+      "expect_empty": false,
+      "evidence": [
+        {
+          "skill": null,
+          "path": "skill-catalog.yml",
+          "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca",
+          "reason": "Der Katalog ist das vollständige kanonische Skill-Inventar."
+        },
+        {
+          "skill": null,
+          "path": "AGENTS.md",
+          "sha256": "cf4f019199b279bc0abaca656ff69244664c870f9dc2d4cacfe072e3e36bf763",
+          "reason": "Original-Descriptions bleiben für fachliches Routing maßgeblich; Toolverfügbarkeit ersetzt keine Prüfung."
+        }
+      ],
+      "action": "QMD-/Node-Aufruf durch einen forbidden stub sperren; Descriptor-Seiten des gleichen Snapshots vollständig abrufen und IDs mit Kataloginventar vergleichen.",
+      "expected_behavior": "Jede kanonische ID genau einmal, kanonische Descriptions und Herkunft erhalten, null QMD-/Node-Aufrufe. Ausgeliefert heißt nicht fachlich geprüft."
+    }
+  ]
+}

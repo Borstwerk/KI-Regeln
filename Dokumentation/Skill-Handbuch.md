@@ -48,6 +48,21 @@ Der Direktpfad bleibt bewusst erhalten: triviale Faktenfragen, mechanische Klein
 
 Damit ist `none` weiterhin ein erstklassiges Ergebnis – bei nichttrivialen Aufgaben aber **nach** zielgerichteter Discovery statt als ungeprüfter Bypass.
 
+### Optionale Suche nach Skill-Kandidaten
+
+Nach den Pflicht-Reads kann ein aktueller lokaler Index mit
+`./Search-KI-Regeln.ps1 -Routing -Query 'Fachwörter zum Teiljob'` die Kandidatensuche
+beschleunigen. Er enthält alle katalogisierten kanonischen `SKILL.md`-Dateien;
+Einrichtung und Quellenvertrag stehen in [Lokale-Regelsuche.md](Lokale-Regelsuche.md).
+Für jeden eigenständigen Job passende Begriffe verwenden und die gefundenen
+Original-Descriptions samt Near-Misses und Katalog-Metadaten prüfen. Workflow-Kernskills
+und registrierte Overlays weiterhin direkt prüfen, unabhängig vom Suchranking.
+
+Die höchstens zehn BM25-Treffer sind keine vollständige Relevanzmenge. Ist die Suche
+nicht verfügbar, veraltet, leer oder fachlich unpassend, gezielt im Katalog und
+passenden Fachbereich weitersuchen. Ein Suchfehlschlag begründet kein `none`.
+Der optionale Index ersetzt keinen Router-Read und ist keine Voraussetzung für Routing.
+
 | Beispielhafter Auftrag | Typischer erster Routingraum |
 |---|---|
 | „Prüfe, ob diese Behauptung stimmt.“ | Recherche |

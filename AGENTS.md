@@ -72,6 +72,18 @@ Ein bloßer Verweis aus `AGENTS.md` auf diese Dateien zählt nicht als Discovery
 
 Kurz: `none` ist ein gültiges Routing-Ergebnis, aber bei nichttrivialen Aufgaben kein ungeprüfter Default-Bypass.
 
+### Optionaler Suchbeschleuniger
+
+Ein vorhandener, aktueller Routing-Index kann die Kandidatensuche unterstützen:
+`./Search-KI-Regeln.ps1 -Routing -Query 'Fachwörter zum Teiljob'`. Er wird bewusst mit
+`-Routing -Build` aufgebaut und aus **allen katalogisierten kanonischen Skills**
+abgeleitet. Einrichtung und Grenzen: [Lokale Regelsuche](Dokumentation/Lokale-Regelsuche.md).
+
+- Mehrteilige Aufträge in eigenständige Jobs zerlegen und je Job passende Fachwörter suchen; höchstens zehn Treffer sind keine vollständige Liste aller relevanten Skills.
+- Treffer sind Kandidaten. Aktuelle Original-`SKILL.md`-Descriptions, Near-Misses und Katalog-Metadaten prüfen; Workflow-Kernskills und Overlay-Kandidaten zusätzlich direkt prüfen.
+- Fehlende Runtime, fehlender/veralteter Index, leere oder unpassende Treffer: mit gezielter Katalog-/Dateisuche fortfahren, etwa `rg -n -i 'Fachwort' skill-catalog.yml` und im passenden Fachbereich. Daraus niemals `none` ableiten.
+- Die Pflicht-Reads oben bleiben bestehen. Suche ist optional, löst keine Installation aus und verlangt keine zusätzlichen Rechte. Auch Suchabfragen benötigen Schreibrechte auf den lokalen abgeleiteten Cache; fehlen diese, den direkten Dateipfad verwenden.
+
 1. **Nutzerauftrag lesen.** Problem, gewünschtes Ergebnis, Scope, Grenzen und explizite Autorisierung festhalten. Fehlende Skill-Namen sind kein fehlender Input.
 2. **Lokale Wahrheit zuerst.** Projektregeln, lokale Sources of Truth, vorhandene Artefakte und Nutzerangaben schlagen allgemeine Repository-Regeln. Allgemeine Arbeitsweise ist zentral; konkrete Wahrheit bleibt lokal.
 3. **Aufgabe einordnen.** Aus dem realen Problem geeignete Domäne(n) und vorhandene Workflows ableiten. Nutze `Dokumentation/Skill-Handbuch.md` als Master-Router und `workflow-index.yml` für vorhandene Workflows. Bei nichttrivialen Aufgaben den Master-Router im aktuellen Lauf tatsächlich öffnen; wenn ein Workflow plausibel ist, den Index und anschließend den Workflow öffnen.

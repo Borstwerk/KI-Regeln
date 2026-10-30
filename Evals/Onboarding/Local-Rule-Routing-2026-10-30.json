@@ -1,0 +1,346 @@
+{
+  "native": {
+    "protocol": {
+      "utc": "2026-10-30T07:13:41.066000+00:00",
+      "source_commit": "ebe392e803e4b47c7bdc64238385be8da028681e",
+      "node_version": "v24.22.1",
+      "qmd_version": "2.8.3",
+      "mode": "bm25",
+      "held_out": false,
+      "model_calls": 0,
+      "code_sha256": {
+        "tools/search_rules.py": "1dd055eebe539c9843a1f0ac48d69b6a820b1f38bdf1706a015087cdb64c1b85",
+        "tools/search_rules_qmd.mjs": "d9c4b3f9222ad7928dfcb1860fd0e975024512ab4e4dedf915820ed283737155",
+        "Search-KI-Regeln.ps1": "019ef4122c42c82b056063d34c4ca89fbfb44c9476cd396f9d1297a183d13dde",
+        "tools/local_search/pnpm-lock.yaml": "30381a3497bf589cd694665a806736e83b724be7670952f0afc2e207fc20b528",
+        "Evals/Onboarding/run_rule_routing_native.py": "dfc2e52dc492c947c249cc8a572ee5c0acdbfc1e298efb4ade9d5388003825de"
+      },
+      "cases": [
+        {
+          "query": "Rechtschreibung Zeichensetzung",
+          "expected_top_ten": "Schreiben/Skills/korrekturlektorat/SKILL.md",
+          "expect_empty": false
+        },
+        {
+          "query": "DCF Comparable Companies",
+          "expected_top_ten": "Finanzen/Skills/bewertungsanalyse/SKILL.md",
+          "expect_empty": false
+        },
+        {
+          "query": "Figuren Motivation Agency",
+          "expected_top_ten": "Storyentwicklung-und-Fiktion/Skills/figurenentwicklung/SKILL.md",
+          "expect_empty": false
+        },
+        {
+          "query": "Architekturentscheidungen Alternativen Konsequenzen",
+          "expected_top_ten": "Dokumentationserstellung/Skills/adr/SKILL.md",
+          "expect_empty": false
+        },
+        {
+          "query": "zzroutingabsentf72ea4bd",
+          "expected_top_ten": null,
+          "expect_empty": true
+        }
+      ]
+    },
+    "protocol_sha256": "f6253ad0e2cb04d2c63fe58c6f66be47a8e55323e5015f75ac294b193c9f2efa",
+    "build": {
+      "status": "ready",
+      "revision": "ebe392e803e4b47c7bdc64238385be8da028681e",
+      "documents": 165,
+      "mode": "bm25",
+      "fingerprint": "33be5497577dc2bd947b73fc4155340bcc9c7b72c04bcebe7599631ca54e0cac",
+      "routing_coverage": {
+        "skills": 155,
+        "indexed_skills": 155
+      }
+    },
+    "queries": [
+      {
+        "query": "Rechtschreibung Zeichensetzung",
+        "pass": true,
+        "result": {
+          "status": "ready",
+          "revision": "ebe392e803e4b47c7bdc64238385be8da028681e",
+          "mode": "bm25",
+          "fingerprint": "33be5497577dc2bd947b73fc4155340bcc9c7b72c04bcebe7599631ca54e0cac",
+          "hits": [
+            {
+              "path": "Schreiben/Skills/korrekturlektorat/SKILL.md",
+              "score": 0.9301449361129966,
+              "snippet": "@@ -2,4 @@ (1 before, 120 after)\nname: korrekturlektorat\ndescription: \"Mechanisches Korrekturlektorat für fertige oder weit fortgeschrittene Texte: Rechtschreibung, Grammatik, Syntax, Zeichensetzung, Tipp-/Wortfehler und unbeabsichtigte Dopplungen prüfen oder minimal korrigieren, ohne Inhalt, Stimme oder Stil unnötig umzuschreiben. Verwenden bei Korrekturlesen, Rechtschreibprüfung, Grammatikprüfung, Komma-/Zeichensetzungsprüfung oder einem letzten sprachlichen Fehlerpass. Nicht für Stilrewrite, fachliche Faktenprüfung, Übersetzung oder Typografie als Hauptziel.\"\n---\n",
+              "content_sha256": "499b931a535d7afc386092b14193108e5c24a1eaa379b76a5b6f9fbf417d5bd8",
+              "kind": "skill",
+              "skill": {
+                "description": "Mechanisches Korrekturlektorat für fertige oder weit fortgeschrittene Texte: Rechtschreibung, Grammatik, Syntax, Zeichensetzung, Tipp-/Wortfehler und unbeabsichtigte Dopplungen prüfen oder minimal korrigieren, ohne Inhalt, Stimme oder Stil unnötig umzuschreiben. Verwenden bei Korrekturlesen, Rechtschreibprüfung, Grammatikprüfung, Komma-/Zeichensetzungsprüfung oder einem letzten sprachlichen Fehlerpass. Nicht für Stilrewrite, fachliche Faktenprüfung, Übersetzung oder Typografie als Hauptziel.",
+                "eval_coverage": "partial",
+                "id": "korrekturlektorat",
+                "maturity": "experimental"
+              }
+            }
+          ],
+          "candidates_only": true,
+          "routing_coverage": {
+            "indexed_skills": 155,
+            "skills": 155
+          },
+          "routing_sources": {
+            "master": "Dokumentation/Skill-Handbuch.md",
+            "catalog": "skill-catalog.yml",
+            "overlays": "routing-overlays.yml",
+            "workflows": "workflow-index.yml"
+          }
+        }
+      },
+      {
+        "query": "DCF Comparable Companies",
+        "pass": true,
+        "result": {
+          "status": "ready",
+          "revision": "ebe392e803e4b47c7bdc64238385be8da028681e",
+          "mode": "bm25",
+          "fingerprint": "33be5497577dc2bd947b73fc4155340bcc9c7b72c04bcebe7599631ca54e0cac",
+          "hits": [
+            {
+              "path": "Finanzen/Skills/bewertungsanalyse/SKILL.md",
+              "score": 0.9523069815988356,
+              "snippet": "@@ -2,4 @@ (1 before, 41 after)\nname: bewertungsanalyse\ndescription: Bewertet Unternehmen oder Beteiligungen mit passenden Methoden wie DCF und Comparable Companies über explizite, belegte Inputs, Annahmen, Peer-Auswahl und Sensitivitäten. Verwenden bei Fair-Value-, DCF-, Multiple- oder Bewertungsfragen; nicht für reine Unternehmensqualität, automatische Investmentempfehlungen oder ungeprüfte aktuelle Marktwerte.\n---\n",
+              "content_sha256": "f13115b7485da959104cb3e377eca916a593f1155e886d05eae546c945cc4a8d",
+              "kind": "skill",
+              "skill": {
+                "description": "Bewertet Unternehmen oder Beteiligungen mit passenden Methoden wie DCF und Comparable Companies über explizite, belegte Inputs, Annahmen, Peer-Auswahl und Sensitivitäten. Verwenden bei Fair-Value-, DCF-, Multiple- oder Bewertungsfragen; nicht für reine Unternehmensqualität, automatische Investmentempfehlungen oder ungeprüfte aktuelle Marktwerte.",
+                "eval_coverage": "partial",
+                "id": "bewertungsanalyse",
+                "maturity": "experimental"
+              }
+            }
+          ],
+          "candidates_only": true,
+          "routing_coverage": {
+            "indexed_skills": 155,
+            "skills": 155
+          },
+          "routing_sources": {
+            "master": "Dokumentation/Skill-Handbuch.md",
+            "catalog": "skill-catalog.yml",
+            "overlays": "routing-overlays.yml",
+            "workflows": "workflow-index.yml"
+          }
+        }
+      },
+      {
+        "query": "Figuren Motivation Agency",
+        "pass": true,
+        "result": {
+          "status": "ready",
+          "revision": "ebe392e803e4b47c7bdc64238385be8da028681e",
+          "mode": "bm25",
+          "fingerprint": "33be5497577dc2bd947b73fc4155340bcc9c7b72c04bcebe7599631ca54e0cac",
+          "hits": [
+            {
+              "path": "Storyentwicklung-und-Fiktion/Skills/figurenentwicklung/SKILL.md",
+              "score": 0.9423649602235815,
+              "snippet": "@@ -2,4 @@ (1 before, 53 after)\nname: figurenentwicklung\ndescription: Entwickelt fiktionale Figuren mit Motivation, Agency, Beziehungen, Stimme und möglichem Arc oder prüft bestehende Figuren darauf. Verwenden bei Charakterentwicklung, Figurenprofilen, Beziehungsdynamik oder Character Arcs; nicht für rein visuelle Referenzmerkmale.\n---\n",
+              "content_sha256": "0908e80908c3f5d7313e070e173c7ea9878db71c38371c78e8e55828822f2a16",
+              "kind": "skill",
+              "skill": {
+                "description": "Entwickelt fiktionale Figuren mit Motivation, Agency, Beziehungen, Stimme und möglichem Arc oder prüft bestehende Figuren darauf. Verwenden bei Charakterentwicklung, Figurenprofilen, Beziehungsdynamik oder Character Arcs; nicht für rein visuelle Referenzmerkmale.",
+                "eval_coverage": "partial",
+                "id": "figurenentwicklung",
+                "maturity": "experimental"
+              }
+            }
+          ],
+          "candidates_only": true,
+          "routing_coverage": {
+            "indexed_skills": 155,
+            "skills": 155
+          },
+          "routing_sources": {
+            "master": "Dokumentation/Skill-Handbuch.md",
+            "catalog": "skill-catalog.yml",
+            "overlays": "routing-overlays.yml",
+            "workflows": "workflow-index.yml"
+          }
+        }
+      },
+      {
+        "query": "Architekturentscheidungen Alternativen Konsequenzen",
+        "pass": false,
+        "result": {
+          "status": "ready",
+          "revision": "ebe392e803e4b47c7bdc64238385be8da028681e",
+          "mode": "bm25",
+          "fingerprint": "33be5497577dc2bd947b73fc4155340bcc9c7b72c04bcebe7599631ca54e0cac",
+          "hits": [],
+          "candidates_only": true,
+          "routing_coverage": {
+            "indexed_skills": 155,
+            "skills": 155
+          },
+          "routing_sources": {
+            "master": "Dokumentation/Skill-Handbuch.md",
+            "catalog": "skill-catalog.yml",
+            "overlays": "routing-overlays.yml",
+            "workflows": "workflow-index.yml"
+          }
+        }
+      },
+      {
+        "query": "zzroutingabsentf72ea4bd",
+        "pass": true,
+        "result": {
+          "status": "ready",
+          "revision": "ebe392e803e4b47c7bdc64238385be8da028681e",
+          "mode": "bm25",
+          "fingerprint": "33be5497577dc2bd947b73fc4155340bcc9c7b72c04bcebe7599631ca54e0cac",
+          "hits": [],
+          "candidates_only": true,
+          "routing_coverage": {
+            "indexed_skills": 155,
+            "skills": 155
+          },
+          "routing_sources": {
+            "master": "Dokumentation/Skill-Handbuch.md",
+            "catalog": "skill-catalog.yml",
+            "overlays": "routing-overlays.yml",
+            "workflows": "workflow-index.yml"
+          }
+        }
+      }
+    ],
+    "original_bytes_unchanged": true,
+    "coverage": {
+      "catalogued_skills": 155,
+      "indexed_skills": 155,
+      "indexed_documents": 165,
+      "skills_outside_content_pilot": 139,
+      "expected_skills_outside_content_pilot": true
+    },
+    "claims": {
+      "coverage_is_source_coverage": true,
+      "general_recall": "UNVERIFIED",
+      "agent_skill_selection_quality": "NOT RUN",
+      "semantic_search": "NOT RUN",
+      "model_calls": 0
+    }
+  },
+  "normal_powershell": {
+    "node_on_normal_path": false,
+    "pnpm_on_normal_path": false,
+    "setup": {
+      "setup_exit": 0,
+      "process_path_restored": true,
+      "node_on_normal_path": false,
+      "pnpm_on_normal_path": false
+    },
+    "build_exit": 0,
+    "build": {
+      "status": "ready",
+      "revision": "ebe392e803e4b47c7bdc64238385be8da028681e",
+      "documents": 72,
+      "mode": "bm25",
+      "fingerprint": "d65de22ad2e4fecd4b8042a12f086ab44960d0d799fdcf645af7f92fdaaa9c26"
+    },
+    "original_query_exit": 0,
+    "original_query": {
+      "status": "ready",
+      "revision": "ebe392e803e4b47c7bdc64238385be8da028681e",
+      "mode": "bm25",
+      "fingerprint": "d65de22ad2e4fecd4b8042a12f086ab44960d0d799fdcf645af7f92fdaaa9c26",
+      "hits": [
+        {
+          "path": "Skill-Engineering/Evidence-getriebene-Skill-Verbesserung.md",
+          "score": 0.8106417035091146,
+          "snippet": "@@ -158,4 @@ (157 before, 14 after)\n\nDer operative Minimalnachweis und seine risikobasierte Einsatzgrenze stehen im bestehenden Workflow `../Workflows/Skill-Verbesserung-aus-Evals-und-Fehlern.md`. Vorhandene Issues, PRs oder Reviews bevorzugen; kein eigenständiges Tracking-System und keine Pflicht zur Dokumentation jedes Einzelfehlers einführen. Ein gespeicherter Entscheid ersetzt weder unabhängige Evaluation noch ein erneutes Human Gate bei neuer Sachlage.\n\n## Stop",
+          "content_sha256": "dea89baef1068710af5576f8251bee0905c8ecb88aff130981919dc5c12ef073"
+        },
+        {
+          "path": "Skill-Engineering/Skill-Review-und-Evals.md",
+          "score": 0.8003094179339523,
+          "snippet": "@@ -81,4 @@ (80 before, 98 after)\n\nVergleichen Skillversionen, damit eine Verbesserung nicht an anderer Stelle Verhalten verschlechtert.\n\n## Positive und negative Fälle",
+          "content_sha256": "fb9b1d696f58d9684589b7af6f094d63ab030d7492cf75b37b4bddfc2a66a500"
+        },
+        {
+          "path": "Skill-Engineering/Skill-Lifecycle-und-Deprecation.md",
+          "score": 0.7984349859401281,
+          "snippet": "@@ -76,4 @@ (75 before, 42 after)\n\nWiederkehrende Fehler oder Eval-Funde dürfen Änderungen anstoßen, aber nicht automatisch den aktiven Skill umschreiben.\n\nEmpfohlenes Muster:",
+          "content_sha256": "9cc849d9cf6d299e5f7a58bc7b0c958f458f0f11f903cf7eb12e7089f1bfcc27"
+        },
+        {
+          "path": "Workflows/Skill-Verbesserung-aus-Evals-und-Fehlern.md",
+          "score": 0.7954365879517085,
+          "snippet": "@@ -1,3 @@ (0 before, 212 after)\n# Skill-Verbesserung aus Evals und Fehlern\n\n## Zweck",
+          "content_sha256": "2b49c37c7a5e08c30cfcf9e9712dd7ebd780f1a1f294614688dafb7723f4b317"
+        },
+        {
+          "path": "Skill-Engineering/README.md",
+          "score": 0.7872637022991424,
+          "snippet": "@@ -10,4 @@ (9 before, 65 after)\n| „Ist dieser Skill klar geschnitten und überprüfbar?“ | [Unabhängiger Skill-Review](Skills/skill-review/SKILL.md) | Prüft den bestehenden Skill; ein Review ist kein automatischer Rewrite. |\n| „Ein Skill scheitert wiederholt. Wie verbessere ich ihn anhand der Evidence?“ | [Workflow: Skill-Verbesserung aus Evals und Fehlern](../Workflows/Skill-Verbesserung-aus-Evals-und-Fehlern.md) | Erst Ursache und Baseline klären; ein einzelner unspezifischer Modellfehler begründet noch keinen Skill-Edit. |\n| „Darf ein fremdes Skill-Paket verwendet werden, oder geht es um ein",
+          "content_sha256": "1fbc671821e3707b4c6acd43b7f055a8acffe02a65b9530c72d40deb87251861"
+        }
+      ]
+    },
+    "invalid_explicit_node_exit": 2,
+    "invalid_explicit_node": {
+      "status": "runtime-missing",
+      "message": "Node.js executable not found. Supply -NodePath (or --node) for an existing Node.js 22+ runtime."
+    },
+    "process_path_unchanged": true
+  },
+  "followup": {
+    "source_commit": "ebe392e803e4b47c7bdc64238385be8da028681e",
+    "initial_report": ".validation/native-rule-routing-ic8npdis/result.json",
+    "initial_query": "Architekturentscheidungen Alternativen Konsequenzen",
+    "initial_expected_skill": "adr",
+    "initial_expected_found": false,
+    "initial_actual_hits": 0,
+    "followup_query": "Architecture Decision Record Alternativen",
+    "followup_exit": 0,
+    "followup": {
+      "status": "ready",
+      "revision": "ebe392e803e4b47c7bdc64238385be8da028681e",
+      "mode": "bm25",
+      "fingerprint": "33be5497577dc2bd947b73fc4155340bcc9c7b72c04bcebe7599631ca54e0cac",
+      "hits": [
+        {
+          "path": "Dokumentationserstellung/Skills/adr/SKILL.md",
+          "score": 0.9493379549252144,
+          "snippet": "@@ -2,4 @@ (1 before, 33 after)\nname: adr\ndescription: Dokumentiert eine Architektur- oder technische Grundsatzentscheidung nachvollziehbar als Architecture Decision Record mit Kontext, Alternativen und Konsequenzen. Verwenden bei tatsächlich getroffenen oder klar als Proposal markierten Entscheidungen, deren Begründung und Trade-offs dauerhaft nachvollziehbar bleiben sollen.\n---\n",
+          "content_sha256": "5b4f69eabdeb03b51df9a1f20ecf7340341c940eafa990eef1a7d74957493720",
+          "kind": "skill",
+          "skill": {
+            "description": "Dokumentiert eine Architektur- oder technische Grundsatzentscheidung nachvollziehbar als Architecture Decision Record mit Kontext, Alternativen und Konsequenzen. Verwenden bei tatsächlich getroffenen oder klar als Proposal markierten Entscheidungen, deren Begründung und Trade-offs dauerhaft nachvollziehbar bleiben sollen.",
+            "eval_coverage": "none",
+            "id": "adr",
+            "maturity": "experimental"
+          }
+        }
+      ],
+      "candidates_only": true,
+      "routing_coverage": {
+        "indexed_skills": 155,
+        "skills": 155
+      },
+      "routing_sources": {
+        "master": "Dokumentation/Skill-Handbuch.md",
+        "catalog": "skill-catalog.yml",
+        "overlays": "routing-overlays.yml",
+        "workflows": "workflow-index.yml"
+      }
+    },
+    "direct_catalog_command": "rg -n -i 'Architekturentscheidungen' skill-catalog.yml",
+    "direct_catalog_lines": [
+      "103:  - {id: adr, area: Dokumentationserstellung, path: Dokumentationserstellung/Skills/adr/SKILL.md, maturity: experimental, eval_coverage: none, purpose: \"Architekturentscheidungen mit Kontext, Alternativen und Konsequenzen dokumentieren.\", capabilities: [decision-source-required]}",
+      "144:  - {id: architecture-conformance-review, area: Software-Architecture-und-System-Design, path: Software-Architecture-und-System-Design/Skills/architecture-conformance-review/SKILL.md, maturity: experimental, eval_coverage: partial, purpose: \"Tatsächliche Systemstruktur read-only gegen gültige Architekturentscheidungen, Boundary-/Dependency-Regeln, Ownership und Fitness Functions prüfen.\", capabilities: [repository-read-required, architecture-source-access-preferred], related: [architecture-baseline, architecture-evolution, architecture-review, code-review, test-suite-review, adr]}"
+    ],
+    "direct_catalog_found_adr": true,
+    "held_out": false,
+    "model_calls": 0
+  },
+  "raw_sha256": {
+    "native": "d7e26c104b89be6357d2520d80b0d24db6a0c0a6dcd530956bbbf7e0ce42b002",
+    "normal_powershell": "500a70b4a52cbec9d769fa7ec28fd36ff574c2ed8ba822b5ddb3c59277417e2b",
+    "followup": "239f0b2ef7871f310d9c1d70eb8f6e7341d277faf5a2c9d4a4c554edb4dbdf7e"
+  }
+}

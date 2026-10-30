@@ -17,6 +17,7 @@ Der [deutsche Einstieg](START-HIER.md) führt zu Nutzung und Katalog; die [READM
 | Einen Skill entwerfen oder verbessern | [Skill-Engineering nach Arbeitsfrage](Skill-Engineering/README.md) |
 | Ein externes Paket oder seine Rechte beurteilen | [Sicherheitsprüfung nach Arbeitsfrage](Sicherheit/README.md) |
 | Tests planen, Fälle entwerfen oder Nachweise ausführen | [Testing und QA nach Arbeitsfrage](Testing-und-QA/README.md) |
+| Ausgewählte Regelquellen lokal durchsuchen | [Eigenständige lokale Regelsuche](Dokumentation/Lokale-Regelsuche.md) |
 
 Diese Karte dient der Orientierung. Die kanonischen Skill-Descriptions und
 Projektquellen bleiben maßgeblich; ein Suchtreffer ersetzt deren Prüfung nicht.

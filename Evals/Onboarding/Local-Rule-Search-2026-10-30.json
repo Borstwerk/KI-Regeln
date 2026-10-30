@@ -1,0 +1,230 @@
+{
+  "protocol": {
+    "utc": "2026-10-30T06:22:40.195991+00:00",
+    "source_commit": "60dd0f7613393b40c59b5da38ade76247b0dbd5b",
+    "execution_commit": "60dd0f7613393b40c59b5da38ade76247b0dbd5b",
+    "node_version": "v24.22.1",
+    "qmd_version": "2.8.3",
+    "mode": "bm25",
+    "script_sha256": {
+      "tools/search_rules.py": "dcd98ce48632322408d27f6b48f3aa01e597e884898e3d47dd333a94acd6fa88",
+      "tools/search_rules_qmd.mjs": "382fbfaf09135458e88bc5b17e2fb3736b7e72a781f25bf005ac4249e6d8aa54",
+      "Search-KI-Regeln.ps1": "4cb1db7eeba2f4d4c491533a49693097b1511990407e9e33b04ba308eb8cc1d5",
+      "tools/local_search/pnpm-lock.yaml": "30381a3497bf589cd694665a806736e83b724be7670952f0afc2e207fc20b528"
+    },
+    "helper_sha256": "5aebb99d0b33d97015e1fedba7e65d0b3a69df4dd75634fbc317c40ab88d449a",
+    "model_calls": 0,
+    "held_out": false,
+    "cases": [
+      {
+        "query": "Skill Verbesserung Fehler",
+        "allowed_top_five": [
+          "Skill-Engineering/Evidence-getriebene-Skill-Verbesserung.md",
+          "Workflows/Skill-Verbesserung-aus-Evals-und-Fehlern.md"
+        ],
+        "expect_empty": false
+      },
+      {
+        "query": "Teststrategie Grenzwerte",
+        "allowed_top_five": [
+          "Testing-und-QA/README.md",
+          "Testing-und-QA/Skills/test-design/SKILL.md"
+        ],
+        "expect_empty": false
+      },
+      {
+        "query": "MCP Berechtigungen",
+        "allowed_top_five": [
+          "Sicherheit/MCP-und-externe-Tools.md",
+          "Sicherheit/Skills/tool-permission-review/SKILL.md"
+        ],
+        "expect_empty": false
+      },
+      {
+        "query": "Workflow beitragen",
+        "allowed_top_five": [
+          "CONTRIBUTING.md",
+          "PROJECT.md"
+        ],
+        "expect_empty": false
+      },
+      {
+        "query": "zzretrievalcanaryf72ea4bd",
+        "allowed_top_five": [],
+        "expect_empty": true
+      }
+    ]
+  },
+  "protocol_sha256": "b65b1a591af832e6a58ab394fb98be97c757a7ec79491622bf9291367b1dc727",
+  "build": {
+    "status": "ready",
+    "revision": "60dd0f7613393b40c59b5da38ade76247b0dbd5b",
+    "documents": 72,
+    "mode": "bm25",
+    "fingerprint": "a8398c0cf38ffce8dbce4861053d12d0b96c2724410b674be33ebb0662386aa4"
+  },
+  "build_seconds": 3.468,
+  "queries": [
+    {
+      "query": "Skill Verbesserung Fehler",
+      "pass": true,
+      "seconds": 2.922,
+      "result": {
+        "status": "ready",
+        "revision": "60dd0f7613393b40c59b5da38ade76247b0dbd5b",
+        "mode": "bm25",
+        "fingerprint": "a8398c0cf38ffce8dbce4861053d12d0b96c2724410b674be33ebb0662386aa4",
+        "hits": [
+          {
+            "path": "Skill-Engineering/Evidence-getriebene-Skill-Verbesserung.md",
+            "score": 0.8105632733587746,
+            "snippet": "@@ -158,4 @@ (157 before, 14 after)\n\nDer operative Minimalnachweis und seine risikobasierte Einsatzgrenze stehen im bestehenden Workflow `../Workflows/Skill-Verbesserung-aus-Evals-und-Fehlern.md`. Vorhandene Issues, PRs oder Reviews bevorzugen; kein eigenständiges Tracking-System und keine Pflicht zur Dokumentation jedes Einzelfehlers einführen. Ein gespeicherter Entscheid ersetzt weder unabhängige Evaluation noch ein erneutes Human Gate bei neuer Sachlage.\n\n## Stop",
+            "content_sha256": "dea89baef1068710af5576f8251bee0905c8ecb88aff130981919dc5c12ef073"
+          },
+          {
+            "path": "Skill-Engineering/Skill-Review-und-Evals.md",
+            "score": 0.8001843405565079,
+            "snippet": "@@ -81,4 @@ (80 before, 98 after)\n\nVergleichen Skillversionen, damit eine Verbesserung nicht an anderer Stelle Verhalten verschlechtert.\n\n## Positive und negative Fälle",
+            "content_sha256": "fb9b1d696f58d9684589b7af6f094d63ab030d7492cf75b37b4bddfc2a66a500"
+          },
+          {
+            "path": "Skill-Engineering/Skill-Lifecycle-und-Deprecation.md",
+            "score": 0.7983258927209929,
+            "snippet": "@@ -76,4 @@ (75 before, 42 after)\n\nWiederkehrende Fehler oder Eval-Funde dürfen Änderungen anstoßen, aber nicht automatisch den aktiven Skill umschreiben.\n\nEmpfohlenes Muster:",
+            "content_sha256": "9cc849d9cf6d299e5f7a58bc7b0c958f458f0f11f903cf7eb12e7089f1bfcc27"
+          },
+          {
+            "path": "Workflows/Skill-Verbesserung-aus-Evals-und-Fehlern.md",
+            "score": 0.7952759463767106,
+            "snippet": "@@ -1,3 @@ (0 before, 212 after)\n# Skill-Verbesserung aus Evals und Fehlern\n\n## Zweck",
+            "content_sha256": "2b49c37c7a5e08c30cfcf9e9712dd7ebd780f1a1f294614688dafb7723f4b317"
+          },
+          {
+            "path": "Skill-Engineering/README.md",
+            "score": 0.7870877798147172,
+            "snippet": "@@ -10,4 @@ (9 before, 65 after)\n| „Ist dieser Skill klar geschnitten und überprüfbar?“ | [Unabhängiger Skill-Review](Skills/skill-review/SKILL.md) | Prüft den bestehenden Skill; ein Review ist kein automatischer Rewrite. |\n| „Ein Skill scheitert wiederholt. Wie verbessere ich ihn anhand der Evidence?“ | [Workflow: Skill-Verbesserung aus Evals und Fehlern](../Workflows/Skill-Verbesserung-aus-Evals-und-Fehlern.md) | Erst Ursache und Baseline klären; ein einzelner unspezifischer Modellfehler begründet noch keinen Skill-Edit. |\n| „Darf ein fremdes Skill-Paket verwendet werden, oder geht es um ein",
+            "content_sha256": "1fbc671821e3707b4c6acd43b7f055a8acffe02a65b9530c72d40deb87251861"
+          }
+        ]
+      }
+    },
+    {
+      "query": "Teststrategie Grenzwerte",
+      "pass": true,
+      "seconds": 2.969,
+      "result": {
+        "status": "ready",
+        "revision": "60dd0f7613393b40c59b5da38ade76247b0dbd5b",
+        "mode": "bm25",
+        "fingerprint": "a8398c0cf38ffce8dbce4861053d12d0b96c2724410b674be33ebb0662386aa4",
+        "hits": [
+          {
+            "path": "Testing-und-QA/Skills/test-design/SKILL.md",
+            "score": 0.881177051755171,
+            "snippet": "@@ -2,4 @@ (1 before, 48 after)\nname: test-design\ndescription: Entwirft konkrete Testfälle aus Anforderungen, Invarianten, Zuständen, Grenzwerten und Failure Modes. Verwenden, wenn konkrete Testfälle oder eine systematische Testfallmenge benötigt werden. Nicht als allgemeine Teststrategie oder E2E-Ausführung verwenden.\n---\n",
+            "content_sha256": "2f04848bb93221f51b609ef04fe8c824a003bff176bfa947b9d8ee3bb68639ab"
+          },
+          {
+            "path": "Testing-und-QA/README.md",
+            "score": 0.8555991961309002,
+            "snippet": "@@ -8,4 @@ (7 before, 112 after)\n| --- | --- | --- |\n| „Wie sollen wir diese Änderung testen, und welche Testebenen brauchen wir?“ | [Risikobasierte Teststrategie](Skills/test-strategy/SKILL.md) | Plant Risiken, Testportfolio und benötigte Evidence; entwirft nicht den einzelnen konkreten Testfall. |\n| „Welche konkreten Fälle, Grenzwerte und Fehlerzustände muss ich prüfen?“ | [Konkrete Testfälle entwerfen](Skills/test-design/SKILL.md) | Benötigt zugesichertes Verhalten und ein belastbares erwartetes Ergebnis; ersetzt weder Strategie noch Testausführung. |\n| „Wie komme ich von der Testplanung zu",
+            "content_sha256": "4813b01bffd2cb15353f48f020cc89e7d8e17f0b90f53b7d56f290389be80f5a"
+          }
+        ]
+      }
+    },
+    {
+      "query": "MCP Berechtigungen",
+      "pass": true,
+      "seconds": 3.078,
+      "result": {
+        "status": "ready",
+        "revision": "60dd0f7613393b40c59b5da38ade76247b0dbd5b",
+        "mode": "bm25",
+        "fingerprint": "a8398c0cf38ffce8dbce4861053d12d0b96c2724410b674be33ebb0662386aa4",
+        "hits": [
+          {
+            "path": "Sicherheit/MCP-und-externe-Tools.md",
+            "score": 0.8342000025633513,
+            "snippet": "@@ -1,3 @@ (0 before, 139 after)\n# MCP und externe Tools\n\n## Grundsatz",
+            "content_sha256": "fa9e90172cc2b434c5a798b4fec53f561301dcc02024719f4a431f5237400cfd"
+          }
+        ]
+      }
+    },
+    {
+      "query": "Workflow beitragen",
+      "pass": true,
+      "seconds": 3.0,
+      "result": {
+        "status": "ready",
+        "revision": "60dd0f7613393b40c59b5da38ade76247b0dbd5b",
+        "mode": "bm25",
+        "fingerprint": "a8398c0cf38ffce8dbce4861053d12d0b96c2724410b674be33ebb0662386aa4",
+        "hits": [
+          {
+            "path": "PROJECT.md",
+            "score": 0.8127099326742451,
+            "snippet": "@@ -15,4 @@ (14 before, 26 after)\n| Regeln für eine konkrete Aufgabe auswählen | [Agenten-Bootstrap](AGENTS.md), dann [Master-Router](Dokumentation/Skill-Handbuch.md) und die dort genannten Register |\n| Einen Skill, Workflow oder Eval beitragen | [Aufgaben und zuständige Dateien](CONTRIBUTING.md#aufgaben-und-zuständige-dateien) |\n| Einen Skill entwerfen oder verbessern | [Skill-Engineering nach Arbeitsfrage](Skill-Engineering/README.md) |\n| Ein externes Paket oder seine Rechte beurteilen | [Sicherheitsprüfung nach Arbeitsfrage](Sicherheit/README.md) |",
+            "content_sha256": "d74d79f2b60459768e4871517b02158bf7b75f9d8be7d814f89385e4befa1a1f"
+          },
+          {
+            "path": "CONTRIBUTING.md",
+            "score": 0.7774473334913847,
+            "snippet": "@@ -20,4 @@ (19 before, 67 after)\n| „Ich möchte einen Skill ergänzen oder verbessern.“ | [Skill-Engineering](Skill-Engineering/README.md); [Skill-Katalog](skill-catalog.yml) und zugehöriges [Eval-Verzeichnis](Evals/README.md) konsistent pflegen |\n| „Ich möchte einen wiederholbaren Ablauf beitragen.“ | [Workflows](Workflows/README.md); den Workflow im [Workflow-Index](workflow-index.yml) registrieren |\n| „Darf ich ein externes Skill-Paket oder einen MCP-Server anbinden?“ | [Sicherheit](Sicherheit/README.md); Objekttyp und Prüfauftrag unterscheiden, konkrete Aktionen bleiben auftragsgebunden |\n|",
+            "content_sha256": "56767e48dbd26f07dacca3bedb642c79e702449823e06b923eb42a1c0ab80985"
+          }
+        ]
+      }
+    },
+    {
+      "query": "zzretrievalcanaryf72ea4bd",
+      "pass": true,
+      "seconds": 3.016,
+      "result": {
+        "status": "ready",
+        "revision": "60dd0f7613393b40c59b5da38ade76247b0dbd5b",
+        "mode": "bm25",
+        "fingerprint": "a8398c0cf38ffce8dbce4861053d12d0b96c2724410b674be33ebb0662386aa4",
+        "hits": []
+      }
+    }
+  ],
+  "original_selected_bytes_unchanged": true,
+  "synthetic_real_engine": {
+    "unicode_source_found": true,
+    "fixture_documents": 10,
+    "stale_after_source_edit": "stale",
+    "stale_worker_calls": 0,
+    "partial_index_rejected": {
+      "status": "error",
+      "message": "QMD produced an incomplete index."
+    },
+    "native_partial_report": {
+      "paths": [
+        "AGENTS.md",
+        "CONTRIBUTING.md",
+        "Dokumentation/Skill-Handbuch.md",
+        "PROJECT.md",
+        "README.md",
+        "START-HIER.md",
+        "Sicherheit/README.md",
+        "Skill-Engineering/README.md",
+        "Testing-und-QA/README.md",
+        "docs/Überblick.md"
+      ],
+      "skipped": 0
+    },
+    "status_after_failed_build": {
+      "status": "missing",
+      "message": "No complete index. Build it explicitly first."
+    }
+  },
+  "claims": {
+    "engine": "QMD 2.8.3, genuine native BM25",
+    "development_examples": true,
+    "semantic_search": "NOT RUN",
+    "independent_retrieval_benchmark": false,
+    "model_calls": 0
+  }
+}
