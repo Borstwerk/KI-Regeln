@@ -88,6 +88,13 @@ neun Core-Dokumente und `Workflows/README.md`. Es gibt keine zweite gepflegte Sk
 Aktuell sind das 155 Skills in 165 Dokumenten. Die bestehenden Auswahlbudgets bleiben
 unverändert; überschreitet der abgeleitete Bestand sie künftig, schlägt der Build fehl.
 
+Pro Skill enthält das Suchdokument zusätzlich einen deterministisch abgeleiteten
+Anhang mit ID, Fachbereich und `purpose` aus dem Katalog. Der kanonische Skill-Inhalt
+bleibt als unveränderter Präfix erhalten; es entstehen keine weiteren Dokumente
+und keine zweite gepflegte Begriffsliste. Sowohl Originalauswahl als auch tatsächlich
+indexierter Text müssen die bestehenden Umfangsgrenzen einhalten. Ein älterer
+Routing-Index wird durch das geänderte Format stale und muss neu gebaut werden.
+
 ```powershell
 .\Search-KI-Regeln.ps1 -Routing -Build
 .\Search-KI-Regeln.ps1 -Routing -Query 'Rechtschreibung Zeichensetzung'
@@ -107,10 +114,20 @@ sowie ID, kanonische Description, Maturity und Eval-Coverage; andere Treffer sin
 `routing_coverage` weist die indexierte Skill-Anzahl aus. `candidates_only: true`
 kennzeichnet das Ergebnis als Kandidatenhilfe. Vollständige Quellenabdeckung ist
 kein Nachweis, dass eine einzelne Anfrage alle relevanten Skills findet.
-Auch ähnliche Formulierungen können leer bleiben: Im nativen Entwicklungsfall
-fand `Architekturentscheidungen Alternativen Konsequenzen` den Skill `adr` nicht;
-die direkte Katalogsuche und `Architecture Decision Record Alternativen` fanden
-ihn anschließend. Der ursprüngliche Fehlfall bleibt als solcher dokumentiert.
+
+`content_sha256` bleibt der Hash der kanonischen Originaldatei.
+`search_document_sha256` bindet separat die tatsächlich indexierten Bytes.
+Skill-Snippets tragen `snippet_origin: derived-search-document` und `sources` mit
+Original- und Kataloghash sowie Feldreferenzen. Sie können Katalogtext enthalten
+und sind deshalb keine wörtlichen Zitate allein aus `SKILL.md`. Guide-Snippets
+tragen `canonical-source`. Beide Hasharten und die Quellenabhängigkeiten werden
+vor/nach der Suche gegen den fixierten Stand geprüft.
+
+Auch ähnliche Formulierungen können leer bleiben. Im bisherigen nativen
+Entwicklungsfall fand `Architekturentscheidungen Alternativen Konsequenzen` den
+Skill `adr` nicht. Dieser historische Fehlfall bleibt dokumentiert; die Aufnahme
+der Katalogtexte wird mit einem getrennten
+[Vorher/Nachher-Vergleich](../Evals/Onboarding/Rule-Routing-P0-P1.md) geprüft.
 
 Agenten verwenden den optionalen Suchpfad aus [AGENTS.md](../AGENTS.md) und
 [Skill-Handbuch.md](Skill-Handbuch.md): Aufträge in Teiljobs zerlegen, je Job suchen,

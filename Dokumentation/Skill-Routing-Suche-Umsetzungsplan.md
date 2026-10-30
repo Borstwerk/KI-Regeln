@@ -1,6 +1,6 @@
 # Umsetzungsplan: vollständigerer Zugang zu Skill-Kandidaten
 
-Stand: 30.10.2026. **Planungsstand, keine Implementierungs- oder Erfolgsevidence.**
+Stand: 30.10.2026. Planungsbasis; Umsetzungsevidence wird separat geführt.
 Gelesene Codebasis: `6b80949fea00a427303a8dad9a612b59d7fd04ca`.
 Bei Umsetzung zuerst aktuellen Branch, Änderungen und Integrationsbasis prüfen.
 
@@ -36,8 +36,8 @@ Verbindliche Grenzen:
 
 ## Arbeitsweise und Skills
 
-Der Rahmen ist [Software-Feature](../Workflows/Software-Feature.md), hier zunächst
-bis zur Planung. `task-graph` strukturiert Abhängigkeiten, `delegation-contract`
+Der Rahmen ist [Software-Feature](../Workflows/Software-Feature.md).
+`task-graph` strukturiert Abhängigkeiten, `delegation-contract`
 die Agentenaufträge, `test-design` die Produktverträge und `agent-eval` die getrennte
 Prüfung natürlicher Skill-Auswahl. Eine kompakte Tabelle reicht zur Darstellung.
 `system-design` ist für diese begrenzte Erweiterung kein zusätzlicher Primärowner.
@@ -258,6 +258,8 @@ Lokale Code-/Testrechte beinhalten keinen eigenen Push, Merge oder Release.
 
 ## Aktueller Status
 
-Dieser Plan wurde aus Repositoryquellen und begrenzter Subagentenberatung
-abgeleitet. Die beschriebenen Slices, neuen Parameter und Evals sind **NOT RUN /
-NOT IMPLEMENTED**. Frühere Testresultate belegen ausschließlich den früheren Stand.
+P0 ist als Kriterien-/Quellenvertrag eingefroren. P1 wird mit getrenntem
+[Vorher/Nachher-Nachweis](../Evals/Onboarding/Rule-Routing-P0-P1.md) umgesetzt.
+P2–P5 sowie die hier vorgeschlagenen neuen CLI-Parameter sind noch **NOT
+IMPLEMENTED / NOT RUN**. Frühere Testresultate belegen ausschließlich ihren
+jeweiligen Stand; dieser Plan selbst ist kein Qualitätsnachweis.

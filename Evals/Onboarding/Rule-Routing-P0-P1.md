@@ -48,4 +48,20 @@ semantische Vollständigkeit.
 
 ## Ergebnis
 
-Baseline und Candidate: **NOT RUN** bis zur tatsächlichen Ausführung.
+Die Kriterien wurden in `5bb94fe` eingefroren. Case-SHA256:
+`b29da5a3e7b817dbb7d37485e7628bd38a58f89a0377a1e13414343699b123df`.
+Ein erster Fixture-Aufbau stoppte vor dem Worker, weil ein Manifest-Einstieg
+außerhalb der 165 Suchdokumente fehlte. Der Treiber ergänzt seit `fcd4ef5` auch
+die verpflichtenden Manifest-Einstiege; Fälle und Grader blieben unverändert.
+
+Der vollständige Vorher-Lauf auf dem unveränderten Controller ergab **13 PASS,
+3 FAIL, 8 NOT RUN**. Fehlfälle: ursprüngliche ADR-Frage, Akzeptanzkriterien im
+Mehrjob-Fall und Claim-/Quellenprüfung im Mehrjob-Fall. Die acht späteren Fälle
+sind kein Bestandteil der P1-Retrievalquote.
+
+Baseline-Rohbericht: `.validation/rule-routing-baseline-duasujmz/result.json`.
+Quellenpaket-SHA256: `02575304ff5a45aea1bc2ab73c0051c1894525f4dcd17655057434deb53b4be2`.
+Reproduzierte Fixture-Revision: `191baec96637be68e71da79c2a02bd959f01f5ab`.
+
+Candidate: **NOT RUN** bis zur tatsächlichen Ausführung. Die Fälle werden nach
+Kenntnis der Vorher-Ergebnisse nicht umformuliert oder gelockert.

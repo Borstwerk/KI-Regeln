@@ -118,14 +118,22 @@ class RuleRoutingTests(unittest.TestCase):
             corpus = Path(request["corpus"])
             actual = {path.relative_to(corpus).as_posix(): path.read_bytes()
                       for path in corpus.rglob("*") if path.is_file()}
-            self.assertEqual(actual, expected)
+            self.assertEqual(set(actual), set(expected))
+            for path, body in expected.items():
+                if path in self.skills:
+                    # P1 appends catalog facets; the canonical prefix remains exact.
+                    self.assertTrue(actual[path].startswith(body))
+                    entry = next(item for item in self.catalog['skills'] if item['path'] == path)
+                    self.assertIn(entry['purpose'].encode('utf-8'), actual[path])
+                else:
+                    self.assertEqual(actual[path], body)
             if request["action"] == "build":
                 Path(request["db"]).touch()
                 return {"paths": sorted(actual), "skipped": 0}
             self.assertEqual(request["action"], "search")
             paths = list(self.skills) if hits is None else hits
             return {"hits": [{"path": path, "score": 0.8, "snippet": "Synthetic match",
-                              "content_sha256": hashlib.sha256(expected[path]).hexdigest()}
+                              "content_sha256": hashlib.sha256(actual[path]).hexdigest()}
                              for path in paths]}
         return execute
 

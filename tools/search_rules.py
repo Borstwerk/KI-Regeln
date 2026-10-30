@@ -36,6 +36,16 @@ def digest(body):
     return hashlib.sha256(body).hexdigest()
 
 
+def derive_search_documents(files, facets):
+    """Append source-bound catalog text; keep canonical bytes and paths intact."""
+    documents = dict(files)
+    for path, facet in facets.items():
+        appendix = ('\n\n# Routing-Metadaten (abgeleitet)\nQuelle: skill-catalog.yml\n'
+                    f"Skill-ID: {facet['id']}\nFachbereich: {facet['area']}\nZweck: {facet['purpose']}\n")
+        documents[path] += appendix.encode('utf-8')
+    return documents
+
+
 def resolve_node(explicit=None):
     """Reuse an installed executable; never install or replace an explicit choice."""
     found = shutil.which(explicit if explicit is not None else 'node') if explicit != '' else None
@@ -97,6 +107,10 @@ def read_snapshot(root, revision=None, routing=False):
                 ids.add(identifier)
                 folded_ids.add(identifier.casefold())
                 folded_paths.add(path.casefold())
+                if not isinstance(item.get('area'), str) or not item['area'].strip():
+                    raise SearchError('Invalid routing facet: area must be a nonempty string.')
+                if not isinstance(item.get('purpose'), str) or len(item['purpose'].strip()) < 20:
+                    raise SearchError('Invalid routing facet: purpose must be a string of at least 20 characters.')
                 skill_entries[path] = item
             if (not isinstance(workflows.get('workflows'), list)
                     or any(not isinstance(path, str) or not path.startswith('Workflows/') or not path.endswith('.md')
@@ -146,7 +160,11 @@ def read_snapshot(root, revision=None, routing=False):
             exported[info.filename] = body
     if set(exported) != set(names):
         raise SearchError('Source snapshot is incomplete.')
-    # The existing manifest validator owns selection limits and forbidden sources.
+    files = {name: exported[name] for name in selected}
+    facets = {path: {key: entry[key] for key in ('id', 'area', 'purpose')}
+              for path, entry in skill_entries.items()}
+    documents = derive_search_documents(files, facets)
+    # Validate both original export and actual indexed bytes with the same budgets.
     with tempfile.TemporaryDirectory(prefix='validate-', dir=state_dir(root, routing)) as temporary:
         snapshot = Path(temporary)
         for name, body in exported.items():
@@ -158,7 +176,12 @@ def read_snapshot(root, revision=None, routing=False):
         errors, _ = validate_project_manifest(snapshot)
         if errors:
             raise SearchError('Source selection rejected: ' + '; '.join(errors))
-    files = {name: exported[name] for name in selected}
+        if routing:
+            for name, body in documents.items():
+                (snapshot / name).write_bytes(body)
+            errors, _ = validate_project_manifest(snapshot)
+            if errors:
+                raise SearchError('Derived search selection rejected: ' + '; '.join(errors))
     metadata = {'revision': commit, 'engine': 'qmd', 'version': QMD_VERSION, 'mode': 'bm25',
                 'manifest_sha256': digest(manifest),
                 'files': {name: digest(body) for name, body in sorted(files.items())}}
@@ -175,7 +198,9 @@ def read_snapshot(root, revision=None, routing=False):
                 raise SearchError('Invalid canonical skill description: ' + path) from exc
             skills[path] = {'id': entry['id'], 'description': front['description'],
                             'maturity': entry.get('maturity'), 'eval_coverage': entry.get('eval_coverage')}
-        metadata.update(skills=skills, routing_dependencies={name: digest(body) for name, body in dependencies.items()},
+        metadata.update(routing_format=2, routing_facets=facets,
+                        search_documents={name: digest(body) for name, body in sorted(documents.items())},
+                        skills=skills, routing_dependencies={name: digest(body) for name, body in dependencies.items()},
                         routing_coverage={'skills': len(skills), 'indexed_skills': len(skills)})
     metadata['fingerprint'] = digest(json.dumps(metadata, sort_keys=True).encode())
     if revision is None:
@@ -281,10 +306,11 @@ def build(root, node=None, worker=call_worker, routing=False):
         state = state_dir(root, routing)
         (state / 'current.json').unlink(missing_ok=True)
         metadata, files = read_snapshot(root, routing=routing)
+        documents = derive_search_documents(files, metadata.get('routing_facets', {}))
         directory = Path(tempfile.mkdtemp(prefix='build-', dir=state))
         corpus = directory / 'corpus'
         corpus.mkdir()
-        for name, body in files.items():
+        for name, body in documents.items():
             target = corpus / name
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_bytes(body)
@@ -316,11 +342,12 @@ def search(root, query, node=None, worker=call_worker, routing=False):
         result = invoke(worker, node, {'action': 'search', 'query': query, 'corpus': str(directory / 'corpus'),
                                'db': str(directory / 'index.sqlite'), 'paths': sorted(metadata['files']), 'limit': limit})
         hits = result.get('hits')
+        expected_hashes = metadata['search_documents'] if routing else metadata['files']
         if not isinstance(hits, list) or len(hits) > limit:
             raise SearchError('Invalid QMD results.')
         for hit in hits:
             if (not isinstance(hit, dict) or not isinstance(hit.get('path'), str) or hit['path'] not in metadata['files']
-                    or hit.get('content_sha256') != metadata['files'][hit['path']]
+                    or hit.get('content_sha256') != expected_hashes[hit['path']]
                     or not isinstance(hit.get('snippet'), str) or len(hit['snippet']) > 600
                     or type(hit.get('score')) not in (int, float) or not math.isfinite(hit['score'])):
                 raise SearchError('Unexpected source or content in QMD results.')
@@ -331,8 +358,15 @@ def search(root, query, node=None, worker=call_worker, routing=False):
                   'fingerprint': metadata['fingerprint'], 'hits': hits}
         if routing:
             for hit in hits:
+                path = hit['path']
+                hit.update(search_document_sha256=hit['content_sha256'], content_sha256=metadata['files'][path],
+                           snippet_origin='canonical-source', sources=[{'path': path, 'sha256': metadata['files'][path]}])
                 if hit['path'] in metadata['skills']:
                     hit.update(kind='skill', skill=metadata['skills'][hit['path']])
+                    hit['snippet_origin'] = 'derived-search-document'
+                    hit['sources'].append({'path': 'skill-catalog.yml',
+                                           'sha256': metadata['routing_dependencies']['skill-catalog.yml'],
+                                           'fields': [f"skills[{hit['skill']['id']}].{key}" for key in ('id', 'area', 'purpose')]})
                 else:
                     hit['kind'] = 'guide'
             output.update(candidates_only=True, routing_coverage=metadata['routing_coverage'],
