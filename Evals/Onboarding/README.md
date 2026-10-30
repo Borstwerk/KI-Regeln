@@ -24,6 +24,12 @@ Validierungs-/PR-Wegs. Eine kleine Navigationsergänzung wurde getrennt
 nachgeprüft; D6 bleibt `partial`. Die begrenzte Schleife ist beendet, die alten
 Urteile bleiben erhalten.
 
+Der [D6-Auftrag/Rubrik-Abgleich](Discovery-D6-Alignment-2026-10-29.md) belegt,
+dass die spätere Rubrik bei gleicher Orientierungsfrage zusätzlich den
+Validierungsweg verlangte. Die historischen `partial`-Urteile bleiben stehen;
+künftige Fallentwürfe trennen Orientierung und vollständigen Beitragsweg.
+Für diesen Abgleich wurden keine weiteren Modellaufrufe ausgeführt.
+
 ## Einmalig vorbereiten
 
 - Exakten Git-SHA von `main` oder dem zu testenden Branch notieren; Rolle, Sprache, Datum, Umgebung und vorhandene Repository-/Browserrechte festhalten.
