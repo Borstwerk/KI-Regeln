@@ -107,6 +107,10 @@ sowie ID, kanonische Description, Maturity und Eval-Coverage; andere Treffer sin
 `routing_coverage` weist die indexierte Skill-Anzahl aus. `candidates_only: true`
 kennzeichnet das Ergebnis als Kandidatenhilfe. Vollständige Quellenabdeckung ist
 kein Nachweis, dass eine einzelne Anfrage alle relevanten Skills findet.
+Auch ähnliche Formulierungen können leer bleiben: Im nativen Entwicklungsfall
+fand `Architekturentscheidungen Alternativen Konsequenzen` den Skill `adr` nicht;
+die direkte Katalogsuche und `Architecture Decision Record Alternativen` fanden
+ihn anschließend. Der ursprüngliche Fehlfall bleibt als solcher dokumentiert.
 
 Agenten verwenden den optionalen Suchpfad aus [AGENTS.md](../AGENTS.md) und
 [Skill-Handbuch.md](Skill-Handbuch.md): Aufträge in Teiljobs zerlegen, je Job suchen,

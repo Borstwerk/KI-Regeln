@@ -48,5 +48,51 @@ semantische Suche und andere Plattformen bleiben separat `NOT RUN`/`UNVERIFIED`.
 
 ## Ergebnis
 
-Die Ausführung und ihre Commit-/Codebindung werden nach dem eingefrorenen
-Vorabstand ergänzt. Bis dahin: **NOT RUN** für den erweiterten nativen Routinglauf.
+Der Code und die Kriterien wurden vor Ausführung in
+`ebe392e803e4b47c7bdc64238385be8da028681e` eingefroren. Die
+[maschinenlesbare Evidence](Local-Rule-Routing-2026-10-30.json) enthält das
+vollständige native Ergebnis, normale PowerShell-Proben und den gesonderten
+Follow-up. Code-, Lockfile-, Protokoll- und Rohbericht-Hashes bleiben darin gebunden.
+
+| Teil | Beobachtung | Status |
+| --- | --- | --- |
+| Vollständiger nativer Bestand | 165 aktive Dokumente, alle 155 katalogisierten Skills | PASS Quellenabdeckung |
+| Rechtschreibung, Bewertung, Figuren | erwartete Skills jeweils unter den zehn Kandidaten | PASS für diese drei Fragen |
+| Architekturfrage wie vorab formuliert | null Treffer; `adr` nicht gefunden | FAIL Retrievalfall |
+| Nicht vorhandener Begriff | null Treffer | PASS |
+| Originalbytes | alle 165 ausgewählten Quelldateien vor/nach dem Lauf unverändert | PASS |
+| Normale PowerShell ohne Node/pnpm im PATH | Setup Exit 0, Inhaltsbuild 72 Dokumente, ursprüngliche Anfrage fünf Treffer | PASS lokal Windows |
+| Expliziter ungültiger Node-Pfad | Exit 2, `runtime-missing`, kein Ersatz durch vorhandene Runtime | PASS |
+| Prozess-PATH nach Setup und Suche | unverändert | PASS |
+
+Der vorab definierte native Fragensatz ist damit **PARTIAL**, nicht vollständig
+bestanden: drei von vier positiven Suchfällen gelingen, der Leertrefferfall gelingt.
+Der feste Runner behält den fehlgeschlagenen Fall und seinen Fehlerexit bei.
+
+### Gesonderter Follow-up nach dem Fehlfall
+
+Die Frage `Architekturentscheidungen Alternativen Konsequenzen` findet den Skill
+nicht. Die kanonische Description verwendet „Architektur-“ und „Architecture
+Decision Record“. BM25 behandelt diese Formulierungen nicht als gleichbedeutend.
+Nach Kenntnis dieses Fehlers wurde separat geprüft:
+
+- `rg -n -i 'Architekturentscheidungen' skill-catalog.yml` findet den Katalogeintrag `adr`;
+- `Architecture Decision Record Alternativen` findet `adr` mit echtem QMD.
+
+Das belegt den dokumentierten Katalog-Fallback und einen begrifflich präzisierten
+Suchfall. Es verbessert den ursprünglichen Wert **nicht rückwirkend** und ist
+keine unabhängige Qualitätsmessung. Die Suche bleibt optional; Pflicht-Discovery,
+kanonische Descriptions und Workflow-/Overlay-Checks tragen das Routing.
+
+### Controller- und Review-Evidence
+
+69 relevante lokale Unit-Tests: OK, ein bestehender Windows-Symlink-Skip.
+Davon 29 Suchcontroller-/Runtime-Methoden und zwölf Routingmethoden mit
+synthetischen Git-Repositories bzw. prozessfreien Runtime-Fixtures; keine davon
+ist ein QMD-Engine-Nachweis. Ein zunächst durch Windows-Pfadaliasing maskierter
+ID-Duplikat-Test wurde isoliert, tatsächlich rot beobachtet und durch kanonische
+ID-/Duplikatprüfung korrigiert. Ein leerer expliziter Node-Override ist ebenfalls
+regressionsgeprüft. Ein getrenntes Source-Review meldet keine offenen P1/P2.
+
+Agentische Skill-Auswahlqualität und vollständiger Recall bleiben **UNVERIFIED**;
+Semantik und andere Plattformen **NOT RUN**. Keine Maturity-Hochstufung.
