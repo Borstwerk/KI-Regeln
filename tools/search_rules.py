@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import base64
 from contextlib import contextmanager
 import hashlib
 import io
@@ -24,6 +25,8 @@ from tools.check_public_entrypoints import PROJECT_CORE, validate_project_manife
 
 QMD_VERSION = '2.8.3'
 BRIDGE = Path(__file__).with_name('search_rules_qmd.mjs')
+ROUTING_SOURCES = {'master': 'Dokumentation/Skill-Handbuch.md', 'catalog': 'skill-catalog.yml',
+                   'overlays': 'routing-overlays.yml', 'workflows': 'workflow-index.yml'}
 
 
 class SearchError(Exception):
@@ -34,6 +37,57 @@ class SearchError(Exception):
 
 def digest(body):
     return hashlib.sha256(body).hexdigest()
+
+
+def canonical_json(value):
+    return json.dumps(value, sort_keys=True, ensure_ascii=False, separators=(',', ':')).encode('utf-8')
+
+
+def encode_cursor(payload):
+    """Corruption check and context binding, not a signature or authorization."""
+    data = {**payload, 'checksum': digest(canonical_json(payload))}
+    return base64.urlsafe_b64encode(canonical_json(data)).rstrip(b'=').decode('ascii')
+
+
+def page_request(fingerprint, action, query, limit, cursor, default):
+    payload = None
+    if cursor is not None:
+        try:
+            if not isinstance(cursor, str) or len(cursor) > 2048 or not re.fullmatch(r'[A-Za-z0-9_-]+', cursor):
+                raise ValueError('invalid encoding')
+            data = json.loads(base64.b64decode(cursor + '=' * (-len(cursor) % 4), altchars=b'-_', validate=True))
+            if not isinstance(data, dict) or set(data) != {'v', 'context', 'limit', 'offset', 'results', 'checksum'}:
+                raise ValueError('invalid fields')
+            payload = {key: value for key, value in data.items() if key != 'checksum'}
+            if (type(data['v']) is not int or data['v'] != 1
+                    or type(data['limit']) is not int or not 1 <= data['limit'] <= 50
+                    or type(data['offset']) is not int or data['offset'] <= 0
+                    or data['offset'] % data['limit']
+                    or any(not isinstance(data[key], str) or not re.fullmatch('[0-9a-f]{64}', data[key])
+                           for key in ('context', 'results', 'checksum'))
+                    or encode_cursor(payload) != cursor):
+                raise ValueError('invalid cursor')
+        except (ValueError, TypeError, KeyError, UnicodeError) as exc:
+            raise SearchError('Invalid or damaged continuation cursor.', 'invalid-cursor') from exc
+    size = (payload['limit'] if payload else default) if limit is None else limit
+    if type(size) is not int or not 1 <= size <= 50:
+        raise SearchError('Routing page size must be an integer from 1 to 50.')
+    context = digest(canonical_json({'fingerprint': fingerprint, 'action': action, 'query': query, 'limit': size}))
+    if payload and payload['context'] != context:
+        raise SearchError('Cursor does not match the source snapshot, action, query or page size.', 'invalid-cursor')
+    return {'v': 1, 'context': context, 'limit': size, 'offset': payload['offset'] if payload else 0,
+            'results': payload['results'] if payload else None}
+
+
+def finish_page(items, request):
+    result_hash = digest(canonical_json(items))
+    offset, size = request['offset'], request['limit']
+    if (request['results'] is not None and request['results'] != result_hash) or (offset and offset >= len(items)):
+        raise SearchError('Cursor result set changed or its position is invalid.', 'invalid-cursor')
+    selected = items[offset:offset + size]
+    more = offset + len(selected) < len(items)
+    cursor = encode_cursor({**request, 'offset': offset + size, 'results': result_hash}) if more else None
+    return selected, {'offset': offset, 'page_size': size, 'has_more': more, 'next_cursor': cursor}
 
 
 def derive_search_documents(files, facets):
@@ -333,30 +387,37 @@ def build(root, node=None, worker=call_worker, routing=False):
         return output
 
 
-def search(root, query, node=None, worker=call_worker, routing=False):
+def search(root, query, node=None, worker=call_worker, routing=False, limit=None, cursor=None):
+    if not routing and (limit is not None or cursor is not None):
+        raise SearchError('Pagination is available only for routing search.')
     if not isinstance(query, str) or not query.strip() or len(query) > 500 or not query.isprintable():
         raise SearchError('Query must contain 1–500 printable characters.')
     with locked(root, routing):
         directory, metadata = current(root, routing)
-        limit = 10 if routing else 5
+        page = page_request(metadata['fingerprint'], 'search', query, limit, cursor, 10) if routing else None
+        worker_limit = len(metadata['files']) if routing else 5
         result = invoke(worker, node, {'action': 'search', 'query': query, 'corpus': str(directory / 'corpus'),
-                               'db': str(directory / 'index.sqlite'), 'paths': sorted(metadata['files']), 'limit': limit})
+                               'db': str(directory / 'index.sqlite'), 'paths': sorted(metadata['files']), 'limit': worker_limit})
         hits = result.get('hits')
         expected_hashes = metadata['search_documents'] if routing else metadata['files']
-        if not isinstance(hits, list) or len(hits) > limit:
+        if not isinstance(hits, list) or len(hits) > worker_limit:
             raise SearchError('Invalid QMD results.')
+        seen = set()
         for hit in hits:
             if (not isinstance(hit, dict) or not isinstance(hit.get('path'), str) or hit['path'] not in metadata['files']
+                    or hit['path'] in seen
                     or hit.get('content_sha256') != expected_hashes[hit['path']]
                     or not isinstance(hit.get('snippet'), str) or len(hit['snippet']) > 600
                     or type(hit.get('score')) not in (int, float) or not math.isfinite(hit['score'])):
                 raise SearchError('Unexpected source or content in QMD results.')
+            seen.add(hit['path'])
         _, after = current(root, routing)
         if metadata != after:
             raise SearchError('Sources changed during search.', 'stale')
         output = {'status': 'ready', 'revision': metadata['revision'], 'mode': 'bm25',
                   'fingerprint': metadata['fingerprint'], 'hits': hits}
         if routing:
+            hits.sort(key=lambda hit: (-hit['score'], hit['path']))
             for hit in hits:
                 path = hit['path']
                 hit.update(search_document_sha256=hit['content_sha256'], content_sha256=metadata['files'][path],
@@ -369,10 +430,47 @@ def search(root, query, node=None, worker=call_worker, routing=False):
                                            'fields': [f"skills[{hit['skill']['id']}].{key}" for key in ('id', 'area', 'purpose')]})
                 else:
                     hit['kind'] = 'guide'
+            output['total_matches'] = len(hits)
+            output['hits'], paging = finish_page(hits, page)
+            output.update(paging)
             output.update(candidates_only=True, routing_coverage=metadata['routing_coverage'],
-                          routing_sources={'master': 'Dokumentation/Skill-Handbuch.md', 'catalog': 'skill-catalog.yml',
-                                           'overlays': 'routing-overlays.yml', 'workflows': 'workflow-index.yml'})
+                          routing_sources=dict(ROUTING_SOURCES))
         return output
+
+
+def list_skills(root, limit=None, cursor=None):
+    """Enumerate canonical descriptors, without opening QMD or a ready index."""
+    with locked(root, routing=True):
+        metadata, _ = read_snapshot(root, routing=True)
+        page = page_request(metadata['fingerprint'], 'list-skills', None, limit, cursor, 25)
+        catalog = yaml.safe_load(git(root, 'show', metadata['revision'] + ':skill-catalog.yml'))
+        descriptors = []
+        for entry in catalog['skills']:
+            path = entry['path']
+            lists = {}
+            for field in ('capabilities', 'related'):
+                values = entry.get(field, [])
+                if (not isinstance(values, list) or any(not isinstance(value, str) for value in values)
+                        or len(values) != len(set(values))):
+                    raise SearchError('Invalid catalog descriptor list: ' + field)
+                lists[field] = values
+            descriptor = {**metadata['skills'][path], **metadata['routing_facets'][path], **lists,
+                          'path': path, 'content_sha256': metadata['files'][path],
+                          'sources': [{'path': path, 'sha256': metadata['files'][path]},
+                                      {'path': 'skill-catalog.yml',
+                                       'sha256': metadata['routing_dependencies']['skill-catalog.yml'],
+                                       'fields': [f"skills[{entry['id']}].{key}" for key in
+                                                  ('id', 'area', 'purpose', 'maturity', 'eval_coverage', 'capabilities', 'related')]}]}
+            descriptors.append(descriptor)
+        descriptors.sort(key=lambda item: item['id'])
+        after, _ = read_snapshot(root, routing=True)
+        if metadata != after:
+            raise SearchError('Sources changed during descriptor listing.', 'stale')
+        selected, paging = finish_page(descriptors, page)
+        return {'status': 'ready', 'mode': 'catalog', 'revision': metadata['revision'],
+                'fingerprint': metadata['fingerprint'], 'skills': selected, 'total_skills': len(descriptors),
+                'assessment_performed': False, 'candidates_only': True,
+                'routing_sources': dict(ROUTING_SOURCES), **paging}
 
 
 def status(root, routing=False):
@@ -390,15 +488,30 @@ def status(root, routing=False):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('action', choices=('build', 'status', 'search'))
+    parser.add_argument('action', choices=('build', 'status', 'search', 'list-skills'))
     parser.add_argument('query', nargs='?')
     parser.add_argument('--node')
     parser.add_argument('--routing', action='store_true', help='Search every catalogued canonical skill, independently of the pilot selection')
+    parser.add_argument('--limit', type=int, help='Routing entries per page, from 1 to 50')
+    parser.add_argument('--cursor', help='Continue the same routing request and source snapshot')
     args = parser.parse_args()
     try:
         options = {'routing': True} if args.routing else {}
-        result = (build(ROOT, args.node, **options) if args.action == 'build' else status(ROOT, **options)
-                  if args.action == 'status' else search(ROOT, args.query, args.node, **options))
+        paging = {key: value for key, value in (('limit', args.limit), ('cursor', args.cursor)) if value is not None}
+        if args.action != 'search' and args.query is not None:
+            raise SearchError('Query text is accepted only for search.')
+        if args.action in ('build', 'status') and paging:
+            raise SearchError('Pagination options apply only to routing search or list-skills.')
+        if args.action == 'list-skills':
+            if not args.routing:
+                raise SearchError('list-skills requires --routing.')
+            result = list_skills(ROOT, **paging)
+        elif args.action == 'search':
+            result = search(ROOT, args.query, args.node, **options, **paging)
+        elif args.action == 'build':
+            result = build(ROOT, args.node, **options)
+        else:
+            result = status(ROOT, **options)
     except SearchError as exc:
         result = {'status': exc.status, 'message': str(exc)}
     if hasattr(sys.stdout, 'reconfigure'):

@@ -66,5 +66,29 @@ Zusätzlich vollständige Descriptor-Seiten des echten Katalogs ohne Node.
 Vor Ausführung Code/Kriterien fixieren, Quellen-/Case-/Code-/Protokollhashes erhalten.
 Historische P0/P1-Ergebnisse bleiben unverändert und werden nicht umgewertet.
 
-Neue Funktionen und Prüfungen: **NOT IMPLEMENTED / NOT RUN** bis zum jeweiligen
-tatsächlichen Nachweis. Keine Maturity- oder allgemeine Recall-Hochstufung.
+## Controller- und Codeprüfung
+
+85 relevante lokale Tests: OK mit einem bestehenden Windows-Symlink-Skip.
+Neun neue Paging-/Descriptor-Methoden verwenden echte Git-Fixtures und kontrollierte
+Worker, keinen simulierten Retrieval-Erfolg. Drei echte Red/Green-Schritte deckten
+fehlende Pagingparameter, fehlende Descriptor-API und die noch fehlende CLI ab.
+
+Das unabhängige Review fand eine PowerShell-Coercion: `[int]$Limit` akzeptierte
+`1.5` als 2 und `$true` als 1. Beide Fälle wurden tatsächlich als ready/Exit 0
+beobachtet. Der Wrapper reicht Werte jetzt als Text zum kanonischen Python-Parser;
+beide Negativfälle liefern Exit 2. Ungültige Build-/Status-Pagingkombinationen und
+Listing ohne Routing sind vor Dispatch regressionsgeprüft.
+
+Zwei ausschließlich im Speicher entfernte Guards werden erkannt: Hashkontrolle
+auch außerhalb der sichtbaren Seite (eine Assertion) und Cursor-Requestbindung
+(drei Assertions). Keine Testfehler aus falscher Exception-Identität und keine
+Änderung der Produktionsbytes. Die volle reguläre Suite bleibt grün.
+
+Die frühere Routing-Fixture erwartet nun den vollständigen Worker-Abruf und
+weiterhin höchstens zehn sichtbare Einträge in der Defaultseite. Elf gültige
+Treffer sind mit P2 ein legitimer mehrseitiger Fall, kein zu verwerfender Workerfehler.
+Das ist die explizite Vertragserweiterung aus dem freigegebenen Plan.
+
+Unabhängiger Source-/Testreview: keine offenen P1/P2. Nativer Nachweis und spätere
+Agentenauswahl: **NOT RUN** bis zur tatsächlichen Ausführung. Keine Maturity- oder
+allgemeine Recall-Hochstufung.

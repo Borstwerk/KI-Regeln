@@ -181,7 +181,7 @@ class RuleRoutingTests(unittest.TestCase):
         paths = [*self.skills, *sorted(set(self.routing_files) - set(self.skills))]
         result = self.search(hits=paths[:10])
         self.assertEqual(len(result["hits"]), 10)
-        self.assertEqual(self.requests[-1]["limit"], 10)
+        self.assertEqual(self.requests[-1]["limit"], len(self.routing_files))
         self.assertIs(result["candidates_only"], True)
         self.assertEqual(result["routing_coverage"], {"skills": 2, "indexed_skills": 2})
         self.assertEqual(result["routing_sources"], {
@@ -191,8 +191,11 @@ class RuleRoutingTests(unittest.TestCase):
             if hit["path"] in self.skills:
                 self.assertEqual(hit["kind"], "skill")
                 self.assertEqual(hit["skill"], self.skills[hit["path"]])
-        with self.assertRaises(search_rules.SearchError):
-            self.search(hits=paths[:11])
+        # P2 validates the full bounded result set, then limits the visible page.
+        continued = self.search(hits=paths[:11])
+        self.assertEqual(len(continued['hits']), 10)
+        self.assertEqual(continued['total_matches'], 11)
+        self.assertTrue(continued['has_more'])
 
     def test_content_and_routing_caches_are_isolated_and_content_stays_unchanged(self):
         self.build(routing=False)

@@ -440,6 +440,21 @@ class RuleSearchRuntimeTests(unittest.TestCase):
 
 
 class RuleSearchCliTests(unittest.TestCase):
+    def test_invalid_paging_combinations_stop_before_mutating_dispatch(self):
+        for arguments in (['--routing', '--limit', '2', 'build'],
+                          ['--routing', '--cursor', 'untrusted', 'status'], ['list-skills']):
+            with (self.subTest(arguments=arguments),
+                  patch('sys.argv', ['search_rules.py', *arguments]),
+                  patch.object(search_rules, 'build', side_effect=AssertionError('build reached')) as build,
+                  patch.object(search_rules, 'status', side_effect=AssertionError('status reached')) as status,
+                  patch.object(search_rules, 'list_skills', side_effect=AssertionError('listing reached')) as listing,
+                  patch('sys.stdout', new_callable=io.StringIO) as output):
+                self.assertEqual(search_rules.main(), 2)
+                self.assertEqual(json.loads(output.getvalue())['status'], 'error')
+                build.assert_not_called()
+                status.assert_not_called()
+                listing.assert_not_called()
+
     def test_leading_dash_query_is_forwarded_exactly_after_option_separator(self):
         with (
             patch("sys.argv", ["search_rules.py", "--node", "fixture-node", "search", "--", "-Quick"]),

@@ -79,10 +79,11 @@ Ein vorhandener, aktueller Routing-Index kann die Kandidatensuche unterstützen:
 `-Routing -Build` aufgebaut und aus **allen katalogisierten kanonischen Skills**
 abgeleitet. Einrichtung und Grenzen: [Lokale Regelsuche](Dokumentation/Lokale-Regelsuche.md).
 
-- Mehrteilige Aufträge in eigenständige Jobs zerlegen und je Job passende Fachwörter suchen; höchstens zehn Treffer sind keine vollständige Liste aller relevanten Skills.
+- Mehrteilige Aufträge in eigenständige Jobs zerlegen und je Job passende Fachwörter suchen; standardmäßig zehn Treffer je Seite sind keine vollständige Liste aller relevanten Skills. `has_more` und `next_cursor` beachten; mit derselben Query und `-Cursor '<next_cursor>'` weitere Seiten abrufen.
 - Treffer sind Kandidaten. Aktuelle Original-`SKILL.md`-Descriptions, Near-Misses und Katalog-Metadaten prüfen; Workflow-Kernskills und Overlay-Kandidaten zusätzlich direkt prüfen.
 - Fehlende Runtime, fehlender/veralteter Index, leere oder unpassende Treffer: mit gezielter Katalog-/Dateisuche fortfahren, etwa `rg -n -i 'Fachwort' skill-catalog.yml` und im passenden Fachbereich. Daraus niemals `none` ableiten.
 - Die Pflicht-Reads oben bleiben bestehen. Suche ist optional, löst keine Installation aus und verlangt keine zusätzlichen Rechte. Auch Suchabfragen benötigen Schreibrechte auf den lokalen abgeleiteten Cache; fehlen diese, den direkten Dateipfad verwenden.
+- Für ausdrücklich hohen Vollständigkeitsbedarf liefert `./Search-KI-Regeln.ps1 -Routing -ListSkills -Limit 25` alle kanonischen Beschreibungen abschnittsweise, auch ohne Node/QMD oder bereiten Index. Weitere Seiten mit `-Cursor` abrufen. Ausgeliefert heißt nicht fachlich geprüft: Eignung je Teiljob beurteilen, mögliche Owner und Zweifelsfälle in Original-Skill und Near-Miss prüfen. Ein Vollscan ist keine Pflicht für normale kurze Aufgaben.
 
 1. **Nutzerauftrag lesen.** Problem, gewünschtes Ergebnis, Scope, Grenzen und explizite Autorisierung festhalten. Fehlende Skill-Namen sind kein fehlender Input.
 2. **Lokale Wahrheit zuerst.** Projektregeln, lokale Sources of Truth, vorhandene Artefakte und Nutzerangaben schlagen allgemeine Repository-Regeln. Allgemeine Arbeitsweise ist zentral; konkrete Wahrheit bleibt lokal.
