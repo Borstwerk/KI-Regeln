@@ -57,12 +57,12 @@ def main():
         git('config', 'user.email', 'fixture@example.invalid')
         for path in sorted(PROJECT_CORE | {'Workflows/README.md'}):
             target = fixture / path; target.parent.mkdir(parents=True, exist_ok=True)
-            target.write_text('# Synthetic guide\nNo query marker.\n', encoding='utf-8')
+            target.write_text('# Synthetic guide\nNo query marker.\n', encoding='utf-8', newline='\n')
         skills = []
         for i, path in enumerate(expected_paths):
             identifier = f'page-{i:02d}'
             target = fixture / path; target.parent.mkdir(parents=True, exist_ok=True)
-            target.write_text(f'---\nname: {identifier}\ndescription: Synthetic pagination skill.\n---\n\n# Synthetic skill\n{MARKER}\n', encoding='utf-8')
+            target.write_text(f'---\nname: {identifier}\ndescription: Synthetic pagination skill.\n---\n\n# Synthetic skill\n{MARKER}\n', encoding='utf-8', newline='\n')
             skills.append({'id': identifier, 'path': path, 'area': 'Fixture', 'maturity': 'experimental',
                            'eval_coverage': 'none', 'purpose': 'Synthetic purpose for a bounded pagination fixture.'})
         manifest = {'schema_version': 1, 'id': 'ki-regeln', 'kind': 'collection',
@@ -71,8 +71,8 @@ def main():
         for path, value in {'mara-project.json': manifest, 'skill-catalog.yml': {'schema_version': 2, 'skills': skills},
                             'workflow-index.yml': {'schema_version': 1, 'workflows': []},
                             'routing-overlays.yml': {'schema_version': 2, 'overlays': []}}.items():
-            (fixture / path).write_text(json.dumps(value), encoding='utf-8')
-        (fixture / '.gitignore').write_text('.validation/\n', encoding='utf-8')
+            (fixture / path).write_text(json.dumps(value), encoding='utf-8', newline='\n')
+        (fixture / '.gitignore').write_text('.validation/\n', encoding='utf-8', newline='\n')
         git('add', '--all'); git('commit', '--quiet', '-m', 'Synthetic P2 sources')
         built = search.build(fixture, node, routing=True)
         assert built['documents'] == 24 and built['routing_coverage']['indexed_skills'] == 14
