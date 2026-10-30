@@ -4,6 +4,9 @@ param(
     [Parameter(Mandatory, ParameterSetName = 'Build')][switch]$Build,
     [Parameter(Mandatory, ParameterSetName = 'Status')][switch]$Status,
     [Parameter(Mandatory, ParameterSetName = 'Setup')][switch]$Setup,
+    [Parameter(Mandatory, ParameterSetName = 'ListSkills')][switch]$ListSkills,
+    [Parameter(ParameterSetName = 'Query')][Parameter(ParameterSetName = 'ListSkills')][string]$Limit,
+    [Parameter(ParameterSetName = 'Query')][Parameter(ParameterSetName = 'ListSkills')][string]$Cursor,
     [switch]$Routing,
     [string]$NodePath = 'node',
     [string]$PnpmPath = 'pnpm'
@@ -54,10 +57,12 @@ $python = Join-Path $PSScriptRoot '.validation/runtime/venv/Scripts/python.exe'
 if (-not (Test-Path -LiteralPath $python -PathType Leaf)) {
     throw 'Run .\Validate-KI-Regeln.ps1 -Quick once to prepare the local Python runtime.'
 }
-$action = if ($Build) { 'build' } elseif ($Status) { 'status' } else { 'search' }
+$action = if ($Build) { 'build' } elseif ($Status) { 'status' } elseif ($ListSkills) { 'list-skills' } else { 'search' }
 $arguments = @((Join-Path $PSScriptRoot 'tools/search_rules.py'))
 if ($PSBoundParameters.ContainsKey('NodePath')) { $arguments += @('--node', $NodePath) }
 if ($Routing) { $arguments += '--routing' }
+if ($PSBoundParameters.ContainsKey('Limit')) { $arguments += @('--limit', [string]$Limit) }
+if ($PSBoundParameters.ContainsKey('Cursor')) { $arguments += "--cursor=$Cursor" }
 $arguments += $action
 if ($action -eq 'search') { $arguments += @('--', $Query) }
 & $python @arguments

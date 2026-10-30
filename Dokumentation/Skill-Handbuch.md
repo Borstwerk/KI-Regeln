@@ -58,7 +58,16 @@ Für jeden eigenständigen Job passende Begriffe verwenden und die gefundenen
 Original-Descriptions samt Near-Misses und Katalog-Metadaten prüfen. Workflow-Kernskills
 und registrierte Overlays weiterhin direkt prüfen, unabhängig vom Suchranking.
 
-Die höchstens zehn BM25-Treffer sind keine vollständige Relevanzmenge. Ist die Suche
+Die standardmäßig zehn BM25-Treffer je Seite sind keine vollständige Relevanzmenge.
+`has_more` und `next_cursor` zeigen weitere Seiten derselben Query an.
+Bei ausdrücklich hohem Vollständigkeitsbedarf kann
+`./Search-KI-Regeln.ps1 -Routing -ListSkills -Limit 25` alle kanonischen
+Beschreibungen abschnittsweise liefern, ohne Node/QMD oder bereiten Suchindex.
+Ausgabe ist keine fachliche Prüfung; pro Teiljob Eignung beurteilen und für mögliche
+Owner sowie Zweifelsfälle Original-Skill und Near-Miss lesen. Ein Vollscan ist kein
+neues allgemeines Pflicht-Gate.
+
+Ist die Suche
 nicht verfügbar, veraltet, leer oder fachlich unpassend, gezielt im Katalog und
 passenden Fachbereich weitersuchen. Ein Suchfehlschlag begründet kein `none`.
 Der optionale Index ersetzt keinen Router-Read und ist keine Voraussetzung für Routing.

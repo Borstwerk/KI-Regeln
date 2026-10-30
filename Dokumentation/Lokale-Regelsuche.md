@@ -108,7 +108,8 @@ Quellenabhängigkeiten: Auch deren Änderung macht den Routing-Index veraltet.
 Die vollständigen Workflow-Dateien werden nicht zusätzlich indexiert; bei einem
 plausiblen Workflow weiterhin `workflow-index.yml` und den passenden Workflow öffnen.
 
-Routing-Antworten enthalten höchstens zehn Treffer. Skill-Treffer tragen `kind: skill`
+Routing-Antworten enthalten standardmäßig zehn Treffer je Seite; `-Limit` erlaubt
+1–50 Einträge. Skill-Treffer tragen `kind: skill`
 sowie ID, kanonische Description, Maturity und Eval-Coverage; andere Treffer sind
 `kind: guide`. `routing_sources` verweist auf die verbindlichen Router,
 `routing_coverage` weist die indexierte Skill-Anzahl aus. `candidates_only: true`
@@ -136,6 +137,46 @@ direkt berücksichtigen. Bei fehlender Runtime, fehlendem/veraltetem Index sowie
 leeren oder unpassenden Treffern mit gezielter Katalog-/Dateisuche fortfahren.
 Ein Suchfehlschlag rechtfertigt kein `none`. Es gibt keine automatische Skill-Aktivierung.
 
+## Weitere Treffer und vollständige Beschreibungslisten
+
+```powershell
+.\Search-KI-Regeln.ps1 -Routing -Query 'Skill' -Limit 10
+.\Search-KI-Regeln.ps1 -Routing -Query 'Skill' -Cursor '<next_cursor>'
+.\Search-KI-Regeln.ps1 -Routing -ListSkills -Limit 25
+.\Search-KI-Regeln.ps1 -Routing -ListSkills -Cursor '<next_cursor>'
+```
+
+Die Suche prüft zunächst alle vom nativen BM25-Aufruf gelieferten Treffer innerhalb
+des begrenzten Corpus, ordnet sie global nach Score absteigend und Pfad aufsteigend
+und schneidet dann Seiten. `total_matches` beschreibt diese Ergebnismenge;
+`offset`, `page_size`, `has_more` und `next_cursor` beschreiben die angezeigte Seite.
+Die Gesamtzahl ist keine Zahl aller fachlich relevanten Skills. Der Inhaltsmodus
+ohne `-Routing` bleibt bei höchstens fünf Treffern und akzeptiert keine Pagingoptionen.
+
+Für eine Fortsetzung dieselbe Query verwenden. Die Seitengröße kann entfallen,
+dann gilt die im Cursor gebundene Größe. Query-, Aktions-, Größen-, Quellen- oder
+Ergebniswechsel führen zu einem sichtbaren Fehler; nach Quellenänderung ggf.
+Index neu bauen und wieder bei Seite eins beginnen. Beschädigte Cursor werden
+zurückgewiesen. Cursor sind Kontext-/Korruptionsschutz, keine geheim signierten
+Autorisierungstoken. Es gibt keinen Sessiondienst und keinen zusätzlichen Secret-Speicher.
+
+`-Routing -ListSkills` liest die geprüften Gitquellen direkt: kein Node/QMD-Aufruf
+und kein bereiter Suchindex erforderlich. Die Ausgabe hat `mode: catalog`,
+`total_skills`, dieselben Seitenfelder und eine nach ID sortierte `skills`-Liste.
+Jeder Eintrag enthält kanonische Description, ID/Pfad, Katalog-Zweck/Fachbereich,
+Maturity, Eval-Coverage, Capabilities, `related` und Quellenhashes/Feldherkunft.
+Standardgröße ist 25, explizit ebenfalls 1–50. Optionale Listen ohne Eintrag sind leer.
+
+Über alle Seiten erscheint jede Katalog-ID genau einmal. `assessment_performed:
+false` und `candidates_only: true` machen klar: Ausliefern ist kein Lesen,
+Bewerten oder Aktivieren. Die gründliche fachliche Prüfung bleibt beim Agenten;
+ungeprüfte oder unklare Einträge erlauben keinen vollständigen Prüfclaim.
+Diese Auflistung ersetzt keine Pflicht-Discovery und erzwingt keinen Vollscan.
+
+Setup/Build/Status akzeptieren keine Pagingoptionen. Ungültige Kombinationen
+stoppen vor Installation oder Indexmutation. Der vorhandene Harness-Python und
+Git bleiben nötig; auch die direkte Auflistung nutzt lokale Snapshot-/Lock-Schreibrechte.
+
 Build und Suche brauchen lokale Schreibrechte auf den jeweiligen abgeleiteten
 Cache (Lock und SQLite). In einer Umgebung ohne diese Rechte reicht der direkte
 Katalog-/Dateipfad; keine Installation oder Rechteerweiterung ist für Routing erforderlich.
@@ -158,7 +199,8 @@ Dependencies behalten ihre eigenen Lizenzdateien; es wird kein Upstreamcode vend
 
 ## Verifikation
 
-`tests.test_rule_search` und `tests.test_rule_search_routing` prüfen den Controller mit echten temporären Git-Repos
+`tests.test_rule_search`, `tests.test_rule_search_routing`, `tests.test_rule_search_facets`
+und `tests.test_rule_search_paging` prüfen den Controller mit echten temporären Git-Repos
 und einem injizierten Worker. Diese Tests sind kein QMD-Engine-Nachweis.
 Reale QMD-Builds und Suchfragen werden separat protokolliert. Keine Aussage über
 allgemeine Retrievalqualität, semantisches Ranking, Agentenantworten oder Maturity
@@ -181,3 +223,8 @@ Der getrennte [Routing-Nachweis](../Evals/Onboarding/Local-Rule-Routing-2026-10-
 verwendet `run_rule_routing_native.py --run` für den vollständigen Katalogbestand
 und bekannte Suchfälle außerhalb der Inhaltsauswahl. Auch dieser Lauf installiert
 nichts und ist kein Agenten- oder allgemeiner Recall-Benchmark.
+
+Der [P2-Nachweis](../Evals/Onboarding/Rule-Routing-P2.md) prüft native Trefferseiten,
+Snapshotwechsel und vollständige Katalogauflistung mit
+`run_rule_routing_p2_native.py --run`. Er installiert nichts und trennt vollständige
+Ausgabe von fachlicher Auswahlqualität.
