@@ -27,6 +27,60 @@ def dump(path, value):
     path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
 
 
+def fixture_environment(environment):
+    return {**environment, 'PYTHONDONTWRITEBYTECODE': '1'}
+
+
+def permission_settings(profile):
+    if profile not in (':workspace', ':read-only'):
+        raise ValueError('Unsupported fixture permission profile.')
+    return ['-c', f'default_permissions="{profile}"', '-c', 'windows.sandbox="elevated"',
+            '-c', 'shell_environment_policy.set.PYTHONDONTWRITEBYTECODE="1"']
+
+
+def fixture_shell():
+    bundled = Path.home() / '.cache/codex-runtimes/codex-primary-runtime/dependencies/native/powershell/pwsh.exe'
+    if bundled.is_file():
+        return str(bundled)
+    installed = shutil.which('pwsh')
+    if not installed:
+        raise RuntimeError('Existing PowerShell 7 runtime required; no legacy fallback or installation.')
+    return installed
+
+
+def sandbox_json(cli, environment, workspace, profile, command):
+    """Run one fixed local preparation command, never a model session."""
+    argv = [cli, 'sandbox', '--include-managed-config', '--permission-profile', profile,
+            *permission_settings(profile), '-C', str(workspace), '--', fixture_shell(),
+            '-NoProfile', '-NonInteractive', '-Command',
+            "[Console]::OutputEncoding=[System.Text.UTF8Encoding]::new($false); "
+            "if ($PSVersionTable.PSVersion.Major -lt 7) { throw 'PowerShell 7 required' }; " + command]
+    done = subprocess.run(argv, env=fixture_environment(environment), capture_output=True,
+                          text=True, encoding='utf-8', timeout=120)
+    try:
+        result = json.loads(done.stdout)
+    except (ValueError, UnicodeError) as exc:
+        raise RuntimeError('Sandbox preparation did not return ready JSON.') from exc
+    if done.returncode or not isinstance(result, dict) or result.get('status') != 'ready':
+        raise RuntimeError('Sandbox preparation did not return ready JSON.')
+    return result
+
+
+def prepare_index(cli, environment, workspace, expected_revision):
+    built = sandbox_json(cli, environment, workspace, ':workspace', '.\\Search-KI-Regeln.ps1 -Routing -Build')
+    if (built.get('documents') != 165 or built.get('mode') != 'bm25'
+            or built.get('revision') != expected_revision
+            or not isinstance(built.get('fingerprint'), str) or not built['fingerprint']):
+        raise RuntimeError('Fixture index is incomplete or bound to a different snapshot.')
+    probe = sandbox_json(cli, environment, workspace, ':workspace',
+                         ".\\Search-KI-Regeln.ps1 -Routing -Query 'zzfixturepreflight709c81' -Limit 1")
+    if (probe.get('mode') != 'bm25' or probe.get('revision') != built['revision']
+            or probe.get('fingerprint') != built['fingerprint']
+            or probe.get('hits') != [] or probe.get('total_matches') != 0):
+        raise RuntimeError('Fixture cache probe does not match its prepared snapshot.')
+    return {'build': built, 'probe': probe}
+
+
 def packet(source=SOURCE):
     archive = search_rules.git(ROOT, '-c', 'core.autocrlf=false', 'archive', '--format=zip', source)
     scripts = {'Search-KI-Regeln.ps1', 'tools/search_rules.py', 'tools/rule_relations.py',
@@ -79,7 +133,8 @@ def main():
         assert (ROOT / path).read_bytes().replace(b'\r\n', b'\n') == files[path], 'Root build tooling differs from fixed product source: ' + path
     inventory = {path: sha(body) for path, body in sorted(files.items())}
     bound = ['Evals/Onboarding/run_rule_routing_p4.py', 'Evals/Onboarding/rule-routing-p4-cases.json',
-             'Evals/Onboarding/Rule-Routing-P4.md', 'Evals/Onboarding/run_corrected_discovery.py']
+             'Evals/Onboarding/Rule-Routing-P4.md', 'Evals/Onboarding/run_corrected_discovery.py',
+             'Evals/Onboarding/Rule-Routing-Fixture-Runtime-Fix.md']
     if compare:
         bound.append('Evals/Onboarding/Rule-Routing-P5.md')
     execution = search_rules.git(ROOT, 'rev-parse', 'HEAD').decode().strip()
@@ -93,6 +148,8 @@ def main():
                 'root_build_code_sha256': {path: sha((ROOT / path).read_bytes()) for path in operational},
                 'cases': data['cases'], 'model_requested': 'gpt-6.1-sol', 'reasoning_requested': 'high',
                 'sessions': len(data['cases']), 'deadline_seconds_each': 240, 'retry': False, 'held_out': False,
+                'fixture_preparation': {'profile': ':workspace', 'bytecode_disabled': True,
+                                        'cache_build': 'sandbox', 'separate_ready_probe_before_model': True},
                 'direct_api_calls': 0, 'permission_boundary': 'workspace-write for development; source integrity checked afterward; others read-only'}
     if compare:
         protocol.update(comparison='one free/guided pair; not a general efficiency estimate',
@@ -110,6 +167,7 @@ def main():
     env = {key: value for key, value in os.environ.items()
            if not key.startswith(('OPENAI_', 'ANTHROPIC_', 'CODEX_API_'))
            and key not in ('CODEX_MODEL_PROVIDER', 'NODE_OPTIONS', 'NODE_PATH', 'QMD_TRUST_UPDATE_HOOKS')}
+    env = fixture_environment(env)
     auth = subprocess.run([cli, 'login', 'status'], env=env, capture_output=True, text=True)
     if auth.returncode or 'Logged in using ChatGPT' not in auth.stdout + auth.stderr:
         raise SystemExit('ChatGPT subscription login required; no API fallback.')
@@ -146,20 +204,23 @@ def main():
         junction(state / 'runtime', ROOT / '.validation/runtime')
         if case['runtime'] == 'indexed':
             junction(state / 'qmd-runtime', ROOT / '.validation/qmd-runtime')
-            built = search_rules.build(workspace, routing=True)
-            assert built['documents'] == 165
+            prepared = prepare_index(cli, env, workspace, git('rev-parse', 'HEAD').decode().strip())
+            built = prepared['build']
             if compare:
                 if reference_index is None:
                     reference_index = built
                 else:
                     assert built == reference_index, 'Comparison index/source identity changed.'
             dump(out / ((case['id'] if compare else 'development') + '-index.json'), built)
-        sandbox = 'workspace-write' if case['runtime'] == 'indexed' else 'read-only'
+            dump(out / (case['id'] + '-cache-probe.json'), prepared['probe'])
+        if (any((workspace / path).read_bytes() != body for path, body in files.items())
+                or git('status', '--porcelain')):
+            raise RuntimeError('Fixture changed during preparation; model NOT RUN.')
+        profile = ':workspace' if case['runtime'] == 'indexed' else ':read-only'
         answer = out / (case['id'] + '-answer.json')
         argv = [cli, '-a', 'never', 'exec', '--ignore-user-config', '--ephemeral', '--skip-git-repo-check',
                 '--cd', str(workspace), '--json', '--color', 'never', '--model', 'gpt-6.1-sol',
-                '-c', 'model_reasoning_effort="high"', '--sandbox', sandbox,
-                '-c', 'windows.sandbox="elevated"', '-c', 'model_provider="openai"',
+                '-c', 'model_reasoning_effort="high"', *permission_settings(profile), '-c', 'model_provider="openai"',
                 '-c', 'forced_login_method="chatgpt"', '-c', 'web_search="disabled"',
                 '--output-schema', str(schema), '--output-last-message', str(answer), '-']
         prompt = ('Arbeite ausschließlich mit den Quellen in deinem aktuellen Arbeitsverzeichnis. '
