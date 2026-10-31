@@ -1,5 +1,6 @@
-"""Bounded P0/P1 native comparison on the same frozen public source packet."""
+"""Bounded P1 comparison: frozen sources, optionally one declared catalog repair."""
 import argparse
+import copy
 from datetime import datetime, timezone
 import hashlib
 import json
@@ -18,6 +19,23 @@ CASES = Path(__file__).with_name('rule-routing-cases.json')
 sha = lambda body: hashlib.sha256(body).hexdigest()
 
 
+def checked_catalog_fix(original, candidate):
+    """This follow-up admits one declared data repair, never arbitrary sources."""
+    before, after = search.yaml.safe_load(original), search.yaml.safe_load(candidate)
+    expected = copy.deepcopy(before)
+    owners = [entry for entry in expected['skills'] if entry['id'] == 'acceptance-criteria-design']
+    old = ('Beobachtbare Acceptance Criteria und Verification Intent für bestehende '
+           'Requirements formulieren, ohne konkrete Testfälle vorwegzunehmen.')
+    new = ('Beobachtbare Akzeptanzkriterien (Acceptance Criteria) und Verification Intent '
+           'für bestehende Requirements formulieren, ohne konkrete Testfälle vorwegzunehmen.')
+    if len(owners) != 1 or owners[0]['purpose'] != old:
+        raise ValueError('Catalog baseline does not match the declared repair.')
+    owners[0]['purpose'] = new
+    if after != expected:
+        raise ValueError('Only the declared acceptance-criteria-design purpose repair is allowed.')
+    return candidate
+
+
 def grade(case, found, empty):
     return (not (set(case['required_skills']) - found)
             and all(found.intersection(group) for group in case['one_of'])
@@ -28,9 +46,12 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--run', action='store_true')
     parser.add_argument('--label', required=True, choices=['baseline', 'candidate'])
+    parser.add_argument('--catalog-revision', help='Candidate only: committed catalog with the one declared acceptance-purpose repair')
     args = parser.parse_args()
     if not args.run:
         parser.error('Explicit --run required; installs nothing, uses isolated synthetic Git state.')
+    if args.catalog_revision and args.label != 'candidate':
+        parser.error('The declared catalog repair is available only with --label candidate.')
     cases_bytes = CASES.read_bytes()
     data = json.loads(cases_bytes)
     cases = data['cases']
@@ -40,6 +61,13 @@ def main():
     _, original = search.read_snapshot(ROOT, revision=SOURCE, routing=True)
     for name in ['mara-project.json', 'skill-catalog.yml', 'routing-overlays.yml', 'workflow-index.yml']:
         original[name] = search.git(ROOT, 'show', SOURCE + ':' + name)
+    catalog_before = sha(original['skill-catalog.yml'])
+    catalog_revision = None
+    if args.catalog_revision:
+        catalog_revision = search.git(ROOT, 'rev-parse', '--verify', '--end-of-options',
+                                      args.catalog_revision + '^{commit}').decode().strip()
+        original['skill-catalog.yml'] = checked_catalog_fix(
+            original['skill-catalog.yml'], search.git(ROOT, 'show', catalog_revision + ':skill-catalog.yml'))
     for name in json.loads(original['mara-project.json'])['entrypoints'].values():
         if name not in original:
             original[name] = search.git(ROOT, 'show', SOURCE + ':' + name)
@@ -57,6 +85,8 @@ def main():
         if name not in original:
             original[name] = search.git(ROOT, 'show', SOURCE + ':' + name)
     dependency_packet_hash = sha(json.dumps({p: sha(b) for p, b in sorted(original.items())}, sort_keys=True).encode())
+    unchanged_sources_hash = sha(json.dumps({p: sha(b) for p, b in sorted(original.items())
+                                            if p != 'skill-catalog.yml'}, sort_keys=True).encode())
     for case in cases:
         for evidence in case['evidence']:
             assert sha(original[evidence['path']]) == evidence['sha256'], case['id']
@@ -67,9 +97,14 @@ def main():
              'tools/local_search/pnpm-lock.yaml', 'Evals/Onboarding/run_rule_routing_comparison.py']
     if (ROOT / 'tools/rule_relations.py').is_file():
         bound.append('tools/rule_relations.py')
+    bound.append('Evals/Onboarding/Rule-Routing-Acceptance-Fix.md')
     protocol = {'utc': datetime.now(timezone.utc).isoformat(), 'label': args.label,
+                'execution_commit': search.git(ROOT, 'rev-parse', 'HEAD').decode().strip(),
                 'source_commit': SOURCE, 'source_packet_sha256': packet_hash,
                 'dependency_packet_sha256': dependency_packet_hash,
+                'sources_except_catalog_sha256': unchanged_sources_hash,
+                'catalog_before_sha256': catalog_before, 'catalog_sha256': sha(original['skill-catalog.yml']),
+                'catalog_override_revision': catalog_revision,
                 'registered_workflow_dependencies': len(workflows),
                 'cases_sha256': sha(cases_bytes), 'qmd_version': search.QMD_VERSION,
                 'node_version': subprocess.check_output([node, '--version'], text=True).strip(),
