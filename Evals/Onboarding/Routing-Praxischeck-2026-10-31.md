@@ -176,3 +176,58 @@ enthält. Die Prüfung wird deshalb der deklarierten Evidence-Revision zugeordne
 ein falscher Pin bleibt ein harter Fehler. Beide Revisionen und die tatsächlich
 geprüften Hashes werden getrennt protokolliert. Keine Änderung an den Fällen oder
 ihren Hash-Erwartungen. Der abgebrochene Start ist **BLOCKED vor Workerstart**.
+
+## Ergebnis des gebundenen Folgelaufs
+
+Der frische modellfreie Vergleich wurde auf `f6640ad` ausgeführt, mit
+Basisquellen `03cdee5`, Kandidatenkatalog `d07334e` und Case-Evidence-Revision
+`6b80949`. Der Vorabvertrag ist in `f6640ad` archiviert; dieser Ergebnisanhang
+entstand erst danach. [Öffentliche JSON-Evidence](Routing-Praxischeck-2026-10-31.json)
+enthält den vollständigen frischen Rohbericht, den getrennten historischen
+Bericht und die Code-/Protokoll-/Quellen-/Testhashes. Lokale Rohdaten:
+`.validation/reference-docs-routing-ngisegt6`.
+
+| Prüfung | Baseline | Kandidat |
+| --- | --- | --- |
+| Zielskill unter den ersten zehn, fünf bekannte Queries | 2/5 | 5/5 |
+| `Datenbank Tabelle dokumentieren` | Ziel fehlt | Ziel auf Rang 2 |
+| `Schema Referenzdokumentation` | Ziel fehlt | Ziel auf Rang 1 |
+| `Tabelle dokumentieren` | Ziel fehlt | Ziel auf Rang 2 |
+| Bestehende 16 P1-Fälle | 16/16 | 16/16 |
+| Künstliche Leertrefferkontrolle | leer | leer |
+| Quellen während des jeweiligen Laufs | unverändert | unverändert |
+
+Die beiden bereits erfolgreichen Zielqueries behalten ihre Ränge. Genau ein
+Katalogzweck und ein daraus abgeleitetes Suchdokument unterscheiden sich; die
+übrigen 219 Paketquellen und alle 155 Original-Skills sind bytegleich. Die
+kanonischen und abgeleiteten Hashes aller zurückgegebenen Treffer wurden gegen
+die gepinnten Gitquellen nachgerechnet. Acht spätere P2-/P3-Fälle sind nicht Teil
+dieses nativen Retrievalvergleichs; keine Vermischung mit technischen Vertrags-
+oder Agentenqualitätsurteilen.
+
+**Review und Verifikation:** 85 relevante Tests bestehen ohne Skip, darunter fünf
+Tests für den erlaubten Katalogdiff und die Evidence-Pins. Zwei Memory-only-
+Brechproben erkennen eine umgangene Katalogadmission sowie entfernte Pin-Prüfung.
+Full Harness besteht mit bestehenden Near-Miss-Warnungen. Der Review hat den
+ursprünglichen Beitrag fachlich geprüft und die Reproduzierbarkeit korrigiert;
+die anschließende Eigenprüfung ist Same-Model-Review, keine unabhängige
+Zertifizierung. Beide technischen Review-Vorstarts bleiben vor QMD blockiert
+dokumentiert. Keine Agenten-CLI-Modellsessions, direkten Modell-APIs oder
+Installationen in diesem Folgelauf.
+
+**Lieferentscheidung:** Katalogkorrektur und reproduzierbaren Nachweis übernehmen.
+Die Retrievalverbesserung gilt für diese bekannten Entwicklungsqueries, nicht
+für beliebige Umschreibungen oder eine tatsächlich geprüfte Agentenaktivierung.
+Suche bleibt optional; allgemeiner Recall und Agentenqualität bleiben
+UNVERIFIED, Effizienz wurde nicht bewertet. Bestehende Skill-Verträge, Suchlogik,
+Maturity und Fall-Erwartungen bleiben unverändert.
+
+## Nutzung in anderen Checkouts
+
+Nach Übernahme erhalten andere Checkouts den verbesserten Katalogeintrag.
+Der abgeleitete Index unter `.validation/` wird nicht mitversioniert. Agenten mit
+lokalem Checkout können ihn nach den dokumentierten Voraussetzungen explizit
+aufbauen; Setup lädt nur auf ausdrücklichen Aufruf die gepinnten Abhängigkeiten.
+Anleitung und Grenzen: [Lokale Regelsuche](../../Dokumentation/Lokale-Regelsuche.md).
+Online-Leser nutzen weiterhin Katalog, Router und kanonische Skill-Dateien.
+Ein Treffer garantiert keine richtige fachliche Auswahl.
