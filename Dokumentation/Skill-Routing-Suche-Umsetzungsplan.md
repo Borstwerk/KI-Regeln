@@ -283,6 +283,14 @@ Die Agenten nutzten die optionale BM25-/Relations-/Pagingoberfläche dabei nicht
 deren natürliche Nutzung bleibt **NOT RUN**, allgemeine Abdeckung **UNVERIFIED**.
 Der erste technische Start blieb vor Modellaufruf wegen eines CLI-Konfigurationsfehlers
 BLOCKED und ist separat dokumentiert. Keine Antwortauswahl durch Wiederholungen.
-Die weitergehende Gesamtabnahme aus P5 bleibt offen; der bekannte P1-Retrievalfall
-bleibt PARTIAL. Frühere Testresultate
+Die [P5-Abnahme](../Evals/Onboarding/Rule-Routing-P5.md) ist ausgeführt und bleibt
+**PARTIAL**: frische P1-Regression 15/16, P2 drei und P3 fünf technische Verträge
+bestanden. Zwei frische Antworten erfüllen den festen Planungs-/Routingfall;
+Guided benutzt die Suche und ihre Hinweise tatsächlich. Sein technisches
+Git-Sauberkeits-Gate scheitert jedoch an Bytecode-Artefakten; außerdem musste ein
+außerhalb der Sandbox vorgebauter Index nach `missing` erneut aufgebaut werden.
+Damit ist der Effizienzvergleich UNVERIFIED, ohne Einspar- oder Routingpromotion.
+Expliziter Relationsabruf, Paging und Descriptorlisting bleiben als Agentenpfade
+NOT RUN. Ein kleiner technischer Fixture-Fix ist als separater Folgeschritt
+beschrieben; Produktregeln und Suchlogik bleiben unverändert. Frühere Testresultate
 belegen ausschließlich ihren jeweiligen Stand; dieser Plan selbst ist kein Qualitätsnachweis.

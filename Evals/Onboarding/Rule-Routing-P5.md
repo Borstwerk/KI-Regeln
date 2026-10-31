@@ -99,3 +99,115 @@ Suchcode, AGENTS, kanonische Skills und Oracles werden in diesem Slice nicht ge�
 
 Status vor Ausführung: **NOT RUN**. Allgemeine semantische Vollständigkeit bleibt
 UNVERIFIED. Frühere P4-Ergebnisse bleiben historische getrennte Prozess-Evidence.
+
+## Ergebnis vom 31.10.2026: Gesamtabnahme PARTIAL
+
+Vorabvertrag und ausgeführter Code: `4e301fe`. Der [JSON-Bericht](Rule-Routing-P5.json)
+verbindet alle 24 IDs mit frischen Rohberichten und bindet Code, Quellen,
+Protokolle, Antworten und Tooloutputs per SHA256. Alte Berichte und Oracles bleiben
+unverändert. Zwei Modellantworten wurden aufgezeichnet; keine Wiederholungen oder
+nachträgliche Auswahl aus mehreren Antworten.
+
+### Bestehende Fälle frisch geprüft
+
+| Prüfart | Ergebnis | Geltungsbereich |
+| --- | --- | --- |
+| P1, 16 direkte Suchfälle | 15 PASS, 1 FAIL; PARTIAL | unverändertes Quellenpaket `6b80949`, aktueller Code; alle Fallpayloads, Ränge, Scores und Inhaltshashes identisch zur vorherigen Regression |
+| P2, drei technische Verträge | 3 PASS | 14 native Treffer auf vier Seiten, globale Ordnung; 155 Descriptions auf sieben Seiten; stale/alte Cursor vor Worker abgewiesen |
+| P3, fünf Beziehungs-/Quellenverträge | 5 PASS | gerichtete Beziehungen, expliziter Workflow-/Checkpointpfad, Leertreffer und ungültige Ziele mit Herkunfts-/Quellguards |
+
+Jede ID ist genau einmal zugeordnet; diese verschiedenen Prüfarten werden nicht
+zu einer Qualitätsquote vermischt. Einziger offener Retrievalfall bleibt
+`jobs-acceptance-tests`: `acceptance-criteria-design` fehlt für die eingefrorene
+Query. Der P1-Treiber endet deshalb weiterhin mit Exit 2. P1 ist ein frischer
+Code-Regressionslauf auf dem alten Paket, kein Suchlauf auf den inzwischen
+geänderten Router-Dokumenten. Die 220 kanonischen P3-Quellpfade und operativen
+Suchdateien sind gegenüber der P4-Basis bytegleich. Allgemeiner Recall bleibt
+UNVERIFIED.
+
+### Freie und angeleitete Werkzeugwahl
+
+Beide vorbereiteten Arbeitsverzeichnisse enthalten dieselben 578 Quelldateien;
+ihre vorgebauten Indexmetadaten einschließlich Fingerprint sind identisch. Beide
+Sessions enden mit Exit 0 und liefern einen Plan mit den erwarteten Ownern,
+Dateigrenzen für zwei Agenten, Abhängigkeiten, Grenztests, Nachladeplan und
+unabhängigem Codecheck. Die tatsächlichen Router-/Workflow-/Owner-/Overlay-Reads
+wurden von Integrator und unabhängigem Review-Agenten geprüft. Das ist keine
+menschliche Blindabnahme oder automatische Judge-Pipeline.
+
+| Bedingung | Produkt-/fachliches Routing-Oracle | Striktes technisches Sauberkeits-Gate |
+| --- | --- | --- |
+| free | PASS im festen Planungsfall | PASS |
+| guided | PASS im festen Planungsfall | **FAIL**: `?? tools/__pycache__/` |
+
+Alle ursprünglichen Quelldateien bleiben unverändert. Guided erzeugte jedoch zwei
+ungetrackte `.pyc`-Dateien für `check_public_entrypoints` und `rule_relations`.
+Die Artefakte sind mit einem Python-Importeffekt vereinbar; eine bewusste direkte
+Quellschreiboperation ist im Trace nicht beobachtet. Das strikte Git-Gate wird
+trotzdem nicht nachträglich gelockert: **Batch-Exit 2 bleibt bestehen**.
+
+Zusätzlich meldete die erste tatsächliche Guided-Abfrage `missing`, obwohl der
+Vorbau außerhalb der Agentensandbox ready gemeldet hatte. Der Agent baute den Cache
+explizit neu auf und suchte danach weiter. Eine ergänzende **modellfreie Read-only-
+Probe** kann den vorbereiteten Free-Pointer lesen, erhält aber AccessDenied für
+dessen Snapshot und SQLite-Datei. Diese Probe unterstützt einen Zusammenhang mit
+dem Ausführungskontext beziehungsweise Cachezugriff; sie benutzt einen anderen
+Read-only-Pfad und beweist nicht die genaue Ursache der ursprünglichen
+Workspace-write-Abfrage. Diese Ursache bleibt UNVERIFIED.
+
+Guided hat den angeleiteten Suchpfad tatsächlich verwendet: zehn aufgezeichnete
+Abfrageantworten, davon eine `missing`, eine erfolgreiche leere Wiederholung und
+acht weitere erfolgreiche Abfragen. Die 70 gelieferten Hinweisinstanzen stimmen
+mit den kanonischen Beziehungen überein, darunter `test-design → tdd` und
+Skill-Nennungen im Software-Workflow. Free nutzte direkte Dateien. Expliziter
+Relationsabruf, Paging und Descriptorlisting wurden von beiden Agenten nicht
+verwendet und bleiben als Agentenpfade NOT RUN. Guided ist angeleitete Nutzung,
+kein Nachweis spontan gewählter Suche.
+
+### Aufwand: ausschließlich deskriptive Beobachtung
+
+| Messwert | free | guided |
+| --- | ---: | ---: |
+| CLI-Laufzeit, Sekunden | 89,67 | 180,11 |
+| Toolkommandos | 10 | 17 |
+| aufgezeichnete Tooloutputs, UTF-8-Bytes | 185684 | 271747 |
+| gemeldete Inputtokens | 219909 | 667761 |
+| darin gemeldete Cached-Inputtokens | 167168 | 582784 |
+| gemeldete Outputtokens | 2791 | 4550 |
+
+Für die Bytezählung werden die Rohberichte ausdrücklich als UTF-8 gelesen und
+die enthaltenen Outputstrings erneut als UTF-8 gezählt. Windows-Locale-Dekodierung
+würde die Zeichen und damit die Bytezahlen verfälschen. Zeichen-/Bytezahlen werden
+nicht in geschätzte Tokens umgerechnet; Usage summiert mehrere Modellschritte.
+
+Die nativen Checks und lokalen Tests wurden parallel zum Paar gestartet und
+können die Laufzeiten ungleich beeinflusst haben. Die Reihenfolge und
+Provider-Caches waren ebenfalls nicht kontrolliert. Guided musste zusätzlich den
+Cache neu aufbauen. Zusammen mit dem gescheiterten technischen Gate sind die
+Bedingungen für einen belastbaren Effizienzvergleich **nicht erfüllt**. Die
+höheren beobachteten Werte belegen weder eine allgemeine Ineffizienz der Suche
+noch einen Spar-Lift. Doppelte Owner-Reads und breite Katalog-/Suchoutputs sind
+konkrete Beobachtungen, keine isoliert nachgewiesene Ursache.
+
+### Verifikation und Entscheidung
+
+103 relevante lokale Tests: OK mit einem bestehenden Windows-Symlink-Skip.
+Die Byte-/Read-only-Gegenprobe besteht. Mechanische Evidence-Checks bestätigen
+Router- und Description-Reads separat; kontrollierte Kopien ohne tatsächlichen
+Master-Router-Output beziehungsweise ohne erfolgreiche Suchantwort werden
+zurückgewiesen. Das technische Guided-Gate bleibt dabei ausdrücklich FAIL.
+
+Der unabhängige Abschlussreview bestätigt Fallzuordnung, Code-/Quellen-/Rohhashes,
+öffentliche Auszüge, UTF-8-Metriken und Redaktion ohne Artefaktblocker. Dieses
+bestandene Artefaktreview hebt weder den Retrieval-FAIL noch das technische
+Guided-Gate oder die Grenze des Effizienzvergleichs auf.
+
+**Keine Routingpromotion:** Suche bleibt optional. AGENTS, Skills, Suchlogik und
+Maturity werden nicht geändert. Die Gesamtabnahme bleibt PARTIAL wegen der
+bekannten Retrieval-Lücke und des nicht belastbaren Effizienzvergleichs.
+
+Ein sinnvoller separater Folgeschritt ist ein kleiner technischer Fixture-Fix:
+Bytecode-Artefakte vermeiden und den Cache im tatsächlichen Ausführungskontext
+vorab auf Lesbarkeit prüfen. Erst danach wäre ein neuer, ausdrücklich abgegrenzter
+Vergleich fachlich begründet. Diese beiden Modellantworten werden dafür weder
+gelöscht noch als erfolgreiche Ausgangsbedingung umetikettiert.
