@@ -92,5 +92,67 @@ Architekturworkflow→Trade-off/ADR; expliziter pre-completion-Checkpoint→Cita
 kein Seed→keine erfundenen Treffer; unbekanntes strukturiertes Ziel→Fehler.
 Technische Beziehungsabdeckung ist keine bereits geprüfte semantische Skill-Auswahl.
 
-Status vor Umsetzung: **NOT IMPLEMENTED / NOT RUN**. Keine neuen Abhängigkeiten,
-direkten Modell-APIs oder Maturity-Hochstufungen.
+## Ergebnis vom 31.10.2026
+
+Vorabvertrag: `cf7ce3a`; Implementierung und fester nativer Treiber: `a33e367`.
+Die [maschinenlesbare Evidence](Rule-Routing-P3.json) bindet ausgeführte
+Checkoutbytes, Gitblobs, unveränderte Fälle, Protokolle und Rohberichte per SHA256.
+CRLF/LF-Äquivalenz ist ausdrücklich ausgewiesen. Historische Berichte bleiben unverändert.
+
+```powershell
+.validation/runtime/venv/Scripts/python.exe Evals/Onboarding/run_rule_routing_p3_native.py --run
+```
+
+Der [feste Treiber](run_rule_routing_p3_native.py) benötigt einen committeten
+Quellstand und die vorhandene optionale QMD-Runtime; er installiert nichts.
+Er prüft fünf technische Entwicklungsfälle, keinen gehaltenen Agentenbenchmark.
+
+| Kriterium | Beobachtetes Ergebnis |
+| --- | --- |
+| related | `bewertungsanalyse` direkt gefunden; gerichteter Hinweis auf `unternehmensanalyse` mit Katalogherkunft |
+| Workflow | expliziter Architekturworkflow liefert beide erforderlichen Skill-Nennungen; zusätzlich liefert die unveränderte natürliche Query `adr` und `architecture-tradeoff-analysis` direkt |
+| Overlay | `research-synthesis` direkt gefunden; explizit übergebener `pre-completion`-Checkpoint liefert `citation-audit` |
+| kein Einstiegstreffer | unveränderte Nonsense-Query: null Treffer und null Hinweise ohne Checkpoint |
+| ungültiges Ziel | unbekannte related- und Overlay-ID vor Worker zurückgewiesen; kein bereiter Teilstand |
+
+**5/5 technische Verträge PASS.** Der Workflowselektor wurde vom Evaluator aus
+dem eingefrorenen Fall vorgegeben. Sein Erfolg allein beweist keine selbstständige
+Workflowentdeckung. Die zusätzlich beobachteten direkten Treffer bleiben ein
+einzelner bekannter Entwicklungsfall.
+
+Der Corpus bleibt bei 165 Dokumenten einschließlich aller 155 Skills. 50
+registrierte Workflows ergänzen die drei bisherigen Quellenabhängigkeiten, nicht
+die BM25-Dokumentmenge. Abgeleitet wurden 512 related-, 229 mentions- und sieben
+Checkpointkanten. QMD-freie Selektoren wurden über Seiten der Größe zwei geprüft;
+Node-, Worker- und Ready-Index-Aufrufe waren dabei durch verbotene Stubs gesperrt.
+Alle geprüften Zeilen, Zielpfade und Quellenhashes stimmen mit dem Snapshot überein.
+
+Eine echte native Fixture bestätigt: Änderung ausschließlich einer Workflowquelle
+ergibt stale; nach Rebuild werden alte Such- und Relationscursor als invalid-cursor
+abgewiesen. Dokument- und Suchdokumenthashes bleiben dabei gleich. Ungültige
+Quellen erreichen den Worker nicht. Originalbytes blieben in allen geprüften
+Quellen unverändert.
+
+103 relevante lokale Tests: OK, davon ein bestehender Windows-Symlink-Skip.
+Die 18 neuen Modul-/Integrationsmethoden prüfen Ableitung, Herkunft, Budgets,
+Quellenwechsel, Selektoren, begrenzte Hinweise und CLI-Grenzen. Zwei ausschließlich
+im Speicher entfernte Guards werden von den zugehörigen Tests erkannt:
+unbekannte related-ID und Nennungen innerhalb eines Fenced-Codeblocks. Jeweils
+eine Assertion, null Testfehler; Produktionsbytes unverändert. Danach neun
+Modultests erneut grün. Unabhängiger Code-/Treiber-/Artefaktreview: keine erkannten
+P1/P2-Blocker.
+
+PowerShell wurde mit normalem Machine-/User-PATH geprüft: alle drei Selektoren
+funktionieren mit ausdrücklich ungültigem Node-Pfad; die Checkpoint-Query liefert
+Research-Seed und Citation-Hinweis über die vorhandene Node-Fallbackruntime.
+
+Der eingefrorene P1-Regressionstest bleibt bei **15/16, PARTIAL**, mit identischen
+Fallstatus. `Akzeptanzkriterien beobachtbar` findet weiterhin den erforderlichen
+Skill nicht. Der historische Kernpaket-Hash bleibt gleich; alle registrierten
+Workflowabhängigkeiten wurden für Format 3 separat ergänzt und separat gehasht.
+Querys, Oracle und Trefferbudget wurden nicht verändert. Exit 2 dieses Treibers
+kennzeichnet den offenen Fall und wird nicht als allgemeiner PASS ausgegeben.
+
+P3 ist technisch nachgewiesen. Natürliche Agentenentscheidungen aus P4/P5 bleiben
+**NOT RUN**, allgemeine semantische Vollständigkeit **UNVERIFIED**. Keine neuen
+Abhängigkeiten, direkten Modell-APIs oder Maturity-Hochstufungen.

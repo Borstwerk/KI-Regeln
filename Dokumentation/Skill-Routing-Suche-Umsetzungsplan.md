@@ -271,9 +271,11 @@ P2-Trefferseiten und Descriptor-Auflistung sind implementiert; der getrennte
 mit echten QMD-Seiten und allen 155 Descriptions ohne Node/QMD. Die verbleibende
 P1-Retrievallücke bleibt PARTIAL.
 P3-Beziehungen sind gemäß [separatem Vertrag](../Evals/Onboarding/Rule-Routing-P3.md)
-implementiert und **IN VERIFICATION**: direkte quellenbelegte Beziehungen,
+implementiert und für die fünf festen technischen Verträge **PASS**: direkte quellenbelegte Beziehungen,
 QMD-unabhängige Selektoren, begrenzte Suchhinweise und explizite Checkpoints.
-Der native P3-Nachweis steht noch aus. Die technische Suchanleitung und die
-optionalen Agentenverweise werden dafür angepasst; die verbleibende natürliche
+Der [native P3-Nachweis](../Evals/Onboarding/Rule-Routing-P3.json) trennt technische
+Beziehungsabdeckung von semantischer Auswahl; die P1-Regression bleibt 15/16 und
+PARTIAL. Technische Suchanleitung und optionale Agentenverweise sind angepasst;
+die verbleibende natürliche
 Agentenprüfung und Gesamtabnahme aus P4/P5 sind **NOT RUN**. Frühere Testresultate
 belegen ausschließlich ihren jeweiligen Stand; dieser Plan selbst ist kein Qualitätsnachweis.
