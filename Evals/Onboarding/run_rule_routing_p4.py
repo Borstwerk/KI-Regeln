@@ -59,6 +59,10 @@ def main():
     data = json.loads(CASES.read_text(encoding='utf-8'))
     assert [case['id'] for case in data['cases']] == ['development', 'fallback', 'trivial']
     files = packet()
+    operational = ['tools/search_rules.py', 'tools/rule_relations.py',
+                   'tools/search_rules_qmd.mjs', 'tools/check_public_entrypoints.py']
+    for path in operational:
+        assert (ROOT / path).read_bytes().replace(b'\r\n', b'\n') == files[path], 'Root build tooling differs from fixed product source: ' + path
     inventory = {path: sha(body) for path, body in sorted(files.items())}
     bound = ['Evals/Onboarding/run_rule_routing_p4.py', 'Evals/Onboarding/rule-routing-p4-cases.json',
              'Evals/Onboarding/Rule-Routing-P4.md', 'Evals/Onboarding/run_corrected_discovery.py']
@@ -70,6 +74,7 @@ def main():
                 'execution_commit': execution, 'source_inventory': inventory,
                 'inventory_sha256': sha(json.dumps(inventory, sort_keys=True).encode()),
                 'code_sha256': {path: sha((ROOT / path).read_bytes()) for path in bound},
+                'root_build_code_sha256': {path: sha((ROOT / path).read_bytes()) for path in operational},
                 'cases': data['cases'], 'model_requested': 'gpt-6.1-sol', 'reasoning_requested': 'high',
                 'sessions': 3, 'deadline_seconds_each': 240, 'retry': False, 'held_out': False,
                 'direct_api_calls': 0, 'permission_boundary': 'workspace-write for development; source integrity checked afterward; others read-only'}

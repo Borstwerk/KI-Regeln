@@ -48,12 +48,17 @@ erhält zusätzlich Zugriff auf die vorhandene gepinnte QMD-Runtime und einen vo
 gebauten Index. Fallback hat ausdrücklich keine QMD-Runtime. Keine Snapshotquelle
 wird dazu editiert.
 
-Die CLI läuft ohne User-Konfiguration, Websuche und externe Tools. Development
+Die CLI läuft ohne User-Konfiguration und mit deaktivierter Websuche. Externe
+Toolnutzung ist untersagt und wird anhand der tatsächlich aufgezeichneten Items
+geprüft; die Konfigurationsflags allein beweisen keine vollständige Abschottung. Development
 darf seinen lokalen abgeleiteten Suchcache schreiben; Quellenänderungen und
 weitere Außenaktionen sind untersagt. Die grobe Workspace-Sandbox allein erzwingt
 keine Cache-only-Grenze: Der Treiber prüft danach Gitstatus und alle Quellbytes und
 weist diese Grenze als nachträglich geprüft aus. Andere Fälle laufen read-only.
 Kein Claim einer technisch vollständigen Dateisystem- oder Oracle-Abschottung.
+Auch das Root-Tooling für den Indexvorbau wird gegen die fixierten Snapshotbytes
+geprüft und separat gehasht; spätere lokale Codeänderungen dürfen nicht unbemerkt
+einen Index für den älteren Produktsnapshot erzeugen.
 
 Vor dem ersten Modellaufruf muss die vorhandene Byte-/Read-only-Gegenprobe aus
 dem Discovery-Pilot bestehen. Environment-API-Keys und Provider-/Endpointoverrides
