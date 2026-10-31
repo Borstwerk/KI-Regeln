@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "source_commit": "e815a0b",
+  "held_out": false,
+  "cases": [
+    {
+      "id": "development",
+      "runtime": "indexed",
+      "prompt": "Ich möchte einen CSV-Import entwickeln: 1 bis 1000 Datensätze, leere Dateien ablehnen, Dubletten melden. Stell mir zunächst nur einen umsetzbaren Arbeitsplan vor. Die Umsetzung soll in kleine prüfbare Schritte zerlegt und auf zwei Agenten verteilt werden, ohne gleichzeitige Änderungen derselben Dateien. Plane auch, welche aktuellen Projektinformationen die Agenten brauchen und was sie erst bei Bedarf nachladen sollten. Konkrete Grenztests und ein unabhängiger Codecheck sollen dazugehören. Welche Werkzeuge aus diesem Repository passen zu den einzelnen Jobs und wann setzt du sie ein? Noch nichts implementieren und keine weiteren Agenten starten.",
+      "required_skills": ["task-graph", "delegation-contract", "context-engineering", "test-design", "code-review"],
+      "workflow": "Workflows/Software-Feature.md",
+      "planned_verification_skill": "verification-loop",
+      "implementation_discipline": "tdd or justified alternative after reading the workflow core description",
+      "router_reads_required": true
+    },
+    {
+      "id": "fallback",
+      "runtime": "no-qmd",
+      "prompt": "Formuliere beobachtbare Akzeptanzkriterien und leite danach konkrete Grenztests ab. Anforderung: Ein CSV-Import akzeptiert 1 bis 1000 Datensätze, lehnt leere Dateien ab und meldet Dubletten. Trenne die beiden Ergebnisse und begründe kurz deine Werkzeugauswahl aus dem Repository. Die optionale Suchruntime ist hier nicht installiert; installiere nichts. Ändere keine Dateien.",
+      "required_skills": ["acceptance-criteria-design", "test-design"],
+      "router_reads_required": true
+    },
+    {
+      "id": "trivial",
+      "runtime": "read-only",
+      "prompt": "Formatiere nur diesen Text: „eins,zwei“ → „eins, zwei“.",
+      "required_skills": [],
+      "expected_answer": "eins, zwei",
+      "router_reads_required": false,
+      "skill_reads_expected": 0
+    }
+  ]
+}
