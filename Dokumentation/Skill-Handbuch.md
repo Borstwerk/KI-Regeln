@@ -67,6 +67,16 @@ Ausgabe ist keine fachliche Pr체fung; pro Teiljob Eignung beurteilen und f체r m�
 Owner sowie Zweifelsf채lle Original-Skill und Near-Miss lesen. Ein Vollscan ist kein
 neues allgemeines Pflicht-Gate.
 
+`routing_hints` erg채nzt die sichtbaren Treffer um begrenzte, quellenbelegte
+Beziehungen. Mit `-Routing -Relations -SkillId '<id>'` lassen sich ausgehende
+`related`-Hinweise und Workflows mit Nennung dieses Skills gezielt nachladen;
+`-Workflow '<registrierter Pfad>'` liefert dessen Skill-Nennungen. Der separate
+Abruf braucht keinen Node/QMD-Index und unterst체tzt weitere Seiten. Ein expliziter
+`-Checkpoint '<checkpoint>'` erg채nzt eine Query um die dort registrierten
+Overlay-Kandidaten; mit `-Relations` sind diese auch direkt abrufbar. Den
+Arbeitszustand bestimmt der Agent, die Relevanz weiterhin die kanonische
+Description. Nennungen sind keine Pflichtaktivierung oder Vollst채ndigkeitsgarantie.
+
 Ist die Suche
 nicht verf체gbar, veraltet, leer oder fachlich unpassend, gezielt im Katalog und
 passenden Fachbereich weitersuchen. Ein Suchfehlschlag begr체ndet kein `none`.

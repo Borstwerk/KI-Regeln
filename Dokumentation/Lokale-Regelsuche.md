@@ -103,10 +103,14 @@ Routing-Index wird durch das geänderte Format stale und muss neu gebaut werden.
 
 Der gleiche Controller und dieselben Quellenprüfungen verwenden dafür einen
 eigenen Cache unter `.validation/rule-routing/`. Der Inhaltsindex bleibt getrennt.
-Katalog, Workflow-Index und Overlay-Registry sind zusätzliche fingerprintete
-Quellenabhängigkeiten: Auch deren Änderung macht den Routing-Index veraltet.
-Die vollständigen Workflow-Dateien werden nicht zusätzlich indexiert; bei einem
-plausiblen Workflow weiterhin `workflow-index.yml` und den passenden Workflow öffnen.
+Katalog, Workflow-Index, Overlay-Registry und alle im Workflow-Index registrierten
+Workflow-Dateien sind zusätzliche geprüfte und fingerprintete Quellenabhängigkeiten:
+Auch eine reine Workflow-Inhaltsänderung macht den Routing-Index veraltet.
+Die Workflow-Dateien werden nicht zusätzlich als BM25-Dokumente indexiert. Für
+ihre Abhängigkeiten gelten separat 256 KiB je Datei und 1 MiB insgesamt. Das
+Beziehungsformat `routing_format: 3` macht ältere Routing-Indizes stale; danach
+bewusst mit `-Routing -Build` neu bauen. Bei einem plausiblen Workflow weiterhin
+`workflow-index.yml` und den passenden Workflow öffnen.
 
 Routing-Antworten enthalten standardmäßig zehn Treffer je Seite; `-Limit` erlaubt
 1–50 Einträge. Skill-Treffer tragen `kind: skill`
@@ -181,6 +185,64 @@ Build und Suche brauchen lokale Schreibrechte auf den jeweiligen abgeleiteten
 Cache (Lock und SQLite). In einer Umgebung ohne diese Rechte reicht der direkte
 Katalog-/Dateipfad; keine Installation oder Rechteerweiterung ist für Routing erforderlich.
 
+## Belegte Beziehungen gezielt nachladen
+
+Routing-Suchantworten enthalten zusätzlich `routing_hints` mit `items`,
+`total_relations`, `limit: 20` und `truncated`. Die Hinweise stammen ausschließlich
+aus den Skill-Treffern der sichtbaren Seite: ausgehende `related`-Beziehungen und
+eingehende Workflow-Nennungen. Sie bleiben von `hits`, BM25-Scores, Reihenfolge und
+`total_matches` getrennt. Hinweise werden nicht rekursiv erweitert. Ohne
+Skill-Einstiegstreffer und ohne expliziten Checkpoint bleibt die Hinweisliste leer.
+
+Ein expliziter Checkpoint ergänzt Kandidaten aus der Overlay-Registry. Nur den
+tatsächlich erreichten Arbeitszustand angeben; die Suche erkennt ihn nicht selbst:
+
+```powershell
+.\Search-KI-Regeln.ps1 -Routing -Query 'Research Findings Fakten Interpretationen' -Checkpoint 'pre-completion'
+```
+
+Der Checkpoint ist Teil der Cursorbindung. Bei weiteren Seiten dieselbe Query
+und denselben Checkpoint verwenden; ein Wechsel wird zurückgewiesen.
+
+Für weitere Beziehungen oder einen bekannten Workflow gibt es einen direkten
+Abruf aus denselben geprüften Gitquellen, ohne Node/QMD oder bereiten Suchindex:
+
+```powershell
+.\Search-KI-Regeln.ps1 -Routing -Relations -SkillId 'context-engineering'
+.\Search-KI-Regeln.ps1 -Routing -Relations -Workflow 'Workflows/Software-Feature.md'
+.\Search-KI-Regeln.ps1 -Routing -Relations -Checkpoint 'pre-execution'
+.\Search-KI-Regeln.ps1 -Routing -Relations -SkillId 'context-engineering' -Cursor '<next_cursor>'
+```
+
+Genau ein Selektor ist erforderlich. `-SkillId` liefert ausgehende `related`-
+Beziehungen und Workflows, die den Skill nennen; `-Workflow` liefert die genannten
+Skills dieses registrierten Workflows; `-Checkpoint` dessen registrierte
+Overlay-Kandidaten. Unbekannte Selektoren sind Fehler. Bekannte Skills und
+Workflows ohne Beziehungen liefern eine leere Seite.
+
+Die Antwort hat `mode: relations`, `relations`, `total_relations`,
+`candidates_only: true`, `assessment_performed: false`, Quellenrevision und
+Fingerprint sowie dieselben Seitenfelder wie die Katalogauflistung. Default sind
+25 Einträge, `-Limit` erlaubt 1–50. Für Folgeseiten denselben Selektor verwenden;
+Quellen-, Aktions-, Selektor-, Größen- oder Ergebniswechsel invalidieren den Cursor.
+Auch dieser direkte Abruf benötigt Harness-Python, Git und lokale
+Snapshot-/Lock-Schreibrechte.
+
+Jede Beziehung nennt Typ, Ausgangspunkt, Ziel-ID, kanonischen Zielpfad sowie
+Quellpfad und SHA256. `related` stammt aus dem deklarierten Katalogfeld,
+`checkpoint` aus der Registry einschließlich Phase und `mentions` aus einfachen
+Inline-Code-Nennungen bekannter Skill-IDs in registrierten Workflows, mit
+1-basierten Quellzeilen. Fenced-Codeblöcke werden ausgelassen. Optionale oder
+beiläufige Nennungen werden nicht zu `requires` oder einem Kernskill-Claim.
+Unbekannte strukturierte Ziel-IDs stoppen die Ableitung mit Fehler; ein
+fehlgeschlagener Neubau veröffentlicht keinen Teilstand.
+
+Bei `truncated: true` mit dem passenden Selektor weitere Seiten abrufen. Einen
+gefundenen Workflow bewusst öffnen und dessen übrige Nennungen gegebenenfalls
+nachladen. Beziehungen sind Kandidaten mit Herkunft, keine Aktivierungsentscheidung
+und kein semantischer Vollständigkeitsnachweis. Original-Descriptions, Near-Misses,
+Pflicht-Reads und Katalog-Fallback bleiben erforderlich.
+
 ## Rechte und geprüfter Scope
 
 Das SDK wird mit Inline-Konfiguration verwendet, ohne QMD-CLI-Projekthooks,
@@ -199,9 +261,11 @@ Dependencies behalten ihre eigenen Lizenzdateien; es wird kein Upstreamcode vend
 
 ## Verifikation
 
-`tests.test_rule_search`, `tests.test_rule_search_routing`, `tests.test_rule_search_facets`
-und `tests.test_rule_search_paging` prüfen den Controller mit echten temporären Git-Repos
-und einem injizierten Worker. Diese Tests sind kein QMD-Engine-Nachweis.
+`tests.test_rule_search`, `tests.test_rule_search_routing`, `tests.test_rule_search_facets`,
+`tests.test_rule_search_paging` sowie `tests.test_rule_search_relations` prüfen den
+Controller mit echten temporären Git-Repos und einem injizierten Worker.
+Diese Tests sind kein QMD-Engine-Nachweis.
+`tests.test_rule_relations` prüft die isolierte, quellenbelegte Beziehungsableitung.
 Reale QMD-Builds und Suchfragen werden separat protokolliert. Keine Aussage über
 allgemeine Retrievalqualität, semantisches Ranking, Agentenantworten oder Maturity
 aus wenigen Suchbeispielen ableiten.

@@ -5,8 +5,12 @@ param(
     [Parameter(Mandatory, ParameterSetName = 'Status')][switch]$Status,
     [Parameter(Mandatory, ParameterSetName = 'Setup')][switch]$Setup,
     [Parameter(Mandatory, ParameterSetName = 'ListSkills')][switch]$ListSkills,
-    [Parameter(ParameterSetName = 'Query')][Parameter(ParameterSetName = 'ListSkills')][string]$Limit,
-    [Parameter(ParameterSetName = 'Query')][Parameter(ParameterSetName = 'ListSkills')][string]$Cursor,
+    [Parameter(Mandatory, ParameterSetName = 'Relations')][switch]$Relations,
+    [Parameter(ParameterSetName = 'Relations')][string]$SkillId,
+    [Parameter(ParameterSetName = 'Relations')][string]$Workflow,
+    [Parameter(ParameterSetName = 'Relations')][Parameter(ParameterSetName = 'Query')][string]$Checkpoint,
+    [Parameter(ParameterSetName = 'Query')][Parameter(ParameterSetName = 'ListSkills')][Parameter(ParameterSetName = 'Relations')][string]$Limit,
+    [Parameter(ParameterSetName = 'Query')][Parameter(ParameterSetName = 'ListSkills')][Parameter(ParameterSetName = 'Relations')][string]$Cursor,
     [switch]$Routing,
     [string]$NodePath = 'node',
     [string]$PnpmPath = 'pnpm'
@@ -57,12 +61,15 @@ $python = Join-Path $PSScriptRoot '.validation/runtime/venv/Scripts/python.exe'
 if (-not (Test-Path -LiteralPath $python -PathType Leaf)) {
     throw 'Run .\Validate-KI-Regeln.ps1 -Quick once to prepare the local Python runtime.'
 }
-$action = if ($Build) { 'build' } elseif ($Status) { 'status' } elseif ($ListSkills) { 'list-skills' } else { 'search' }
+$action = if ($Build) { 'build' } elseif ($Status) { 'status' } elseif ($ListSkills) { 'list-skills' } elseif ($Relations) { 'relations' } else { 'search' }
 $arguments = @((Join-Path $PSScriptRoot 'tools/search_rules.py'))
 if ($PSBoundParameters.ContainsKey('NodePath')) { $arguments += @('--node', $NodePath) }
 if ($Routing) { $arguments += '--routing' }
 if ($PSBoundParameters.ContainsKey('Limit')) { $arguments += @('--limit', [string]$Limit) }
 if ($PSBoundParameters.ContainsKey('Cursor')) { $arguments += "--cursor=$Cursor" }
+if ($PSBoundParameters.ContainsKey('SkillId')) { $arguments += "--skill-id=$SkillId" }
+if ($PSBoundParameters.ContainsKey('Workflow')) { $arguments += "--workflow=$Workflow" }
+if ($PSBoundParameters.ContainsKey('Checkpoint')) { $arguments += "--checkpoint=$Checkpoint" }
 $arguments += $action
 if ($action -eq 'search') { $arguments += @('--', $Query) }
 & $python @arguments

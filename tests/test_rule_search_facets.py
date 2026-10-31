@@ -69,7 +69,7 @@ class RuleRoutingFacetTests(unittest.TestCase):
         self.assertNotIn(self.marker.encode(), original[self.path])
         built = self.build()
         self.assertEqual(built["documents"], len(original))
-        self.assertEqual(metadata["routing_format"], 2)
+        self.assertEqual(metadata["routing_format"], 3)
         self.assertEqual(metadata["files"], {path: sha(body) for path, body in original.items()})
         self.assertEqual(metadata["skills"], self.fixture.skills)
         self.assertEqual(metadata["routing_facets"], {

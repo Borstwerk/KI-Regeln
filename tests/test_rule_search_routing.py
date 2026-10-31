@@ -169,7 +169,9 @@ class RuleRoutingTests(unittest.TestCase):
         self.assertEqual(metadata["files"], {
             path: hashlib.sha256(body).hexdigest() for path, body in self.routing_files.items()})
         self.assertEqual(metadata["routing_dependencies"], {
-            path: hashlib.sha256(body).hexdigest() for path, body in self.dependencies.items()})
+            path: hashlib.sha256(body).hexdigest() for path, body in {
+                **self.dependencies, 'Workflows/Synthetic-review.md':
+                (self.root / 'Workflows/Synthetic-review.md').read_bytes()}.items()})
         self.assertNotIn("Workflows/Synthetic-review.md", files)
         self.assertTrue(set(self.dependencies).isdisjoint(files))
         _, content = search_rules.read_snapshot(self.root)

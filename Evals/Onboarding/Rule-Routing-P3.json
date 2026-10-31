@@ -1,0 +1,1738 @@
+{
+  "native": {
+    "protocol": {
+      "utc": "2026-10-31T07:12:40.442284+00:00",
+      "source_commit": "a33e367a83709c5262e7ff063d832935250fd933",
+      "code_sha256": {
+        "tools/search_rules.py": "3e85143290eacdcbe317ad42c75e461917d863e35a0ec761671328f1c59b8308",
+        "tools/rule_relations.py": "55df4b901b68dbc008a812894e45030dc6342c0f22c68b332fb95e97b70b4577",
+        "tools/search_rules_qmd.mjs": "d9c4b3f9222ad7928dfcb1860fd0e975024512ab4e4dedf915820ed283737155",
+        "Search-KI-Regeln.ps1": "abf43cf9ff5b0f8d2f43029303792f498b25747696a6bf0eafe30fcd1bb04661",
+        "tools/check_public_entrypoints.py": "65607d90c95273fcdf9088ec29005b2f6b58a90672b9449a234be1d7d43c1976",
+        "tools/local_search/pnpm-lock.yaml": "30381a3497bf589cd694665a806736e83b724be7670952f0afc2e207fc20b528",
+        "Evals/Onboarding/Rule-Routing-P3.md": "a4483283375406ca5e0bd9f84da9e878bb7205719b4315f6490b0908ef3ccb0e",
+        "Evals/Onboarding/run_rule_routing_p3_native.py": "31461359036be81e3cce0422d076bbb2f83a6ac01c7db4ed8e5d73f8b478438e",
+        "Evals/Onboarding/rule-routing-cases.json": "b29da5a3e7b817dbb7d37485e7628bd38a58f89a0377a1e13414343699b123df"
+      },
+      "cases_sha256": "b29da5a3e7b817dbb7d37485e7628bd38a58f89a0377a1e13414343699b123df",
+      "criteria": {
+        "relation-related": "Visible bewertungsanalyse seed and explicit related hint to unternehmensanalyse.",
+        "relation-workflow": "Explicit frozen evidence workflow selector exposes both required skill mentions; natural query is reported separately.",
+        "relation-overlay": "Visible research-synthesis seed and explicit pre-completion checkpoint hint to citation-audit.",
+        "relation-no-seed": "Frozen nonsense query has zero direct matches and zero hints without a checkpoint.",
+        "contract-invalid-relation": "Unknown related and overlay targets fail before worker and publish no ready pointer."
+      },
+      "queries": {
+        "relation-related": [
+          "DCF Comparable Companies"
+        ],
+        "relation-workflow": [
+          "Architekturentscheidung Trade-off"
+        ],
+        "relation-overlay": [
+          "Research Findings Fakten Interpretationen"
+        ],
+        "relation-no-seed": [
+          "zzroutingnographseedf72ea4bd"
+        ],
+        "contract-invalid-relation": []
+      },
+      "workflow_selector": "Workflows/Architekturentscheidung-und-Tradeoff.md",
+      "checkpoint": "pre-completion",
+      "held_out": false,
+      "node_version": "v24.22.1",
+      "qmd_version": "2.8.3",
+      "mode": "bm25",
+      "model_calls": 0
+    },
+    "protocol_sha256": "8c94bcd89c59ac5b19dd6d05c209ebdbc07d69e326326385eaa0f10b4fd943ec",
+    "build": {
+      "status": "ready",
+      "revision": "a33e367a83709c5262e7ff063d832935250fd933",
+      "documents": 165,
+      "mode": "bm25",
+      "fingerprint": "29142fda051bb5b818c4e1e2425a2955debc5e2ebef496a7a61fa211e9f28d24",
+      "routing_coverage": {
+        "skills": 155,
+        "indexed_skills": 155
+      }
+    },
+    "routing_format": 3,
+    "documents": 165,
+    "dependency_sha256": {
+      "skill-catalog.yml": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca",
+      "workflow-index.yml": "14f548f0bac430b3228913553d36b1327426b210c5017ce106d3aeda1ee48ff0",
+      "routing-overlays.yml": "2ab96e1b0028f3e5f6e4c2a7331ca32016517c23ebac829519275fb4ba45c224",
+      "Workflows/Acceptance-Traceability-und-Handoff.md": "5a82b3ae9e856b27de0b7571ae45dc3e9d7131f29e800e9809b33777c3a7875d",
+      "Workflows/Architektur-Baseline-und-Systemdesign.md": "9e2080d52682f1881b1d3be22dd30ddf1d18746fde3c29bce31b0a30fe6bc549",
+      "Workflows/Architektur-Readiness-Review.md": "4371d9b84b1a39ca1d1310c1ce85460c288f719089d307546daef8a65d83b068",
+      "Workflows/Architekturentscheidung-und-Tradeoff.md": "2190ae3c4c837b2b6ac51554384d15e2322f3b760c26cff31b230ca05b5bbdf7",
+      "Workflows/Backfill-und-Reprocessing.md": "f442da00260137a4d1706352df19e82aa01b0ce624854f52edd3dc2057376ef6",
+      "Workflows/Bestehende-Website-Review.md": "3ae141ca33b3de340259c24e941c0f7cdfa1e78380411bd344a4e88599e0e1ff",
+      "Workflows/Binaerdatei-verstehen.md": "60847c9951f87e47d28f6fc3edb87304fbfb08d5372cb10e787f0424de8ba571",
+      "Workflows/Bildserie.md": "5c6d104e4127b056aec0d037ba7a7096e6126de3a6bdc5c091ebf5f59653e8e9",
+      "Workflows/Bugdiagnose.md": "20ade3523c6f28e33f617ae7838da63b36936d1d52fb1d63bf4a4dafbaf2cac0",
+      "Workflows/Build-Deploy-und-Promotion.md": "034c538c9b153e901a7dd031d391f770704944dc59272214d46dce5fe9778bff",
+      "Workflows/Codebasierte-Motion-Graphics-und-Video.md": "71d83b20a6452838a69419ff309a064c80b30adada396b103b26654699534875",
+      "Workflows/Community-Engagement-und-Eskalation.md": "25131e81efd9dc0b57d6d035668599d193ed216d4a9850d55ed0e8e0e34588fe",
+      "Workflows/Content-Performance-und-Readiness-Review.md": "4ec2e3865cc32f50d308351ebaba4b7caed87118eb6bd7814724355ee8c18749",
+      "Workflows/Content-Praesenz-Baseline-und-Strategie.md": "7eda1c947138d62fdd3595fba7eb6be678f89cfd9317b1282b0529a2af12376d",
+      "Workflows/Cross-Platform-Adaption-und-Repurposing.md": "c3fb0f59e7b1e9241a325f0791c7abe64425eb88a5fe5c6158e4bc6fe8477133",
+      "Workflows/Data-Engineering-Readiness-Review.md": "80f3817a0f0606078064e8c3e9638f500e5d5ca208f1432f5c867627a8e5c3f3",
+      "Workflows/Data-Pipeline-Baseline-und-Design.md": "e6f08ba0b30380909af34fa6a1fa975117a585826e5488d7dc746f3e3a2708ef",
+      "Workflows/Datenbank-Aenderung.md": "4e2ef4804c86312bb84841baaba7ac8480c274ea011af697a6a1f7e93d029022",
+      "Workflows/Datenqualitaetsstoerung-und-Reconciliation.md": "e2ef12a8830725141a936656a47fb44eab8e71f06a210d23e7e62151da91e32e",
+      "Workflows/Deep-Research.md": "4e9417b8e239d35b0e05ad477340033da3ac2601d26e8b0b3b0d279c8f62d095",
+      "Workflows/Editorialplan-und-Content-Produktion.md": "5432e7692d9e3775bb37a6d06f2aa8bffb6391336dda9df42660c99df369c979",
+      "Workflows/Evolutionaere-Architekturaenderung.md": "ebd4929ae623fe8e2e75cb534f8a800714d16f3d81fe18ee5ce47a185216ec8a",
+      "Workflows/Infrastruktur-Aenderung.md": "629bc32697adc8ccac4336bf3bc11161eeb563696a2ccb45305ae1e60603f3f3",
+      "Workflows/Inhaltsprovenienz-und-Metadatenhygiene.md": "699602340978d4f35bb886c5ed13acf39dca8cf367b70ae9c3c53611cfa67a58",
+      "Workflows/Long-Horizon-Agentenarbeit.md": "5e435201ce0b32925457633fddc839e128b2400c1e82fb26cca7ddf01f814645",
+      "Workflows/Mobile-App-bis-Store-Freigabe.md": "c72cc910f86b0eba0b44d89c00b4998c02e163423d3c279197229bf636759507",
+      "Workflows/Neue-Datenquelle-und-Ingestion.md": "676d7f2964ed948e0293078aa2804d646d8cd936a98fe46993f69f798ff722f2",
+      "Workflows/Operational-Readiness-Review.md": "3515e1827aa7d4fc0f3f6be1172bf7fb4c26ae9ec1fed05392324b67d1286b26",
+      "Workflows/Persoenliche-Finanzplanung.md": "97d94f330b0883144ea04d8111f0a9d5332990a47b72999d498e32c755eb6327",
+      "Workflows/Post-Incident-Learning.md": "529ab5d71861dd3d7f644d9a0ff45a75b4f2fbcbac46fc7a1979ddd0238ffbda",
+      "Workflows/Produktionsincident.md": "a512372ff387fc9c9d0454f6a06f9fe3a2d0145fba03d5e47d0ac49a117ae2d5",
+      "Workflows/Reliability-Baseline-und-SLOs.md": "04e49d2f899486645642dd7d3e92b183835ddb808fcd9f846a104d7c4100d087",
+      "Workflows/Requirements-Baseline-und-Spezifikation.md": "ad25d5ae6c097135a450f56c7b4b02373afb07be00fa5441c0e2c35b9d00edc9",
+      "Workflows/Requirements-Change-und-Impact.md": "92af985ded9f932ff5c45d9228d285a87614723fc71a7b968350def1e4198854",
+      "Workflows/Requirements-Elicitation-und-Klaerung.md": "ebf9c0dd76beceb74b12215a3b9c0f1112537ba6f141a7b11d63e8d6905ebdf4",
+      "Workflows/Requirements-Readiness-Review.md": "ab2ad3ba584ac3f98c47aa7a36c1d9e77f3c33bca5ff67ea131152e7ba3143f2",
+      "Workflows/Resilience-Game-Day.md": "a1b147a322594d4e176940a0d3f10a4e7bd8e93b9b3bc6081bf60d25604114fa",
+      "Workflows/Review-Revise-Loop.md": "0f1e83b6efaabc1fc07c7043cc2dd8d511e3ef9a662fb0bf4d88987fb1656d2e",
+      "Workflows/Skill-Verbesserung-aus-Evals-und-Fehlern.md": "2b49c37c7a5e08c30cfcf9e9712dd7ebd780f1a1f294614688dafb7723f4b317",
+      "Workflows/Schnittstellenvertrag-Entwerfen-und-Aendern.md": "0466008c699ee4cc8758e9fa5e0f6bdc1db2513323503da174ae427705fb1d5d",
+      "Workflows/Software-Feature.md": "26f6affa186d7fb52b478598e27ac992dea6b84c71dd799062d8b25fc962d948",
+      "Workflows/Storyprojekt-von-Idee-bis-Manuskript.md": "e9465cf97d963c4229e3505f15f9615d17fbc478ca675c844819e0fe7423f210",
+      "Workflows/Systemgrenze-und-Dekomposition.md": "4ce3a176c465fa86784cfa57ee8e0b1be04f39ec4704ac0e8fe2c1a0b94cc71a",
+      "Workflows/Technische-Dokumentation.md": "60d783e51a30464d704ad6f36ebff3d7e11392c18af52f1ed1a9d44a5f3a00e7",
+      "Workflows/Teststrategie-und-QA.md": "501ccb0ff1cf4bfc4f4943e80051c46b1f77dde56f91e933f6a0f58d26892a72",
+      "Workflows/Wiederkehrende-Aufgabe-zum-Playbook.md": "7f6a183607f0febcc6bfc5a7605b39d81ea9c03ce89ff981ce35e9ae75dbd830",
+      "Workflows/Text-Endkontrolle.md": "0c43048f9da7c6bc3b868861df9ddab3249d1c58b89ab0936ecd441eb240010d",
+      "Workflows/Unternehmens-und-Investmentanalyse.md": "717921ebfed9959efd26a82c2acc5b2fea9ff21a0a7853850ef165821ab686e1",
+      "Workflows/Website-Neuentwicklung.md": "abd939d76943e31b4ee740a1719efe0f79d91bd2a3407d51f1380864cf69b5d4",
+      "Workflows/Wissensbasis-Aufbauen-und-Pflegen.md": "6d5bdff4ba88a2dd4ba3bea3ad27b70b78732ceb28459232fb4473ecf159201a"
+    },
+    "relation_counts": {
+      "related": 512,
+      "mentions": 229,
+      "checkpoint": 7
+    },
+    "query_results": {
+      "relation-related": {
+        "status": "ready",
+        "revision": "a33e367a83709c5262e7ff063d832935250fd933",
+        "mode": "bm25",
+        "fingerprint": "29142fda051bb5b818c4e1e2425a2955debc5e2ebef496a7a61fa211e9f28d24",
+        "hits": [
+          {
+            "path": "Finanzen/Skills/bewertungsanalyse/SKILL.md",
+            "score": 0.9563012440210908,
+            "snippet": "@@ -2,4 @@ (1 before, 48 after)\nname: bewertungsanalyse\ndescription: Bewertet Unternehmen oder Beteiligungen mit passenden Methoden wie DCF und Comparable Companies über explizite, belegte Inputs, Annahmen, Peer-Auswahl und Sensitivitäten. Verwenden bei Fair-Value-, DCF-, Multiple- oder Bewertungsfragen; nicht für reine Unternehmensqualität, automatische Investmentempfehlungen oder ungeprüfte aktuelle Marktwerte.\n---\n",
+            "content_sha256": "f13115b7485da959104cb3e377eca916a593f1155e886d05eae546c945cc4a8d",
+            "search_document_sha256": "7d177daf5ff5e626b4c12e17ea424bb484b637fefa6db285811d1d543a374203",
+            "snippet_origin": "derived-search-document",
+            "sources": [
+              {
+                "path": "Finanzen/Skills/bewertungsanalyse/SKILL.md",
+                "sha256": "f13115b7485da959104cb3e377eca916a593f1155e886d05eae546c945cc4a8d"
+              },
+              {
+                "path": "skill-catalog.yml",
+                "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca",
+                "fields": [
+                  "skills[bewertungsanalyse].id",
+                  "skills[bewertungsanalyse].area",
+                  "skills[bewertungsanalyse].purpose"
+                ]
+              }
+            ],
+            "kind": "skill",
+            "skill": {
+              "description": "Bewertet Unternehmen oder Beteiligungen mit passenden Methoden wie DCF und Comparable Companies über explizite, belegte Inputs, Annahmen, Peer-Auswahl und Sensitivitäten. Verwenden bei Fair-Value-, DCF-, Multiple- oder Bewertungsfragen; nicht für reine Unternehmensqualität, automatische Investmentempfehlungen oder ungeprüfte aktuelle Marktwerte.",
+              "eval_coverage": "partial",
+              "id": "bewertungsanalyse",
+              "maturity": "experimental"
+            }
+          }
+        ],
+        "total_matches": 1,
+        "offset": 0,
+        "page_size": 10,
+        "has_more": false,
+        "next_cursor": null,
+        "routing_hints": {
+          "items": [
+            {
+              "from": "skill:bewertungsanalyse",
+              "source": {
+                "field": "skills[bewertungsanalyse].related",
+                "path": "skill-catalog.yml",
+                "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca"
+              },
+              "target_path": "Finanzen/Skills/anlagevergleich/SKILL.md",
+              "to": "skill:anlagevergleich",
+              "type": "related"
+            },
+            {
+              "from": "skill:bewertungsanalyse",
+              "source": {
+                "field": "skills[bewertungsanalyse].related",
+                "path": "skill-catalog.yml",
+                "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca"
+              },
+              "target_path": "Recherche/Skills/claim-verification/SKILL.md",
+              "to": "skill:claim-verification",
+              "type": "related"
+            },
+            {
+              "from": "skill:bewertungsanalyse",
+              "source": {
+                "field": "skills[bewertungsanalyse].related",
+                "path": "skill-catalog.yml",
+                "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca"
+              },
+              "target_path": "Arbeitsweisen/Skills/entscheidungsunterstuetzung/SKILL.md",
+              "to": "skill:entscheidungsunterstuetzung",
+              "type": "related"
+            },
+            {
+              "from": "skill:bewertungsanalyse",
+              "source": {
+                "field": "skills[bewertungsanalyse].related",
+                "path": "skill-catalog.yml",
+                "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca"
+              },
+              "target_path": "Finanzen/Skills/portfolioanalyse/SKILL.md",
+              "to": "skill:portfolioanalyse",
+              "type": "related"
+            },
+            {
+              "from": "skill:bewertungsanalyse",
+              "source": {
+                "field": "skills[bewertungsanalyse].related",
+                "path": "skill-catalog.yml",
+                "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca"
+              },
+              "target_path": "Recherche/Skills/source-evaluation/SKILL.md",
+              "to": "skill:source-evaluation",
+              "type": "related"
+            },
+            {
+              "from": "skill:bewertungsanalyse",
+              "source": {
+                "field": "skills[bewertungsanalyse].related",
+                "path": "skill-catalog.yml",
+                "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca"
+              },
+              "target_path": "Finanzen/Skills/unternehmensanalyse/SKILL.md",
+              "to": "skill:unternehmensanalyse",
+              "type": "related"
+            },
+            {
+              "from": "workflow:Workflows/Unternehmens-und-Investmentanalyse.md",
+              "source": {
+                "lines": [
+                  78
+                ],
+                "path": "Workflows/Unternehmens-und-Investmentanalyse.md",
+                "sha256": "717921ebfed9959efd26a82c2acc5b2fea9ff21a0a7853850ef165821ab686e1"
+              },
+              "target_path": "Finanzen/Skills/bewertungsanalyse/SKILL.md",
+              "to": "skill:bewertungsanalyse",
+              "type": "mentions"
+            }
+          ],
+          "total_relations": 7,
+          "limit": 20,
+          "truncated": false
+        },
+        "candidates_only": true,
+        "routing_coverage": {
+          "indexed_skills": 155,
+          "skills": 155
+        },
+        "routing_sources": {
+          "master": "Dokumentation/Skill-Handbuch.md",
+          "catalog": "skill-catalog.yml",
+          "overlays": "routing-overlays.yml",
+          "workflows": "workflow-index.yml"
+        }
+      },
+      "relation-workflow": {
+        "status": "ready",
+        "revision": "a33e367a83709c5262e7ff063d832935250fd933",
+        "mode": "bm25",
+        "fingerprint": "29142fda051bb5b818c4e1e2425a2955debc5e2ebef496a7a61fa211e9f28d24",
+        "hits": [
+          {
+            "path": "Dokumentationserstellung/Skills/adr/SKILL.md",
+            "score": 0.8694404137823095,
+            "snippet": "@@ -2,4 @@ (1 before, 40 after)\nname: adr\ndescription: Dokumentiert eine Architektur- oder technische Grundsatzentscheidung nachvollziehbar als Architecture Decision Record mit Kontext, Alternativen und Konsequenzen. Verwenden bei tatsächlich getroffenen oder klar als Proposal markierten Entscheidungen, deren Begründung und Trade-offs dauerhaft nachvollziehbar bleiben sollen.\n---\n",
+            "content_sha256": "5b4f69eabdeb03b51df9a1f20ecf7340341c940eafa990eef1a7d74957493720",
+            "search_document_sha256": "835c71bf03254a761aac6d5b825d4e6be6db3e04a9eee9ad7f246fd78b015950",
+            "snippet_origin": "derived-search-document",
+            "sources": [
+              {
+                "path": "Dokumentationserstellung/Skills/adr/SKILL.md",
+                "sha256": "5b4f69eabdeb03b51df9a1f20ecf7340341c940eafa990eef1a7d74957493720"
+              },
+              {
+                "path": "skill-catalog.yml",
+                "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca",
+                "fields": [
+                  "skills[adr].id",
+                  "skills[adr].area",
+                  "skills[adr].purpose"
+                ]
+              }
+            ],
+            "kind": "skill",
+            "skill": {
+              "description": "Dokumentiert eine Architektur- oder technische Grundsatzentscheidung nachvollziehbar als Architecture Decision Record mit Kontext, Alternativen und Konsequenzen. Verwenden bei tatsächlich getroffenen oder klar als Proposal markierten Entscheidungen, deren Begründung und Trade-offs dauerhaft nachvollziehbar bleiben sollen.",
+              "eval_coverage": "none",
+              "id": "adr",
+              "maturity": "experimental"
+            }
+          },
+          {
+            "path": "Software-Architecture-und-System-Design/Skills/architecture-review/SKILL.md",
+            "score": 0.86045213548087,
+            "snippet": "@@ -2,4 @@ (1 before, 119 after)\nname: architecture-review\ndescription: Auditiert ein Softwaresystem oder Systemdesign unabhängig auf Drivers, Kontext, Grenzen, Ownership, Runtime-Flows, State, Quality-Trade-offs, Patterns, Technologie, Evolution, Evidence und Conformance. Verwenden für breite Architektur-, Systemdesign- oder Readiness-Reviews. Nicht als Implementierungs-, Code-Review- oder automatische Re-Architecture verwenden.\n---\n",
+            "content_sha256": "9a816c8f2a6180ff766137dad85a8ad95c21e22f38e433eae83040891454f0f0",
+            "search_document_sha256": "ff018872b5a78b059ccf3c7c17421f799557988cdf5801c20dfed11f98a91ec4",
+            "snippet_origin": "derived-search-document",
+            "sources": [
+              {
+                "path": "Software-Architecture-und-System-Design/Skills/architecture-review/SKILL.md",
+                "sha256": "9a816c8f2a6180ff766137dad85a8ad95c21e22f38e433eae83040891454f0f0"
+              },
+              {
+                "path": "skill-catalog.yml",
+                "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca",
+                "fields": [
+                  "skills[architecture-review].id",
+                  "skills[architecture-review].area",
+                  "skills[architecture-review].purpose"
+                ]
+              }
+            ],
+            "kind": "skill",
+            "skill": {
+              "description": "Auditiert ein Softwaresystem oder Systemdesign unabhängig auf Drivers, Kontext, Grenzen, Ownership, Runtime-Flows, State, Quality-Trade-offs, Patterns, Technologie, Evolution, Evidence und Conformance. Verwenden für breite Architektur-, Systemdesign- oder Readiness-Reviews. Nicht als Implementierungs-, Code-Review- oder automatische Re-Architecture verwenden.",
+              "eval_coverage": "partial",
+              "id": "architecture-review",
+              "maturity": "experimental"
+            }
+          },
+          {
+            "path": "Software-Architecture-und-System-Design/Skills/system-design/SKILL.md",
+            "score": 0.8564856453810082,
+            "snippet": "@@ -2,4 @@ (1 before, 87 after)\nname: system-design\ndescription: Entwirft oder entwickelt ein Softwaresystem aus bestätigten Requirements, Architecture Drivers, Invarianten, Workload-/Failure-Evidence, Systemkontext und expliziten Trade-offs. Verwenden für neue Systeme, größere strukturelle Änderungen oder schwer umkehrbare Plattform-/Topologieentscheidungen. Nicht als Patternkatalog-, Toolauswahl- oder Implementierungsskill verwenden.\n---\n",
+            "content_sha256": "9aee0c916d024b603bf9e73f92834fc37b25449e652d5bdf7d8661aa3364a563",
+            "search_document_sha256": "9adb976e4c3afdc66b0555d6bc2e6b7784671b9995369023569fc9dfc8df8394",
+            "snippet_origin": "derived-search-document",
+            "sources": [
+              {
+                "path": "Software-Architecture-und-System-Design/Skills/system-design/SKILL.md",
+                "sha256": "9aee0c916d024b603bf9e73f92834fc37b25449e652d5bdf7d8661aa3364a563"
+              },
+              {
+                "path": "skill-catalog.yml",
+                "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca",
+                "fields": [
+                  "skills[system-design].id",
+                  "skills[system-design].area",
+                  "skills[system-design].purpose"
+                ]
+              }
+            ],
+            "kind": "skill",
+            "skill": {
+              "description": "Entwirft oder entwickelt ein Softwaresystem aus bestätigten Requirements, Architecture Drivers, Invarianten, Workload-/Failure-Evidence, Systemkontext und expliziten Trade-offs. Verwenden für neue Systeme, größere strukturelle Änderungen oder schwer umkehrbare Plattform-/Topologieentscheidungen. Nicht als Patternkatalog-, Toolauswahl- oder Implementierungsskill verwenden.",
+              "eval_coverage": "partial",
+              "id": "system-design",
+              "maturity": "experimental"
+            }
+          },
+          {
+            "path": "Software-Architecture-und-System-Design/Skills/architecture-tradeoff-analysis/SKILL.md",
+            "score": 0.8309031791763737,
+            "snippet": "@@ -2,4 @@ (1 before, 85 after)\nname: architecture-tradeoff-analysis\ndescription: Vergleicht ernsthafte Architekturvarianten anhand konkreter Quality-Szenarien, Constraints, Failure Modes, Kosten, Operability, Migration und Sensitivity Points. Verwenden bei schwer umkehrbaren Architekturentscheidungen oder konkurrierenden Systemdesigns. Nicht als generische Pro/Contra-Liste oder Scoregenerator verwenden.\n---\n",
+            "content_sha256": "155a39a7d5c37c8395b808155ae767c58bcb42d28ce5b6186753400d1384e616",
+            "search_document_sha256": "49cdd191e1b026f30ed2b3f1cecc688b0119b5fdf15ba765872ad886c454ee20",
+            "snippet_origin": "derived-search-document",
+            "sources": [
+              {
+                "path": "Software-Architecture-und-System-Design/Skills/architecture-tradeoff-analysis/SKILL.md",
+                "sha256": "155a39a7d5c37c8395b808155ae767c58bcb42d28ce5b6186753400d1384e616"
+              },
+              {
+                "path": "skill-catalog.yml",
+                "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca",
+                "fields": [
+                  "skills[architecture-tradeoff-analysis].id",
+                  "skills[architecture-tradeoff-analysis].area",
+                  "skills[architecture-tradeoff-analysis].purpose"
+                ]
+              }
+            ],
+            "kind": "skill",
+            "skill": {
+              "description": "Vergleicht ernsthafte Architekturvarianten anhand konkreter Quality-Szenarien, Constraints, Failure Modes, Kosten, Operability, Migration und Sensitivity Points. Verwenden bei schwer umkehrbaren Architekturentscheidungen oder konkurrierenden Systemdesigns. Nicht als generische Pro/Contra-Liste oder Scoregenerator verwenden.",
+              "eval_coverage": "partial",
+              "id": "architecture-tradeoff-analysis",
+              "maturity": "experimental"
+            }
+          }
+        ],
+        "total_matches": 4,
+        "offset": 0,
+        "page_size": 10,
+        "has_more": false,
+        "next_cursor": null,
+        "routing_hints": {
+          "items": [
+            {
+              "from": "skill:architecture-review",
+              "source": {
+                "field": "skills[architecture-review].related",
+                "path": "skill-catalog.yml",
+                "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca"
+              },
+              "target_path": "Software-Architecture-und-System-Design/Skills/architecture-baseline/SKILL.md",
+              "to": "skill:architecture-baseline",
+              "type": "related"
+            },
+            {
+              "from": "skill:architecture-review",
+              "source": {
+                "field": "skills[architecture-review].related",
+                "path": "skill-catalog.yml",
+                "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca"
+              },
+              "target_path": "Software-Architecture-und-System-Design/Skills/architecture-conformance-review/SKILL.md",
+              "to": "skill:architecture-conformance-review",
+              "type": "related"
+            },
+            {
+              "from": "skill:architecture-review",
+              "source": {
+                "field": "skills[architecture-review].related",
+                "path": "skill-catalog.yml",
+                "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca"
+              },
+              "target_path": "Software-Architecture-und-System-Design/Skills/architecture-decomposition/SKILL.md",
+              "to": "skill:architecture-decomposition",
+              "type": "related"
+            },
+            {
+              "from": "skill:architecture-review",
+              "source": {
+                "field": "skills[architecture-review].related",
+                "path": "skill-catalog.yml",
+                "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca"
+              },
+              "target_path": "Software-Architecture-und-System-Design/Skills/architecture-evolution/SKILL.md",
+              "to": "skill:architecture-evolution",
+              "type": "related"
+            },
+            {
+              "from": "skill:architecture-review",
+              "source": {
+                "field": "skills[architecture-review].related",
+                "path": "skill-catalog.yml",
+                "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca"
+              },
+              "target_path": "Software-Architecture-und-System-Design/Skills/architecture-tradeoff-analysis/SKILL.md",
+              "to": "skill:architecture-tradeoff-analysis",
+              "type": "related"
+            },
+            {
+              "from": "skill:architecture-review",
+              "source": {
+                "field": "skills[architecture-review].related",
+                "path": "skill-catalog.yml",
+                "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca"
+              },
+              "target_path": "Data-Engineering/Skills/data-engineering-review/SKILL.md",
+              "to": "skill:data-engineering-review",
+              "type": "related"
+            },
+            {
+              "from": "skill:architecture-review",
+              "source": {
+                "field": "skills[architecture-review].related",
+                "path": "skill-catalog.yml",
+                "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca"
+              },
+              "target_path": "Datenbanken/Skills/database-review/SKILL.md",
+              "to": "skill:database-review",
+              "type": "related"
+            },
+            {
+              "from": "skill:architecture-review",
+              "source": {
+                "field": "skills[architecture-review].related",
+                "path": "skill-catalog.yml",
+                "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca"
+              },
+              "target_path": "Infrastruktur-und-DevOps/Skills/infrastructure-review/SKILL.md",
+              "to": "skill:infrastructure-review",
+              "type": "related"
+            },
+            {
+              "from": "skill:architecture-review",
+              "source": {
+                "field": "skills[architecture-review].related",
+                "path": "skill-catalog.yml",
+                "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca"
+              },
+              "target_path": "Schnittstellen-und-Vertraege/Skills/interface-review/SKILL.md",
+              "to": "skill:interface-review",
+              "type": "related"
+            },
+            {
+              "from": "skill:architecture-review",
+              "source": {
+                "field": "skills[architecture-review].related",
+                "path": "skill-catalog.yml",
+                "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca"
+              },
+              "target_path": "Reliability-und-System-Observability/Skills/reliability-review/SKILL.md",
+              "to": "skill:reliability-review",
+              "type": "related"
+            },
+            {
+              "from": "skill:architecture-review",
+              "source": {
+                "field": "skills[architecture-review].related",
+                "path": "skill-catalog.yml",
+                "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca"
+              },
+              "target_path": "Software-Architecture-und-System-Design/Skills/system-design/SKILL.md",
+              "to": "skill:system-design",
+              "type": "related"
+            },
+            {
+              "from": "skill:architecture-review",
+              "source": {
+                "field": "skills[architecture-review].related",
+                "path": "skill-catalog.yml",
+                "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca"
+              },
+              "target_path": "Testing-und-QA/Skills/test-suite-review/SKILL.md",
+              "to": "skill:test-suite-review",
+              "type": "related"
+            },
+            {
+              "from": "skill:architecture-tradeoff-analysis",
+              "source": {
+                "field": "skills[architecture-tradeoff-analysis].related",
+                "path": "skill-catalog.yml",
+                "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca"
+              },
+              "target_path": "Dokumentationserstellung/Skills/adr/SKILL.md",
+              "to": "skill:adr",
+              "type": "related"
+            },
+            {
+              "from": "skill:architecture-tradeoff-analysis",
+              "source": {
+                "field": "skills[architecture-tradeoff-analysis].related",
+                "path": "skill-catalog.yml",
+                "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca"
+              },
+              "target_path": "Software-Architecture-und-System-Design/Skills/architecture-decomposition/SKILL.md",
+              "to": "skill:architecture-decomposition",
+              "type": "related"
+            },
+            {
+              "from": "skill:architecture-tradeoff-analysis",
+              "source": {
+                "field": "skills[architecture-tradeoff-analysis].related",
+                "path": "skill-catalog.yml",
+                "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca"
+              },
+              "target_path": "Software-Architecture-und-System-Design/Skills/architecture-evolution/SKILL.md",
+              "to": "skill:architecture-evolution",
+              "type": "related"
+            },
+            {
+              "from": "skill:architecture-tradeoff-analysis",
+              "source": {
+                "field": "skills[architecture-tradeoff-analysis].related",
+                "path": "skill-catalog.yml",
+                "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca"
+              },
+              "target_path": "Software-Architecture-und-System-Design/Skills/architecture-review/SKILL.md",
+              "to": "skill:architecture-review",
+              "type": "related"
+            },
+            {
+              "from": "skill:architecture-tradeoff-analysis",
+              "source": {
+                "field": "skills[architecture-tradeoff-analysis].related",
+                "path": "skill-catalog.yml",
+                "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca"
+              },
+              "target_path": "Reliability-und-System-Observability/Skills/capacity-planning/SKILL.md",
+              "to": "skill:capacity-planning",
+              "type": "related"
+            },
+            {
+              "from": "skill:architecture-tradeoff-analysis",
+              "source": {
+                "field": "skills[architecture-tradeoff-analysis].related",
+                "path": "skill-catalog.yml",
+                "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca"
+              },
+              "target_path": "Reliability-und-System-Observability/Skills/slo-design/SKILL.md",
+              "to": "skill:slo-design",
+              "type": "related"
+            },
+            {
+              "from": "skill:architecture-tradeoff-analysis",
+              "source": {
+                "field": "skills[architecture-tradeoff-analysis].related",
+                "path": "skill-catalog.yml",
+                "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca"
+              },
+              "target_path": "Software-Architecture-und-System-Design/Skills/system-design/SKILL.md",
+              "to": "skill:system-design",
+              "type": "related"
+            },
+            {
+              "from": "skill:system-design",
+              "source": {
+                "field": "skills[system-design].related",
+                "path": "skill-catalog.yml",
+                "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca"
+              },
+              "target_path": "Dokumentationserstellung/Skills/adr/SKILL.md",
+              "to": "skill:adr",
+              "type": "related"
+            }
+          ],
+          "total_relations": 43,
+          "limit": 20,
+          "truncated": true
+        },
+        "candidates_only": true,
+        "routing_coverage": {
+          "indexed_skills": 155,
+          "skills": 155
+        },
+        "routing_sources": {
+          "master": "Dokumentation/Skill-Handbuch.md",
+          "catalog": "skill-catalog.yml",
+          "overlays": "routing-overlays.yml",
+          "workflows": "workflow-index.yml"
+        }
+      },
+      "relation-overlay": {
+        "status": "ready",
+        "revision": "a33e367a83709c5262e7ff063d832935250fd933",
+        "mode": "bm25",
+        "fingerprint": "29142fda051bb5b818c4e1e2425a2955debc5e2ebef496a7a61fa211e9f28d24",
+        "hits": [
+          {
+            "path": "Recherche/Skills/research-synthesis/SKILL.md",
+            "score": 0.9351687862896715,
+            "snippet": "@@ -2,4 @@ (1 before, 65 after)\nname: research-synthesis\ndescription: Führt mehrere Research-Funde zu einem strukturierten, entscheidungsrelevanten Wissensbild mit sichtbaren Fakten, Interpretationen, Konflikten und Unsicherheiten zusammen. Verwenden bei mehreren Quellen oder Teilfragen, wenn Findings nach Erkenntnis statt nach Quelle synthetisiert werden sollen.\n---\n",
+            "content_sha256": "bf739ec5452a4edd0262fdb42054dd1a002f3b099a9ac59ed6aae21f1303a7a8",
+            "search_document_sha256": "6f75a2f4915fb4fcfbafd765ca3cd5ce4b0f8d9dd586e6c0e252707ed8d3b8c3",
+            "snippet_origin": "derived-search-document",
+            "sources": [
+              {
+                "path": "Recherche/Skills/research-synthesis/SKILL.md",
+                "sha256": "bf739ec5452a4edd0262fdb42054dd1a002f3b099a9ac59ed6aae21f1303a7a8"
+              },
+              {
+                "path": "skill-catalog.yml",
+                "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca",
+                "fields": [
+                  "skills[research-synthesis].id",
+                  "skills[research-synthesis].area",
+                  "skills[research-synthesis].purpose"
+                ]
+              }
+            ],
+            "kind": "skill",
+            "skill": {
+              "description": "Führt mehrere Research-Funde zu einem strukturierten, entscheidungsrelevanten Wissensbild mit sichtbaren Fakten, Interpretationen, Konflikten und Unsicherheiten zusammen. Verwenden bei mehreren Quellen oder Teilfragen, wenn Findings nach Erkenntnis statt nach Quelle synthetisiert werden sollen.",
+              "eval_coverage": "none",
+              "id": "research-synthesis",
+              "maturity": "experimental"
+            }
+          }
+        ],
+        "total_matches": 1,
+        "offset": 0,
+        "page_size": 10,
+        "has_more": false,
+        "next_cursor": null,
+        "routing_hints": {
+          "items": [
+            {
+              "from": "checkpoint:pre-completion",
+              "phase": "assurance",
+              "source": {
+                "field": "overlays[citation-audit].checkpoints",
+                "path": "routing-overlays.yml",
+                "sha256": "2ab96e1b0028f3e5f6e4c2a7331ca32016517c23ebac829519275fb4ba45c224"
+              },
+              "target_path": "Recherche/Skills/citation-audit/SKILL.md",
+              "to": "skill:citation-audit",
+              "type": "checkpoint"
+            },
+            {
+              "from": "workflow:Workflows/Deep-Research.md",
+              "source": {
+                "lines": [
+                  50
+                ],
+                "path": "Workflows/Deep-Research.md",
+                "sha256": "4e9417b8e239d35b0e05ad477340033da3ac2601d26e8b0b3b0d279c8f62d095"
+              },
+              "target_path": "Recherche/Skills/research-synthesis/SKILL.md",
+              "to": "skill:research-synthesis",
+              "type": "mentions"
+            }
+          ],
+          "total_relations": 2,
+          "limit": 20,
+          "truncated": false
+        },
+        "candidates_only": true,
+        "routing_coverage": {
+          "indexed_skills": 155,
+          "skills": 155
+        },
+        "routing_sources": {
+          "master": "Dokumentation/Skill-Handbuch.md",
+          "catalog": "skill-catalog.yml",
+          "overlays": "routing-overlays.yml",
+          "workflows": "workflow-index.yml"
+        }
+      },
+      "relation-no-seed": {
+        "status": "ready",
+        "revision": "a33e367a83709c5262e7ff063d832935250fd933",
+        "mode": "bm25",
+        "fingerprint": "29142fda051bb5b818c4e1e2425a2955debc5e2ebef496a7a61fa211e9f28d24",
+        "hits": [],
+        "total_matches": 0,
+        "offset": 0,
+        "page_size": 10,
+        "has_more": false,
+        "next_cursor": null,
+        "routing_hints": {
+          "items": [],
+          "total_relations": 0,
+          "limit": 20,
+          "truncated": false
+        },
+        "candidates_only": true,
+        "routing_coverage": {
+          "indexed_skills": 155,
+          "skills": 155
+        },
+        "routing_sources": {
+          "master": "Dokumentation/Skill-Handbuch.md",
+          "catalog": "skill-catalog.yml",
+          "overlays": "routing-overlays.yml",
+          "workflows": "workflow-index.yml"
+        }
+      }
+    },
+    "selectors": {
+      "workflow": {
+        "pages": [
+          {
+            "offset": 0,
+            "total_relations": 5,
+            "has_more": true
+          },
+          {
+            "offset": 2,
+            "total_relations": 5,
+            "has_more": true
+          },
+          {
+            "offset": 4,
+            "total_relations": 5,
+            "has_more": false
+          }
+        ],
+        "relations": [
+          {
+            "type": "mentions",
+            "from": "workflow:Workflows/Architekturentscheidung-und-Tradeoff.md",
+            "to": "skill:adr",
+            "target_path": "Dokumentationserstellung/Skills/adr/SKILL.md",
+            "source": {
+              "path": "Workflows/Architekturentscheidung-und-Tradeoff.md",
+              "sha256": "2190ae3c4c837b2b6ac51554384d15e2322f3b760c26cff31b230ca05b5bbdf7",
+              "lines": [
+                26
+              ]
+            }
+          },
+          {
+            "type": "mentions",
+            "from": "workflow:Workflows/Architekturentscheidung-und-Tradeoff.md",
+            "to": "skill:architecture-baseline",
+            "target_path": "Software-Architecture-und-System-Design/Skills/architecture-baseline/SKILL.md",
+            "source": {
+              "path": "Workflows/Architekturentscheidung-und-Tradeoff.md",
+              "sha256": "2190ae3c4c837b2b6ac51554384d15e2322f3b760c26cff31b230ca05b5bbdf7",
+              "lines": [
+                22
+              ]
+            }
+          },
+          {
+            "type": "mentions",
+            "from": "workflow:Workflows/Architekturentscheidung-und-Tradeoff.md",
+            "to": "skill:architecture-review",
+            "target_path": "Software-Architecture-und-System-Design/Skills/architecture-review/SKILL.md",
+            "source": {
+              "path": "Workflows/Architekturentscheidung-und-Tradeoff.md",
+              "sha256": "2190ae3c4c837b2b6ac51554384d15e2322f3b760c26cff31b230ca05b5bbdf7",
+              "lines": [
+                25
+              ]
+            }
+          },
+          {
+            "type": "mentions",
+            "from": "workflow:Workflows/Architekturentscheidung-und-Tradeoff.md",
+            "to": "skill:architecture-tradeoff-analysis",
+            "target_path": "Software-Architecture-und-System-Design/Skills/architecture-tradeoff-analysis/SKILL.md",
+            "source": {
+              "path": "Workflows/Architekturentscheidung-und-Tradeoff.md",
+              "sha256": "2190ae3c4c837b2b6ac51554384d15e2322f3b760c26cff31b230ca05b5bbdf7",
+              "lines": [
+                23,
+                30,
+                32
+              ]
+            }
+          },
+          {
+            "type": "mentions",
+            "from": "workflow:Workflows/Architekturentscheidung-und-Tradeoff.md",
+            "to": "skill:system-design",
+            "target_path": "Software-Architecture-und-System-Design/Skills/system-design/SKILL.md",
+            "source": {
+              "path": "Workflows/Architekturentscheidung-und-Tradeoff.md",
+              "sha256": "2190ae3c4c837b2b6ac51554384d15e2322f3b760c26cff31b230ca05b5bbdf7",
+              "lines": [
+                24
+              ]
+            }
+          }
+        ],
+        "total_relations": 5
+      },
+      "skill": {
+        "pages": [
+          {
+            "offset": 0,
+            "total_relations": 7,
+            "has_more": true
+          },
+          {
+            "offset": 2,
+            "total_relations": 7,
+            "has_more": true
+          },
+          {
+            "offset": 4,
+            "total_relations": 7,
+            "has_more": true
+          },
+          {
+            "offset": 6,
+            "total_relations": 7,
+            "has_more": false
+          }
+        ],
+        "relations": [
+          {
+            "type": "mentions",
+            "from": "workflow:Workflows/Unternehmens-und-Investmentanalyse.md",
+            "to": "skill:bewertungsanalyse",
+            "target_path": "Finanzen/Skills/bewertungsanalyse/SKILL.md",
+            "source": {
+              "path": "Workflows/Unternehmens-und-Investmentanalyse.md",
+              "sha256": "717921ebfed9959efd26a82c2acc5b2fea9ff21a0a7853850ef165821ab686e1",
+              "lines": [
+                78
+              ]
+            }
+          },
+          {
+            "type": "related",
+            "from": "skill:bewertungsanalyse",
+            "to": "skill:anlagevergleich",
+            "target_path": "Finanzen/Skills/anlagevergleich/SKILL.md",
+            "source": {
+              "path": "skill-catalog.yml",
+              "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca",
+              "field": "skills[bewertungsanalyse].related"
+            }
+          },
+          {
+            "type": "related",
+            "from": "skill:bewertungsanalyse",
+            "to": "skill:claim-verification",
+            "target_path": "Recherche/Skills/claim-verification/SKILL.md",
+            "source": {
+              "path": "skill-catalog.yml",
+              "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca",
+              "field": "skills[bewertungsanalyse].related"
+            }
+          },
+          {
+            "type": "related",
+            "from": "skill:bewertungsanalyse",
+            "to": "skill:entscheidungsunterstuetzung",
+            "target_path": "Arbeitsweisen/Skills/entscheidungsunterstuetzung/SKILL.md",
+            "source": {
+              "path": "skill-catalog.yml",
+              "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca",
+              "field": "skills[bewertungsanalyse].related"
+            }
+          },
+          {
+            "type": "related",
+            "from": "skill:bewertungsanalyse",
+            "to": "skill:portfolioanalyse",
+            "target_path": "Finanzen/Skills/portfolioanalyse/SKILL.md",
+            "source": {
+              "path": "skill-catalog.yml",
+              "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca",
+              "field": "skills[bewertungsanalyse].related"
+            }
+          },
+          {
+            "type": "related",
+            "from": "skill:bewertungsanalyse",
+            "to": "skill:source-evaluation",
+            "target_path": "Recherche/Skills/source-evaluation/SKILL.md",
+            "source": {
+              "path": "skill-catalog.yml",
+              "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca",
+              "field": "skills[bewertungsanalyse].related"
+            }
+          },
+          {
+            "type": "related",
+            "from": "skill:bewertungsanalyse",
+            "to": "skill:unternehmensanalyse",
+            "target_path": "Finanzen/Skills/unternehmensanalyse/SKILL.md",
+            "source": {
+              "path": "skill-catalog.yml",
+              "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca",
+              "field": "skills[bewertungsanalyse].related"
+            }
+          }
+        ],
+        "total_relations": 7
+      },
+      "checkpoint": {
+        "pages": [
+          {
+            "offset": 0,
+            "total_relations": 1,
+            "has_more": false
+          }
+        ],
+        "relations": [
+          {
+            "type": "checkpoint",
+            "from": "checkpoint:pre-completion",
+            "to": "skill:citation-audit",
+            "target_path": "Recherche/Skills/citation-audit/SKILL.md",
+            "phase": "assurance",
+            "source": {
+              "path": "routing-overlays.yml",
+              "sha256": "2ab96e1b0028f3e5f6e4c2a7331ca32016517c23ebac829519275fb4ba45c224",
+              "field": "overlays[citation-audit].checkpoints"
+            }
+          }
+        ],
+        "total_relations": 1
+      },
+      "node_calls": 0,
+      "worker_calls": 0,
+      "ready_index_calls": 0
+    },
+    "fixture": {
+      "build": {
+        "status": "ready",
+        "revision": "e6ff14b9597f513fcd84faab15ed45e2d432dce5",
+        "documents": 12,
+        "mode": "bm25",
+        "fingerprint": "11a23a4bb45fd7589af0ebfa5ddcee8deace2c4c4d7fc0f459c508822fb8376a",
+        "routing_coverage": {
+          "skills": 2,
+          "indexed_skills": 2
+        }
+      },
+      "workflow_only_change": {
+        "uncommitted": {
+          "status": "stale",
+          "message": "Commit selected source changes before building/searching."
+        },
+        "committed": {
+          "status": "stale",
+          "message": "Index is stale. Rebuild explicitly."
+        },
+        "old_search_cursor": {
+          "status": "invalid-cursor",
+          "message": "Cursor does not match the source snapshot, action, query or page size."
+        },
+        "old_relation_cursor": {
+          "status": "invalid-cursor",
+          "message": "Cursor does not match the source snapshot, action, query or page size."
+        },
+        "canonical_and_search_document_hashes_unchanged": true,
+        "worker_calls": 0
+      },
+      "invalid_targets": {
+        "related": {
+          "status": "error",
+          "message": "Invalid routing relations: Unknown related target: missing-owner",
+          "ready_pointer_exists": false,
+          "worker_calls": 0
+        },
+        "overlay": {
+          "status": "error",
+          "message": "Invalid routing relations: Unknown overlay target: missing-owner",
+          "ready_pointer_exists": false,
+          "worker_calls": 0
+        }
+      }
+    },
+    "technical_contracts": {
+      "relation-related": "PASS",
+      "relation-workflow": "PASS",
+      "relation-overlay": "PASS",
+      "relation-no-seed": "PASS",
+      "contract-invalid-relation": "PASS"
+    },
+    "workflow_natural_query_required_skills_present": true,
+    "workflow_selector_supplied_by_evaluator_from_frozen_case": true,
+    "original_bytes_unchanged": true,
+    "claims": {
+      "agent_selection_quality": "NOT RUN",
+      "general_semantic_recall": "UNVERIFIED",
+      "model_calls": 0
+    }
+  },
+  "p1_regression": {
+    "protocol": {
+      "utc": "2026-10-31T07:12:42.253405+00:00",
+      "label": "candidate",
+      "source_commit": "6b80949fea00a427303a8dad9a612b59d7fd04ca",
+      "source_packet_sha256": "02575304ff5a45aea1bc2ab73c0051c1894525f4dcd17655057434deb53b4be2",
+      "dependency_packet_sha256": "a4dacdbccc4f2633d3976c3ffbd36450d8411575778e1f93bad8ba6f0f4dc7fe",
+      "registered_workflow_dependencies": 50,
+      "cases_sha256": "b29da5a3e7b817dbb7d37485e7628bd38a58f89a0377a1e13414343699b123df",
+      "qmd_version": "2.8.3",
+      "node_version": "v24.22.1",
+      "code_sha256": {
+        "tools/search_rules.py": "3e85143290eacdcbe317ad42c75e461917d863e35a0ec761671328f1c59b8308",
+        "tools/search_rules_qmd.mjs": "d9c4b3f9222ad7928dfcb1860fd0e975024512ab4e4dedf915820ed283737155",
+        "tools/check_public_entrypoints.py": "65607d90c95273fcdf9088ec29005b2f6b58a90672b9449a234be1d7d43c1976",
+        "tools/local_search/pnpm-lock.yaml": "30381a3497bf589cd694665a806736e83b724be7670952f0afc2e207fc20b528",
+        "Evals/Onboarding/run_rule_routing_comparison.py": "cef63caee0a4b3618a066e98814909ec34dcc79f9c9326e13b88f6f60c2083e9",
+        "tools/rule_relations.py": "55df4b901b68dbc008a812894e45030dc6342c0f22c68b332fb95e97b70b4577"
+      },
+      "model_calls": 0,
+      "held_out": false,
+      "per_query_limit": 10
+    },
+    "protocol_sha256": "3f253dd34ede581a39d7ac6428cf4a93c6dc9d6212fc650389bdd79e19671335",
+    "fixture_revision": "bc0c5df54724f2e67bbe9830a3dd03958f37194f",
+    "build": {
+      "status": "ready",
+      "revision": "bc0c5df54724f2e67bbe9830a3dd03958f37194f",
+      "documents": 165,
+      "mode": "bm25",
+      "fingerprint": "a6a964d5ab516668ddcc4178f26e7f45a16dbaa56c35ff75e3c1b05d0ae5885d",
+      "routing_coverage": {
+        "skills": 155,
+        "indexed_skills": 155
+      }
+    },
+    "counts": {
+      "PASS": 15,
+      "FAIL": 1,
+      "NOT RUN": 8
+    },
+    "status": "PARTIAL",
+    "cases": [
+      {
+        "id": "legacy-correction",
+        "status": "PASS",
+        "found_skills": [
+          "korrekturlektorat"
+        ],
+        "missing_required": [],
+        "unsuitable_candidates": [],
+        "queries": [
+          {
+            "query": "Rechtschreibung Zeichensetzung",
+            "hits": [
+              {
+                "path": "Schreiben/Skills/korrekturlektorat/SKILL.md",
+                "score": 0.9337310341044425,
+                "content_sha256": "499b931a535d7afc386092b14193108e5c24a1eaa379b76a5b6f9fbf417d5bd8",
+                "search_document_sha256": "8ae46114f62f6d61b8ffee5d2404675a8859207bd084c47c29cad290228dafcb",
+                "snippet_origin": "derived-search-document"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "legacy-valuation",
+        "status": "PASS",
+        "found_skills": [
+          "bewertungsanalyse"
+        ],
+        "missing_required": [],
+        "unsuitable_candidates": [],
+        "queries": [
+          {
+            "query": "DCF Comparable Companies",
+            "hits": [
+              {
+                "path": "Finanzen/Skills/bewertungsanalyse/SKILL.md",
+                "score": 0.9562718738508568,
+                "content_sha256": "f13115b7485da959104cb3e377eca916a593f1155e886d05eae546c945cc4a8d",
+                "search_document_sha256": "7d177daf5ff5e626b4c12e17ea424bb484b637fefa6db285811d1d543a374203",
+                "snippet_origin": "derived-search-document"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "legacy-character",
+        "status": "PASS",
+        "found_skills": [
+          "figurenentwicklung"
+        ],
+        "missing_required": [],
+        "unsuitable_candidates": [],
+        "queries": [
+          {
+            "query": "Figuren Motivation Agency",
+            "hits": [
+              {
+                "path": "Storyentwicklung-und-Fiktion/Skills/figurenentwicklung/SKILL.md",
+                "score": 0.9465865552938676,
+                "content_sha256": "0908e80908c3f5d7313e070e173c7ea9878db71c38371c78e8e55828822f2a16",
+                "search_document_sha256": "c1692a3de14fd5c835d31f06baecb5babe0f2f3dd632c0086894da41b7bf1b53",
+                "snippet_origin": "derived-search-document"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "legacy-adr",
+        "status": "PASS",
+        "found_skills": [
+          "adr"
+        ],
+        "missing_required": [],
+        "unsuitable_candidates": [],
+        "queries": [
+          {
+            "query": "Architekturentscheidungen Alternativen Konsequenzen",
+            "hits": [
+              {
+                "path": "Dokumentationserstellung/Skills/adr/SKILL.md",
+                "score": 0.9441803266880955,
+                "content_sha256": "5b4f69eabdeb03b51df9a1f20ecf7340341c940eafa990eef1a7d74957493720",
+                "search_document_sha256": "835c71bf03254a761aac6d5b825d4e6be6db3e04a9eee9ad7f246fd78b015950",
+                "snippet_origin": "derived-search-document"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "wording-correction",
+        "status": "PASS",
+        "found_skills": [
+          "korrekturlektorat"
+        ],
+        "missing_required": [],
+        "unsuitable_candidates": [],
+        "queries": [
+          {
+            "query": "Tippfehler Dopplungen Korrekturlesen",
+            "hits": [
+              {
+                "path": "Schreiben/Skills/korrekturlektorat/SKILL.md",
+                "score": 0.9340230226526707,
+                "content_sha256": "499b931a535d7afc386092b14193108e5c24a1eaa379b76a5b6f9fbf417d5bd8",
+                "search_document_sha256": "8ae46114f62f6d61b8ffee5d2404675a8859207bd084c47c29cad290228dafcb",
+                "snippet_origin": "derived-search-document"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "wording-valuation",
+        "status": "PASS",
+        "found_skills": [
+          "bewertungsanalyse"
+        ],
+        "missing_required": [],
+        "unsuitable_candidates": [],
+        "queries": [
+          {
+            "query": "Fair-Value Sensitivitäten",
+            "hits": [
+              {
+                "path": "Finanzen/Skills/bewertungsanalyse/SKILL.md",
+                "score": 0.9178208888922974,
+                "content_sha256": "f13115b7485da959104cb3e377eca916a593f1155e886d05eae546c945cc4a8d",
+                "search_document_sha256": "7d177daf5ff5e626b4c12e17ea424bb484b637fefa6db285811d1d543a374203",
+                "snippet_origin": "derived-search-document"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "wording-character",
+        "status": "PASS",
+        "found_skills": [
+          "figurenentwicklung"
+        ],
+        "missing_required": [],
+        "unsuitable_candidates": [],
+        "queries": [
+          {
+            "query": "Character Arcs Beziehungen",
+            "hits": [
+              {
+                "path": "Storyentwicklung-und-Fiktion/Skills/figurenentwicklung/SKILL.md",
+                "score": 0.9134531069267597,
+                "content_sha256": "0908e80908c3f5d7313e070e173c7ea9878db71c38371c78e8e55828822f2a16",
+                "search_document_sha256": "c1692a3de14fd5c835d31f06baecb5babe0f2f3dd632c0086894da41b7bf1b53",
+                "snippet_origin": "derived-search-document"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "wording-adr",
+        "status": "PASS",
+        "found_skills": [
+          "adr"
+        ],
+        "missing_required": [],
+        "unsuitable_candidates": [],
+        "queries": [
+          {
+            "query": "Architecture Decision Record Alternativen",
+            "hits": [
+              {
+                "path": "Dokumentationserstellung/Skills/adr/SKILL.md",
+                "score": 0.9498868829866169,
+                "content_sha256": "5b4f69eabdeb03b51df9a1f20ecf7340341c940eafa990eef1a7d74957493720",
+                "search_document_sha256": "835c71bf03254a761aac6d5b825d4e6be6db3e04a9eee9ad7f246fd78b015950",
+                "snippet_origin": "derived-search-document"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "jobs-acceptance-tests",
+        "status": "FAIL",
+        "found_skills": [
+          "delegation-contract",
+          "test-design"
+        ],
+        "missing_required": [
+          "acceptance-criteria-design"
+        ],
+        "unsuitable_candidates": [],
+        "queries": [
+          {
+            "query": "Akzeptanzkriterien beobachtbar",
+            "hits": [
+              {
+                "path": "Agentenarbeit/Skills/delegation-contract/SKILL.md",
+                "score": 0.8683616394704166,
+                "content_sha256": "8db59b9327cc6d378316629236c7c3f94940bdf068144a777b743ad91543ed41",
+                "search_document_sha256": "f12b7a88f47369c1db3a1a186999bc8ec78ceb3612c17c699be7579bdc847df1",
+                "snippet_origin": "derived-search-document"
+              }
+            ]
+          },
+          {
+            "query": "Testfälle Grenzwerte",
+            "hits": [
+              {
+                "path": "Testing-und-QA/Skills/test-design/SKILL.md",
+                "score": 0.9289023154355349,
+                "content_sha256": "2f04848bb93221f51b609ef04fe8c824a003bff176bfa947b9d8ee3bb68639ab",
+                "search_document_sha256": "362a98ed5cbe23eaf2e7934ced78c1cfd0dd39340db7636a89f4d5857604a3a1",
+                "snippet_origin": "derived-search-document"
+              },
+              {
+                "path": "Testing-und-QA/README.md",
+                "score": 0.8879782336455915,
+                "content_sha256": "4813b01bffd2cb15353f48f020cc89e7d8e17f0b90f53b7d56f290389be80f5a",
+                "search_document_sha256": "4813b01bffd2cb15353f48f020cc89e7d8e17f0b90f53b7d56f290389be80f5a",
+                "snippet_origin": "canonical-source"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "jobs-claim-source",
+        "status": "PASS",
+        "found_skills": [
+          "architecture-baseline",
+          "claim-verification",
+          "context-audit",
+          "requirements-baseline",
+          "source-evaluation"
+        ],
+        "missing_required": [],
+        "unsuitable_candidates": [],
+        "queries": [
+          {
+            "query": "Behauptungen Evidenz prüfen",
+            "hits": [
+              {
+                "path": "Recherche/Skills/claim-verification/SKILL.md",
+                "score": 0.8979622674051881,
+                "content_sha256": "bf491036efad3326d0a062212a6adcf933274feab9cea92288928be48c14e82b",
+                "search_document_sha256": "4df86f889856191052074d31702bde9454c3422dc85756edeec5cd908709d277",
+                "snippet_origin": "derived-search-document"
+              }
+            ]
+          },
+          {
+            "query": "Quellen Autorität Aktualität",
+            "hits": [
+              {
+                "path": "Recherche/Skills/source-evaluation/SKILL.md",
+                "score": 0.908768450484773,
+                "content_sha256": "474246da90126a2f8da18b539235c5da677e69332535c70d7fd1c25ccd854e45",
+                "search_document_sha256": "06405d0cfc3c7f66744433579c20adaff64494d09b674e44c668a12e90ca167a",
+                "snippet_origin": "derived-search-document"
+              },
+              {
+                "path": "Requirements-und-Spezifikations-Engineering/Skills/requirements-baseline/SKILL.md",
+                "score": 0.8775514119289143,
+                "content_sha256": "9d2e5fceb9ff4687823ef513186232c41d43062e0bde7c50e34413221438930b",
+                "search_document_sha256": "ef720121d540b1840d71c0e8f1e092fa226ed7a5c3c5d505a9f52d28bd3c42f1",
+                "snippet_origin": "derived-search-document"
+              },
+              {
+                "path": "Agentenarbeit/Skills/context-audit/SKILL.md",
+                "score": 0.871691657674935,
+                "content_sha256": "00844737a457bb3e6b114b0739e2490210afb6d1f2aff2fa5f9cc956816bb9bc",
+                "search_document_sha256": "0e7aff36bb23209b26ad62f85f68f8a4e6c87942fd41d1ec0ff363ca41d751d0",
+                "snippet_origin": "derived-search-document"
+              },
+              {
+                "path": "Software-Architecture-und-System-Design/Skills/architecture-baseline/SKILL.md",
+                "score": 0.8698751424078349,
+                "content_sha256": "903c6d862d082481165772434eefc4560c378b5266ff41b22bb9e57990487fd3",
+                "search_document_sha256": "7248029c08aaad36d514b9cd68e921d4c11622047d898a2a961713a035f23c1a",
+                "snippet_origin": "derived-search-document"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "jobs-provenance-hygiene",
+        "status": "PASS",
+        "found_skills": [
+          "inhaltsprovenienz-review",
+          "metadaten-hygiene"
+        ],
+        "missing_required": [],
+        "unsuitable_candidates": [],
+        "queries": [
+          {
+            "query": "Provenienz Metadaten Geräte",
+            "hits": [
+              {
+                "path": "Sicherheit/Skills/inhaltsprovenienz-review/SKILL.md",
+                "score": 0.900901660477335,
+                "content_sha256": "57f7d276cba75a38aa068ec318d0e9769c4d04c2353f96a6246e3a9065eeeee3",
+                "search_document_sha256": "591aac84f251138bac7ce90150c89a9e08f66c6106bf9be62e577d92f91d41c6",
+                "snippet_origin": "derived-search-document"
+              },
+              {
+                "path": "Sicherheit/Skills/metadaten-hygiene/SKILL.md",
+                "score": 0.8749387457107833,
+                "content_sha256": "a4177ac40e6ec39f621f01321b7f04e672428dd447893f5f8e8751afdcc6ebe4",
+                "search_document_sha256": "99baa8a547f833a5fbd800c12fcdc26d8a2ae8cfc143baf2598e710c2f4dcd5f",
+                "snippet_origin": "derived-search-document"
+              },
+              {
+                "path": "Dokumentation/Skill-Handbuch.md",
+                "score": 0.7110861224736079,
+                "content_sha256": "17411374069434877114d0f8b60fbcfe2721defb165a4e1614051ddf495aa7fe",
+                "search_document_sha256": "17411374069434877114d0f8b60fbcfe2721defb165a4e1614051ddf495aa7fe",
+                "snippet_origin": "canonical-source"
+              }
+            ]
+          },
+          {
+            "query": "GPS Sharing-Kopie Metadaten",
+            "hits": [
+              {
+                "path": "Sicherheit/Skills/metadaten-hygiene/SKILL.md",
+                "score": 0.8827648340263989,
+                "content_sha256": "a4177ac40e6ec39f621f01321b7f04e672428dd447893f5f8e8751afdcc6ebe4",
+                "search_document_sha256": "99baa8a547f833a5fbd800c12fcdc26d8a2ae8cfc143baf2598e710c2f4dcd5f",
+                "snippet_origin": "derived-search-document"
+              },
+              {
+                "path": "Dokumentation/Skill-Handbuch.md",
+                "score": 0.7654653953400817,
+                "content_sha256": "17411374069434877114d0f8b60fbcfe2721defb165a4e1614051ddf495aa7fe",
+                "search_document_sha256": "17411374069434877114d0f8b60fbcfe2721defb165a4e1614051ddf495aa7fe",
+                "snippet_origin": "canonical-source"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "jobs-canon-character",
+        "status": "PASS",
+        "found_skills": [
+          "figurenentwicklung",
+          "plot-und-storystruktur",
+          "story-bible",
+          "worldbuilding"
+        ],
+        "missing_required": [],
+        "unsuitable_candidates": [],
+        "queries": [
+          {
+            "query": "Story-Bible Kanon offene Fragen",
+            "hits": [
+              {
+                "path": "Storyentwicklung-und-Fiktion/Skills/story-bible/SKILL.md",
+                "score": 0.9240765173437068,
+                "content_sha256": "4241c970178057087087872f378c52183ce1789c2861b5ff01febbdf8e00a485",
+                "search_document_sha256": "e2e0523662b19d2da7307ebb7dae54e65b971e247654d00d0e265e4f1f1eb3b6",
+                "snippet_origin": "derived-search-document"
+              },
+              {
+                "path": "Storyentwicklung-und-Fiktion/Skills/plot-und-storystruktur/SKILL.md",
+                "score": 0.8911743538478357,
+                "content_sha256": "725d5c65513c7283012a4b98a254ef3e192ce45d4d9fc1e8feed0e16e6d023f5",
+                "search_document_sha256": "42307c3d9f993fe4fb3aa004d07b26b3ecbc5578f8146da7dbdd26140e6eb706",
+                "snippet_origin": "derived-search-document"
+              },
+              {
+                "path": "Storyentwicklung-und-Fiktion/Skills/worldbuilding/SKILL.md",
+                "score": 0.8861574411301264,
+                "content_sha256": "b96549dfcb2b9475e992400c8700f52b386bbf54b13ee077ce77a7d57cb3b647",
+                "search_document_sha256": "99efdf33f69ae894ab8f8da95431442915941fd7442babc6bf7d3aed548fd83b",
+                "snippet_origin": "derived-search-document"
+              }
+            ]
+          },
+          {
+            "query": "Figuren Motivation Agency",
+            "hits": [
+              {
+                "path": "Storyentwicklung-und-Fiktion/Skills/figurenentwicklung/SKILL.md",
+                "score": 0.9465865552938676,
+                "content_sha256": "0908e80908c3f5d7313e070e173c7ea9878db71c38371c78e8e55828822f2a16",
+                "search_document_sha256": "c1692a3de14fd5c835d31f06baecb5babe0f2f3dd632c0086894da41b7bf1b53",
+                "snippet_origin": "derived-search-document"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "relation-related",
+        "status": "NOT RUN",
+        "reason": "later implementation phase"
+      },
+      {
+        "id": "relation-workflow",
+        "status": "NOT RUN",
+        "reason": "later implementation phase"
+      },
+      {
+        "id": "relation-overlay",
+        "status": "NOT RUN",
+        "reason": "later implementation phase"
+      },
+      {
+        "id": "relation-no-seed",
+        "status": "NOT RUN",
+        "reason": "later implementation phase"
+      },
+      {
+        "id": "negative-absent",
+        "status": "PASS",
+        "found_skills": [],
+        "missing_required": [],
+        "unsuitable_candidates": [],
+        "queries": [
+          {
+            "query": "zzroutingabsentf72ea4bd",
+            "hits": []
+          }
+        ]
+      },
+      {
+        "id": "near-correction-only",
+        "status": "PASS",
+        "found_skills": [
+          "korrekturlektorat"
+        ],
+        "missing_required": [],
+        "unsuitable_candidates": [],
+        "queries": [
+          {
+            "query": "Rechtschreibung Grammatik Korrekturlesen",
+            "hits": [
+              {
+                "path": "Schreiben/Skills/korrekturlektorat/SKILL.md",
+                "score": 0.9464904195327666,
+                "content_sha256": "499b931a535d7afc386092b14193108e5c24a1eaa379b76a5b6f9fbf417d5bd8",
+                "search_document_sha256": "8ae46114f62f6d61b8ffee5d2404675a8859207bd084c47c29cad290228dafcb",
+                "snippet_origin": "derived-search-document"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "near-source-only",
+        "status": "PASS",
+        "found_skills": [
+          "source-evaluation"
+        ],
+        "missing_required": [],
+        "unsuitable_candidates": [],
+        "queries": [
+          {
+            "query": "Quelle Aktualität Unabhängigkeit",
+            "hits": [
+              {
+                "path": "Recherche/Skills/source-evaluation/SKILL.md",
+                "score": 0.9221554136780686,
+                "content_sha256": "474246da90126a2f8da18b539235c5da677e69332535c70d7fd1c25ccd854e45",
+                "search_document_sha256": "06405d0cfc3c7f66744433579c20adaff64494d09b674e44c668a12e90ca167a",
+                "snippet_origin": "derived-search-document"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "near-style-alternative",
+        "status": "PASS",
+        "found_skills": [
+          "natuerliches-schreiben"
+        ],
+        "missing_required": [],
+        "unsuitable_candidates": [],
+        "queries": [
+          {
+            "query": "Stil natürliche Formulierungen",
+            "hits": [
+              {
+                "path": "Schreiben/Skills/natuerliches-schreiben/SKILL.md",
+                "score": 0.9141758880744353,
+                "content_sha256": "7076c50f822921972ba6d822ec63f77f75cb6d701fa1c2e596801db712290808",
+                "search_document_sha256": "32b6030bb5a5381742e185ce4cc1e0d16789a71194669408c3a6fe461f073500",
+                "snippet_origin": "derived-search-document"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "contract-pagination",
+        "status": "NOT RUN",
+        "reason": "later implementation phase"
+      },
+      {
+        "id": "contract-stale",
+        "status": "NOT RUN",
+        "reason": "later implementation phase"
+      },
+      {
+        "id": "contract-invalid-relation",
+        "status": "NOT RUN",
+        "reason": "later implementation phase"
+      },
+      {
+        "id": "contract-descriptors",
+        "status": "NOT RUN",
+        "reason": "later implementation phase"
+      }
+    ],
+    "original_bytes_unchanged": true,
+    "claims": {
+      "general_recall": "UNVERIFIED",
+      "agent_selection_quality": "NOT RUN",
+      "model_calls": 0
+    }
+  },
+  "guard_probes": {
+    "source_sha256": "55df4b901b68dbc008a812894e45030dc6342c0f22c68b332fb95e97b70b4577",
+    "probes": [
+      {
+        "guard": "unknown-related-target",
+        "test": "test_unknown_and_malformed_related_targets_are_rejected",
+        "failures": 1,
+        "errors": 0,
+        "detected": true
+      },
+      {
+        "guard": "fenced-workflow-mention",
+        "test": "test_workflow_mentions_merge_lines_skip_fences_and_never_become_requirements",
+        "failures": 1,
+        "errors": 0,
+        "detected": true
+      }
+    ],
+    "production_bytes_unchanged": true,
+    "mutation_scope": "memory-only"
+  },
+  "powershell_smoke": [
+    {
+      "exit_code": 0,
+      "total_relations": 7,
+      "mode": "relations",
+      "selector": "SkillId",
+      "explicit_missing_node": true
+    },
+    {
+      "exit_code": 0,
+      "total_relations": 6,
+      "mode": "relations",
+      "selector": "Workflow",
+      "explicit_missing_node": true
+    },
+    {
+      "exit_code": 0,
+      "total_relations": 1,
+      "mode": "relations",
+      "selector": "Checkpoint",
+      "explicit_missing_node": true
+    },
+    {
+      "hint": "citation-audit",
+      "exit_code": 0,
+      "seed": "research-synthesis",
+      "selector": "query-checkpoint",
+      "normal_machine_user_path": true
+    }
+  ],
+  "unit_tests": {
+    "command": "python -m unittest tests.test_rule_search tests.test_rule_search_routing tests.test_rule_search_facets tests.test_rule_search_paging tests.test_rule_relations tests.test_rule_search_relations tests.test_public_entrypoints tests.test_corrected_discovery -q",
+    "tests_run": 103,
+    "skipped": 1,
+    "failures": 0,
+    "errors": 0,
+    "duration_seconds": 166.123,
+    "skip_reason": "Existing Windows symlink capability test",
+    "log_sha256": "6c6cfce7b639ca657ed0d0ffb7d5b78244c19cf599b2b819a2d6300354e9d7d3"
+  },
+  "code_revision": "a33e367a83709c5262e7ff063d832935250fd933",
+  "code_bindings": {
+    "tools/search_rules.py": {
+      "executed_checkout_sha256": "3e85143290eacdcbe317ad42c75e461917d863e35a0ec761671328f1c59b8308",
+      "git_blob_sha256": "3e85143290eacdcbe317ad42c75e461917d863e35a0ec761671328f1c59b8308",
+      "checkout_matches_git_after_crlf_normalization": true
+    },
+    "tools/rule_relations.py": {
+      "executed_checkout_sha256": "55df4b901b68dbc008a812894e45030dc6342c0f22c68b332fb95e97b70b4577",
+      "git_blob_sha256": "55df4b901b68dbc008a812894e45030dc6342c0f22c68b332fb95e97b70b4577",
+      "checkout_matches_git_after_crlf_normalization": true
+    },
+    "tools/search_rules_qmd.mjs": {
+      "executed_checkout_sha256": "d9c4b3f9222ad7928dfcb1860fd0e975024512ab4e4dedf915820ed283737155",
+      "git_blob_sha256": "d9c4b3f9222ad7928dfcb1860fd0e975024512ab4e4dedf915820ed283737155",
+      "checkout_matches_git_after_crlf_normalization": true
+    },
+    "Search-KI-Regeln.ps1": {
+      "executed_checkout_sha256": "abf43cf9ff5b0f8d2f43029303792f498b25747696a6bf0eafe30fcd1bb04661",
+      "git_blob_sha256": "abf43cf9ff5b0f8d2f43029303792f498b25747696a6bf0eafe30fcd1bb04661",
+      "checkout_matches_git_after_crlf_normalization": true
+    },
+    "tools/check_public_entrypoints.py": {
+      "executed_checkout_sha256": "65607d90c95273fcdf9088ec29005b2f6b58a90672b9449a234be1d7d43c1976",
+      "git_blob_sha256": "d945c1d6a8e28e3c2bb4cf93c2c2a8255d7ee21ce35afb2d8093b71e00ddc110",
+      "checkout_matches_git_after_crlf_normalization": true
+    },
+    "tools/local_search/pnpm-lock.yaml": {
+      "executed_checkout_sha256": "30381a3497bf589cd694665a806736e83b724be7670952f0afc2e207fc20b528",
+      "git_blob_sha256": "30381a3497bf589cd694665a806736e83b724be7670952f0afc2e207fc20b528",
+      "checkout_matches_git_after_crlf_normalization": true
+    },
+    "Evals/Onboarding/Rule-Routing-P3.md": {
+      "executed_checkout_sha256": "a4483283375406ca5e0bd9f84da9e878bb7205719b4315f6490b0908ef3ccb0e",
+      "git_blob_sha256": "a4483283375406ca5e0bd9f84da9e878bb7205719b4315f6490b0908ef3ccb0e",
+      "checkout_matches_git_after_crlf_normalization": true
+    },
+    "Evals/Onboarding/run_rule_routing_p3_native.py": {
+      "executed_checkout_sha256": "31461359036be81e3cce0422d076bbb2f83a6ac01c7db4ed8e5d73f8b478438e",
+      "git_blob_sha256": "31461359036be81e3cce0422d076bbb2f83a6ac01c7db4ed8e5d73f8b478438e",
+      "checkout_matches_git_after_crlf_normalization": true
+    },
+    "Evals/Onboarding/rule-routing-cases.json": {
+      "executed_checkout_sha256": "b29da5a3e7b817dbb7d37485e7628bd38a58f89a0377a1e13414343699b123df",
+      "git_blob_sha256": "2cb6e2b31f9a3973b59e7288a19032c38e3258afe193514dd8332733446fc093",
+      "checkout_matches_git_after_crlf_normalization": true
+    },
+    "Evals/Onboarding/run_rule_routing_comparison.py": {
+      "executed_checkout_sha256": "cef63caee0a4b3618a066e98814909ec34dcc79f9c9326e13b88f6f60c2083e9",
+      "git_blob_sha256": "cef63caee0a4b3618a066e98814909ec34dcc79f9c9326e13b88f6f60c2083e9",
+      "checkout_matches_git_after_crlf_normalization": true
+    }
+  },
+  "raw_sha256": {
+    ".validation/native-rule-routing-p3-ydjr_w_i/result.json": "11796d3d3e27b0f53c1b573c6f89c9bf992f57d9bf8ec576534f6f51bd218819",
+    ".validation/rule-routing-candidate-w9lk9axz/result.json": "5f3da92691b3471eb0637c113ef50519eb531c107f921e02cb03f3eba64925bb"
+  },
+  "comparison": {
+    "same_historical_core_packet": true,
+    "same_case_statuses": true,
+    "dependency_packet_extended_with_all_registered_workflows": true,
+    "semantic_retrieval_status": "PARTIAL"
+  },
+  "claims": {
+    "technical_relations": "PASS for five fixed contracts",
+    "general_semantic_recall": "UNVERIFIED",
+    "agent_selection_quality": "NOT RUN",
+    "model_calls": 0
+  }
+}

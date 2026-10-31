@@ -167,7 +167,7 @@ den Stand. Suchbudgets und Anzahl indexierter Dokumente werden nicht erhöht.
 
 **Owner:** Integrator; Dokumentations-Agent erst nach stabilem Verhalten.
 
-CLI-Oberfläche für P2; Beziehungsintegration bleibt P3/P4:
+CLI-Oberfläche für P2 und P3; die tatsächliche Agentennutzung bleibt separat zu prüfen:
 
 ```powershell
 # normale Kandidatensuche, weitere Seiten bei Bedarf
@@ -177,6 +177,11 @@ CLI-Oberfläche für P2; Beziehungsintegration bleibt P3/P4:
 # alle Beschreibungen abschnittsweise für eine gründliche Prüfung abrufen
 .\Search-KI-Regeln.ps1 -Routing -ListSkills -Limit 25
 .\Search-KI-Regeln.ps1 -Routing -ListSkills -Limit 25 -Cursor '<next_cursor>'
+
+# belegte Beziehungen gezielt nachladen, ohne QMD-Index
+.\Search-KI-Regeln.ps1 -Routing -Relations -SkillId 'context-engineering'
+.\Search-KI-Regeln.ps1 -Routing -Relations -Workflow 'Workflows/Software-Feature.md'
+.\Search-KI-Regeln.ps1 -Routing -Relations -Checkpoint 'pre-execution'
 ```
 
 `AGENTS.md`, Master-Router und lokale Suchanleitung auf diesen Ablauf abstimmen:
@@ -265,6 +270,12 @@ P2-Trefferseiten und Descriptor-Auflistung sind implementiert; der getrennte
 [P2-Nachweis](../Evals/Onboarding/Rule-Routing-P2.md) belegt die drei Vertragsfälle
 mit echten QMD-Seiten und allen 155 Descriptions ohne Node/QMD. Die verbleibende
 P1-Retrievallücke bleibt PARTIAL.
-P3-Beziehungen und die verbleibenden P4/P5-Schritte sind noch **NOT
-IMPLEMENTED / NOT RUN**. Frühere Testresultate belegen ausschließlich ihren
-jeweiligen Stand; dieser Plan selbst ist kein Qualitätsnachweis.
+P3-Beziehungen sind gemäß [separatem Vertrag](../Evals/Onboarding/Rule-Routing-P3.md)
+implementiert und für die fünf festen technischen Verträge **PASS**: direkte quellenbelegte Beziehungen,
+QMD-unabhängige Selektoren, begrenzte Suchhinweise und explizite Checkpoints.
+Der [native P3-Nachweis](../Evals/Onboarding/Rule-Routing-P3.json) trennt technische
+Beziehungsabdeckung von semantischer Auswahl; die P1-Regression bleibt 15/16 und
+PARTIAL. Technische Suchanleitung und optionale Agentenverweise sind angepasst;
+die verbleibende natürliche
+Agentenprüfung und Gesamtabnahme aus P4/P5 sind **NOT RUN**. Frühere Testresultate
+belegen ausschließlich ihren jeweiligen Stand; dieser Plan selbst ist kein Qualitätsnachweis.
