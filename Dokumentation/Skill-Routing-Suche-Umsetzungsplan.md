@@ -306,6 +306,10 @@ mit genau zwei neuen Sessions ausgeführt: technische Gates sowie Produkt-/Routi
 Review bestehen im festen Planungsfall. Guided verwendet sechs Suchantworten und
 einen expliziten Relationsabruf; Paging und Descriptorlisting bleiben als
 Agentenpfade NOT RUN. Eine Effizienzersparnis ist nicht nachgewiesen; Suche bleibt
-optional. Der Vergleich ist abgeschlossen. Nächster getrennter Slice ist die
-bekannte Akzeptanzkriterien-Retrievallücke, ohne nachträgliche Oraclelockerung oder
-Maturitypromotion. Der historische P5-Status bleibt PARTIAL.
+optional. Der Vergleich ist abgeschlossen. Die anschließende
+[separate Katalogkorrektur](../Evals/Onboarding/Rule-Routing-Acceptance-Fix.md)
+ergänzt die fehlende deutsche Fachbezeichnung im bestehenden `purpose` eines
+Skills. Der modellfreie Vergleich steigt im unveränderten bekannten P1-Fallset
+von 15/16 auf 16/16 ohne Regression; alle übrigen Quellen bleiben bytegleich.
+Dies ist ein späterer Datenfix, keine neue Bewertung historischer Läufe und kein
+allgemeiner Recall- oder Maturitynachweis. Der historische P5-Status bleibt PARTIAL.
