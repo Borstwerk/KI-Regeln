@@ -21,7 +21,8 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from tools.check_public_entrypoints import PROJECT_CORE, validate_project_manifest
+from tools.check_public_entrypoints import PROJECT_CORE, MAX_PROJECT_BYTES, MAX_PROJECT_FILE_BYTES, validate_project_manifest
+from tools.rule_relations import derive_relations
 
 QMD_VERSION = '2.8.3'
 BRIDGE = Path(__file__).with_name('search_rules_qmd.mjs')
@@ -138,6 +139,7 @@ def read_snapshot(root, revision=None, routing=False):
     manifest = git(root, 'show', commit + ':mara-project.json')
     dependencies = {}
     skill_entries = {}
+    workflow_paths = []
     try:
         config = json.loads(manifest)
         selected = config['search']['include']
@@ -170,15 +172,17 @@ def read_snapshot(root, revision=None, routing=False):
                     or any(not isinstance(path, str) or not path.startswith('Workflows/') or not path.endswith('.md')
                            for path in workflows['workflows'])):
                 raise ValueError('invalid workflow index')
-            if (not isinstance(overlays.get('overlays'), list)
-                    or any(item.get('skill') not in ids for item in overlays['overlays'])):
-                raise ValueError('unknown overlay owner')
+            workflow_paths = workflows['workflows']
+            if len({path.casefold() for path in workflow_paths}) != len(workflow_paths):
+                raise ValueError('duplicate workflow path')
+            if not isinstance(overlays.get('overlays'), list):
+                raise ValueError('invalid overlay registry')
             selected = sorted(PROJECT_CORE | {'Workflows/README.md'} | set(skill_entries))
             # Derived selection only: no second maintained catalog or modified source manifest.
             config = {**config, 'search': {'include': selected, 'exclude': config['search']['exclude']}}
         if not isinstance(selected, list):
             raise ValueError('not a list')
-        names = list(dict.fromkeys([*selected, *entries, 'mara-project.json', *dependencies]))
+        names = list(dict.fromkeys([*selected, *entries, 'mara-project.json', *dependencies, *workflow_paths]))
         for name in names:
             if (not isinstance(name, str) or not name or '\\' in name or ':' in name
                     or PurePosixPath(name).is_absolute() or '..' in PurePosixPath(name).parts
@@ -214,6 +218,18 @@ def read_snapshot(root, revision=None, routing=False):
             exported[info.filename] = body
     if set(exported) != set(names):
         raise SearchError('Source snapshot is incomplete.')
+    if routing:
+        workflow_sources = {path: exported[path] for path in workflow_paths}
+        if any(len(body) > MAX_PROJECT_FILE_BYTES for body in workflow_sources.values()):
+            raise SearchError('Workflow dependency above 256 KiB.')
+        if sum(map(len, workflow_sources.values())) > MAX_PROJECT_BYTES:
+            raise SearchError('Workflow dependencies total above 1 MiB.')
+        dependencies.update(workflow_sources)
+        try:
+            relations = derive_relations(catalog, overlays, workflow_sources,
+                                         {path: digest(body) for path, body in dependencies.items()})
+        except (ValueError, TypeError, KeyError, UnicodeError) as exc:
+            raise SearchError('Invalid routing relations: ' + str(exc)) from exc
     files = {name: exported[name] for name in selected}
     facets = {path: {key: entry[key] for key in ('id', 'area', 'purpose')}
               for path, entry in skill_entries.items()}
@@ -252,7 +268,7 @@ def read_snapshot(root, revision=None, routing=False):
                 raise SearchError('Invalid canonical skill description: ' + path) from exc
             skills[path] = {'id': entry['id'], 'description': front['description'],
                             'maturity': entry.get('maturity'), 'eval_coverage': entry.get('eval_coverage')}
-        metadata.update(routing_format=2, routing_facets=facets,
+        metadata.update(routing_format=3, routing_facets=facets, routing_relations=relations,
                         search_documents={name: digest(body) for name, body in sorted(documents.items())},
                         skills=skills, routing_dependencies={name: digest(body) for name, body in dependencies.items()},
                         routing_coverage={'skills': len(skills), 'indexed_skills': len(skills)})
@@ -387,14 +403,61 @@ def build(root, node=None, worker=call_worker, routing=False):
         return output
 
 
-def search(root, query, node=None, worker=call_worker, routing=False, limit=None, cursor=None):
-    if not routing and (limit is not None or cursor is not None):
-        raise SearchError('Pagination is available only for routing search.')
+def check_checkpoint(metadata, checkpoint):
+    if checkpoint is not None:
+        known = {edge['from'] for edge in metadata['routing_relations'] if edge['type'] == 'checkpoint'}
+        if not isinstance(checkpoint, str) or 'checkpoint:' + checkpoint not in known:
+            raise SearchError('Unknown registered checkpoint: ' + str(checkpoint))
+
+
+def relation_subset(metadata, skill_id=None, workflow=None, checkpoint=None):
+    if sum(value is not None for value in (skill_id, workflow, checkpoint)) != 1:
+        raise SearchError('Specify exactly one relation selector: skill ID, workflow or checkpoint.')
+    if any(value is not None and (not isinstance(value, str) or not value) for value in (skill_id, workflow, checkpoint)):
+        raise SearchError('Relation selectors must be nonempty strings.')
+    edges = metadata['routing_relations']
+    if skill_id is not None:
+        if skill_id not in {skill['id'] for skill in metadata['skills'].values()}:
+            raise SearchError('Unknown canonical skill ID: ' + skill_id)
+        node = 'skill:' + skill_id
+        return [edge for edge in edges if (edge['type'] == 'related' and edge['from'] == node)
+                or (edge['type'] == 'mentions' and edge['to'] == node)]
+    if workflow is not None:
+        if not workflow.startswith('Workflows/') or workflow not in metadata['routing_dependencies']:
+            raise SearchError('Unknown registered workflow: ' + workflow)
+        return [edge for edge in edges if edge['type'] == 'mentions' and edge['from'] == 'workflow:' + workflow]
+    check_checkpoint(metadata, checkpoint)
+    return [edge for edge in edges if edge['type'] == 'checkpoint' and edge['from'] == 'checkpoint:' + checkpoint]
+
+
+def list_relations(root, skill_id=None, workflow=None, checkpoint=None, limit=None, cursor=None):
+    """One explicitly selected neighborhood, without QMD or activation decisions."""
+    with locked(root, routing=True):
+        metadata, _ = read_snapshot(root, routing=True)
+        edges = relation_subset(metadata, skill_id, workflow, checkpoint)
+        selector = {'skill_id': skill_id, 'workflow': workflow, 'checkpoint': checkpoint}
+        request = page_request(metadata['fingerprint'], 'relations', selector, limit, cursor, 25)
+        selected, paging = finish_page(edges, request)
+        after, _ = read_snapshot(root, routing=True)
+        if metadata != after:
+            raise SearchError('Sources changed during relation listing.', 'stale')
+        return {'status': 'ready', 'mode': 'relations', 'revision': metadata['revision'],
+                'fingerprint': metadata['fingerprint'], 'relations': selected, 'total_relations': len(edges),
+                'assessment_performed': False, 'candidates_only': True,
+                'routing_sources': dict(ROUTING_SOURCES), **paging}
+
+
+def search(root, query, node=None, worker=call_worker, routing=False, limit=None, cursor=None, checkpoint=None):
+    if not routing and (limit is not None or cursor is not None or checkpoint is not None):
+        raise SearchError('Pagination and checkpoint hints are available only for routing search.')
     if not isinstance(query, str) or not query.strip() or len(query) > 500 or not query.isprintable():
         raise SearchError('Query must contain 1–500 printable characters.')
     with locked(root, routing):
         directory, metadata = current(root, routing)
-        page = page_request(metadata['fingerprint'], 'search', query, limit, cursor, 10) if routing else None
+        if routing:
+            check_checkpoint(metadata, checkpoint)
+        context = {'query': query, 'checkpoint': checkpoint}
+        page = page_request(metadata['fingerprint'], 'search', context, limit, cursor, 10) if routing else None
         worker_limit = len(metadata['files']) if routing else 5
         result = invoke(worker, node, {'action': 'search', 'query': query, 'corpus': str(directory / 'corpus'),
                                'db': str(directory / 'index.sqlite'), 'paths': sorted(metadata['files']), 'limit': worker_limit})
@@ -433,6 +496,15 @@ def search(root, query, node=None, worker=call_worker, routing=False, limit=None
             output['total_matches'] = len(hits)
             output['hits'], paging = finish_page(hits, page)
             output.update(paging)
+            seeds = {'skill:' + hit['skill']['id'] for hit in output['hits'] if hit['kind'] == 'skill'}
+            hints = [edge for edge in metadata['routing_relations']
+                     if (edge['type'] == 'related' and edge['from'] in seeds)
+                     or (edge['type'] == 'mentions' and edge['to'] in seeds)
+                     or (edge['type'] == 'checkpoint' and checkpoint is not None
+                         and edge['from'] == 'checkpoint:' + checkpoint)]
+            hints.sort(key=lambda edge: ({'checkpoint': 0, 'related': 1, 'mentions': 2}[edge['type']], edge['from'], edge['to']))
+            output['routing_hints'] = {'items': hints[:20], 'total_relations': len(hints),
+                                       'limit': 20, 'truncated': len(hints) > 20}
             output.update(candidates_only=True, routing_coverage=metadata['routing_coverage'],
                           routing_sources=dict(ROUTING_SOURCES))
         return output
@@ -488,25 +560,40 @@ def status(root, routing=False):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('action', choices=('build', 'status', 'search', 'list-skills'))
+    parser.add_argument('action', choices=('build', 'status', 'search', 'list-skills', 'relations'))
     parser.add_argument('query', nargs='?')
     parser.add_argument('--node')
     parser.add_argument('--routing', action='store_true', help='Search every catalogued canonical skill, independently of the pilot selection')
     parser.add_argument('--limit', type=int, help='Routing entries per page, from 1 to 50')
     parser.add_argument('--cursor', help='Continue the same routing request and source snapshot')
+    parser.add_argument('--skill-id', help='Canonical skill whose direct relationships to list')
+    parser.add_argument('--workflow', help='Registered workflow whose skill mentions to list')
+    parser.add_argument('--checkpoint', help='Registered checkpoint whose candidates to inspect')
     args = parser.parse_args()
     try:
         options = {'routing': True} if args.routing else {}
         paging = {key: value for key, value in (('limit', args.limit), ('cursor', args.cursor)) if value is not None}
+        selectors = {key: value for key, value in (('skill_id', args.skill_id), ('workflow', args.workflow),
+                                                  ('checkpoint', args.checkpoint)) if value is not None}
         if args.action != 'search' and args.query is not None:
             raise SearchError('Query text is accepted only for search.')
-        if args.action in ('build', 'status') and paging:
-            raise SearchError('Pagination options apply only to routing search or list-skills.')
-        if args.action == 'list-skills':
-            if not args.routing:
-                raise SearchError('list-skills requires --routing.')
+        if not args.routing and (paging or selectors or args.action in ('list-skills', 'relations')):
+            raise SearchError('These routing options require --routing.')
+        if args.action in ('build', 'status') and (paging or selectors):
+            raise SearchError('Paging and relation selectors do not apply to build/status.')
+        if args.action != 'relations' and (args.skill_id is not None or args.workflow is not None):
+            raise SearchError('Skill/workflow selectors apply only to relations.')
+        if args.action == 'list-skills' and selectors:
+            raise SearchError('Relation selectors do not apply to list-skills.')
+        if args.action == 'relations':
+            if len(selectors) != 1:
+                raise SearchError('Specify exactly one relation selector.')
+            result = list_relations(ROOT, **selectors, **paging)
+        elif args.action == 'list-skills':
             result = list_skills(ROOT, **paging)
         elif args.action == 'search':
+            if args.checkpoint is not None:
+                options['checkpoint'] = args.checkpoint
             result = search(ROOT, args.query, args.node, **options, **paging)
         elif args.action == 'build':
             result = build(ROOT, args.node, **options)

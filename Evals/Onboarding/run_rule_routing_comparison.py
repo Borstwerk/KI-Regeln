@@ -51,6 +51,12 @@ def main():
                 assert name in workflows, 'Only registered workflow evidence may extend the packet.'
                 original[name] = search.git(ROOT, 'show', SOURCE + ':' + name)
     packet_hash = sha(json.dumps({p: sha(b) for p, b in sorted(original.items())}, sort_keys=True).encode())
+    # Format 3 needs every registered workflow as a source dependency. Keep the
+    # historical core packet digest above comparable; these are not BM25 docs.
+    for name in sorted(workflows):
+        if name not in original:
+            original[name] = search.git(ROOT, 'show', SOURCE + ':' + name)
+    dependency_packet_hash = sha(json.dumps({p: sha(b) for p, b in sorted(original.items())}, sort_keys=True).encode())
     for case in cases:
         for evidence in case['evidence']:
             assert sha(original[evidence['path']]) == evidence['sha256'], case['id']
@@ -59,8 +65,12 @@ def main():
     output = Path(tempfile.mkdtemp(prefix='rule-routing-' + args.label + '-', dir=ROOT / '.validation'))
     bound = ['tools/search_rules.py', 'tools/search_rules_qmd.mjs', 'tools/check_public_entrypoints.py',
              'tools/local_search/pnpm-lock.yaml', 'Evals/Onboarding/run_rule_routing_comparison.py']
+    if (ROOT / 'tools/rule_relations.py').is_file():
+        bound.append('tools/rule_relations.py')
     protocol = {'utc': datetime.now(timezone.utc).isoformat(), 'label': args.label,
                 'source_commit': SOURCE, 'source_packet_sha256': packet_hash,
+                'dependency_packet_sha256': dependency_packet_hash,
+                'registered_workflow_dependencies': len(workflows),
                 'cases_sha256': sha(cases_bytes), 'qmd_version': search.QMD_VERSION,
                 'node_version': subprocess.check_output([node, '--version'], text=True).strip(),
                 'code_sha256': {p: sha((ROOT / p).read_bytes()) for p in bound},
