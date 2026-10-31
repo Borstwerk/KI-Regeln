@@ -75,3 +75,64 @@ Dieses Paar anschließend abschließen; die Akzeptanzkriterien-Suchlücke wäre 
 separater Bug-Slice. Vor Veröffentlichung Hash-/Redaktionsprüfung und Full Harness.
 
 Status vor Ausführung: **NOT RUN**.
+
+## Ergebnis des fixierten Laufs
+
+Ausgeführt am 31.10.2026 mit Controller-/Vertragsstand `380c4ed`, Produktsnapshot
+`6284bda`. [Öffentliche Evidence](Rule-Routing-Repaired-Comparison.json) bindet
+Protokoll, CLI-Version, Code, Quellinventar und Rohantworten über Hashes. Der oben
+stehende Vorabvertrag ist in `380c4ed` unverändert archiviert; dieser Ergebnisanhang
+entstand erst danach. Keine zusätzlichen Modellversuche.
+
+**Technik: PASS.** Beide frischen Antworten mit Exitcode 0; der strikte Batch endet
+ebenfalls mit 0. Alle 578 Quellen je Fixture sind unverändert, beide Gitstatus leer.
+Sandboxvorbauten und getrennte Canaryproben sind untereinander identisch. Sämtliche
+sechs tatsächlichen BM25-Antworten sind `ready`, keine Cache-Reparatur erforderlich.
+Die erste Alltagsquery liefert keine Treffer; die anschließende Query `task graph`
+liefert Kandidaten. Ein leerer Treffer ersetzt keine fachliche Prüfung.
+
+**Produkt und Routing: PASS im festen Planungsfall.** Beide Pläne decken die fünf
+festen Ownerjobs, TDD und geplante Verifikation ab; sie trennen Dateibesitz, konkrete
+Grenztests, initialen Kontext, Nachladen und einen Codecheck durch den anderen
+Agenten. Beide lesen Master-Router, Katalog, Workflowindex, Feature-Workflow und
+Original-Descriptions tatsächlich. Späte Overlay-Descriptions und Registry sind
+in den Tooloutputs vorhanden. Implementierung, Tests und Codecheck sind in beiden
+Antworten ausdrücklich nur geplant. Die Bewertung bezieht sich auf diesen einen
+bekannten Auftrag, nicht auf generelle Skill-Auswahlqualität.
+
+Free verwendet ausschließlich direkte Dateien. Guided liefert sechs Suchantworten
+(eine leer), 52 zurückgegebene Hinweisinstanzen und einen expliziten Relationsabruf
+mit fünf Kanten. Alle 57 Kanteninstanzen stimmen mit den kanonischen Quellen
+überein. Paging und Descriptorlisting als Agentenpfade bleiben **NOT RUN**.
+Die mechanischen Evidence-Checks erkennen entferntes Master-Router-Output und
+entfernte erfolgreiche Suche in kontrollierten Kopien der tatsächlichen Traces.
+Diese Kontrollen sind kein automatischer semantischer Judge.
+
+| Beobachtung | Free | Guided |
+| --- | ---: | ---: |
+| Sessionlaufzeit in Sekunden | 128,39 | 190,98 |
+| Toolkommandos | 32 | 11 |
+| Tooloutput in UTF-8-Bytes | 204.022 | 223.165 |
+| Gemeldete Inputtokens, über Modellschritte summiert | 296.545 | 489.464 |
+| Davon Cached-Inputtokens | 233.856 | 417.536 |
+| Gemeldete Outputtokens | 3.517 | 5.018 |
+
+Die Werte dürfen für dieses technisch saubere Paar nebeneinanderstehen. Guided
+bündelt mehrere Reads und Queries in einzelne Kommandos; die kleinere Kommandomenge
+belegt daher keine Aufwandsersparnis. In diesem Paar sind Laufzeit, Outputbytes und
+Inputtokens sogar höher. Input-Usage ist keine einmalige Kontextgröße; feste
+Reihenfolge, Provider-Caches, Stochastik und externe Rechnerlast verhindern eine
+kausale oder verallgemeinerbare Effizienzaussage. Integratortests, native Treiber und
+Review-Agenten liefen während beider Sessions nicht.
+
+Vor dem Paar: portable Tests **16 Tests, OK mit einem Skip** des separat ausgeführten nativen
+Opt-in-Tests; nativer Fixturetest **1 OK**, modellfrei; Full Harness **PASS** mit
+bestehenden Near-Miss-Warnungen. Qualitative Prüfung durch Integrator und separaten
+Same-Model-Review sowie mechanische Evidence-Prüfung; keine unabhängige
+Zertifizierung und keine menschliche Blindabnahme.
+
+**Entscheidung:** Suche bleibt optional. Angeführte Nutzung von Suche und Relations
+ist beobachtet; ein allgemeiner Effizienzgewinn bleibt **UNVERIFIED**. Keine
+Routing-/Maturitypromotion, keine Änderung an Skills, Suchlogik oder den 24 alten
+Fällen. Der historische P5-Status bleibt PARTIAL; der bekannte Retrieval-FAIL wird
+in einem getrennten nächsten Slice bearbeitet. Dieser Vergleich ist abgeschlossen.

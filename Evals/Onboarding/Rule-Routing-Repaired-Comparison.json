@@ -1,0 +1,2168 @@
+{
+  "schema_version": 1,
+  "status": "PASS within fixed pair; general quality/efficiency UNVERIFIED",
+  "source_commit": "6284bda3c6cdb341c0acd5e775306722222a8b0a",
+  "execution_commit": "380c4ed5c9c152e6d3cfc41efab46045b5916898",
+  "source_files": 578,
+  "product_snapshot_unchanged_from_previous_pair": true,
+  "source_inventory_sha256": "6928807d7fb59861a5bcab22acd2d2cdc3d57064b7170ebf557ddd508fc7f3f7",
+  "protocol_sha256": "68c3073290c0e0d991cc7cb208cd0176fb65fb5a79db8cbc0906ac9dc94e543b",
+  "protocol": {
+    "utc": "2026-10-31T16:11:04.266955+00:00",
+    "source_commit": "6284bda3c6cdb341c0acd5e775306722222a8b0a",
+    "execution_commit": "380c4ed5c9c152e6d3cfc41efab46045b5916898",
+    "inventory_sha256": "6928807d7fb59861a5bcab22acd2d2cdc3d57064b7170ebf557ddd508fc7f3f7",
+    "cases": [
+      {
+        "id": "free",
+        "runtime": "indexed",
+        "prompt": "Ich möchte einen CSV-Import entwickeln: 1 bis 1000 Datensätze, leere Dateien ablehnen, Dubletten melden. Stell mir zunächst nur einen umsetzbaren Arbeitsplan vor. Die Umsetzung soll in kleine prüfbare Schritte zerlegt und auf zwei Agenten verteilt werden, ohne gleichzeitige Änderungen derselben Dateien. Plane auch, welche aktuellen Projektinformationen die Agenten brauchen und was sie erst bei Bedarf nachladen sollten. Konkrete Grenztests und ein unabhängiger Codecheck sollen dazugehören. Welche Werkzeuge aus diesem Repository passen zu den einzelnen Jobs und wann setzt du sie ein? Noch nichts implementieren und keine weiteren Agenten starten.",
+        "required_skills": [
+          "task-graph",
+          "delegation-contract",
+          "context-engineering",
+          "test-design",
+          "code-review"
+        ],
+        "workflow": "Workflows/Software-Feature.md",
+        "planned_verification_skill": "verification-loop",
+        "implementation_discipline": "tdd or justified alternative after reading the workflow core description",
+        "router_reads_required": true
+      },
+      {
+        "id": "guided",
+        "runtime": "indexed",
+        "prompt": "Ich möchte einen CSV-Import entwickeln: 1 bis 1000 Datensätze, leere Dateien ablehnen, Dubletten melden. Stell mir zunächst nur einen umsetzbaren Arbeitsplan vor. Die Umsetzung soll in kleine prüfbare Schritte zerlegt und auf zwei Agenten verteilt werden, ohne gleichzeitige Änderungen derselben Dateien. Plane auch, welche aktuellen Projektinformationen die Agenten brauchen und was sie erst bei Bedarf nachladen sollten. Konkrete Grenztests und ein unabhängiger Codecheck sollen dazugehören. Welche Werkzeuge aus diesem Repository passen zu den einzelnen Jobs und wann setzt du sie ein? Noch nichts implementieren und keine weiteren Agenten starten.\n\nNutze für die Kandidatensuche nach den Pflicht-Reads den vorhandenen lokalen Routing-Suchpfad über Search-KI-Regeln.ps1 -Routing -Query und seine belegten Beziehungshinweise. Zerlege den Auftrag in Teiljobs und wähle passende Suchwörter selbst. Lade Original-Descriptions und Near-Misses gezielt nach; Seiten oder konkrete Beziehungen nur soweit nötig. Katalog- und Workflow-Fallbacks sowie alle Pflicht-Gates bleiben erhalten.",
+        "required_skills": [
+          "task-graph",
+          "delegation-contract",
+          "context-engineering",
+          "test-design",
+          "code-review"
+        ],
+        "workflow": "Workflows/Software-Feature.md",
+        "planned_verification_skill": "verification-loop",
+        "implementation_discipline": "tdd or justified alternative after reading the workflow core description",
+        "router_reads_required": true
+      }
+    ],
+    "model_requested": "gpt-6.1-sol",
+    "reasoning_requested": "high",
+    "sessions": 2,
+    "deadline_seconds_each": 240,
+    "retry": false,
+    "held_out": false,
+    "fixture_preparation": {
+      "profile": ":workspace",
+      "bytecode_disabled": true,
+      "cache_build": "sandbox",
+      "separate_ready_probe_before_model": true
+    },
+    "direct_api_calls": 0,
+    "permission_boundary": "both workspace-write; source integrity checked afterward",
+    "comparison": "one free/guided pair; not a general efficiency estimate",
+    "base_prompt_sha256": "869acec7857843227568b9e74bbb09b35668c47338a0998ea49d35bf87319d8b",
+    "guidance": "\n\nNutze für die Kandidatensuche nach den Pflicht-Reads den vorhandenen lokalen Routing-Suchpfad über Search-KI-Regeln.ps1 -Routing -Query und seine belegten Beziehungshinweise. Zerlege den Auftrag in Teiljobs und wähle passende Suchwörter selbst. Lade Original-Descriptions und Near-Misses gezielt nach; Seiten oder konkrete Beziehungen nur soweit nötig. Katalog- und Workflow-Fallbacks sowie alle Pflicht-Gates bleiben erhalten.",
+    "order": [
+      "free",
+      "guided"
+    ],
+    "cache_carryover_controlled": false
+  },
+  "code_bindings": {
+    "Evals/Onboarding/run_rule_routing_p4.py": {
+      "executed_checkout_sha256": "c48a2dcff4cfff9df80610d7fcbdcf2d5b191a0143e05c2bef8b1144cdbf8807",
+      "git_blob_sha256": "c48a2dcff4cfff9df80610d7fcbdcf2d5b191a0143e05c2bef8b1144cdbf8807",
+      "bound_execution_git_bytes_match_after_lf_normalization": true
+    },
+    "Evals/Onboarding/rule-routing-p4-cases.json": {
+      "executed_checkout_sha256": "69db44753fc6d948287cd30295afe75c558f4237cd4b87ba9b8288b9e4b41ab3",
+      "git_blob_sha256": "69db44753fc6d948287cd30295afe75c558f4237cd4b87ba9b8288b9e4b41ab3",
+      "bound_execution_git_bytes_match_after_lf_normalization": true
+    },
+    "Evals/Onboarding/Rule-Routing-P4.md": {
+      "executed_checkout_sha256": "fb5ed694482445335422f834cda7a1171bb81b6889de1d5ad4b3c563113cc0ff",
+      "git_blob_sha256": "fb5ed694482445335422f834cda7a1171bb81b6889de1d5ad4b3c563113cc0ff",
+      "bound_execution_git_bytes_match_after_lf_normalization": true
+    },
+    "Evals/Onboarding/run_corrected_discovery.py": {
+      "executed_checkout_sha256": "65cb28531bdb83c4c3057552c27eaefdde392ab1532060e2cbd8dea78705eb56",
+      "git_blob_sha256": "52777e863de492d594f2ac14fc55976ff20e5c23bcf843e36adf618491d7412c",
+      "bound_execution_git_bytes_match_after_lf_normalization": true
+    },
+    "Evals/Onboarding/Rule-Routing-Fixture-Runtime-Fix.md": {
+      "executed_checkout_sha256": "240a1860efe309969d61d76e3c1d28248117ca8211b51990ca0e1a9d9eca2f3c",
+      "git_blob_sha256": "240a1860efe309969d61d76e3c1d28248117ca8211b51990ca0e1a9d9eca2f3c",
+      "bound_execution_git_bytes_match_after_lf_normalization": true
+    },
+    "Evals/Onboarding/Rule-Routing-P5.md": {
+      "executed_checkout_sha256": "dae272c890bece147ae14eeec4453ebc572fe735084bf91a6acddc530a44fa54",
+      "git_blob_sha256": "dae272c890bece147ae14eeec4453ebc572fe735084bf91a6acddc530a44fa54",
+      "bound_execution_git_bytes_match_after_lf_normalization": true
+    },
+    "Evals/Onboarding/Rule-Routing-Repaired-Comparison.md": {
+      "executed_checkout_sha256": "897656f78456da58c8b42b70f26bfbccb4631e708fc2daaba5326b7732cb0817",
+      "git_blob_sha256": "897656f78456da58c8b42b70f26bfbccb4631e708fc2daaba5326b7732cb0817",
+      "bound_execution_git_bytes_match_after_lf_normalization": true
+    },
+    "tools/search_rules.py": {
+      "executed_checkout_sha256": "3e85143290eacdcbe317ad42c75e461917d863e35a0ec761671328f1c59b8308",
+      "git_blob_sha256": "3e85143290eacdcbe317ad42c75e461917d863e35a0ec761671328f1c59b8308",
+      "bound_execution_git_bytes_match_after_lf_normalization": true
+    },
+    "tools/rule_relations.py": {
+      "executed_checkout_sha256": "55df4b901b68dbc008a812894e45030dc6342c0f22c68b332fb95e97b70b4577",
+      "git_blob_sha256": "55df4b901b68dbc008a812894e45030dc6342c0f22c68b332fb95e97b70b4577",
+      "bound_execution_git_bytes_match_after_lf_normalization": true
+    },
+    "tools/search_rules_qmd.mjs": {
+      "executed_checkout_sha256": "d9c4b3f9222ad7928dfcb1860fd0e975024512ab4e4dedf915820ed283737155",
+      "git_blob_sha256": "d9c4b3f9222ad7928dfcb1860fd0e975024512ab4e4dedf915820ed283737155",
+      "bound_execution_git_bytes_match_after_lf_normalization": true
+    },
+    "tools/check_public_entrypoints.py": {
+      "executed_checkout_sha256": "65607d90c95273fcdf9088ec29005b2f6b58a90672b9449a234be1d7d43c1976",
+      "git_blob_sha256": "d945c1d6a8e28e3c2bb4cf93c2c2a8255d7ee21ce35afb2d8093b71e00ddc110",
+      "bound_execution_git_bytes_match_after_lf_normalization": true
+    }
+  },
+  "cli": {
+    "protocol_sha256": "68c3073290c0e0d991cc7cb208cd0176fb65fb5a79db8cbc0906ac9dc94e543b",
+    "cli_version": "codex-cli 0.166.0-alpha.5.1"
+  },
+  "preflight": {
+    "read_exit": 0,
+    "exact_byte_match": true,
+    "source_bytes": 20,
+    "source_sha256": "25de4d1c269233f805f8c0a01d5342102f6cab22454d17fce0936c6ec293a077",
+    "received_bytes": 20,
+    "received_sha256": "25de4d1c269233f805f8c0a01d5342102f6cab22454d17fce0936c6ec293a077",
+    "write_exit": 17,
+    "write_target_exists": false,
+    "write_permission_denied": true,
+    "write_attempt_stage": "target_write",
+    "write_error_type": "System.UnauthorizedAccessException",
+    "known_good_accepted": true,
+    "extra_lf_rejected": true,
+    "extra_crlf_rejected": true,
+    "pass": true
+  },
+  "initial_indices_identical": true,
+  "initial_index": {
+    "status": "ready",
+    "revision": "dc12d6fac053f1e1dcdc861660f1c4709b1dbb1e",
+    "documents": 165,
+    "mode": "bm25",
+    "fingerprint": "9e1296360fea44067a260a4402390147c9c9af3ecc53b1a4e1f6759f33ab8cbf",
+    "routing_coverage": {
+      "skills": 155,
+      "indexed_skills": 155
+    }
+  },
+  "separate_cache_probes_identical": true,
+  "cache_probe": {
+    "status": "ready",
+    "revision": "dc12d6fac053f1e1dcdc861660f1c4709b1dbb1e",
+    "mode": "bm25",
+    "fingerprint": "9e1296360fea44067a260a4402390147c9c9af3ecc53b1a4e1f6759f33ab8cbf",
+    "hits": [],
+    "total_matches": 0,
+    "offset": 0,
+    "page_size": 1,
+    "has_more": false,
+    "next_cursor": null,
+    "routing_hints": {
+      "items": [],
+      "total_relations": 0,
+      "limit": 20,
+      "truncated": false
+    },
+    "candidates_only": true,
+    "routing_coverage": {
+      "indexed_skills": 155,
+      "skills": 155
+    },
+    "routing_sources": {
+      "master": "Dokumentation/Skill-Handbuch.md",
+      "catalog": "skill-catalog.yml",
+      "overlays": "routing-overlays.yml",
+      "workflows": "workflow-index.yml"
+    }
+  },
+  "conditions": [
+    {
+      "condition": "free",
+      "product_review": "PASS in fixed planning scope",
+      "routing_process_review": "PASS in fixed scope",
+      "technical_gates": "PASS",
+      "status": "RESPONSE_RECORDED",
+      "exit_code": 0,
+      "git_status": "",
+      "source_bytes_unchanged": true,
+      "source_files_checked": 578,
+      "answer": "Ich würde **Agent A für Umsetzung und Tests, Agent B für unabhängige Testplanung und Codeprüfung** einsetzen. Grundlage ist der lokale Workflow `Workflows/Software-Feature.md`. Jetzt bleibt es ausschließlich beim Plan: keine Änderungen, Installationen, Außenaktionen oder Agentenstarts.\n\nDas Arbeitsverzeichnis enthält die Regelsammlung; ein konkretes CSV-Zielprojekt ist bislang nicht identifiziert. Deshalb werden Sprache, Dateipfade und Testbefehle erst anhand vorhandener Projektquellen festgelegt.\n\n**Ablauf und prüfbare Ergebnisse**\n\n| Schritt | Verantwortung | Ergebnis und Abnahme | Repository-Werkzeug und Zeitpunkt |\n|---|---|---|---|\n| 1. Projektstand erfassen | A; B prüft die Testbasis | Import-Einstieg, vorhandener Parser, Datenmodell, relevante Tests, lokale Runtime und Testbefehle sind mit Fundstellen benannt. Ausgangsrevision und vorhandene Änderungen sind erfasst. | `context-engineering` für die Quellenauswahl; `task-graph` für Abhängigkeiten. |\n| 2. Importvertrag festlegen | A erstellt, B prüft | Zählweise, CSV-Format, Dublettendefinition und Fehlerverhalten sind eindeutig; offene Entscheidungen bleiben sichtbar. Konkrete Schreibpfade werden zugeordnet. | `delegation-contract` vor delegierter Umsetzung. |\n| 3. Testfälle unabhängig ableiten | B, nach Schritt 2 | Eingaben und erwartete Ergebnisse entstehen aus dem Vertrag, ohne Produktionslogik zu übernehmen. Kann parallel zur Umsetzung laufen. | `test-design`; `test-strategy` für die Wahl der kleinsten geeigneten Testebenen. |\n| 4. Kleinsten gültigen Import umsetzen | A | Eine Datei mit einem gültigen Datensatz durchläuft den vorgesehenen Importweg; Werte bleiben erhalten. | Später `tdd`: erwartbar rot → minimale Umsetzung → grün. |\n| 5. Leerdateien und Mengengrenzen ergänzen | A, nach Schritt 4 | Null Datensätze werden abgelehnt; 1 bis 1000 akzeptiert; 1001 abgelehnt. Jeder Schnitt erhält einen eigenen Testnachweis. | `tdd` und `verification-loop` je Schnitt. |\n| 6. Dublettenmeldung ergänzen | A, nach Schritt 5 | Dubletten werden nach vereinbartem Schlüssel erkannt und nachvollziehbar gemeldet; weitere Behandlung entspricht dem Vertrag. | `tdd`, anschließend gezielte Brechprobe der Dublettenprüfung. |\n| 7. Gesamtstand prüfen und einfrieren | A | Relevante Tests, Integration über den realen Import-Einstieg sowie vorhandene Build-/Lint-Prüfungen laufen am selben Quellstand. | `verification-loop`; projektnative Befehle nach lokaler Verification Discovery. |\n| 8. Unabhängiger Codecheck | B, nach Schritt 7 | Vollständigen Diff einschließlich Tests gegen Ausgangspunkt lesen; Anforderungen und Projektstandards getrennt bewerten; kritische Tests selbst erneut ausführen. | `code-review`. Befunde gehen an A zur Korrektur, danach erneute Prüfung des geänderten Stands. |\n\n**Vor der Umsetzung zu entscheiden**\n\nZuerst lokale Vorgaben suchen; nur verbleibende Lücken klären:\n\n- Welche Spalten, Trennzeichen, Kodierung und Headerregel gelten? Was zählt als Datensatz, insbesondere bei Leerzeilen und mehrzeiligen CSV-Feldern?\n- Bedeutet Dublette eine identische Zeile oder denselben fachlichen Schlüssel? Gelten Normalisierung, Groß-/Kleinschreibung und bereits gespeicherte Datensätze als Vergleichsbasis?\n- Werden Dubletten nur gemeldet, übersprungen oder wird der Import abgebrochen? Welche Fundstellen muss die Meldung nennen?\n- Gilt die Grenze von 1000 vor einer möglichen Dublettenbereinigung? Sind Teilimporte erlaubt?\n\nDiese Entscheidungen werden nicht stillschweigend durch Tests vorweggenommen.\n\n**Konkrete Grenztests**\n\nAlle Mengenfälle verwenden ansonsten gültige CSV-Daten. B legt die erwarteten Werte unabhängig fest; A implementiert die Tests.\n\n| Eingabe | Erwartung |\n|---|---|\n| Datei mit 0 Bytes | Ablehnung als leer |\n| Nur Header, sofern vorgesehen | Ablehnung: 0 Datensätze |\n| Nur Leerzeichen oder Leerzeilen | Ablehnung; genaue Fehlerklasse gemäß Formatvertrag |\n| 1 eindeutiger Datensatz | Erfolgreicher Import, Werte unverändert |\n| 999 und 1000 eindeutige Datensätze | Erfolgreicher Import mit jeweils exakter Anzahl |\n| 1001 eindeutige Datensätze | Ablehnung wegen Mengenüberschreitung |\n| Zwei Datensätze mit gleichem Dublettenschlüssel | Meldung mit vereinbarten Fundstellen und vereinbarter Folge |\n| Gleicher Schlüssel in Datensatz 1 und 1000 | Dublette trotz großer Entfernung erkannt |\n| Drei Vorkommen desselben Schlüssels | Vollständige, deterministische Meldung gemäß Vertrag |\n| Zwei ähnliche, fachlich unterschiedliche Schlüssel | Keine falsche Dublettenmeldung |\n| 1001 Datensätze mit einer Dublette | Mengenprüfung folgt ausdrücklich der vereinbarten Zählweise |\n\nZusätzlich werden Quoting, Trennzeichen im Feld, eingebettete Zeilenumbrüche und fehlerhafte CSV-Syntax entsprechend dem gewählten Format geprüft. Mengen-/Dublettentests gehören überwiegend auf Komponentenebene; mindestens ein gültiger und ein abgewiesener Fall laufen über den tatsächlichen Import-Einstieg. Temporär entfernte Mengen- und Dublettenschutzbedingungen müssen passende Tests scheitern lassen; danach werden sie vollständig wiederhergestellt.\n\n**Dateibesitz und Agentenkontext**\n\nA besitzt sämtliche vorgesehenen Code-, Test- und nötigen Konfigurationsänderungen. B arbeitet lesend und liefert Testfallkatalog sowie Reviewbericht. Damit gibt es keine konkurrierenden Dateiänderungen. Während B den eingefrorenen Stand prüft, pausiert A Änderungen. B hat den geprüften Code und dessen Tests nicht selbst verfasst.\n\nBeide erhalten zu Beginn Auftrag, aktuelle lokale Regeln samt Pflicht-Routing, Importvertrag, Ausgangsstand, Dateizuständigkeiten, Akzeptanzkriterien und Stop-Bedingungen. A lädt die betroffene Implementierung, direkte Abhängigkeiten und benachbarte Tests. B benötigt zunächst Vertrag, Testkonventionen und Importgrenze; den vollständigen Änderungsdiff erhält B zum Review.\n\nWeitere Aufrufer, Persistenzdetails, historische Entscheidungen und große Logs werden erst bei konkreten Abhängigkeiten oder Fehlern nachgeladen. Übergaben enthalten Quellenreferenzen, bestätigte Entscheidungen, Quellstand, Prüfstatus und offene Punkte. `context-audit`, `context-compaction` und `session-handoff` kommen erst bei tatsächlichem Kontextproblem beziehungsweise Sessionwechsel hinzu.\n\nJeder Schritt stoppt bei widersprüchlicher Spezifikation, Änderungen außerhalb seiner Dateiliste oder fehlender Prüfumgebung. Die spätere Umsetzung benötigt einen ausdrücklich erweiterten Auftrag; das aktuelle Änderungsverbot bleibt bestehen. Abschlussnachweise nennen Befehle, Quellstand, Exitcodes und offene Befunde. Nicht ausführbare Prüfungen bleiben `NOT_RUN` oder `BLOCKED`. **Tests und Codecheck wurden jetzt nicht ausgeführt.**",
+      "description_reads": [
+        {
+          "skill": "context-engineering",
+          "path": "Agentenarbeit/Skills/context-engineering/SKILL.md",
+          "source_sha256": "0698816157c90ad06a3ffed01597867d7e7912badab4b9826fed116c02b95263",
+          "command_indices": [
+            15
+          ],
+          "canonical_description": "Wählt für einen Agentenlauf den kleinsten ausreichenden, aktuellen und signalstarken Kontext aus, schützt Sources of Truth und entscheidet zwischen aktivem Kontext, Working State, Compaction und gezieltem Nachladen. Verwenden bei Auswahl, Bereinigung oder Planung des aktiven Agentenkontexts."
+        },
+        {
+          "skill": "task-graph",
+          "path": "Agentenarbeit/Skills/task-graph/SKILL.md",
+          "source_sha256": "575d393ecd11eec50adc39b9cbebda19b66b665df1f3b015e4f25400460be294",
+          "command_indices": [
+            11
+          ],
+          "canonical_description": "Zerlegt komplexe Agentenarbeit in abhängige, überprüfbare Knoten und macht echte Abhängigkeiten, Parallelisierung und Stop-Bedingungen sichtbar. Verwenden bei komplexen Aufgaben mit mehreren abhängigen oder parallelisierbaren Arbeitsschritten."
+        },
+        {
+          "skill": "verification-loop",
+          "path": "Agentenarbeit/Skills/verification-loop/SKILL.md",
+          "source_sha256": "37824715a191c6668343358817959756dc6ac5117291e7f11675e7245f2d608f",
+          "command_indices": [
+            13
+          ],
+          "canonical_description": "Führt innerhalb eines freigegebenen Scopes einen kontrollierten Arbeiten-Prüfen-Diagnose-Korrigieren-Loop mit klaren Stop-Kriterien aus. Verwenden bei iterativer Umsetzung, wenn nach jedem Änderungsschritt reproduzierbare Nachweise möglich sind."
+        },
+        {
+          "skill": "delegation-contract",
+          "path": "Agentenarbeit/Skills/delegation-contract/SKILL.md",
+          "source_sha256": "8db59b9327cc6d378316629236c7c3f94940bdf068144a777b743ad91543ed41",
+          "command_indices": [
+            10
+          ],
+          "canonical_description": "Definiert vor relevanter Agentenarbeit Ziel, Scope, Rechte, Quellen, Akzeptanzbedingungen und geforderte Evidence und prüft anschließend das Evidence Bundle. Verwenden vor nicht trivialer delegierter Agentenarbeit mit Scope-, Rechte- oder Gate-Risiken."
+        },
+        {
+          "skill": "adressatengerechte-kommunikation",
+          "path": "Schreiben/Skills/adressatengerechte-kommunikation/SKILL.md",
+          "source_sha256": "787e86f1a02445fa9a95af6a33899aa2f9ddd3a89216e7e0914c9d84e1874c4f",
+          "command_indices": [
+            17
+          ],
+          "canonical_description": "Nachrichten und schriftliche Kommunikation so planen und formulieren, dass Sachverhalt, Empfänger, Beziehung, Hierarchie, gewünschte Reaktion, Direktheit, Kanal und gegebenenfalls Konfliktlage zusammenpassen. Verwenden, wenn nicht nur der Sprachstil, sondern die Wirkung auf einen konkreten Empfänger oder eine konkrete Entscheidung materiell für die Lösung ist."
+        },
+        {
+          "skill": "code-review",
+          "path": "Programmieren/Skills/code-review/SKILL.md",
+          "source_sha256": "314840ab5fed2ac4d8fb67147e460864471d71f120de1409031ff26cf5345260",
+          "command_indices": [
+            7
+          ],
+          "canonical_description": "Strukturiertes Code-Review für KI-gestützte Softwarearbeit. Verwenden, um einen Diff gegen festen Ausgangspunkt, Anforderung, freigegebenen Plan und Repository-Standards zu prüfen."
+        },
+        {
+          "skill": "tdd",
+          "path": "Programmieren/Skills/tdd/SKILL.md",
+          "source_sha256": "f69f734d323fff987d0e9f7cae202770be153210c1b31a82f08ee8006ef30d9a",
+          "command_indices": [
+            12
+          ],
+          "canonical_description": "Testgetriebene Umsetzung für KI-gestützte Softwarearbeit. Verwenden, wenn ein freigegebener Feature- oder Bugfix-Scope in kleinen überprüfbaren Schnitten umgesetzt wird."
+        },
+        {
+          "skill": "citation-audit",
+          "path": "Recherche/Skills/citation-audit/SKILL.md",
+          "source_sha256": "3dae6050d9cfcfb2a3e4a91f1d545da05b6c1c231bb256ea148ffb0588838928",
+          "command_indices": [
+            24
+          ],
+          "canonical_description": "Prüft fertige oder weitgehend fertige Research-Synthesen darauf, ob wesentliche Faktenclaims durch die tatsächlich zugeordneten Quellen und konkrete Evidence gestützt werden. Verwenden vor Abschluss oder Veröffentlichung, wenn Claim-zu-Zitation-Support materiell geprüft werden muss; nicht für die frühe Qualitätsbewertung einzelner Quellen oder die isolierte Verifikation eines einzelnen Claims."
+        },
+        {
+          "skill": "visual-answer",
+          "path": "Dokumentationserstellung/Skills/visual-answer/SKILL.md",
+          "source_sha256": "61ba11f9e11f8141e8492a695a885fd7d717e2c882a83058851ee405fb092982",
+          "command_indices": [
+            20,
+            27
+          ],
+          "canonical_description": "Strukturiert komplexe Antworten als visuell schnell erfassbares Artefakt oder Layout mit Kernaussage, Prioritäten, Beziehungen und gestuften Details. Verwenden bei Architektur/Flows, Mehrkriterien-Vergleichen, Hierarchien/Timelines, komplexen Plänen oder Reviews mit vielen Findings; nicht für kurze Faktenantworten, Smalltalk, reine Command-Ausgabe oder wenn der Nutzer Plain Text verlangt."
+        },
+        {
+          "skill": "skill-security-review",
+          "path": "Sicherheit/Skills/skill-security-review/SKILL.md",
+          "source_sha256": "14bfdf2b8764286f336ed8aabb07eea6103e3c44bb543cc6c564ba8e377a4dd8",
+          "command_indices": [
+            18
+          ],
+          "canonical_description": "Prüft einen Agent-Skill vor Aktivierung oder Freigabe auf Trust-/Admission-, Supply-Chain-, Berechtigungs-, Prompt-Injection-, Datenexfiltrations-, Script-, Remote-Dependency-, External-Action- und Update-Risiken. Verwenden bei externen oder mächtigen Skills und bei sicherheitsrelevanten Upstream-Änderungen; nicht als allgemeiner fachlicher Skillreview und nicht für die allgemeine Admission eines eigenständigen MCP-Servers, Plugins, Connectors oder Hooks, sofern dieser nicht Teil des Skill-Bundles ist."
+        },
+        {
+          "skill": "tool-permission-review",
+          "path": "Sicherheit/Skills/tool-permission-review/SKILL.md",
+          "source_sha256": "6e66c6added6308aa86124528a633d264f8902500034102973f3738e40d73eb7",
+          "command_indices": [
+            19
+          ],
+          "canonical_description": "Prüft die für einen Agenten, Skill, Workflow oder eine eigenständige externe Integration vorgesehenen Tool- und Berechtigungsrechte gegen Least Privilege, Fallbacks und Human Gates. Verwenden wenn neue Tools, Netzwerk-, Schreib-, Ausführungs- oder Produktionsrechte eingeführt werden; nicht für reine Funktionsbeschreibung eines Tools und nicht als vollständiger Supply-Chain- oder Skill-Admission-Review."
+        },
+        {
+          "skill": "test-strategy",
+          "path": "Testing-und-QA/Skills/test-strategy/SKILL.md",
+          "source_sha256": "6840f2aaa40a65fd9b0b13ec9bc9e5f47476f1893a383c898624c20e75f290c7",
+          "command_indices": [
+            26
+          ],
+          "canonical_description": "Entwickelt für ein Feature, System oder eine Änderung eine risikobasierte Teststrategie und ein sinnvolles Testportfolio. Verwenden bei Fragen wie „Wie sollen wir das testen?“, „Welche Tests brauchen wir?“ oder wenn Testebenen und Qualitätsevidence geplant werden müssen. Nicht für das Schreiben eines einzelnen konkreten Testfalls verwenden."
+        },
+        {
+          "skill": "test-design",
+          "path": "Testing-und-QA/Skills/test-design/SKILL.md",
+          "source_sha256": "2f04848bb93221f51b609ef04fe8c824a003bff176bfa947b9d8ee3bb68639ab",
+          "command_indices": [
+            9
+          ],
+          "canonical_description": "Entwirft konkrete Testfälle aus Anforderungen, Invarianten, Zuständen, Grenzwerten und Failure Modes. Verwenden, wenn konkrete Testfälle oder eine systematische Testfallmenge benötigt werden. Nicht als allgemeine Teststrategie oder E2E-Ausführung verwenden."
+        },
+        {
+          "skill": "data-ingestion-design",
+          "path": "Data-Engineering/Skills/data-ingestion-design/SKILL.md",
+          "source_sha256": "3121e0576450ad5b8e4a3759fcc4631208860c694c8b900e99d43e6ac6b0303c",
+          "command_indices": [
+            29
+          ],
+          "canonical_description": "Entwirft oder prüft Ingestion aus Dateien, APIs, Snapshots, CDC oder Streams mit Identität, Änderungs-/Delete-Semantik, Cursor/Offsets, Ordering, Duplikaten, Late Data und Replay. Verwenden bei Source-Anbindung und Capture-Fragen. Nicht als Source-DB-Tuning-, Event-Contract- oder produktiver Offset-/Replay-Skill verwenden."
+        }
+      ],
+      "completed_item_types": {
+        "agent_message": 3,
+        "command_execution": 32
+      },
+      "metrics": {
+        "elapsed_seconds": 128.39,
+        "commands": 32,
+        "tool_output_utf8_bytes": 204022,
+        "usage": [
+          {
+            "input_tokens": 296545,
+            "cached_input_tokens": 233856,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 3517,
+            "reasoning_output_tokens": 709
+          }
+        ]
+      },
+      "invocation": {
+        "argv": [
+          "<user-home>\\AppData\\Local\\OpenAI\\Codex\\bin\\22cfb1d302613eae\\codex.EXE",
+          "-a",
+          "never",
+          "exec",
+          "--ignore-user-config",
+          "--ephemeral",
+          "--skip-git-repo-check",
+          "--cd",
+          "<repo>\\.validation\\routing-repaired-comparison-20261031\\workspace-free",
+          "--json",
+          "--color",
+          "never",
+          "--model",
+          "gpt-6.1-sol",
+          "-c",
+          "model_reasoning_effort=\"high\"",
+          "-c",
+          "default_permissions=\":workspace\"",
+          "-c",
+          "windows.sandbox=\"elevated\"",
+          "-c",
+          "shell_environment_policy.set.PYTHONDONTWRITEBYTECODE=\"1\"",
+          "-c",
+          "model_provider=\"openai\"",
+          "-c",
+          "forced_login_method=\"chatgpt\"",
+          "-c",
+          "web_search=\"disabled\"",
+          "--output-schema",
+          "<repo>\\.validation\\routing-repaired-comparison-20261031\\answer-schema.json",
+          "--output-last-message",
+          "<repo>\\.validation\\routing-repaired-comparison-20261031\\free-answer.json",
+          "-"
+        ],
+        "prompt": "Arbeite ausschließlich mit den Quellen in deinem aktuellen Arbeitsverzeichnis. Keine Installation, Außenaktionen oder Quellenänderungen. Lokale abgeleitete Suchcaches sind erlaubt.\n\nIch möchte einen CSV-Import entwickeln: 1 bis 1000 Datensätze, leere Dateien ablehnen, Dubletten melden. Stell mir zunächst nur einen umsetzbaren Arbeitsplan vor. Die Umsetzung soll in kleine prüfbare Schritte zerlegt und auf zwei Agenten verteilt werden, ohne gleichzeitige Änderungen derselben Dateien. Plane auch, welche aktuellen Projektinformationen die Agenten brauchen und was sie erst bei Bedarf nachladen sollten. Konkrete Grenztests und ein unabhängiger Codecheck sollen dazugehören. Welche Werkzeuge aus diesem Repository passen zu den einzelnen Jobs und wann setzt du sie ein? Noch nichts implementieren und keine weiteren Agenten starten.",
+        "prompt_sha256": "b4f23e19539c817629c5cc1f70b8534c37fff7f7a7e7b235cf244c05500543db"
+      },
+      "search_records": [],
+      "commands": [
+        {
+          "index": 0,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command 'Get-Content routing-overlays.yml'",
+          "exit_code": 0,
+          "output_sha256": "06f72e657d59240da1027d3824a5a76696365866cca602dcf4ed977f1730f883",
+          "output_utf8_bytes": 1228,
+          "output_excerpt": "schema_version: 2\n\n# Kleine globale \"don't forget\"-Liste für domänenübergreifende Skills.\n#\n# Diese Datei definiert KEINE Triggerlogik. Ob ein Overlay wirklich passt,\n# entscheidet weiterhin ausschließlich die Description / Near-Miss-Grenze\n# der jeweiligen SKILL.md.\n#\n# checkpoints steuern nur, WANN ein Kandidat erneut geprüft werden soll.\n# Sie s"
+        },
+        {
+          "index": 1,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command 'Get-Content Dokumentation/Skill-Handbuch.md'",
+          "exit_code": 0,
+          "output_sha256": "ba6a3fdccb00c0b3f1266f53396a36d6143aa5b1d76dcba7c6eb6ab28f431e58",
+          "output_utf8_bytes": 15371,
+          "output_excerpt": "# Skill-Handbuch – Master-Router\n\nDieses Dokument ist kein zweites Skill-Katalogbuch. Es routet von einem **konkreten Problem oder Auftrag** zum kleinsten ausreichenden Skill-Satz und verweist für Details auf Katalog, Fachhandbücher und lokale Sources of Truth.\n\nDer Nutzer muss dafür weder die richtige Domäne noch einen Skill-Namen kennen.\n\n## Star"
+        },
+        {
+          "index": 2,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command 'Get-Content workflow-index.yml'",
+          "exit_code": 0,
+          "output_sha256": "325cd805fcc637f87ca4921256f86662a13972e0c1048dc046e8a82803eb7898",
+          "output_utf8_bytes": 2427,
+          "output_excerpt": "schema_version: 1\nworkflows:\n  - Workflows/Acceptance-Traceability-und-Handoff.md\n  - Workflows/Architektur-Baseline-und-Systemdesign.md\n  - Workflows/Architektur-Readiness-Review.md\n  - Workflows/Architekturentscheidung-und-Tradeoff.md\n  - Workflows/Backfill-und-Reprocessing.md\n  - Workflows/Bestehende-Website-Review.md\n  - Workflows/Binaerdatei-v"
+        },
+        {
+          "index": 3,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"Get-ChildItem -Name; rg -n -i 'plan|agent|context|test|review|csv|implement|decompos|handoff' skill-catalog.yml\"",
+          "exit_code": 0,
+          "output_sha256": "238a88805de04fd1623304fbe4794a40cad7e63712411e49ed8b10046fc6da5d",
+          "output_utf8_bytes": 50919,
+          "output_excerpt": ".validation\nAgentenarbeit\nArbeitsweisen\nBildarbeit\nData-Engineering\nDatenbanken\nDokumentation\nDokumentationserstellung\nFinanzen\nGrundlagen\nInfrastruktur-und-DevOps\nProgrammieren\nRecherche\nReliability-und-System-Observability\nRequirements-und-Spezifikations-Engineering\nReverse-Engineering-und-Binaeranalyse\nSchemas\nSchnittstellen-und-Vertraege\nSchrei"
+        },
+        {
+          "index": 4,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command 'Get-Content Workflows/Software-Feature.md; Get-Content Workflows/Long-Horizon-Agentenarbeit.md'",
+          "exit_code": 0,
+          "output_sha256": "40bd3d331363066c02a52e60cfae69684d39074ad4f5b3c48c84097e9e01669f",
+          "output_utf8_bytes": 6018,
+          "output_excerpt": "# Workflow – Software Feature\n\n## Ziel\n\nEin Feature kontrolliert von Anforderung und Domänenverständnis bis zu verifizierter Änderung führen.\n\n## Empfohlene Skill-Kette\n\n```text\nAnforderung / Projektwahrheit\n→ optional domain-modeling\n→ Planung / task-graph bei Komplexität\n→ delegation-contract bei Delegation\n→ tdd oder passende Implementierungsdis"
+        },
+        {
+          "index": 5,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"Get-Content routing-overlays.yml; rg -n 'id: (.*plan.*|.*decompos.*|.*agent.*|context-engineering|session-handoff|tdd|test-design|code-review|verification-loop|visual-answer|citation-audit|adressatengerechte-kommunikation|skill-security-review|tool-permission-review|prompt-injection-review)' skill-catalog.yml\"",
+          "exit_code": 0,
+          "output_sha256": "9a1cde3caef1f433afd89d83fd09df8a283eda1901534b251463f37c97753561",
+          "output_utf8_bytes": 22026,
+          "output_excerpt": "schema_version: 2\n\n# Kleine globale \"don't forget\"-Liste für domänenübergreifende Skills.\n#\n# Diese Datei definiert KEINE Triggerlogik. Ob ein Overlay wirklich passt,\n# entscheidet weiterhin ausschließlich die Description / Near-Miss-Grenze\n# der jeweiligen SKILL.md.\n#\n# checkpoints steuern nur, WANN ein Kandidat erneut geprüft werden soll.\n# Sie s"
+        },
+        {
+          "index": 6,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"Get-ChildItem -Name; rg --files -g '*csv*' -g '*CSV*' -g '*fixture*' -g '*package.json' -g '*.csproj' -g 'pyproject.toml' -g 'AGENTS.md' -g '*plan*SKILL*'\"",
+          "exit_code": 0,
+          "output_sha256": "03eaa1aac384c627821805230f5326b1587ce3b22bad66f39ad96b9360312f74",
+          "output_utf8_bytes": 905,
+          "output_excerpt": ".validation\nAgentenarbeit\nArbeitsweisen\nBildarbeit\nData-Engineering\nDatenbanken\nDokumentation\nDokumentationserstellung\nFinanzen\nGrundlagen\nInfrastruktur-und-DevOps\nProgrammieren\nRecherche\nReliability-und-System-Observability\nRequirements-und-Spezifikations-Engineering\nReverse-Engineering-und-Binaeranalyse\nSchemas\nSchnittstellen-und-Vertraege\nSchrei"
+        },
+        {
+          "index": 7,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"Get-Content 'Programmieren/Skills/code-review/SKILL.md'\"",
+          "exit_code": 0,
+          "output_sha256": "6609c425ee2a703f5832ea23e7a6f3818b785a6309c2734b79cb7cf1076db413",
+          "output_utf8_bytes": 4337,
+          "output_excerpt": "---\nname: code-review\ndescription: Strukturiertes Code-Review für KI-gestützte Softwarearbeit. Verwenden, um einen Diff gegen festen Ausgangspunkt, Anforderung, freigegebenen Plan und Repository-Standards zu prüfen.\n---\n\n# Code Review\n\nEin grüner Testlauf ersetzt dieses Review nicht.\n\n## 1. Ausgangspunkt festnageln\n\nVor dem Review festhalten:\n\n- Ba"
+        },
+        {
+          "index": 8,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"Get-Content 'mara-project.json'\"",
+          "exit_code": 0,
+          "output_sha256": "7c7bb932420e1e220d2c6f2a65a6e7e6e6d3eb2cf3059fe4954ee43cf29db06c",
+          "output_utf8_bytes": 4795,
+          "output_excerpt": "{\n  \"schema_version\": 1,\n  \"id\": \"ki-regeln\",\n  \"kind\": \"collection\",\n  \"entrypoints\": {\n    \"overview\": \"PROJECT.md\",\n    \"status\": \"README.md\",\n    \"plan\": \"Dokumentation/Pflege-und-Aktualisierung.md\",\n    \"contents\": \"START-HIER.md\"\n  },\n  \"search\": {\n    \"include\": [\n      \"PROJECT.md\",\n      \"START-HIER.md\",\n      \"README.md\",\n      \"AGENTS.md"
+        },
+        {
+          "index": 9,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"Get-Content 'Testing-und-QA/Skills/test-design/SKILL.md'\"",
+          "exit_code": 0,
+          "output_sha256": "151b3ed71b73a6a5c01d727aef59535cf0dbdd97202ff5362700cccc653496aa",
+          "output_utf8_bytes": 1784,
+          "output_excerpt": "---\nname: test-design\ndescription: Entwirft konkrete Testfälle aus Anforderungen, Invarianten, Zuständen, Grenzwerten und Failure Modes. Verwenden, wenn konkrete Testfälle oder eine systematische Testfallmenge benötigt werden. Nicht als allgemeine Teststrategie oder E2E-Ausführung verwenden.\n---\n\n# Test Design\n\n## Ziel\n\nKonkrete, aussagekräftige Te"
+        },
+        {
+          "index": 10,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"Get-Content 'Agentenarbeit/Skills/delegation-contract/SKILL.md'\"",
+          "exit_code": 0,
+          "output_sha256": "0a51b382cfb03ef14c75807185a446d7a1fa5e5341e0226c3e74e70854a51d7d",
+          "output_utf8_bytes": 3195,
+          "output_excerpt": "---\nname: delegation-contract\ndescription: Definiert vor relevanter Agentenarbeit Ziel, Scope, Rechte, Quellen, Akzeptanzbedingungen und geforderte Evidence und prüft anschließend das Evidence Bundle. Verwenden vor nicht trivialer delegierter Agentenarbeit mit Scope-, Rechte- oder Gate-Risiken.\n---\n\n# Delegation Contract\n\nDieser Skill nutzt `../../"
+        },
+        {
+          "index": 11,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"Get-Content 'Agentenarbeit/Skills/task-graph/SKILL.md'\"",
+          "exit_code": 0,
+          "output_sha256": "0bb482d6300030856bea518dd37104aa5f4d7d550ba9e49eca4ff3ab809e1e24",
+          "output_utf8_bytes": 1654,
+          "output_excerpt": "---\nname: task-graph\ndescription: Zerlegt komplexe Agentenarbeit in abhängige, überprüfbare Knoten und macht echte Abhängigkeiten, Parallelisierung und Stop-Bedingungen sichtbar. Verwenden bei komplexen Aufgaben mit mehreren abhängigen oder parallelisierbaren Arbeitsschritten.\n---\n\n# Task Graph\n\nNutze `../../Task-Graph-und-Loops.md`.\n\n## Vorgehen\n\n"
+        },
+        {
+          "index": 12,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"Get-Content 'Programmieren/Skills/tdd/SKILL.md'\"",
+          "exit_code": 0,
+          "output_sha256": "b476696dbe99f6d4c5060046a64261df0325cb7026cb21f0f33e32fbf9700964",
+          "output_utf8_bytes": 3411,
+          "output_excerpt": "---\nname: tdd\ndescription: Testgetriebene Umsetzung für KI-gestützte Softwarearbeit. Verwenden, wenn ein freigegebener Feature- oder Bugfix-Scope in kleinen überprüfbaren Schnitten umgesetzt wird.\n---\n\n# Test-Driven Development\n\nDieser Skill unterstützt die Umsetzung. Er ersetzt weder Anforderung noch freigegebenen Plan.\n\n## Vorbedingung\n\nBevor Cod"
+        },
+        {
+          "index": 13,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"Get-Content 'Agentenarbeit/Skills/verification-loop/SKILL.md'\"",
+          "exit_code": 0,
+          "output_sha256": "edf89de772e90f3489ec4cf578db98cd7b3255fa9b067ca138fa84a24f4d142d",
+          "output_utf8_bytes": 6629,
+          "output_excerpt": "---\nname: verification-loop\ndescription: Führt innerhalb eines freigegebenen Scopes einen kontrollierten Arbeiten-Prüfen-Diagnose-Korrigieren-Loop mit klaren Stop-Kriterien aus. Verwenden bei iterativer Umsetzung, wenn nach jedem Änderungsschritt reproduzierbare Nachweise möglich sind.\n---\n\n# Verification Loop\n\nNutze `../../Task-Graph-und-Loops.md`"
+        },
+        {
+          "index": 14,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"Get-Content 'PROJECT.md'\"",
+          "exit_code": 0,
+          "output_sha256": "36a49538867e0e09bd854171d423002974bd5ce6c57baa9ce2a272567ca8ecfd",
+          "output_utf8_bytes": 2857,
+          "output_excerpt": "# KI-Regeln\n\n## Was ist es?\n\nKI-Regeln ist eine anbieterunabhängige Sammlung wiederverwendbarer Regeln, Agenten-Skills, Workflows und Evaluationsmethoden für die Arbeit mit generativer KI. Der [deutsche Einstieg](START-HIER.md) erläutert die Nutzung.\n\n## Was gehört dazu?\n\nDer [deutsche Einstieg](START-HIER.md) führt zu Nutzung und Katalog; die [REA"
+        },
+        {
+          "index": 15,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"Get-Content 'Agentenarbeit/Skills/context-engineering/SKILL.md'\"",
+          "exit_code": 0,
+          "output_sha256": "1c10850e8bf790efbf14fc359ee26c032fdcd0b0c20d53970fcf31dcf912211a",
+          "output_utf8_bytes": 3079,
+          "output_excerpt": "---\nname: context-engineering\ndescription: Wählt für einen Agentenlauf den kleinsten ausreichenden, aktuellen und signalstarken Kontext aus, schützt Sources of Truth und entscheidet zwischen aktivem Kontext, Working State, Compaction und gezieltem Nachladen. Verwenden bei Auswahl, Bereinigung oder Planung des aktiven Agentenkontexts.\n---\n\n# Context"
+        },
+        {
+          "index": 16,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command 'Get-Content Testing-und-QA/Umgebungsabhaengige-Verifikation-und-Reports.md'",
+          "exit_code": 0,
+          "output_sha256": "b6cc8f3b7e16e2a541fa17350f84c5de969be3be0d313fe40a56f9c6ad42e880",
+          "output_utf8_bytes": 6568,
+          "output_excerpt": "# Umgebungsabhängige Verifikation und Reports\n\n## Zweck und Scope\n\nBei Softwareänderungen folgt die Verifikation dem **konkreten Projekt**, nicht der Sprache des KI-Regeln-Repositories. Dies ist eine Discovery-/Handoff-Regel für `test-strategy`, `verification-loop` und die Workflows `Software-Feature` sowie `Teststrategie-und-QA`; kein zusätzlicher"
+        },
+        {
+          "index": 17,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"Get-Content 'Schreiben/Skills/adressatengerechte-kommunikation/SKILL.md' -TotalCount 12\"",
+          "exit_code": 0,
+          "output_sha256": "03a3de2865e0024ca8f255e95b82313509d5b0df218cbc99a957a0a399928498",
+          "output_utf8_bytes": 927,
+          "output_excerpt": "---\nname: adressatengerechte-kommunikation\ndescription: Nachrichten und schriftliche Kommunikation so planen und formulieren, dass Sachverhalt, Empfänger, Beziehung, Hierarchie, gewünschte Reaktion, Direktheit, Kanal und gegebenenfalls Konfliktlage zusammenpassen. Verwenden, wenn nicht nur der Sprachstil, sondern die Wirkung auf einen konkreten Emp"
+        },
+        {
+          "index": 18,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"Get-Content 'Sicherheit/Skills/skill-security-review/SKILL.md' -TotalCount 12\"",
+          "exit_code": 0,
+          "output_sha256": "43554f7551d9844ea919c27228ff9c6d887b5b0c273ff3ec7afc5a03d72ed569",
+          "output_utf8_bytes": 906,
+          "output_excerpt": "---\nname: skill-security-review\ndescription: Prüft einen Agent-Skill vor Aktivierung oder Freigabe auf Trust-/Admission-, Supply-Chain-, Berechtigungs-, Prompt-Injection-, Datenexfiltrations-, Script-, Remote-Dependency-, External-Action- und Update-Risiken. Verwenden bei externen oder mächtigen Skills und bei sicherheitsrelevanten Upstream-Änderun"
+        },
+        {
+          "index": 19,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"Get-Content 'Sicherheit/Skills/tool-permission-review/SKILL.md' -TotalCount 12\"",
+          "exit_code": 0,
+          "output_sha256": "6f3c1f5ade1a447c657ee3611db1fe22eb8f3537d631843cd50353f8e817fe55",
+          "output_utf8_bytes": 598,
+          "output_excerpt": "---\nname: tool-permission-review\ndescription: Prüft die für einen Agenten, Skill, Workflow oder eine eigenständige externe Integration vorgesehenen Tool- und Berechtigungsrechte gegen Least Privilege, Fallbacks und Human Gates. Verwenden wenn neue Tools, Netzwerk-, Schreib-, Ausführungs- oder Produktionsrechte eingeführt werden; nicht für reine Fun"
+        },
+        {
+          "index": 20,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"Get-Content 'Dokumentationserstellung/Skills/visual-answer/SKILL.md' -TotalCount 12\"",
+          "exit_code": 0,
+          "output_sha256": "532143d10cf4d1550ec0cd9fc24a84aaacdd344da5019b55a2055ccef5192d7c",
+          "output_utf8_bytes": 580,
+          "output_excerpt": "---\nname: visual-answer\ndescription: Strukturiert komplexe Antworten als visuell schnell erfassbares Artefakt oder Layout mit Kernaussage, Prioritäten, Beziehungen und gestuften Details. Verwenden bei Architektur/Flows, Mehrkriterien-Vergleichen, Hierarchien/Timelines, komplexen Plänen oder Reviews mit vielen Findings; nicht für kurze Faktenantwort"
+        },
+        {
+          "index": 21,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"rg -n 'id: (task-graph|delegation-contract|test-strategy|data-ingestion-design)' skill-catalog.yml; Get-ChildItem .validation -Name\"",
+          "exit_code": 0,
+          "output_sha256": "5f9f7117e7cc84f995555d76da9cbbb0b63113e0c1422327da9700078cf405b4",
+          "output_utf8_bytes": 1452,
+          "output_excerpt": "16:  - {id: task-graph, area: Agentenarbeit, path: Agentenarbeit/Skills/task-graph/SKILL.md, maturity: candidate, eval_coverage: partial, purpose: \"Komplexe Arbeit in abhängige, prüfbare Teilaufgaben zerlegen.\"}\n18:  - {id: delegation-contract, area: Agentenarbeit, path: Agentenarbeit/Skills/delegation-contract/SKILL.md, maturity: candidate, eval_c"
+        },
+        {
+          "index": 22,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command 'Get-Content Agentenarbeit/Task-Graph-und-Loops.md'",
+          "exit_code": 0,
+          "output_sha256": "425dbdf411f29702db40983351e08bdad2ef16602a9bd25fdd36ce31d05c8e96",
+          "output_utf8_bytes": 6976,
+          "output_excerpt": "# Task Graph und kontrollierte Loops\n\n## Zweck\n\nKomplexe Agentenarbeit sollte nicht nur als lange lineare Aufgabenliste betrachtet werden.\n\nEin Task Graph beschreibt, welche Arbeitsschritte voneinander abhängen. Ein Loop beschreibt, wie ein einzelner freigegebener Arbeitsschritt iterativ verbessert und geprüft wird.\n\n## Task Graph\n\nEin Knoten steht"
+        },
+        {
+          "index": 23,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command 'Get-Content Agentenarbeit/Delegation-und-Evidence.md'",
+          "exit_code": 0,
+          "output_sha256": "1e625833e39f8789b80a550123db314df9b100bd5625620c8a414f836d1634ec",
+          "output_utf8_bytes": 7294,
+          "output_excerpt": "# Delegation und Evidence\n\n## Zweck\n\nAgentenarbeit wird zuverlässiger, wenn vor der Ausführung klar ist, **was delegiert wird**, **welche Grenzen gelten** und **welcher Nachweis am Ende erwartet wird**.\n\nEin Delegation Contract beschreibt den Arbeitsauftrag. Ein Evidence Bundle beschreibt anschließend, wodurch das Ergebnis überprüfbar wird.\n\n## Gru"
+        },
+        {
+          "index": 24,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"Get-Content 'Recherche/Skills/citation-audit/SKILL.md' -TotalCount 12\"",
+          "exit_code": 0,
+          "output_sha256": "af320b3fd70221f684b1c2bcbb6cb8b741f149a62af1a9baf5cad772cd80231b",
+          "output_utf8_bytes": 661,
+          "output_excerpt": "---\nname: citation-audit\ndescription: Prüft fertige oder weitgehend fertige Research-Synthesen darauf, ob wesentliche Faktenclaims durch die tatsächlich zugeordneten Quellen und konkrete Evidence gestützt werden. Verwenden vor Abschluss oder Veröffentlichung, wenn Claim-zu-Zitation-Support materiell geprüft werden muss; nicht für die frühe Qualität"
+        },
+        {
+          "index": 25,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command 'Get-Content Agentenarbeit/Context-Engineering.md'",
+          "exit_code": 0,
+          "output_sha256": "b1783bad1da5f09a19cabfd589ee0f7756361fb247b02197d87fc12a14052334",
+          "output_utf8_bytes": 6738,
+          "output_excerpt": "# Context Engineering für KI-Agenten\n\n## Zweck\n\nContext Engineering beschreibt, welche Informationen ein Agent für die aktuelle Aufgabe benötigt und wie dieser Kontext über längere Arbeitsläufe sauber gehalten wird.\n\nDas Ziel ist nicht maximal viel Kontext, sondern **minimal ausreichender, aktueller und signalstarker Kontext**.\n\n## Grundprinzip\n\n> "
+        },
+        {
+          "index": 26,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"Get-Content 'Testing-und-QA/Skills/test-strategy/SKILL.md'\"",
+          "exit_code": 0,
+          "output_sha256": "09dbf8af12d3451f6b52aef41ae97be353841b55479fc46783a7bdf06b9fe866",
+          "output_utf8_bytes": 2192,
+          "output_excerpt": "---\nname: test-strategy\ndescription: Entwickelt für ein Feature, System oder eine Änderung eine risikobasierte Teststrategie und ein sinnvolles Testportfolio. Verwenden bei Fragen wie „Wie sollen wir das testen?“, „Welche Tests brauchen wir?“ oder wenn Testebenen und Qualitätsevidence geplant werden müssen. Nicht für das Schreiben eines einzelnen k"
+        },
+        {
+          "index": 27,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"Get-Content 'Dokumentationserstellung/Skills/visual-answer/SKILL.md'\"",
+          "exit_code": 0,
+          "output_sha256": "6fa2ec697c0c0a6261b54e5fe120dbea230f3854047aced8ab748f41a7b9aae9",
+          "output_utf8_bytes": 4874,
+          "output_excerpt": "---\nname: visual-answer\ndescription: Strukturiert komplexe Antworten als visuell schnell erfassbares Artefakt oder Layout mit Kernaussage, Prioritäten, Beziehungen und gestuften Details. Verwenden bei Architektur/Flows, Mehrkriterien-Vergleichen, Hierarchien/Timelines, komplexen Plänen oder Reviews mit vielen Findings; nicht für kurze Faktenantwort"
+        },
+        {
+          "index": 28,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"Get-Content 'Dokumentationserstellung/Visuelle-Antworten-und-HTML-Artefakte.md'\"",
+          "exit_code": 0,
+          "output_sha256": "fa15e03728c1a6663f4dfecf54e76c1ac99180f640e81c832195238ca6e17e17",
+          "output_utf8_bytes": 12560,
+          "output_excerpt": "# Visuelle Antworten und HTML-Artefakte\n\n## Zweck\n\nKomplexe Antworten können fachlich korrekt sein und trotzdem langsam erfassbar bleiben.\n\nDer Zweck einer visuellen Antwort ist deshalb nicht dekoratives HTML, sondern eine kürzere **Time-to-Signal**:\n\n> Kernaussage, Prioritäten, Zusammenhänge und Handlungsbedarf sollen auf den ersten Blick erkennba"
+        },
+        {
+          "index": 29,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"Get-Content 'Data-Engineering/Skills/data-ingestion-design/SKILL.md'\"",
+          "exit_code": 0,
+          "output_sha256": "7e14f0850f0614a54c415919a2cfacf8298f7809ca2a9ec65f8a5ca45c3b3d9d",
+          "output_utf8_bytes": 2955,
+          "output_excerpt": "---\nname: data-ingestion-design\ndescription: Entwirft oder prüft Ingestion aus Dateien, APIs, Snapshots, CDC oder Streams mit Identität, Änderungs-/Delete-Semantik, Cursor/Offsets, Ordering, Duplikaten, Late Data und Replay. Verwenden bei Source-Anbindung und Capture-Fragen. Nicht als Source-DB-Tuning-, Event-Contract- oder produktiver Offset-/Repl"
+        },
+        {
+          "index": 30,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command 'Get-Content skill-catalog.yml -TotalCount 55'",
+          "exit_code": 0,
+          "output_sha256": "2e5c096ce2b5b60adacba66e564ef82a291a1d03ef4cde590637e86307ef4f6f",
+          "output_utf8_bytes": 16878,
+          "output_excerpt": "schema_version: 2\nlast_updated: 2026-10-17\n\nmaturity_levels: [experimental, candidate, stable, deprecated, retired]\neval_coverage_levels: [none, partial, core, broad]\n\nskills:\n  - {id: reflektierender-dialog, area: Arbeitsweisen, path: Arbeitsweisen/Skills/reflektierender-dialog/SKILL.md, maturity: candidate, eval_coverage: none, purpose: \"Erfahrun"
+        },
+        {
+          "index": 31,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command 'Get-Content routing-overlays.yml'",
+          "exit_code": 0,
+          "output_sha256": "06f72e657d59240da1027d3824a5a76696365866cca602dcf4ed977f1730f883",
+          "output_utf8_bytes": 1228,
+          "output_excerpt": "schema_version: 2\n\n# Kleine globale \"don't forget\"-Liste für domänenübergreifende Skills.\n#\n# Diese Datei definiert KEINE Triggerlogik. Ob ein Overlay wirklich passt,\n# entscheidet weiterhin ausschließlich die Description / Near-Miss-Grenze\n# der jeweiligen SKILL.md.\n#\n# checkpoints steuern nur, WANN ein Kandidat erneut geprüft werden soll.\n# Sie s"
+        }
+      ],
+      "raw_response_sha256": "b23f2e6ab9f9a63a06c07c16c7b07d17ca97903fca31c1e383bd200077261369"
+    },
+    {
+      "condition": "guided",
+      "product_review": "PASS in fixed planning scope",
+      "routing_process_review": "PASS in fixed scope",
+      "technical_gates": "PASS",
+      "status": "RESPONSE_RECORDED",
+      "exit_code": 0,
+      "git_status": "",
+      "source_bytes_unchanged": true,
+      "source_files_checked": 578,
+      "answer": "Ich plane **zwei Agenten: A für Umsetzung, B für Abnahmetests und den unabhängigen Codecheck**. Grundlage ist der lokale Workflow `Workflows/Software-Feature.md`. Zielanwendung, CSV-Schema und Dublettenschlüssel sind bisher nicht belegt; sie werden vor der Implementierung geklärt.\n\n**Arbeitsfolge und prüfbare Ergebnisse**\n\n| Schritt | Zuständigkeit und Arbeit | Abschlussnachweis | Repository-Werkzeuge |\n|---|---|---|---|\n| 1. Projektbasis feststellen | A ermittelt Einstiegspunkt, bestehende Parser, Fehlerkonventionen, Runtime und Testbefehle. B prüft Anforderungen und vorhandene Tests lesend. | Aktueller Ausgangszustand, konkrete Dateizuständigkeiten und offene Fachentscheidungen sind dokumentiert. | `context-engineering`, `task-graph` |\n| 2. Importvertrag festlegen | A beschreibt Eingabeformat, Datensatzzählung, Dublettenschlüssel und Ergebnis-/Fehlermeldungen. B leitet unabhängig erwartete Ergebnisse ab. | Für jedes Akzeptanzkriterium gibt es ein eindeutiges Testoracle; offene Produktentscheidungen sind geklärt. | `delegation-contract`, `test-design` |\n| 3. Kleinster Import-Schnitt | A implementiert gültigen Ein-Datensatz-Import und Ablehnung leerer Eingaben samt eigenen Unit-Tests. B erstellt parallel getrennte Abnahmetests anhand des vereinbarten Vertrags. | Neue Unit-Tests zunächst aus erwartetem Grund rot, danach grün; Abnahmetests am eingefrorenen Zwischenstand ausgeführt. | A: `tdd`, `verification-loop`; B: `test-design` |\n| 4. Mengengrenzen | A ergänzt die inklusive Grenze 1–1000 und die Ablehnung von 1001 Datensätzen. | Grenztests bestehen; Header, Leerzeilen und mehrzeilige CSV-Felder verfälschen die vereinbarte Zählung nicht. | `tdd`, `verification-loop` |\n| 5. Dublettenmeldung | A ergänzt Erkennung und nachvollziehbare Meldung nach dem vereinbarten Schlüssel. B ergänzt unabhängige Abnahmefälle. | Dubletten werden mit vereinbarten Fundstellen gemeldet; unterschiedliche Datensätze bleiben unterscheidbar. | `tdd`, `test-design`, `verification-loop` |\n| 6. Integration und Review | A führt passende Regression-, Build- und statische Prüfungen aus und friert den Stand ein. B liest den tatsächlichen Produktionsdiff und führt die Abnahmetests erneut aus. | Review gegen Anforderungen und Projektstandards, Befundliste und aktuelle Nachweismatrix. | `verification-loop`, `code-review` |\n| 7. Begrenzte Korrekturen | A behebt Reviewbefunde innerhalb des vereinbarten Scopes. B prüft betroffene Stellen und Nachweise erneut. | Endstand frisch geprüft; offene Prüfungen und Restunsicherheiten ausdrücklich benannt. | `verification-loop`, `code-review` |\n\nAbhängigkeiten: **1 → 2 → 3 → 4 → 5 → 6 → gegebenenfalls 7**. Nach Schritt 2 können A und B in ihren getrennten Dateien parallel arbeiten. Tests gegen gemeinsam veränderlichen Code laufen erst an vereinbarten, eingefrorenen Zwischenständen.\n\n**Dateizuständigkeiten und Agentenaufträge**\n\n- **A besitzt** Produktionscode, zugehörige Unit-Testdateien sowie notwendige gemeinsame Vertrags- und Projektkonfiguration. A prüft außerdem die von B geschriebenen Tests.\n- **B besitzt** separate Abnahmetestdateien, eigene Testfixtures und den Reviewbericht. Produktionscode wird von B ausschließlich gelesen.\n- Die konkreten Pfade werden in Schritt 1 festgelegt; beide Agenten erhalten eine verbindliche Dateiliste. Eine Datei hat immer genau einen schreibenden Owner. Notwendige Änderungen außerhalb dieser Liste werden zuerst abgestimmt.\n- Jeder Auftrag nennt Ziel, erlaubte Dateien, Quellen, Akzeptanzkriterien, geforderte Evidence und Stopbedingungen. Unklare Fachregeln, widersprüchliche Quellen oder fehlende Prüfwerkzeuge stoppen den betroffenen Schritt.\n\nB überprüft damit Code, den B selbst nicht implementiert hat. Diese Rollentrennung garantiert allein noch keine vollständige Unabhängigkeit: Erwartungswerte müssen aus dem Importvertrag stammen, nicht aus A’s Implementierungslogik.\n\n**Kontext für die Agenten**\n\nBeide brauchen zum Start den aktuellen Nutzerauftrag, geltende `AGENTS.md`-Regeln und Pflicht-Router, den Importvertrag, Dateizuständigkeiten, Ausgangsrevision samt relevanten lokalen Änderungen und die geltenden Prüf-/Freigabegrenzen.\n\n| Agent | Zusätzlich sofort erforderlich | Erst bei konkretem Bedarf nachladen |\n|---|---|---|\n| A | Betroffener Importpfad, direkte Aufrufer, Datenmodell, Parserkonfiguration, nahe Unit-Tests und lokale Testbefehle | Weiter entfernte Aufrufer, historische Entscheidungen oder Persistenzdetails, wenn der aktuelle Schnitt sie tatsächlich berührt |\n| B | Akzeptanzkriterien, öffentliche Importgrenze, Testkonventionen und Fixtureformat; zum Review Basis, eingefrorener Endstand und vollständiger relevanter Diff | Implementierungsdetails beim Codecheck; Nachbarmodule und Historie nur zur Klärung konkreter Befunde |\n\nÜbergaben enthalten geprüften Stand, Artefaktreferenzen, Befehle, Ergebnisse und offene Punkte. Gesamte Logs und Denkverläufe werden nicht dupliziert. `session-handoff` kommt erst bei einem tatsächlichen Sessionwechsel hinzu; `context-audit` und `context-compaction` sind ohne entsprechenden Bedarf nicht eingeplant.\n\n**Konkrete Tests**\n\n| Eingabe | Erwartung |\n|---|---|\n| 0 Byte | Ablehnung als leer |\n| Nur Header, nur Leerraum oder Leerzeilen | Verhalten vor Umsetzung festlegen; Vorschlag: bei null Datensätzen ablehnen |\n| 1 gültiger, eindeutiger Datensatz | Annahme |\n| 2, 999 und 1000 gültige, eindeutige Datensätze | Annahme; exakte Anzahl nachweisbar |\n| 1001 gültige Datensätze | Ablehnung wegen Mengenüberschreitung |\n| Zwei gleiche Schlüssel, direkt benachbart oder weit auseinander | Dublettenmeldung mit vereinbarten Fundstellen |\n| Derselbe Schlüssel dreimal | Vollständige Meldung gemäß vereinbartem Gruppenformat |\n| Ähnliche Daten mit unterschiedlichen Schlüsseln | Keine falsche Dublettenmeldung |\n| Dublette am Ende einer Datei mit 1000 Datensätzen | Dublette erkannt; Obergrenze bleibt korrekt |\n| 1001 Datensätze, davon eine Dublette | Vorschlag: weiterhin Mengenfehler; Deduplizierung darf die Grenze nicht umgehen |\n| Gequotetes Trennzeichen oder Zeilenumbruch innerhalb eines Feldes | Korrektes Parsing und logische Datensatzzählung gemäß CSV-Vertrag |\n\nVor Schritt 3 festzulegen sind insbesondere Headerpflicht, Trennzeichen, Encoding, Leerzeilenbehandlung, Dublettenschlüssel und Normalisierung sowie Dubletten innerhalb der Datei beziehungsweise gegenüber bestehenden Daten. Ebenso offen: Meldung mit Fortsetzung, Überspringen oder vollständige Ablehnung. „Dubletten melden“ autorisiert keine stille Entfernung.\n\nDie Tests prüfen beobachtbares Verhalten. Eine gezielte spätere Brechprobe soll zeigen, dass eine falsche Obergrenze beziehungsweise deaktivierte Dublettenerkennung tatsächlich auffällt; anschließend wird der korrekte Endstand wiederhergestellt und erneut geprüft.\n\nDie Werkzeugauswahl wurde über den lokalen Routing-Suchpfad, Original-Descriptions und Abgrenzungen geprüft. Belegte Beziehungen verbinden unter anderem `test-design` mit `tdd` sowie den Feature-Workflow mit Planung, Verifikation und Review. `test-strategy` dient bei der späteren Verification Discovery zur Wahl der kleinsten ausreichenden Testebenen; konkrete Fälle gehören zu `test-design`. Ein umfassender Ingestion- oder Datenbankworkflow ist bislang nicht begründet.\n\nAbschließend liefert jeder Agent eine Zuordnung **Akzeptanzkriterium → Test/Codefundstelle → aktueller Status**, einschließlich Quellstand, Prüfbefehl, Exitcode und Evidence. Fehlende Runtime oder Checks werden als `NOT_RUN` beziehungsweise `BLOCKED` ausgewiesen. Installationen und Außenaktionen bleiben ausgeschlossen.\n\nBis hierhin wurden nur lokale Quellen und Suchwerkzeuge verwendet. Keine Quellen wurden geändert, keine weiteren Agenten gestartet; Implementierung, Tests und Codecheck sind noch nicht ausgeführt.",
+      "description_reads": [
+        {
+          "skill": "context-engineering",
+          "path": "Agentenarbeit/Skills/context-engineering/SKILL.md",
+          "source_sha256": "0698816157c90ad06a3ffed01597867d7e7912badab4b9826fed116c02b95263",
+          "command_indices": [
+            5
+          ],
+          "canonical_description": "Wählt für einen Agentenlauf den kleinsten ausreichenden, aktuellen und signalstarken Kontext aus, schützt Sources of Truth und entscheidet zwischen aktivem Kontext, Working State, Compaction und gezieltem Nachladen. Verwenden bei Auswahl, Bereinigung oder Planung des aktiven Agentenkontexts."
+        },
+        {
+          "skill": "context-audit",
+          "path": "Agentenarbeit/Skills/context-audit/SKILL.md",
+          "source_sha256": "00844737a457bb3e6b114b0739e2490210afb6d1f2aff2fa5f9cc956816bb9bc",
+          "command_indices": [
+            7
+          ],
+          "canonical_description": "Prüft einen Agentenkontext oder Harness auf Token-/Größenverteilung, Relevanz, Staleness, Duplikate, Context Rot, Tooloutput-Bloat und unnötig sichtbare Skills oder Tools und leitet messbare Optimierungen ab. Verwenden bei Context Bloat, steigenden Token-/Latenzkosten oder Verdacht auf Staleness und Signalverlust."
+        },
+        {
+          "skill": "context-compaction",
+          "path": "Agentenarbeit/Skills/context-compaction/SKILL.md",
+          "source_sha256": "b2a026fb28f552df6aed96759183d2c75873b83d1453463ac687c24882ef6826",
+          "command_indices": [
+            7
+          ],
+          "canonical_description": "Verdichtet gewachsenen Agentenkontext mit hoher Fidelity, erhält Constraints, Entscheidungen, Sources of Truth, offenen Zustand und Evidence und prüft die Fortsetzungsfähigkeit nach der Kompression. Verwenden bei langen Agentenläufen mit Context Pressure oder vor einer kontrollierten Verdichtung."
+        },
+        {
+          "skill": "session-handoff",
+          "path": "Agentenarbeit/Skills/session-handoff/SKILL.md",
+          "source_sha256": "99de9b8c86a3eebb55544774508d27c409d42d03f1b1c98c6834222e0aeaf21a",
+          "command_indices": [
+            7
+          ],
+          "canonical_description": "Erzeugt für einen neuen Agenten, Chat oder späteren Arbeitslauf einen eigenständig nutzbaren Fortsetzungszustand mit Ziel, Scope, Sources of Truth, Entscheidungen, Artefakten, Evidence, Risiken, Gates und nächstem Schritt. Verwenden bei Session-, Agenten- oder Zeitwechseln, wenn Arbeit zuverlässig fortgesetzt werden muss."
+        },
+        {
+          "skill": "task-graph",
+          "path": "Agentenarbeit/Skills/task-graph/SKILL.md",
+          "source_sha256": "575d393ecd11eec50adc39b9cbebda19b66b665df1f3b015e4f25400460be294",
+          "command_indices": [
+            5
+          ],
+          "canonical_description": "Zerlegt komplexe Agentenarbeit in abhängige, überprüfbare Knoten und macht echte Abhängigkeiten, Parallelisierung und Stop-Bedingungen sichtbar. Verwenden bei komplexen Aufgaben mit mehreren abhängigen oder parallelisierbaren Arbeitsschritten."
+        },
+        {
+          "skill": "verification-loop",
+          "path": "Agentenarbeit/Skills/verification-loop/SKILL.md",
+          "source_sha256": "37824715a191c6668343358817959756dc6ac5117291e7f11675e7245f2d608f",
+          "command_indices": [
+            6
+          ],
+          "canonical_description": "Führt innerhalb eines freigegebenen Scopes einen kontrollierten Arbeiten-Prüfen-Diagnose-Korrigieren-Loop mit klaren Stop-Kriterien aus. Verwenden bei iterativer Umsetzung, wenn nach jedem Änderungsschritt reproduzierbare Nachweise möglich sind."
+        },
+        {
+          "skill": "delegation-contract",
+          "path": "Agentenarbeit/Skills/delegation-contract/SKILL.md",
+          "source_sha256": "8db59b9327cc6d378316629236c7c3f94940bdf068144a777b743ad91543ed41",
+          "command_indices": [
+            5
+          ],
+          "canonical_description": "Definiert vor relevanter Agentenarbeit Ziel, Scope, Rechte, Quellen, Akzeptanzbedingungen und geforderte Evidence und prüft anschließend das Evidence Bundle. Verwenden vor nicht trivialer delegierter Agentenarbeit mit Scope-, Rechte- oder Gate-Risiken."
+        },
+        {
+          "skill": "adressatengerechte-kommunikation",
+          "path": "Schreiben/Skills/adressatengerechte-kommunikation/SKILL.md",
+          "source_sha256": "787e86f1a02445fa9a95af6a33899aa2f9ddd3a89216e7e0914c9d84e1874c4f",
+          "command_indices": [
+            6
+          ],
+          "canonical_description": "Nachrichten und schriftliche Kommunikation so planen und formulieren, dass Sachverhalt, Empfänger, Beziehung, Hierarchie, gewünschte Reaktion, Direktheit, Kanal und gegebenenfalls Konfliktlage zusammenpassen. Verwenden, wenn nicht nur der Sprachstil, sondern die Wirkung auf einen konkreten Empfänger oder eine konkrete Entscheidung materiell für die Lösung ist."
+        },
+        {
+          "skill": "code-review",
+          "path": "Programmieren/Skills/code-review/SKILL.md",
+          "source_sha256": "314840ab5fed2ac4d8fb67147e460864471d71f120de1409031ff26cf5345260",
+          "command_indices": [
+            5
+          ],
+          "canonical_description": "Strukturiertes Code-Review für KI-gestützte Softwarearbeit. Verwenden, um einen Diff gegen festen Ausgangspunkt, Anforderung, freigegebenen Plan und Repository-Standards zu prüfen."
+        },
+        {
+          "skill": "domain-modeling",
+          "path": "Programmieren/Skills/domain-modeling/SKILL.md",
+          "source_sha256": "74bbc72334d6bac1ff388abd5a42fb162cc223207f803ad3c0aa35173949b1eb",
+          "command_indices": [
+            10
+          ],
+          "canonical_description": "Fachmodellierungs-Disziplin für KI-gestützte Softwarearbeit. Verwenden, wenn Begriffe, wiederholbare Fachobjekte, Zuständigkeiten oder Modulgrenzen geklärt werden müssen."
+        },
+        {
+          "skill": "tdd",
+          "path": "Programmieren/Skills/tdd/SKILL.md",
+          "source_sha256": "f69f734d323fff987d0e9f7cae202770be153210c1b31a82f08ee8006ef30d9a",
+          "command_indices": [
+            5
+          ],
+          "canonical_description": "Testgetriebene Umsetzung für KI-gestützte Softwarearbeit. Verwenden, wenn ein freigegebener Feature- oder Bugfix-Scope in kleinen überprüfbaren Schnitten umgesetzt wird."
+        },
+        {
+          "skill": "citation-audit",
+          "path": "Recherche/Skills/citation-audit/SKILL.md",
+          "source_sha256": "3dae6050d9cfcfb2a3e4a91f1d545da05b6c1c231bb256ea148ffb0588838928",
+          "command_indices": [
+            6
+          ],
+          "canonical_description": "Prüft fertige oder weitgehend fertige Research-Synthesen darauf, ob wesentliche Faktenclaims durch die tatsächlich zugeordneten Quellen und konkrete Evidence gestützt werden. Verwenden vor Abschluss oder Veröffentlichung, wenn Claim-zu-Zitation-Support materiell geprüft werden muss; nicht für die frühe Qualitätsbewertung einzelner Quellen oder die isolierte Verifikation eines einzelnen Claims."
+        },
+        {
+          "skill": "visual-answer",
+          "path": "Dokumentationserstellung/Skills/visual-answer/SKILL.md",
+          "source_sha256": "61ba11f9e11f8141e8492a695a885fd7d717e2c882a83058851ee405fb092982",
+          "command_indices": [
+            6,
+            8
+          ],
+          "canonical_description": "Strukturiert komplexe Antworten als visuell schnell erfassbares Artefakt oder Layout mit Kernaussage, Prioritäten, Beziehungen und gestuften Details. Verwenden bei Architektur/Flows, Mehrkriterien-Vergleichen, Hierarchien/Timelines, komplexen Plänen oder Reviews mit vielen Findings; nicht für kurze Faktenantworten, Smalltalk, reine Command-Ausgabe oder wenn der Nutzer Plain Text verlangt."
+        },
+        {
+          "skill": "skill-security-review",
+          "path": "Sicherheit/Skills/skill-security-review/SKILL.md",
+          "source_sha256": "14bfdf2b8764286f336ed8aabb07eea6103e3c44bb543cc6c564ba8e377a4dd8",
+          "command_indices": [
+            6
+          ],
+          "canonical_description": "Prüft einen Agent-Skill vor Aktivierung oder Freigabe auf Trust-/Admission-, Supply-Chain-, Berechtigungs-, Prompt-Injection-, Datenexfiltrations-, Script-, Remote-Dependency-, External-Action- und Update-Risiken. Verwenden bei externen oder mächtigen Skills und bei sicherheitsrelevanten Upstream-Änderungen; nicht als allgemeiner fachlicher Skillreview und nicht für die allgemeine Admission eines eigenständigen MCP-Servers, Plugins, Connectors oder Hooks, sofern dieser nicht Teil des Skill-Bundles ist."
+        },
+        {
+          "skill": "tool-permission-review",
+          "path": "Sicherheit/Skills/tool-permission-review/SKILL.md",
+          "source_sha256": "6e66c6added6308aa86124528a633d264f8902500034102973f3738e40d73eb7",
+          "command_indices": [
+            6
+          ],
+          "canonical_description": "Prüft die für einen Agenten, Skill, Workflow oder eine eigenständige externe Integration vorgesehenen Tool- und Berechtigungsrechte gegen Least Privilege, Fallbacks und Human Gates. Verwenden wenn neue Tools, Netzwerk-, Schreib-, Ausführungs- oder Produktionsrechte eingeführt werden; nicht für reine Funktionsbeschreibung eines Tools und nicht als vollständiger Supply-Chain- oder Skill-Admission-Review."
+        },
+        {
+          "skill": "test-strategy",
+          "path": "Testing-und-QA/Skills/test-strategy/SKILL.md",
+          "source_sha256": "6840f2aaa40a65fd9b0b13ec9bc9e5f47476f1893a383c898624c20e75f290c7",
+          "command_indices": [
+            7
+          ],
+          "canonical_description": "Entwickelt für ein Feature, System oder eine Änderung eine risikobasierte Teststrategie und ein sinnvolles Testportfolio. Verwenden bei Fragen wie „Wie sollen wir das testen?“, „Welche Tests brauchen wir?“ oder wenn Testebenen und Qualitätsevidence geplant werden müssen. Nicht für das Schreiben eines einzelnen konkreten Testfalls verwenden."
+        },
+        {
+          "skill": "test-design",
+          "path": "Testing-und-QA/Skills/test-design/SKILL.md",
+          "source_sha256": "2f04848bb93221f51b609ef04fe8c824a003bff176bfa947b9d8ee3bb68639ab",
+          "command_indices": [
+            5
+          ],
+          "canonical_description": "Entwirft konkrete Testfälle aus Anforderungen, Invarianten, Zuständen, Grenzwerten und Failure Modes. Verwenden, wenn konkrete Testfälle oder eine systematische Testfallmenge benötigt werden. Nicht als allgemeine Teststrategie oder E2E-Ausführung verwenden."
+        }
+      ],
+      "completed_item_types": {
+        "agent_message": 3,
+        "command_execution": 11
+      },
+      "metrics": {
+        "elapsed_seconds": 190.98,
+        "commands": 11,
+        "tool_output_utf8_bytes": 223165,
+        "usage": [
+          {
+            "input_tokens": 489464,
+            "cached_input_tokens": 417536,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 5018,
+            "reasoning_output_tokens": 1317
+          }
+        ]
+      },
+      "invocation": {
+        "argv": [
+          "<user-home>\\AppData\\Local\\OpenAI\\Codex\\bin\\22cfb1d302613eae\\codex.EXE",
+          "-a",
+          "never",
+          "exec",
+          "--ignore-user-config",
+          "--ephemeral",
+          "--skip-git-repo-check",
+          "--cd",
+          "<repo>\\.validation\\routing-repaired-comparison-20261031\\workspace-guided",
+          "--json",
+          "--color",
+          "never",
+          "--model",
+          "gpt-6.1-sol",
+          "-c",
+          "model_reasoning_effort=\"high\"",
+          "-c",
+          "default_permissions=\":workspace\"",
+          "-c",
+          "windows.sandbox=\"elevated\"",
+          "-c",
+          "shell_environment_policy.set.PYTHONDONTWRITEBYTECODE=\"1\"",
+          "-c",
+          "model_provider=\"openai\"",
+          "-c",
+          "forced_login_method=\"chatgpt\"",
+          "-c",
+          "web_search=\"disabled\"",
+          "--output-schema",
+          "<repo>\\.validation\\routing-repaired-comparison-20261031\\answer-schema.json",
+          "--output-last-message",
+          "<repo>\\.validation\\routing-repaired-comparison-20261031\\guided-answer.json",
+          "-"
+        ],
+        "prompt": "Arbeite ausschließlich mit den Quellen in deinem aktuellen Arbeitsverzeichnis. Keine Installation, Außenaktionen oder Quellenänderungen. Lokale abgeleitete Suchcaches sind erlaubt.\n\nIch möchte einen CSV-Import entwickeln: 1 bis 1000 Datensätze, leere Dateien ablehnen, Dubletten melden. Stell mir zunächst nur einen umsetzbaren Arbeitsplan vor. Die Umsetzung soll in kleine prüfbare Schritte zerlegt und auf zwei Agenten verteilt werden, ohne gleichzeitige Änderungen derselben Dateien. Plane auch, welche aktuellen Projektinformationen die Agenten brauchen und was sie erst bei Bedarf nachladen sollten. Konkrete Grenztests und ein unabhängiger Codecheck sollen dazugehören. Welche Werkzeuge aus diesem Repository passen zu den einzelnen Jobs und wann setzt du sie ein? Noch nichts implementieren und keine weiteren Agenten starten.\n\nNutze für die Kandidatensuche nach den Pflicht-Reads den vorhandenen lokalen Routing-Suchpfad über Search-KI-Regeln.ps1 -Routing -Query und seine belegten Beziehungshinweise. Zerlege den Auftrag in Teiljobs und wähle passende Suchwörter selbst. Lade Original-Descriptions und Near-Misses gezielt nach; Seiten oder konkrete Beziehungen nur soweit nötig. Katalog- und Workflow-Fallbacks sowie alle Pflicht-Gates bleiben erhalten.",
+        "prompt_sha256": "5fa3b3df6f3270311319718c428684f67de6e097855639036fbc3d1509baa0b3"
+      },
+      "search_records": [
+        {
+          "command_index": 2,
+          "response": {
+            "status": "ready",
+            "revision": "dc12d6fac053f1e1dcdc861660f1c4709b1dbb1e",
+            "mode": "bm25",
+            "fingerprint": "9e1296360fea44067a260a4402390147c9c9af3ecc53b1a4e1f6759f33ab8cbf",
+            "hits": [],
+            "total_matches": 0,
+            "offset": 0,
+            "page_size": 10,
+            "has_more": false,
+            "next_cursor": null,
+            "routing_hints": {
+              "items": [],
+              "total_relations": 0,
+              "limit": 20,
+              "truncated": false
+            },
+            "candidates_only": true,
+            "routing_coverage": {
+              "indexed_skills": 155,
+              "skills": 155
+            },
+            "routing_sources": {
+              "master": "Dokumentation/Skill-Handbuch.md",
+              "catalog": "skill-catalog.yml",
+              "overlays": "routing-overlays.yml",
+              "workflows": "workflow-index.yml"
+            }
+          }
+        },
+        {
+          "command_index": 3,
+          "response": {
+            "status": "ready",
+            "revision": "dc12d6fac053f1e1dcdc861660f1c4709b1dbb1e",
+            "mode": "bm25",
+            "fingerprint": "9e1296360fea44067a260a4402390147c9c9af3ecc53b1a4e1f6759f33ab8cbf",
+            "hits": [
+              {
+                "path": "Agentenarbeit/Skills/task-graph/SKILL.md",
+                "score": 0.9222486242508754,
+                "snippet": "@@ -1,4 @@ (0 before, 54 after)\n---\nname: task-graph\ndescription: Zerlegt komplexe Agentenarbeit in abhängige, überprüfbare Knoten und macht echte Abhängigkeiten, Parallelisierung und Stop-Bedingungen sichtbar. Verwenden bei komplexen Aufgaben mit mehreren abhängigen oder parallelisierbaren Arbeitsschritten.\n---",
+                "content_sha256": "575d393ecd11eec50adc39b9cbebda19b66b665df1f3b015e4f25400460be294",
+                "search_document_sha256": "0ba4d4dfdaec70c19f5d1260f80f815197bee502841492bf71a8ea34280ecfa5",
+                "snippet_origin": "derived-search-document",
+                "sources": [
+                  {
+                    "path": "Agentenarbeit/Skills/task-graph/SKILL.md",
+                    "sha256": "575d393ecd11eec50adc39b9cbebda19b66b665df1f3b015e4f25400460be294"
+                  },
+                  {
+                    "path": "skill-catalog.yml",
+                    "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca",
+                    "fields": [
+                      "skills[task-graph].id",
+                      "skills[task-graph].area",
+                      "skills[task-graph].purpose"
+                    ]
+                  }
+                ],
+                "kind": "skill",
+                "skill": {
+                  "description": "Zerlegt komplexe Agentenarbeit in abhängige, überprüfbare Knoten und macht echte Abhängigkeiten, Parallelisierung und Stop-Bedingungen sichtbar. Verwenden bei komplexen Aufgaben mit mehreren abhängigen oder parallelisierbaren Arbeitsschritten.",
+                  "eval_coverage": "partial",
+                  "id": "task-graph",
+                  "maturity": "candidate"
+                }
+              },
+              {
+                "path": "Schnittstellen-und-Vertraege/Skills/interface-design/SKILL.md",
+                "score": 0.8858158543928788,
+                "snippet": "@@ -2,4 @@ (1 before, 64 after)\nname: interface-design\ndescription: Entwirft oder präzisiert einen technologieübergreifenden Vertrag an einer bestehenden oder vorgesehenen Systemgrenze. Verwenden bei Consumer-/Provider-Fragen, Wahl von HTTP, GraphQL, RPC, Events oder Webhooks und beim Definieren der gemeinsamen Semantik. Nicht für große Systemzerlegung oder reine Implementierungsdetails verwenden.\n---\n",
+                "content_sha256": "c9a3a583c9e44d9433e67aece2fb3beb79f81467d748171cd39e9f0c7c85b796",
+                "search_document_sha256": "986e078e58061cec2019fa2a019bb98d26107ef387eca59430fa0fb9533e446f",
+                "snippet_origin": "derived-search-document",
+                "sources": [
+                  {
+                    "path": "Schnittstellen-und-Vertraege/Skills/interface-design/SKILL.md",
+                    "sha256": "c9a3a583c9e44d9433e67aece2fb3beb79f81467d748171cd39e9f0c7c85b796"
+                  },
+                  {
+                    "path": "skill-catalog.yml",
+                    "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca",
+                    "fields": [
+                      "skills[interface-design].id",
+                      "skills[interface-design].area",
+                      "skills[interface-design].purpose"
+                    ]
+                  }
+                ],
+                "kind": "skill",
+                "skill": {
+                  "description": "Entwirft oder präzisiert einen technologieübergreifenden Vertrag an einer bestehenden oder vorgesehenen Systemgrenze. Verwenden bei Consumer-/Provider-Fragen, Wahl von HTTP, GraphQL, RPC, Events oder Webhooks und beim Definieren der gemeinsamen Semantik. Nicht für große Systemzerlegung oder reine Implementierungsdetails verwenden.",
+                  "eval_coverage": "partial",
+                  "id": "interface-design",
+                  "maturity": "experimental"
+                }
+              },
+              {
+                "path": "Agentenarbeit/Skills/verification-loop/SKILL.md",
+                "score": 0.7998565221950663,
+                "snippet": "@@ -7,4 @@ (6 before, 148 after)\n\nNutze `../../Task-Graph-und-Loops.md` und `../../Human-Gates-und-Freigaben.md`.\n\n## Voraussetzungen",
+                "content_sha256": "37824715a191c6668343358817959756dc6ac5117291e7f11675e7245f2d608f",
+                "search_document_sha256": "d36021a86e5b88b48c1f422e50ba0b323a92b4c655155f2891dec1a646d3d215",
+                "snippet_origin": "derived-search-document",
+                "sources": [
+                  {
+                    "path": "Agentenarbeit/Skills/verification-loop/SKILL.md",
+                    "sha256": "37824715a191c6668343358817959756dc6ac5117291e7f11675e7245f2d608f"
+                  },
+                  {
+                    "path": "skill-catalog.yml",
+                    "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca",
+                    "fields": [
+                      "skills[verification-loop].id",
+                      "skills[verification-loop].area",
+                      "skills[verification-loop].purpose"
+                    ]
+                  }
+                ],
+                "kind": "skill",
+                "skill": {
+                  "description": "Führt innerhalb eines freigegebenen Scopes einen kontrollierten Arbeiten-Prüfen-Diagnose-Korrigieren-Loop mit klaren Stop-Kriterien aus. Verwenden bei iterativer Umsetzung, wenn nach jedem Änderungsschritt reproduzierbare Nachweise möglich sind.",
+                  "eval_coverage": "partial",
+                  "id": "verification-loop",
+                  "maturity": "candidate"
+                }
+              }
+            ],
+            "total_matches": 3,
+            "offset": 0,
+            "page_size": 10,
+            "has_more": false,
+            "next_cursor": null,
+            "routing_hints": {
+              "items": [
+                {
+                  "from": "skill:interface-design",
+                  "source": {
+                    "field": "skills[interface-design].related",
+                    "path": "skill-catalog.yml",
+                    "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca"
+                  },
+                  "target_path": "Schnittstellen-und-Vertraege/Skills/contract-change-review/SKILL.md",
+                  "to": "skill:contract-change-review",
+                  "type": "related"
+                },
+                {
+                  "from": "skill:interface-design",
+                  "source": {
+                    "field": "skills[interface-design].related",
+                    "path": "skill-catalog.yml",
+                    "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca"
+                  },
+                  "target_path": "Programmieren/Skills/domain-modeling/SKILL.md",
+                  "to": "skill:domain-modeling",
+                  "type": "related"
+                },
+                {
+                  "from": "skill:interface-design",
+                  "source": {
+                    "field": "skills[interface-design].related",
+                    "path": "skill-catalog.yml",
+                    "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca"
+                  },
+                  "target_path": "Schnittstellen-und-Vertraege/Skills/event-contract-design/SKILL.md",
+                  "to": "skill:event-contract-design",
+                  "type": "related"
+                },
+                {
+                  "from": "skill:interface-design",
+                  "source": {
+                    "field": "skills[interface-design].related",
+                    "path": "skill-catalog.yml",
+                    "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca"
+                  },
+                  "target_path": "Schnittstellen-und-Vertraege/Skills/http-api-design/SKILL.md",
+                  "to": "skill:http-api-design",
+                  "type": "related"
+                },
+                {
+                  "from": "skill:interface-design",
+                  "source": {
+                    "field": "skills[interface-design].related",
+                    "path": "skill-catalog.yml",
+                    "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca"
+                  },
+                  "target_path": "Schnittstellen-und-Vertraege/Skills/interface-review/SKILL.md",
+                  "to": "skill:interface-review",
+                  "type": "related"
+                },
+                {
+                  "from": "workflow:Workflows/Acceptance-Traceability-und-Handoff.md",
+                  "source": {
+                    "lines": [
+                      29
+                    ],
+                    "path": "Workflows/Acceptance-Traceability-und-Handoff.md",
+                    "sha256": "5a82b3ae9e856b27de0b7571ae45dc3e9d7131f29e800e9809b33777c3a7875d"
+                  },
+                  "target_path": "Schnittstellen-und-Vertraege/Skills/interface-design/SKILL.md",
+                  "to": "skill:interface-design",
+                  "type": "mentions"
+                },
+                {
+                  "from": "workflow:Workflows/Bugdiagnose.md",
+                  "source": {
+                    "lines": [
+                      79
+                    ],
+                    "path": "Workflows/Bugdiagnose.md",
+                    "sha256": "20ade3523c6f28e33f617ae7838da63b36936d1d52fb1d63bf4a4dafbaf2cac0"
+                  },
+                  "target_path": "Agentenarbeit/Skills/verification-loop/SKILL.md",
+                  "to": "skill:verification-loop",
+                  "type": "mentions"
+                },
+                {
+                  "from": "workflow:Workflows/Long-Horizon-Agentenarbeit.md",
+                  "source": {
+                    "lines": [
+                      37
+                    ],
+                    "path": "Workflows/Long-Horizon-Agentenarbeit.md",
+                    "sha256": "5e435201ce0b32925457633fddc839e128b2400c1e82fb26cca7ddf01f814645"
+                  },
+                  "target_path": "Agentenarbeit/Skills/task-graph/SKILL.md",
+                  "to": "skill:task-graph",
+                  "type": "mentions"
+                },
+                {
+                  "from": "workflow:Workflows/Review-Revise-Loop.md",
+                  "source": {
+                    "lines": [
+                      149,
+                      162
+                    ],
+                    "path": "Workflows/Review-Revise-Loop.md",
+                    "sha256": "0f1e83b6efaabc1fc07c7043cc2dd8d511e3ef9a662fb0bf4d88987fb1656d2e"
+                  },
+                  "target_path": "Agentenarbeit/Skills/verification-loop/SKILL.md",
+                  "to": "skill:verification-loop",
+                  "type": "mentions"
+                },
+                {
+                  "from": "workflow:Workflows/Skill-Verbesserung-aus-Evals-und-Fehlern.md",
+                  "source": {
+                    "lines": [
+                      147
+                    ],
+                    "path": "Workflows/Skill-Verbesserung-aus-Evals-und-Fehlern.md",
+                    "sha256": "2b49c37c7a5e08c30cfcf9e9712dd7ebd780f1a1f294614688dafb7723f4b317"
+                  },
+                  "target_path": "Agentenarbeit/Skills/verification-loop/SKILL.md",
+                  "to": "skill:verification-loop",
+                  "type": "mentions"
+                },
+                {
+                  "from": "workflow:Workflows/Software-Feature.md",
+                  "source": {
+                    "lines": [
+                      37
+                    ],
+                    "path": "Workflows/Software-Feature.md",
+                    "sha256": "26f6affa186d7fb52b478598e27ac992dea6b84c71dd799062d8b25fc962d948"
+                  },
+                  "target_path": "Agentenarbeit/Skills/task-graph/SKILL.md",
+                  "to": "skill:task-graph",
+                  "type": "mentions"
+                },
+                {
+                  "from": "workflow:Workflows/Software-Feature.md",
+                  "source": {
+                    "lines": [
+                      62
+                    ],
+                    "path": "Workflows/Software-Feature.md",
+                    "sha256": "26f6affa186d7fb52b478598e27ac992dea6b84c71dd799062d8b25fc962d948"
+                  },
+                  "target_path": "Agentenarbeit/Skills/verification-loop/SKILL.md",
+                  "to": "skill:verification-loop",
+                  "type": "mentions"
+                },
+                {
+                  "from": "workflow:Workflows/Systemgrenze-und-Dekomposition.md",
+                  "source": {
+                    "lines": [
+                      24
+                    ],
+                    "path": "Workflows/Systemgrenze-und-Dekomposition.md",
+                    "sha256": "4ce3a176c465fa86784cfa57ee8e0b1be04f39ec4704ac0e8fe2c1a0b94cc71a"
+                  },
+                  "target_path": "Schnittstellen-und-Vertraege/Skills/interface-design/SKILL.md",
+                  "to": "skill:interface-design",
+                  "type": "mentions"
+                },
+                {
+                  "from": "workflow:Workflows/Wiederkehrende-Aufgabe-zum-Playbook.md",
+                  "source": {
+                    "lines": [
+                      39
+                    ],
+                    "path": "Workflows/Wiederkehrende-Aufgabe-zum-Playbook.md",
+                    "sha256": "7f6a183607f0febcc6bfc5a7605b39d81ea9c03ce89ff981ce35e9ae75dbd830"
+                  },
+                  "target_path": "Agentenarbeit/Skills/task-graph/SKILL.md",
+                  "to": "skill:task-graph",
+                  "type": "mentions"
+                },
+                {
+                  "from": "workflow:Workflows/Wiederkehrende-Aufgabe-zum-Playbook.md",
+                  "source": {
+                    "lines": [
+                      42
+                    ],
+                    "path": "Workflows/Wiederkehrende-Aufgabe-zum-Playbook.md",
+                    "sha256": "7f6a183607f0febcc6bfc5a7605b39d81ea9c03ce89ff981ce35e9ae75dbd830"
+                  },
+                  "target_path": "Agentenarbeit/Skills/verification-loop/SKILL.md",
+                  "to": "skill:verification-loop",
+                  "type": "mentions"
+                }
+              ],
+              "total_relations": 15,
+              "limit": 20,
+              "truncated": false
+            },
+            "candidates_only": true,
+            "routing_coverage": {
+              "indexed_skills": 155,
+              "skills": 155
+            },
+            "routing_sources": {
+              "master": "Dokumentation/Skill-Handbuch.md",
+              "catalog": "skill-catalog.yml",
+              "overlays": "routing-overlays.yml",
+              "workflows": "workflow-index.yml"
+            }
+          }
+        },
+        {
+          "command_index": 4,
+          "response": {
+            "query": "Delegation",
+            "status": "ready",
+            "hits": [
+              {
+                "path": "Agentenarbeit/Skills/delegation-contract/SKILL.md",
+                "skill": {
+                  "description": "Definiert vor relevanter Agentenarbeit Ziel, Scope, Rechte, Quellen, Akzeptanzbedingungen und geforderte Evidence und prüft anschließend das Evidence Bundle. Verwenden vor nicht trivialer delegierter Agentenarbeit mit Scope-, Rechte- oder Gate-Risiken.",
+                  "eval_coverage": "partial",
+                  "id": "delegation-contract",
+                  "maturity": "candidate"
+                }
+              },
+              {
+                "path": "Arbeitsweisen/Skills/prompt-engineering/SKILL.md",
+                "skill": {
+                  "description": "Erstellt, prüft, verbessert, zerlegt oder adaptiert einen Prompt als eigenständiges Endartefakt für ein KI-Werkzeug. Verwenden, wenn der Nutzer ausdrücklich einen Prompt oder Agentenauftrag zum Kopieren, Analysieren oder Übersetzen möchte; nicht bei der unmittelbaren Ausführung der beschriebenen Aufgabe, beim normalen Schreiben von Texten, beim Erstellen eines Skills oder automatisch für jede KI-Nutzung.",
+                  "eval_coverage": "partial",
+                  "id": "prompt-engineering",
+                  "maturity": "experimental"
+                }
+              },
+              {
+                "path": "Programmieren/Skills/diagnose/SKILL.md",
+                "skill": {
+                  "description": "Disziplinierte Fehlerdiagnose für KI-gestützte Softwarearbeit. Verwenden bei Bugs, Regressionen, sporadischem Verhalten oder Performanceproblemen, bevor ein Fix geraten wird.",
+                  "eval_coverage": "partial",
+                  "id": "diagnose",
+                  "maturity": "candidate"
+                }
+              }
+            ],
+            "total_matches": 3,
+            "has_more": false,
+            "next_cursor": null,
+            "routing_hints": {
+              "items": [
+                {
+                  "from": "skill:prompt-engineering",
+                  "source": {
+                    "field": "skills[prompt-engineering].related",
+                    "path": "skill-catalog.yml",
+                    "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca"
+                  },
+                  "target_path": "Agentenarbeit/Skills/agent-eval/SKILL.md",
+                  "to": "skill:agent-eval",
+                  "type": "related"
+                },
+                {
+                  "from": "skill:prompt-engineering",
+                  "source": {
+                    "field": "skills[prompt-engineering].related",
+                    "path": "skill-catalog.yml",
+                    "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca"
+                  },
+                  "target_path": "Agentenarbeit/Skills/context-engineering/SKILL.md",
+                  "to": "skill:context-engineering",
+                  "type": "related"
+                },
+                {
+                  "from": "skill:prompt-engineering",
+                  "source": {
+                    "field": "skills[prompt-engineering].related",
+                    "path": "skill-catalog.yml",
+                    "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca"
+                  },
+                  "target_path": "Agentenarbeit/Skills/delegation-contract/SKILL.md",
+                  "to": "skill:delegation-contract",
+                  "type": "related"
+                },
+                {
+                  "from": "skill:prompt-engineering",
+                  "source": {
+                    "field": "skills[prompt-engineering].related",
+                    "path": "skill-catalog.yml",
+                    "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca"
+                  },
+                  "target_path": "Agentenarbeit/Skills/session-handoff/SKILL.md",
+                  "to": "skill:session-handoff",
+                  "type": "related"
+                },
+                {
+                  "from": "workflow:Workflows/Bugdiagnose.md",
+                  "source": {
+                    "lines": [
+                      20
+                    ],
+                    "path": "Workflows/Bugdiagnose.md",
+                    "sha256": "20ade3523c6f28e33f617ae7838da63b36936d1d52fb1d63bf4a4dafbaf2cac0"
+                  },
+                  "target_path": "Programmieren/Skills/diagnose/SKILL.md",
+                  "to": "skill:diagnose",
+                  "type": "mentions"
+                },
+                {
+                  "from": "workflow:Workflows/Datenqualitaetsstoerung-und-Reconciliation.md",
+                  "source": {
+                    "lines": [
+                      42
+                    ],
+                    "path": "Workflows/Datenqualitaetsstoerung-und-Reconciliation.md",
+                    "sha256": "e2ef12a8830725141a936656a47fb44eab8e71f06a210d23e7e62151da91e32e"
+                  },
+                  "target_path": "Programmieren/Skills/diagnose/SKILL.md",
+                  "to": "skill:diagnose",
+                  "type": "mentions"
+                },
+                {
+                  "from": "workflow:Workflows/Long-Horizon-Agentenarbeit.md",
+                  "source": {
+                    "lines": [
+                      38
+                    ],
+                    "path": "Workflows/Long-Horizon-Agentenarbeit.md",
+                    "sha256": "5e435201ce0b32925457633fddc839e128b2400c1e82fb26cca7ddf01f814645"
+                  },
+                  "target_path": "Agentenarbeit/Skills/delegation-contract/SKILL.md",
+                  "to": "skill:delegation-contract",
+                  "type": "mentions"
+                },
+                {
+                  "from": "workflow:Workflows/Produktionsincident.md",
+                  "source": {
+                    "lines": [
+                      49
+                    ],
+                    "path": "Workflows/Produktionsincident.md",
+                    "sha256": "a512372ff387fc9c9d0454f6a06f9fe3a2d0145fba03d5e47d0ac49a117ae2d5"
+                  },
+                  "target_path": "Programmieren/Skills/diagnose/SKILL.md",
+                  "to": "skill:diagnose",
+                  "type": "mentions"
+                },
+                {
+                  "from": "workflow:Workflows/Software-Feature.md",
+                  "source": {
+                    "lines": [
+                      43
+                    ],
+                    "path": "Workflows/Software-Feature.md",
+                    "sha256": "26f6affa186d7fb52b478598e27ac992dea6b84c71dd799062d8b25fc962d948"
+                  },
+                  "target_path": "Agentenarbeit/Skills/delegation-contract/SKILL.md",
+                  "to": "skill:delegation-contract",
+                  "type": "mentions"
+                },
+                {
+                  "from": "workflow:Workflows/Wiederkehrende-Aufgabe-zum-Playbook.md",
+                  "source": {
+                    "lines": [
+                      38
+                    ],
+                    "path": "Workflows/Wiederkehrende-Aufgabe-zum-Playbook.md",
+                    "sha256": "7f6a183607f0febcc6bfc5a7605b39d81ea9c03ce89ff981ce35e9ae75dbd830"
+                  },
+                  "target_path": "Agentenarbeit/Skills/delegation-contract/SKILL.md",
+                  "to": "skill:delegation-contract",
+                  "type": "mentions"
+                }
+              ],
+              "total_relations": 10,
+              "limit": 20,
+              "truncated": false
+            }
+          }
+        },
+        {
+          "command_index": 4,
+          "response": {
+            "query": "Kontext",
+            "status": "ready",
+            "hits": [
+              {
+                "path": "Agentenarbeit/Skills/context-engineering/SKILL.md",
+                "skill": {
+                  "description": "Wählt für einen Agentenlauf den kleinsten ausreichenden, aktuellen und signalstarken Kontext aus, schützt Sources of Truth und entscheidet zwischen aktivem Kontext, Working State, Compaction und gezieltem Nachladen. Verwenden bei Auswahl, Bereinigung oder Planung des aktiven Agentenkontexts.",
+                  "eval_coverage": "partial",
+                  "id": "context-engineering",
+                  "maturity": "candidate"
+                }
+              },
+              {
+                "path": "Agentenarbeit/Skills/context-audit/SKILL.md",
+                "skill": {
+                  "description": "Prüft einen Agentenkontext oder Harness auf Token-/Größenverteilung, Relevanz, Staleness, Duplikate, Context Rot, Tooloutput-Bloat und unnötig sichtbare Skills oder Tools und leitet messbare Optimierungen ab. Verwenden bei Context Bloat, steigenden Token-/Latenzkosten oder Verdacht auf Staleness und Signalverlust.",
+                  "eval_coverage": "partial",
+                  "id": "context-audit",
+                  "maturity": "experimental"
+                }
+              },
+              {
+                "path": "Dokumentationserstellung/Skills/adr/SKILL.md",
+                "skill": {
+                  "description": "Dokumentiert eine Architektur- oder technische Grundsatzentscheidung nachvollziehbar als Architecture Decision Record mit Kontext, Alternativen und Konsequenzen. Verwenden bei tatsächlich getroffenen oder klar als Proposal markierten Entscheidungen, deren Begründung und Trade-offs dauerhaft nachvollziehbar bleiben sollen.",
+                  "eval_coverage": "none",
+                  "id": "adr",
+                  "maturity": "experimental"
+                }
+              },
+              {
+                "path": "Arbeitsweisen/Skills/prompt-engineering/SKILL.md",
+                "skill": {
+                  "description": "Erstellt, prüft, verbessert, zerlegt oder adaptiert einen Prompt als eigenständiges Endartefakt für ein KI-Werkzeug. Verwenden, wenn der Nutzer ausdrücklich einen Prompt oder Agentenauftrag zum Kopieren, Analysieren oder Übersetzen möchte; nicht bei der unmittelbaren Ausführung der beschriebenen Aufgabe, beim normalen Schreiben von Texten, beim Erstellen eines Skills oder automatisch für jede KI-Nutzung.",
+                  "eval_coverage": "partial",
+                  "id": "prompt-engineering",
+                  "maturity": "experimental"
+                }
+              },
+              {
+                "path": "Schreiben/Skills/stilreview/SKILL.md",
+                "skill": {
+                  "description": "Struktureller Stilreview für längere Texte. Verwendet Muster als Fundstellen, bewertet aber immer Funktion, Zielgruppe, Stimme und Inhalt vor einer Änderung. Verwenden bei fertigen oder weit fortgeschrittenen Texten, wenn Stilprobleme, KI-typische Muster oder unnötige Glättung unabhängig geprüft werden sollen.",
+                  "eval_coverage": "partial",
+                  "id": "stilreview",
+                  "maturity": "candidate"
+                }
+              },
+              {
+                "path": "Wissensmanagement/Skills/knowledge-query/SKILL.md",
+                "skill": {
+                  "description": "Beantwortet Fragen aus einer vorhandenen Wissensbasis durch gezieltes Retrieval, Prüfung von Provenance, Aktualität und Widersprüchen und kennzeichnet klar, was die Basis nicht trägt. Verwenden bei Fragen, die aus einer bestehenden Wissensbasis grounded beantwortet werden sollen, ohne Modellwissen als Basisinhalt auszugeben.",
+                  "eval_coverage": "partial",
+                  "id": "knowledge-query",
+                  "maturity": "experimental"
+                }
+              },
+              {
+                "path": "Skill-Engineering/README.md",
+                "skill": null
+              },
+              {
+                "path": "Sicherheit/Skills/inhaltsprovenienz-review/SKILL.md",
+                "skill": {
+                  "description": "Vorhandene Dateien oder Inhalte read-only auf sichtbare und maschinenlesbare Provenienzsignale, Metadaten, Content Credentials, ungewöhnliche Unicode-Artefakte und dokumentierte Herkunftshinweise prüfen. Verwenden wenn der Nutzer wissen will, welche Provenienz-, Generator-, Geräte- oder Bearbeitungshinweise in einer Datei stecken, ohne diese bereits zu entfernen oder zu verändern.",
+                  "eval_coverage": "partial",
+                  "id": "inhaltsprovenienz-review",
+                  "maturity": "experimental"
+                }
+              },
+              {
+                "path": "Agentenarbeit/Skills/delegation-contract/SKILL.md",
+                "skill": {
+                  "description": "Definiert vor relevanter Agentenarbeit Ziel, Scope, Rechte, Quellen, Akzeptanzbedingungen und geforderte Evidence und prüft anschließend das Evidence Bundle. Verwenden vor nicht trivialer delegierter Agentenarbeit mit Scope-, Rechte- oder Gate-Risiken.",
+                  "eval_coverage": "partial",
+                  "id": "delegation-contract",
+                  "maturity": "candidate"
+                }
+              },
+              {
+                "path": "Schreiben/Skills/natuerliches-schreiben/SKILL.md",
+                "skill": {
+                  "description": "Allgemeiner Schreibskill für klare, glaubwürdige und natürliche sachliche oder allgemeine Texte. Verwenden zum Erzeugen neuer Texte, zum inhaltstreuen sprachlichen Überarbeiten sowie zur evidenzbasierten Annäherung an eine vorhandene Nutzerstimme, wenn natürliche Formulierungen, Quellen- und Unsicherheitstreue sowie ein sauberes Endprodukt wichtig sind.",
+                  "eval_coverage": "partial",
+                  "id": "natuerliches-schreiben",
+                  "maturity": "candidate"
+                }
+              }
+            ],
+            "total_matches": 42,
+            "has_more": true,
+            "next_cursor": "eyJjaGVja3N1bSI6IjAwZDBhYjA2Y2EzNjZjYWVjNTRlODMzM2FmMDMyY2Y3NDQwYjUzZjZlODFhZTNiODZmMjFmMjhlYTY1NmFlYjEiLCJjb250ZXh0IjoiZjE0ZmNjZjFlOGNlMDE2MWY1MTRjMTJkN2JlYjlhMzA1MjhkZmM0YmUyZjIwYmRiNmQ1ZmIwY2U5YzA3ZGZhYSIsImxpbWl0IjoxMCwib2Zmc2V0IjoxMCwicmVzdWx0cyI6Ijg2ZjI0Mjg5YjRiYmZhODI1OWJhNDAxZjU4MmQ1MWVlYzIyMmIwZTg5Mzk5ZDVlYmQ5MzAyNGI3YzEyYTczOTciLCJ2IjoxfQ",
+            "routing_hints": {
+              "items": [
+                {
+                  "from": "skill:context-audit",
+                  "source": {
+                    "field": "skills[context-audit].related",
+                    "path": "skill-catalog.yml",
+                    "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca"
+                  },
+                  "target_path": "Agentenarbeit/Skills/context-compaction/SKILL.md",
+                  "to": "skill:context-compaction",
+                  "type": "related"
+                },
+                {
+                  "from": "skill:context-audit",
+                  "source": {
+                    "field": "skills[context-audit].related",
+                    "path": "skill-catalog.yml",
+                    "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca"
+                  },
+                  "target_path": "Agentenarbeit/Skills/context-engineering/SKILL.md",
+                  "to": "skill:context-engineering",
+                  "type": "related"
+                },
+                {
+                  "from": "skill:context-engineering",
+                  "source": {
+                    "field": "skills[context-engineering].related",
+                    "path": "skill-catalog.yml",
+                    "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca"
+                  },
+                  "target_path": "Agentenarbeit/Skills/context-audit/SKILL.md",
+                  "to": "skill:context-audit",
+                  "type": "related"
+                },
+                {
+                  "from": "skill:context-engineering",
+                  "source": {
+                    "field": "skills[context-engineering].related",
+                    "path": "skill-catalog.yml",
+                    "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca"
+                  },
+                  "target_path": "Agentenarbeit/Skills/context-compaction/SKILL.md",
+                  "to": "skill:context-compaction",
+                  "type": "related"
+                },
+                {
+                  "from": "skill:context-engineering",
+                  "source": {
+                    "field": "skills[context-engineering].related",
+                    "path": "skill-catalog.yml",
+                    "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca"
+                  },
+                  "target_path": "Agentenarbeit/Skills/session-handoff/SKILL.md",
+                  "to": "skill:session-handoff",
+                  "type": "related"
+                },
+                {
+                  "from": "skill:inhaltsprovenienz-review",
+                  "source": {
+                    "field": "skills[inhaltsprovenienz-review].related",
+                    "path": "skill-catalog.yml",
+                    "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca"
+                  },
+                  "target_path": "Schreiben/Skills/deutsche-typografie/SKILL.md",
+                  "to": "skill:deutsche-typografie",
+                  "type": "related"
+                },
+                {
+                  "from": "skill:inhaltsprovenienz-review",
+                  "source": {
+                    "field": "skills[inhaltsprovenienz-review].related",
+                    "path": "skill-catalog.yml",
+                    "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca"
+                  },
+                  "target_path": "Sicherheit/Skills/metadaten-hygiene/SKILL.md",
+                  "to": "skill:metadaten-hygiene",
+                  "type": "related"
+                },
+                {
+                  "from": "skill:inhaltsprovenienz-review",
+                  "source": {
+                    "field": "skills[inhaltsprovenienz-review].related",
+                    "path": "skill-catalog.yml",
+                    "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca"
+                  },
+                  "target_path": "Schreiben/Skills/natuerliches-schreiben/SKILL.md",
+                  "to": "skill:natuerliches-schreiben",
+                  "type": "related"
+                },
+                {
+                  "from": "skill:inhaltsprovenienz-review",
+                  "source": {
+                    "field": "skills[inhaltsprovenienz-review].related",
+                    "path": "skill-catalog.yml",
+                    "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca"
+                  },
+                  "target_path": "Sicherheit/Skills/tool-permission-review/SKILL.md",
+                  "to": "skill:tool-permission-review",
+                  "type": "related"
+                },
+                {
+                  "from": "skill:knowledge-query",
+                  "source": {
+                    "field": "skills[knowledge-query].related",
+                    "path": "skill-catalog.yml",
+                    "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca"
+                  },
+                  "target_path": "Agentenarbeit/Skills/context-engineering/SKILL.md",
+                  "to": "skill:context-engineering",
+                  "type": "related"
+                },
+                {
+                  "from": "skill:knowledge-query",
+                  "source": {
+                    "field": "skills[knowledge-query].related",
+                    "path": "skill-catalog.yml",
+                    "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca"
+                  },
+                  "target_path": "Wissensmanagement/Skills/knowledge-synthesis/SKILL.md",
+                  "to": "skill:knowledge-synthesis",
+                  "type": "related"
+                },
+                {
+                  "from": "skill:natuerliches-schreiben",
+                  "source": {
+                    "field": "skills[natuerliches-schreiben].related",
+                    "path": "skill-catalog.yml",
+                    "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca"
+                  },
+                  "target_path": "Schreiben/Skills/adressatengerechte-kommunikation/SKILL.md",
+                  "to": "skill:adressatengerechte-kommunikation",
+                  "type": "related"
+                },
+                {
+                  "from": "skill:natuerliches-schreiben",
+                  "source": {
+                    "field": "skills[natuerliches-schreiben].related",
+                    "path": "skill-catalog.yml",
+                    "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca"
+                  },
+                  "target_path": "Schreiben/Skills/stilreview/SKILL.md",
+                  "to": "skill:stilreview",
+                  "type": "related"
+                },
+                {
+                  "from": "skill:prompt-engineering",
+                  "source": {
+                    "field": "skills[prompt-engineering].related",
+                    "path": "skill-catalog.yml",
+                    "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca"
+                  },
+                  "target_path": "Agentenarbeit/Skills/agent-eval/SKILL.md",
+                  "to": "skill:agent-eval",
+                  "type": "related"
+                },
+                {
+                  "from": "skill:prompt-engineering",
+                  "source": {
+                    "field": "skills[prompt-engineering].related",
+                    "path": "skill-catalog.yml",
+                    "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca"
+                  },
+                  "target_path": "Agentenarbeit/Skills/context-engineering/SKILL.md",
+                  "to": "skill:context-engineering",
+                  "type": "related"
+                },
+                {
+                  "from": "skill:prompt-engineering",
+                  "source": {
+                    "field": "skills[prompt-engineering].related",
+                    "path": "skill-catalog.yml",
+                    "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca"
+                  },
+                  "target_path": "Agentenarbeit/Skills/delegation-contract/SKILL.md",
+                  "to": "skill:delegation-contract",
+                  "type": "related"
+                },
+                {
+                  "from": "skill:prompt-engineering",
+                  "source": {
+                    "field": "skills[prompt-engineering].related",
+                    "path": "skill-catalog.yml",
+                    "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca"
+                  },
+                  "target_path": "Agentenarbeit/Skills/session-handoff/SKILL.md",
+                  "to": "skill:session-handoff",
+                  "type": "related"
+                },
+                {
+                  "from": "skill:stilreview",
+                  "source": {
+                    "field": "skills[stilreview].related",
+                    "path": "skill-catalog.yml",
+                    "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca"
+                  },
+                  "target_path": "Schreiben/Skills/adressatengerechte-kommunikation/SKILL.md",
+                  "to": "skill:adressatengerechte-kommunikation",
+                  "type": "related"
+                },
+                {
+                  "from": "skill:stilreview",
+                  "source": {
+                    "field": "skills[stilreview].related",
+                    "path": "skill-catalog.yml",
+                    "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca"
+                  },
+                  "target_path": "Schreiben/Skills/natuerliches-schreiben/SKILL.md",
+                  "to": "skill:natuerliches-schreiben",
+                  "type": "related"
+                },
+                {
+                  "from": "workflow:Workflows/Architektur-Baseline-und-Systemdesign.md",
+                  "source": {
+                    "lines": [
+                      27
+                    ],
+                    "path": "Workflows/Architektur-Baseline-und-Systemdesign.md",
+                    "sha256": "9e2080d52682f1881b1d3be22dd30ddf1d18746fde3c29bce31b0a30fe6bc549"
+                  },
+                  "target_path": "Dokumentationserstellung/Skills/adr/SKILL.md",
+                  "to": "skill:adr",
+                  "type": "mentions"
+                }
+              ],
+              "total_relations": 33,
+              "limit": 20,
+              "truncated": true
+            }
+          }
+        },
+        {
+          "command_index": 4,
+          "response": {
+            "query": "Grenzwerte",
+            "status": "ready",
+            "hits": [
+              {
+                "path": "Testing-und-QA/Skills/test-design/SKILL.md",
+                "skill": {
+                  "description": "Entwirft konkrete Testfälle aus Anforderungen, Invarianten, Zuständen, Grenzwerten und Failure Modes. Verwenden, wenn konkrete Testfälle oder eine systematische Testfallmenge benötigt werden. Nicht als allgemeine Teststrategie oder E2E-Ausführung verwenden.",
+                  "eval_coverage": "partial",
+                  "id": "test-design",
+                  "maturity": "experimental"
+                }
+              },
+              {
+                "path": "Testing-und-QA/README.md",
+                "skill": null
+              }
+            ],
+            "total_matches": 2,
+            "has_more": false,
+            "next_cursor": null,
+            "routing_hints": {
+              "items": [
+                {
+                  "from": "skill:test-design",
+                  "source": {
+                    "field": "skills[test-design].related",
+                    "path": "skill-catalog.yml",
+                    "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca"
+                  },
+                  "target_path": "Programmieren/Skills/tdd/SKILL.md",
+                  "to": "skill:tdd",
+                  "type": "related"
+                },
+                {
+                  "from": "skill:test-design",
+                  "source": {
+                    "field": "skills[test-design].related",
+                    "path": "skill-catalog.yml",
+                    "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca"
+                  },
+                  "target_path": "Testing-und-QA/Skills/test-strategy/SKILL.md",
+                  "to": "skill:test-strategy",
+                  "type": "related"
+                },
+                {
+                  "from": "workflow:Workflows/Acceptance-Traceability-und-Handoff.md",
+                  "source": {
+                    "lines": [
+                      28
+                    ],
+                    "path": "Workflows/Acceptance-Traceability-und-Handoff.md",
+                    "sha256": "5a82b3ae9e856b27de0b7571ae45dc3e9d7131f29e800e9809b33777c3a7875d"
+                  },
+                  "target_path": "Testing-und-QA/Skills/test-design/SKILL.md",
+                  "to": "skill:test-design",
+                  "type": "mentions"
+                }
+              ],
+              "total_relations": 3,
+              "limit": 20,
+              "truncated": false
+            }
+          }
+        },
+        {
+          "command_index": 4,
+          "response": {
+            "query": "Codeänderungen",
+            "status": "ready",
+            "hits": [
+              {
+                "path": "Programmieren/Skills/code-review/SKILL.md",
+                "skill": {
+                  "description": "Strukturiertes Code-Review für KI-gestützte Softwarearbeit. Verwenden, um einen Diff gegen festen Ausgangspunkt, Anforderung, freigegebenen Plan und Repository-Standards zu prüfen.",
+                  "eval_coverage": "partial",
+                  "id": "code-review",
+                  "maturity": "candidate"
+                }
+              }
+            ],
+            "total_matches": 1,
+            "has_more": false,
+            "next_cursor": null,
+            "routing_hints": {
+              "items": [
+                {
+                  "from": "workflow:Workflows/Bestehende-Website-Review.md",
+                  "source": {
+                    "lines": [
+                      63
+                    ],
+                    "path": "Workflows/Bestehende-Website-Review.md",
+                    "sha256": "3ae141ca33b3de340259c24e941c0f7cdfa1e78380411bd344a4e88599e0e1ff"
+                  },
+                  "target_path": "Programmieren/Skills/code-review/SKILL.md",
+                  "to": "skill:code-review",
+                  "type": "mentions"
+                },
+                {
+                  "from": "workflow:Workflows/Bugdiagnose.md",
+                  "source": {
+                    "lines": [
+                      91,
+                      99
+                    ],
+                    "path": "Workflows/Bugdiagnose.md",
+                    "sha256": "20ade3523c6f28e33f617ae7838da63b36936d1d52fb1d63bf4a4dafbaf2cac0"
+                  },
+                  "target_path": "Programmieren/Skills/code-review/SKILL.md",
+                  "to": "skill:code-review",
+                  "type": "mentions"
+                },
+                {
+                  "from": "workflow:Workflows/Review-Revise-Loop.md",
+                  "source": {
+                    "lines": [
+                      88
+                    ],
+                    "path": "Workflows/Review-Revise-Loop.md",
+                    "sha256": "0f1e83b6efaabc1fc07c7043cc2dd8d511e3ef9a662fb0bf4d88987fb1656d2e"
+                  },
+                  "target_path": "Programmieren/Skills/code-review/SKILL.md",
+                  "to": "skill:code-review",
+                  "type": "mentions"
+                },
+                {
+                  "from": "workflow:Workflows/Software-Feature.md",
+                  "source": {
+                    "lines": [
+                      68
+                    ],
+                    "path": "Workflows/Software-Feature.md",
+                    "sha256": "26f6affa186d7fb52b478598e27ac992dea6b84c71dd799062d8b25fc962d948"
+                  },
+                  "target_path": "Programmieren/Skills/code-review/SKILL.md",
+                  "to": "skill:code-review",
+                  "type": "mentions"
+                }
+              ],
+              "total_relations": 4,
+              "limit": 20,
+              "truncated": false
+            }
+          }
+        },
+        {
+          "command_index": 10,
+          "response": {
+            "status": "ready",
+            "mode": "relations",
+            "revision": "dc12d6fac053f1e1dcdc861660f1c4709b1dbb1e",
+            "fingerprint": "9e1296360fea44067a260a4402390147c9c9af3ecc53b1a4e1f6759f33ab8cbf",
+            "relations": [
+              {
+                "type": "mentions",
+                "from": "workflow:Workflows/Long-Horizon-Agentenarbeit.md",
+                "to": "skill:context-engineering",
+                "target_path": "Agentenarbeit/Skills/context-engineering/SKILL.md",
+                "source": {
+                  "path": "Workflows/Long-Horizon-Agentenarbeit.md",
+                  "sha256": "5e435201ce0b32925457633fddc839e128b2400c1e82fb26cca7ddf01f814645",
+                  "lines": [
+                    25
+                  ]
+                }
+              },
+              {
+                "type": "mentions",
+                "from": "workflow:Workflows/Wiederkehrende-Aufgabe-zum-Playbook.md",
+                "to": "skill:context-engineering",
+                "target_path": "Agentenarbeit/Skills/context-engineering/SKILL.md",
+                "source": {
+                  "path": "Workflows/Wiederkehrende-Aufgabe-zum-Playbook.md",
+                  "sha256": "7f6a183607f0febcc6bfc5a7605b39d81ea9c03ce89ff981ce35e9ae75dbd830",
+                  "lines": [
+                    41
+                  ]
+                }
+              },
+              {
+                "type": "related",
+                "from": "skill:context-engineering",
+                "to": "skill:context-audit",
+                "target_path": "Agentenarbeit/Skills/context-audit/SKILL.md",
+                "source": {
+                  "path": "skill-catalog.yml",
+                  "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca",
+                  "field": "skills[context-engineering].related"
+                }
+              },
+              {
+                "type": "related",
+                "from": "skill:context-engineering",
+                "to": "skill:context-compaction",
+                "target_path": "Agentenarbeit/Skills/context-compaction/SKILL.md",
+                "source": {
+                  "path": "skill-catalog.yml",
+                  "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca",
+                  "field": "skills[context-engineering].related"
+                }
+              },
+              {
+                "type": "related",
+                "from": "skill:context-engineering",
+                "to": "skill:session-handoff",
+                "target_path": "Agentenarbeit/Skills/session-handoff/SKILL.md",
+                "source": {
+                  "path": "skill-catalog.yml",
+                  "sha256": "b8566fbd76d60f65c9e939d286827e441e5e3c0f29008bb41a7b80d341170fca",
+                  "field": "skills[context-engineering].related"
+                }
+              }
+            ],
+            "total_relations": 5,
+            "assessment_performed": false,
+            "candidates_only": true,
+            "routing_sources": {
+              "master": "Dokumentation/Skill-Handbuch.md",
+              "catalog": "skill-catalog.yml",
+              "overlays": "routing-overlays.yml",
+              "workflows": "workflow-index.yml"
+            },
+            "offset": 0,
+            "page_size": 25,
+            "has_more": false,
+            "next_cursor": null
+          }
+        }
+      ],
+      "commands": [
+        {
+          "index": 0,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"Get-Content -LiteralPath 'Dokumentation/Skill-Handbuch.md'; Get-Content -LiteralPath 'routing-overlays.yml'; Get-Content -LiteralPath 'workflow-index.yml'; Get-Content -LiteralPath 'skill-catalog.yml' -TotalCount 95\"",
+          "exit_code": 0,
+          "output_sha256": "3ae569964626d9c948c2e87263cf407a214b5ee0374ae08c7ec45ca8c7f6c2e0",
+          "output_utf8_bytes": 52821,
+          "output_excerpt": "# Skill-Handbuch – Master-Router\n\nDieses Dokument ist kein zweites Skill-Katalogbuch. Es routet von einem **konkreten Problem oder Auftrag** zum kleinsten ausreichenden Skill-Satz und verweist für Details auf Katalog, Fachhandbücher und lokale Sources of Truth.\n\nDer Nutzer muss dafür weder die richtige Domäne noch einen Skill-Namen kennen.\n\n## Star"
+        },
+        {
+          "index": 1,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"Get-Content -LiteralPath 'Workflows/Software-Feature.md'; Get-Content -LiteralPath 'Workflows/Long-Horizon-Agentenarbeit.md'; Get-Content -LiteralPath 'Dokumentation/Lokale-Regelsuche.md' -TotalCount 160; rg --files -g '*csv*' -g '*CSV*' -g '*fixture*' -g 'AGENTS.md' -g 'package.json' -g '*.sln' -g 'pyproject.toml' -g '*lock*' -g '\"'!**/node_modules/**'\"' -g '\"'!**/.git/**'\"'\"",
+          "exit_code": 0,
+          "output_sha256": "18856b61dbed75ebcda6d0219ba298406f6de924f3efc9c869844b54ab109aa4",
+          "output_utf8_bytes": 15558,
+          "output_excerpt": "# Workflow – Software Feature\n\n## Ziel\n\nEin Feature kontrolliert von Anforderung und Domänenverständnis bis zu verifizierter Änderung führen.\n\n## Empfohlene Skill-Kette\n\n```text\nAnforderung / Projektwahrheit\n→ optional domain-modeling\n→ Planung / task-graph bei Komplexität\n→ delegation-contract bei Delegation\n→ tdd oder passende Implementierungsdis"
+        },
+        {
+          "index": 2,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \".\\\\Search-KI-Regeln.ps1 -Routing -Query 'Planung Arbeitspakete Abhängigkeiten'\"",
+          "exit_code": 0,
+          "output_sha256": "33e037adcfe6f897a218d5e73feb5e87ca1d6136f73fe06cfbf7fb9bf4bee9c2",
+          "output_utf8_bytes": 729,
+          "output_excerpt": "{\n  \"status\": \"ready\",\n  \"revision\": \"dc12d6fac053f1e1dcdc861660f1c4709b1dbb1e\",\n  \"mode\": \"bm25\",\n  \"fingerprint\": \"9e1296360fea44067a260a4402390147c9c9af3ecc53b1a4e1f6759f33ab8cbf\",\n  \"hits\": [],\n  \"total_matches\": 0,\n  \"offset\": 0,\n  \"page_size\": 10,\n  \"has_more\": false,\n  \"next_cursor\": null,\n  \"routing_hints\": {\n    \"items\": [],\n    \"total_rel"
+        },
+        {
+          "index": 3,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \".\\\\Search-KI-Regeln.ps1 -Routing -Query 'task graph'\"",
+          "exit_code": 0,
+          "output_sha256": "5bc4fc0f5e7a660f7b74ee643def11f2450062e1dadc8c38aaa71f376b179d95",
+          "output_utf8_bytes": 12626,
+          "output_excerpt": "{\n  \"status\": \"ready\",\n  \"revision\": \"dc12d6fac053f1e1dcdc861660f1c4709b1dbb1e\",\n  \"mode\": \"bm25\",\n  \"fingerprint\": \"9e1296360fea44067a260a4402390147c9c9af3ecc53b1a4e1f6759f33ab8cbf\",\n  \"hits\": [\n    {\n      \"path\": \"Agentenarbeit/Skills/task-graph/SKILL.md\",\n      \"score\": 0.9222486242508754,\n      \"snippet\": \"@@ -1,4 @@ (0 before, 54 after)\\n---\\"
+        },
+        {
+          "index": 4,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command '$routingQueries = @('\"'Delegation', 'Kontext', 'Grenzwerte', 'Codeänderungen'); foreach (\"'$routingQuery in $routingQueries) { $routingResult = .'\"\\\\Search-KI-Regeln.ps1 -Routing -Query \"'$routingQuery | ConvertFrom-Json; [pscustomobject]@{ query=$routingQuery; status=$routingResult.status; hits=@($routingResult.hits | Select-Object path,skill); total_matches=$routingResult.total_matches; has_more=$routingResult.has_more; next_cursor=$routingResult.next_cursor; routing_hints=$routingResult.routing_hints } | ConvertTo-Json -Depth 12 }'",
+          "exit_code": 0,
+          "output_sha256": "298ab6e2e21a6e6c207b94e75fa3ce66d2ec5077dd74074cdc3f0ced3a7f1e81",
+          "output_utf8_bytes": 25330,
+          "output_excerpt": "{\n  \"query\": \"Delegation\",\n  \"status\": \"ready\",\n  \"hits\": [\n    {\n      \"path\": \"Agentenarbeit/Skills/delegation-contract/SKILL.md\",\n      \"skill\": {\n        \"description\": \"Definiert vor relevanter Agentenarbeit Ziel, Scope, Rechte, Quellen, Akzeptanzbedingungen und geforderte Evidence und prüft anschließend das Evidence Bundle. Verwenden vor nich"
+        },
+        {
+          "index": 5,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command '$skillFiles = @('\"'Agentenarbeit/Skills/task-graph/SKILL.md','Agentenarbeit/Skills/delegation-contract/SKILL.md','Agentenarbeit/Skills/context-engineering/SKILL.md','Testing-und-QA/Skills/test-design/SKILL.md','Programmieren/Skills/tdd/SKILL.md','Programmieren/Skills/code-review/SKILL.md'); foreach (\"'$skillFile in $skillFiles) { Get-Content -LiteralPath $skillFile }'",
+          "exit_code": 0,
+          "output_sha256": "cb84751960f23c71bc516d3f6059aac0e031f07bd1abcbac9057a98464632d51",
+          "output_utf8_bytes": 17460,
+          "output_excerpt": "---\nname: task-graph\ndescription: Zerlegt komplexe Agentenarbeit in abhängige, überprüfbare Knoten und macht echte Abhängigkeiten, Parallelisierung und Stop-Bedingungen sichtbar. Verwenden bei komplexen Aufgaben mit mehreren abhängigen oder parallelisierbaren Arbeitsschritten.\n---\n\n# Task Graph\n\nNutze `../../Task-Graph-und-Loops.md`.\n\n## Vorgehen\n\n"
+        },
+        {
+          "index": 6,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"rg -n 'id: (task-graph|delegation-contract|context-engineering|context-audit|context-compaction|session-handoff|test-design|test-strategy|tdd|code-review|verification-loop|visual-answer|adressatengerechte-kommunikation|citation-audit|skill-security-review|tool-permission-review|planning)' skill-catalog.yml; Get-Content -LiteralPath 'Agentenarbeit/Skills/verification-loop/SKILL.md'; \"'$overlayFiles = @('\"'Dokumentationserstellung/Skills/visual-answer/SKILL.md','Schreiben/Skills/adressatengerechte-kommunikation/SKILL.md','Recherche/Skills/citation-audit/SKILL.md','Sicherheit/Skills/skill-security-review/SKILL.md','Sicherheit/Skills/tool-permission-review/SKILL.md'); foreach (\"'$overlayFile in $overlayFiles) { Get-Content -LiteralPath $overlayFile -TotalCount 25 }; rg --files -g '\"'\"'!**/node_modules/**'\"' -g '\"'!**/.git/**'\"' -g '\"'!**/.validation/**'\"' | Select-Object -First 65\"",
+          "exit_code": 0,
+          "output_sha256": "0c691e30bb2de5df369e62a65b92d25246143f588e7b4d15ce6b64fa6f1c9f04",
+          "output_utf8_bytes": 20533,
+          "output_excerpt": "12:  - {id: context-engineering, area: Agentenarbeit, path: Agentenarbeit/Skills/context-engineering/SKILL.md, maturity: candidate, eval_coverage: partial, purpose: \"Den kleinsten ausreichenden, aktuellen und signalstarken Agentenkontext auswählen und Active Context, Working State sowie Sources of Truth sauber trennen.\", capabilities: [context-sour"
+        },
+        {
+          "index": 7,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"Get-Content -LiteralPath 'Testing-und-QA/Skills/test-strategy/SKILL.md' -TotalCount 16; Get-Content -LiteralPath 'Agentenarbeit/Skills/context-audit/SKILL.md' -TotalCount 10; Get-Content -LiteralPath 'Agentenarbeit/Skills/context-compaction/SKILL.md' -TotalCount 10; Get-Content -LiteralPath 'Agentenarbeit/Skills/session-handoff/SKILL.md' -TotalCount 12; rg -n -i 'csv.import|csv-import|1000 Datens|Dubletten' -g '*.md' -g '*.json' -g '*.yml' -g '\"'!**/.validation/**'\"' -g '\"'!**/node_modules/**'\"'; Get-Content -LiteralPath 'Testing-und-QA/Umgebungsabhaengige-Verifikation-und-Reports.md' -TotalCount 100; git status --short\"",
+          "exit_code": 0,
+          "output_sha256": "ea88c39da3d11e025ba84b162f6843f3e150ebb613e18078bdfc74ed9220f635",
+          "output_utf8_bytes": 8758,
+          "output_excerpt": "---\nname: test-strategy\ndescription: Entwickelt für ein Feature, System oder eine Änderung eine risikobasierte Teststrategie und ein sinnvolles Testportfolio. Verwenden bei Fragen wie „Wie sollen wir das testen?“, „Welche Tests brauchen wir?“ oder wenn Testebenen und Qualitätsevidence geplant werden müssen. Nicht für das Schreiben eines einzelnen k"
+        },
+        {
+          "index": 8,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"Get-Content -LiteralPath 'Agentenarbeit/Task-Graph-und-Loops.md'; Get-Content -LiteralPath 'Agentenarbeit/Delegation-und-Evidence.md'; Get-Content -LiteralPath 'Agentenarbeit/Context-Engineering.md'; Get-Content -LiteralPath 'Agentenarbeit/Human-Gates-und-Freigaben.md'; Get-Content -LiteralPath 'Dokumentationserstellung/Skills/visual-answer/SKILL.md'; Get-Content -LiteralPath 'Dokumentationserstellung/Visuelle-Antworten-und-HTML-Artefakte.md'\"",
+          "exit_code": 0,
+          "output_sha256": "2188db754f5c3939f4b1771ae5c73f547aad621615909bf4ae68aa495f3b7f74",
+          "output_utf8_bytes": 44030,
+          "output_excerpt": "# Task Graph und kontrollierte Loops\n\n## Zweck\n\nKomplexe Agentenarbeit sollte nicht nur als lange lineare Aufgabenliste betrachtet werden.\n\nEin Task Graph beschreibt, welche Arbeitsschritte voneinander abhängen. Ein Loop beschreibt, wie ein einzelner freigegebener Arbeitsschritt iterativ verbessert und geprüft wird.\n\n## Task Graph\n\nEin Knoten steht"
+        },
+        {
+          "index": 9,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"rg -n -i 'planung|planen|plan-' skill-catalog.yml; Get-Content -LiteralPath 'Agentenarbeit/Human-Gates-und-Freigaben.md'; Get-Content -LiteralPath 'Agentenarbeit/Context-Engineering.md' | Select-Object -Skip 65 -First 110; Get-Content -LiteralPath 'Dokumentationserstellung/Skills/visual-answer/SKILL.md' | Select-Object -Skip 75 -First 90; Get-Content -LiteralPath 'routing-overlays.yml'\"",
+          "exit_code": 0,
+          "output_sha256": "821e1a152b829d1c250a3ea664f447c838355b33c03ea51bc1337811b5ff1af9",
+          "output_utf8_bytes": 19366,
+          "output_excerpt": "21:  - {id: adressatengerechte-kommunikation, area: Schreiben, path: Schreiben/Skills/adressatengerechte-kommunikation/SKILL.md, maturity: experimental, eval_coverage: partial, purpose: \"Schriftliche Kommunikation nach Empfänger, Beziehung, Hierarchie, gewünschter Reaktion, Direktheit und Konfliktlage planen und formulieren.\", related: [natuerliche"
+        },
+        {
+          "index": 10,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command '$routingRelations = .'\"\\\\Search-KI-Regeln.ps1 -Routing -Relations -SkillId 'context-engineering' | ConvertFrom-Json; \"'$routingRelations | ConvertTo-Json -Depth 10; Get-Content -LiteralPath '\"'Programmieren/Skills/domain-modeling/SKILL.md' -TotalCount 12; Get-Content -LiteralPath 'Testing-und-QA/Skills/test-strategy/SKILL.md' | Select-Object -Skip 16 -First 90; Get-Content -LiteralPath 'routing-overlays.yml'; git diff --stat; git status --short\"",
+          "exit_code": 0,
+          "output_sha256": "d80bffdc51bc8404b37682add3b0953907e0d93f0dd6d0f7c298e74682bacf04",
+          "output_utf8_bytes": 5954,
+          "output_excerpt": "{\n  \"status\": \"ready\",\n  \"mode\": \"relations\",\n  \"revision\": \"dc12d6fac053f1e1dcdc861660f1c4709b1dbb1e\",\n  \"fingerprint\": \"9e1296360fea44067a260a4402390147c9c9af3ecc53b1a4e1f6759f33ab8cbf\",\n  \"relations\": [\n    {\n      \"type\": \"mentions\",\n      \"from\": \"workflow:Workflows/Long-Horizon-Agentenarbeit.md\",\n      \"to\": \"skill:context-engineering\",\n     "
+        }
+      ],
+      "raw_response_sha256": "a58829b8ef0d2a275dc45f804f02091a322c1214ec0c39ff736e5526b5dbc9fc"
+    }
+  ],
+  "search_summary": {
+    "free": "NOT RUN",
+    "guided_bm25_responses": 6,
+    "guided_empty_bm25_responses": 1,
+    "ready_responses": 7,
+    "hint_instances": 52,
+    "explicit_relation_instances": 5,
+    "all_returned_edges_match_canonical_sources": true,
+    "paging": "NOT RUN",
+    "list_skills": "NOT RUN"
+  },
+  "mechanical_controls": {
+    "actual_routing_errors": {
+      "free": [],
+      "guided": []
+    },
+    "removed_router_output_rejected": [
+      "missing actual read: Dokumentation/Skill-Handbuch.md"
+    ],
+    "removed_search_evidence_rejected": [
+      "missing successful guided search evidence"
+    ],
+    "scope": "controlled copies of actual traces; no extra model calls; not a semantic judge"
+  },
+  "checks_before_models": {
+    "portable_log_sha256": "fe469f7e63c730d7a384d54cee13b54c44a6de940961695c5045763f29603ba9",
+    "portable_tests": 16,
+    "portable_skips": 1,
+    "native_report": {
+      "model_calls": 0,
+      "profile": ":workspace",
+      "shell": "<user-home>\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell\\pwsh.exe",
+      "shell_version": "PowerShell 7.6.5",
+      "source_files": 578,
+      "source_commit": "c066cc3e721b83682bc7643e25379aee04bbaf60",
+      "execution_commit": "380c4ed5c9c152e6d3cfc41efab46045b5916898",
+      "code_sha256": {
+        "Evals/Onboarding/run_rule_routing_p4.py": "c48a2dcff4cfff9df80610d7fcbdcf2d5b191a0143e05c2bef8b1144cdbf8807",
+        "tests/test_rule_routing_fixture_runtime.py": "b09920722248c486b4d2d20a80e1eaf4314d185a3c041c854c7b6ba90fe3c57c"
+      },
+      "source_inventory_sha256": "6928807d7fb59861a5bcab22acd2d2cdc3d57064b7170ebf557ddd508fc7f3f7",
+      "host_negative": {
+        "build": {
+          "status": "ready",
+          "revision": "0c46c1fdfb902bd80c803dbbaa7afc030eee71bb",
+          "documents": 165,
+          "mode": "bm25",
+          "fingerprint": "77b7c13f6572f25dace6b365ee5aebf60e519510adb6aa59e8cf3b59df6bf9ed",
+          "routing_coverage": {
+            "skills": 155,
+            "indexed_skills": 155
+          }
+        },
+        "query": {
+          "status": "missing",
+          "message": "No complete index. Build it explicitly first."
+        },
+        "query_exit": 1,
+        "git_status": "?? tools/__pycache__/\n"
+      },
+      "sandbox_positive": {
+        "build": {
+          "status": "ready",
+          "revision": "0c46c1fdfb902bd80c803dbbaa7afc030eee71bb",
+          "documents": 165,
+          "mode": "bm25",
+          "fingerprint": "77b7c13f6572f25dace6b365ee5aebf60e519510adb6aa59e8cf3b59df6bf9ed",
+          "routing_coverage": {
+            "skills": 155,
+            "indexed_skills": 155
+          }
+        },
+        "probe": {
+          "status": "ready",
+          "revision": "0c46c1fdfb902bd80c803dbbaa7afc030eee71bb",
+          "mode": "bm25",
+          "fingerprint": "77b7c13f6572f25dace6b365ee5aebf60e519510adb6aa59e8cf3b59df6bf9ed",
+          "hits": [],
+          "total_matches": 0,
+          "offset": 0,
+          "page_size": 1,
+          "has_more": false,
+          "next_cursor": null,
+          "routing_hints": {
+            "items": [],
+            "total_relations": 0,
+            "limit": 20,
+            "truncated": false
+          },
+          "candidates_only": true,
+          "routing_coverage": {
+            "indexed_skills": 155,
+            "skills": 155
+          },
+          "routing_sources": {
+            "master": "Dokumentation/Skill-Handbuch.md",
+            "catalog": "skill-catalog.yml",
+            "overlays": "routing-overlays.yml",
+            "workflows": "workflow-index.yml"
+          }
+        }
+      },
+      "positive_git_status": "",
+      "positive_bytecode_files": [],
+      "source_bytes_unchanged_in_both": true
+    },
+    "native_log_sha256": "03c6d288663290e4e1f4e72ec7a3b2cda05dfe9250c41bcab95de0c27a8213a1",
+    "full": "PASS",
+    "full_log_sha256": "070f5836268b78dda9bd527ff03d6d86d36527ee4221b0b7ee5cf64f9653708d",
+    "condition_check": {
+      "source_files": 578,
+      "product_snapshot_unchanged": true,
+      "task_guidance_oracle_budget_unchanged": true,
+      "source_commit": "6284bda3c6cdb341c0acd5e775306722222a8b0a",
+      "sessions": 2,
+      "model_calls": 0,
+      "new_output": "routing-repaired-comparison-20261031",
+      "old_output_preserved": true
+    }
+  },
+  "strict_batch_exit_code": 0,
+  "models": {
+    "sessions": 2,
+    "retries": 0,
+    "direct_api_calls": 0,
+    "held_out": false
+  },
+  "assessment": "qualitative integrator plus separate Same-Model review; not independent certification or human blind assessment; mechanical checks separately",
+  "execution_isolation": "integrator tests/native drivers and review agents paused during both model sessions; external machine load uncontrolled",
+  "decision": "Search remains optional. Guided use observed, no demonstrated efficiency saving. Fixed order, provider caches, batching and stochasticity prevent general/causal claims. Historical P5 PARTIAL and retrieval FAIL retained; retrieval fix is a separate slice.",
+  "redaction": "private paths replaced; raw digests before redaction; no reasoning text or thread identifiers"
+}

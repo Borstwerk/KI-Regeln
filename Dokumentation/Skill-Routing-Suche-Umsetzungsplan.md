@@ -300,4 +300,12 @@ ist modellfrei nativ nachgewiesen: Cachebau und getrennte Folgeabfrage im selben
 expliziten Sandboxprofil, Bytecode verhindert und striktes Git-Gate unverändert.
 Die historische Host-Vorbereitung bleibt als fehlschlagende Kontrolle erhalten.
 Keine ACL-/ExecutionPolicy-Lockerung, keine Produktänderung und kein neuer
-Effizienzvergleich. Die weitere Live-Abnahme bleibt separat und NOT RUN.
+Effizienzvergleich. Der anschließende
+[separate Vergleich](../Evals/Onboarding/Rule-Routing-Repaired-Comparison.md) ist
+mit genau zwei neuen Sessions ausgeführt: technische Gates sowie Produkt-/Routing-
+Review bestehen im festen Planungsfall. Guided verwendet sechs Suchantworten und
+einen expliziten Relationsabruf; Paging und Descriptorlisting bleiben als
+Agentenpfade NOT RUN. Eine Effizienzersparnis ist nicht nachgewiesen; Suche bleibt
+optional. Der Vergleich ist abgeschlossen. Nächster getrennter Slice ist die
+bekannte Akzeptanzkriterien-Retrievallücke, ohne nachträgliche Oraclelockerung oder
+Maturitypromotion. Der historische P5-Status bleibt PARTIAL.
