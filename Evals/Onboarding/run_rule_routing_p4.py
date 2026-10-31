@@ -109,8 +109,8 @@ def main():
         raise SystemExit('Use optional --compare, followed by optional --run.')
     compare = '--compare' in sys.argv[1:]
     live = '--run' in sys.argv[1:]
-    source = 'c066cc3' if compare else SOURCE
-    out = OUT.with_name('routing-p5-comparison-20261031') if compare else OUT
+    source = '6284bda' if compare else SOURCE
+    out = OUT.with_name('routing-repaired-comparison-20261031') if compare else OUT
     if (out / 'started.json').exists():
         raise SystemExit('Existing batch retained; no retry/overwrite.')
     data = json.loads(CASES.read_text(encoding='utf-8'))
@@ -137,6 +137,7 @@ def main():
              'Evals/Onboarding/Rule-Routing-Fixture-Runtime-Fix.md']
     if compare:
         bound.append('Evals/Onboarding/Rule-Routing-P5.md')
+        bound.append('Evals/Onboarding/Rule-Routing-Repaired-Comparison.md')
     execution = search_rules.git(ROOT, 'rev-parse', 'HEAD').decode().strip()
     if live:
         for path in bound:
