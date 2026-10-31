@@ -18,7 +18,7 @@ from Evals.Onboarding.run_corrected_discovery import byte_preflight, failure_dia
 from tools import search_rules
 
 SOURCE = 'e815a0b'
-OUT = ROOT / '.validation/routing-p4-20261031'
+OUT = ROOT / '.validation/routing-p4-20261031-v2'
 CASES = Path(__file__).with_name('rule-routing-p4-cases.json')
 sha = lambda body: hashlib.sha256(body).hexdigest()
 
@@ -127,11 +127,11 @@ def main():
             built = search_rules.build(workspace, routing=True)
             assert built['documents'] == 165
             dump(OUT / 'development-index.json', built)
-        permission = ':workspace-write' if case['runtime'] == 'indexed' else ':read-only'
+        sandbox = 'workspace-write' if case['runtime'] == 'indexed' else 'read-only'
         answer = OUT / (case['id'] + '-answer.json')
         argv = [cli, '-a', 'never', 'exec', '--ignore-user-config', '--ephemeral', '--skip-git-repo-check',
                 '--cd', str(workspace), '--json', '--color', 'never', '--model', 'gpt-6.1-sol',
-                '-c', 'model_reasoning_effort="high"', '-c', 'default_permissions="' + permission + '"',
+                '-c', 'model_reasoning_effort="high"', '--sandbox', sandbox,
                 '-c', 'windows.sandbox="elevated"', '-c', 'model_provider="openai"',
                 '-c', 'forced_login_method="chatgpt"', '-c', 'web_search="disabled"',
                 '--output-schema', str(schema), '--output-last-message', str(answer), '-']

@@ -83,3 +83,20 @@ Produktregeln wären ein eigener nachgelagerter Slice mit neuer Evidence.
 
 Status vor Lauf: **NOT RUN**. Kein A/B-Lift, keine Erfolgsquote über alle Aufgaben,
 keine Maturity-Hochstufung und keine Garantie universeller Agentenbefolgung.
+
+## Technische Protokollkorrektur vor Modellstart
+
+Die erste Batch (`15fb68a`, `.validation/routing-p4-20261031`) bleibt **BLOCKED**:
+Die CLI lehnte `default_permissions=":workspace-write"` nach 0,03 Sekunden als
+unbekanntes Built-in-Profil ab. Null Command-Items, null Usage und keine Antwort;
+die übrigen beiden Sessions wurden nicht gestartet. Byte-/Read-only-Gate bestand.
+Dieser Start ist keine schlechte Agentenantwort und wird nicht als PASS gewertet.
+
+Vor einem getrennten zweiten technischen Start wird ausschließlich die
+CLI-Konfiguration auf `--sandbox workspace-write` beziehungsweise `read-only`
+korrigiert, entsprechend [offizieller CLI-Referenz](https://learn.chatgpt.com/docs/developer-commands?surface=cli).
+Aufgaben, Oracle, Modell, Budget und Produktsnapshot bleiben unverändert. Batch v2
+hat ein eigenes Verzeichnis; die ursprünglichen Artefakte werden nicht überschrieben.
+Dies ist eine explizite Korrektur eines Fehlers **vor** Modell-/Antwortauswertung,
+keine Wiederholung zur Auswahl einer besseren Antwort. Weiter maximal ein
+Modellversuch je Fall; weitere Laufzeitfehler bleiben ohne Wiederholung BLOCKED.
