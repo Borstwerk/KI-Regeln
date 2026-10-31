@@ -1,0 +1,228 @@
+{
+  "base_commit": "69b97f4d7c91c5c3a2a685800f780527e08cbac6",
+  "execution_commit": "96c3528e12c98b6e21d1fbe7dba85d2cd124a849",
+  "native_regression": {
+    "model_calls": 0,
+    "profile": ":workspace",
+    "shell": "<user-home>\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell\\pwsh.exe",
+    "shell_version": "PowerShell 7.6.5",
+    "source_files": 578,
+    "source_commit": "c066cc3e721b83682bc7643e25379aee04bbaf60",
+    "execution_commit": "96c3528e12c98b6e21d1fbe7dba85d2cd124a849",
+    "code_sha256": {
+      "Evals/Onboarding/run_rule_routing_p4.py": "814b93dba498f35d9551beef8656101acc809d2ba9ddf9121b2abc02f9341d49",
+      "tests/test_rule_routing_fixture_runtime.py": "b09920722248c486b4d2d20a80e1eaf4314d185a3c041c854c7b6ba90fe3c57c"
+    },
+    "source_inventory_sha256": "6928807d7fb59861a5bcab22acd2d2cdc3d57064b7170ebf557ddd508fc7f3f7",
+    "host_negative": {
+      "build": {
+        "status": "ready",
+        "revision": "0c46c1fdfb902bd80c803dbbaa7afc030eee71bb",
+        "documents": 165,
+        "mode": "bm25",
+        "fingerprint": "77b7c13f6572f25dace6b365ee5aebf60e519510adb6aa59e8cf3b59df6bf9ed",
+        "routing_coverage": {
+          "skills": 155,
+          "indexed_skills": 155
+        }
+      },
+      "query": {
+        "status": "missing",
+        "message": "No complete index. Build it explicitly first."
+      },
+      "query_exit": 1,
+      "git_status": "?? tools/__pycache__/\n"
+    },
+    "sandbox_positive": {
+      "build": {
+        "status": "ready",
+        "revision": "0c46c1fdfb902bd80c803dbbaa7afc030eee71bb",
+        "documents": 165,
+        "mode": "bm25",
+        "fingerprint": "77b7c13f6572f25dace6b365ee5aebf60e519510adb6aa59e8cf3b59df6bf9ed",
+        "routing_coverage": {
+          "skills": 155,
+          "indexed_skills": 155
+        }
+      },
+      "probe": {
+        "status": "ready",
+        "revision": "0c46c1fdfb902bd80c803dbbaa7afc030eee71bb",
+        "mode": "bm25",
+        "fingerprint": "77b7c13f6572f25dace6b365ee5aebf60e519510adb6aa59e8cf3b59df6bf9ed",
+        "hits": [],
+        "total_matches": 0,
+        "offset": 0,
+        "page_size": 1,
+        "has_more": false,
+        "next_cursor": null,
+        "routing_hints": {
+          "items": [],
+          "total_relations": 0,
+          "limit": 20,
+          "truncated": false
+        },
+        "candidates_only": true,
+        "routing_coverage": {
+          "indexed_skills": 155,
+          "skills": 155
+        },
+        "routing_sources": {
+          "master": "Dokumentation/Skill-Handbuch.md",
+          "catalog": "skill-catalog.yml",
+          "overlays": "routing-overlays.yml",
+          "workflows": "workflow-index.yml"
+        }
+      }
+    },
+    "positive_git_status": "",
+    "positive_bytecode_files": [],
+    "source_bytes_unchanged_in_both": true
+  },
+  "initial_repro": {
+    "workspace": "<repo>\\.validation\\fixture-repro-b9c0bb46\\workspace",
+    "model_calls": 0,
+    "profile": ":workspace",
+    "host_build": {
+      "status": "ready",
+      "revision": "4b049b0399d47596cc0a5cdb84c56e6f2ff38f69",
+      "documents": 165,
+      "mode": "bm25",
+      "fingerprint": "73c861257b4e1da1a2a11d857a8de849ee7bc43ac8f0d709e8f20aa200f5b362",
+      "routing_coverage": {
+        "skills": 155,
+        "indexed_skills": 155
+      }
+    },
+    "query_exit": 1,
+    "query": {
+      "status": "missing",
+      "message": "No complete index. Build it explicitly first."
+    },
+    "git_status": "?? tools/__pycache__/\n",
+    "bytecode": [
+      "tools\\__pycache__\\check_public_entrypoints.cpython-312.pyc",
+      "tools\\__pycache__\\rule_relations.cpython-312.pyc"
+    ],
+    "source_bytes_unchanged": true
+  },
+  "execution_context_experiment": {
+    "model_calls": 0,
+    "profile": ":workspace",
+    "host_before": {
+      "status": "ready",
+      "revision": "4b049b0399d47596cc0a5cdb84c56e6f2ff38f69",
+      "mode": "bm25",
+      "documents": 165,
+      "fingerprint": "73c861257b4e1da1a2a11d857a8de849ee7bc43ac8f0d709e8f20aa200f5b362",
+      "routing_coverage": {
+        "indexed_skills": 155,
+        "skills": 155
+      }
+    },
+    "sandbox_read_before": {
+      "exit_code": 0,
+      "stdout": "{\"readable\":false,\"type\":\"System.UnauthorizedAccessException\"}\n",
+      "stderr": ""
+    },
+    "sandbox_build": {
+      "exit_code": 0,
+      "stdout": "{\n  \"status\": \"ready\",\n  \"revision\": \"4b049b0399d47596cc0a5cdb84c56e6f2ff38f69\",\n  \"documents\": 165,\n  \"mode\": \"bm25\",\n  \"fingerprint\": \"73c861257b4e1da1a2a11d857a8de849ee7bc43ac8f0d709e8f20aa200f5b362\",\n  \"routing_coverage\": {\n    \"skills\": 155,\n    \"indexed_skills\": 155\n  }\n}\n",
+      "stderr": ""
+    },
+    "separate_sandbox_query": {
+      "exit_code": 0,
+      "stdout": "{\n  \"status\": \"ready\",\n  \"revision\": \"4b049b0399d47596cc0a5cdb84c56e6f2ff38f69\",\n  \"mode\": \"bm25\",\n  \"fingerprint\": \"73c861257b4e1da1a2a11d857a8de849ee7bc43ac8f0d709e8f20aa200f5b362\",\n  \"hits\": [],\n  \"total_matches\": 0,\n  \"offset\": 0,\n  \"page_size\": 1,\n  \"has_more\": false,\n  \"next_cursor\": null,\n  \"routing_hints\": {\n    \"items\": [],\n    \"total_relations\": 0,\n    \"limit\": 20,\n    \"truncated\": false\n  },\n  \"candidates_only\": true,\n  \"routing_coverage\": {\n    \"indexed_skills\": 155,\n    \"skills\": 155\n  },\n  \"routing_sources\": {\n    \"master\": \"Dokumentation/Skill-Handbuch.md\",\n    \"catalog\": \"skill-catalog.yml\",\n    \"overlays\": \"routing-overlays.yml\",\n    \"workflows\": \"workflow-index.yml\"\n  }\n}\n",
+      "stderr": ""
+    }
+  },
+  "code_bindings": {
+    "Evals/Onboarding/run_rule_routing_p4.py": {
+      "executed_checkout_sha256": "814b93dba498f35d9551beef8656101acc809d2ba9ddf9121b2abc02f9341d49",
+      "git_blob_sha256": "814b93dba498f35d9551beef8656101acc809d2ba9ddf9121b2abc02f9341d49",
+      "matches_git_after_crlf_normalization": true
+    },
+    "tests/test_rule_routing_fixture_runtime.py": {
+      "executed_checkout_sha256": "b09920722248c486b4d2d20a80e1eaf4314d185a3c041c854c7b6ba90fe3c57c",
+      "git_blob_sha256": "b09920722248c486b4d2d20a80e1eaf4314d185a3c041c854c7b6ba90fe3c57c",
+      "matches_git_after_crlf_normalization": true
+    }
+  },
+  "guard_probes": {
+    "code_sha256": "814b93dba498f35d9551beef8656101acc809d2ba9ddf9121b2abc02f9341d49",
+    "scope": "memory-only changes, no model calls",
+    "probes": [
+      {
+        "guard": "bytecode policy removed",
+        "test": "test_real_python_import_keeps_sources_free_of_bytecode",
+        "failures": 1,
+        "errors": 0,
+        "detected": true
+      },
+      {
+        "guard": "probe fingerprint binding removed",
+        "test": "test_preparation_rejects_partial_or_changed_probe",
+        "failures": 1,
+        "errors": 0,
+        "detected": true
+      }
+    ],
+    "production_bytes_unchanged": true
+  },
+  "portable_tests": {
+    "tests_run": 111,
+    "skipped": 2,
+    "errors": 0,
+    "failures": 0,
+    "duration_seconds": 154.796,
+    "skip_reasons": [
+      "existing Windows symlink capability",
+      "explicit native fixture test, executed separately"
+    ]
+  },
+  "native_test": {
+    "tests_run": 1,
+    "skipped": 0,
+    "errors": 0,
+    "failures": 0,
+    "duration_seconds": 24.104
+  },
+  "cli_version_observed_after_native_test": "codex-cli 0.166.0-alpha.5.1",
+  "development_failure": {
+    "first_native_attempt": "FAIL before acceptance; Windows PowerShell 5 script execution disabled",
+    "evidence": "PSSecurityException in original raw stderr; initial UTF-8 capture failed",
+    "resolution": "use existing PowerShell 7, no execution policy bypass"
+  },
+  "historical_files_unchanged": [
+    "Evals/Onboarding/Rule-Routing-P5.md",
+    "Evals/Onboarding/Rule-Routing-P5.json",
+    "Evals/Onboarding/rule-routing-cases.json",
+    "Evals/Onboarding/rule-routing-p4-cases.json"
+  ],
+  "raw_sha256": {
+    ".validation/fixture-runtime-check-12a1cd6b/result.json": "9012256ae781bf5f55ee7d91d778eaefe30d3f207e93a26da673849c8d3b688c",
+    ".validation/fixture-repro-b9c0bb46/result.json": "f0d20a67319d73a1f5b51fb0626c1a889c4ec5f4cb5556b4a1591778de9ac5bb",
+    ".validation/fixture-cache-context-experiment.json": "b0641ed2e118316165b28c4a15f90e94c19eb43c85dc91f0a7df5ce1ca0a05bb",
+    ".validation/fixture-native-green.log": "bb3f578d87022a7185c8a34a710140ce21e9ec2c04950e5ef4ca6539f11d0d86",
+    ".validation/fixture-native-final.log": "e9d90c3ba1ba41788a929895238a23ec324b3eb3455697d095a1b96cf02c402f",
+    ".validation/fixture-all-units.log": "48ec89daf65b705cb30e5963b2cd191c714a3aa1a733f62e8cbf7be1333a0e65",
+    ".validation/fixture-powershell5-stderr.bin": "e9d5ae673caf8a2f1d0ed9197db1c84e2902eb39130089c0b98dece1965c8127",
+    ".validation/fixture-guard-probes.json": "d6ee18f9937c462d11b1f298cf7c6d1cf63686c83c028cfa81405d288a3bbca1"
+  },
+  "review": {
+    "type": "separate same-model agent review, not independent certification",
+    "plan": "PASS in scoped review",
+    "code": "PASS in scoped review",
+    "native_evidence": "PASS in scoped review"
+  },
+  "claims": {
+    "fixture_cache_preparation": "PASS in native test",
+    "bytecode_prevention": "PASS",
+    "model_calls": 0,
+    "direct_model_api_calls": 0,
+    "new_efficiency_comparison": "NOT RUN",
+    "p5_overall_acceptance": "PARTIAL unchanged",
+    "general_recall": "UNVERIFIED"
+  },
+  "redaction": "user-home/repository paths replaced; raw hashes bind original local artifacts; no reasoning or model sessions"
+}

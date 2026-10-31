@@ -294,3 +294,10 @@ Expliziter Relationsabruf, Paging und Descriptorlisting bleiben als Agentenpfade
 NOT RUN. Ein kleiner technischer Fixture-Fix ist als separater Folgeschritt
 beschrieben; Produktregeln und Suchlogik bleiben unverändert. Frühere Testresultate
 belegen ausschließlich ihren jeweiligen Stand; dieser Plan selbst ist kein Qualitätsnachweis.
+
+Der separate [Fixture-Runtime-Fix](../Evals/Onboarding/Rule-Routing-Fixture-Runtime-Fix.md)
+ist modellfrei nativ nachgewiesen: Cachebau und getrennte Folgeabfrage im selben
+expliziten Sandboxprofil, Bytecode verhindert und striktes Git-Gate unverändert.
+Die historische Host-Vorbereitung bleibt als fehlschlagende Kontrolle erhalten.
+Keine ACL-/ExecutionPolicy-Lockerung, keine Produktänderung und kein neuer
+Effizienzvergleich. Die weitere Live-Abnahme bleibt separat und NOT RUN.

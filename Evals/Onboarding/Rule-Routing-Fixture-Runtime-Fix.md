@@ -31,7 +31,7 @@ verwendet die reale PowerShell-/Python-/QMD-Kette.
 2. Den modellfreien Vorbau über `codex sandbox --permission-profile :workspace`
    ausführen. Den tatsächlichen Agentenlauf auf dasselbe explizite Profil binden;
    Read-only-Fälle bleiben read-only. Keine neuen Profile, globalen Einstellungen,
-   Netzwerkrechte, Shared-Runtime-Writes oder ACL-Änderungen.
+   Netzwerkrechte, Shared-Runtime-Writes oder manuellen ACL-Änderungen.
 3. Vor einem Modellstart aus einem **separaten** Sandboxprozess eine feste leere
    Canaryquery ausführen. Ready, Revision/Fingerprint, Dokumentzahl und saubere
    Fixture prüfen. Fehlender/falscher Probe-Status blockiert vor Modellaufruf.
@@ -81,3 +81,56 @@ Der Adapter soll daher diese vorhandene CLI-PowerShell-7-Runtime bevorzugen,
 alternativ eine bereits installierte `pwsh`-Runtime. Fehlt beides, stoppt die
 Vorbereitung sichtbar; keine Installation und kein PowerShell-5-/Bypass-Fallback.
 Der Plan wird vor dieser Anpassung erneut separat im selben Modell geprüft.
+
+## Ergebnis: technischer Fixture-Fix nachgewiesen
+
+Implementierung und Teststand: `96c3528`. Die [maschinenlesbare Evidence](Rule-Routing-Fixture-Runtime-Fix.json)
+bindet ausgeführte Code-/Testbytes, Gitblobs, Quelleninventar und Rohberichte.
+Private Pfade sind ersetzt; historische P5-Berichte und Fälle sind unverändert.
+
+| Kontrolle | Tatsächliches Ergebnis |
+| --- | --- |
+| alte Host-Vorbereitung, gleiche PowerShell 7 / gleiches Workspaceprofil | Host ready, Sandbox missing; zwei `.pyc`, Git unsauber; Originalquellen unverändert |
+| reparierte Vorbereitung | Sandboxbau und getrennte Folgeabfrage ready; identische Revision/Fingerprintwerte zur Negativkontrolle |
+| Quelldateien | in beiden Fixtures alle 578 Dateien bytegleich |
+| striktes positives Git-Gate | leerer Gitstatus, keine `.pyc`; keine Bereinigung oder zusätzlichen Ignore-Regeln |
+| tatsächliche Runtime | PowerShell 7.6.5, Profil `:workspace`; null Modellaufrufe |
+
+Sieben portable Guardtests bestehen. Sie prüfen einen echten Pythonimport mit
+negativer Kontrolle, Profil-/Umgebungstransport, fehlende Runtime, fehlerhafte
+Antworten sowie unvollständige oder abweichende Cache-Probes. Der breite Lauf
+meldet **111 Tests, OK mit zwei Skips**: bestehende Windows-Symlink-Grenze und
+explizit zu aktivierender nativer Fixturetest. Letzterer wurde separat tatsächlich
+ausgeführt: **ein nativer Test OK**, keine Skips, 24,104 Sekunden.
+
+Zwei ausschließlich im Speicher entfernte Guards werden erkannt: fehlender
+Bytecode-Schalter und fehlende Fingerprintbindung. Je eine Testassertion, keine
+Testfehler; Produktionsbytes unverändert. Der enge Lauf ist nach Wiederherstellung
+wieder grün. Die früheren roten Schritte und der zusätzliche PowerShell-5-Fehler
+bleiben als Development-Evidence erhalten.
+
+Plan, Code und native Evidence wurden separat durch einen Agenten derselben
+Modellfamilie geprüft: **Same-Model-Review ohne erkannten Blocker, keine unabhängige
+Zertifizierung**. Dieser technische Nachweis ist kein neuer Effizienzvergleich und
+kein neuer Live-Agentenlauf. P5 bleibt rückwirkend PARTIAL; sein Retrievalfehlfall
+und die Grenzen seines damaligen Vergleichs bleiben bestehen.
+
+Portable Prüfung:
+
+```powershell
+.validation/runtime/venv/Scripts/python.exe -m unittest tests.test_rule_routing_fixture_runtime
+```
+
+Die native Klasse benötigt die bereits vorhandene Windows-Codex-Sandbox,
+PowerShell 7, portable Python- und gepinnte QMD-Runtime. Sie installiert nichts und
+startet keine Modell- oder Loginaktion. Explizite Aktivierung in einer temporären Shell:
+
+```powershell
+$env:KI_REGELN_NATIVE_FIXTURE = '1'
+.validation/runtime/venv/Scripts/python.exe -m unittest tests.test_rule_routing_fixture_runtime.NativeFixtureRuntimeTests
+Remove-Item Env:KI_REGELN_NATIVE_FIXTURE
+```
+
+Ein künftiger Modellvergleich ist hier **NOT RUN**. Er muss separat versioniert
+und nach den technischen Checks ohne parallele Lasttests gestartet werden; aus
+diesem Fixture-Fix allein wird keine Einsparung oder Suchpflicht abgeleitet.
