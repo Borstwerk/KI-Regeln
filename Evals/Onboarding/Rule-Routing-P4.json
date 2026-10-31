@@ -1,0 +1,878 @@
+{
+  "source_commit": "e815a0b04aa67a21d142f6e148b189cb688a4dd4",
+  "execution_commit": "9aad1e82bd7cf18fe6ad0684330e0c6faf52843f",
+  "source_files": 578,
+  "source_inventory_sha256": "6928807d7fb59861a5bcab22acd2d2cdc3d57064b7170ebf557ddd508fc7f3f7",
+  "protocol_sha256": "116199d75eda4fcb70947a604ef1831b9935dd6059ed7cdd7fdc3a1f1590b224",
+  "protocol": {
+    "utc": "2026-10-31T07:29:23.216003+00:00",
+    "source_commit": "e815a0b04aa67a21d142f6e148b189cb688a4dd4",
+    "execution_commit": "9aad1e82bd7cf18fe6ad0684330e0c6faf52843f",
+    "inventory_sha256": "6928807d7fb59861a5bcab22acd2d2cdc3d57064b7170ebf557ddd508fc7f3f7",
+    "cases": [
+      {
+        "id": "development",
+        "runtime": "indexed",
+        "prompt": "Ich möchte einen CSV-Import entwickeln: 1 bis 1000 Datensätze, leere Dateien ablehnen, Dubletten melden. Stell mir zunächst nur einen umsetzbaren Arbeitsplan vor. Die Umsetzung soll in kleine prüfbare Schritte zerlegt und auf zwei Agenten verteilt werden, ohne gleichzeitige Änderungen derselben Dateien. Plane auch, welche aktuellen Projektinformationen die Agenten brauchen und was sie erst bei Bedarf nachladen sollten. Konkrete Grenztests und ein unabhängiger Codecheck sollen dazugehören. Welche Werkzeuge aus diesem Repository passen zu den einzelnen Jobs und wann setzt du sie ein? Noch nichts implementieren und keine weiteren Agenten starten.",
+        "required_skills": [
+          "task-graph",
+          "delegation-contract",
+          "context-engineering",
+          "test-design",
+          "code-review"
+        ],
+        "workflow": "Workflows/Software-Feature.md",
+        "planned_verification_skill": "verification-loop",
+        "implementation_discipline": "tdd or justified alternative after reading the workflow core description",
+        "router_reads_required": true
+      },
+      {
+        "id": "fallback",
+        "runtime": "no-qmd",
+        "prompt": "Formuliere beobachtbare Akzeptanzkriterien und leite danach konkrete Grenztests ab. Anforderung: Ein CSV-Import akzeptiert 1 bis 1000 Datensätze, lehnt leere Dateien ab und meldet Dubletten. Trenne die beiden Ergebnisse und begründe kurz deine Werkzeugauswahl aus dem Repository. Die optionale Suchruntime ist hier nicht installiert; installiere nichts. Ändere keine Dateien.",
+        "required_skills": [
+          "acceptance-criteria-design",
+          "test-design"
+        ],
+        "router_reads_required": true
+      },
+      {
+        "id": "trivial",
+        "runtime": "read-only",
+        "prompt": "Formatiere nur diesen Text: „eins,zwei“ → „eins, zwei“.",
+        "required_skills": [],
+        "expected_answer": "eins, zwei",
+        "router_reads_required": false,
+        "skill_reads_expected": 0
+      }
+    ],
+    "model_requested": "gpt-6.1-sol",
+    "reasoning_requested": "high",
+    "sessions": 3,
+    "deadline_seconds_each": 240,
+    "retry": false,
+    "held_out": false,
+    "direct_api_calls": 0,
+    "permission_boundary": "workspace-write for development; source integrity checked afterward; others read-only"
+  },
+  "code_bindings": {
+    "Evals/Onboarding/run_rule_routing_p4.py": {
+      "executed_checkout_sha256": "ff27b165297398ff4fad19c9c6c8e07d1853ed1cb2a29be9d3925c8ffb67e92a",
+      "git_blob_sha256": "ff27b165297398ff4fad19c9c6c8e07d1853ed1cb2a29be9d3925c8ffb67e92a",
+      "matches_git_after_crlf_normalization": true
+    },
+    "Evals/Onboarding/rule-routing-p4-cases.json": {
+      "executed_checkout_sha256": "69db44753fc6d948287cd30295afe75c558f4237cd4b87ba9b8288b9e4b41ab3",
+      "git_blob_sha256": "69db44753fc6d948287cd30295afe75c558f4237cd4b87ba9b8288b9e4b41ab3",
+      "matches_git_after_crlf_normalization": true
+    },
+    "Evals/Onboarding/Rule-Routing-P4.md": {
+      "executed_checkout_sha256": "1dcfb33f79cf2affa236e40f75b214fa0a4327c1400bc93ee827f24749a7578e",
+      "git_blob_sha256": "1dcfb33f79cf2affa236e40f75b214fa0a4327c1400bc93ee827f24749a7578e",
+      "matches_git_after_crlf_normalization": true
+    },
+    "Evals/Onboarding/run_corrected_discovery.py": {
+      "executed_checkout_sha256": "65cb28531bdb83c4c3057552c27eaefdde392ab1532060e2cbd8dea78705eb56",
+      "git_blob_sha256": "52777e863de492d594f2ac14fc55976ff20e5c23bcf843e36adf618491d7412c",
+      "matches_git_after_crlf_normalization": true
+    },
+    "tools/search_rules.py": {
+      "executed_checkout_sha256": "3e85143290eacdcbe317ad42c75e461917d863e35a0ec761671328f1c59b8308",
+      "git_blob_sha256": "3e85143290eacdcbe317ad42c75e461917d863e35a0ec761671328f1c59b8308",
+      "matches_git_after_crlf_normalization": true
+    },
+    "tools/rule_relations.py": {
+      "executed_checkout_sha256": "55df4b901b68dbc008a812894e45030dc6342c0f22c68b332fb95e97b70b4577",
+      "git_blob_sha256": "55df4b901b68dbc008a812894e45030dc6342c0f22c68b332fb95e97b70b4577",
+      "matches_git_after_crlf_normalization": true
+    },
+    "tools/search_rules_qmd.mjs": {
+      "executed_checkout_sha256": "d9c4b3f9222ad7928dfcb1860fd0e975024512ab4e4dedf915820ed283737155",
+      "git_blob_sha256": "d9c4b3f9222ad7928dfcb1860fd0e975024512ab4e4dedf915820ed283737155",
+      "matches_git_after_crlf_normalization": true
+    },
+    "tools/check_public_entrypoints.py": {
+      "executed_checkout_sha256": "65607d90c95273fcdf9088ec29005b2f6b58a90672b9449a234be1d7d43c1976",
+      "git_blob_sha256": "d945c1d6a8e28e3c2bb4cf93c2c2a8255d7ee21ce35afb2d8093b71e00ddc110",
+      "matches_git_after_crlf_normalization": true
+    }
+  },
+  "cli": {
+    "protocol_sha256": "116199d75eda4fcb70947a604ef1831b9935dd6059ed7cdd7fdc3a1f1590b224",
+    "cli_version": "codex-cli 0.166.0-alpha.5.1"
+  },
+  "preflight": {
+    "read_exit": 0,
+    "exact_byte_match": true,
+    "source_bytes": 20,
+    "source_sha256": "25de4d1c269233f805f8c0a01d5342102f6cab22454d17fce0936c6ec293a077",
+    "received_bytes": 20,
+    "received_sha256": "25de4d1c269233f805f8c0a01d5342102f6cab22454d17fce0936c6ec293a077",
+    "write_exit": 17,
+    "write_target_exists": false,
+    "write_permission_denied": true,
+    "write_attempt_stage": "target_write",
+    "write_error_type": "System.UnauthorizedAccessException",
+    "known_good_accepted": true,
+    "extra_lf_rejected": true,
+    "extra_crlf_rejected": true,
+    "pass": true
+  },
+  "preserved_first_batch": {
+    "execution_commit": "15fb68aa2b6701ac730320f743947d11022fcca2",
+    "status": "BLOCKED before model response",
+    "manual_category_from_stderr": "CONFIG",
+    "response": {
+      "status": "BLOCKED",
+      "exit_code": 1,
+      "elapsed_seconds": 0.03,
+      "source_bytes_unchanged": true,
+      "git_status": "",
+      "command_events": [],
+      "completed_item_types": {},
+      "usage": [],
+      "diagnostic": {
+        "category": "UNKNOWN",
+        "stderr_present": true,
+        "stderr_excerpt": "Error: default_permissions refers to unknown built-in profile `:workspace-write`\n",
+        "stdout_error_count": 0,
+        "stdout_error_excerpt": "",
+        "stderr_category": "UNKNOWN"
+      }
+    },
+    "raw_response_sha256": "7fb483d5664fbdbb0f477f93c604984dfb723a0f872257b821a65e0e5390ac83",
+    "protocol_sha256": "3eabfc828738f420b175dfeb966eb328a6f30af396af27ca7a20c84e00a93f61",
+    "other_cases": "NOT RUN",
+    "retry_explanation": "separate pre-model configuration correction; no model answer selected or discarded"
+  },
+  "cases": [
+    {
+      "status": "RESPONSE_RECORDED",
+      "exit_code": 0,
+      "elapsed_seconds": 116.38,
+      "usage": [
+        {
+          "input_tokens": 268867,
+          "cached_input_tokens": 212480,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 4044,
+          "reasoning_output_tokens": 829
+        }
+      ],
+      "completed_item_types": {
+        "agent_message": 4,
+        "command_execution": 12
+      },
+      "source_bytes_unchanged": true,
+      "git_status": "",
+      "answer": "Der Plan folgt dem lokalen [Workflow „Software-Feature“](<repo>/.validation/routing-p4-20261031-v2/workspace-development/Workflows/Software-Feature.md). Vorgesehen sind genau zwei Agenten: **A implementiert**, **B entwickelt separate Akzeptanztests und prüft anschließend den Produktionscode unabhängig**.\n\nDas Arbeitsverzeichnis enthält eine Regelsammlung; Zielanwendung, Technologie und fachlicher Dublettenschlüssel sind bislang nicht belegt. Deshalb beginnt die spätere Arbeit mit einem klar begrenzten Klärungsschritt.\n\n| Schritt | Zuständigkeit und Arbeit | Prüfbares Ergebnis / Abhängigkeit |\n|---|---|---|\n| 1. Projektstand und Vertrag klären | A ermittelt lokale Einstiegspunkte, vorhandenen CSV-Parser, Testbefehle und Projektregeln. B prüft die daraus abgeleiteten Akzeptanzfälle. | Festgelegt sind CSV-Format, Zählweise, Dublettenschlüssel, Meldungsformat und Fehlerverhalten. Fehlende Produktentscheidungen bleiben ausdrücklich offen. |\n| 2. Arbeitsgrenzen festlegen | A und B erhalten getrennte Dateilisten und einen gemeinsamen, stabilen Importvertrag. | Jede veränderbare Datei hat genau einen Owner; erst danach beginnt Parallelität. |\n| 3a. Gültigen Minimalimport entwickeln | A implementiert einen gültigen Datensatz einschließlich Unit-Test und beobachtbarem Ergebnis am vereinbarten Import-Einstieg. | Neuer Test zunächst nachvollziehbar rot, danach grün. Hängt von Schritt 2 ab. |\n| 3b. Akzeptanztests vorbereiten | B erstellt parallel separate Testdateien und synthetische Fixtures gegen den festgelegten Vertrag. | Erwartungswerte stammen aus Anforderungen, nicht aus Produktionslogik. Hängt ebenfalls von Schritt 2 ab. |\n| 4. Leere Eingaben und Mengengrenzen | A ergänzt das Verhalten in einzelnen Test–Implementierungs-Zyklen: leer ablehnen, Untergrenze, Obergrenze und Überschreitung. | Jeder Schnitt hat einen gezielten Verhaltensnachweis; vorherige Tests bleiben gültig. |\n| 5. Dubletten melden | A ergänzt Erkennung und verständliche Zuordnung der Fundstellen nach dem vereinbarten Schlüssel. | Positive und negative Dublettenfälle bestehen; keine stillschweigende Bereinigung. |\n| 6. Gesamtprüfung | Nach Abschluss beider Arbeitszweige führt B Akzeptanz- und relevante Regressionstests auf dem integrierten Stand aus. A korrigiert Produktionsfehler. | Frische Ergebnisse für denselben Quellzustand; nach jeder Korrektur relevante Checks erneut ausführen. |\n| 7. Unabhängiger Codecheck | Bei eingefrorenem Code liest B den tatsächlichen Diff gegen den dokumentierten Ausgangsstand. | Review von Anforderungserfüllung **und** Projektstandards; Findings mit Fundstelle, Auswirkung und Priorität. A behebt Findings, B prüft den neuen Stand erneut. |\n\nFür die Dateitrennung gilt: A besitzt Produktionscode und begleitende Unit-Tests; B besitzt separate Akzeptanztests, Fixtures und Review-Nachweise. Gemeinsame Konfigurationen bekommen einen ausdrücklich benannten Owner. Die konkreten Pfade werden in Schritt 2 aus der tatsächlichen Projektstruktur abgeleitet. Ein Wechsel der Zuständigkeit erfolgt erst nach abgeschlossener Übergabe. Testläufe verwenden getrennte temporäre Verzeichnisse und Testdaten.\n\nVor Schritt 3 müssen insbesondere diese Fragen aus lokalen Quellen beantwortet oder als notwendige Klärung markiert sein: Zählen Header und Leerzeilen mit? Welche Felder bilden eine Dublette, mit welcher Normalisierung? Werden nur Dubletten innerhalb der Datei oder auch vorhandene Zielbestände geprüft? Darf ein Import trotz Dubletten fortgesetzt werden? Für diese Entscheidungen wird kein Verhalten stillschweigend erfunden.\n\nDie konkrete Grenztestmenge umfasst:\n\n| Eingabe / Zustand | Erwartung |\n|---|---|\n| Null Byte; außerdem Datei ohne Datensätze | Ablehnung mit verständlicher Leermeldung. Header-, BOM- und Leerraumvarianten nach dem festgelegten Dateivertrag prüfen. |\n| 1, 2, 999 und 1000 gültige, unterschiedliche Datensätze | Annahme und jeweils exakt die erwartete Anzahl. |\n| 1001 gültige, unterschiedliche Datensätze | Ablehnung wegen Überschreitung; weitere Zustandswirkungen entsprechend dem vereinbarten Fehlervertrag prüfen. |\n| Zwei gleiche Datensätze, direkt benachbart und weit auseinander | Dublettenmeldung mit eindeutig zuordenbaren Fundstellen. |\n| Derselbe Schlüssel dreimal | Alle betroffenen Vorkommen entsprechend der vereinbarten Meldesemantik erkennbar. |\n| Ähnliche Datensätze mit verschiedenen Schlüsseln | Keine falsche Dublettenmeldung. |\n| Gleicher Schlüssel, unterschiedliche übrige Werte | Ergebnis gemäß festgelegter Schlüsselregel. |\n| 1001 Datensätze einschließlich Dubletten | Mengenregel prüfen; Dubletten dürfen die Zählweise nicht unbemerkt verändern. |\n| Quoting, eingebettete Trennzeichen/Zeilenumbrüche, fehlerhafte CSV | Logische Datensätze korrekt zählen beziehungsweise Parserfehler nachvollziehbar melden. |\n\nA prüft die Wirksamkeit der kritischen Tests durch eine begrenzte Brechprobe: Mengengrenze beziehungsweise Dublettenerkennung vorübergehend umgehen, erwarteten Testfehler beobachten, Probe vollständig zurückbauen und den Endstand erneut prüfen.\n\nDie Repository-Werkzeuge ordne ich so zu:\n\n- **`task-graph` – jetzt:** kleine Knoten, Abhängigkeiten, Nachweise und Stop-Bedingungen planen.\n- **`delegation-contract` – vor dem späteren Agentenstart:** pro Agent Ziel, Dateiscope, Rechte, Quellen, Akzeptanz und Evidence festhalten.\n- **`context-engineering` – jetzt und bei Übergaben:** den benötigten aktuellen Projektkontext zusammenstellen und gezieltes Nachladen planen.\n- **`test-design` – jetzt und vor jedem Schnitt:** konkrete Grenzen, Eingabeklassen und unabhängige Erwartungswerte bestimmen.\n- **`tdd` – während der Umsetzung durch A:** jeden kleinen Verhaltensschnitt einzeln rot–grün entwickeln.\n- **`verification-loop` – während Umsetzung und Integration:** prüfen, diagnostizieren und innerhalb des vereinbarten Scopes korrigieren.\n- **`code-review` – nach Integration durch B:** den eingefrorenen Diff tatsächlich lesen; grüne Tests ersetzen diesen Check nicht.\n- **`visual-answer` – für diesen Plan:** Zuständigkeiten und Abhängigkeiten kompakt tabellarisch darstellen.\n\nBeide Agenten brauchen zu Beginn Auftrag, lokale Regeln samt Pflicht-Routing, aktuellen Quellstand, Importvertrag, Dateizuständigkeiten und vorhandene Prüfkommandos. A lädt zusätzlich betroffene Implementierung und nahe Unit-Tests; B erhält Akzeptanzkriterien und öffentliche Importgrenze und liest zum Review den vollständigen relevanten Diff. Historie, entfernte Module, Datenbankdetails und große Logs werden erst bei einem konkreten Befund nachgeladen. Übergaben enthalten bestätigten Stand, Quellenreferenzen, offene Fragen und Prüfevidence statt vollständiger Gesprächsverläufe.\n\nFehlende Zielquellen, widersprüchliche Regeln, notwendige Installationen, Scopeüberschreitungen oder wiederholte erfolglose Reparaturen stoppen den betroffenen Schritt. Prüfberichte nennen Quellzustand, Befehl, Exitcode, Skips und Ergebnis; fehlende Prüfungen bleiben `NOT_RUN` oder `BLOCKED`. Die verwendeten Skills liefern Arbeitsmethoden, keine bestandenen Nachweise.\n\n**Aktueller Status:** nur geplant; keine Dateien geändert, keine Installation oder Außenaktion, keine weiteren Agenten gestartet. Tests und Codecheck sind noch nicht ausgeführt.",
+      "id": "development",
+      "product_assessment": "PASS for fixed case",
+      "process_assessment": "PASS for fixed case",
+      "assessment_method": "integrator and independent reviewer read actual outputs and answer against frozen rubric; not LLM judge automation",
+      "description_reads": [
+        {
+          "skill": "context-engineering",
+          "path": "Agentenarbeit/Skills/context-engineering/SKILL.md",
+          "source_sha256": "0698816157c90ad06a3ffed01597867d7e7912badab4b9826fed116c02b95263",
+          "command_indices": [
+            7
+          ],
+          "canonical_description": "Wählt für einen Agentenlauf den kleinsten ausreichenden, aktuellen und signalstarken Kontext aus, schützt Sources of Truth und entscheidet zwischen aktivem Kontext, Working State, Compaction und gezieltem Nachladen. Verwenden bei Auswahl, Bereinigung oder Planung des aktiven Agentenkontexts.",
+          "description_present_in_actual_output": true
+        },
+        {
+          "skill": "task-graph",
+          "path": "Agentenarbeit/Skills/task-graph/SKILL.md",
+          "source_sha256": "575d393ecd11eec50adc39b9cbebda19b66b665df1f3b015e4f25400460be294",
+          "command_indices": [
+            7
+          ],
+          "canonical_description": "Zerlegt komplexe Agentenarbeit in abhängige, überprüfbare Knoten und macht echte Abhängigkeiten, Parallelisierung und Stop-Bedingungen sichtbar. Verwenden bei komplexen Aufgaben mit mehreren abhängigen oder parallelisierbaren Arbeitsschritten.",
+          "description_present_in_actual_output": true
+        },
+        {
+          "skill": "verification-loop",
+          "path": "Agentenarbeit/Skills/verification-loop/SKILL.md",
+          "source_sha256": "37824715a191c6668343358817959756dc6ac5117291e7f11675e7245f2d608f",
+          "command_indices": [
+            8
+          ],
+          "canonical_description": "Führt innerhalb eines freigegebenen Scopes einen kontrollierten Arbeiten-Prüfen-Diagnose-Korrigieren-Loop mit klaren Stop-Kriterien aus. Verwenden bei iterativer Umsetzung, wenn nach jedem Änderungsschritt reproduzierbare Nachweise möglich sind.",
+          "description_present_in_actual_output": true
+        },
+        {
+          "skill": "delegation-contract",
+          "path": "Agentenarbeit/Skills/delegation-contract/SKILL.md",
+          "source_sha256": "8db59b9327cc6d378316629236c7c3f94940bdf068144a777b743ad91543ed41",
+          "command_indices": [
+            7
+          ],
+          "canonical_description": "Definiert vor relevanter Agentenarbeit Ziel, Scope, Rechte, Quellen, Akzeptanzbedingungen und geforderte Evidence und prüft anschließend das Evidence Bundle. Verwenden vor nicht trivialer delegierter Agentenarbeit mit Scope-, Rechte- oder Gate-Risiken.",
+          "description_present_in_actual_output": true
+        },
+        {
+          "skill": "adressatengerechte-kommunikation",
+          "path": "Schreiben/Skills/adressatengerechte-kommunikation/SKILL.md",
+          "source_sha256": "787e86f1a02445fa9a95af6a33899aa2f9ddd3a89216e7e0914c9d84e1874c4f",
+          "command_indices": [
+            9
+          ],
+          "canonical_description": "Nachrichten und schriftliche Kommunikation so planen und formulieren, dass Sachverhalt, Empfänger, Beziehung, Hierarchie, gewünschte Reaktion, Direktheit, Kanal und gegebenenfalls Konfliktlage zusammenpassen. Verwenden, wenn nicht nur der Sprachstil, sondern die Wirkung auf einen konkreten Empfänger oder eine konkrete Entscheidung materiell für die Lösung ist.",
+          "description_present_in_actual_output": true
+        },
+        {
+          "skill": "code-review",
+          "path": "Programmieren/Skills/code-review/SKILL.md",
+          "source_sha256": "314840ab5fed2ac4d8fb67147e460864471d71f120de1409031ff26cf5345260",
+          "command_indices": [
+            8
+          ],
+          "canonical_description": "Strukturiertes Code-Review für KI-gestützte Softwarearbeit. Verwenden, um einen Diff gegen festen Ausgangspunkt, Anforderung, freigegebenen Plan und Repository-Standards zu prüfen.",
+          "description_present_in_actual_output": true
+        },
+        {
+          "skill": "tdd",
+          "path": "Programmieren/Skills/tdd/SKILL.md",
+          "source_sha256": "f69f734d323fff987d0e9f7cae202770be153210c1b31a82f08ee8006ef30d9a",
+          "command_indices": [
+            8
+          ],
+          "canonical_description": "Testgetriebene Umsetzung für KI-gestützte Softwarearbeit. Verwenden, wenn ein freigegebener Feature- oder Bugfix-Scope in kleinen überprüfbaren Schnitten umgesetzt wird.",
+          "description_present_in_actual_output": true
+        },
+        {
+          "skill": "citation-audit",
+          "path": "Recherche/Skills/citation-audit/SKILL.md",
+          "source_sha256": "3dae6050d9cfcfb2a3e4a91f1d545da05b6c1c231bb256ea148ffb0588838928",
+          "command_indices": [
+            9
+          ],
+          "canonical_description": "Prüft fertige oder weitgehend fertige Research-Synthesen darauf, ob wesentliche Faktenclaims durch die tatsächlich zugeordneten Quellen und konkrete Evidence gestützt werden. Verwenden vor Abschluss oder Veröffentlichung, wenn Claim-zu-Zitation-Support materiell geprüft werden muss; nicht für die frühe Qualitätsbewertung einzelner Quellen oder die isolierte Verifikation eines einzelnen Claims.",
+          "description_present_in_actual_output": true
+        },
+        {
+          "skill": "visual-answer",
+          "path": "Dokumentationserstellung/Skills/visual-answer/SKILL.md",
+          "source_sha256": "61ba11f9e11f8141e8492a695a885fd7d717e2c882a83058851ee405fb092982",
+          "command_indices": [
+            9,
+            11
+          ],
+          "canonical_description": "Strukturiert komplexe Antworten als visuell schnell erfassbares Artefakt oder Layout mit Kernaussage, Prioritäten, Beziehungen und gestuften Details. Verwenden bei Architektur/Flows, Mehrkriterien-Vergleichen, Hierarchien/Timelines, komplexen Plänen oder Reviews mit vielen Findings; nicht für kurze Faktenantworten, Smalltalk, reine Command-Ausgabe oder wenn der Nutzer Plain Text verlangt.",
+          "description_present_in_actual_output": true
+        },
+        {
+          "skill": "skill-security-review",
+          "path": "Sicherheit/Skills/skill-security-review/SKILL.md",
+          "source_sha256": "14bfdf2b8764286f336ed8aabb07eea6103e3c44bb543cc6c564ba8e377a4dd8",
+          "command_indices": [
+            9
+          ],
+          "canonical_description": "Prüft einen Agent-Skill vor Aktivierung oder Freigabe auf Trust-/Admission-, Supply-Chain-, Berechtigungs-, Prompt-Injection-, Datenexfiltrations-, Script-, Remote-Dependency-, External-Action- und Update-Risiken. Verwenden bei externen oder mächtigen Skills und bei sicherheitsrelevanten Upstream-Änderungen; nicht als allgemeiner fachlicher Skillreview und nicht für die allgemeine Admission eines eigenständigen MCP-Servers, Plugins, Connectors oder Hooks, sofern dieser nicht Teil des Skill-Bundles ist.",
+          "description_present_in_actual_output": true
+        },
+        {
+          "skill": "tool-permission-review",
+          "path": "Sicherheit/Skills/tool-permission-review/SKILL.md",
+          "source_sha256": "6e66c6added6308aa86124528a633d264f8902500034102973f3738e40d73eb7",
+          "command_indices": [
+            9
+          ],
+          "canonical_description": "Prüft die für einen Agenten, Skill, Workflow oder eine eigenständige externe Integration vorgesehenen Tool- und Berechtigungsrechte gegen Least Privilege, Fallbacks und Human Gates. Verwenden wenn neue Tools, Netzwerk-, Schreib-, Ausführungs- oder Produktionsrechte eingeführt werden; nicht für reine Funktionsbeschreibung eines Tools und nicht als vollständiger Supply-Chain- oder Skill-Admission-Review.",
+          "description_present_in_actual_output": true
+        },
+        {
+          "skill": "test-design",
+          "path": "Testing-und-QA/Skills/test-design/SKILL.md",
+          "source_sha256": "2f04848bb93221f51b609ef04fe8c824a003bff176bfa947b9d8ee3bb68639ab",
+          "command_indices": [
+            8
+          ],
+          "canonical_description": "Entwirft konkrete Testfälle aus Anforderungen, Invarianten, Zuständen, Grenzwerten und Failure Modes. Verwenden, wenn konkrete Testfälle oder eine systematische Testfallmenge benötigt werden. Nicht als allgemeine Teststrategie oder E2E-Ausführung verwenden.",
+          "description_present_in_actual_output": true
+        }
+      ],
+      "invocation": {
+        "argv": [
+          "<user-home>\\AppData\\Local\\OpenAI\\Codex\\bin\\22cfb1d302613eae\\codex.EXE",
+          "-a",
+          "never",
+          "exec",
+          "--ignore-user-config",
+          "--ephemeral",
+          "--skip-git-repo-check",
+          "--cd",
+          "<repo>\\.validation\\routing-p4-20261031-v2\\workspace-development",
+          "--json",
+          "--color",
+          "never",
+          "--model",
+          "gpt-6.1-sol",
+          "-c",
+          "model_reasoning_effort=\"high\"",
+          "--sandbox",
+          "workspace-write",
+          "-c",
+          "windows.sandbox=\"elevated\"",
+          "-c",
+          "model_provider=\"openai\"",
+          "-c",
+          "forced_login_method=\"chatgpt\"",
+          "-c",
+          "web_search=\"disabled\"",
+          "--output-schema",
+          "<repo>\\.validation\\routing-p4-20261031-v2\\answer-schema.json",
+          "--output-last-message",
+          "<repo>\\.validation\\routing-p4-20261031-v2\\development-answer.json",
+          "-"
+        ],
+        "prompt": "Arbeite ausschließlich mit den Quellen in deinem aktuellen Arbeitsverzeichnis. Keine Installation, Außenaktionen oder Quellenänderungen. Lokale abgeleitete Suchcaches sind erlaubt.\n\nIch möchte einen CSV-Import entwickeln: 1 bis 1000 Datensätze, leere Dateien ablehnen, Dubletten melden. Stell mir zunächst nur einen umsetzbaren Arbeitsplan vor. Die Umsetzung soll in kleine prüfbare Schritte zerlegt und auf zwei Agenten verteilt werden, ohne gleichzeitige Änderungen derselben Dateien. Plane auch, welche aktuellen Projektinformationen die Agenten brauchen und was sie erst bei Bedarf nachladen sollten. Konkrete Grenztests und ein unabhängiger Codecheck sollen dazugehören. Welche Werkzeuge aus diesem Repository passen zu den einzelnen Jobs und wann setzt du sie ein? Noch nichts implementieren und keine weiteren Agenten starten.",
+        "prompt_sha256": "b4f23e19539c817629c5cc1f70b8534c37fff7f7a7e7b235cf244c05500543db"
+      },
+      "commands": [
+        {
+          "index": 0,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"Get-Content -LiteralPath 'workflow-index.yml'\"",
+          "exit_code": 0,
+          "output_sha256": "325cd805fcc637f87ca4921256f86662a13972e0c1048dc046e8a82803eb7898",
+          "output_characters": 2427,
+          "output_excerpt": "schema_version: 1\nworkflows:\n  - Workflows/Acceptance-Traceability-und-Handoff.md\n  - Workflows/Architektur-Baseline-und-Systemdesign.md\n  - Workflows/Architektur-Readiness-Review.md\n  - Workflows/Architekturentscheidung-und-Tradeoff.md\n  - Workflows/Backfill-und-Reprocessing.md\n  - Workflows/Bestehende-Website-Review.md\n  - Workflows/Binaerdatei-v"
+        },
+        {
+          "index": 1,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"Get-Content -LiteralPath 'routing-overlays.yml'\"",
+          "exit_code": 0,
+          "output_sha256": "06f72e657d59240da1027d3824a5a76696365866cca602dcf4ed977f1730f883",
+          "output_characters": 1220,
+          "output_excerpt": "schema_version: 2\n\n# Kleine globale \"don't forget\"-Liste für domänenübergreifende Skills.\n#\n# Diese Datei definiert KEINE Triggerlogik. Ob ein Overlay wirklich passt,\n# entscheidet weiterhin ausschließlich die Description / Near-Miss-Grenze\n# der jeweiligen SKILL.md.\n#\n# checkpoints steuern nur, WANN ein Kandidat erneut geprüft werden soll.\n# Sie s"
+        },
+        {
+          "index": 2,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"Get-Content -LiteralPath 'skill-catalog.yml' -TotalCount 100; rg -n -i 'plan|agent|parallel|context|test|review|csv|import|implement|specification' skill-catalog.yml\"",
+          "exit_code": 0,
+          "output_sha256": "ea407054e1be336933f208b78903b57df31b802a9744eba845815ff74273c9b2",
+          "output_characters": 85963,
+          "output_excerpt": "schema_version: 2\nlast_updated: 2026-10-17\n\nmaturity_levels: [experimental, candidate, stable, deprecated, retired]\neval_coverage_levels: [none, partial, core, broad]\n\nskills:\n  - {id: reflektierender-dialog, area: Arbeitsweisen, path: Arbeitsweisen/Skills/reflektierender-dialog/SKILL.md, maturity: candidate, eval_coverage: none, purpose: \"Erfahrun"
+        },
+        {
+          "index": 3,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"Get-Content -LiteralPath 'Dokumentation/Skill-Handbuch.md'\"",
+          "exit_code": 0,
+          "output_sha256": "ba6a3fdccb00c0b3f1266f53396a36d6143aa5b1d76dcba7c6eb6ab28f431e58",
+          "output_characters": 15073,
+          "output_excerpt": "# Skill-Handbuch – Master-Router\n\nDieses Dokument ist kein zweites Skill-Katalogbuch. Es routet von einem **konkreten Problem oder Auftrag** zum kleinsten ausreichenden Skill-Satz und verweist für Details auf Katalog, Fachhandbücher und lokale Sources of Truth.\n\nDer Nutzer muss dafür weder die richtige Domäne noch einen Skill-Namen kennen.\n\n## Star"
+        },
+        {
+          "index": 4,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"Get-ChildItem -Force -Name; rg --files -g 'AGENTS.md' -g '*csv*' -g '*CSV*' -g '*fixture*' -g '*Fixture*' -g 'package.json' -g 'pyproject.toml' -g '*.sln' -g '*proj'\"",
+          "exit_code": 0,
+          "output_sha256": "f1cf76e8656e02c6bd202e2f9f96f4b2e117ebc8f10aa4a9710e803030d28096",
+          "output_characters": 911,
+          "output_excerpt": ".git\n.validation\nAgentenarbeit\nArbeitsweisen\nBildarbeit\nData-Engineering\nDatenbanken\nDokumentation\nDokumentationserstellung\nFinanzen\nGrundlagen\nInfrastruktur-und-DevOps\nProgrammieren\nRecherche\nReliability-und-System-Observability\nRequirements-und-Spezifikations-Engineering\nReverse-Engineering-und-Binaeranalyse\nSchemas\nSchnittstellen-und-Vertraege\nS"
+        },
+        {
+          "index": 5,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"Get-Content -LiteralPath 'Workflows/Software-Feature.md'; Get-Content -LiteralPath 'routing-overlays.yml'; Get-Content -LiteralPath 'PROJECT.md'; Get-Content -LiteralPath 'mara-project.json'\"",
+          "exit_code": 0,
+          "output_sha256": "2c4269d7d424f1339bca46ad8c10955d6b0da56d65c5703e36a024006ba4e772",
+          "output_characters": 11336,
+          "output_excerpt": "# Workflow – Software Feature\n\n## Ziel\n\nEin Feature kontrolliert von Anforderung und Domänenverständnis bis zu verifizierter Änderung führen.\n\n## Empfohlene Skill-Kette\n\n```text\nAnforderung / Projektwahrheit\n→ optional domain-modeling\n→ Planung / task-graph bei Komplexität\n→ delegation-contract bei Delegation\n→ tdd oder passende Implementierungsdis"
+        },
+        {
+          "index": 6,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"rg -n -i 'id: (.*plan.*|.*context.*|.*agent.*|.*parallel.*|.*test.*|code-review|.*verification.*|.*visual-answer.*|adressatengerechte-kommunikation|citation-audit|skill-security-review|tool-permission-review|prompt-injection-review|.*implement.*|.*task.*)' skill-catalog.yml; Get-ChildItem -LiteralPath '.validation' -Force -Name; Get-ChildItem -LiteralPath 'Agentenarbeit' -Name; Get-ChildItem -LiteralPath 'Programmieren/Skills' -Name\"",
+          "exit_code": 0,
+          "output_sha256": "12934c8f8eb7726a3bdfb4c48b21779418678c52aa7347164d6912f7d9938956",
+          "output_characters": 38222,
+          "output_excerpt": "11:  - {id: prompt-engineering, area: Arbeitsweisen, path: Arbeitsweisen/Skills/prompt-engineering/SKILL.md, maturity: experimental, eval_coverage: partial, purpose: \"Auf ausdrücklichen Auftrag KI-Prompts als Artefakt erstellen, verbessern, zerlegen, prüfen oder für ein anderes Zielwerkzeug anpassen; keine unmittelbare Fachaufgabenausführung.\", rel"
+        },
+        {
+          "index": 7,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"Get-Content -LiteralPath 'Agentenarbeit/Skills/task-graph/SKILL.md'; Get-Content -LiteralPath 'Agentenarbeit/Skills/delegation-contract/SKILL.md'; Get-Content -LiteralPath 'Agentenarbeit/Skills/context-engineering/SKILL.md'\"",
+          "exit_code": 0,
+          "output_sha256": "ccc82100e9902e1db263ce21beb97dab43cbdcd442642a2c26377a3ef6ab0697",
+          "output_characters": 7798,
+          "output_excerpt": "---\nname: task-graph\ndescription: Zerlegt komplexe Agentenarbeit in abhängige, überprüfbare Knoten und macht echte Abhängigkeiten, Parallelisierung und Stop-Bedingungen sichtbar. Verwenden bei komplexen Aufgaben mit mehreren abhängigen oder parallelisierbaren Arbeitsschritten.\n---\n\n# Task Graph\n\nNutze `../../Task-Graph-und-Loops.md`.\n\n## Vorgehen\n\n"
+        },
+        {
+          "index": 8,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"Get-Content -LiteralPath 'Programmieren/Skills/tdd/SKILL.md'; Get-Content -LiteralPath 'Testing-und-QA/Skills/test-design/SKILL.md'; Get-Content -LiteralPath 'Programmieren/Skills/code-review/SKILL.md'; Get-Content -LiteralPath 'Agentenarbeit/Skills/verification-loop/SKILL.md'; rg -n '\"'^  - '\"\\\\{id: (tdd|test-design|code-review|visual-answer|skill-security-review|tool-permission-review|citation-audit|verification-loop|context-engineering|task-graph|delegation-contract),' skill-catalog.yml\"",
+          "exit_code": 0,
+          "output_sha256": "4f9792599fa10450055734c6282f7555f1bee8e84c184e083e1698b5520b7e73",
+          "output_characters": 19275,
+          "output_excerpt": "---\nname: tdd\ndescription: Testgetriebene Umsetzung für KI-gestützte Softwarearbeit. Verwenden, wenn ein freigegebener Feature- oder Bugfix-Scope in kleinen überprüfbaren Schnitten umgesetzt wird.\n---\n\n# Test-Driven Development\n\nDieser Skill unterstützt die Umsetzung. Er ersetzt weder Anforderung noch freigegebenen Plan.\n\n## Vorbedingung\n\nBevor Cod"
+        },
+        {
+          "index": 9,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command '$skillPaths = @('\"'Dokumentationserstellung/Skills/visual-answer/SKILL.md','Schreiben/Skills/adressatengerechte-kommunikation/SKILL.md','Recherche/Skills/citation-audit/SKILL.md','Sicherheit/Skills/skill-security-review/SKILL.md','Sicherheit/Skills/tool-permission-review/SKILL.md'); foreach (\"'$skillPath in $skillPaths) { Get-Content -LiteralPath $skillPath -TotalCount 12 }; Get-Content -LiteralPath '\"'Testing-und-QA/Umgebungsabhaengige-Verifikation-und-Reports.md'; rg --files --hidden -g '\"'!.git/**'\"' -g '\"'!*cache*/**'\"' -g '*csv*' -g '*CSV*' -g 'package.json' -g 'pyproject.toml' -g '*.csproj' -g '*.sln' -g 'Cargo.toml' -g 'go.mod' -g 'pom.xml' -g 'Validate-KI-Regeln.ps1'\"",
+          "exit_code": 1,
+          "output_sha256": "7ecbfe657408751437c3335e99ec1283a4b5cad4dae39756b5f1537c1f49eb04",
+          "output_characters": 10119,
+          "output_excerpt": "---\nname: visual-answer\ndescription: Strukturiert komplexe Antworten als visuell schnell erfassbares Artefakt oder Layout mit Kernaussage, Prioritäten, Beziehungen und gestuften Details. Verwenden bei Architektur/Flows, Mehrkriterien-Vergleichen, Hierarchien/Timelines, komplexen Plänen oder Reviews mit vielen Findings; nicht für kurze Faktenantwort"
+        },
+        {
+          "index": 10,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"Get-Content -LiteralPath 'Agentenarbeit/Task-Graph-und-Loops.md'; Get-Content -LiteralPath 'Agentenarbeit/Delegation-und-Evidence.md'; Get-Content -LiteralPath 'Agentenarbeit/Context-Engineering.md'; Get-Content -LiteralPath 'Agentenarbeit/Human-Gates-und-Freigaben.md'\"",
+          "exit_code": 0,
+          "output_sha256": "b88cb3a6543151b5fc24b3553dc8b484690ba1d1192861aad3213633768a93c1",
+          "output_characters": 26099,
+          "output_excerpt": "# Task Graph und kontrollierte Loops\n\n## Zweck\n\nKomplexe Agentenarbeit sollte nicht nur als lange lineare Aufgabenliste betrachtet werden.\n\nEin Task Graph beschreibt, welche Arbeitsschritte voneinander abhängen. Ein Loop beschreibt, wie ein einzelner freigegebener Arbeitsschritt iterativ verbessert und geprüft wird.\n\n## Task Graph\n\nEin Knoten steht"
+        },
+        {
+          "index": 11,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"Get-Content -LiteralPath 'Dokumentationserstellung/Skills/visual-answer/SKILL.md'; Get-Content -LiteralPath 'Dokumentationserstellung/Visuelle-Antworten-und-HTML-Artefakte.md'; Get-Content -LiteralPath 'routing-overlays.yml'\"",
+          "exit_code": 0,
+          "output_sha256": "6f7aa3dca40955fe65353db3439ca5cb9639d7334911c341d89e9b7662b19edd",
+          "output_characters": 18405,
+          "output_excerpt": "---\nname: visual-answer\ndescription: Strukturiert komplexe Antworten als visuell schnell erfassbares Artefakt oder Layout mit Kernaussage, Prioritäten, Beziehungen und gestuften Details. Verwenden bei Architektur/Flows, Mehrkriterien-Vergleichen, Hierarchien/Timelines, komplexen Plänen oder Reviews mit vielen Findings; nicht für kurze Faktenantwort"
+        }
+      ],
+      "raw_response_sha256": "3a2b626ae175787422e562488fecfbcdc5b0543ba127a70fad319214bd5363c6",
+      "optional_agent_paths": {
+        "bm25_search": "NOT RUN",
+        "relations": "NOT RUN",
+        "paging": "NOT RUN",
+        "list_skills": "NOT RUN"
+      },
+      "independently_checked_source_files": 578
+    },
+    {
+      "status": "RESPONSE_RECORDED",
+      "exit_code": 0,
+      "elapsed_seconds": 59.44,
+      "usage": [
+        {
+          "input_tokens": 195894,
+          "cached_input_tokens": 143616,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 2135,
+          "reasoning_output_tokens": 383
+        }
+      ],
+      "completed_item_types": {
+        "agent_message": 3,
+        "command_execution": 19
+      },
+      "source_bytes_unchanged": true,
+      "git_status": "",
+      "answer": "**1. Beobachtbare Akzeptanzkriterien**\n\nQuelle ist die angegebene Anforderung. Für die Mengenprüfung werden ansonsten gültige, dublettenfreie CSV-Daten vorausgesetzt.\n\n| ID | Bedingung | Beobachtbares Ergebnis |\n|---|---|---|\n| AK1 | Die CSV enthält 1 bis einschließlich 1000 Datensätze. | Der Import wird erfolgreich abgeschlossen; alle enthaltenen Datensätze werden übernommen. |\n| AK2 | Die Datei ist leer. | Der Import wird abgelehnt; es werden keine Datensätze übernommen. |\n| AK3 | Die CSV enthält mehr als 1000 Datensätze. | Der Import wird wegen Überschreitung der zulässigen Anzahl abgelehnt. |\n| AK4 | Die CSV enthält Dubletten gemäß der fachlichen Dublettenregel. | Das Importergebnis weist ausdrücklich auf erkannte Dubletten hin. |\n\nVerifikationsabsicht: funktionale Tests anhand des sichtbaren Importergebnisses und der übernommenen Daten.\n\n**2. Daraus abgeleitete Grenztests**\n\nJeder Test startet mit einem leeren Importziel. Aktion: die jeweilige CSV importieren. Testebene: funktionaler Test des CSV-Imports.\n\n| Test | Konkrete Eingabe | Erwartetes Ergebnis | Bezug |\n|---|---|---|---|\n| G1 | Datei mit 0 Byte | Abgelehnt; 0 Datensätze übernommen | AK2 |\n| G2 | 1 gültiger Datensatz | Erfolgreich; genau 1 übernommen | AK1, untere Grenze |\n| G3 | 2 gültige, verschiedene Datensätze | Erfolgreich; genau 2 übernommen | AK1, knapp innerhalb |\n| G4 | 999 gültige, verschiedene Datensätze | Erfolgreich; genau 999 übernommen | AK1, knapp innerhalb |\n| G5 | 1000 gültige, verschiedene Datensätze | Erfolgreich; genau 1000 übernommen | AK1, obere Grenze |\n| G6 | 1001 gültige, verschiedene Datensätze | Wegen Mengenüberschreitung abgelehnt | AK3 |\n| G7 | Zwei Datensätze, die gemäß bestätigter Dublettenregel gleich sind | Dublettenmeldung sichtbar | AK4, kleinstes Dublettenpaar |\n| G8 | 1000 Datensätze; der letzte dupliziert den ersten gemäß bestätigter Regel | Dublettenmeldung sichtbar | AK4, Dublette an der oberen Mengengrenze |\n\n**Offene Festlegungen:** Dublettenschlüssel, Vergleich innerhalb der Datei beziehungsweise gegen Bestandsdaten und Verhalten nach einer Dublettenmeldung fehlen. G7/G8 benötigen deshalb noch die bestätigte Vergleichsregel. Ebenfalls offen: Behandlung einer Datei mit ausschließlich Kopfzeile und Zählung vor oder nach einer möglichen Deduplizierung. Daraus werden keine zusätzlichen Produktregeln abgeleitet.\n\n**Werkzeugauswahl:** Nach Prüfung der lokalen Router und des Workflows `Acceptance-Traceability-und-Handoff` nutze ich gezielt `acceptance-criteria-design` für Erfüllungskriterien und `test-design` für konkrete Grenzfälle. Ihre Beschreibungen grenzen diese Aufgaben ausdrücklich voneinander ab. Die Discovery erfolgte direkt mit `rg` und Dateilesen, ohne Suchruntime, Installation oder Dateiänderungen. Die Tests wurden entworfen, nicht ausgeführt.",
+      "id": "fallback",
+      "product_assessment": "PASS for fixed case",
+      "process_assessment": "PASS for fixed case",
+      "assessment_method": "integrator and independent reviewer read actual outputs and answer against frozen rubric; not LLM judge automation",
+      "description_reads": [
+        {
+          "skill": "verification-loop",
+          "path": "Agentenarbeit/Skills/verification-loop/SKILL.md",
+          "source_sha256": "37824715a191c6668343358817959756dc6ac5117291e7f11675e7245f2d608f",
+          "command_indices": [
+            17
+          ],
+          "canonical_description": "Führt innerhalb eines freigegebenen Scopes einen kontrollierten Arbeiten-Prüfen-Diagnose-Korrigieren-Loop mit klaren Stop-Kriterien aus. Verwenden bei iterativer Umsetzung, wenn nach jedem Änderungsschritt reproduzierbare Nachweise möglich sind.",
+          "description_present_in_actual_output": true
+        },
+        {
+          "skill": "adressatengerechte-kommunikation",
+          "path": "Schreiben/Skills/adressatengerechte-kommunikation/SKILL.md",
+          "source_sha256": "787e86f1a02445fa9a95af6a33899aa2f9ddd3a89216e7e0914c9d84e1874c4f",
+          "command_indices": [
+            15
+          ],
+          "canonical_description": "Nachrichten und schriftliche Kommunikation so planen und formulieren, dass Sachverhalt, Empfänger, Beziehung, Hierarchie, gewünschte Reaktion, Direktheit, Kanal und gegebenenfalls Konfliktlage zusammenpassen. Verwenden, wenn nicht nur der Sprachstil, sondern die Wirkung auf einen konkreten Empfänger oder eine konkrete Entscheidung materiell für die Lösung ist.",
+          "description_present_in_actual_output": true
+        },
+        {
+          "skill": "citation-audit",
+          "path": "Recherche/Skills/citation-audit/SKILL.md",
+          "source_sha256": "3dae6050d9cfcfb2a3e4a91f1d545da05b6c1c231bb256ea148ffb0588838928",
+          "command_indices": [
+            12,
+            18
+          ],
+          "canonical_description": "Prüft fertige oder weitgehend fertige Research-Synthesen darauf, ob wesentliche Faktenclaims durch die tatsächlich zugeordneten Quellen und konkrete Evidence gestützt werden. Verwenden vor Abschluss oder Veröffentlichung, wenn Claim-zu-Zitation-Support materiell geprüft werden muss; nicht für die frühe Qualitätsbewertung einzelner Quellen oder die isolierte Verifikation eines einzelnen Claims.",
+          "description_present_in_actual_output": true
+        },
+        {
+          "skill": "visual-answer",
+          "path": "Dokumentationserstellung/Skills/visual-answer/SKILL.md",
+          "source_sha256": "61ba11f9e11f8141e8492a695a885fd7d717e2c882a83058851ee405fb092982",
+          "command_indices": [
+            13,
+            18
+          ],
+          "canonical_description": "Strukturiert komplexe Antworten als visuell schnell erfassbares Artefakt oder Layout mit Kernaussage, Prioritäten, Beziehungen und gestuften Details. Verwenden bei Architektur/Flows, Mehrkriterien-Vergleichen, Hierarchien/Timelines, komplexen Plänen oder Reviews mit vielen Findings; nicht für kurze Faktenantworten, Smalltalk, reine Command-Ausgabe oder wenn der Nutzer Plain Text verlangt.",
+          "description_present_in_actual_output": true
+        },
+        {
+          "skill": "skill-security-review",
+          "path": "Sicherheit/Skills/skill-security-review/SKILL.md",
+          "source_sha256": "14bfdf2b8764286f336ed8aabb07eea6103e3c44bb543cc6c564ba8e377a4dd8",
+          "command_indices": [
+            16
+          ],
+          "canonical_description": "Prüft einen Agent-Skill vor Aktivierung oder Freigabe auf Trust-/Admission-, Supply-Chain-, Berechtigungs-, Prompt-Injection-, Datenexfiltrations-, Script-, Remote-Dependency-, External-Action- und Update-Risiken. Verwenden bei externen oder mächtigen Skills und bei sicherheitsrelevanten Upstream-Änderungen; nicht als allgemeiner fachlicher Skillreview und nicht für die allgemeine Admission eines eigenständigen MCP-Servers, Plugins, Connectors oder Hooks, sofern dieser nicht Teil des Skill-Bundles ist.",
+          "description_present_in_actual_output": true
+        },
+        {
+          "skill": "tool-permission-review",
+          "path": "Sicherheit/Skills/tool-permission-review/SKILL.md",
+          "source_sha256": "6e66c6added6308aa86124528a633d264f8902500034102973f3738e40d73eb7",
+          "command_indices": [
+            14
+          ],
+          "canonical_description": "Prüft die für einen Agenten, Skill, Workflow oder eine eigenständige externe Integration vorgesehenen Tool- und Berechtigungsrechte gegen Least Privilege, Fallbacks und Human Gates. Verwenden wenn neue Tools, Netzwerk-, Schreib-, Ausführungs- oder Produktionsrechte eingeführt werden; nicht für reine Funktionsbeschreibung eines Tools und nicht als vollständiger Supply-Chain- oder Skill-Admission-Review.",
+          "description_present_in_actual_output": true
+        },
+        {
+          "skill": "test-design",
+          "path": "Testing-und-QA/Skills/test-design/SKILL.md",
+          "source_sha256": "2f04848bb93221f51b609ef04fe8c824a003bff176bfa947b9d8ee3bb68639ab",
+          "command_indices": [
+            9
+          ],
+          "canonical_description": "Entwirft konkrete Testfälle aus Anforderungen, Invarianten, Zuständen, Grenzwerten und Failure Modes. Verwenden, wenn konkrete Testfälle oder eine systematische Testfallmenge benötigt werden. Nicht als allgemeine Teststrategie oder E2E-Ausführung verwenden.",
+          "description_present_in_actual_output": true
+        },
+        {
+          "skill": "acceptance-criteria-design",
+          "path": "Requirements-und-Spezifikations-Engineering/Skills/acceptance-criteria-design/SKILL.md",
+          "source_sha256": "9eebe9c721f76155a496ef7ba6af2c778a28f006b6dcc6a02581682a994bdd62",
+          "command_indices": [
+            9
+          ],
+          "canonical_description": "Entwirft beobachtbare Acceptance Criteria und Verification Intent für bestehende Requirements oder Szenarien, ohne bereits Testfälle oder Implementierungsdetails festzulegen. Verwenden wenn Erfüllungskriterien fehlen, vage oder unvollständig sind. Nicht als Testdesign-, E2E- oder Contract-Test-Skill verwenden.",
+          "description_present_in_actual_output": true
+        },
+        {
+          "skill": "requirements-traceability",
+          "path": "Requirements-und-Spezifikations-Engineering/Skills/requirements-traceability/SKILL.md",
+          "source_sha256": "c92b6c99ba827224fe6f88a5adc9f142c90586f471e3458a4fd75733e5fc08b9",
+          "command_indices": [
+            10
+          ],
+          "canonical_description": "Baut oder prüft nachvollziehbare Links von Stakeholdern, Quellen und Zielen über Requirements zu Acceptance Criteria, Architektur, Contracts, Tests und anderer relevanter Evidence. Verwenden für Traceability, Coverage, Orphans oder Impact-Vorbereitung. Nicht als Beweis für fachliche Korrektheit oder automatischer Change-Skill verwenden.",
+          "description_present_in_actual_output": true
+        },
+        {
+          "skill": "requirements-validation",
+          "path": "Requirements-und-Spezifikations-Engineering/Skills/requirements-validation/SKILL.md",
+          "source_sha256": "75d737a78204699f8491cbdf5930304e099b1758b0e19d675dac92e1b1af1c3a",
+          "command_indices": [
+            11
+          ],
+          "canonical_description": "Validiert Requirements gegen Stakeholderbedarfe, Ziele, Scope, Quellen, Konsistenz, Verifizierbarkeit, Feasibility-Risiken und relevante Szenarien. Verwenden vor Architektur-/Implementierungshandoff oder nach wesentlichen Requirement Changes. Nicht mit Product Validation, Testausführung oder bloßem Formatlint verwechseln.",
+          "description_present_in_actual_output": true
+        }
+      ],
+      "invocation": {
+        "argv": [
+          "<user-home>\\AppData\\Local\\OpenAI\\Codex\\bin\\22cfb1d302613eae\\codex.EXE",
+          "-a",
+          "never",
+          "exec",
+          "--ignore-user-config",
+          "--ephemeral",
+          "--skip-git-repo-check",
+          "--cd",
+          "<repo>\\.validation\\routing-p4-20261031-v2\\workspace-fallback",
+          "--json",
+          "--color",
+          "never",
+          "--model",
+          "gpt-6.1-sol",
+          "-c",
+          "model_reasoning_effort=\"high\"",
+          "--sandbox",
+          "read-only",
+          "-c",
+          "windows.sandbox=\"elevated\"",
+          "-c",
+          "model_provider=\"openai\"",
+          "-c",
+          "forced_login_method=\"chatgpt\"",
+          "-c",
+          "web_search=\"disabled\"",
+          "--output-schema",
+          "<repo>\\.validation\\routing-p4-20261031-v2\\answer-schema.json",
+          "--output-last-message",
+          "<repo>\\.validation\\routing-p4-20261031-v2\\fallback-answer.json",
+          "-"
+        ],
+        "prompt": "Arbeite ausschließlich mit den Quellen in deinem aktuellen Arbeitsverzeichnis. Keine Installation, Außenaktionen oder Quellenänderungen. Lokale abgeleitete Suchcaches sind erlaubt.\n\nFormuliere beobachtbare Akzeptanzkriterien und leite danach konkrete Grenztests ab. Anforderung: Ein CSV-Import akzeptiert 1 bis 1000 Datensätze, lehnt leere Dateien ab und meldet Dubletten. Trenne die beiden Ergebnisse und begründe kurz deine Werkzeugauswahl aus dem Repository. Die optionale Suchruntime ist hier nicht installiert; installiere nichts. Ändere keine Dateien.",
+        "prompt_sha256": "c5306f4905bc1aefaa2d76bf5e11e228e3b1bfdf56444759f42e89eb110b42f6"
+      },
+      "commands": [
+        {
+          "index": 0,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command 'Get-Location; rg --files -g AGENTS.md -g Skill-Handbuch.md -g skill-catalog.yml -g routing-overlays.yml -g workflow-index.yml'",
+          "exit_code": 0,
+          "output_sha256": "c7a94a9ff7ab4d3e391c8ae35efcdab3bd4b4d3c0f02766469376cc457b5d016",
+          "output_characters": 222,
+          "output_excerpt": "\nAGENTS.md\nworkflow-index.yml\nrouting-overlays.yml\nskill-catalog.yml\nDokumentation\\Skill-Handbuch.md\nPath\n----\n<repo>\\.validation\\routing-p4-20261031-v2\\workspace-fallback\n\n"
+        },
+        {
+          "index": 1,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"rg -n -i -C 5 'acceptance|akzeptanz|boundary|grenz|test.design|requirements|anforderung|specification' skill-catalog.yml\"",
+          "exit_code": 0,
+          "output_sha256": "714855309acf063802f2b58cd0332dc2dbff42ac2d73ef65d247a2054b81f908",
+          "output_characters": 49031,
+          "output_excerpt": "13-  - {id: context-audit, area: Agentenarbeit, path: Agentenarbeit/Skills/context-audit/SKILL.md, maturity: experimental, eval_coverage: partial, purpose: \"Context-Footprint, Signalqualität, Staleness, Duplikate, Tooloutput-Bloat und Token-/Größenverteilung auditieren.\", capabilities: [context-metrics-preferred], related: [context-engineering, con"
+        },
+        {
+          "index": 2,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command 'Get-Content workflow-index.yml; Get-Content routing-overlays.yml'",
+          "exit_code": 0,
+          "output_sha256": "42eed62f463385e1c6eb05e5b00e25e1ee94dd7a6c3d12b24989fd7c28ff4186",
+          "output_characters": 3647,
+          "output_excerpt": "schema_version: 1\nworkflows:\n  - Workflows/Acceptance-Traceability-und-Handoff.md\n  - Workflows/Architektur-Baseline-und-Systemdesign.md\n  - Workflows/Architektur-Readiness-Review.md\n  - Workflows/Architekturentscheidung-und-Tradeoff.md\n  - Workflows/Backfill-und-Reprocessing.md\n  - Workflows/Bestehende-Website-Review.md\n  - Workflows/Binaerdatei-v"
+        },
+        {
+          "index": 3,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command 'Get-Content AGENTS.md; Get-Content Dokumentation/Skill-Handbuch.md'",
+          "exit_code": 0,
+          "output_sha256": "833e2ee256d3486b94a8eeccd7003b7850e01297b24dc63eed53524b7713937c",
+          "output_characters": 31715,
+          "output_excerpt": "# KI-Regeln – Agent Bootstrap\n\nDiese Datei ist der kleinste Einstiegspunkt für einen frischen KI-Agenten. Lade nicht pauschal README, alle Skills oder das vollständige Handbuch in den Kontext.\n\n## Pflicht vor nichttrivialer Arbeit\n\nBevor bei einer **nichttrivialen** Aufgabe ein erster Lösungsentwurf entsteht, müssen im aktuellen Lauf die zentralen "
+        },
+        {
+          "index": 4,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command 'Get-Content Dokumentation/Skill-Handbuch.md'",
+          "exit_code": 0,
+          "output_sha256": "ba6a3fdccb00c0b3f1266f53396a36d6143aa5b1d76dcba7c6eb6ab28f431e58",
+          "output_characters": 15073,
+          "output_excerpt": "# Skill-Handbuch – Master-Router\n\nDieses Dokument ist kein zweites Skill-Katalogbuch. Es routet von einem **konkreten Problem oder Auftrag** zum kleinsten ausreichenden Skill-Satz und verweist für Details auf Katalog, Fachhandbücher und lokale Sources of Truth.\n\nDer Nutzer muss dafür weder die richtige Domäne noch einen Skill-Namen kennen.\n\n## Star"
+        },
+        {
+          "index": 5,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command 'Get-Content workflow-index.yml'",
+          "exit_code": 0,
+          "output_sha256": "325cd805fcc637f87ca4921256f86662a13972e0c1048dc046e8a82803eb7898",
+          "output_characters": 2427,
+          "output_excerpt": "schema_version: 1\nworkflows:\n  - Workflows/Acceptance-Traceability-und-Handoff.md\n  - Workflows/Architektur-Baseline-und-Systemdesign.md\n  - Workflows/Architektur-Readiness-Review.md\n  - Workflows/Architekturentscheidung-und-Tradeoff.md\n  - Workflows/Backfill-und-Reprocessing.md\n  - Workflows/Bestehende-Website-Review.md\n  - Workflows/Binaerdatei-v"
+        },
+        {
+          "index": 6,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command 'Get-Content routing-overlays.yml'",
+          "exit_code": 0,
+          "output_sha256": "06f72e657d59240da1027d3824a5a76696365866cca602dcf4ed977f1730f883",
+          "output_characters": 1220,
+          "output_excerpt": "schema_version: 2\n\n# Kleine globale \"don't forget\"-Liste für domänenübergreifende Skills.\n#\n# Diese Datei definiert KEINE Triggerlogik. Ob ein Overlay wirklich passt,\n# entscheidet weiterhin ausschließlich die Description / Near-Miss-Grenze\n# der jeweiligen SKILL.md.\n#\n# checkpoints steuern nur, WANN ein Kandidat erneut geprüft werden soll.\n# Sie s"
+        },
+        {
+          "index": 7,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"rg -n 'id: (acceptance-criteria-design|test-design|requirements-specification|test-strategy)' skill-catalog.yml\"",
+          "exit_code": 0,
+          "output_sha256": "b8db1459fcc33b1ad661b24a22780fcf8e5c4bcb907b17ff3f7b52fe700d5d88",
+          "output_characters": 1959,
+          "output_excerpt": "121:  - {id: test-strategy, area: Testing-und-QA, path: Testing-und-QA/Skills/test-strategy/SKILL.md, maturity: experimental, eval_coverage: partial, purpose: \"Risikobasierte Teststrategie und ein begründetes Testportfolio für Feature, System oder Änderung entwickeln.\", capabilities: [repository-read-preferred], related: [test-design, integration-t"
+        },
+        {
+          "index": 8,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"rg -n 'id: (visual-answer|adressatengerechte-kommunikation|citation-audit|verification-loop|skill-security-review|tool-permission-review)' skill-catalog.yml; rg --files -g '*csv*' -g '*CSV*' -g '*fixture*' -g '*Fixture*'\"",
+          "exit_code": 1,
+          "output_sha256": "c8ed75112300b54b040550091b710154c83a59692bae0aefed147b8988e0004b",
+          "output_characters": 2116,
+          "output_excerpt": "17:  - {id: verification-loop, area: Agentenarbeit, path: Agentenarbeit/Skills/verification-loop/SKILL.md, maturity: candidate, eval_coverage: partial, purpose: \"Arbeit durch Prüfen, Diagnostizieren und Korrigieren iterativ verifizieren.\"}\n21:  - {id: adressatengerechte-kommunikation, area: Schreiben, path: Schreiben/Skills/adressatengerechte-kommu"
+        },
+        {
+          "index": 9,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command 'Get-Content Workflows/Acceptance-Traceability-und-Handoff.md; Get-Content Requirements-und-Spezifikations-Engineering/Skills/acceptance-criteria-design/SKILL.md; Get-Content Testing-und-QA/Skills/test-design/SKILL.md'",
+          "exit_code": 0,
+          "output_sha256": "707c747d957e43355e5251e9ea313924529ab696f2eefb0dbce69e0fd7ad60e6",
+          "output_characters": 5156,
+          "output_excerpt": "# Workflow: Acceptance, Traceability und Handoff\n\n## Ziel\n\nEin bestehendes Requirement-Set für Design, Testing oder andere Downstream-Disziplinen so vorbereiten, dass Erfüllungsabsicht, Herkunft und relevante Abhängigkeiten nachvollziehbar sind.\n\n## Ablauf\n\n```text\n1. bestätigte Requirements / Scope\n→ 2. acceptance-criteria-design\n→ 3. Verification"
+        },
+        {
+          "index": 10,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"Get-Content 'Requirements-und-Spezifikations-Engineering/Skills/requirements-traceability/SKILL.md' -TotalCount 7\"",
+          "exit_code": 0,
+          "output_sha256": "29623f79ec5fba36e32163dcc4f5acf83d52da155636c3860cc34891896c29e0",
+          "output_characters": 429,
+          "output_excerpt": "---\nname: requirements-traceability\ndescription: Baut oder prüft nachvollziehbare Links von Stakeholdern, Quellen und Zielen über Requirements zu Acceptance Criteria, Architektur, Contracts, Tests und anderer relevanter Evidence. Verwenden für Traceability, Coverage, Orphans oder Impact-Vorbereitung. Nicht als Beweis für fachliche Korrektheit oder "
+        },
+        {
+          "index": 11,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"Get-Content 'Requirements-und-Spezifikations-Engineering/Skills/requirements-validation/SKILL.md' -TotalCount 7\"",
+          "exit_code": 0,
+          "output_sha256": "c222c140d5d461cdb2ee1c9e38f54cecb64635f831f0978d49ff05f6644b0ff9",
+          "output_characters": 410,
+          "output_excerpt": "---\nname: requirements-validation\ndescription: Validiert Requirements gegen Stakeholderbedarfe, Ziele, Scope, Quellen, Konsistenz, Verifizierbarkeit, Feasibility-Risiken und relevante Szenarien. Verwenden vor Architektur-/Implementierungshandoff oder nach wesentlichen Requirement Changes. Nicht mit Product Validation, Testausführung oder bloßem For"
+        },
+        {
+          "index": 12,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"Get-Content 'Recherche/Skills/citation-audit/SKILL.md' -TotalCount 7\"",
+          "exit_code": 0,
+          "output_sha256": "c29858c840eebfd5cccb7ee26d7fc0d7ab9117094b3eb12dd41c0a81ad7a7a8e",
+          "output_characters": 472,
+          "output_excerpt": "---\nname: citation-audit\ndescription: Prüft fertige oder weitgehend fertige Research-Synthesen darauf, ob wesentliche Faktenclaims durch die tatsächlich zugeordneten Quellen und konkrete Evidence gestützt werden. Verwenden vor Abschluss oder Veröffentlichung, wenn Claim-zu-Zitation-Support materiell geprüft werden muss; nicht für die frühe Qualität"
+        },
+        {
+          "index": 13,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"Get-Content 'Dokumentationserstellung/Skills/visual-answer/SKILL.md' -TotalCount 7\"",
+          "exit_code": 0,
+          "output_sha256": "f833a47d6ad6256e9285ac5b19adf401261f6f9e91ca4b51015ae34dc649fbfb",
+          "output_characters": 458,
+          "output_excerpt": "---\nname: visual-answer\ndescription: Strukturiert komplexe Antworten als visuell schnell erfassbares Artefakt oder Layout mit Kernaussage, Prioritäten, Beziehungen und gestuften Details. Verwenden bei Architektur/Flows, Mehrkriterien-Vergleichen, Hierarchien/Timelines, komplexen Plänen oder Reviews mit vielen Findings; nicht für kurze Faktenantwort"
+        },
+        {
+          "index": 14,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"Get-Content 'Sicherheit/Skills/tool-permission-review/SKILL.md' -TotalCount 7\"",
+          "exit_code": 0,
+          "output_sha256": "b2614e2965df1917be6749cd4f9a677d769a936ce45d60a9b01a2092e0077b2f",
+          "output_characters": 490,
+          "output_excerpt": "---\nname: tool-permission-review\ndescription: Prüft die für einen Agenten, Skill, Workflow oder eine eigenständige externe Integration vorgesehenen Tool- und Berechtigungsrechte gegen Least Privilege, Fallbacks und Human Gates. Verwenden wenn neue Tools, Netzwerk-, Schreib-, Ausführungs- oder Produktionsrechte eingeführt werden; nicht für reine Fun"
+        },
+        {
+          "index": 15,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"Get-Content 'Schreiben/Skills/adressatengerechte-kommunikation/SKILL.md' -TotalCount 7\"",
+          "exit_code": 0,
+          "output_sha256": "795df91002799f196e330176162525ff1f7834db607642628a7af98987acbba7",
+          "output_characters": 467,
+          "output_excerpt": "---\nname: adressatengerechte-kommunikation\ndescription: Nachrichten und schriftliche Kommunikation so planen und formulieren, dass Sachverhalt, Empfänger, Beziehung, Hierarchie, gewünschte Reaktion, Direktheit, Kanal und gegebenenfalls Konfliktlage zusammenpassen. Verwenden, wenn nicht nur der Sprachstil, sondern die Wirkung auf einen konkreten Emp"
+        },
+        {
+          "index": 16,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"Get-Content 'Sicherheit/Skills/skill-security-review/SKILL.md' -TotalCount 7\"",
+          "exit_code": 0,
+          "output_sha256": "8feb93a29ee3802616fef93363756f119335519b449be5d62e05f8650b358e76",
+          "output_characters": 590,
+          "output_excerpt": "---\nname: skill-security-review\ndescription: Prüft einen Agent-Skill vor Aktivierung oder Freigabe auf Trust-/Admission-, Supply-Chain-, Berechtigungs-, Prompt-Injection-, Datenexfiltrations-, Script-, Remote-Dependency-, External-Action- und Update-Risiken. Verwenden bei externen oder mächtigen Skills und bei sicherheitsrelevanten Upstream-Änderun"
+        },
+        {
+          "index": 17,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command \"Get-Content 'Agentenarbeit/Skills/verification-loop/SKILL.md' -TotalCount 7\"",
+          "exit_code": 0,
+          "output_sha256": "ac8a001d0085ff453542088f92758a590d77528d6da58f980d0eb2963fa5f3a4",
+          "output_characters": 320,
+          "output_excerpt": "---\nname: verification-loop\ndescription: Führt innerhalb eines freigegebenen Scopes einen kontrollierten Arbeiten-Prüfen-Diagnose-Korrigieren-Loop mit klaren Stop-Kriterien aus. Verwenden bei iterativer Umsetzung, wenn nach jedem Änderungsschritt reproduzierbare Nachweise möglich sind.\n---\n\n# Verification Loop\n\n"
+        },
+        {
+          "index": 18,
+          "command": "\"<user-home>\\\\.cache\\\\codex-runtimes\\\\codex-primary-runtime\\\\dependencies\\\\native\\\\powershell\\\\pwsh.exe\" -Command 'Get-Content routing-overlays.yml; Get-Content Recherche/Skills/citation-audit/SKILL.md -TotalCount 4; Get-Content Dokumentationserstellung/Skills/visual-answer/SKILL.md -TotalCount 4'",
+          "exit_code": 0,
+          "output_sha256": "27327d2b54a1f8d8cbdfd647e3e39e398e08eeacc69d63ba1447a307bf34a824",
+          "output_characters": 2100,
+          "output_excerpt": "schema_version: 2\n\n# Kleine globale \"don't forget\"-Liste für domänenübergreifende Skills.\n#\n# Diese Datei definiert KEINE Triggerlogik. Ob ein Overlay wirklich passt,\n# entscheidet weiterhin ausschließlich die Description / Near-Miss-Grenze\n# der jeweiligen SKILL.md.\n#\n# checkpoints steuern nur, WANN ein Kandidat erneut geprüft werden soll.\n# Sie s"
+        }
+      ],
+      "raw_response_sha256": "e474c97d74ff299b4d43bea999aac3204e2412bbdd3b6ffcdcd9ad16ed6323e0",
+      "optional_agent_paths": {
+        "bm25_search": "NOT RUN",
+        "relations": "NOT RUN",
+        "paging": "NOT RUN",
+        "list_skills": "NOT RUN"
+      },
+      "independently_checked_source_files": 578
+    },
+    {
+      "status": "RESPONSE_RECORDED",
+      "exit_code": 0,
+      "elapsed_seconds": 4.14,
+      "usage": [
+        {
+          "input_tokens": 15666,
+          "cached_input_tokens": 0,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 57,
+          "reasoning_output_tokens": 38
+        }
+      ],
+      "completed_item_types": {
+        "agent_message": 1
+      },
+      "source_bytes_unchanged": true,
+      "git_status": "",
+      "answer": "eins, zwei",
+      "id": "trivial",
+      "product_assessment": "PASS for fixed case",
+      "process_assessment": "PASS for fixed case",
+      "assessment_method": "integrator and independent reviewer read actual outputs and answer against frozen rubric; not LLM judge automation",
+      "description_reads": [],
+      "invocation": {
+        "argv": [
+          "<user-home>\\AppData\\Local\\OpenAI\\Codex\\bin\\22cfb1d302613eae\\codex.EXE",
+          "-a",
+          "never",
+          "exec",
+          "--ignore-user-config",
+          "--ephemeral",
+          "--skip-git-repo-check",
+          "--cd",
+          "<repo>\\.validation\\routing-p4-20261031-v2\\workspace-trivial",
+          "--json",
+          "--color",
+          "never",
+          "--model",
+          "gpt-6.1-sol",
+          "-c",
+          "model_reasoning_effort=\"high\"",
+          "--sandbox",
+          "read-only",
+          "-c",
+          "windows.sandbox=\"elevated\"",
+          "-c",
+          "model_provider=\"openai\"",
+          "-c",
+          "forced_login_method=\"chatgpt\"",
+          "-c",
+          "web_search=\"disabled\"",
+          "--output-schema",
+          "<repo>\\.validation\\routing-p4-20261031-v2\\answer-schema.json",
+          "--output-last-message",
+          "<repo>\\.validation\\routing-p4-20261031-v2\\trivial-answer.json",
+          "-"
+        ],
+        "prompt": "Arbeite ausschließlich mit den Quellen in deinem aktuellen Arbeitsverzeichnis. Keine Installation, Außenaktionen oder Quellenänderungen. Lokale abgeleitete Suchcaches sind erlaubt.\n\nFormatiere nur diesen Text: „eins,zwei“ → „eins, zwei“.",
+        "prompt_sha256": "eecf434e865776ebbf47534c4f0144bf165b235f00ae72fed203f2251667490c"
+      },
+      "commands": [],
+      "raw_response_sha256": "d85c5a03b085ccc5188bbdd005173521f0eaea10478ee015270d684893ad2c81",
+      "optional_agent_paths": {
+        "bm25_search": "NOT RUN",
+        "relations": "NOT RUN",
+        "paging": "NOT RUN",
+        "list_skills": "NOT RUN"
+      },
+      "independently_checked_source_files": 578
+    }
+  ],
+  "mechanical_checks": {
+    "actual_failures": {
+      "development": [],
+      "fallback": [],
+      "trivial": []
+    },
+    "negative_controls": [
+      {
+        "mutation": "remove actual master-router command/output",
+        "failures": [
+          "missing actual router read: Dokumentation/Skill-Handbuch.md"
+        ],
+        "detected": true
+      },
+      {
+        "mutation": "inject skill/tool use into trivial response",
+        "failures": [
+          "trivial answer",
+          "trivial artificial tool/skill use"
+        ],
+        "detected": true
+      }
+    ],
+    "scope": "synthetic transcript perturbations, not extra model calls or independent semantic grading",
+    "checker_sha256": "e664958c05b7cea5ad4459643d735b942ce2241a9cbfe5798d9d7713c66996fb"
+  },
+  "scope": {
+    "sessions_with_answers": 3,
+    "direct_model_api_calls": 0,
+    "held_out": false,
+    "general_skill_recall": "UNVERIFIED",
+    "natural_search_feature_usage": "NOT RUN",
+    "token_savings": "NOT MEASURED",
+    "comparison_lift": "NOT MEASURED",
+    "unexpected_runtime_error_recovery": "NOT RUN",
+    "product_code_changes": false
+  },
+  "redaction": "user home and repository paths replaced; raw local response/output hashes refer to bytes before redaction; reasoning/thread identifiers not exported"
+}

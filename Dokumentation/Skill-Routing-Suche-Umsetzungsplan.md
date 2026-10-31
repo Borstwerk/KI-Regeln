@@ -276,6 +276,13 @@ QMD-unabhängige Selektoren, begrenzte Suchhinweise und explizite Checkpoints.
 Der [native P3-Nachweis](../Evals/Onboarding/Rule-Routing-P3.json) trennt technische
 Beziehungsabdeckung von semantischer Auswahl; die P1-Regression bleibt 15/16 und
 PARTIAL. Technische Suchanleitung und optionale Agentenverweise sind angepasst;
-die verbleibende natürliche
-Agentenprüfung und Gesamtabnahme aus P4/P5 sind **NOT RUN**. Frühere Testresultate
+der [P4-Pilot](../Evals/Onboarding/Rule-Routing-P4.md) prüft drei frische CLI-Sessions
+mit vorab fixiertem Oracle. Alle drei Fälle bestehen Produkt-/Prozessreview im
+jeweiligen Scope; direkte natürliche Discovery und Fallback sind beobachtet.
+Die Agenten nutzten die optionale BM25-/Relations-/Pagingoberfläche dabei nicht:
+deren natürliche Nutzung bleibt **NOT RUN**, allgemeine Abdeckung **UNVERIFIED**.
+Der erste technische Start blieb vor Modellaufruf wegen eines CLI-Konfigurationsfehlers
+BLOCKED und ist separat dokumentiert. Keine Antwortauswahl durch Wiederholungen.
+Die weitergehende Gesamtabnahme aus P5 bleibt offen; der bekannte P1-Retrievalfall
+bleibt PARTIAL. Frühere Testresultate
 belegen ausschließlich ihren jeweiligen Stand; dieser Plan selbst ist kein Qualitätsnachweis.
