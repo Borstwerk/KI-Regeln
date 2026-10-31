@@ -87,3 +87,64 @@ Corepaketumfang bleibt erhalten. Ein neuer Admissiontest reproduziert die falsch
 Reihenfolge rot; seine Gegenprobe mit falschem Pin in einem NOT-RUN-Fall muss vor
 Overlay und Runtime stoppen. Das endgültige Paar wird mit derselben korrigierten
 Treiberfassung ausgeführt; frühere Starts bleiben gesondert erhalten.
+
+## Ergebnis des endgültigen Vergleichs
+
+Ausgeführt auf `39eabd2`, Katalogkandidat `faa53e3`, eingefrorene übrige Quellen
+aus `6b80949`. [Öffentliche Evidence](Rule-Routing-Acceptance-Fix.json) enthält beide
+vollständigen Berichte, Roh-/Protokollhashes, Codebindungen und die getrennt
+ausgewiesenen früheren Starts. Der oben dokumentierte Vertrag samt Admission-
+korrektur ist im Ausführungscommit archiviert; dieser Ergebnisanhang entstand
+nach dem Lauf. Keine historischen Ergebnisdateien wurden verändert.
+
+```powershell
+.validation/runtime/venv/Scripts/python.exe Evals/Onboarding/run_rule_routing_comparison.py --run --label baseline
+.validation/runtime/venv/Scripts/python.exe Evals/Onboarding/run_rule_routing_comparison.py --run --label candidate --catalog-revision faa53e3
+```
+
+| Nachweis | Baseline | Katalogkandidat |
+| --- | --- | --- |
+| 16 unveränderte P1-Retrievalfälle | 15 PASS, 1 FAIL | 16 PASS, 0 FAIL |
+| `jobs-acceptance-tests` | FAIL: Akzeptanzkriterien-Owner fehlt | PASS: beide Owner gefunden |
+| Zielskill bei `Akzeptanzkriterien beobachtbar` | fehlt | Rang 1 |
+| Regression bisher erfolgreicher Fälle | – | keine |
+| Acht P2-/P3-Fälle in diesem Treiber | NOT RUN | NOT RUN |
+| Quellen während des jeweiligen Laufs | unverändert | unverändert |
+| Nativer Index | ready, 165 Dokumente / 155 Skills | ready, 165 Dokumente / 155 Skills |
+| Exitcode | 2 wegen bekanntem FAIL | 0 |
+
+Beide Bedingungen nutzen dieselben sieben Code-/Vertragsbindungen, QMD 2.8.3,
+Node v24.22.1, zehn Treffer je Query und Case-SHA256
+`b29da5a3e7b817dbb7d37485e7628bd38a58f89a0377a1e13414343699b123df`.
+Die vollständige Falldatei und der Grader bleiben unverändert. Die nativen Läufe
+wurden parallel in getrennten Fixtures ausgeführt; Laufzeiten werden nicht als
+Leistungs- oder Effizienzvergleich ausgewertet.
+
+**Quellenvertrag:** Genau `skill-catalog.yml` unterscheidet sich, mit exakt einer
+UTF-8-Ersetzung im festgelegten `purpose`. Die übrigen 219 Paketdateien sind
+bytegleich, ebenso sämtliche 155 kanonischen Skills. Ein einziges abgeleitetes
+Suchdokument ändert sich: das des Zielskills. Sein kanonischer Quellenhash bleibt
+gleich, sein Suchdokumenthash ändert sich. Katalog-, Paket-, Fixture- und
+Fingerprintwerte sind folgerichtig verschieden. Diese Unterschiede sind kein
+Beleg für ein unverändertes Gesamtpaket.
+
+**Weitere Prüfungen:** 80 relevante lokale Tests bestehen ohne Skip, darunter
+fünf Admissiontests. Rot/Grün wurde für fehlende Katalogadmission sowie die falsche
+Pin-Reihenfolge beobachtet. Zwei Memory-only-Brechproben erkennen umgangene
+Katalogadmission und eine entfernte Evidence-Pin-Prüfung; keine Produktdateien
+wurden dafür mutiert. Full Harness besteht mit vorhandenen Near-Miss-Warnungen.
+Der separate Same-Model-Review hat Code, Rohdaten, öffentliche Bindungen und
+Claims ohne Blocker geprüft; keine unabhängige Zertifizierung.
+
+Die beiden vorläufigen Baselinereproduktionen bleiben mit jeweils 15/16 erhalten.
+Der erste Kandidatenstart bleibt BLOCKED vor Workerstart; er war kein negativer
+Retrievalbefund. Das endgültige Paar ist davon getrennt. Insgesamt wurden in
+diesem Slice keine Agenten-CLI-Modellsessions oder direkten Modell-API-Aufrufe
+gestartet; die nativen Evals sind modellfrei.
+
+**Entscheidung:** Der Katalogfix erfüllt den bekannten Development-/Regressionsfall.
+Suche bleibt optional; allgemeiner Recall und natürliche Agentenauswahl sind
+dadurch nicht bewiesen. Keine Änderung an Maturity, Skill-Verträgen, Suchlogik
+oder Evaloracles. Die historischen P1-/P5-Urteile bleiben FAIL/PARTIAL für ihre
+damaligen Quellenstände. Keine weitere Suche nach Synonymen oder Ausweitung der
+Testplattform in diesem Slice.
