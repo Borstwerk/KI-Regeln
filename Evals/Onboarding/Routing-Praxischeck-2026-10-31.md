@@ -121,7 +121,48 @@ kein Urteil über ungeeignete Kandidaten, spätere Skillaktivierung oder Verhalt
 eines Agenten. Die 17 gezielten Routing-/Katalog-Unittests bestanden ebenfalls.
 Allgemeiner Recall, natürliche Agentenauswahl und Effizienz bleiben `UNVERIFIED`.
 
-Der reguläre Suchindex verwendet festgeschriebene Git-Snapshots; der noch nicht
-übernommene Arbeitsverzeichnis-Kandidat ist dort nicht automatisch aktiv. Nach
+Der reguläre Suchindex verwendet festgeschriebene Git-Snapshots; zum Zeitpunkt
+dieses ersten Laufs war der Arbeitsverzeichnis-Kandidat dort nicht automatisch aktiv. Nach
 Übernahme muss der Index gemäß bestehender Dokumentation neu gebaut werden.
 Skillvertrag, Suchalgorithmus, Reife und bestehende Oracles wurden nicht geändert.
+
+## PR-Review: reproduzierbarer Folgelauf
+
+Der Folgeauftrag übernimmt den Beitrag `81493b7` auf den aktuellen Main-Stand
+`4939eef`; dessen unveränderter Produktdiff liegt hier in `d07334e`.
+Reviewmethoden: `code-review`, `agent-eval` und `verification-loop`. Die fachliche
+Katalogerweiterung passt zur kanonischen Description von `reference-docs`.
+`database-design` bleibt ein anderer Job, ohne automatische Pflichtaktivierung.
+
+Ein Repro des ursprünglichen Treibers auf seinem committed Stand `81493b7`
+bricht vor dem Indexaufbau ab: `HEAD` enthält bereits den neuen Katalogzweck,
+während die Admission dort noch den alten Text erwartet. Der damalige Lauf aus
+einem veränderten Arbeitsverzeichnis war damit nach dem Commit nicht direkt
+wiederholbar. Der frühere Bericht bleibt als explorative Development-Evidence
+erhalten; seine fehlenden Code-/Versionsbindungen werden nicht rückwirkend
+als nachgewiesen ausgegeben.
+
+**Vorabvertrag für den frischen Lauf:**
+
+- Basisquellen fest aus `03cdee5`, Kandidatenkatalog fest aus `d07334e` lesen,
+  statt `HEAD` und uncommittete Checkoutbytes zu mischen. Weitere Quellen des
+  Kandidatencommits werden nicht übernommen. Der exakte Byteguard erlaubt nur
+  die oben beschriebene Ersetzung des einen Katalogzwecks.
+- Dieselben fünf Zielqueries, dieselbe Leertrefferkontrolle und dieselben 16
+  P1-Fälle mit unverändertem Zehnerbudget prüfen. Falldatei aus der gepinnten
+  Basis lesen und deren P1-Evidence gegen die Originalquellen prüfen. Den bereits
+  vorhandenen P1-Grader wiederverwenden; keine neuen Fall-Erwartungen festlegen.
+- Beide Bedingungen in getrennten Fixtures ausführen; alle Quellen während
+  jedes Laufs unverändert halten. Die Leertrefferkontrolle muss beidseitig leer
+  bleiben. Keine Regression eines bisher erfolgreichen P1-Falls.
+- Ausführungscommit, Code-/Vertragshashes, vollständiges Basis-Quellinventar,
+  effektive Paketdigests, Kataloghashes, Casehash, Node-/QMD-Version und Budget
+  protokollieren. Rohberichte zusätzlich als öffentliche JSON-Evidence liefern.
+- Die Admissiontests müssen den zulässigen Edit akzeptieren und zusätzliche,
+  fehlende oder mehrdeutige Änderungen zurückweisen. Vorhandene Suchtests und
+  Full Harness verwenden. Keine Installationen und keine Agenten-CLI-Modellläufe.
+
+Die Korrektur betrifft den Eval-Treiber und seine Nachweise. Der Produktdiff des
+zweiten Agenten bleibt unverändert: ein `purpose`-Feld, keine Skill-Description,
+Suchlogik, Routingregel oder Maturityänderung. Bekannte Entwicklungsfälle sind
+keine unabhängige Bestätigung allgemeiner Auswahlqualität. Neuer Lauf: **NOT RUN**.
