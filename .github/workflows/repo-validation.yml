@@ -31,6 +31,7 @@ jobs:
         run: |
           python -m unittest tests.test_public_entrypoints
           python -m unittest tests.test_corrected_discovery
+          python -m unittest tests.test_rule_routing_fixture_runtime
           python -m unittest tests.test_rule_search
           python -m unittest tests.test_rule_search_routing
           python -m unittest tests.test_rule_search_facets
