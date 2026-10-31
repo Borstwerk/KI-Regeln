@@ -1,0 +1,1930 @@
+{
+  "schema_version": 1,
+  "status": "PASS within five known target queries and sixteen P1 development cases",
+  "original_agent_commit": "81493b7f7822e2f6894a83aceda912094b6ec1b2",
+  "review_base": "4939eefef64b38e0fb20c83f693a438a7ae5fa51",
+  "execution_commit": "f6640ad96aa545a52b7fed9788ceca5c3acc6dcc",
+  "product_change": {
+    "path": "skill-catalog.yml",
+    "id": "reference-docs",
+    "field": "purpose",
+    "before": "Nachschlagbare Referenz eng an der tatsächlichen Source of Truth dokumentieren.",
+    "after": "Nachschlagbare Referenzdokumentation für Datenbank, Tabelle, Schema und andere technische Fakten eng an der tatsächlichen Source of Truth dokumentieren."
+  },
+  "fresh_native_report": {
+    "protocol": {
+      "revision": "03cdee52bdd38955e81b48d6f46f585db8e18c17",
+      "candidate_revision": "d07334ec0089812c047f6a9db3bbb0f79181d789",
+      "execution_commit": "f6640ad96aa545a52b7fed9788ceca5c3acc6dcc",
+      "code_sha256": {
+        "tools/search_rules.py": "3e85143290eacdcbe317ad42c75e461917d863e35a0ec761671328f1c59b8308",
+        "tools/search_rules_qmd.mjs": "d9c4b3f9222ad7928dfcb1860fd0e975024512ab4e4dedf915820ed283737155",
+        "tools/rule_relations.py": "55df4b901b68dbc008a812894e45030dc6342c0f22c68b332fb95e97b70b4577",
+        "tools/check_public_entrypoints.py": "65607d90c95273fcdf9088ec29005b2f6b58a90672b9449a234be1d7d43c1976",
+        "tools/local_search/pnpm-lock.yaml": "30381a3497bf589cd694665a806736e83b724be7670952f0afc2e207fc20b528",
+        "Evals/Onboarding/run_rule_routing_comparison.py": "5da9d1974726ba0a0767e80074e2bd8867456c99854317c5f9b7e9af210997e0",
+        "Evals/Onboarding/run_reference_docs_routing.py": "24b14dde720eb61d5150b5ed9eee63f824a256e02daae85f9ff0a01bfff4a78f",
+        "Evals/Onboarding/Routing-Praxischeck-2026-10-31.md": "6ad50bd9b7f15bc51b26daae5271bfbd3549c5f000c56037ee1417118f136648"
+      },
+      "source_inventory": {
+        "AGENTS.md": "f4f635814ee4ba6b6ef34ad3dec78d8cecc13242b4f1370aed754968b7628a8a",
+        "Agentenarbeit/Skills/agent-eval/SKILL.md": "a1783ecd7d774c63373e1b7e2c49657b93067a4d91c7b906cb26ab049d8ba5f0",
+        "Agentenarbeit/Skills/context-audit/SKILL.md": "00844737a457bb3e6b114b0739e2490210afb6d1f2aff2fa5f9cc956816bb9bc",
+        "Agentenarbeit/Skills/context-compaction/SKILL.md": "b2a026fb28f552df6aed96759183d2c75873b83d1453463ac687c24882ef6826",
+        "Agentenarbeit/Skills/context-engineering/SKILL.md": "0698816157c90ad06a3ffed01597867d7e7912badab4b9826fed116c02b95263",
+        "Agentenarbeit/Skills/delegation-contract/SKILL.md": "8db59b9327cc6d378316629236c7c3f94940bdf068144a777b743ad91543ed41",
+        "Agentenarbeit/Skills/session-handoff/SKILL.md": "99de9b8c86a3eebb55544774508d27c409d42d03f1b1c98c6834222e0aeaf21a",
+        "Agentenarbeit/Skills/task-graph/SKILL.md": "575d393ecd11eec50adc39b9cbebda19b66b665df1f3b015e4f25400460be294",
+        "Agentenarbeit/Skills/verification-loop/SKILL.md": "37824715a191c6668343358817959756dc6ac5117291e7f11675e7245f2d608f",
+        "Arbeitsweisen/Skills/entscheidungsunterstuetzung/SKILL.md": "46fbc6423ffd79b24757dd79677d8c3a928dcf063dd3085b53f2f03e0e9e4750",
+        "Arbeitsweisen/Skills/prompt-engineering/SKILL.md": "c468dcd5191986d4131aa090d4796f153b2b7c8e1d4b840c16279743738da85e",
+        "Arbeitsweisen/Skills/reflektierender-dialog/SKILL.md": "55e83e3a0b0b454cefa0c801534bf8919a4b0b2e2df054580d06138fc16a03d2",
+        "Arbeitsweisen/Skills/ziel-reflexions-loop/SKILL.md": "20b18307a2ddc441ca0f79ec460a40233b8d9480cb0262799aaabe92e565a7b9",
+        "Bildarbeit/Skills/bild-prebrief/SKILL.md": "e281680815986d616bb84581439cd839dd6b9a3290008fdfa499b39e17dd0c8b",
+        "Bildarbeit/Skills/bildreview/SKILL.md": "05d47b51a729c1e93834029291a84cba2f61adb9523aa564fcc2b820876f7642",
+        "Bildarbeit/Skills/entitaetsbibel/SKILL.md": "0e16a3200b5008fc4952f5d52ce0d905dcf422547bc9887bbf230a4b1aa4d523",
+        "Bildarbeit/Skills/logo-design/SKILL.md": "f9d5bde65325d4c5a6ac94f66acaaad9db4374730724e44518968a13fea44104",
+        "Bildarbeit/Skills/serien-kontinuitaetscheck/SKILL.md": "680041dde27a7ab027609590e1b9eaa2595ad9a7f853c154ee1dbc1998e08e0a",
+        "CONTRIBUTING.md": "56767e48dbd26f07dacca3bedb642c79e702449823e06b923eb42a1c0ab80985",
+        "Data-Engineering/Skills/analytical-data-modeling/SKILL.md": "78756fd6ebec30cbf5f8695db2e2ea2483109ec111149a1da0fdfd2043bde16b",
+        "Data-Engineering/Skills/data-contract-design/SKILL.md": "11f5cd1dbdc2d740fb7db5ff6c1681d82ac449819c779f272cc31355edd776bc",
+        "Data-Engineering/Skills/data-engineering-review/SKILL.md": "6ee988dfbeb02edfaa7533c7ec2dd8a9bfeee6c81f8e666f6ce5da0629d7bd7b",
+        "Data-Engineering/Skills/data-ingestion-design/SKILL.md": "3121e0576450ad5b8e4a3759fcc4631208860c694c8b900e99d43e6ac6b0303c",
+        "Data-Engineering/Skills/data-lineage-analysis/SKILL.md": "ec00262ddb1780d878a8340a0060f7c14c83a4ea4f900e115225197d33742280",
+        "Data-Engineering/Skills/data-orchestration-design/SKILL.md": "d7ab941311c03676e5f65afad4adf213c9febfed493e9a5cc2fc52239e244ae2",
+        "Data-Engineering/Skills/data-pipeline-design/SKILL.md": "8c91622560affe98391ace9272e5464b5150c4864b1c075cda25a21a97cd1bb2",
+        "Data-Engineering/Skills/data-quality-design/SKILL.md": "db17ac81dbdf162bb82a1f3a10186192229d1aac9cfc3a542996e81aaa500371",
+        "Data-Engineering/Skills/data-transformation-design/SKILL.md": "9dfc563b78c524cd8c72ec7d5b38a8135944987ab953ca744a1d4f78c81759d9",
+        "Datenbanken/Skills/database-design/SKILL.md": "89ae95621cbaf2104169b5efddc1106f4f739c7b702a3d0189e6a580b164dab5",
+        "Datenbanken/Skills/database-operations/SKILL.md": "78d93fa8118b5139ec948e91cf9b5db2ce2f6e4c9f62a0d908674238696c9a21",
+        "Datenbanken/Skills/database-query-review/SKILL.md": "bdb65b619703296f5b6e9f2cda6b9f4e79907b2216bc5f10dba4a6b0002565a7",
+        "Datenbanken/Skills/database-review/SKILL.md": "b22afa6201dd4e5d38678db24835bcf9d7844e5c96ee5cf85a5cd6ec7cbe08ab",
+        "Datenbanken/Skills/query-performance/SKILL.md": "73181329e252bc47568730f05611e3d7352984880137d9a1537e0cb13e4ec235",
+        "Datenbanken/Skills/schema-migration/SKILL.md": "879bb3ff76f194c1964331db5c87dff1a287b17f1313fe7dc4fbe3e274a592c4",
+        "Datenbanken/Skills/transaction-review/SKILL.md": "9a9cfe9fa397d8528d2b1f2900f7a74c8d709425b516a9381fd2ea6433542d57",
+        "Dokumentation/Pflege-und-Aktualisierung.md": "e5c9ad5e84ebea3eaf420f49db6b6b51b738c04f77a0f38f448ebe9701364c63",
+        "Dokumentation/Skill-Handbuch.md": "354131c2f80a4f8278757fd0a7cf6faa5412ef87fb874558d7a32c916200a12d",
+        "Dokumentationserstellung/Skills/adr/SKILL.md": "5b4f69eabdeb03b51df9a1f20ecf7340341c940eafa990eef1a7d74957493720",
+        "Dokumentationserstellung/Skills/docs-plan/SKILL.md": "6bcdcf6f7549c35b3a1f44f4fd6df140f06356bc014a3789c015c048d323ca46",
+        "Dokumentationserstellung/Skills/docs-review/SKILL.md": "cec79e4510666764d489cf6da219e43a0772fe7e61d13d7171af435dd17aff59",
+        "Dokumentationserstellung/Skills/explanation-docs/SKILL.md": "230f9408c6d9ddd80a74cc4bc0a957c96dc9cf3ea620b3f4ce3de05b34a638c2",
+        "Dokumentationserstellung/Skills/how-to/SKILL.md": "bc2f8ad62d18a7a39227073fc769f23ebd89726407e70af0b451d5492fd6f164",
+        "Dokumentationserstellung/Skills/readme/SKILL.md": "6227d414bd3a3d9260b2e7463c6dcfb3ca040ae9bc793aff1212ae87ad179d31",
+        "Dokumentationserstellung/Skills/reference-docs/SKILL.md": "d4ccc71851e11c5346e9ffe4fa07f43a95e2170b58e4ec8f702b593687cb3ec7",
+        "Dokumentationserstellung/Skills/runbook/SKILL.md": "58e31f64fc7badd2d765d136f3345a8bc602b1e63340dfad0147675d8156b8ca",
+        "Dokumentationserstellung/Skills/technical-writing/SKILL.md": "c8debea3d9136f0e1c669429db375932de26f89334f415adede45141905de0e8",
+        "Dokumentationserstellung/Skills/tutorial/SKILL.md": "47bb003b30b0169d3eb5672706290a21c6922c050bde3bfc82ca9906e29c2829",
+        "Dokumentationserstellung/Skills/visual-answer/SKILL.md": "61ba11f9e11f8141e8492a695a885fd7d717e2c882a83058851ee405fb092982",
+        "Finanzen/Skills/anlagevergleich/SKILL.md": "253aa418f8abeb5988e2b2ea50d4d46988881c332172c18134b25359d007258f",
+        "Finanzen/Skills/bewertungsanalyse/SKILL.md": "f13115b7485da959104cb3e377eca916a593f1155e886d05eae546c945cc4a8d",
+        "Finanzen/Skills/finanzstatus-und-cashflow/SKILL.md": "9700fd0ede10e9e082e21dd4d9725d4ad378b68eba9f8d618f0c5ef475d8dec1",
+        "Finanzen/Skills/portfolio-rebalancing/SKILL.md": "73bc204709a49e4d7bd4074089e74958dc933bd8aadef790afd11dbf361b8c41",
+        "Finanzen/Skills/portfolioanalyse/SKILL.md": "1f07d614bae236592576642df45fc64e883ce15856a8d7630f5b9c02fb35d3ae",
+        "Finanzen/Skills/ruecklagenplanung/SKILL.md": "bfea20e7fb6e9ff58d255380f13aa49fdaab41ed46292b908d69afa478165171",
+        "Finanzen/Skills/schuldenstrategie/SKILL.md": "3f09b4428442706b026ca69e3896db2d9a36c04b9c75288bbc5831515abe10c3",
+        "Finanzen/Skills/unternehmensanalyse/SKILL.md": "a70099727edd346e11ec18a9c6fd213fa852699fb1413057b0c73ba160e977eb",
+        "Finanzen/Skills/vermoegensprojektion/SKILL.md": "20856985d5f751eb40ac624cb958e7e490f0c36062d40a13f4dfaf458eedf194",
+        "Infrastruktur-und-DevOps/Skills/ci-pipeline-design/SKILL.md": "b4c369528d14237536a38f899ff387567fac8cf8303dbfc60f8dc6173921fede",
+        "Infrastruktur-und-DevOps/Skills/container-build/SKILL.md": "919278e9624bfdef2026dea57c68b6fe159cb25d934ea7080f36049bd505e1d5",
+        "Infrastruktur-und-DevOps/Skills/deployment-strategy/SKILL.md": "26bcc0a697e5b4800e83a118409c61c54ae3135a59ecee3cc89ce81f3b4ccaf1",
+        "Infrastruktur-und-DevOps/Skills/gitops-design/SKILL.md": "2f4ee196f31fa3c0b2522cc495f86695262721807d4b0b93982c37e1bf352729",
+        "Infrastruktur-und-DevOps/Skills/infrastructure-as-code/SKILL.md": "c48ab50d34c6f7f0eb28949e4edbca483fdf6934a1945f1733eda9a211d5f2de",
+        "Infrastruktur-und-DevOps/Skills/infrastructure-change-review/SKILL.md": "491f09863a8a369855a3b7368e1e6117d16090b7bd03a639413e47fb3870845c",
+        "Infrastruktur-und-DevOps/Skills/infrastructure-review/SKILL.md": "364ab2610d9d3a756e9465e6f4a11d1a3f2716a530f3a6933230c2c5796b4263",
+        "PROJECT.md": "d74d79f2b60459768e4871517b02158bf7b75f9d8be7d814f89385e4befa1a1f",
+        "Programmieren/Skills/code-review/SKILL.md": "314840ab5fed2ac4d8fb67147e460864471d71f120de1409031ff26cf5345260",
+        "Programmieren/Skills/diagnose/SKILL.md": "1315b0cb68ba6fa9850256332aea9a90eb674b6363fbf1fbd0d541815fc7d690",
+        "Programmieren/Skills/domain-modeling/SKILL.md": "74bbc72334d6bac1ff388abd5a42fb162cc223207f803ad3c0aa35173949b1eb",
+        "Programmieren/Skills/tdd/SKILL.md": "f69f734d323fff987d0e9f7cae202770be153210c1b31a82f08ee8006ef30d9a",
+        "README.md": "6006d669d6fc3b519ab2e152aa1f694d200c95bbfd259769ccad5f6aad579fe0",
+        "Recherche/Skills/citation-audit/SKILL.md": "3dae6050d9cfcfb2a3e4a91f1d545da05b6c1c231bb256ea148ffb0588838928",
+        "Recherche/Skills/claim-verification/SKILL.md": "bf491036efad3326d0a062212a6adcf933274feab9cea92288928be48c14e82b",
+        "Recherche/Skills/deep-research/SKILL.md": "eeb5c36b8fe984e6eb0d0b8f3f1009a4f319cd6ca42b66fae5ad20b8cb529457",
+        "Recherche/Skills/research-plan/SKILL.md": "82d3eeca15af1d94e65f31568d1f0d370cb7ed6a41a88d3e87d1802b92c58982",
+        "Recherche/Skills/research-synthesis/SKILL.md": "bf739ec5452a4edd0262fdb42054dd1a002f3b099a9ac59ed6aae21f1303a7a8",
+        "Recherche/Skills/source-evaluation/SKILL.md": "474246da90126a2f8da18b539235c5da677e69332535c70d7fd1c25ccd854e45",
+        "Recherche/Skills/web-search/SKILL.md": "01cc837df6a244f49fc0fb3443d0590b757b54541b4e7973cd213d91c92c6451",
+        "Reliability-und-System-Observability/Skills/alert-design/SKILL.md": "0a8d2bae1ce9904aa0d83184aacc257f538d3283f3504d1e8e062b47836178e4",
+        "Reliability-und-System-Observability/Skills/capacity-planning/SKILL.md": "0e7cc37b759d1ff8bed137fde246313c4f4c83d4006a4a4982436f0891455d39",
+        "Reliability-und-System-Observability/Skills/incident-postmortem/SKILL.md": "f9fb1ad2998054d42e8f06afb84bde1bed3b48b50564fe85b4be43325970f5bf",
+        "Reliability-und-System-Observability/Skills/incident-response/SKILL.md": "cb5a6e1d5ff1b6577fb6b50192748b93f80339bcdbabf60a4c5f388feea81979",
+        "Reliability-und-System-Observability/Skills/reliability-review/SKILL.md": "9d7ef921645c6b80f1c55ab4a62476f2a0d4605179deae62d99e62140434ec25",
+        "Reliability-und-System-Observability/Skills/resilience-experiment/SKILL.md": "99e0054dde945433d90ecec6d529e17eba3eefde81a61262c5cdc9d673e7f9e3",
+        "Reliability-und-System-Observability/Skills/slo-design/SKILL.md": "f75055028ec950cff58261f4fe1396cdc2d9dcb09f89b907afb1281c0262d918",
+        "Reliability-und-System-Observability/Skills/system-observability-design/SKILL.md": "627f43d23052ed9499a0bfc94e3550cd06700a8987e79a14a67b6e0f042f5f6c",
+        "Requirements-und-Spezifikations-Engineering/Skills/acceptance-criteria-design/SKILL.md": "9eebe9c721f76155a496ef7ba6af2c778a28f006b6dcc6a02581682a994bdd62",
+        "Requirements-und-Spezifikations-Engineering/Skills/requirements-baseline/SKILL.md": "9d2e5fceb9ff4687823ef513186232c41d43062e0bde7c50e34413221438930b",
+        "Requirements-und-Spezifikations-Engineering/Skills/requirements-change-analysis/SKILL.md": "c68730030463767fb892c21cedeff426ba56420c5803d2b3684b7680dbe953a9",
+        "Requirements-und-Spezifikations-Engineering/Skills/requirements-elicitation/SKILL.md": "d9f5ce661a15528542e679b25fbb5431fae3ed59309a03b511346f036bfc3aaf",
+        "Requirements-und-Spezifikations-Engineering/Skills/requirements-review/SKILL.md": "41a7e7709515d7d3fe8566c03e33b9f929aae8ccbbd1b2b326aa35e154d951d0",
+        "Requirements-und-Spezifikations-Engineering/Skills/requirements-specification/SKILL.md": "da63b7010c141789d1db9669212abceba228523d3942f56ab1fd59e4dd487a43",
+        "Requirements-und-Spezifikations-Engineering/Skills/requirements-traceability/SKILL.md": "c92b6c99ba827224fe6f88a5adc9f142c90586f471e3458a4fd75733e5fc08b9",
+        "Requirements-und-Spezifikations-Engineering/Skills/requirements-validation/SKILL.md": "75d737a78204699f8491cbdf5930304e099b1758b0e19d675dac92e1b1af1c3a",
+        "Reverse-Engineering-und-Binaeranalyse/Skills/binary-analysis/SKILL.md": "a8db8932f5776af9854ed0adece3ee653d5352fa87a9916505c5283571bb3852",
+        "Reverse-Engineering-und-Binaeranalyse/Skills/binary-triage/SKILL.md": "d73974129d92256c7dce14617e21d40ff4a2d56e0e8e5a7725df00bcfaf6d1ac",
+        "START-HIER.md": "e833acea9867db9bb07891097451ef87ed28777110fc7281e99f044aa6dd0344",
+        "Schnittstellen-und-Vertraege/Skills/contract-change-review/SKILL.md": "9be6d6e63d74050c5cfc4d90f722f9ddcb43a15b06205285e6bfbb9cfab4c988",
+        "Schnittstellen-und-Vertraege/Skills/event-contract-design/SKILL.md": "9a9cb42ca82b8a23eb4fa05cef4a18cd14fbf10ce4f8d93651630e47f7ba2a91",
+        "Schnittstellen-und-Vertraege/Skills/http-api-design/SKILL.md": "f5fa08f3ba6a8f066f57a117090ae1d3d96f76451e32e91b95d35dcd8c1be1b0",
+        "Schnittstellen-und-Vertraege/Skills/interface-design/SKILL.md": "c9a3a583c9e44d9433e67aece2fb3beb79f81467d748171cd39e9f0c7c85b796",
+        "Schnittstellen-und-Vertraege/Skills/interface-review/SKILL.md": "094e1995f951c1ebe58d1259ce756adee3636e3217b8fb0f85a1c91ba7caaed3",
+        "Schreiben/Skills/adressatengerechte-kommunikation/SKILL.md": "787e86f1a02445fa9a95af6a33899aa2f9ddd3a89216e7e0914c9d84e1874c4f",
+        "Schreiben/Skills/deutsche-typografie/SKILL.md": "a6ba8f51fedd8d6148e4a400ae0e8dd6798ff236cec1a4e61e4ee798b52d47c9",
+        "Schreiben/Skills/korrekturlektorat/SKILL.md": "499b931a535d7afc386092b14193108e5c24a1eaa379b76a5b6f9fbf417d5bd8",
+        "Schreiben/Skills/kreatives-schreiben/SKILL.md": "eac80bf8c8ce112b624a9d537371e7fbc53cb2fba736f06c4b2822509d7a17f7",
+        "Schreiben/Skills/natuerliches-schreiben/SKILL.md": "7076c50f822921972ba6d822ec63f77f75cb6d701fa1c2e596801db712290808",
+        "Schreiben/Skills/stilreview/SKILL.md": "0dfdcc7246168f4814c391b5c181c2e3e07b5568097543fb7ffcbaa5c8049270",
+        "Sicherheit/README.md": "9ea3550680f08fab350fcab66f7d8d28f2d28a3058f2974a7b263e1d232ad523",
+        "Sicherheit/Skills/inhaltsprovenienz-review/SKILL.md": "57f7d276cba75a38aa068ec318d0e9769c4d04c2353f96a6246e3a9065eeeee3",
+        "Sicherheit/Skills/metadaten-hygiene/SKILL.md": "a4177ac40e6ec39f621f01321b7f04e672428dd447893f5f8e8751afdcc6ebe4",
+        "Sicherheit/Skills/prompt-injection-review/SKILL.md": "985126e7b1ae49f681598cbbffa0a63a2b9ab38891f04a51fe4a5f8a83660e19",
+        "Sicherheit/Skills/skill-security-review/SKILL.md": "14bfdf2b8764286f336ed8aabb07eea6103e3c44bb543cc6c564ba8e377a4dd8",
+        "Sicherheit/Skills/tool-permission-review/SKILL.md": "6e66c6added6308aa86124528a633d264f8902500034102973f3738e40d73eb7",
+        "Skill-Engineering/README.md": "1fbc671821e3707b4c6acd43b7f055a8acffe02a65b9530c72d40deb87251861",
+        "Skill-Engineering/Skills/skill-authoring/SKILL.md": "9f30578561a444a1dbad6e45f491bd218ef2ca2a3a8123d53dc24da1ffe39cda",
+        "Skill-Engineering/Skills/skill-review/SKILL.md": "d1e12f737a9f039c2af4ee7a9a1906d0f816f0f08850a341866c09ff698c14ec",
+        "Social-Media-und-Content-Praesenz/Skills/community-engagement/SKILL.md": "fc992670fbbad77859fbf7000c08c77be25d8ef33ac88bec851a671abfd32754",
+        "Social-Media-und-Content-Praesenz/Skills/content-performance-analysis/SKILL.md": "b8aafa20f20644c64f737e7969919f04bb34581d6f40efb6e9ea05c0a6ef6028",
+        "Social-Media-und-Content-Praesenz/Skills/content-presence-baseline/SKILL.md": "bdb8d0de45312ee26f13a97d433bbb2ae2a2de93888c6e20779edbe081a048e3",
+        "Social-Media-und-Content-Praesenz/Skills/content-presence-review/SKILL.md": "a9770b9fa3241254f56b7968ca0b03855b9faf72c0c9ae78e41f4b3532c49684",
+        "Social-Media-und-Content-Praesenz/Skills/content-repurposing/SKILL.md": "d407189b0028e3b297df40c3d8d0a785887f0ff3136765cea072e977216f5b41",
+        "Social-Media-und-Content-Praesenz/Skills/editorial-planning/SKILL.md": "49ad7cbfd36ef1cc03c649f38f4fd28f490c787385b7f03b9cbe151bfe057afe",
+        "Social-Media-und-Content-Praesenz/Skills/platform-content-adaptation/SKILL.md": "691dae27d7fec4cb3ef7321a61f3de15044976d2fc6d40321419b2f8f2fc280f",
+        "Social-Media-und-Content-Praesenz/Skills/social-content-design/SKILL.md": "e9b958121fef3a37c53c57fa6c5829a0fbce78098dff83c28f1a0fcfa9ec7b5f",
+        "Social-Media-und-Content-Praesenz/Skills/social-content-strategy/SKILL.md": "0602440ad0048c4ca78edd02a0861361f2a5d200ebd6fd3040379d9c215573a4",
+        "Software-Architecture-und-System-Design/Skills/architecture-baseline/SKILL.md": "903c6d862d082481165772434eefc4560c378b5266ff41b22bb9e57990487fd3",
+        "Software-Architecture-und-System-Design/Skills/architecture-conformance-review/SKILL.md": "8e3e8fe265335c0b9a54a58a80c89e4fcc9134d938bef44da1d6c9e9516040e3",
+        "Software-Architecture-und-System-Design/Skills/architecture-decomposition/SKILL.md": "4a20627fe7018359f1daa23604a1cf02cdc2d86ad2a898d3cbf5fc345433afac",
+        "Software-Architecture-und-System-Design/Skills/architecture-evolution/SKILL.md": "5d78c3e402812bdd3c93a7bd7a5b14105b7841001161d69b4668a2a470391fd8",
+        "Software-Architecture-und-System-Design/Skills/architecture-review/SKILL.md": "9a816c8f2a6180ff766137dad85a8ad95c21e22f38e433eae83040891454f0f0",
+        "Software-Architecture-und-System-Design/Skills/architecture-tradeoff-analysis/SKILL.md": "155a39a7d5c37c8395b808155ae767c58bcb42d28ce5b6186753400d1384e616",
+        "Software-Architecture-und-System-Design/Skills/system-design/SKILL.md": "9aee0c916d024b603bf9e73f92834fc37b25449e652d5bdf7d8661aa3364a563",
+        "Storyentwicklung-und-Fiktion/Skills/figurenentwicklung/SKILL.md": "0908e80908c3f5d7313e070e173c7ea9878db71c38371c78e8e55828822f2a16",
+        "Storyentwicklung-und-Fiktion/Skills/plot-und-storystruktur/SKILL.md": "725d5c65513c7283012a4b98a254ef3e192ce45d4d9fc1e8feed0e16e6d023f5",
+        "Storyentwicklung-und-Fiktion/Skills/story-bible/SKILL.md": "4241c970178057087087872f378c52183ce1789c2861b5ff01febbdf8e00a485",
+        "Storyentwicklung-und-Fiktion/Skills/story-kontinuitaet/SKILL.md": "f0a3516c4500f6f4f98a61476d8f84a4a830e6670f43e206f5833930feb54d8e",
+        "Storyentwicklung-und-Fiktion/Skills/worldbuilding/SKILL.md": "b96549dfcb2b9475e992400c8700f52b386bbf54b13ee077ce77a7d57cb3b647",
+        "Testing-und-QA/README.md": "4813b01bffd2cb15353f48f020cc89e7d8e17f0b90f53b7d56f290389be80f5a",
+        "Testing-und-QA/Skills/contract-testing/SKILL.md": "be55c81ef57495026d904c62addccd2a9ad04719d4873f2ab64147c725dfa58d",
+        "Testing-und-QA/Skills/e2e-testing/SKILL.md": "2da185b62456a6ca44e237385c1818d3c55aff97ccfee999ad7dc2f1f5c421c7",
+        "Testing-und-QA/Skills/exploratory-testing/SKILL.md": "65ee31728c385ee413a81f08894870ace5f6a6a552e90d97ce042138b90cb470",
+        "Testing-und-QA/Skills/failure-testing/SKILL.md": "e98453fb2ede5847e0c59fe4fe28c35773eff07a4516935b5628f8f976dc5d5e",
+        "Testing-und-QA/Skills/flaky-test-diagnosis/SKILL.md": "66476c708606c045d55fb78f80cba6d34e30a117ad8d2fa6fee33c5147ba7b55",
+        "Testing-und-QA/Skills/integration-testing/SKILL.md": "45f2e236204ddfd5df03ceadb67caeea2002a29c067f1b8621265de9ea7a19e5",
+        "Testing-und-QA/Skills/test-design/SKILL.md": "2f04848bb93221f51b609ef04fe8c824a003bff176bfa947b9d8ee3bb68639ab",
+        "Testing-und-QA/Skills/test-strategy/SKILL.md": "6840f2aaa40a65fd9b0b13ec9bc9e5f47476f1893a383c898624c20e75f290c7",
+        "Testing-und-QA/Skills/test-suite-review/SKILL.md": "f43f718bd84f245e348f88cae3cc8486806cf33f5ced1553e17dd1e970df9bf4",
+        "Webentwicklung/Skills/accessibility-review/SKILL.md": "ecd6cdceb182078e5e6c34e037cb3e515dd7b486060f2c16e6d2cc38139debfc",
+        "Webentwicklung/Skills/design-system/SKILL.md": "99a1ea6b8b82cf5cbe938223f280caa5b03ad0112addbb4232aba39bbd5b0062",
+        "Webentwicklung/Skills/frontend-design/SKILL.md": "84e78fd01fdc1701d0a454f1bab3796b3214194bdcb44633acaa94a7387d2281",
+        "Webentwicklung/Skills/frontend-performance/SKILL.md": "84c8238b6f09bee198e86f5098ead84ad683ef7ca9895b6a489bfba3f9aadba3",
+        "Webentwicklung/Skills/greybox/SKILL.md": "b78d86320db1134fee92bc729a5792ce25c910841aed57bf30ca1e506dc139f4",
+        "Webentwicklung/Skills/motion-design/SKILL.md": "0ef16f20a194405c9f56a2f35207b037a1dadcd4fb6f04d21b653efbbf5d3165",
+        "Webentwicklung/Skills/motion-implementation/SKILL.md": "0162553f49b29f051afc32084c01d7d80d2ee2f9ce3fc516605e53eb29685d9f",
+        "Webentwicklung/Skills/motion-review/SKILL.md": "1fbd542f6b9a609e32847d371d5c9049757cd485dba6e3fa548f49a3f8879acc",
+        "Webentwicklung/Skills/visual-verification/SKILL.md": "3cc19514829ed6225fdf1cbe5f9f27b620162b175d91d2fd9125522ab8c17663",
+        "Webentwicklung/Skills/web-content/SKILL.md": "6458320e1ff29a7776f16ab8694c2f511c6dc710eb2d1ccc26d8c550a387d535",
+        "Webentwicklung/Skills/web-design-review/SKILL.md": "7954ab0edd1433b8b963f4dc23775700b2d083a4309b4694e2b399e6f0ab4b16",
+        "Wissensmanagement/Skills/knowledge-base-design/SKILL.md": "4bb96a3d73e019c58031ef0dad13a000b2e628f26d4465990e79e878f958b8c5",
+        "Wissensmanagement/Skills/knowledge-base-review/SKILL.md": "24c7d3aca10792f8f78c9bb10ed2d0a5c9787da71a142bfca4ec2a814aec43e8",
+        "Wissensmanagement/Skills/knowledge-distill/SKILL.md": "5f759b8941f67a3a5e107e144103acd8a963390b0e14779b771a8c148aa0eadf",
+        "Wissensmanagement/Skills/knowledge-ingest/SKILL.md": "14e46becbf65e65dedd7d626330d27a53cf87a20547b48b5fb2f94d274fe5f97",
+        "Wissensmanagement/Skills/knowledge-maintenance/SKILL.md": "d9de3726d09e5af036bd5c1c07b362e2318855cdd4d2d38436835ef85d95c83f",
+        "Wissensmanagement/Skills/knowledge-query/SKILL.md": "521d9693d244e9b84d0f230b39ffc4b1175961d87a2db4c4fb2b04b71a58862b",
+        "Wissensmanagement/Skills/knowledge-synthesis/SKILL.md": "418fd2daa7d9886f0ff1a1e0bdfb2cb1750d662496d0e02d31200fd71cef653d",
+        "Workflows/Acceptance-Traceability-und-Handoff.md": "5a82b3ae9e856b27de0b7571ae45dc3e9d7131f29e800e9809b33777c3a7875d",
+        "Workflows/Architektur-Baseline-und-Systemdesign.md": "9e2080d52682f1881b1d3be22dd30ddf1d18746fde3c29bce31b0a30fe6bc549",
+        "Workflows/Architektur-Readiness-Review.md": "4371d9b84b1a39ca1d1310c1ce85460c288f719089d307546daef8a65d83b068",
+        "Workflows/Architekturentscheidung-und-Tradeoff.md": "2190ae3c4c837b2b6ac51554384d15e2322f3b760c26cff31b230ca05b5bbdf7",
+        "Workflows/Backfill-und-Reprocessing.md": "f442da00260137a4d1706352df19e82aa01b0ce624854f52edd3dc2057376ef6",
+        "Workflows/Bestehende-Website-Review.md": "3ae141ca33b3de340259c24e941c0f7cdfa1e78380411bd344a4e88599e0e1ff",
+        "Workflows/Bildserie.md": "5c6d104e4127b056aec0d037ba7a7096e6126de3a6bdc5c091ebf5f59653e8e9",
+        "Workflows/Binaerdatei-verstehen.md": "60847c9951f87e47d28f6fc3edb87304fbfb08d5372cb10e787f0424de8ba571",
+        "Workflows/Bugdiagnose.md": "20ade3523c6f28e33f617ae7838da63b36936d1d52fb1d63bf4a4dafbaf2cac0",
+        "Workflows/Build-Deploy-und-Promotion.md": "034c538c9b153e901a7dd031d391f770704944dc59272214d46dce5fe9778bff",
+        "Workflows/Codebasierte-Motion-Graphics-und-Video.md": "71d83b20a6452838a69419ff309a064c80b30adada396b103b26654699534875",
+        "Workflows/Community-Engagement-und-Eskalation.md": "25131e81efd9dc0b57d6d035668599d193ed216d4a9850d55ed0e8e0e34588fe",
+        "Workflows/Content-Performance-und-Readiness-Review.md": "4ec2e3865cc32f50d308351ebaba4b7caed87118eb6bd7814724355ee8c18749",
+        "Workflows/Content-Praesenz-Baseline-und-Strategie.md": "7eda1c947138d62fdd3595fba7eb6be678f89cfd9317b1282b0529a2af12376d",
+        "Workflows/Cross-Platform-Adaption-und-Repurposing.md": "c3fb0f59e7b1e9241a325f0791c7abe64425eb88a5fe5c6158e4bc6fe8477133",
+        "Workflows/Data-Engineering-Readiness-Review.md": "80f3817a0f0606078064e8c3e9638f500e5d5ca208f1432f5c867627a8e5c3f3",
+        "Workflows/Data-Pipeline-Baseline-und-Design.md": "e6f08ba0b30380909af34fa6a1fa975117a585826e5488d7dc746f3e3a2708ef",
+        "Workflows/Datenbank-Aenderung.md": "4e2ef4804c86312bb84841baaba7ac8480c274ea011af697a6a1f7e93d029022",
+        "Workflows/Datenqualitaetsstoerung-und-Reconciliation.md": "e2ef12a8830725141a936656a47fb44eab8e71f06a210d23e7e62151da91e32e",
+        "Workflows/Deep-Research.md": "4e9417b8e239d35b0e05ad477340033da3ac2601d26e8b0b3b0d279c8f62d095",
+        "Workflows/Editorialplan-und-Content-Produktion.md": "5432e7692d9e3775bb37a6d06f2aa8bffb6391336dda9df42660c99df369c979",
+        "Workflows/Evolutionaere-Architekturaenderung.md": "ebd4929ae623fe8e2e75cb534f8a800714d16f3d81fe18ee5ce47a185216ec8a",
+        "Workflows/Infrastruktur-Aenderung.md": "629bc32697adc8ccac4336bf3bc11161eeb563696a2ccb45305ae1e60603f3f3",
+        "Workflows/Inhaltsprovenienz-und-Metadatenhygiene.md": "699602340978d4f35bb886c5ed13acf39dca8cf367b70ae9c3c53611cfa67a58",
+        "Workflows/Long-Horizon-Agentenarbeit.md": "5e435201ce0b32925457633fddc839e128b2400c1e82fb26cca7ddf01f814645",
+        "Workflows/Mobile-App-bis-Store-Freigabe.md": "c72cc910f86b0eba0b44d89c00b4998c02e163423d3c279197229bf636759507",
+        "Workflows/Neue-Datenquelle-und-Ingestion.md": "676d7f2964ed948e0293078aa2804d646d8cd936a98fe46993f69f798ff722f2",
+        "Workflows/Operational-Readiness-Review.md": "3515e1827aa7d4fc0f3f6be1172bf7fb4c26ae9ec1fed05392324b67d1286b26",
+        "Workflows/Persoenliche-Finanzplanung.md": "97d94f330b0883144ea04d8111f0a9d5332990a47b72999d498e32c755eb6327",
+        "Workflows/Post-Incident-Learning.md": "529ab5d71861dd3d7f644d9a0ff45a75b4f2fbcbac46fc7a1979ddd0238ffbda",
+        "Workflows/Produktionsincident.md": "a512372ff387fc9c9d0454f6a06f9fe3a2d0145fba03d5e47d0ac49a117ae2d5",
+        "Workflows/README.md": "5f6c40e671bfb251036ba25b14d1a8565f7a7a41f2e8fe0ab25ac7c2a7a02381",
+        "Workflows/Reliability-Baseline-und-SLOs.md": "04e49d2f899486645642dd7d3e92b183835ddb808fcd9f846a104d7c4100d087",
+        "Workflows/Requirements-Baseline-und-Spezifikation.md": "ad25d5ae6c097135a450f56c7b4b02373afb07be00fa5441c0e2c35b9d00edc9",
+        "Workflows/Requirements-Change-und-Impact.md": "92af985ded9f932ff5c45d9228d285a87614723fc71a7b968350def1e4198854",
+        "Workflows/Requirements-Elicitation-und-Klaerung.md": "ebf9c0dd76beceb74b12215a3b9c0f1112537ba6f141a7b11d63e8d6905ebdf4",
+        "Workflows/Requirements-Readiness-Review.md": "ab2ad3ba584ac3f98c47aa7a36c1d9e77f3c33bca5ff67ea131152e7ba3143f2",
+        "Workflows/Resilience-Game-Day.md": "a1b147a322594d4e176940a0d3f10a4e7bd8e93b9b3bc6081bf60d25604114fa",
+        "Workflows/Review-Revise-Loop.md": "0f1e83b6efaabc1fc07c7043cc2dd8d511e3ef9a662fb0bf4d88987fb1656d2e",
+        "Workflows/Schnittstellenvertrag-Entwerfen-und-Aendern.md": "0466008c699ee4cc8758e9fa5e0f6bdc1db2513323503da174ae427705fb1d5d",
+        "Workflows/Skill-Verbesserung-aus-Evals-und-Fehlern.md": "2b49c37c7a5e08c30cfcf9e9712dd7ebd780f1a1f294614688dafb7723f4b317",
+        "Workflows/Software-Feature.md": "26f6affa186d7fb52b478598e27ac992dea6b84c71dd799062d8b25fc962d948",
+        "Workflows/Storyprojekt-von-Idee-bis-Manuskript.md": "e9465cf97d963c4229e3505f15f9615d17fbc478ca675c844819e0fe7423f210",
+        "Workflows/Systemgrenze-und-Dekomposition.md": "4ce3a176c465fa86784cfa57ee8e0b1be04f39ec4704ac0e8fe2c1a0b94cc71a",
+        "Workflows/Technische-Dokumentation.md": "60d783e51a30464d704ad6f36ebff3d7e11392c18af52f1ed1a9d44a5f3a00e7",
+        "Workflows/Teststrategie-und-QA.md": "501ccb0ff1cf4bfc4f4943e80051c46b1f77dde56f91e933f6a0f58d26892a72",
+        "Workflows/Text-Endkontrolle.md": "0c43048f9da7c6bc3b868861df9ddab3249d1c58b89ab0936ecd441eb240010d",
+        "Workflows/Unternehmens-und-Investmentanalyse.md": "717921ebfed9959efd26a82c2acc5b2fea9ff21a0a7853850ef165821ab686e1",
+        "Workflows/Website-Neuentwicklung.md": "abd939d76943e31b4ee740a1719efe0f79d91bd2a3407d51f1380864cf69b5d4",
+        "Workflows/Wiederkehrende-Aufgabe-zum-Playbook.md": "7f6a183607f0febcc6bfc5a7605b39d81ea9c03ce89ff981ce35e9ae75dbd830",
+        "Workflows/Wissensbasis-Aufbauen-und-Pflegen.md": "6d5bdff4ba88a2dd4ba3bea3ad27b70b78732ceb28459232fb4473ecf159201a",
+        "mara-project.json": "9e9a41d6291f3d7cc53574aad955f29e142e166324bbdf11ede191feb8cffc49",
+        "routing-overlays.yml": "2ab96e1b0028f3e5f6e4c2a7331ca32016517c23ebac829519275fb4ba45c224",
+        "skill-catalog.yml": "3f662e1feb64b9d9f31747030aca315ffa9bf2e2e87379cfc1286a17bae52bd8",
+        "workflow-index.yml": "14f548f0bac430b3228913553d36b1327426b210c5017ce106d3aeda1ee48ff0"
+      },
+      "qmd_version": "2.8.3",
+      "per_query_limit": 10,
+      "node_version": "v24.22.1",
+      "before_catalog_sha256": "3f662e1feb64b9d9f31747030aca315ffa9bf2e2e87379cfc1286a17bae52bd8",
+      "candidate_catalog_sha256": "3f46a89f12651c29eb277de6ea255371cae65b6483ef0704c56dd1d41ab51cea",
+      "cases_sha256": "2cb6e2b31f9a3973b59e7288a19032c38e3258afe193514dd8332733446fc093",
+      "case_evidence_revision": "6b80949fea00a427303a8dad9a612b59d7fd04ca",
+      "case_evidence_sha256": {
+        "Schreiben/Skills/korrekturlektorat/SKILL.md": "499b931a535d7afc386092b14193108e5c24a1eaa379b76a5b6f9fbf417d5bd8",
+        "Finanzen/Skills/bewertungsanalyse/SKILL.md": "f13115b7485da959104cb3e377eca916a593f1155e886d05eae546c945cc4a8d",
+        "Storyentwicklung-und-Fiktion/Skills/figurenentwicklung/SKILL.md": "0908e80908c3f5d7313e070e173c7ea9878db71c38371c78e8e55828822f2a16",
+        "Dokumentationserstellung/Skills/adr/SKILL.md": "5b4f69eabdeb03b51df9a1f20ecf7340341c940eafa990eef1a7d74957493720",
+        "Requirements-und-Spezifikations-Engineering/Skills/acceptance-criteria-design/SKILL.md": "9eebe9c721f76155a496ef7ba6af2c778a28f006b6dcc6a02581682a994bdd62",
+        "Testing-und-QA/Skills/test-design/SKILL.md": "2f04848bb93221f51b609ef04fe8c824a003bff176bfa947b9d8ee3bb68639ab",
+        "Recherche/Skills/claim-verification/SKILL.md": "bf491036efad3326d0a062212a6adcf933274feab9cea92288928be48c14e82b",
+        "Recherche/Skills/source-evaluation/SKILL.md": "474246da90126a2f8da18b539235c5da677e69332535c70d7fd1c25ccd854e45",
+        "Sicherheit/Skills/inhaltsprovenienz-review/SKILL.md": "57f7d276cba75a38aa068ec318d0e9769c4d04c2353f96a6246e3a9065eeeee3",
+        "Sicherheit/Skills/metadaten-hygiene/SKILL.md": "a4177ac40e6ec39f621f01321b7f04e672428dd447893f5f8e8751afdcc6ebe4",
+        "Storyentwicklung-und-Fiktion/Skills/story-bible/SKILL.md": "4241c970178057087087872f378c52183ce1789c2861b5ff01febbdf8e00a485",
+        "AGENTS.md": "cf4f019199b279bc0abaca656ff69244664c870f9dc2d4cacfe072e3e36bf763",
+        "Schreiben/Skills/stilreview/SKILL.md": "0dfdcc7246168f4814c391b5c181c2e3e07b5568097543fb7ffcbaa5c8049270",
+        "Schreiben/Skills/natuerliches-schreiben/SKILL.md": "7076c50f822921972ba6d822ec63f77f75cb6d701fa1c2e596801db712290808",
+        "Recherche/Skills/citation-audit/SKILL.md": "3dae6050d9cfcfb2a3e4a91f1d545da05b6c1c231bb256ea148ffb0588838928"
+      },
+      "queries": [
+        "Datenbank Tabelle dokumentieren",
+        "Schema Referenzdokumentation",
+        "Tabelle dokumentieren",
+        "Schema dokumentieren",
+        "reference docs schema",
+        "zzroutingabsentf72ea4bd",
+        "Rechtschreibung Zeichensetzung",
+        "DCF Comparable Companies",
+        "Figuren Motivation Agency",
+        "Architekturentscheidungen Alternativen Konsequenzen",
+        "Tippfehler Dopplungen Korrekturlesen",
+        "Fair-Value Sensitivitäten",
+        "Character Arcs Beziehungen",
+        "Architecture Decision Record Alternativen",
+        "Akzeptanzkriterien beobachtbar",
+        "Testfälle Grenzwerte",
+        "Behauptungen Evidenz prüfen",
+        "Quellen Autorität Aktualität",
+        "Provenienz Metadaten Geräte",
+        "GPS Sharing-Kopie Metadaten",
+        "Story-Bible Kanon offene Fragen",
+        "Rechtschreibung Grammatik Korrekturlesen",
+        "Quelle Aktualität Unabhängigkeit",
+        "Stil natürliche Formulierungen"
+      ],
+      "target": "Dokumentationserstellung/Skills/reference-docs/SKILL.md",
+      "model_calls": 0,
+      "held_out": false,
+      "contract": "target in top ten for five target queries; negative empty; no loss of baseline P1 required/one-of outcomes"
+    },
+    "protocol_sha256": "8998943cdbf775c7bad05c0205d4c566a02409477df08bcb6e6961253f28a358",
+    "results": {
+      "baseline": {
+        "build": {
+          "status": "ready",
+          "revision": "7d4bf2c603b66bf601badf3bf31573d18b489981",
+          "documents": 165,
+          "mode": "bm25",
+          "fingerprint": "57847995dfc35a70c844d8ddc9adb607db2be1aceaa1dbfc379591ba89d0b74e",
+          "routing_coverage": {
+            "skills": 155,
+            "indexed_skills": 155
+          }
+        },
+        "queries": {
+          "Datenbank Tabelle dokumentieren": [
+            {
+              "path": "Datenbanken/Skills/database-design/SKILL.md",
+              "id": "database-design",
+              "score": 0.8921911457992049,
+              "content_sha256": "89ae95621cbaf2104169b5efddc1106f4f739c7b702a3d0189e6a580b164dab5",
+              "search_document_sha256": "687316a336d7ee8a4db081957a11634708f37335f1374b1cdd2475a1699dbde9",
+              "snippet_origin": "derived-search-document"
+            }
+          ],
+          "Schema Referenzdokumentation": [],
+          "Tabelle dokumentieren": [
+            {
+              "path": "CONTRIBUTING.md",
+              "id": null,
+              "score": 0.8298565758253936,
+              "content_sha256": "56767e48dbd26f07dacca3bedb642c79e702449823e06b923eb42a1c0ab80985",
+              "search_document_sha256": "56767e48dbd26f07dacca3bedb642c79e702449823e06b923eb42a1c0ab80985",
+              "snippet_origin": "canonical-source"
+            },
+            {
+              "path": "Datenbanken/Skills/database-design/SKILL.md",
+              "id": "database-design",
+              "score": 0.8138543882774107,
+              "content_sha256": "89ae95621cbaf2104169b5efddc1106f4f739c7b702a3d0189e6a580b164dab5",
+              "search_document_sha256": "687316a336d7ee8a4db081957a11634708f37335f1374b1cdd2475a1699dbde9",
+              "snippet_origin": "derived-search-document"
+            },
+            {
+              "path": "Data-Engineering/Skills/data-contract-design/SKILL.md",
+              "id": "data-contract-design",
+              "score": 0.7996627687747895,
+              "content_sha256": "11f5cd1dbdc2d740fb7db5ff6c1681d82ac449819c779f272cc31355edd776bc",
+              "search_document_sha256": "ca01b1d03ba7ea143f33e9e76bcadeba96dfd57b879b67424309425b54840319",
+              "snippet_origin": "derived-search-document"
+            },
+            {
+              "path": "Data-Engineering/Skills/data-transformation-design/SKILL.md",
+              "id": "data-transformation-design",
+              "score": 0.7975502651269019,
+              "content_sha256": "9dfc563b78c524cd8c72ec7d5b38a8135944987ab953ca744a1d4f78c81759d9",
+              "search_document_sha256": "e5aee53ab1f5cfe8d015d7b37c7b2a86a768eef20e055c823b4a9a4cb42dca06",
+              "snippet_origin": "derived-search-document"
+            }
+          ],
+          "Schema dokumentieren": [
+            {
+              "path": "Datenbanken/Skills/database-design/SKILL.md",
+              "id": "database-design",
+              "score": 0.816069697794771,
+              "content_sha256": "89ae95621cbaf2104169b5efddc1106f4f739c7b702a3d0189e6a580b164dab5",
+              "search_document_sha256": "687316a336d7ee8a4db081957a11634708f37335f1374b1cdd2475a1699dbde9",
+              "snippet_origin": "derived-search-document"
+            },
+            {
+              "path": "Dokumentationserstellung/Skills/reference-docs/SKILL.md",
+              "id": "reference-docs",
+              "score": 0.8049728307113616,
+              "content_sha256": "d4ccc71851e11c5346e9ffe4fa07f43a95e2170b58e4ec8f702b593687cb3ec7",
+              "search_document_sha256": "a3e0eb62d66f9c1ec185835fd2d4bd19b2992362442c971b43ae938d486169dd",
+              "snippet_origin": "derived-search-document"
+            },
+            {
+              "path": "Data-Engineering/Skills/data-contract-design/SKILL.md",
+              "id": "data-contract-design",
+              "score": 0.800869000497541,
+              "content_sha256": "11f5cd1dbdc2d740fb7db5ff6c1681d82ac449819c779f272cc31355edd776bc",
+              "search_document_sha256": "ca01b1d03ba7ea143f33e9e76bcadeba96dfd57b879b67424309425b54840319",
+              "snippet_origin": "derived-search-document"
+            },
+            {
+              "path": "Testing-und-QA/Skills/integration-testing/SKILL.md",
+              "id": "integration-testing",
+              "score": 0.7779550346829035,
+              "content_sha256": "45f2e236204ddfd5df03ceadb67caeea2002a29c067f1b8621265de9ea7a19e5",
+              "search_document_sha256": "e87ad649bd312d9e061345976f2fe80f518b3503b10687ea8a9aab0281fb596e",
+              "snippet_origin": "derived-search-document"
+            },
+            {
+              "path": "Data-Engineering/Skills/data-ingestion-design/SKILL.md",
+              "id": "data-ingestion-design",
+              "score": 0.7414689566805004,
+              "content_sha256": "3121e0576450ad5b8e4a3759fcc4631208860c694c8b900e99d43e6ac6b0303c",
+              "search_document_sha256": "7268425c4d006517c6e715eac9561de81ae714dbd0efc3c960aceb8ab17bd4fe",
+              "snippet_origin": "derived-search-document"
+            },
+            {
+              "path": "Agentenarbeit/Skills/agent-eval/SKILL.md",
+              "id": "agent-eval",
+              "score": 0.6713185490426749,
+              "content_sha256": "a1783ecd7d774c63373e1b7e2c49657b93067a4d91c7b906cb26ab049d8ba5f0",
+              "search_document_sha256": "449615ea2143f3f3564b4fdae9c4387a24268d882d410ae6bdb1881ced23f928",
+              "snippet_origin": "derived-search-document"
+            }
+          ],
+          "reference docs schema": [
+            {
+              "path": "Dokumentationserstellung/Skills/reference-docs/SKILL.md",
+              "id": "reference-docs",
+              "score": 0.9133296669077445,
+              "content_sha256": "d4ccc71851e11c5346e9ffe4fa07f43a95e2170b58e4ec8f702b593687cb3ec7",
+              "search_document_sha256": "a3e0eb62d66f9c1ec185835fd2d4bd19b2992362442c971b43ae938d486169dd",
+              "snippet_origin": "derived-search-document"
+            }
+          ],
+          "zzroutingabsentf72ea4bd": [],
+          "Rechtschreibung Zeichensetzung": [
+            {
+              "path": "Schreiben/Skills/korrekturlektorat/SKILL.md",
+              "id": "korrekturlektorat",
+              "score": 0.9337816845814372,
+              "content_sha256": "499b931a535d7afc386092b14193108e5c24a1eaa379b76a5b6f9fbf417d5bd8",
+              "search_document_sha256": "8ae46114f62f6d61b8ffee5d2404675a8859207bd084c47c29cad290228dafcb",
+              "snippet_origin": "derived-search-document"
+            }
+          ],
+          "DCF Comparable Companies": [
+            {
+              "path": "Finanzen/Skills/bewertungsanalyse/SKILL.md",
+              "id": "bewertungsanalyse",
+              "score": 0.9563013503620879,
+              "content_sha256": "f13115b7485da959104cb3e377eca916a593f1155e886d05eae546c945cc4a8d",
+              "search_document_sha256": "7d177daf5ff5e626b4c12e17ea424bb484b637fefa6db285811d1d543a374203",
+              "snippet_origin": "derived-search-document"
+            }
+          ],
+          "Figuren Motivation Agency": [
+            {
+              "path": "Storyentwicklung-und-Fiktion/Skills/figurenentwicklung/SKILL.md",
+              "id": "figurenentwicklung",
+              "score": 0.9466167617302871,
+              "content_sha256": "0908e80908c3f5d7313e070e173c7ea9878db71c38371c78e8e55828822f2a16",
+              "search_document_sha256": "c1692a3de14fd5c835d31f06baecb5babe0f2f3dd632c0086894da41b7bf1b53",
+              "snippet_origin": "derived-search-document"
+            }
+          ],
+          "Architekturentscheidungen Alternativen Konsequenzen": [
+            {
+              "path": "Dokumentationserstellung/Skills/adr/SKILL.md",
+              "id": "adr",
+              "score": 0.9442134842576883,
+              "content_sha256": "5b4f69eabdeb03b51df9a1f20ecf7340341c940eafa990eef1a7d74957493720",
+              "search_document_sha256": "835c71bf03254a761aac6d5b825d4e6be6db3e04a9eee9ad7f246fd78b015950",
+              "snippet_origin": "derived-search-document"
+            }
+          ],
+          "Tippfehler Dopplungen Korrekturlesen": [
+            {
+              "path": "Schreiben/Skills/korrekturlektorat/SKILL.md",
+              "id": "korrekturlektorat",
+              "score": 0.9341366335492477,
+              "content_sha256": "499b931a535d7afc386092b14193108e5c24a1eaa379b76a5b6f9fbf417d5bd8",
+              "search_document_sha256": "8ae46114f62f6d61b8ffee5d2404675a8859207bd084c47c29cad290228dafcb",
+              "snippet_origin": "derived-search-document"
+            }
+          ],
+          "Fair-Value Sensitivitäten": [
+            {
+              "path": "Finanzen/Skills/bewertungsanalyse/SKILL.md",
+              "id": "bewertungsanalyse",
+              "score": 0.9178989472473832,
+              "content_sha256": "f13115b7485da959104cb3e377eca916a593f1155e886d05eae546c945cc4a8d",
+              "search_document_sha256": "7d177daf5ff5e626b4c12e17ea424bb484b637fefa6db285811d1d543a374203",
+              "snippet_origin": "derived-search-document"
+            }
+          ],
+          "Character Arcs Beziehungen": [
+            {
+              "path": "Storyentwicklung-und-Fiktion/Skills/figurenentwicklung/SKILL.md",
+              "id": "figurenentwicklung",
+              "score": 0.9114031480633704,
+              "content_sha256": "0908e80908c3f5d7313e070e173c7ea9878db71c38371c78e8e55828822f2a16",
+              "search_document_sha256": "c1692a3de14fd5c835d31f06baecb5babe0f2f3dd632c0086894da41b7bf1b53",
+              "snippet_origin": "derived-search-document"
+            }
+          ],
+          "Architecture Decision Record Alternativen": [
+            {
+              "path": "Dokumentationserstellung/Skills/adr/SKILL.md",
+              "id": "adr",
+              "score": 0.9499169402768497,
+              "content_sha256": "5b4f69eabdeb03b51df9a1f20ecf7340341c940eafa990eef1a7d74957493720",
+              "search_document_sha256": "835c71bf03254a761aac6d5b825d4e6be6db3e04a9eee9ad7f246fd78b015950",
+              "snippet_origin": "derived-search-document"
+            }
+          ],
+          "Akzeptanzkriterien beobachtbar": [
+            {
+              "path": "Requirements-und-Spezifikations-Engineering/Skills/acceptance-criteria-design/SKILL.md",
+              "id": "acceptance-criteria-design",
+              "score": 0.8846638965414538,
+              "content_sha256": "9eebe9c721f76155a496ef7ba6af2c778a28f006b6dcc6a02581682a994bdd62",
+              "search_document_sha256": "a98186c4b67d65c0fe4ad791c41e0d2da3677af6044b3308ba362f00b9e637fa",
+              "snippet_origin": "derived-search-document"
+            },
+            {
+              "path": "Agentenarbeit/Skills/delegation-contract/SKILL.md",
+              "id": "delegation-contract",
+              "score": 0.8639361901084066,
+              "content_sha256": "8db59b9327cc6d378316629236c7c3f94940bdf068144a777b743ad91543ed41",
+              "search_document_sha256": "f12b7a88f47369c1db3a1a186999bc8ec78ceb3612c17c699be7579bdc847df1",
+              "snippet_origin": "derived-search-document"
+            }
+          ],
+          "Testfälle Grenzwerte": [
+            {
+              "path": "Testing-und-QA/Skills/test-design/SKILL.md",
+              "id": "test-design",
+              "score": 0.9289394390019469,
+              "content_sha256": "2f04848bb93221f51b609ef04fe8c824a003bff176bfa947b9d8ee3bb68639ab",
+              "search_document_sha256": "362a98ed5cbe23eaf2e7934ced78c1cfd0dd39340db7636a89f4d5857604a3a1",
+              "snippet_origin": "derived-search-document"
+            },
+            {
+              "path": "Testing-und-QA/README.md",
+              "id": null,
+              "score": 0.8881498388168718,
+              "content_sha256": "4813b01bffd2cb15353f48f020cc89e7d8e17f0b90f53b7d56f290389be80f5a",
+              "search_document_sha256": "4813b01bffd2cb15353f48f020cc89e7d8e17f0b90f53b7d56f290389be80f5a",
+              "snippet_origin": "canonical-source"
+            }
+          ],
+          "Behauptungen Evidenz prüfen": [
+            {
+              "path": "Recherche/Skills/claim-verification/SKILL.md",
+              "id": "claim-verification",
+              "score": 0.8980300254833584,
+              "content_sha256": "bf491036efad3326d0a062212a6adcf933274feab9cea92288928be48c14e82b",
+              "search_document_sha256": "4df86f889856191052074d31702bde9454c3422dc85756edeec5cd908709d277",
+              "snippet_origin": "derived-search-document"
+            }
+          ],
+          "Quellen Autorität Aktualität": [
+            {
+              "path": "Recherche/Skills/source-evaluation/SKILL.md",
+              "id": "source-evaluation",
+              "score": 0.9088230699945644,
+              "content_sha256": "474246da90126a2f8da18b539235c5da677e69332535c70d7fd1c25ccd854e45",
+              "search_document_sha256": "06405d0cfc3c7f66744433579c20adaff64494d09b674e44c668a12e90ca167a",
+              "snippet_origin": "derived-search-document"
+            },
+            {
+              "path": "Requirements-und-Spezifikations-Engineering/Skills/requirements-baseline/SKILL.md",
+              "id": "requirements-baseline",
+              "score": 0.8777061313979637,
+              "content_sha256": "9d2e5fceb9ff4687823ef513186232c41d43062e0bde7c50e34413221438930b",
+              "search_document_sha256": "ef720121d540b1840d71c0e8f1e092fa226ed7a5c3c5d505a9f52d28bd3c42f1",
+              "snippet_origin": "derived-search-document"
+            },
+            {
+              "path": "Agentenarbeit/Skills/context-audit/SKILL.md",
+              "id": "context-audit",
+              "score": 0.8718643975229271,
+              "content_sha256": "00844737a457bb3e6b114b0739e2490210afb6d1f2aff2fa5f9cc956816bb9bc",
+              "search_document_sha256": "0e7aff36bb23209b26ad62f85f68f8a4e6c87942fd41d1ec0ff363ca41d751d0",
+              "snippet_origin": "derived-search-document"
+            },
+            {
+              "path": "Software-Architecture-und-System-Design/Skills/architecture-baseline/SKILL.md",
+              "id": "architecture-baseline",
+              "score": 0.8700550348413167,
+              "content_sha256": "903c6d862d082481165772434eefc4560c378b5266ff41b22bb9e57990487fd3",
+              "search_document_sha256": "7248029c08aaad36d514b9cd68e921d4c11622047d898a2a961713a035f23c1a",
+              "snippet_origin": "derived-search-document"
+            }
+          ],
+          "Provenienz Metadaten Geräte": [
+            {
+              "path": "Sicherheit/Skills/inhaltsprovenienz-review/SKILL.md",
+              "id": "inhaltsprovenienz-review",
+              "score": 0.9009812162702276,
+              "content_sha256": "57f7d276cba75a38aa068ec318d0e9769c4d04c2353f96a6246e3a9065eeeee3",
+              "search_document_sha256": "591aac84f251138bac7ce90150c89a9e08f66c6106bf9be62e577d92f91d41c6",
+              "snippet_origin": "derived-search-document"
+            },
+            {
+              "path": "Sicherheit/Skills/metadaten-hygiene/SKILL.md",
+              "id": "metadaten-hygiene",
+              "score": 0.8750929290084102,
+              "content_sha256": "a4177ac40e6ec39f621f01321b7f04e672428dd447893f5f8e8751afdcc6ebe4",
+              "search_document_sha256": "99baa8a547f833a5fbd800c12fcdc26d8a2ae8cfc143baf2598e710c2f4dcd5f",
+              "snippet_origin": "derived-search-document"
+            },
+            {
+              "path": "Dokumentation/Skill-Handbuch.md",
+              "id": null,
+              "score": 0.6982350477212893,
+              "content_sha256": "354131c2f80a4f8278757fd0a7cf6faa5412ef87fb874558d7a32c916200a12d",
+              "search_document_sha256": "354131c2f80a4f8278757fd0a7cf6faa5412ef87fb874558d7a32c916200a12d",
+              "snippet_origin": "canonical-source"
+            }
+          ],
+          "GPS Sharing-Kopie Metadaten": [
+            {
+              "path": "Sicherheit/Skills/metadaten-hygiene/SKILL.md",
+              "id": "metadaten-hygiene",
+              "score": 0.8829670812509957,
+              "content_sha256": "a4177ac40e6ec39f621f01321b7f04e672428dd447893f5f8e8751afdcc6ebe4",
+              "search_document_sha256": "99baa8a547f833a5fbd800c12fcdc26d8a2ae8cfc143baf2598e710c2f4dcd5f",
+              "snippet_origin": "derived-search-document"
+            },
+            {
+              "path": "Dokumentation/Skill-Handbuch.md",
+              "id": null,
+              "score": 0.7541970237992335,
+              "content_sha256": "354131c2f80a4f8278757fd0a7cf6faa5412ef87fb874558d7a32c916200a12d",
+              "search_document_sha256": "354131c2f80a4f8278757fd0a7cf6faa5412ef87fb874558d7a32c916200a12d",
+              "snippet_origin": "canonical-source"
+            }
+          ],
+          "Story-Bible Kanon offene Fragen": [
+            {
+              "path": "Storyentwicklung-und-Fiktion/Skills/story-bible/SKILL.md",
+              "id": "story-bible",
+              "score": 0.9241081652837141,
+              "content_sha256": "4241c970178057087087872f378c52183ce1789c2861b5ff01febbdf8e00a485",
+              "search_document_sha256": "e2e0523662b19d2da7307ebb7dae54e65b971e247654d00d0e265e4f1f1eb3b6",
+              "snippet_origin": "derived-search-document"
+            },
+            {
+              "path": "Storyentwicklung-und-Fiktion/Skills/plot-und-storystruktur/SKILL.md",
+              "id": "plot-und-storystruktur",
+              "score": 0.891300288802384,
+              "content_sha256": "725d5c65513c7283012a4b98a254ef3e192ce45d4d9fc1e8feed0e16e6d023f5",
+              "search_document_sha256": "42307c3d9f993fe4fb3aa004d07b26b3ecbc5578f8146da7dbdd26140e6eb706",
+              "snippet_origin": "derived-search-document"
+            },
+            {
+              "path": "Storyentwicklung-und-Fiktion/Skills/worldbuilding/SKILL.md",
+              "id": "worldbuilding",
+              "score": 0.8862967530658267,
+              "content_sha256": "b96549dfcb2b9475e992400c8700f52b386bbf54b13ee077ce77a7d57cb3b647",
+              "search_document_sha256": "99efdf33f69ae894ab8f8da95431442915941fd7442babc6bf7d3aed548fd83b",
+              "snippet_origin": "derived-search-document"
+            }
+          ],
+          "Rechtschreibung Grammatik Korrekturlesen": [
+            {
+              "path": "Schreiben/Skills/korrekturlektorat/SKILL.md",
+              "id": "korrekturlektorat",
+              "score": 0.9465491266112562,
+              "content_sha256": "499b931a535d7afc386092b14193108e5c24a1eaa379b76a5b6f9fbf417d5bd8",
+              "search_document_sha256": "8ae46114f62f6d61b8ffee5d2404675a8859207bd084c47c29cad290228dafcb",
+              "snippet_origin": "derived-search-document"
+            }
+          ],
+          "Quelle Aktualität Unabhängigkeit": [
+            {
+              "path": "Recherche/Skills/source-evaluation/SKILL.md",
+              "id": "source-evaluation",
+              "score": 0.92218675641139,
+              "content_sha256": "474246da90126a2f8da18b539235c5da677e69332535c70d7fd1c25ccd854e45",
+              "search_document_sha256": "06405d0cfc3c7f66744433579c20adaff64494d09b674e44c668a12e90ca167a",
+              "snippet_origin": "derived-search-document"
+            }
+          ],
+          "Stil natürliche Formulierungen": [
+            {
+              "path": "Schreiben/Skills/natuerliches-schreiben/SKILL.md",
+              "id": "natuerliches-schreiben",
+              "score": 0.9142829471909608,
+              "content_sha256": "7076c50f822921972ba6d822ec63f77f75cb6d701fa1c2e596801db712290808",
+              "search_document_sha256": "32b6030bb5a5381742e185ce4cc1e0d16789a71194669408c3a6fe461f073500",
+              "snippet_origin": "derived-search-document"
+            }
+          ]
+        },
+        "source_bytes_unchanged": true,
+        "effective_inventory_sha256": "2ea1b1804a020a4cfd5594a59752f9d1beff1d73d23d07113fe8b7e0202e4806"
+      },
+      "candidate": {
+        "build": {
+          "status": "ready",
+          "revision": "28b18b67bbe033c4c95909a8ddeba0c8e309b869",
+          "documents": 165,
+          "mode": "bm25",
+          "fingerprint": "af1f6817a2c08de12cb3b6a37c60264057e418e6ada61e7c6f2ebdc073df2c98",
+          "routing_coverage": {
+            "skills": 155,
+            "indexed_skills": 155
+          }
+        },
+        "queries": {
+          "Datenbank Tabelle dokumentieren": [
+            {
+              "path": "Datenbanken/Skills/database-design/SKILL.md",
+              "id": "database-design",
+              "score": 0.8897367586959417,
+              "content_sha256": "89ae95621cbaf2104169b5efddc1106f4f739c7b702a3d0189e6a580b164dab5",
+              "search_document_sha256": "687316a336d7ee8a4db081957a11634708f37335f1374b1cdd2475a1699dbde9",
+              "snippet_origin": "derived-search-document"
+            },
+            {
+              "path": "Dokumentationserstellung/Skills/reference-docs/SKILL.md",
+              "id": "reference-docs",
+              "score": 0.8776928903671106,
+              "content_sha256": "d4ccc71851e11c5346e9ffe4fa07f43a95e2170b58e4ec8f702b593687cb3ec7",
+              "search_document_sha256": "238f9d47131abf602eeb512a2ac8e8f50e253da637b42d66f09098d85fcefc12",
+              "snippet_origin": "derived-search-document"
+            }
+          ],
+          "Schema Referenzdokumentation": [
+            {
+              "path": "Dokumentationserstellung/Skills/reference-docs/SKILL.md",
+              "id": "reference-docs",
+              "score": 0.8948878913136281,
+              "content_sha256": "d4ccc71851e11c5346e9ffe4fa07f43a95e2170b58e4ec8f702b593687cb3ec7",
+              "search_document_sha256": "238f9d47131abf602eeb512a2ac8e8f50e253da637b42d66f09098d85fcefc12",
+              "snippet_origin": "derived-search-document"
+            }
+          ],
+          "Tabelle dokumentieren": [
+            {
+              "path": "CONTRIBUTING.md",
+              "id": null,
+              "score": 0.827150601879239,
+              "content_sha256": "56767e48dbd26f07dacca3bedb642c79e702449823e06b923eb42a1c0ab80985",
+              "search_document_sha256": "56767e48dbd26f07dacca3bedb642c79e702449823e06b923eb42a1c0ab80985",
+              "snippet_origin": "canonical-source"
+            },
+            {
+              "path": "Dokumentationserstellung/Skills/reference-docs/SKILL.md",
+              "id": "reference-docs",
+              "score": 0.823696824321709,
+              "content_sha256": "d4ccc71851e11c5346e9ffe4fa07f43a95e2170b58e4ec8f702b593687cb3ec7",
+              "search_document_sha256": "238f9d47131abf602eeb512a2ac8e8f50e253da637b42d66f09098d85fcefc12",
+              "snippet_origin": "derived-search-document"
+            },
+            {
+              "path": "Datenbanken/Skills/database-design/SKILL.md",
+              "id": "database-design",
+              "score": 0.8105126108037162,
+              "content_sha256": "89ae95621cbaf2104169b5efddc1106f4f739c7b702a3d0189e6a580b164dab5",
+              "search_document_sha256": "687316a336d7ee8a4db081957a11634708f37335f1374b1cdd2475a1699dbde9",
+              "snippet_origin": "derived-search-document"
+            },
+            {
+              "path": "Data-Engineering/Skills/data-contract-design/SKILL.md",
+              "id": "data-contract-design",
+              "score": 0.7961312312430668,
+              "content_sha256": "11f5cd1dbdc2d740fb7db5ff6c1681d82ac449819c779f272cc31355edd776bc",
+              "search_document_sha256": "ca01b1d03ba7ea143f33e9e76bcadeba96dfd57b879b67424309425b54840319",
+              "snippet_origin": "derived-search-document"
+            },
+            {
+              "path": "Data-Engineering/Skills/data-transformation-design/SKILL.md",
+              "id": "data-transformation-design",
+              "score": 0.7939912466755131,
+              "content_sha256": "9dfc563b78c524cd8c72ec7d5b38a8135944987ab953ca744a1d4f78c81759d9",
+              "search_document_sha256": "e5aee53ab1f5cfe8d015d7b37c7b2a86a768eef20e055c823b4a9a4cb42dca06",
+              "snippet_origin": "derived-search-document"
+            }
+          ],
+          "Schema dokumentieren": [
+            {
+              "path": "Datenbanken/Skills/database-design/SKILL.md",
+              "id": "database-design",
+              "score": 0.8160729595802055,
+              "content_sha256": "89ae95621cbaf2104169b5efddc1106f4f739c7b702a3d0189e6a580b164dab5",
+              "search_document_sha256": "687316a336d7ee8a4db081957a11634708f37335f1374b1cdd2475a1699dbde9",
+              "snippet_origin": "derived-search-document"
+            },
+            {
+              "path": "Dokumentationserstellung/Skills/reference-docs/SKILL.md",
+              "id": "reference-docs",
+              "score": 0.8128104000391613,
+              "content_sha256": "d4ccc71851e11c5346e9ffe4fa07f43a95e2170b58e4ec8f702b593687cb3ec7",
+              "search_document_sha256": "238f9d47131abf602eeb512a2ac8e8f50e253da637b42d66f09098d85fcefc12",
+              "snippet_origin": "derived-search-document"
+            },
+            {
+              "path": "Data-Engineering/Skills/data-contract-design/SKILL.md",
+              "id": "data-contract-design",
+              "score": 0.8008737828344255,
+              "content_sha256": "11f5cd1dbdc2d740fb7db5ff6c1681d82ac449819c779f272cc31355edd776bc",
+              "search_document_sha256": "ca01b1d03ba7ea143f33e9e76bcadeba96dfd57b879b67424309425b54840319",
+              "snippet_origin": "derived-search-document"
+            },
+            {
+              "path": "Testing-und-QA/Skills/integration-testing/SKILL.md",
+              "id": "integration-testing",
+              "score": 0.7779610898867391,
+              "content_sha256": "45f2e236204ddfd5df03ceadb67caeea2002a29c067f1b8621265de9ea7a19e5",
+              "search_document_sha256": "e87ad649bd312d9e061345976f2fe80f518b3503b10687ea8a9aab0281fb596e",
+              "snippet_origin": "derived-search-document"
+            },
+            {
+              "path": "Data-Engineering/Skills/data-ingestion-design/SKILL.md",
+              "id": "data-ingestion-design",
+              "score": 0.7414788321322281,
+              "content_sha256": "3121e0576450ad5b8e4a3759fcc4631208860c694c8b900e99d43e6ac6b0303c",
+              "search_document_sha256": "7268425c4d006517c6e715eac9561de81ae714dbd0efc3c960aceb8ab17bd4fe",
+              "snippet_origin": "derived-search-document"
+            },
+            {
+              "path": "Agentenarbeit/Skills/agent-eval/SKILL.md",
+              "id": "agent-eval",
+              "score": 0.6713346347810236,
+              "content_sha256": "a1783ecd7d774c63373e1b7e2c49657b93067a4d91c7b906cb26ab049d8ba5f0",
+              "search_document_sha256": "449615ea2143f3f3564b4fdae9c4387a24268d882d410ae6bdb1881ced23f928",
+              "snippet_origin": "derived-search-document"
+            }
+          ],
+          "reference docs schema": [
+            {
+              "path": "Dokumentationserstellung/Skills/reference-docs/SKILL.md",
+              "id": "reference-docs",
+              "score": 0.914928672070642,
+              "content_sha256": "d4ccc71851e11c5346e9ffe4fa07f43a95e2170b58e4ec8f702b593687cb3ec7",
+              "search_document_sha256": "238f9d47131abf602eeb512a2ac8e8f50e253da637b42d66f09098d85fcefc12",
+              "snippet_origin": "derived-search-document"
+            }
+          ],
+          "zzroutingabsentf72ea4bd": [],
+          "Rechtschreibung Zeichensetzung": [
+            {
+              "path": "Schreiben/Skills/korrekturlektorat/SKILL.md",
+              "id": "korrekturlektorat",
+              "score": 0.9337831463547328,
+              "content_sha256": "499b931a535d7afc386092b14193108e5c24a1eaa379b76a5b6f9fbf417d5bd8",
+              "search_document_sha256": "8ae46114f62f6d61b8ffee5d2404675a8859207bd084c47c29cad290228dafcb",
+              "snippet_origin": "derived-search-document"
+            }
+          ],
+          "DCF Comparable Companies": [
+            {
+              "path": "Finanzen/Skills/bewertungsanalyse/SKILL.md",
+              "id": "bewertungsanalyse",
+              "score": 0.9563022009706931,
+              "content_sha256": "f13115b7485da959104cb3e377eca916a593f1155e886d05eae546c945cc4a8d",
+              "search_document_sha256": "7d177daf5ff5e626b4c12e17ea424bb484b637fefa6db285811d1d543a374203",
+              "snippet_origin": "derived-search-document"
+            }
+          ],
+          "Figuren Motivation Agency": [
+            {
+              "path": "Storyentwicklung-und-Fiktion/Skills/figurenentwicklung/SKILL.md",
+              "id": "figurenentwicklung",
+              "score": 0.9466176335024089,
+              "content_sha256": "0908e80908c3f5d7313e070e173c7ea9878db71c38371c78e8e55828822f2a16",
+              "search_document_sha256": "c1692a3de14fd5c835d31f06baecb5babe0f2f3dd632c0086894da41b7bf1b53",
+              "snippet_origin": "derived-search-document"
+            }
+          ],
+          "Architekturentscheidungen Alternativen Konsequenzen": [
+            {
+              "path": "Dokumentationserstellung/Skills/adr/SKILL.md",
+              "id": "adr",
+              "score": 0.944214441254536,
+              "content_sha256": "5b4f69eabdeb03b51df9a1f20ecf7340341c940eafa990eef1a7d74957493720",
+              "search_document_sha256": "835c71bf03254a761aac6d5b825d4e6be6db3e04a9eee9ad7f246fd78b015950",
+              "snippet_origin": "derived-search-document"
+            }
+          ],
+          "Tippfehler Dopplungen Korrekturlesen": [
+            {
+              "path": "Schreiben/Skills/korrekturlektorat/SKILL.md",
+              "id": "korrekturlektorat",
+              "score": 0.9341399124554398,
+              "content_sha256": "499b931a535d7afc386092b14193108e5c24a1eaa379b76a5b6f9fbf417d5bd8",
+              "search_document_sha256": "8ae46114f62f6d61b8ffee5d2404675a8859207bd084c47c29cad290228dafcb",
+              "snippet_origin": "derived-search-document"
+            }
+          ],
+          "Fair-Value Sensitivitäten": [
+            {
+              "path": "Finanzen/Skills/bewertungsanalyse/SKILL.md",
+              "id": "bewertungsanalyse",
+              "score": 0.9179012002008708,
+              "content_sha256": "f13115b7485da959104cb3e377eca916a593f1155e886d05eae546c945cc4a8d",
+              "search_document_sha256": "7d177daf5ff5e626b4c12e17ea424bb484b637fefa6db285811d1d543a374203",
+              "snippet_origin": "derived-search-document"
+            }
+          ],
+          "Character Arcs Beziehungen": [
+            {
+              "path": "Storyentwicklung-und-Fiktion/Skills/figurenentwicklung/SKILL.md",
+              "id": "figurenentwicklung",
+              "score": 0.9114053576858476,
+              "content_sha256": "0908e80908c3f5d7313e070e173c7ea9878db71c38371c78e8e55828822f2a16",
+              "search_document_sha256": "c1692a3de14fd5c835d31f06baecb5babe0f2f3dd632c0086894da41b7bf1b53",
+              "snippet_origin": "derived-search-document"
+            }
+          ],
+          "Architecture Decision Record Alternativen": [
+            {
+              "path": "Dokumentationserstellung/Skills/adr/SKILL.md",
+              "id": "adr",
+              "score": 0.9499178076694305,
+              "content_sha256": "5b4f69eabdeb03b51df9a1f20ecf7340341c940eafa990eef1a7d74957493720",
+              "search_document_sha256": "835c71bf03254a761aac6d5b825d4e6be6db3e04a9eee9ad7f246fd78b015950",
+              "snippet_origin": "derived-search-document"
+            }
+          ],
+          "Akzeptanzkriterien beobachtbar": [
+            {
+              "path": "Requirements-und-Spezifikations-Engineering/Skills/acceptance-criteria-design/SKILL.md",
+              "id": "acceptance-criteria-design",
+              "score": 0.8846669011666337,
+              "content_sha256": "9eebe9c721f76155a496ef7ba6af2c778a28f006b6dcc6a02581682a994bdd62",
+              "search_document_sha256": "a98186c4b67d65c0fe4ad791c41e0d2da3677af6044b3308ba362f00b9e637fa",
+              "snippet_origin": "derived-search-document"
+            },
+            {
+              "path": "Agentenarbeit/Skills/delegation-contract/SKILL.md",
+              "id": "delegation-contract",
+              "score": 0.8639414202762611,
+              "content_sha256": "8db59b9327cc6d378316629236c7c3f94940bdf068144a777b743ad91543ed41",
+              "search_document_sha256": "f12b7a88f47369c1db3a1a186999bc8ec78ceb3612c17c699be7579bdc847df1",
+              "snippet_origin": "derived-search-document"
+            }
+          ],
+          "Testfälle Grenzwerte": [
+            {
+              "path": "Testing-und-QA/Skills/test-design/SKILL.md",
+              "id": "test-design",
+              "score": 0.9289405103926872,
+              "content_sha256": "2f04848bb93221f51b609ef04fe8c824a003bff176bfa947b9d8ee3bb68639ab",
+              "search_document_sha256": "362a98ed5cbe23eaf2e7934ced78c1cfd0dd39340db7636a89f4d5857604a3a1",
+              "snippet_origin": "derived-search-document"
+            },
+            {
+              "path": "Testing-und-QA/README.md",
+              "id": null,
+              "score": 0.8881547927164193,
+              "content_sha256": "4813b01bffd2cb15353f48f020cc89e7d8e17f0b90f53b7d56f290389be80f5a",
+              "search_document_sha256": "4813b01bffd2cb15353f48f020cc89e7d8e17f0b90f53b7d56f290389be80f5a",
+              "snippet_origin": "canonical-source"
+            }
+          ],
+          "Behauptungen Evidenz prüfen": [
+            {
+              "path": "Recherche/Skills/claim-verification/SKILL.md",
+              "id": "claim-verification",
+              "score": 0.8980319813413543,
+              "content_sha256": "bf491036efad3326d0a062212a6adcf933274feab9cea92288928be48c14e82b",
+              "search_document_sha256": "4df86f889856191052074d31702bde9454c3422dc85756edeec5cd908709d277",
+              "snippet_origin": "derived-search-document"
+            }
+          ],
+          "Quellen Autorität Aktualität": [
+            {
+              "path": "Recherche/Skills/source-evaluation/SKILL.md",
+              "id": "source-evaluation",
+              "score": 0.9088246465067505,
+              "content_sha256": "474246da90126a2f8da18b539235c5da677e69332535c70d7fd1c25ccd854e45",
+              "search_document_sha256": "06405d0cfc3c7f66744433579c20adaff64494d09b674e44c668a12e90ca167a",
+              "snippet_origin": "derived-search-document"
+            },
+            {
+              "path": "Requirements-und-Spezifikations-Engineering/Skills/requirements-baseline/SKILL.md",
+              "id": "requirements-baseline",
+              "score": 0.8777105969411502,
+              "content_sha256": "9d2e5fceb9ff4687823ef513186232c41d43062e0bde7c50e34413221438930b",
+              "search_document_sha256": "ef720121d540b1840d71c0e8f1e092fa226ed7a5c3c5d505a9f52d28bd3c42f1",
+              "snippet_origin": "derived-search-document"
+            },
+            {
+              "path": "Agentenarbeit/Skills/context-audit/SKILL.md",
+              "id": "context-audit",
+              "score": 0.8718693831300772,
+              "content_sha256": "00844737a457bb3e6b114b0739e2490210afb6d1f2aff2fa5f9cc956816bb9bc",
+              "search_document_sha256": "0e7aff36bb23209b26ad62f85f68f8a4e6c87942fd41d1ec0ff363ca41d751d0",
+              "snippet_origin": "derived-search-document"
+            },
+            {
+              "path": "Software-Architecture-und-System-Design/Skills/architecture-baseline/SKILL.md",
+              "id": "architecture-baseline",
+              "score": 0.8700602269320864,
+              "content_sha256": "903c6d862d082481165772434eefc4560c378b5266ff41b22bb9e57990487fd3",
+              "search_document_sha256": "7248029c08aaad36d514b9cd68e921d4c11622047d898a2a961713a035f23c1a",
+              "snippet_origin": "derived-search-document"
+            }
+          ],
+          "Provenienz Metadaten Geräte": [
+            {
+              "path": "Sicherheit/Skills/inhaltsprovenienz-review/SKILL.md",
+              "id": "inhaltsprovenienz-review",
+              "score": 0.9009835132262619,
+              "content_sha256": "57f7d276cba75a38aa068ec318d0e9769c4d04c2353f96a6246e3a9065eeeee3",
+              "search_document_sha256": "591aac84f251138bac7ce90150c89a9e08f66c6106bf9be62e577d92f91d41c6",
+              "snippet_origin": "derived-search-document"
+            },
+            {
+              "path": "Sicherheit/Skills/metadaten-hygiene/SKILL.md",
+              "id": "metadaten-hygiene",
+              "score": 0.8750973803017694,
+              "content_sha256": "a4177ac40e6ec39f621f01321b7f04e672428dd447893f5f8e8751afdcc6ebe4",
+              "search_document_sha256": "99baa8a547f833a5fbd800c12fcdc26d8a2ae8cfc143baf2598e710c2f4dcd5f",
+              "snippet_origin": "derived-search-document"
+            },
+            {
+              "path": "Dokumentation/Skill-Handbuch.md",
+              "id": null,
+              "score": 0.6982553630365578,
+              "content_sha256": "354131c2f80a4f8278757fd0a7cf6faa5412ef87fb874558d7a32c916200a12d",
+              "search_document_sha256": "354131c2f80a4f8278757fd0a7cf6faa5412ef87fb874558d7a32c916200a12d",
+              "snippet_origin": "canonical-source"
+            }
+          ],
+          "GPS Sharing-Kopie Metadaten": [
+            {
+              "path": "Sicherheit/Skills/metadaten-hygiene/SKILL.md",
+              "id": "metadaten-hygiene",
+              "score": 0.882972918968017,
+              "content_sha256": "a4177ac40e6ec39f621f01321b7f04e672428dd447893f5f8e8751afdcc6ebe4",
+              "search_document_sha256": "99baa8a547f833a5fbd800c12fcdc26d8a2ae8cfc143baf2598e710c2f4dcd5f",
+              "snippet_origin": "derived-search-document"
+            },
+            {
+              "path": "Dokumentation/Skill-Handbuch.md",
+              "id": null,
+              "score": 0.7542148978399299,
+              "content_sha256": "354131c2f80a4f8278757fd0a7cf6faa5412ef87fb874558d7a32c916200a12d",
+              "search_document_sha256": "354131c2f80a4f8278757fd0a7cf6faa5412ef87fb874558d7a32c916200a12d",
+              "snippet_origin": "canonical-source"
+            }
+          ],
+          "Story-Bible Kanon offene Fragen": [
+            {
+              "path": "Storyentwicklung-und-Fiktion/Skills/story-bible/SKILL.md",
+              "id": "story-bible",
+              "score": 0.9241090787419758,
+              "content_sha256": "4241c970178057087087872f378c52183ce1789c2861b5ff01febbdf8e00a485",
+              "search_document_sha256": "e2e0523662b19d2da7307ebb7dae54e65b971e247654d00d0e265e4f1f1eb3b6",
+              "snippet_origin": "derived-search-document"
+            },
+            {
+              "path": "Storyentwicklung-und-Fiktion/Skills/plot-und-storystruktur/SKILL.md",
+              "id": "plot-und-storystruktur",
+              "score": 0.8913039235101743,
+              "content_sha256": "725d5c65513c7283012a4b98a254ef3e192ce45d4d9fc1e8feed0e16e6d023f5",
+              "search_document_sha256": "42307c3d9f993fe4fb3aa004d07b26b3ecbc5578f8146da7dbdd26140e6eb706",
+              "snippet_origin": "derived-search-document"
+            },
+            {
+              "path": "Storyentwicklung-und-Fiktion/Skills/worldbuilding/SKILL.md",
+              "id": "worldbuilding",
+              "score": 0.8863007738919769,
+              "content_sha256": "b96549dfcb2b9475e992400c8700f52b386bbf54b13ee077ce77a7d57cb3b647",
+              "search_document_sha256": "99efdf33f69ae894ab8f8da95431442915941fd7442babc6bf7d3aed548fd83b",
+              "snippet_origin": "derived-search-document"
+            }
+          ],
+          "Rechtschreibung Grammatik Korrekturlesen": [
+            {
+              "path": "Schreiben/Skills/korrekturlektorat/SKILL.md",
+              "id": "korrekturlektorat",
+              "score": 0.9465508213558478,
+              "content_sha256": "499b931a535d7afc386092b14193108e5c24a1eaa379b76a5b6f9fbf417d5bd8",
+              "search_document_sha256": "8ae46114f62f6d61b8ffee5d2404675a8859207bd084c47c29cad290228dafcb",
+              "snippet_origin": "derived-search-document"
+            }
+          ],
+          "Quelle Aktualität Unabhängigkeit": [
+            {
+              "path": "Recherche/Skills/source-evaluation/SKILL.md",
+              "id": "source-evaluation",
+              "score": 0.9221876608707099,
+              "content_sha256": "474246da90126a2f8da18b539235c5da677e69332535c70d7fd1c25ccd854e45",
+              "search_document_sha256": "06405d0cfc3c7f66744433579c20adaff64494d09b674e44c668a12e90ca167a",
+              "snippet_origin": "derived-search-document"
+            }
+          ],
+          "Stil natürliche Formulierungen": [
+            {
+              "path": "Schreiben/Skills/natuerliches-schreiben/SKILL.md",
+              "id": "natuerliches-schreiben",
+              "score": 0.9142860376297864,
+              "content_sha256": "7076c50f822921972ba6d822ec63f77f75cb6d701fa1c2e596801db712290808",
+              "search_document_sha256": "32b6030bb5a5381742e185ce4cc1e0d16789a71194669408c3a6fe461f073500",
+              "snippet_origin": "derived-search-document"
+            }
+          ]
+        },
+        "source_bytes_unchanged": true,
+        "effective_inventory_sha256": "bc6ebbd85f9132d375109450eb6430c7dc3b8f5e0bbd1bf14fd4cd1bab8276f2"
+      }
+    },
+    "p1": [
+      {
+        "id": "legacy-correction",
+        "baseline": true,
+        "candidate": true
+      },
+      {
+        "id": "legacy-valuation",
+        "baseline": true,
+        "candidate": true
+      },
+      {
+        "id": "legacy-character",
+        "baseline": true,
+        "candidate": true
+      },
+      {
+        "id": "legacy-adr",
+        "baseline": true,
+        "candidate": true
+      },
+      {
+        "id": "wording-correction",
+        "baseline": true,
+        "candidate": true
+      },
+      {
+        "id": "wording-valuation",
+        "baseline": true,
+        "candidate": true
+      },
+      {
+        "id": "wording-character",
+        "baseline": true,
+        "candidate": true
+      },
+      {
+        "id": "wording-adr",
+        "baseline": true,
+        "candidate": true
+      },
+      {
+        "id": "jobs-acceptance-tests",
+        "baseline": true,
+        "candidate": true
+      },
+      {
+        "id": "jobs-claim-source",
+        "baseline": true,
+        "candidate": true
+      },
+      {
+        "id": "jobs-provenance-hygiene",
+        "baseline": true,
+        "candidate": true
+      },
+      {
+        "id": "jobs-canon-character",
+        "baseline": true,
+        "candidate": true
+      },
+      {
+        "id": "negative-absent",
+        "baseline": true,
+        "candidate": true
+      },
+      {
+        "id": "near-correction-only",
+        "baseline": true,
+        "candidate": true
+      },
+      {
+        "id": "near-source-only",
+        "baseline": true,
+        "candidate": true
+      },
+      {
+        "id": "near-style-alternative",
+        "baseline": true,
+        "candidate": true
+      }
+    ],
+    "target": {
+      "Datenbank Tabelle dokumentieren": true,
+      "Schema Referenzdokumentation": true,
+      "Tabelle dokumentieren": true,
+      "Schema dokumentieren": true,
+      "reference docs schema": true
+    },
+    "negative_empty": true,
+    "no_p1_regression": true,
+    "pass": true,
+    "limits": "development cases; no general recall, natural agent selection, or efficiency claim"
+  },
+  "fresh_result_sha256": "cd96dd05fb7ec270692f49084961b34da6b4bf4e740bc5925b3a72d6f7696dae",
+  "code_bindings": {
+    "tools/search_rules.py": {
+      "executed_checkout_sha256": "3e85143290eacdcbe317ad42c75e461917d863e35a0ec761671328f1c59b8308",
+      "git_blob_sha256": "3e85143290eacdcbe317ad42c75e461917d863e35a0ec761671328f1c59b8308",
+      "matches_execution_git_after_lf_normalization": true
+    },
+    "tools/search_rules_qmd.mjs": {
+      "executed_checkout_sha256": "d9c4b3f9222ad7928dfcb1860fd0e975024512ab4e4dedf915820ed283737155",
+      "git_blob_sha256": "d9c4b3f9222ad7928dfcb1860fd0e975024512ab4e4dedf915820ed283737155",
+      "matches_execution_git_after_lf_normalization": true
+    },
+    "tools/rule_relations.py": {
+      "executed_checkout_sha256": "55df4b901b68dbc008a812894e45030dc6342c0f22c68b332fb95e97b70b4577",
+      "git_blob_sha256": "55df4b901b68dbc008a812894e45030dc6342c0f22c68b332fb95e97b70b4577",
+      "matches_execution_git_after_lf_normalization": true
+    },
+    "tools/check_public_entrypoints.py": {
+      "executed_checkout_sha256": "65607d90c95273fcdf9088ec29005b2f6b58a90672b9449a234be1d7d43c1976",
+      "git_blob_sha256": "d945c1d6a8e28e3c2bb4cf93c2c2a8255d7ee21ce35afb2d8093b71e00ddc110",
+      "matches_execution_git_after_lf_normalization": true
+    },
+    "tools/local_search/pnpm-lock.yaml": {
+      "executed_checkout_sha256": "30381a3497bf589cd694665a806736e83b724be7670952f0afc2e207fc20b528",
+      "git_blob_sha256": "30381a3497bf589cd694665a806736e83b724be7670952f0afc2e207fc20b528",
+      "matches_execution_git_after_lf_normalization": true
+    },
+    "Evals/Onboarding/run_rule_routing_comparison.py": {
+      "executed_checkout_sha256": "5da9d1974726ba0a0767e80074e2bd8867456c99854317c5f9b7e9af210997e0",
+      "git_blob_sha256": "5da9d1974726ba0a0767e80074e2bd8867456c99854317c5f9b7e9af210997e0",
+      "matches_execution_git_after_lf_normalization": true
+    },
+    "Evals/Onboarding/run_reference_docs_routing.py": {
+      "executed_checkout_sha256": "24b14dde720eb61d5150b5ed9eee63f824a256e02daae85f9ff0a01bfff4a78f",
+      "git_blob_sha256": "9e067b41168ed22d84d1631e4afcb33c41433026223b7c530a733910b89cf735",
+      "matches_execution_git_after_lf_normalization": true
+    },
+    "Evals/Onboarding/Routing-Praxischeck-2026-10-31.md": {
+      "executed_checkout_sha256": "6ad50bd9b7f15bc51b26daae5271bfbd3549c5f000c56037ee1417118f136648",
+      "git_blob_sha256": "1ecf71196c99982ad8cb06118670ea59019e5737a11788eed2b71e8d1758d626",
+      "matches_execution_git_after_lf_normalization": true
+    }
+  },
+  "ranks": [
+    {
+      "query": "Datenbank Tabelle dokumentieren",
+      "baseline_rank": null,
+      "candidate_rank": 2
+    },
+    {
+      "query": "Schema Referenzdokumentation",
+      "baseline_rank": null,
+      "candidate_rank": 1
+    },
+    {
+      "query": "Tabelle dokumentieren",
+      "baseline_rank": null,
+      "candidate_rank": 2
+    },
+    {
+      "query": "Schema dokumentieren",
+      "baseline_rank": 2,
+      "candidate_rank": 2
+    },
+    {
+      "query": "reference docs schema",
+      "baseline_rank": 1,
+      "candidate_rank": 1
+    }
+  ],
+  "source_checks": {
+    "packet_files": 220,
+    "unchanged_sources_except_catalog": 219,
+    "original_skills_unchanged": 155,
+    "only_changed_indexed_document": "Dokumentationserstellung/Skills/reference-docs/SKILL.md",
+    "all_returned_canonical_and_derived_hashes_verified": true,
+    "p1_regraded_against_frozen_cases": true,
+    "case_evidence_differs_from_later_baseline": [
+      "AGENTS.md"
+    ]
+  },
+  "historical_report": {
+    "raw": {
+      "protocol": {
+        "revision": "03cdee52bdd38955e81b48d6f46f585db8e18c17",
+        "before_catalog_sha256": "3f662e1feb64b9d9f31747030aca315ffa9bf2e2e87379cfc1286a17bae52bd8",
+        "candidate_catalog_sha256": "3f46a89f12651c29eb277de6ea255371cae65b6483ef0704c56dd1d41ab51cea",
+        "cases_sha256": "b29da5a3e7b817dbb7d37485e7628bd38a58f89a0377a1e13414343699b123df",
+        "queries": [
+          "Datenbank Tabelle dokumentieren",
+          "Schema Referenzdokumentation",
+          "Tabelle dokumentieren",
+          "Schema dokumentieren",
+          "reference docs schema",
+          "zzroutingabsentf72ea4bd",
+          "Rechtschreibung Zeichensetzung",
+          "DCF Comparable Companies",
+          "Figuren Motivation Agency",
+          "Architekturentscheidungen Alternativen Konsequenzen",
+          "Tippfehler Dopplungen Korrekturlesen",
+          "Fair-Value Sensitivitäten",
+          "Character Arcs Beziehungen",
+          "Architecture Decision Record Alternativen",
+          "Akzeptanzkriterien beobachtbar",
+          "Testfälle Grenzwerte",
+          "Behauptungen Evidenz prüfen",
+          "Quellen Autorität Aktualität",
+          "Provenienz Metadaten Geräte",
+          "GPS Sharing-Kopie Metadaten",
+          "Story-Bible Kanon offene Fragen",
+          "Rechtschreibung Grammatik Korrekturlesen",
+          "Quelle Aktualität Unabhängigkeit",
+          "Stil natürliche Formulierungen"
+        ],
+        "target": "Dokumentationserstellung/Skills/reference-docs/SKILL.md",
+        "model_calls": 0,
+        "held_out": false,
+        "contract": "target in top ten for five target queries; negative empty; no loss of baseline P1 required/one-of outcomes"
+      },
+      "results": {
+        "baseline": {
+          "build": {
+            "status": "ready",
+            "revision": "7d4bf2c603b66bf601badf3bf31573d18b489981",
+            "documents": 165,
+            "mode": "bm25",
+            "fingerprint": "57847995dfc35a70c844d8ddc9adb607db2be1aceaa1dbfc379591ba89d0b74e",
+            "routing_coverage": {
+              "skills": 155,
+              "indexed_skills": 155
+            }
+          },
+          "queries": {
+            "Datenbank Tabelle dokumentieren": [
+              {
+                "path": "Datenbanken/Skills/database-design/SKILL.md",
+                "id": "database-design"
+              }
+            ],
+            "Schema Referenzdokumentation": [],
+            "Tabelle dokumentieren": [
+              {
+                "path": "CONTRIBUTING.md",
+                "id": null
+              },
+              {
+                "path": "Datenbanken/Skills/database-design/SKILL.md",
+                "id": "database-design"
+              },
+              {
+                "path": "Data-Engineering/Skills/data-contract-design/SKILL.md",
+                "id": "data-contract-design"
+              },
+              {
+                "path": "Data-Engineering/Skills/data-transformation-design/SKILL.md",
+                "id": "data-transformation-design"
+              }
+            ],
+            "Schema dokumentieren": [
+              {
+                "path": "Datenbanken/Skills/database-design/SKILL.md",
+                "id": "database-design"
+              },
+              {
+                "path": "Dokumentationserstellung/Skills/reference-docs/SKILL.md",
+                "id": "reference-docs"
+              },
+              {
+                "path": "Data-Engineering/Skills/data-contract-design/SKILL.md",
+                "id": "data-contract-design"
+              },
+              {
+                "path": "Testing-und-QA/Skills/integration-testing/SKILL.md",
+                "id": "integration-testing"
+              },
+              {
+                "path": "Data-Engineering/Skills/data-ingestion-design/SKILL.md",
+                "id": "data-ingestion-design"
+              },
+              {
+                "path": "Agentenarbeit/Skills/agent-eval/SKILL.md",
+                "id": "agent-eval"
+              }
+            ],
+            "reference docs schema": [
+              {
+                "path": "Dokumentationserstellung/Skills/reference-docs/SKILL.md",
+                "id": "reference-docs"
+              }
+            ],
+            "zzroutingabsentf72ea4bd": [],
+            "Rechtschreibung Zeichensetzung": [
+              {
+                "path": "Schreiben/Skills/korrekturlektorat/SKILL.md",
+                "id": "korrekturlektorat"
+              }
+            ],
+            "DCF Comparable Companies": [
+              {
+                "path": "Finanzen/Skills/bewertungsanalyse/SKILL.md",
+                "id": "bewertungsanalyse"
+              }
+            ],
+            "Figuren Motivation Agency": [
+              {
+                "path": "Storyentwicklung-und-Fiktion/Skills/figurenentwicklung/SKILL.md",
+                "id": "figurenentwicklung"
+              }
+            ],
+            "Architekturentscheidungen Alternativen Konsequenzen": [
+              {
+                "path": "Dokumentationserstellung/Skills/adr/SKILL.md",
+                "id": "adr"
+              }
+            ],
+            "Tippfehler Dopplungen Korrekturlesen": [
+              {
+                "path": "Schreiben/Skills/korrekturlektorat/SKILL.md",
+                "id": "korrekturlektorat"
+              }
+            ],
+            "Fair-Value Sensitivitäten": [
+              {
+                "path": "Finanzen/Skills/bewertungsanalyse/SKILL.md",
+                "id": "bewertungsanalyse"
+              }
+            ],
+            "Character Arcs Beziehungen": [
+              {
+                "path": "Storyentwicklung-und-Fiktion/Skills/figurenentwicklung/SKILL.md",
+                "id": "figurenentwicklung"
+              }
+            ],
+            "Architecture Decision Record Alternativen": [
+              {
+                "path": "Dokumentationserstellung/Skills/adr/SKILL.md",
+                "id": "adr"
+              }
+            ],
+            "Akzeptanzkriterien beobachtbar": [
+              {
+                "path": "Requirements-und-Spezifikations-Engineering/Skills/acceptance-criteria-design/SKILL.md",
+                "id": "acceptance-criteria-design"
+              },
+              {
+                "path": "Agentenarbeit/Skills/delegation-contract/SKILL.md",
+                "id": "delegation-contract"
+              }
+            ],
+            "Testfälle Grenzwerte": [
+              {
+                "path": "Testing-und-QA/Skills/test-design/SKILL.md",
+                "id": "test-design"
+              },
+              {
+                "path": "Testing-und-QA/README.md",
+                "id": null
+              }
+            ],
+            "Behauptungen Evidenz prüfen": [
+              {
+                "path": "Recherche/Skills/claim-verification/SKILL.md",
+                "id": "claim-verification"
+              }
+            ],
+            "Quellen Autorität Aktualität": [
+              {
+                "path": "Recherche/Skills/source-evaluation/SKILL.md",
+                "id": "source-evaluation"
+              },
+              {
+                "path": "Requirements-und-Spezifikations-Engineering/Skills/requirements-baseline/SKILL.md",
+                "id": "requirements-baseline"
+              },
+              {
+                "path": "Agentenarbeit/Skills/context-audit/SKILL.md",
+                "id": "context-audit"
+              },
+              {
+                "path": "Software-Architecture-und-System-Design/Skills/architecture-baseline/SKILL.md",
+                "id": "architecture-baseline"
+              }
+            ],
+            "Provenienz Metadaten Geräte": [
+              {
+                "path": "Sicherheit/Skills/inhaltsprovenienz-review/SKILL.md",
+                "id": "inhaltsprovenienz-review"
+              },
+              {
+                "path": "Sicherheit/Skills/metadaten-hygiene/SKILL.md",
+                "id": "metadaten-hygiene"
+              },
+              {
+                "path": "Dokumentation/Skill-Handbuch.md",
+                "id": null
+              }
+            ],
+            "GPS Sharing-Kopie Metadaten": [
+              {
+                "path": "Sicherheit/Skills/metadaten-hygiene/SKILL.md",
+                "id": "metadaten-hygiene"
+              },
+              {
+                "path": "Dokumentation/Skill-Handbuch.md",
+                "id": null
+              }
+            ],
+            "Story-Bible Kanon offene Fragen": [
+              {
+                "path": "Storyentwicklung-und-Fiktion/Skills/story-bible/SKILL.md",
+                "id": "story-bible"
+              },
+              {
+                "path": "Storyentwicklung-und-Fiktion/Skills/plot-und-storystruktur/SKILL.md",
+                "id": "plot-und-storystruktur"
+              },
+              {
+                "path": "Storyentwicklung-und-Fiktion/Skills/worldbuilding/SKILL.md",
+                "id": "worldbuilding"
+              }
+            ],
+            "Rechtschreibung Grammatik Korrekturlesen": [
+              {
+                "path": "Schreiben/Skills/korrekturlektorat/SKILL.md",
+                "id": "korrekturlektorat"
+              }
+            ],
+            "Quelle Aktualität Unabhängigkeit": [
+              {
+                "path": "Recherche/Skills/source-evaluation/SKILL.md",
+                "id": "source-evaluation"
+              }
+            ],
+            "Stil natürliche Formulierungen": [
+              {
+                "path": "Schreiben/Skills/natuerliches-schreiben/SKILL.md",
+                "id": "natuerliches-schreiben"
+              }
+            ]
+          }
+        },
+        "candidate": {
+          "build": {
+            "status": "ready",
+            "revision": "28b18b67bbe033c4c95909a8ddeba0c8e309b869",
+            "documents": 165,
+            "mode": "bm25",
+            "fingerprint": "af1f6817a2c08de12cb3b6a37c60264057e418e6ada61e7c6f2ebdc073df2c98",
+            "routing_coverage": {
+              "skills": 155,
+              "indexed_skills": 155
+            }
+          },
+          "queries": {
+            "Datenbank Tabelle dokumentieren": [
+              {
+                "path": "Datenbanken/Skills/database-design/SKILL.md",
+                "id": "database-design"
+              },
+              {
+                "path": "Dokumentationserstellung/Skills/reference-docs/SKILL.md",
+                "id": "reference-docs"
+              }
+            ],
+            "Schema Referenzdokumentation": [
+              {
+                "path": "Dokumentationserstellung/Skills/reference-docs/SKILL.md",
+                "id": "reference-docs"
+              }
+            ],
+            "Tabelle dokumentieren": [
+              {
+                "path": "CONTRIBUTING.md",
+                "id": null
+              },
+              {
+                "path": "Dokumentationserstellung/Skills/reference-docs/SKILL.md",
+                "id": "reference-docs"
+              },
+              {
+                "path": "Datenbanken/Skills/database-design/SKILL.md",
+                "id": "database-design"
+              },
+              {
+                "path": "Data-Engineering/Skills/data-contract-design/SKILL.md",
+                "id": "data-contract-design"
+              },
+              {
+                "path": "Data-Engineering/Skills/data-transformation-design/SKILL.md",
+                "id": "data-transformation-design"
+              }
+            ],
+            "Schema dokumentieren": [
+              {
+                "path": "Datenbanken/Skills/database-design/SKILL.md",
+                "id": "database-design"
+              },
+              {
+                "path": "Dokumentationserstellung/Skills/reference-docs/SKILL.md",
+                "id": "reference-docs"
+              },
+              {
+                "path": "Data-Engineering/Skills/data-contract-design/SKILL.md",
+                "id": "data-contract-design"
+              },
+              {
+                "path": "Testing-und-QA/Skills/integration-testing/SKILL.md",
+                "id": "integration-testing"
+              },
+              {
+                "path": "Data-Engineering/Skills/data-ingestion-design/SKILL.md",
+                "id": "data-ingestion-design"
+              },
+              {
+                "path": "Agentenarbeit/Skills/agent-eval/SKILL.md",
+                "id": "agent-eval"
+              }
+            ],
+            "reference docs schema": [
+              {
+                "path": "Dokumentationserstellung/Skills/reference-docs/SKILL.md",
+                "id": "reference-docs"
+              }
+            ],
+            "zzroutingabsentf72ea4bd": [],
+            "Rechtschreibung Zeichensetzung": [
+              {
+                "path": "Schreiben/Skills/korrekturlektorat/SKILL.md",
+                "id": "korrekturlektorat"
+              }
+            ],
+            "DCF Comparable Companies": [
+              {
+                "path": "Finanzen/Skills/bewertungsanalyse/SKILL.md",
+                "id": "bewertungsanalyse"
+              }
+            ],
+            "Figuren Motivation Agency": [
+              {
+                "path": "Storyentwicklung-und-Fiktion/Skills/figurenentwicklung/SKILL.md",
+                "id": "figurenentwicklung"
+              }
+            ],
+            "Architekturentscheidungen Alternativen Konsequenzen": [
+              {
+                "path": "Dokumentationserstellung/Skills/adr/SKILL.md",
+                "id": "adr"
+              }
+            ],
+            "Tippfehler Dopplungen Korrekturlesen": [
+              {
+                "path": "Schreiben/Skills/korrekturlektorat/SKILL.md",
+                "id": "korrekturlektorat"
+              }
+            ],
+            "Fair-Value Sensitivitäten": [
+              {
+                "path": "Finanzen/Skills/bewertungsanalyse/SKILL.md",
+                "id": "bewertungsanalyse"
+              }
+            ],
+            "Character Arcs Beziehungen": [
+              {
+                "path": "Storyentwicklung-und-Fiktion/Skills/figurenentwicklung/SKILL.md",
+                "id": "figurenentwicklung"
+              }
+            ],
+            "Architecture Decision Record Alternativen": [
+              {
+                "path": "Dokumentationserstellung/Skills/adr/SKILL.md",
+                "id": "adr"
+              }
+            ],
+            "Akzeptanzkriterien beobachtbar": [
+              {
+                "path": "Requirements-und-Spezifikations-Engineering/Skills/acceptance-criteria-design/SKILL.md",
+                "id": "acceptance-criteria-design"
+              },
+              {
+                "path": "Agentenarbeit/Skills/delegation-contract/SKILL.md",
+                "id": "delegation-contract"
+              }
+            ],
+            "Testfälle Grenzwerte": [
+              {
+                "path": "Testing-und-QA/Skills/test-design/SKILL.md",
+                "id": "test-design"
+              },
+              {
+                "path": "Testing-und-QA/README.md",
+                "id": null
+              }
+            ],
+            "Behauptungen Evidenz prüfen": [
+              {
+                "path": "Recherche/Skills/claim-verification/SKILL.md",
+                "id": "claim-verification"
+              }
+            ],
+            "Quellen Autorität Aktualität": [
+              {
+                "path": "Recherche/Skills/source-evaluation/SKILL.md",
+                "id": "source-evaluation"
+              },
+              {
+                "path": "Requirements-und-Spezifikations-Engineering/Skills/requirements-baseline/SKILL.md",
+                "id": "requirements-baseline"
+              },
+              {
+                "path": "Agentenarbeit/Skills/context-audit/SKILL.md",
+                "id": "context-audit"
+              },
+              {
+                "path": "Software-Architecture-und-System-Design/Skills/architecture-baseline/SKILL.md",
+                "id": "architecture-baseline"
+              }
+            ],
+            "Provenienz Metadaten Geräte": [
+              {
+                "path": "Sicherheit/Skills/inhaltsprovenienz-review/SKILL.md",
+                "id": "inhaltsprovenienz-review"
+              },
+              {
+                "path": "Sicherheit/Skills/metadaten-hygiene/SKILL.md",
+                "id": "metadaten-hygiene"
+              },
+              {
+                "path": "Dokumentation/Skill-Handbuch.md",
+                "id": null
+              }
+            ],
+            "GPS Sharing-Kopie Metadaten": [
+              {
+                "path": "Sicherheit/Skills/metadaten-hygiene/SKILL.md",
+                "id": "metadaten-hygiene"
+              },
+              {
+                "path": "Dokumentation/Skill-Handbuch.md",
+                "id": null
+              }
+            ],
+            "Story-Bible Kanon offene Fragen": [
+              {
+                "path": "Storyentwicklung-und-Fiktion/Skills/story-bible/SKILL.md",
+                "id": "story-bible"
+              },
+              {
+                "path": "Storyentwicklung-und-Fiktion/Skills/plot-und-storystruktur/SKILL.md",
+                "id": "plot-und-storystruktur"
+              },
+              {
+                "path": "Storyentwicklung-und-Fiktion/Skills/worldbuilding/SKILL.md",
+                "id": "worldbuilding"
+              }
+            ],
+            "Rechtschreibung Grammatik Korrekturlesen": [
+              {
+                "path": "Schreiben/Skills/korrekturlektorat/SKILL.md",
+                "id": "korrekturlektorat"
+              }
+            ],
+            "Quelle Aktualität Unabhängigkeit": [
+              {
+                "path": "Recherche/Skills/source-evaluation/SKILL.md",
+                "id": "source-evaluation"
+              }
+            ],
+            "Stil natürliche Formulierungen": [
+              {
+                "path": "Schreiben/Skills/natuerliches-schreiben/SKILL.md",
+                "id": "natuerliches-schreiben"
+              }
+            ]
+          }
+        }
+      },
+      "p1": [
+        {
+          "id": "legacy-correction",
+          "baseline": true,
+          "candidate": true
+        },
+        {
+          "id": "legacy-valuation",
+          "baseline": true,
+          "candidate": true
+        },
+        {
+          "id": "legacy-character",
+          "baseline": true,
+          "candidate": true
+        },
+        {
+          "id": "legacy-adr",
+          "baseline": true,
+          "candidate": true
+        },
+        {
+          "id": "wording-correction",
+          "baseline": true,
+          "candidate": true
+        },
+        {
+          "id": "wording-valuation",
+          "baseline": true,
+          "candidate": true
+        },
+        {
+          "id": "wording-character",
+          "baseline": true,
+          "candidate": true
+        },
+        {
+          "id": "wording-adr",
+          "baseline": true,
+          "candidate": true
+        },
+        {
+          "id": "jobs-acceptance-tests",
+          "baseline": true,
+          "candidate": true
+        },
+        {
+          "id": "jobs-claim-source",
+          "baseline": true,
+          "candidate": true
+        },
+        {
+          "id": "jobs-provenance-hygiene",
+          "baseline": true,
+          "candidate": true
+        },
+        {
+          "id": "jobs-canon-character",
+          "baseline": true,
+          "candidate": true
+        },
+        {
+          "id": "negative-absent",
+          "baseline": true,
+          "candidate": true
+        },
+        {
+          "id": "near-correction-only",
+          "baseline": true,
+          "candidate": true
+        },
+        {
+          "id": "near-source-only",
+          "baseline": true,
+          "candidate": true
+        },
+        {
+          "id": "near-style-alternative",
+          "baseline": true,
+          "candidate": true
+        }
+      ],
+      "target": {
+        "Datenbank Tabelle dokumentieren": true,
+        "Schema Referenzdokumentation": true,
+        "Tabelle dokumentieren": true,
+        "Schema dokumentieren": true,
+        "reference docs schema": true
+      },
+      "negative_empty": true,
+      "no_p1_regression": true,
+      "pass": true,
+      "limits": "development cases; no general recall, natural agent selection, or efficiency claim"
+    },
+    "raw_sha256": "6a06c718df4a155e825595f5f136bbb9afb96c2b3900cfe9f8d4bf6d63abf572",
+    "limit": "Exploratory original report; no retroactive code/runtime binding is claimed."
+  },
+  "review_blocked_starts": [
+    {
+      "revision": "81493b7",
+      "reason": "HEAD already contained catalog edit; old driver required uncommitted candidate.",
+      "before_qmd": true,
+      "log_sha256": "f55a0a54fcfc9ee29c48ce265cbbd943e1c949b4e60498cd13893f3672b23571"
+    },
+    {
+      "revision": "5a91484",
+      "reason": "Additional case-pin check used later product revision instead of case-declared source.",
+      "before_qmd": true,
+      "log_sha256": "97c772a29a557c74a7ab253304e5f1ddbf97e7beeb43e5e7e3d26a7b1cbcce87"
+    }
+  ],
+  "verification": {
+    "tests": 85,
+    "duration_seconds": 155.294,
+    "status": "OK without skips",
+    "unit_log_sha256": "08bd4ab216486badf91d74e5f87a04fc7cff13eb08c2385db38ab5d3e534f427",
+    "guard_test_git_sha256": "01f888d0c250b69d172fff0dd26c58488d56663df890df6d51ec7e14a01b22fb",
+    "controlled_mutations": {
+      "mutations": [
+        {
+          "mutation": "bypass one-edit catalog admission",
+          "detected_failures": 5,
+          "errors": 0
+        },
+        {
+          "mutation": "bypass frozen case evidence validation",
+          "detected_failures": 1,
+          "errors": 0
+        }
+      ],
+      "production_files_mutated": false,
+      "model_calls": 0,
+      "native_workers": 0
+    },
+    "full_harness": "PASS with existing Near-Miss warnings",
+    "full_log_sha256": "54f0d97e1125a34fabe06946c642d3d5e6244b28decc331562efca2edfaf4c87"
+  },
+  "not_run_native_cases": [
+    "relation-related",
+    "relation-workflow",
+    "relation-overlay",
+    "relation-no-seed",
+    "contract-pagination",
+    "contract-stale",
+    "contract-invalid-relation",
+    "contract-descriptors"
+  ],
+  "claims": {
+    "held_out": false,
+    "native_model_calls": 0,
+    "direct_model_api_calls": 0,
+    "agent_selection_quality": "NOT RUN",
+    "general_recall": "UNVERIFIED",
+    "efficiency": "NOT EVALUATED",
+    "search_optional": true,
+    "maturity_changed": false,
+    "product_search_algorithm_changed": false
+  },
+  "review_method": "code-review and verification-loop of contributor work; subsequent revision review is Same-Model, no independent certification",
+  "distribution": "Tracked catalog correction is usable after merge. Derived .validation indexes remain local and require explicit setup/build where supported. Online-only readers use catalog/router/skill files."
+}

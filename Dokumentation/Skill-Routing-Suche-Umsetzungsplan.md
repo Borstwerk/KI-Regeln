@@ -313,3 +313,10 @@ Skills. Der modellfreie Vergleich steigt im unveränderten bekannten P1-Fallset
 von 15/16 auf 16/16 ohne Regression; alle übrigen Quellen bleiben bytegleich.
 Dies ist ein späterer Datenfix, keine neue Bewertung historischer Läufe und kein
 allgemeiner Recall- oder Maturitynachweis. Der historische P5-Status bleibt PARTIAL.
+
+Der anschließende [Routing-Praxischeck](../Evals/Onboarding/Routing-Praxischeck-2026-10-31.md)
+ergänzt einen getrennten Datenfix für `reference-docs`: fünf bekannte Zielqueries
+steigen von 2/5 auf 5/5 mit passendem Kandidaten unter den ersten zehn; die 16
+bestehenden P1-Fälle bleiben in beiden Bedingungen bestanden. Der reproduzierbare
+Folgelauf bindet Quellen, Katalogkandidat und historische Case-Evidence an getrennte
+Git-Revisionen. Kein allgemeiner Recall-, Aktivierungs- oder Effizienzclaim.
