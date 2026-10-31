@@ -57,17 +57,12 @@ def main():
     cases = data['cases']
     assert data['source_commit'] == SOURCE
     assert len(cases) == 24 and len({c['id'] for c in cases}) == 24
-    # Both implementations receive these exact original bytes, not their checkouts.
+    # Pin the original packet first; only the explicit data repair may differ.
     _, original = search.read_snapshot(ROOT, revision=SOURCE, routing=True)
     for name in ['mara-project.json', 'skill-catalog.yml', 'routing-overlays.yml', 'workflow-index.yml']:
         original[name] = search.git(ROOT, 'show', SOURCE + ':' + name)
     catalog_before = sha(original['skill-catalog.yml'])
     catalog_revision = None
-    if args.catalog_revision:
-        catalog_revision = search.git(ROOT, 'rev-parse', '--verify', '--end-of-options',
-                                      args.catalog_revision + '^{commit}').decode().strip()
-        original['skill-catalog.yml'] = checked_catalog_fix(
-            original['skill-catalog.yml'], search.git(ROOT, 'show', catalog_revision + ':skill-catalog.yml'))
     for name in json.loads(original['mara-project.json'])['entrypoints'].values():
         if name not in original:
             original[name] = search.git(ROOT, 'show', SOURCE + ':' + name)
@@ -78,18 +73,24 @@ def main():
             if name not in original:
                 assert name in workflows, 'Only registered workflow evidence may extend the packet.'
                 original[name] = search.git(ROOT, 'show', SOURCE + ':' + name)
-    packet_hash = sha(json.dumps({p: sha(b) for p, b in sorted(original.items())}, sort_keys=True).encode())
-    # Format 3 needs every registered workflow as a source dependency. Keep the
-    # historical core packet digest above comparable; these are not BM25 docs.
+    core_paths = sorted(original)
+    # Format 3 also needs every registered workflow as a dependency. Preserve
+    # historical core packet membership; these extra sources are not BM25 docs.
     for name in sorted(workflows):
         if name not in original:
             original[name] = search.git(ROOT, 'show', SOURCE + ':' + name)
-    dependency_packet_hash = sha(json.dumps({p: sha(b) for p, b in sorted(original.items())}, sort_keys=True).encode())
-    unchanged_sources_hash = sha(json.dumps({p: sha(b) for p, b in sorted(original.items())
-                                            if p != 'skill-catalog.yml'}, sort_keys=True).encode())
     for case in cases:
         for evidence in case['evidence']:
             assert sha(original[evidence['path']]) == evidence['sha256'], case['id']
+    if args.catalog_revision:
+        catalog_revision = search.git(ROOT, 'rev-parse', '--verify', '--end-of-options',
+                                      args.catalog_revision + '^{commit}').decode().strip()
+        original['skill-catalog.yml'] = checked_catalog_fix(
+            original['skill-catalog.yml'], search.git(ROOT, 'show', catalog_revision + ':skill-catalog.yml'))
+    packet_hash = sha(json.dumps({p: sha(original[p]) for p in core_paths}, sort_keys=True).encode())
+    dependency_packet_hash = sha(json.dumps({p: sha(b) for p, b in sorted(original.items())}, sort_keys=True).encode())
+    unchanged_sources_hash = sha(json.dumps({p: sha(b) for p, b in sorted(original.items())
+                                            if p != 'skill-catalog.yml'}, sort_keys=True).encode())
     node = search.resolve_node()
     (ROOT / '.validation/tmp').mkdir(parents=True, exist_ok=True)
     output = Path(tempfile.mkdtemp(prefix='rule-routing-' + args.label + '-', dir=ROOT / '.validation'))

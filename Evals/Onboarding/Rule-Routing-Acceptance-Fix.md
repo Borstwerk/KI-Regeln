@@ -71,3 +71,19 @@ Maturity bleiben davon unberührt; Suche bleibt optional. Historische Berichte
 bleiben unverändert. Ergebnisse werden erst nach Ausführung angehängt.
 
 Status des neuen Kandidaten vor Ausführung: **NOT RUN**.
+
+## Technischer Admissionbefund vor dem endgültigen Paar
+
+Ein erster Kandidatenstart auf `faa53e3` stoppt vor `resolve_node` und QMD-Aufbau:
+`relation-related` aus den acht NOT-RUN-Fällen bindet den ursprünglichen gesamten
+Kataloghash. Der erste Treiber prüfte diesen Pin erst nach dem erlaubten Overlay.
+Dieser Start bleibt **BLOCKED vor Workerstart**, nicht als Retrievalergebnis.
+
+Korrigierter Ablauf, separat per Same-Model-Planreview geprüft: zuerst alle
+unveränderten Evidencepins aller 24 Fälle gegen das eingefrorene Basispaket
+prüfen; danach denselben strengen Katalogguard anwenden und die effektiven
+Pakethashes berechnen. Kein Pin wird ausgelassen oder ersetzt. Der ursprüngliche
+Corepaketumfang bleibt erhalten. Ein neuer Admissiontest reproduziert die falsche
+Reihenfolge rot; seine Gegenprobe mit falschem Pin in einem NOT-RUN-Fall muss vor
+Overlay und Runtime stoppen. Das endgültige Paar wird mit derselben korrigierten
+Treiberfassung ausgeführt; frühere Starts bleiben gesondert erhalten.
