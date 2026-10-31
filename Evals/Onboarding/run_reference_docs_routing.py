@@ -30,6 +30,21 @@ def checked_catalog_fix(original, candidate):
     return candidate
 
 
+def pinned_case_evidence(root, data):
+    """Validate case pins against their declared source, not later product data."""
+    hashes = {}
+    for case in data['cases']:
+        if case['phase'] != 'P1' or case['kind'] != 'retrieval':
+            continue
+        for evidence in case['evidence']:
+            path = evidence['path']
+            if path not in hashes:
+                hashes[path] = hashlib.sha256(search.git(root, 'show', data['source_commit'] + ':' + path)).hexdigest()
+            if hashes[path] != evidence['sha256']:
+                raise ValueError('Invalid frozen case evidence: ' + case['id'])
+    return hashes
+
+
 def main():
     if sys.argv[1:] != ['--run']:
         raise SystemExit('Use --run; builds isolated local Git snapshots and uses existing QMD.')
@@ -45,12 +60,11 @@ def main():
     candidate = checked_catalog_fix(before_catalog,
         search.git(ROOT, 'show', CANDIDATE_REVISION + ':skill-catalog.yml'))
     cases_bytes = search.git(ROOT, 'show', revision + ':Evals/Onboarding/rule-routing-cases.json')
-    cases = [c for c in json.loads(cases_bytes)['cases']
+    case_data = json.loads(cases_bytes)
+    cases = [c for c in case_data['cases']
              if c['phase'] == 'P1' and c['kind'] == 'retrieval']
     assert len(cases) == 16
-    for case in cases:
-        for evidence in case['evidence']:
-            assert hashlib.sha256(files[evidence['path']]).hexdigest() == evidence['sha256'], case['id']
+    evidence_hashes = pinned_case_evidence(ROOT, case_data)
     queries = list(dict.fromkeys(QUERIES + [NEGATIVE] + [q for c in cases for q in c['queries']]))
     out = Path(tempfile.mkdtemp(prefix='reference-docs-routing-', dir=ROOT / '.validation'))
     sha = lambda b: hashlib.sha256(b).hexdigest()
@@ -69,6 +83,7 @@ def main():
                 'node_version': subprocess.check_output([node, '--version'], text=True).strip(),
                 'before_catalog_sha256': sha(before_catalog),
                 'candidate_catalog_sha256': sha(candidate), 'cases_sha256': sha(cases_bytes),
+                'case_evidence_revision': case_data['source_commit'], 'case_evidence_sha256': evidence_hashes,
                 'queries': queries, 'target': TARGET, 'model_calls': 0, 'held_out': False,
                 'contract': 'target in top ten for five target queries; negative empty; '
                             'no loss of baseline P1 required/one-of outcomes'}

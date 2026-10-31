@@ -150,7 +150,8 @@ als nachgewiesen ausgegeben.
   die oben beschriebene Ersetzung des einen Katalogzwecks.
 - Dieselben fünf Zielqueries, dieselbe Leertrefferkontrolle und dieselben 16
   P1-Fälle mit unverändertem Zehnerbudget prüfen. Falldatei aus der gepinnten
-  Basis lesen und deren P1-Evidence gegen die Originalquellen prüfen. Den bereits
+  Basis lesen und deren P1-Evidence gegen die in der Falldatei deklarierte
+  Originalrevision prüfen. Den bereits
   vorhandenen P1-Grader wiederverwenden; keine neuen Fall-Erwartungen festlegen.
 - Beide Bedingungen in getrennten Fixtures ausführen; alle Quellen während
   jedes Laufs unverändert halten. Die Leertrefferkontrolle muss beidseitig leer
@@ -166,3 +167,12 @@ Die Korrektur betrifft den Eval-Treiber und seine Nachweise. Der Produktdiff des
 zweiten Agenten bleibt unverändert: ein `purpose`-Feld, keine Skill-Description,
 Suchlogik, Routingregel oder Maturityänderung. Bekannte Entwicklungsfälle sind
 keine unabhängige Bestätigung allgemeiner Auswahlqualität. Neuer Lauf: **NOT RUN**.
+
+Der erste Review-Folgestart `5a91484` stoppt ebenfalls vor QMD: die zusätzlich
+eingeführte Prüfung verwendet für einen historischen Katalogpin die spätere
+Produktbasis. Die Falldatei deklariert dafür ausdrücklich `6b80949`, während die
+Vergleichsbasis `03cdee5` bereits den zuvor gemergten Akzeptanzkriterien-Datenfix
+enthält. Die Prüfung wird deshalb der deklarierten Evidence-Revision zugeordnet;
+ein falscher Pin bleibt ein harter Fehler. Beide Revisionen und die tatsächlich
+geprüften Hashes werden getrennt protokolliert. Keine Änderung an den Fällen oder
+ihren Hash-Erwartungen. Der abgebrochene Start ist **BLOCKED vor Workerstart**.
